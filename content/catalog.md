@@ -1549,6 +1549,7 @@ weight: 50
 							- [Git Server.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-server)
 							- [git 撤销修改.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-撤销修改)
 							- [github 下 fork 后如何同步源的新更新内容？.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github-下-fork-后如何同步源的新更新内容？)
+							- [github上传时出现error.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github上传时出现error)
 							- [SSH-key.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/ssh-key)
 						- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/大纲)
 					- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/大纲)

@@ -161,9 +161,9 @@ weight: 50
 						- [04 软间隔与正则化.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/04-软间隔与正则化)
 						- [05 支持向量回归.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/05-支持向量回归)
 						- [06 核方法.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/06-核方法)
-						- [svm 三重.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/svm-三重)
 						- [SVM 例子1：对小规模数据点进行分类.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/svm-例子1：对小规模数据点进行分类)
 						- [SVM 例子2：手写数字识别.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/svm-例子2：手写数字识别)
+						- [svm 三重.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/svm-三重)
 						- [支持向量机.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/03-支持向量机相关/支持向量机)
 					- 04 贝叶斯
 						- [01 贝叶斯决策论.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/04-贝叶斯/01-贝叶斯决策论)
@@ -215,8 +215,8 @@ weight: 50
 						- [KNN-例子1：根据信息选择约会对象.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/07-降维与度量学习/knn-例子1：根据信息选择约会对象)
 						- [KNN-例子2：手写数字识别系统.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/07-降维与度量学习/knn-例子2：手写数字识别系统)
 						- [KNN.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/07-降维与度量学习/knn)
-						- [pca 2.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/07-降维与度量学习/pca-2)
 						- [PCA.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/07-降维与度量学习/pca)
+						- [pca 2.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/07-降维与度量学习/pca-2)
 					- 08 特征选择与稀疏学习
 						- [01 子集搜索与评价.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/08-特征选择与稀疏学习/01-子集搜索与评价)
 						- [02 过滤式选择.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/06-机器学习相关算法/08-特征选择与稀疏学习/02-过滤式选择)
@@ -271,10 +271,10 @@ weight: 50
 				- [ML 调参数.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/ml-调参数)
 				- [ML 距离.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/ml-距离)
 				- [Parzen 窗设计.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/parzen-窗设计)
-				- [pLSA.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/plsa)
 				- [ROC.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/roc)
 				- Sigai
 					- [大纲.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/sigai/大纲)
+				- [pLSA.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/plsa)
 				- [主题模型.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/主题模型)
 				- [什么是近似误差和估计误差？.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/什么是近似误差和估计误差？)
 				- [从线性分类器开始.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/02-机器学习/从线性分类器开始)
@@ -355,10 +355,10 @@ weight: 50
 				- [Dropout.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/dropout)
 				- [LSTM.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/lstm)
 				- [ResNet.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/resnet)
-				- [rnn 循环神经网络 应用.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/rnn-循环神经网络-应用)
-				- [rnn 循环神经网络.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/rnn-循环神经网络)
 				- Sigai
 					- [大纲.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/sigai/大纲)
+				- [rnn 循环神经网络 应用.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/rnn-循环神经网络-应用)
+				- [rnn 循环神经网络.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/rnn-循环神经网络)
 				- [卷积神经网络 CNN.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/卷积神经网络-cnn)
 				- [大纲.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/大纲)
 				- [注意力模型.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/03-深度学习/注意力模型)
@@ -422,9 +422,9 @@ weight: 50
 				- [_生成对抗网络 大纲.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/05-生成对抗网络/_生成对抗网络-大纲)
 			- 06 迁移学习
 				- [TL DNS例子1：.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-dns例子1：)
-				- [TL finetune例子1：.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-finetune例子1：)
 				- [TL GAN例子1：.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-gan例子1：)
 				- [TL JDA例子1：.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-jda例子1：)
+				- [TL finetune例子1：.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-finetune例子1：)
 				- [TL 深度迁移学习.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-深度迁移学习)
 				- [TL 第一类方法：数据分布自适应.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-第一类方法：数据分布自适应)
 				- [TL 第三类方法：子空间学习.md](http://iterate.site/post/01-知识树/02-机器学习/01-机器学习理论/06-迁移学习/tl-第三类方法：子空间学习)
@@ -448,8 +448,6 @@ weight: 50
 				- [00 大纲.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/00-大纲)
 				- [2018-03-25-tensorflow-deep-mnist.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/2018-03-25-tensorflow-deep-mnist)
 				- [Tensorflow 00 介绍.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-00-介绍)
-				- [tensorflow MNIST feed-forward neural network.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-mnist-feed-forward-neural-network)
-				- [tensorflow MNIST 入门.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-mnist-入门)
 				- [Tensorflow 使用之前的问题.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-使用之前的问题)
 				- Tensorflow 实战
 					- [00 介绍.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-实战/00-介绍)
@@ -467,6 +465,8 @@ weight: 50
 				- [Tensorflow 的基础概念.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-的基础概念)
 				- [Tensorflow 的安装.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-的安装)
 				- [Tensorflow使用之前的问题.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow使用之前的问题)
+				- [tensorflow MNIST feed-forward neural network.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-mnist-feed-forward-neural-network)
+				- [tensorflow MNIST 入门.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/02-tensorflow/tensorflow-mnist-入门)
 			- 03 Caffe
 				- [00 大纲.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/03-caffe/00-大纲)
 				- [caffe 使用.md](http://iterate.site/post/01-知识树/02-机器学习/02-机器学习工具使用/03-caffe/caffe-使用)
@@ -831,9 +831,6 @@ weight: 50
 				- 01 C++
 					- [03 C++ 基本语法.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/03-c++-基本语法)
 					- [12 C++ 循环.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/12-c++-循环)
-					- [C++ cstring、string、char指针.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-cstring、string、char指针)
-					- [C++ gtest.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-gtest)
-					- [C++ main 函数运行前后.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-main-函数运行前后)
 					- C++ Primer
 						- 00 介绍
 							- [00 介绍.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-primer/00-介绍/00-介绍)
@@ -873,6 +870,9 @@ weight: 50
 						- [19 特殊工具与技术.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-primer/19-特殊工具与技术)
 						- [20 术语与索引.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-primer/20-术语与索引)
 					- [C++ STL istream_iterator、ostream_iterator.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-stl-istream_iterator、ostream_iterator)
+					- [C++ cstring、string、char指针.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-cstring、string、char指针)
+					- [C++ gtest.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-gtest)
+					- [C++ main 函数运行前后.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-main-函数运行前后)
 					- C++ 中调用的数学平台
 						- [01 介绍.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-中调用的数学平台/01-介绍)
 						- [C++ 矩阵运算库.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/01-c++/c++-中调用的数学平台/c++-矩阵运算库)
@@ -914,38 +914,24 @@ weight: 50
 						- [Python  'ascii' codec can't decode byte 0xe9 in position 0 ordinal not in range(128).md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python--'ascii'-codec-can't-decode-byte-0xe9-in-position-0-ordinal-not-in-range(128))
 						- [Python 00 Python 介绍.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-00-python-介绍)
 						- [Python 2 与 3.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-2-与-3)
-						- [Python beautifulsoup4.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-beautifulsoup4)
-						- [python bytes.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-bytes)
 						- [Python CGI编程.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-cgi编程)
-						- [python collections模块.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-collections模块)
 						- [Python CPython IronPython Jython PyPy.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-cpython-ironpython-jython-pypy)
-						- [python enumerate.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-enumerate)
-						- [Python importlib's analogue for imp.new_module().md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-importlib's-analogue-for-imp.new_module())
 						- [Python JSON.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-json)
 						- [Python List.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-list)
+						- [Python XML解析.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-xml解析)
+						- [Python beautifulsoup4.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-beautifulsoup4)
+						- [Python importlib's analogue for imp.new_module().md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-importlib's-analogue-for-imp.new_module())
 						- [Python pickle.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-pickle)
-						- [python sorted.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-sorted)
-						- [python sum.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-sum)
-						- [python traceback.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-traceback)
-						- [python TypeError ''dict_keys'' object does not support indexing.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-typeerror-''dict_keys''-object-does-not-support-indexing)
 						- [Python virtualenv.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-virtualenv)
 						- [Python xml 中的非法字符.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-xml-中的非法字符)
-						- [Python XML解析.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-xml解析)
-						- [python [[0,0,0]]  3 的问题.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-[[0,0,0]]--3-的问题)
-						- [python 中怎么测量程序运行的时间？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中怎么测量程序运行的时间？)
-						- [python 中文内容怎么办？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中文内容怎么办？)
 						- [Python 中文支持.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中文支持)
 						- [Python 中文编码.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中文编码)
-						- [python 中文路径怎么办？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中文路径怎么办？)
 						- [Python 什么是自动化测试？怎么写？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-什么是自动化测试？怎么写？)
-						- [python 位运算.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-位运算)
 						- [Python 元组.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-元组)
 						- [Python 函数.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-函数)
-						- [python 函数式编程与lambda表达式.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-函数式编程与lambda表达式)
 						- [Python 列表(Lists).md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-列表(lists))
 						- [Python 判断字符串是否为数字.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-判断字符串是否为数字)
 						- [Python 变量类型.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-变量类型)
-						- [python 可迭代，生成器，迭代器.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-可迭代，生成器，迭代器)
 						- [Python 同时装了 Python3 和 Python2 之后怎么使用？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-同时装了-python3-和-python2-之后怎么使用？)
 						- [Python 基础 01 .md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-基础-01-)
 						- [Python 基础 02 数据结构与序列.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-基础-02-数据结构与序列)
@@ -956,11 +942,11 @@ weight: 50
 						- [Python 多线程.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-多线程)
 						- [Python 字典(Dictionary).md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-字典(dictionary))
 						- [Python 字符串.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-字符串)
-						- [Python 工具 pdb.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-工具-pdb)
 						- [Python 工具 Pip 和 virtualenv 的使用.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-工具-pip-和-virtualenv-的使用)
-						- [Python 工具 pip.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-工具-pip)
 						- [Python 工具 Pycharm.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-工具-pycharm)
 						- [Python 工具 SublimeText.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-工具-sublimetext)
+						- [Python 工具 pdb.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-工具-pdb)
+						- [Python 工具 pip.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-工具-pip)
 						- [Python 库 feedparser.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-库-feedparser)
 						- [Python 库 lxml.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-库-lxml)
 						- [Python 库 pillow.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-库-pillow)
@@ -973,7 +959,6 @@ weight: 50
 						- [Python 日期和时间.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-日期和时间)
 						- [Python 条件语句.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-条件语句)
 						- [Python 模块 itertools.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-模块-itertools)
-						- [python 模块 os.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-模块-os)
 						- [Python 模块.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-模块)
 						- [Python 正则表达式 regex.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-正则表达式-regex)
 						- [Python 正则表达式.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-正则表达式)
@@ -991,7 +976,25 @@ weight: 50
 						- [Python 风格指南.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-风格指南)
 						- [Python2.x与3​​.x版本区别.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python2.x与3​​.x版本区别)
 						- [Python3 安装 CentOS.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python3-安装-centos)
+						- [Python的map_filter_reduce常见用法例举.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python的map_filter_reduce常见用法例举)
+						- [Selenium.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/selenium)
+						- [python TypeError ''dict_keys'' object does not support indexing.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-typeerror-''dict_keys''-object-does-not-support-indexing)
+						- [python [[0,0,0]]  3 的问题.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-[[0,0,0]]--3-的问题)
+						- [python bytes.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-bytes)
+						- [python collections模块.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-collections模块)
+						- [python enumerate.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-enumerate)
+						- [python sorted.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-sorted)
+						- [python sum.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-sum)
+						- [python traceback.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-traceback)
+						- [python 中怎么测量程序运行的时间？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中怎么测量程序运行的时间？)
+						- [python 中文内容怎么办？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中文内容怎么办？)
+						- [python 中文路径怎么办？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-中文路径怎么办？)
+						- [python 位运算.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-位运算)
+						- [python 函数式编程与lambda表达式.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-函数式编程与lambda表达式)
+						- [python 可迭代，生成器，迭代器.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-可迭代，生成器，迭代器)
+						- [python 模块 os.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python-模块-os)
 						- [python中文件的读写.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中文件的读写)
+						- [python中的__xx__形式的属性和方法.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的__xx__形式的属性和方法)
 						- [python中的dict.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的dict)
 						- [python中的file与directory.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的file与directory)
 						- [python中的list.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的list)
@@ -999,7 +1002,6 @@ weight: 50
 						- [python中的set.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的set)
 						- [python中的slots.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的slots)
 						- [python中的time和datetime.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的time和datetime)
-						- [python中的__xx__形式的属性和方法.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的__xx__形式的属性和方法)
 						- [python中的偏函数.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的偏函数)
 						- [python中的命名规范.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的命名规范)
 						- [python中的字符串.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python中的字符串)
@@ -1020,8 +1022,6 @@ weight: 50
 						- [python描述器.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python描述器)
 						- [python操作mysql数据库.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python操作mysql数据库)
 						- [python生成器与yield.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python生成器与yield)
-						- [Python的map_filter_reduce常见用法例举.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/python的map_filter_reduce常见用法例举)
-						- [Selenium.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/01基础/selenium)
 					- 02Data
 						- [00 关于数据分析.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/00-关于数据分析)
 						- 01 数据加载，存储，文件格式
@@ -1103,14 +1103,14 @@ weight: 50
 						- [Matplotlib.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/matplotlib)
 						- [Matplotlib1.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/matplotlib1)
 						- [NLTK.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/nltk)
-						- [pandas 处理比较大的csv文件.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/pandas-处理比较大的csv文件)
-						- [pandas.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/pandas)
-						- [pandas读取csv处理时报错：pandas.io.common.CParserError Error .md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/pandas读取csv处理时报错：pandas.io.common.cparsererror-error-)
 						- [Python Data 环境安装.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/python-data-环境安装)
 						- [Python 与 Tensorflow.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/python-与-tensorflow)
 						- [Python 数据分析 02 引言.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/python-数据分析-02-引言)
-						- [scikit-learn.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/scikit-learn)
 						- [Scipy.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/scipy)
+						- [pandas 处理比较大的csv文件.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/pandas-处理比较大的csv文件)
+						- [pandas.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/pandas)
+						- [pandas读取csv处理时报错：pandas.io.common.CParserError Error .md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/pandas读取csv处理时报错：pandas.io.common.cparsererror-error-)
+						- [scikit-learn.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/scikit-learn)
 						- [seaborn.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/seaborn)
 						- [seaborn1.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/seaborn1)
 						- [statsmodels.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/02data/statsmodels)
@@ -1135,20 +1135,17 @@ weight: 50
 						- [Flask 00 博客项目.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/flask-00-博客项目)
 						- [Flask 00 总体.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/flask-00-总体)
 						- [Flask 库 Migrate.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/flask-库-migrate)
-						- [gunicorn 与 supervisor 的配置与使用.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/gunicorn-与-supervisor-的配置与使用)
-						- [Python requests.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-requests)
 						- [Python Scrapy.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-scrapy)
 						- [Python Tornado.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-tornado)
+						- [Python requests.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-requests)
 						- [Python urllib.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-urllib)
 						- [Python urllib2.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-urllib2)
-						- [python 爬虫时候的翻墙.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-爬虫时候的翻墙)
 						- [Python使用SMTP发送邮件.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python使用smtp发送邮件)
+						- [gunicorn 与 supervisor 的配置与使用.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/gunicorn-与-supervisor-的配置与使用)
+						- [python 爬虫时候的翻墙.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/python-爬虫时候的翻墙)
 						- [使用 python 发邮件.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/03web/使用-python-发邮件)
-					- [pip log.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pip-log)
-					- [pip 到底怎么用？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pip-到底怎么用？)
-					- [Pycharm 常用的快捷键.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pycharm-常用的快捷键)
-					- [pygame.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pygame)
 					- [PySpark.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pyspark)
+					- [Pycharm 常用的快捷键.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pycharm-常用的快捷键)
 					- [Python hashlib.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/python-hashlib)
 					- Python 核心编程
 						- [00 介绍.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/python-核心编程/00-介绍)
@@ -1175,6 +1172,9 @@ weight: 50
 						- [21 数据库编程.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/python-核心编程/21-数据库编程)
 						- [22 扩展 Python.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/python-核心编程/22-扩展-python)
 						- [23 其它话题.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/python-核心编程/23-其它话题)
+					- [pip log.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pip-log)
+					- [pip 到底怎么用？.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pip-到底怎么用？)
+					- [pygame.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/pygame)
 					- [python中获取对象的信息.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/python中获取对象的信息)
 					- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/01-基础编程/01-编程语言/02-python/大纲)
 					- 流畅的 Python
@@ -1462,7 +1462,7 @@ weight: 50
 			- 分布式计算
 				- [分布式计算.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/分布式计算/分布式计算)
 			- 大数据相关工具
-				- cassandra
+				- HBase
 				- Hadoop
 					- Hadoop 权威指南
 						- [00 Hadoop介绍.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/大数据相关工具/hadoop/hadoop-权威指南/00-hadoop介绍)
@@ -1493,9 +1493,7 @@ weight: 50
 						- [25 其他.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/大数据相关工具/hadoop/hadoop-权威指南/25-其他)
 					- [Hadoop.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/大数据相关工具/hadoop/hadoop)
 					- [mrjob.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/大数据相关工具/hadoop/mrjob)
-				- HBase
 				- Hive
-				- impala
 				- Kafka
 				- Kubernetes
 				- Mahout
@@ -1505,6 +1503,8 @@ weight: 50
 				- Storm
 				- Tableau
 				- ZooKeeper
+				- cassandra
+				- impala
 				- [大数据工具联系和对比.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/大数据相关工具/大数据工具联系和对比)
 				- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/大数据相关工具/大纲)
 				- [流计算.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/大数据相关工具/流计算)
@@ -1516,8 +1516,8 @@ weight: 50
 					- [什么是增量数据？怎么获取增量数据？.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/数据库/01-基础知识/什么是增量数据？怎么获取增量数据？)
 				- [MongoDB 极简实践入门.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/数据库/mongodb-极简实践入门)
 				- [MySQL 数据库备份与上传到Dropbox.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/数据库/mysql-数据库备份与上传到dropbox)
-				- [sqlite python 定时备份.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/数据库/sqlite-python-定时备份)
 				- [Sqlite 复制表.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/数据库/sqlite-复制表)
+				- [sqlite python 定时备份.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/数据库/sqlite-python-定时备份)
 				- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/数据库/大纲)
 			- 高性能计算 HPC
 				- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/02-基础数据与计算/高性能计算-hpc/大纲)
@@ -1525,8 +1525,8 @@ weight: 50
 		- 05 基础服务开发
 			- 01 项目开发基础
 				- 01 软件工程
-					- [api sdk 设计.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/api-sdk-设计)
 					- [Restful API.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/restful-api)
+					- [api sdk 设计.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/api-sdk-设计)
 					- 代码管理
 						- Git
 							- [00 大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/00-大纲)
@@ -1544,14 +1544,14 @@ weight: 50
 							- [12 Git 分支策略.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/12-git-分支策略)
 							- [13 Git 连接 github.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/13-git-连接-github)
 							- [Git Deprecated option RSAAuthentication.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-deprecated-option-rsaauthentication)
-							- [git push.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-push)
 							- [Git Server.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-server)
+							- [Github使用方法及常见错误.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github使用方法及常见错误)
+							- [SSH-key.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/ssh-key)
+							- [git push.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-push)
 							- [git 撤销修改.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-撤销修改)
 							- [github 下 fork 后如何同步源的新更新内容？.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github-下-fork-后如何同步源的新更新内容？)
 							- [github上传时出现error.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github上传时出现error)
 							- [github上面的文件夹是灰色的.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github上面的文件夹是灰色的)
-							- [Github使用方法及常见错误.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github使用方法及常见错误)
-							- [SSH-key.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/ssh-key)
 						- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/大纲)
 					- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/大纲)
 					- 设计模式
@@ -1670,7 +1670,6 @@ weight: 50
 						- [Shell echo命令.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-echo命令)
 						- [Shell printf 命令.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-printf-命令)
 						- [Shell test命令.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-test命令)
-						- [shell 介绍.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-介绍)
 						- [Shell 传递参数.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-传递参数)
 						- [Shell 函数.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-函数)
 						- [Shell 变量.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-变量)
@@ -1681,12 +1680,13 @@ weight: 50
 							- [输出重定向.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-输入/输出重定向)
 						- [Shell 运算符.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-运算符)
 						- [Shell编程极简入门实践.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell编程极简入门实践)
-					- [tmux.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/tmux)
+						- [shell 介绍.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/shell/shell-介绍)
 					- Vim
-						- [vim vi.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/vim/vim-vi)
 						- [Vim 滚动屏幕快捷键.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/vim/vim-滚动屏幕快捷键)
 						- [Vim.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/vim/vim)
+						- [vim vi.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/vim/vim-vi)
 						- [vim2.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/vim/vim2)
+					- [tmux.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/tmux)
 					- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/大纲)
 					- [数据科学家的命令行技巧.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/02-linux-环境/数据科学家的命令行技巧)
 					- 翻墙
@@ -1710,8 +1710,9 @@ weight: 50
 						- [Docker.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/docker/docker)
 						- [Docker1.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/docker/docker1)
 					- [Nginx gunicorn 一些配置.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/nginx-gunicorn-一些配置)
-					- [nginx-13-permission-denied.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/nginx-13-permission-denied)
 					- [Travis CI.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/travis-ci)
+					- [Travis.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/travis)
+					- [nginx-13-permission-denied.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/nginx-13-permission-denied)
 					- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/大纲)
 					- [测试 HTTP 接口.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/02-后端开发基础/01-后端开发工具/测试-http-接口)
 				- 02 linux 环境开发
@@ -1754,7 +1755,6 @@ weight: 50
 					- [HTML 03 XHTML.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/html/html-03-xhtml)
 					- [HTML 04 表单.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/html/html-04-表单)
 					- [HTML 05 HTML5.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/html/html-05-html5)
-				- Jquery
 				- JS
 					- [JS00 介绍.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/js/js00-介绍)
 					- [JS01 JavaScript 简介 .md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/js/js01-javascript-简介-)
@@ -1783,6 +1783,7 @@ weight: 50
 					- [JS24 最佳实践.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/js/js24-最佳实践)
 					- [JS25 新兴的API.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/js/js25-新兴的api)
 					- [Prettify 使用.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/js/prettify-使用)
+				- Jquery
 				- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/大纲)
 				- [网页加载加速.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/网页加载加速)
 				- [黏贴并上传图片到七牛.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/03-前端开发基础/黏贴并上传图片到七牛)
@@ -1912,25 +1913,25 @@ weight: 50
 	- [大纲.md](http://iterate.site/post/02-个人迭代/大纲)
 - 03 非核心
 	- [AB 测试.md](http://iterate.site/post/03-非核心/ab-测试)
+	- [Markdown 的使用.md](http://iterate.site/post/03-非核心/markdown-的使用)
+	- [Typra 字体颜色.md](http://iterate.site/post/03-非核心/typra-字体颜色)
+	- [Vim.md](http://iterate.site/post/03-非核心/vim)
 	- hexo
 		- [4000 端口连不上.md](http://iterate.site/post/03-非核心/hexo/4000-端口连不上)
-		- [expect comment.md](http://iterate.site/post/03-非核心/hexo/expect-comment)
 		- [Template render error.md](http://iterate.site/post/03-非核心/hexo/template-render-error)
+		- [expect comment.md](http://iterate.site/post/03-非核心/hexo/expect-comment)
 		- [介绍.md](http://iterate.site/post/03-非核心/hexo/介绍)
 	- hugo
 		- [介绍.md](http://iterate.site/post/03-非核心/hugo/介绍)
 	- [jupter.md](http://iterate.site/post/03-非核心/jupter)
 	- latex
 		- [Latex 常用符号.md](http://iterate.site/post/03-非核心/latex/latex-常用符号)
-		- [latex 括号.md](http://iterate.site/post/03-非核心/latex/latex-括号)
 		- [Latex.md](http://iterate.site/post/03-非核心/latex/latex)
+		- [latex 括号.md](http://iterate.site/post/03-非核心/latex/latex-括号)
 	- markdown
 		- [rst 转 markdown.md](http://iterate.site/post/03-非核心/markdown/rst-转-markdown)
-	- [Markdown 的使用.md](http://iterate.site/post/03-非核心/markdown-的使用)
 	- [some_image.md](http://iterate.site/post/03-非核心/some_image)
 	- [travis.md](http://iterate.site/post/03-非核心/travis)
-	- [Typra 字体颜色.md](http://iterate.site/post/03-非核心/typra-字体颜色)
-	- [Vim.md](http://iterate.site/post/03-非核心/vim)
 	- wordpress
 		- [wordpress cache的使用.md](http://iterate.site/post/03-非核心/wordpress/wordpress-cache的使用)
 		- [wordpress 修改邮箱.md](http://iterate.site/post/03-非核心/wordpress/wordpress-修改邮箱)

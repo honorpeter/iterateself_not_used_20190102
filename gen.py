@@ -20,6 +20,7 @@ basedir_len=len(basedir)
 def ListFilesToTxt(dir,file,wildcard,recursion,levelnum):
     exts = wildcard.split(" ")
     files = os.listdir(dir)
+    files.sort()
     for name in files:
         fullname=os.path.join(dir,name)
         if(os.path.isdir(fullname) & recursion):

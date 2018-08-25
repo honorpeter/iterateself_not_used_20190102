@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 Linux防火墙 iptables - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="“纟 Linux 防火墙 iptables 在最新版的CentOS 7中，系统安装了两个防火墙firewalld和iptables,并且默认使用 firewalldo由于之前" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/04-linux%E9%98%B2%E7%81%AB%E5%A2%99-iptables/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 Linux防火墙 iptables" />
+<meta property="og:description" content="“纟 Linux 防火墙 iptables 在最新版的CentOS 7中，系统安装了两个防火墙firewalld和iptables,并且默认使用 firewalldo由于之前" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/04-linux%E9%98%B2%E7%81%AB%E5%A2%99-iptables/" /><meta property="article:published_time" content="2018-07-12T16:07:58&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-12T16:07:58&#43;00:00"/>
+<meta itemprop="name" content="04 Linux防火墙 iptables">
+<meta itemprop="description" content="“纟 Linux 防火墙 iptables 在最新版的CentOS 7中，系统安装了两个防火墙firewalld和iptables,并且默认使用 firewalldo由于之前">
+
+
+<meta itemprop="datePublished" content="2018-07-12T16:07:58&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-12T16:07:58&#43;00:00" />
+<meta itemprop="wordCount" content="7138">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 Linux防火墙 iptables"/>
+<meta name="twitter:description" content="“纟 Linux 防火墙 iptables 在最新版的CentOS 7中，系统安装了两个防火墙firewalld和iptables,并且默认使用 firewalldo由于之前"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 Linux防火墙 iptables</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-12 </span>
+        
+        <span class="more-meta"> 7138 words </span>
+        <span class="more-meta"> 15 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>“纟 Linux 防火墙 iptables</p>
+
+<p>在最新版的CentOS 7中，系统安装了两个防火墙firewalld和iptables,并且默认使用 firewalldo由于之前版本均使用iptables,因此本书也主要介绍iptables□要使用Linux防火墙， 必须要先了解TCP/IP网络的基本原理，理解Linux防火墙的工作原理，本节主要介绍Linux 防火墙方面的知识。</p>
+
+<p>3.4.1 Linux内核防火墙的工作原理</p>
+
+<p>Linux的内核提供的防火墙功能通过netfiter框架实现，并提供了 iptables工具配置和修改 防火墙的规则。</p>
+
+<p>netfilter的通用框架不依赖于具体的协议，而是为每种网络协议定义一套钩子函数。这些 钩子函数在数据包经过协议栈的几个关键点时被调用，在这几个点中，协议栈将数据包及钩子 函数作为参数，传递给netfilter框架。</p>
+
+<p>对于每种网络协议定义的钩子函数，任何内核模块可以对每种协议的一个或多个钩子函数 进行注册，实现挂接。这样当某个数据包被传递给netfilter框架时，内核能检测到是否有有关模 块对该协议和钩子函数进行了注册。如发现注册信息则调用该模块在注册时使用的回调函数， 然后对应模块去检查、修改、丢弃该数据包及指示netfilter将该数据包传入用户空间的队列。</p>
+
+<p>从以上描述可以得知钩子提供了一种方便的机制，以便在数据包通过Linux内核的不同位 置上截获和操作处理数据包。</p>
+
+<p>\1. netfilter的体系结构</p>
+
+<p>网络数据包的通信主要经过以下相关步骤，对应netfdter定义的钩子函数，更多信息可以 参考源代码。</p>
+
+<p>•    NF_IP_PRE_ROUTING:网络数据包进入系统，经过了简单的检测后，数据包转交 给该函数进行处理，然后根据系统设置的规则对数据包进行处理，如果数据包不被丢 弃则交给路由函数进行处理。在该函数中可以替换IP包的目的地址，即DNAT。</p>
+
+<p>•    NF_IP_LOCAL_IN:所有发送给本机的数据包都要通过该函数的处理，该函数根据 系统设置的规则对数据包进行处理，如果数据包不被丢弃则交给本地的应用程序。</p>
+
+<p>•    NF IP FORWARD:所有不是发送给本机的数据包都要通过该函数进行处理，该函 数会根据系统设置的规则对数据包进行处理，如数据包不被丢弃则转 NF_IP_POST_ROUTING 进行处理。</p>
+
+<p>•    NF IP LOCAL OUT:所有从本地应用程序出来的数据包必须通过该函数的处理， 该函数根据系统设置的规则对数据包进行处理如果数据包不被丢弃则交给路由函数 进行处理。</p>
+
+<p>•    NF_IP_POST_ROUTING:所有数据包在发给其他主机之前需要通过该函数的处理， 该函数根据系统设置的规则对数据包进行处理，如果数据包不被丢弃，将数据包发给 数据链路层。在该函数中可以替换IP包的源地址，即SNAT。</p>
+
+<p>图3.3显示了数据包在通过Linux防火墙时的处理过程。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-56.jpg" alt="img" /></p>
+
+<p>图3.3数据包在通过Linux防火墙时的处理过程</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-58.jpg" alt="img" /></p>
+
+<p>2.包过滤</p>
+
+<p>每个函数都可以对数据包进行处理，最基本的操作为对数据包进行过滤。系统管理员可以 通过iptables工具来向内核模块注册多个过滤规则，并且指明过滤规则的优先权。设置完以后 每个钩子按照规则进行匹配，如果与规则匹配，函数就会进行一些过滤操作，这些操作主要是 以下几个：</p>
+
+<p>•    NF ACCEPT:继续正常地传递包</p>
+
+<p>•    NF_DROP:丢弃包，停止传送</p>
+
+<p>•    NF_STOLEN:已经接管了包，不要继续传送</p>
+
+<p>•    NF_QUEUE:排列包</p>
+
+<p>•    NF REPEAT:再次使用该钩子</p>
+
+<p>3.包选择</p>
+
+<p>在netfilter框架上已经创建了一个包选择系统，这个包选择工具默认已经注册了 3个表， 分别是：过滤（filter）表、网络地址转换（NAT）表和mangle表。</p>
+
+<p>在调用钩子函数时是按照表的顺序来调用的。例如在执行NFJP_PRE_ROUTING吋，首 先检查filter表，然后检查Mangle表，最后检查NAT表。</p>
+
+<p>过滤（filter）表过滤包而不会改变包，仅仅是过滤的作用，实际上由网络过滤框架来提供 NF_IP_FORWARD钩子的输出和输入接口使得很多过滤工作变得非常简单。从图中可以看出， NF_IP_LOCAL_IN和NFJP LOCAL OUT也可以做过滤，但是只是针对本机。</p>
+
+<p>网络地址转换（NAT）表分别服务于两套不同的网络过滤挂钩的包，对于非本地包， NF_IP_PRE_ROUTING和NF_IP_POST_ROUTING挂钩可以完美地解决源地址和目的地址的 变更。</p>
+
+<p>NAT表与filter表的区别在于只有新建连接的第1个包会在表中传送，结果将被用于以后 所有来自这一连接的包。例如某一个连接的第1个数据包在这个表中被替换了源地址，那么以 后这条连接的所有包都将被替换源地址。</p>
+
+<p>mangle表被用于真正的改变包的信息，mangle表和所有的5个网络过滤的钩子函数都有关。</p>
+
+<p>4.切换至 iptables</p>
+
+<p>在正式学习iptables之前，还需要将默认使用的firewalld停止，并让系统将iptables作为 默认防火墙。其命令如下：</p>
+
+<p>#关闭并禁用firewalld</p>
+
+<p>[root@CentOS &lsquo;] # systemctl</p>
+
+<p>stop firewalld</p>
+
+<p>[rootQCentOS systemctl disable firewalld #启动并启用iptables</p>
+
+<p>[root^CentOS 〜systemctl start iptables [rootGCentOS 〜]# systemctl enable iptables #如果使用了 IPv6，还需要开启ip6tables</p>
+
+<p>#启动并启用ip6tables</p>
+
+<p>[root@CentOS 〜systemctl start ip6tables [rootQCentOS 〜# systemctl enable ip6tables</p>
+
+<p>使用上述命令之后就可以在CentOS 7中使用iptables 了。</p>
+
+<p>3.4.2 Linux 软件防火墙 iptables</p>
+
+<p>iptables工具用来设置、维护和检查Linux内核的IP包过滤规则。filter、NAT和mangle 表可以包含多个链（chain）,每个链可以包含多条规则（rule）。iptables主要对表（table）、链 （chain）和规则（rule）进行管理。</p>
+
+<p>iptables预定义了 5个链，分别对应netfilter的5个钩子函数，这5个链分别是：INPUT 链、FORWARD 链、OUTPUT 链、PREROUTING 链、POSTROUTING 链。</p>
+
+<p>iptables指令语法如下：</p>
+
+<p>iptables [~t table] command [match]卜j target/jump]</p>
+
+<p>“-t table”参数用来指定规则表，内建的规则表分别为nat、mangle和filter,当未指定规 则表时，默认为filter。各个规则表的功能如下：</p>
+
+<p>•    nat:此规则表主要针对PREROUTING和POSTROUTING两个规则链，主要功能为 进行源地址或目的地址的网址转换工作（SNAT、DNAT）。</p>
+
+<p>•    mangle;此规则表主要针对 PREROUTING、FORWARD 和 POSTROUTING 3 个规则 链，某些特殊应用可以在此规则表里设定，比如为数据包做标记。</p>
+
+<p>•    filter这个规则表是默认规则表，针对INPUT、FORWARD和OUTPUT 3个规则链， 这个规则表主要用来进行封包过滤的处理动作，如DROP、LOG ACCEPT或REJECT。</p>
+
+<p>iptables的简单用法如【示例3-15】所示。</p>
+
+<p>【示例3-15]</p>
+
+<p>[rooteCentOS -]# iptables -t filter -A FORWARD -s 192.168,19.0/24 -j DROP [root@CentOS 〜iptables -nL Chain FORWARD (policy ACCEPT)</p>
+
+<p>target    prot opt source    destination</p>
+
+<p>DROP    all — 192.168.19.0/24    0.0.0.0/0</p>
+
+<p>其中“-tfilter”表示该规则作用于filter表，“-A “表示新增规则，“-S”表示IP段选项，</p>
+
+<p>“d”表示指定动作。该规则表示在filter表FORWARD链上新增一条规则，发往</p>
+
+<p>192.168.19.0/24网段的包采取丢弃操作。要查看某个表下的各个链的信息可以使用</p>
+
+<p>“iptables _nL u。</p>
+
+<p>要使Linux系统成为网络防火墙，当然除了内核支持之外，还需要启用Linux的网络转发</p>
+
+<p>功能。如需要使系统启动时就具有该功能，可以将上面的命令写入到/etc/rc.d/rc.local文件中。</p>
+
+<p>echo 1 &gt; /proc/sys/net/ipv4/ip_forward</p>
+
+<p>数据包通过表和链时需要遵循一定的顺序，当数据包到达防火墙时，如果MAC地址符 合，就会由内核里相应的驱动程序接收，然后会经过一系列操作，从而决定是发送给本地的程 序还是转发给其他机器。数据包通过防火墙时分以下3种情况。</p>
+
+<p>1.以本地为目标的包</p>
+
+<p>当一个数据包进入防火墙后，如果目的地址是本机，被防火墙进行检查的顺序如表3.8所 示。如果在某一个步骤数据包被丢弃，当然就不会执行后面的检查了。</p>
+
+<p>表3.8以本地为目的的包检查顺序</p>
+
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>表</th>
+<th>链</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>数据包在链路上进行传输</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td>数据包进入网络接口</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>mangle</td>
+<td>PREROUTING</td>
+<td>这个链用来mangle数据包，如对包进行改写或做标记</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>nat</td>
+<td>PREROUTING</td>
+<td>这个链主要用来做DNAT</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td></td>
+<td></td>
+<td>路由判断，如包是发往本地的还是要转发的</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>mangle</td>
+<td>INPUT</td>
+<td>在路由之后，被送往本地程序之前如对包进行改写或做标记</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>filter</td>
+<td>INPUT</td>
+<td>所有以本地为目的的包都需经过这个链，包的过滤规则设置在此</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td></td>
+<td></td>
+<td>数据包到达本地程序，如服务程序或客户程序</td>
+</tr>
+</tbody>
+</table>
+
+<p>2.以本地为源的包</p>
+
+<p>本地应用程序发出的数据包，被防火墙进行检查的顺序如表3.9所示。</p>
+
+<p>表3.9以本地为源的包检查顺序</p>
+
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>表</th>
+<th>链</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>本地程序，如服务程序或客户程序</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td>路由判断</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>mangle</td>
+<td>OUTPUT</td>
+<td>用来mangle数据包，如对包进行改写或做标记</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>nat</td>
+<td>OUTPUT</td>
+<td>对发出的包进行DNAT操作</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>filter</td>
+<td>OUTPUT</td>
+<td>对本地发出的包过滤，包的过滤规则设置在此</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>mangle</td>
+<td>POSTROUTING</td>
+<td>进行数据包的修改</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>filter</td>
+<td>POSTROUTING</td>
+<td>在这里做SNAT</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td></td>
+<td></td>
+<td>离开网络接口</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td></td>
+<td></td>
+<td>数据包在链路上传输</td>
+</tr>
+</tbody>
+</table>
+
+<p>3.被转发的包</p>
+
+<p>需要通过防火墙转发的数据包，被防火墙进行检查的顺序如表3.10所示。</p>
+
+<p>表3.10被转发的包检查顺序</p>
+
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>表</th>
+<th>链</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+<td></td>
+<td>数据包在链路上传输</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td>进入网络接口</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>mangle</td>
+<td>PREROUTING</td>
+<td>mangle数据包，如对包进行改写或做标记</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>nat</td>
+<td>PREROUTING</td>
+<td>这个链主要用来做DNAT</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td></td>
+<td></td>
+<td>路由判断，如包是发往本地的，还是要转发</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>mangle</td>
+<td>FORWARD</td>
+<td>包继续被发送至mangle表的FORWARD链，这是非常特殊的情 况才会用到的。在这里，包被mangle。这次mangle发生在最初的 路由判断之后，在最后一次更改包的目的之前</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>filter</td>
+<td>FORWARD</td>
+<td>FORWARD包继续被发送至这条FORWARD链。只有需要转发的 包才会走到这里，并且针对这些包的所有过滤也在这里进行。注 意，所有要转发的包都要经过这里</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>mangle</td>
+<td>POSTROUTING</td>
+<td>这个链也是针对一些特殊类型的包。这一步mangle是在所有更改 包的目的地址的操作完成之后做的，但这时包还在本地上</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>nat</td>
+<td>POSTROUTING</td>
+<td>这个链就是用来做SNAT的，不推荐在此处过滤，因为某些包即 使不满足条件也会通过</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td></td>
+<td></td>
+<td>离开网络接口</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td></td>
+<td></td>
+<td>数据包在链路上传输</td>
+</tr>
+</tbody>
+</table>
+
+<p>在对包进行过滤时，常用的有以下3个动作。</p>
+
+<p>(1)    ACCEPT： 一旦数据包满足了指定的匹配条件，数据包就会被ACCEPT，并且不会 再去匹配当前链中的其他规则或同一个表内的其他规则，但数据仍然需要通过其他表中的链。</p>
+
+<p>(2)    DROP：如果包符合条件，数据包就会被丢掉，并且不会向发送者返回任何信息， 也不会向路由器返回信息。</p>
+
+<p>(3)    REJECT:和DROP基本…样，区别在于除了将包丢弃并且向发送者返回错误信息。</p>
+
+<p>要进一步了解各个链中规则的匹配顺序，就来学习下filter表中FORWARD链的输出，如 【示例3-16】所示。</p>
+
+<p>【示例3-16】</p>
+
+<p>[rootSCentOS 叫# iptables -nvL</p>
+
+<p>Chain FORWARD (policy DROP)</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-59.jpg" alt="img" /></p>
+
+<p>target prot opt source destination ACCEPT all •— 192.168.100.0/24 0.0.0.0/0 ACCEPT all •— 0.0.0.0/0 69.147.0.0/24 ACCEPT all — 172.16.0.0/16 0.0.0.0/0</p>
+
+<p>mychain tcp ——10</p>
+
+<p>0.0.0/24 0.0.0.0 tcp dpt:80</p>
+
+<p>“policy DROP”表示该链的默认规则为DROP操作。如现有一数据包，源地址为 192.168.1.58，目的地址为137.254.60.6,协议为TCP,目的端口为80。当该数据包通过</p>
+
+<p>FORWARD链时，从上往下开始匹配：</p>
+
+<p>(1)    与第1条规则：源为192.168.100.0/24,源不匹配。</p>
+
+<p>(2)    与第2条规则：目的为69.147.0.0/24，目标不匹配。</p>
+
+<p>(3)    与第3条规则：源为172.16.0.0/16，源不匹配。</p>
+
+<p>(4)    与第4条规则：源为10.0.0.0/24,源不匹配。</p>
+
+<p>由于经过匹配以上所有规则都不符合，数据包则转交给默认规则处理，由于本示例中默认 的规则为DROP,因此该数据包被丢弃。</p>
+
+<p>再看另一个数据包，源地址为192.168.1.58，目的地址为69.147.83.199,协议为TCP，目 的端口为80。当该数据包通过FORWARD链时，从上往下开始匹配：</p>
+
+<p>(1)    与第1条规则：源为192.168.100.0/28,源不匹配。</p>
+
+<p>(2)    与第2条规则：源地址为任意(0.0.0.0/0),匹配：目的地址为69.147.0.0/24, 69.147.83.199在范围内，匹配；源端口和目的端口为任意，匹配；协议为任意(all),匹配； 规则链对该数据包的动作为ACCEPT,因此该数据包通过。</p>
+
+<p>如果数据包的源地址为10.0.0.35,目的地址为69.147.83.199,协议为TCP,目的端口为 80。当该数据包通过FORWARD链时，从上往下开始匹配，当匹配到第4条规则时匹配，动 作为mychain,此时数据包会被转到用户自己定义的规则链mychain进行处理。</p>
+
+<p>3.4.3 iptables 配置实例</p>
+
+<p>iptables工具支持丰富的参数，可以IP和端口、网络接口、TCP标志位或MAC地址进行 过滤，参数指定方式除传统方法外，可以支持“！”、“ALL”或“NONE”等进行参数匹配。 iptables常用参数说明如表3.11所示。</p>
+
+<p>表3.11 iptables命令参数含义说明</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>-A</td>
+<td>新增规则到某个规则链中，该规则将会成为规则链中的最后一条规则</td>
+</tr>
+
+<tr>
+<td>-D</td>
+<td>从某个规则链中删除一条规则，可以输入完整规则，或直接指定规则编号加以删除</td>
+</tr>
+
+<tr>
+<td>-R</td>
+<td>替换某行规则，规则被替换后并不会改变顺序</td>
+</tr>
+
+<tr>
+<td>-I</td>
+<td>插入一条规则，原本该位置上的规则将会往后移动一个顺位</td>
+</tr>
+
+<tr>
+<td>-L</td>
+<td>列出某规则链中的所有规则</td>
+</tr>
+
+<tr>
+<td>-F</td>
+<td>删除规则链的所有规则</td>
+</tr>
+
+<tr>
+<td>-Z</td>
+<td>将数据包计数器归零</td>
+</tr>
+
+<tr>
+<td>-N</td>
+<td>定义新的规则链</td>
+</tr>
+
+<tr>
+<td>-X</td>
+<td>删除某个规则链</td>
+</tr>
+
+<tr>
+<td>-P</td>
+<td>定义不符合规则的数据包的默认处理方式</td>
+</tr>
+
+<tr>
+<td>-E</td>
+<td>修改某自定义规则链的名称</td>
+</tr>
+
+<tr>
+<td>-P</td>
+<td>匹配通信协议类型是否相符，可以使用!运算符进行反向匹配</td>
+</tr>
+</tbody>
+</table>
+
+<p>（续表）</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>-S</td>
+<td>匹配数据包的来源IP,可以匹配单个IP或某个网段</td>
+</tr>
+
+<tr>
+<td>-d</td>
+<td>匹配数据包的目的地IP，设定方式同上</td>
+</tr>
+
+<tr>
+<td>-i</td>
+<td>匹配数据包是从那个网络接口进入，可以使用通配字符+指定匹配范围</td>
+</tr>
+
+<tr>
+<td>-0</td>
+<td>匹配数据包要从哪个网络接口发出，设定方式同上</td>
+</tr>
+
+<tr>
+<td>—sport</td>
+<td>匹配数据包的源端口，可以匹配单一端口或一个范围</td>
+</tr>
+
+<tr>
+<td>—dport</td>
+<td>匹配数据包的目的端口号，设定方式同上</td>
+</tr>
+
+<tr>
+<td>—tcp-flags</td>
+<td>匹配TCP数据包的状态标志，如SYN、ACK、FIN等，另外可使用ALL和NONE进行匹配</td>
+</tr>
+
+<tr>
+<td>-m</td>
+<td>匹配不连续的多个源端口或目的端口</td>
+</tr>
+
+<tr>
+<td>m</td>
+<td>匹配数据包来源网络接口的MAC地址，不能用于OUTPUT和POSTROUTING规则链</td>
+</tr>
+
+<tr>
+<td>ACCEPT</td>
+<td>将数据包放行，进行完此处理动作后，将不再匹配其他规则，直接跳往下一个规则链</td>
+</tr>
+
+<tr>
+<td>REJECT</td>
+<td>阻塞数据包，并传送数据包通知对方</td>
+</tr>
+
+<tr>
+<td>DROP</td>
+<td>丢弃数据包不予处理，进行完此处理动作后，将不再匹配其他规则，直接中断过滤程序</td>
+</tr>
+
+<tr>
+<td>REDIRECT</td>
+<td>将数据包定向另一个端口，进行完此处理动作后，将会继续匹配其他规则</td>
+</tr>
+
+<tr>
+<td>LOG</td>
+<td>将数据包相关信息记录在/var/log中</td>
+</tr>
+
+<tr>
+<td>SNAT</td>
+<td>改写数据包来源IP为某特定IP或IP范围，可以指定port对应的范围，进行完此处理动作 后，将直接跳往下一个规则</td>
+</tr>
+
+<tr>
+<td>DNAT</td>
+<td>改写数据包目的地IP为某特定IP或IP范围，可以指定port对应的范围，进行完此处理动 作后，将会直接跳往下一个规则链</td>
+</tr>
+
+<tr>
+<td>RETURN</td>
+<td>结束在目前规则链中的过滤程序，返回主规则链继续过滤</td>
+</tr>
+
+<tr>
+<td>MARK</td>
+<td>数据包做标记，以便提供作为后续过滤的条件判断依据，进行完此处理动作后，将会继续匹 配其他规则</td>
+</tr>
+</tbody>
+</table>
+
+<p>1.简单应用示例</p>
+
+<p>iptables使用方法首先指定规则表，然后指定要执行的命令，接着指定参数匹配数据包的内容， 最后是要采取的动作。下面通过一些示例来说明iptables的使用方法，如【示例3-17】所示。</p>
+
+<p>【示例3-17]</p>
+
+<p>#清除所有规则</p>
+
+<p>[rootSCentOS ~]# iptables -F &lsquo;    #清除nat表中的所有规则</p>
+
+<p>[root@CentOS ~]# Iptables -t nat -F ，允许来自192.168.3.0/24连接sshd服务</p>
+
+<p>[rootQCentOS # iptables -A INPUT -p tcp -s 192.168.3.0/24    &ndash;dport 22 -j</p>
+
+<p>ACCEPT</p>
+
+<p>#其他任何网段访问不能访问sshd服务</p>
+
+<p>[rootSCentOS # iptables -A INPUT -p tcp    &ndash;dport 22 -j DROP</p>
+
+<p>在上述示例中，“-F”表示清除已存在的所有规则，“-A”表示添加一条规则，“-p”指 定协议为TCP, &ldquo;-s”指定源地址段，如果该参数忽略或为0.0.0.0/0,则源地址表示任何地址，</p>
+
+<p>“-dport指定目的端口 ”。包的判断顺序为首先判断第1条规则，由于允许192.168.3.0/24网 段的服务器访问sshd服务，因此包可以通过；如果是其他来源的主机，由于第1条规则不符 合接着判断第2条规则，策略为禁止，因此包将被丢弃。</p>
+
+<p>除以上示例外，iptables可以为每个链指定默认规则，如果包不符合现存的所有规则，则 按默认规则处理，方法如【示例3-18】所示。</p>
+
+<p>【示例3-18】</p>
+
+<p>#淸除所有规则</p>
+
+<p>[root@CentOS 〜iptables -F #设置默认规则</p>
+
+<p>[.root@CentOS 〜]# iptables -t filter -P INPUT ACCEPT #允许來自192.168.3.0/24连接sshd服务</p>
+
+<p>[root@CentOS # iptables -A INPUT -p tcp ~s 192.168.3.0/24    &ndash;dport 22 -j</p>
+
+<p>ACCEPT</p>
+
+<p>由于设置了默认规则，该示例的功能同示例3-3。</p>
+
+<p>上面所列举的示例仅仅是为了说明语法和原理，在实际使用+ ,还需要注意规则添加的顺&rsquo;</p>
+
+<p>序，使数据包通过的规则最少。</p>
+
+<p>基于网络接口的过滤如【示例3-19】所示。</p>
+
+<p>【示例3-19]</p>
+
+<p>[root@CentOS #iptables -t filter -F [root^CentOS #iptables -t filter -P FORWARD DROP</p>
+
+<p>[root@CentOS ~]#iptables -t filter -A FORWARD -p tcp -i eth2 -o ethl &ndash;dport 80 -j ACCEPT</p>
+
+<p>使用-i参数来指定数据包的来源网络接口，使用-0来指定数据包将从哪个网络接口出去。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-60.jpg" alt="img" /></p>
+
+<p>在INPUT链中不能使用-o选项，OUTPUT链中不能使用-i选项。</p>
+
+<p>\2. NAT设置</p>
+
+<p>通常网络中的数据包从包的源地址发出直到包要发送的目的地址，整个路径经过很多不同 的连接，一般情况下这些连接不会更改数据包的内容，只是原样转发。如果发出数据包的主机 使用的源地址是私用网络地址，该数据包将不能在互联网上传输。要能够使用私有网络访问互 联网，就必须要做NAT (Network Address Translation,网络地址转换)。</p>
+
+<p>NAT分为两种不同的类型：源NAT (SNAT)和目标NAT (DNAT)。SNAT通常用于使 用了私网地址的局域网络能够访问互联网。DNAT是指修改包的目标地址，端口转发、负载均 衡和透明代理都属于DNAT。</p>
+
+<p>在SNAT中改变源地址，如【示例3-20]所示。</p>
+
+<p>【示例3-20】</p>
+
+<p>#抓7^改变源地址为1.2.3.4</p>
+
+<p>[rootGCentOS 〜iptables -t nat -A POSTROUTING -o ethO -j SNAT &ndash;to 1.2.3.4 #DNAT</p>
+
+<p>[root@CentOS ~] # iptables ~t nat -A PREROUTING -p tcp -i eth2 -d 1.2.3.4 —dport 80 -j DNAT —to 192.168.3.88:80</p>
+
+<p>如果做SNAT只能在POSTROUTING上进行，而做DNAT只能在PREROUTING内进行。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-61.jpg" alt="img" /></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/03-linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 Linux网络配置</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/02-%E8%B7%9F%E6%88%91%E5%AD%A6-centos-%E7%9A%84%E5%AE%89%E8%A3%85/07-%E5%B0%8F%E7%BB%93/">
+            <span class="next-text nav-default">07 小结</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

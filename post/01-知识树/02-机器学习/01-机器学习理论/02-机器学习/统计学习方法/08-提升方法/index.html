@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>08 提升方法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第8章提升方法 提升（boosting）方法是一种常用的统计学习方法，应用广泛且有效.在分 类问题中，它通过改变训炼样本的权重，学习多个分类器，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/08-%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="08 提升方法" />
+<meta property="og:description" content="第8章提升方法 提升（boosting）方法是一种常用的统计学习方法，应用广泛且有效.在分 类问题中，它通过改变训炼样本的权重，学习多个分类器，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/08-%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95/" /><meta property="article:published_time" content="2018-06-26T19:22:02&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:22:02&#43;00:00"/>
+<meta itemprop="name" content="08 提升方法">
+<meta itemprop="description" content="第8章提升方法 提升（boosting）方法是一种常用的统计学习方法，应用广泛且有效.在分 类问题中，它通过改变训炼样本的权重，学习多个分类器，">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:22:02&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:22:02&#43;00:00" />
+<meta itemprop="wordCount" content="9413">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="08 提升方法"/>
+<meta name="twitter:description" content="第8章提升方法 提升（boosting）方法是一种常用的统计学习方法，应用广泛且有效.在分 类问题中，它通过改变训炼样本的权重，学习多个分类器，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">08 提升方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 9413 words </span>
+        <span class="more-meta"> 19 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#第8章提升方法">第8章提升方法</a>
+<ul>
+<li><a href="#8-1提升方法adaboost算法">8.1提升方法AdaBoost算法</a></li>
+<li><a href="#8-2-adaboost算法的训练误差分析">8.2 AdaBoost算法的训练误差分析</a></li>
+<li><a href="#ip">IP、</a></li>
+<li><a href="#8-3-adaboost算法的解释">8.3 AdaBoost算法的解释</a></li>
+<li><a href="#g-x-argnun-记-乃-g-x">G*„(x) = argnun^记《/(乃 * G(x.))</a></li>
+<li><a href="#8-4提升树">8.4提升树</a></li>
+<li><a href="#l-y-fsx-e-u-z-巧-2-1-93-i">L(,y,fSx))=E U - Z (巧))2 = 1.93 /-I</a></li>
+<li><a href="#10">10</a></li>
+<li><a href="#本章概要">本章概要</a></li>
+<li><a href="#乂-x">乂 (X) =</a></li>
+<li><a href="#继续阅读">继续阅读</a></li>
+<li><a href="#习-题">习-题</a></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h5 id="第8章提升方法">第8章提升方法</h5>
+
+<p>提升（boosting）方法是一种常用的统计学习方法，应用广泛且有效.在分 类问题中，它通过改变训炼样本的权重，学习多个分类器，并将这些分类器进行 线性组合，提髙分类的性能.</p>
+
+<p>本章首先介绍提升方法的思路和代表性的提升算法AdaBoost；然后通过训练 误差分析探讨AdaBoost为什么能够提高学习精度：并且从前向分步加法模型的</p>
+
+<p>角度解释AdaBoost；最后叙述提升方法更具体的实例-提升树（boosting</p>
+
+<p>tree）. AdaBoost算法是1995年由Freund和Schapire提出的，提升树是2000年 由Friedman等人提出的.</p>
+
+<h6 id="8-1提升方法adaboost算法">8.1提升方法AdaBoost算法</h6>
+
+<p>8.1.1提升方法的基本思路</p>
+
+<p>提升方法基于这样一种思想：对于一•个复杂任务来说，将多个专家的判断进 行适当的综合所得出的判断，要比其中任何一个专家单独的判断好.实际上，就 是“三个臭皮匠顶个诸葛亮”的道理.</p>
+
+<p>历史上，Kearns和Valiant首先提出了“强可学习（strongly leamable ） ”和“弱 可学习（weakly leamable）”的概念.指出：在概率近似正确（probably approximately correct, PAC）学习的框架中，一个概念（一个类），如果存在一个多项式的学习 算法能够学习它，并且正确率很髙，那么就称这个概念是强可学习的；一个概念， 如果存在一个多项式的学习算法能够学习它，学习的正确率仅比随机猜测略好，那 么就称这个概念是弱可学习的.非常有趣的是Schapire后来证明强可学习与弱可 学习是等价的，也就是说，在PAC学习的框架下，一个概念是强可学习的充分 必要条件是这个概念是弱可学习的.</p>
+
+<p>这样一来，问题便成为，在学习中，如果已经发现了 “弱学习算法”，那么 能否将它提升（boost）为“强学习算法”.大家知道，发现弱学习算法通常要比 发现强学习算法容易得多.那么如何具体实施提升，便成为开发提升方法时所要 解决的问题.关于提升方法的研究很多，有很多算法被提出.最具代表性的是 AdaBoost 算法（AdaBoost algorithm）.</p>
+
+<p>对于分类问题而言，给定一个训练样本集，求比较粗糙的分类规则（弱分类 器）要比求精确的分类规则（强分类器）容易得多.提升方法就是从弱学习算法 出发，反复学习，得到一系列弱分类器（又称为基本分类器），然后组合这些弱 分类器，构成一个强分类器.大多数的提升方法都是改变训练数据的概率分布(训 练数据的权值分布)，针对不同的训练数据分布调用弱学习算法学习一系列弱分 类器.</p>
+
+<p>这样，对提升方法来说，有两个问题需要回答：一是在每一轮如何改变训练 数据的权值或概率分布；二是如何将弱分类器组合成一个强分类器.关于第1个 问题，AdaBoost的做法是，提髙那些被前一轮弱分类器错误分类样本的权值，而 降低那些被正确分类样本的权值.这样一来，那些没有得到正确分类的数据，由 于其权值的加大而受到后一轮的弱分类器的更大关注.于是，分类问题被一系列 的弱分类器“分而治之”.至于第2个问题，即弱分类器的组合，AdaBoost采取 加权多数表决的方法.具体地，加大分类误差率小的弱分类器的权值，使其在表 决中起较大的作用，减小分类误差率大的弱分类器的权值，使其在表决中起较小 的作用.</p>
+
+<p>AdaBoost的巧妙之处就在于它将这些想法自然且有效地实现在一种算法里.</p>
+
+<p>8.1*2 AdaBoost 算法</p>
+
+<p>现在叙述AdaBoost算法.假设给定一个二类分类的训练数据集 T =</p>
+
+<p>其中，每个样本点由实例与标记组成.实例七标记=</p>
+
+<p>•V是实例空间，3；是标记集合.AdaBoost利用以下算法，从训练数据中学习一 系列弱分类器或基本分类器，并将这些弱分类器线性组合成为一个强分类器.</p>
+
+<p>算法 8.1 (AdaBoost)</p>
+
+<p>输入：训练数据集    其中</p>
+
+<p>；V = {-1，+1}:弱学习算法；</p>
+
+<p>输出：最终分类器G(x).</p>
+
+<p>(1)    .初始化训练数据的权值分布</p>
+
+<p>Dx=(wn,-,wu，-, ww), wu -, i = \,2,&ndash;,N N</p>
+
+<p>(2)    对m = l，2,…，Af</p>
+
+<p>(a)使用具有权值分布的训练数据集学习，得到基本分类器</p>
+
+<p>Gm (x):X —&gt; {-1，+1}</p>
+
+<p>(b)计算么Cr)在训练数据集上的分类误差率</p>
+
+<p>e«= P(GM = £</p>
+
+<p>(8.1)</p>
+
+<p>&copy;计算G„(X)的系数</p>
+
+<p>这里的对数是自然对数.</p>
+
+<p>(d)更新训练数据集的权值分布</p>
+
+<p>Wm+I,i    ⑷)，！■ = 1,2,…，W</p>
+
+<p>这里，是规范化因子</p>
+
+<p>=ZW«/ 呵(-a”yiGm ⑹) 1=1</p>
+
+<p>它使DM+I成为一个概率分布.</p>
+
+<p>(3)构建基本分类器的线性组合</p>
+
+<p>/(x) = JamC7B(x)</p>
+
+<p>得到最终分类器</p>
+
+<p>G(x) = sign(/(x)) = sign</p>
+
+<p>(8.2)</p>
+
+<p>(8.3)</p>
+
+<p>(8.4)</p>
+
+<p>(8.5)</p>
+
+<p>(8.6)</p>
+
+<p>(8.7)</p>
+
+<p>对AdaBoost算法作如下说明：</p>
+
+<p>步骤(1)假设训练数据集具有均匀的权值分布，即每个训练样本在基本分类 器的学习中作用相同，这一假设保证第1步能够在原始数据上学习基本分类器^⑶.</p>
+
+<p>步骤(2) AdaBoost反复学习基本分类器，在每一轮m = l，2,…，M顺次地执 行下列操作：</p>
+
+<p>(a)    使用当前分布加权的训练数据集，学习基本分类器</p>
+
+<p>(b)    计算基本分类器在加权训练数据集上的分类误差率：</p>
+
+<p>=p(G«U)*Z)= Z    (8-8)</p>
+
+<p>这里，&amp;表示第m轮中第/个实例的权值，^&gt;#=1.这表明，氏什)在加权的</p>
+
+<p>(=i</p>
+
+<p>训练数据集上的分类误差率是被&lt;?„00误分类样本的权值之和，由此可以看出数 据权值分布仏与基本分类器Gm(x)的分类误差率的关系.</p>
+
+<p>&copy;    计算基本分类器0„(*)的系数表示C&lt;)在最终分类器中的重要 性.由式(8.2)可知，当么彡j时，am^0,并且随着么的减小而增大，所以 分类误差率越小的基本分类器在最终分类器中的作用越大.</p>
+
+<p>Cd)更新训练数据的权值分布为下~轮作准备.式(8.4)可以写成:</p>
+
+<p>Gn(Xl) = yi An</p>
+
+<p>由此可知，被基木分类器误分类样本的权值得以扩大，而被正确分类样本 的权值却得以缩小.两相比较，误分类样本的权值被放大e2fl-=-S=—倍.因此，</p>
+
+<p>误分类样本在下一轮学习中起更大的作用.不改变所给的训练数据，而不断改变 训练数据权值的分布，使得训练数据在基本分类器的学习中起不同的作用，这是 AdaBoost的一个特点.</p>
+
+<p>步骤(3)线性组合/(X)实现A/个基本分类器的加权表决.系数，表示了 基本分类器的重要性，这里，所有&amp;之和并不为1. /C0的符号决定实例 *的类，/(JC)的绝对值表示分类的确信度.利用基本分类器的线性组合构建最终 分类器是AdaBoost的另一特点.</p>
+
+<p>8.1.3 AdaBoost 的例子①</p>
+
+<p>例8.1给定如表8.1所示训练数据.假设弱分类器由;c<v或x>v产生，其 阈值v使该分类器在训练数据集上分类误差率最低.试用AdaBoost算法学习一个 强分类器.</p>
+
+<p>表8.1训练数据表</p>
+
+<table>
+<thead>
+<tr>
+<th>序号    1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>X</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+
+<tr>
+<td>y</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+
+<p>解初始化数据权值分布</p>
+
+<p>wH=0.1, / = 1,2,-,10</p>
+
+<p>对 w = l，</p>
+
+<p>(a)在权值分布为^的训练数据上，阈值v取2.5时分类误差率最低，故基 本分类器为</p>
+
+<p>①例题来源于 ht^)://www.csie.edu.tw。</p>
+
+<p>(b)    G,(x)在训练数据集上的误差率e, = P(G,(xJ*乃)=0.3.</p>
+
+<p>&copy;    计算(?办)的系数：a, =ilOgi^- = 0.4236.</p>
+
+<p>2 e,</p>
+
+<p>(d)    更新训练数据的权值分布：</p>
+
+<p>D2=(W21：&rdquo;.，W2P…，W2W)</p>
+
+<p>w2i = ^i-exp^^GiCx,)), » = 1,2,- -,10 zi</p>
+
+<p>D2 = (0.0715,0.0715,0.0715,0.0715,0.0715,0.0715, 0.1666,0.1666,0.1666,0,0715)</p>
+
+<p>7；(«) = 0.4236^(^)</p>
+
+<p>分类器Sign[y；(x)]在训练数据集上有3个误分类点.</p>
+
+<p>对 w = 2，</p>
+
+<p>(a)在权值分布为只的训练数据上，阈值v是8.5时分类误差率最低，基本 分类器为</p>
+
+<p>G!2(x) =</p>
+
+<p>x&lt;8.5</p>
+
+<p>x&gt;8.5</p>
+
+<p>(b) G20c)在训练数据集上的误差率e2=0.2143.</p>
+
+<p>(c )计算 or2 = 0.6496.</p>
+
+<p>(d)更新训练数据权值分布：</p>
+
+<p>D3= (0.0455,0.0455, 0.0455, 0.1667,0.1667,0.1667,</p>
+
+<p>0.1060,0.1060,0.1060,0.0455)</p>
+
+<p>f2(x) = 0.4236G,(x) + 0.6496G2 (x)</p>
+
+<p>分类器sign[/2(x)]在训练数据集上有3个误分类点.</p>
+
+<p>对 = 3，</p>
+
+<p>(a)在权值分布为马的训练数据上，阈值v是5.5时分类误差率最低，基本 分类器为</p>
+
+<p>(b)    G3C0在训练样本集上的误差率&amp; =0.1820.</p>
+
+<p>&copy;    计算叫=0.7514.</p>
+
+<p>(d)    更新训练数据的权值分布：</p>
+
+<p>= (0.125,0.125,0.125,0.102,0.102,0.102,0.065,0.065,0.065,0.125)</p>
+
+<p>于是得到：</p>
+
+<p>/j(x) = 0.4236G,(x) + 0.6496G2(x) + 0.7514G3(x)</p>
+
+<p>分类器Sign［/3CO］在训练数据集上误分类点个数为0.</p>
+
+<p>于是最终分类器为</p>
+
+<p>G(x) = sign［乂 (*)］ = signlO^eG, CO + 0.6496G2(x) + 0.7514G3 ⑻］    ■</p>
+
+<h6 id="8-2-adaboost算法的训练误差分析">8.2 AdaBoost算法的训练误差分析</h6>
+
+<p>AdaBoost最基本的性质是它能在学习过程中不断减少训练误差，即在训练数 据集上的分类误差率.关于这个问题有下面的定理：</p>
+
+<p>定理8.1 (AdaBoost的训练误差界)AdaBoost算法最终分类器的训练误差</p>
+
+<p>1    N    1    ■哩</p>
+
+<p>—名一Sexp(-y,/(x,)) = nz»</p>
+
+<p>这里，G(x)，/⑻和分别由式(8.7)、式(8.6)和式(8.5)给出.</p>
+
+<p>证明当时，y,f(x,)&lt;0.因而expC-j^/Xx,))彡1.由此直接推导</p>
+
+<p>出前半部分.</p>
+
+<p>后半部分的推导要用到；的定义式(8.5)及式(8.4)的变形：</p>
+
+<p>〜exp(-a„^(?Bt(x/)) = Z„wn+lil</p>
+
+<p>现推导如下:</p>
+
+<p>M</p>
+
+<p>=% e % n 哪(-«»&lt;))</p>
+
+<p>=[ wM exp(-aMyfGM (x,))</p>
+
+<h6 id="ip">IP、</h6>
+
+<p>这一定理说明，可以在每一轮选取适当的G„使得，最小，从而使训练误差 下降最快.对二类分类问题，有如下结果：</p>
+
+<p>定理8.2 (二类分类问题AdaBoost的训练误差界)</p>
+
+<p>U    M _ M &ndash; &lt; M </p>
+
+<p>T[Zn= fl[2似l-e„)] = nVO-4^2) &lt; exp -2£(8.10)</p>
+
+<p>m=l    m=l    \ m=l J</p>
+
+<p>这里，</p>
+
+<p>证明由；的定义式(8.5)及式(8.8)得</p>
+
+<p>Z” = £ &gt;%+ exp(-amyiGm(x())</p>
+
+<p>=Z 冰„，〜+ Z wW</p>
+
+<p>= (l-e„)e、+emea&rdquo;_</p>
+
+<p>=2V^(r-eJ = K    (8.11)</p>
+
+<p>至于不等式</p>
+
+<p>nW-O expf-2^z„2l</p>
+
+<p>则可先由ex和711在点x = 0的泰勒展开式推出不等式^^^^^ &lt; exp(-2zm2), 进而得到.    ■</p>
+
+<p>推论8.1如果存在厂&gt;0,对所有有匕&gt;/，则 1 N</p>
+
+<p>—S !(G(xi) * Z )彡 exp(-2Af/)    (8.12)</p>
+
+<p>A ;=1</p>
+
+<p>这表明在此条件下AdaBoost的训练误差是以指数速率下降的.这一性质当 然是很有吸引力的.</p>
+
+<p>注意，AdaBoost算法不需要知道下界％.这正是Freund与Schapire设计 AdaBoost时所考虑的.与一些早期的提升方法不同，AdaBoost具有适应性，即它 能适应弱分类器各自的训练误差率.这也是它的名称(适应的提升)的由来，Ada 是Adaptive的简写.</p>
+
+<h6 id="8-3-adaboost算法的解释">8.3 AdaBoost算法的解释</h6>
+
+<p>AdaBoost算法还有另一个解释，即可以认为AdaBoost算法是模型为加法模 型、损失函数为指数函数、学习算法为前向分步算法时的二类分类学习方法.</p>
+
+<p>8.3.1前向分步算法</p>
+
+<p>考虑加法模型(additive model)</p>
+
+<p>=    (8.13)</p>
+
+<p>其中，咐;r„)为基函数，4为基函数的参数，足为基函数的系数.显然，式(8.6) 是一个加法模型.</p>
+
+<p>在给定训练数据及损失函数iCv,/co)的条件下，学习加法模型/(X)成为经 验风险极小化即损失函数极小化问题：</p>
+
+<p>啟各£(乃，写狀W«))    (8-14)</p>
+
+<p>通常这是一个复杂的优化问题.前向分步算法(forward stagewise algorithm)求</p>
+
+<p>解这一优化问题的想法是：因为学习的是加法模型，如果能够从前向后，每一步 只学习一个基函数及其系数，逐步逼近优化目标函数式(8.14)，那么就可以简化 优化的复杂度.具体地，每步只需优化如下损失函数：</p>
+
+<p>N</p>
+
+<p>(乃，州弋;”)    (8.15)</p>
+
+<p>给定训练数据集 r = {(x1,yJ),(Jc2,J,2)»&ndash;»(-«j?»y»)} }xteX^Rn , y,^y = 损失函数L(y,/CO)和基函数的集合什⑶7)},学习加法模型/CO的前</p>
+
+<p>向分步算法如下：</p>
+
+<p>算法8.2 (前向分步算法)</p>
+
+<p>输入：训练数据集损失函数Z&lt;y，/(;c));基 函数集译(AZ)};</p>
+
+<p>输出：加法模型/CO.</p>
+
+<p>(1)    初始化/0(x) = O</p>
+
+<p>(2)    对 to = 1，2,…，M</p>
+
+<p>(a)极小化损失函数</p>
+
+<p>*    N</p>
+
+<p>(此，y„) = arg    + 仰(A; y))    (8.16〉</p>
+
+<p>得到参数此 &lt;b)更新</p>
+
+<p>/mW = /«-iW +    (8.17)</p>
+
+<p>(3)    得到加法模型</p>
+
+<p>(8.18)</p>
+
+<p>这样，前向分步算法将同时求解从m = l到M所有参数足，n,的优化问题简 化为逐次求解各个凡，的优化问题.</p>
+
+<p>8.3.2前向分步算法与AdaBoost</p>
+
+<p>由前向分步算法可以推导出AdaBoost，用定理叙述这一关系.</p>
+
+<p>定理8.3 AdaBoost算法是前向分歩加法算法的特例.这时，模型是由基本</p>
+
+<p>分类器组成的加法模型，损失函数是指数函数.</p>
+
+<p>证明前向分步算法学习的是加法模型，当基函数为基本分类器时，该加法</p>
+
+<p>模型等价于AdaBoost的最终分类器</p>
+
+<p>M</p>
+
+<p>=    (8.19)</p>
+
+<p>由基本分类器及其系数义组成，m =    前向分步算法逐一学习基</p>
+
+<p>函数，这一过程与AdaBoost算法逐一学习基本分类器的过程一致.下面证明前 向分步算法的损失函数是指数损失函数(exponential loss function)</p>
+
+<p>厶(J，/W) = exp[-j/(x)]</p>
+
+<p>时，其学习的具体操作等价于AdaBoost算法学习的具体操作.</p>
+
+<p>假设经过m-1轮迭代前向分步算法已经得到:</p>
+
+<p>(x) = f„.2 (x) +    Gm_, (x)</p>
+
+<p>= alGl(x)+- + am_lGm.,(x)</p>
+
+<p>在第m轮迭代得到a。，CO和人Ce) •</p>
+
+<p>Z,W = /«-,(x)+omG!b(x)</p>
+
+<p>目标是使前向分步算法得到的％和使人(x)在训练数据集r上的指数损失 最小，即</p>
+
+<p>= arg rain exp[-y( (/^ (x,) + aG(_x,))}    (8.20)</p>
+
+<p>式(8.20)可以表示为</p>
+
+<p>(«„,GK(xy)= arg mm J；    exp<a href="8.21">-少,aG ⑷</a></p>
+
+<p>其中，.因为还„,既不依赖a也不依赖于G，所以与最小化 无关.但元，依赖于/^什)，随着每一轮迭代而发生改变.</p>
+
+<p>现证使式(8.21)达到最小的 &lt; 和G⑻就是AdaBoost算法所得到的氏和 G„(x).求解式(8.21)可分两步：</p>
+
+<p>首先，求S(x).对任意a&gt;0,使式(8.21)最小的GC0由下式得到：</p>
+
+<h6 id="g-x-argnun-记-乃-g-x">G*„(x) = argnun^记《/(乃 * G(x.))</h6>
+
+<p>其中，exp[-只/„_介)1 •</p>
+
+<p>此分类器GM即为AdaBoost算法的基本分类器GJx)，因为它是使第w轮 加权训练数据分类误差率最小的基本分类器.</p>
+
+<p>之后，求a:.参照式(8.11)，式(8.21)中 StexP 卜只a&lt;7(人)]</p>
+
+<p>=I J；</p>
+
+<p>将已求得的GOO代入式(8.22),对cr求导并使导数为0,即得到使式(8.21)最 小的a.</p>
+
+<p>.1, l-em «« = 2l0g_7^</p>
+
+<p>其中，e„是分类误差率:</p>
+
+<p>N</p>
+
+<p>e”= ——n-=Z    (〜))</p>
+
+<p>lx i=,</p>
+
+<p>i=l</p>
+
+<p>这里的 &lt; 与AdaBoost算法第2&copy;步的a„完全一致.</p>
+
+<p>最后来看每&ndash;轮样本权值的更新.由</p>
+
+<p>以及 &lt; =，可得</p>
+
+<p>wn+M=wn&gt;j exp[-肌(7„(x)]</p>
+
+<p>这与AdaBoost算法第2(d)步的样本权值的更新，只相差规范化因子，因而 等价.    .</p>
+
+<h6 id="8-4提升树">8.4提升树</h6>
+
+<p>提升树是以分类树或回归树为基本分类器的提升方法.提升树被认为是统计 学习中性能最好的方法之一.</p>
+
+<p>8.4.1提升树模型</p>
+
+<p>提升方法实际采用加法模型(即基函数的线性组合)与前向分步算法.以决 策树为基函数的提升方法称为提升树(boosting tree).对分类问题决策树是二叉 分类树，对回归问题决策树是二叉回归树.在例8.1中看到的基本分类器;c<v或 x>v,可以看作是由一个根结点直接连接两个叶结点的简单决策树，即所谓的决 策树桩(decision stump).提升树模型可以表示为决策树的加法模型：</p>
+
+<p>M</p>
+
+<p>/M(x) = 2r(x;0m)    (8.23)</p>
+
+<p>m=l</p>
+
+<p>其中，表示决策树：为决策树的参数；a/为树的个数.</p>
+
+<p>8.4.2提升树算法</p>
+
+<p>提升树算法采用前向分步算法.首先确定初始提升树/e(x) = 0,第w歩的模</p>
+
+<p>型是</p>
+
+<p>Z,,W=ZB-1W+r(x；©m)    (8.24)</p>
+
+<p>其中，人为当前模型，通过经验风险极小化确定下一棵决策树的参数e。，</p>
+
+<p>em=argmin    (xj + T(x,; ©„))    (8.25)</p>
+
+<p>由于树的线性组合可以很好地拟合训练数据，即使数据中的输入与输出之间 的关系很复杂也是如此，所以提升树是一个髙功能的学习算法.</p>
+
+<p>下面讨论针对不同问题的提升树学习算法，其主要区别在于使用的损失函数 不同.包括用平方误差损失函数的回归问题，用指数损失函数的分类问题，以及 用一般损失函数的一般决策问题.</p>
+
+<p>对于二类分类问题，提升树算法只需将AdaBoost算法8.1中的基本分类器限 制为二类分类树即可，可以说这时的提升树算法是AdaBoost算法的特殊情况， 这里不再细述.下面叙述回归问题的提升树.</p>
+
+<p>已知一个训练数据集义为输 入空间，ytey^R, 3；为输出空间.在5.5节中已经讨论了回归树的问题.如 果将输入空间1划分为个互不相交的区域2?,，^，…，心，并且在每个区域上确 定输出的常量Cy,那么树可表示为</p>
+
+<p>j</p>
+
+<p>T(x; ©) = ^ Cjl(x eRj)    (8.26)</p>
+
+<p>/=i</p>
+
+<p>其中，参数© = «代，Cj,(及，c2)，…，况而)｝表示树的区域划分和各区域上的常</p>
+
+<p>数.J是回归树的复杂度即叶结点个数. 回归问题提升树使用以下前向分步算法:</p>
+
+<p>/oW = O</p>
+
+<p>fmW =    W+T(.x;Qm), m =</p>
+
+<p>M</p>
+
+<p>/mW = Z^；©m)</p>
+
+<p>在前向分步算法的第W步，给定当前模型⑻，需求解 0«=arg min    ) + T{xt; 0m ))</p>
+
+<p>得到白„，即第棵树的参数.</p>
+
+<p>当采用平方误差损失函数时，</p>
+
+<p>取7V)) = (y-_/W</p>
+
+<p>其损失变为</p>
+
+<p>吻-人-相-nx;©』2 = [r-r(x;0J]2</p>
+
+<p>这里，</p>
+
+<p>&rdquo;=广/„-相    (8.27)</p>
+
+<p>是当前模型拟合数据的残差(residual).所以，对回归问题的提升树算法来说， 只需简单地拟合当前模型的残差.这样，算法是相当简单的.现将回归问题的提 升树算法叙述如下.</p>
+
+<p>算法8 J (回归问题的提升树算法)</p>
+
+<p>输入:训练数据集r = {(么乃)，(^[，乃)》•■••，(々，外)}, x,eXQR&rdquo;, y.ey^R； 输出：提升树/^x).</p>
+
+<p>(1)    初始化/flco=o</p>
+
+<p>(2)    对 m = l，2,…，M (a)按式(8.27)计算残差</p>
+
+<p>(b)拟合残差rmi学习一个回归树，得到r(x;0„) &copy;更新人⑻⑶+ror;e„)</p>
+
+<p>(3)得到回归问题提升树</p>
+
+<p>，《(x)=：£r(x;e”)    ■</p>
+
+<p>«=i</p>
+
+<p>例8.2已知如表8.2所示的训练数据，x的取值范围为区间［0.5,10.5］，j的 取值范围为区间［5.0,10.0］,学习这个回归问题的提升树模型，考虑只用树桩作为 基函数.</p>
+
+<p>表8.2训练数据表</p>
+
+<p>x,    1    . 2    _ .3    4.5.6    7    .8    9    10</p>
+
+<p>y,    5.56    5.70    5.91    6.40    6.80    7.05    8.卯 8.70    9.00    9.05</p>
+
+<p>解按照算法8J,第I步求乂⑻即回归树7］(x). 苜先通过以下优化问题：</p>
+
+<p><img src="2012.4e2a-62.jpg" alt="img" /></p>
+
+<p>求解训练数据的切分点S:</p>
+
+<p>72, = {x|jf^ ,    7^ = {x | x &gt; s}</p>
+
+<p>容易求得在代，尽内部使平方损失误差达到最小值的C|, 02为</p>
+
+<p>这里％,仏是氏，奂的样本点数.</p>
+
+<p>求训练数据的切分点.根据所给数据，考虑如下切分点：</p>
+
+<p>1.5, 2.5, 3.5, 4.5» 5.5, 6.5, 7.5, 8.5, 9.5 对各切分点，不难求出相应的代，氏，c,, 9及</p>
+
+<p>mfs) = min (J, ~c,)2 +min (yt -c2)z</p>
+
+<p>q    01 x,e«2</p>
+
+<p>例如，当 s = 1.5 时，代={1}，尽={2,3,…，10}, c,=5.56, &lt;^=7.50,</p>
+
+<p>m(s) = min (Z - ci)2 +min    (&gt;&gt;, -c2)z = 0+15.72 = 15.72</p>
+
+<p>Cl »(6«2</p>
+
+<p>现将s及m(s)的计算结果列表如下(见表8.3).</p>
+
+<p>表83计算数据表</p>
+
+<table>
+<thead>
+<tr>
+<th>S</th>
+<th>1.5</th>
+<th>2.5</th>
+<th>3.5</th>
+<th>4.5</th>
+<th>5.5</th>
+<th>6.5</th>
+<th>7,5</th>
+<th>8.5</th>
+<th>9.5</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>W⑻</td>
+<td>15.72</td>
+<td>12.07</td>
+<td>8.36</td>
+<td>5.78</td>
+<td>3.91</td>
+<td>1.93</td>
+<td>8.01</td>
+<td>11.73</td>
+<td>15.74</td>
+</tr>
+</tbody>
+</table>
+
+<p>由表8.3可知，当■? = 6.5时w⑷达到最小值，此时代={1,2,-,6},^= {7,8,9,10}, c,=6.24, c2=8.91,所以回归树7JCO为</p>
+
+<p>16.24, 18.91, /(x) = 7；(x)</p>
+
+<p>x&lt;6.5</p>
+
+<p>x^6.5</p>
+
+<p>用/(x)拟合训练数据的残差见表8.4,</p>
+
+<p>表中 ^=_y,-7IU)，</p>
+
+<p>jc, .1    2    3    456    7    8    9    10</p>
+
+<p>r2,    -0.68    -0.54    -0.33    0—16    0.56    0.81    -0.01    -0.21    0.09    0.14</p>
+
+<p>用/(X)拟合训练数据的平方损失误差：</p>
+
+<p>10</p>
+
+<h6 id="l-y-fsx-e-u-z-巧-2-1-93-i">L(,y,fSx))=E U - Z (巧))2 = 1.93 /-I</h6>
+
+<p>第2步求r2co.方法与求—样，只是拟合的数据是表8.4的残差.可 以得到：</p>
+
+<p>r2(x)=</p>
+
+<p>-0.52,</p>
+
+<p>0.22,</p>
+
+<p>x&lt;3.5</p>
+
+<p>x&gt;3.5</p>
+
+<p>/2W = ZW + r2(x)</p>
+
+<table>
+<thead>
+<tr>
+<th>5.72,</th>
+<th>x&lt;3.5</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>6.46,</td>
+<td>3.5^x&lt;6.5</td>
+</tr>
+
+<tr>
+<td>9.13,</td>
+<td>x 衾 6.5</td>
+</tr>
+</tbody>
+</table>
+
+<p>用/2C0拟合训练数据的平方损失误差是</p>
+
+<h6 id="10">10</h6>
+
+<p>i(y，Z00)=Z(z-/2(x())J =0.79</p>
+
+<p>M</p>
+
+<p>继续求得</p>
+
+<p>r3(工)=•</p>
+
+<p>r4(x)=</p>
+
+<p>r5(x)=-</p>
+
+<p>W=-</p>
+
+<table>
+<thead>
+<tr>
+<th>0.15,</th>
+<th>x&lt;6.5</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>-0.22,</td>
+<td>x 多 6.5</td>
+</tr>
+
+<tr>
+<td>-0.16,</td>
+<td>x&lt;4.5</td>
+</tr>
+
+<tr>
+<td>0.11,</td>
+<td>x 衾 4.5</td>
+</tr>
+
+<tr>
+<td>0.07,</td>
+<td>x&lt;6.5</td>
+</tr>
+
+<tr>
+<td>-0.11,</td>
+<td>x^6.S</td>
+</tr>
+
+<tr>
+<td>-0.15,</td>
+<td>x&lt;2.5</td>
+</tr>
+
+<tr>
+<td>0.04,</td>
+<td>x^2.5</td>
+</tr>
+</tbody>
+</table>
+
+<p>L(y,/3(x)) = 0.47,</p>
+
+<p>L(y,/4(x)) = 0.30,</p>
+
+<p>L(y,/s(x)) = 0.23,</p>
+
+<p>/6（x）=/s（x）+r6（x）=rt（x）+-+r5（x）+r6（x）</p>
+
+<table>
+<thead>
+<tr>
+<th>5.63，</th>
+<th>x&lt;2.5</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>5.82，</td>
+<td>2.5    &lt;3.5</td>
+</tr>
+
+<tr>
+<td>6.56，</td>
+<td>3.5 冬x&lt;4.5</td>
+</tr>
+
+<tr>
+<td>6.83，</td>
+<td>4.5 彡 x &lt;6.5</td>
+</tr>
+
+<tr>
+<td>8.95，</td>
+<td>x^6.5</td>
+</tr>
+</tbody>
+</table>
+
+<p>用拟合训练数据的平方损失误差是</p>
+
+<p>^Cv&gt;/6(x)) = EU -乂⑷)2 =0.17</p>
+
+<p>i=i</p>
+
+<p>假设此时已满足误差要求，那么/(x) = f6(x)即为所求提升树.</p>
+
+<p>8.4.3梯度提升</p>
+
+<p>提升树利用加法模型与前向分歩算法实现学习的优化过程.当损失函数是平 方损失和指数损失函数时，每一步优化是很简单的.但对一般损失函数而言，往 往每一步优化并不那么容易.针对这一问题，Freidman提出了梯度提升(gradient boosting)算法.这是利用最速下降法的近似方法，其关键是利用损失函数的负 梯度在当前模型的值</p>
+
+<p>L 彻 J/^w</p>
+
+<p>作为回归问题提升树算法中的残差的近似值，拟合一个回归树.</p>
+
+<p>算法8.4 (梯度提升算法)</p>
+
+<p>输入：训练数据集7 =供，乃)，(々，)，…，(〜，JW)}&rsquo; e A* c R&rdquo;,乃e y £ R ; 损失函数£(y，/(x)):</p>
+
+<p>输出：回归树/(x).</p>
+
+<p>(1)    初始化</p>
+
+<p>N</p>
+
+<p>ZoW = arg min ^£(&gt;»pc)</p>
+
+<p>C i=l</p>
+
+<p>(2)    对 w = l，2,…，Af</p>
+
+<p>(a)对f = l，2，&rdquo;.，7V,计算</p>
+
+<p>7 -</p>
+
+<p>L彻」紙^</p>
+
+<p>(b)    对rmi拟合一个回归树，得到第m棵树的叶结点区域； = 1,2,&ndash;,J</p>
+
+<p>&copy;    对/ = 1,2,…，J,计算</p>
+
+<p>^=argmin iU，/m-,(x,) + c)</p>
+
+<p>c栌〜</p>
+
+<p>(d)更新厶00=人_相+玄〜，(妊〜)</p>
+
+<p>(3)得到回归树</p>
+
+<p>/W = Af(x)=    R^)    ■</p>
+
+<p>m=1 J=i</p>
+
+<p>算法第1步初始化，估计使损失函数极小化的常数值，它是只有一个根结点 的树.第2⑻步计算损失函数的负梯度在当前模型的值，将它作为残差的估计.对 于平方损失函数，它就是通常所说的残差；对于一般损失函数，它就是残差的近 似值.第2(b)步估计回归树叶结点区域，以拟合残差的近似值.第2&copy;步利用线 性搜索估计叶结点区域的值，使损失函数极小化.第2(d)步更新回归树.第3步 得到输出的最终模型/(X).</p>
+
+<h6 id="本章概要">本章概要</h6>
+
+<p>\1.    提升方法是将弱学习算法提升为强学习算法的统计学习方法.在分类学 习中，提升方法通过反复修改训练数据的权值分布，构建一系列基本分类器(弱 分类器)，并将这些基本分类器线性组合，构成一个强分类器.代表性的提升方 法是AdaBoost算法.</p>
+
+<p>AdaBoost模型是弱分类器的线性组合：</p>
+
+<p>M</p>
+
+<h6 id="乂-x">乂 (X) =</h6>
+
+<p>m«»I</p>
+
+<p>\2.    AdaBoost算法的特点是通过迭代每次学习~个基本分类器.每次迭代中， 提高那些被前一轮分类器错误分类数据的权值，而降低那些被正确分类的数据的 权值.最后，AdaBoost将基本分类器的线性组合作为强分类器，其中给分类误差 率小的基本分类器以大的权值，给分类误差率大的基本分类器以小的权值.</p>
+
+<p>\3.    AdaBoost的训练误差分析表明，AdaBoost的每次迭代可以减少它在训练 数据集上的分类误差率，这说明了它作为提升方法的有效性.</p>
+
+<p>\4.    AdaBoost算法的&ndash;个解释是该算法实际是前向分步算法的一个实现.在 这个方法里，模型是加法模型，损失函数是指数损失，算法是前向分步算法.</p>
+
+<p>每一步中极小化损失函数</p>
+
+<p>(A,，Z„)=吨辦    邱(W))</p>
+
+<p>5.提升树是以分类树或回归树为基本分类器的提升方法.提升树被认为是 统计学习中最有效的方法之一.</p>
+
+<h6 id="继续阅读">继续阅读</h6>
+
+<p>提升方法的介绍可参见文献[1,2]. PAC学习可参见文献[3].强可学习与弱可学 习的关系可参见文献[4].关于AdaBoost的最初论文是文献[5].关于AdaBoost的 前向分步加法模型解释参见文献[6],提升树与梯度提升可参见文献[6,7]. AdaBoost 只是用于二类分类，Schapire与Singer将它扩展到多类分类问题AdaBoost与 逻辑斯谛回归的关系也有相关研究[9].</p>
+
+<h6 id="习-题">习-题</h6>
+
+<p>8.1某公司招聘职员考査身体、业务能力、发展潜力这3项.身体分为合格1、 不合格0两级，业务能力和发展潜力分为上1、中2、下3三级.分类为合 格1、不合格-1两类.已知10个人的数据，如下表所示.假设弱分类器为 决策树桩.试用AdaBoost算法学习一个强分类器.</p>
+
+<p>应聘人员情况数据表</p>
+
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>身体    0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>业务    1</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>潜力    3</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>分类    1</td>
+<td>-1</td>
+<td>-I</td>
+<td>-1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>-I</td>
+<td>-I</td>
+</tr>
+</tbody>
+</table>
+
+<p>8.2比较支持向量机、AdaBoost,逻辑斯话回归模型的学习策略与算法.</p>
+
+<h6 id="参考文献">参考文献</h6>
+
+<p>Freund Y, Schapire RE. A short introduction to boosting. Journal of Japanese Society for Artificial Intelligence, 1999, 14(5): 771-780</p>
+
+<p>Hastie T, Tibshirani R, Friedman J. The Elements of Statistical Learning: Data Mining,</p>
+
+<p>Inference, and Prediction. Springer-Verlag, 2001 (中译本：统计学习基础-数据挖掘、推</p>
+
+<p>理与预测.范明，柴玉梅，昝红英，等译.北京：电子工业出版社，2004)</p>
+
+<p>Valiant LG A theory of the leamable. Communications of the ACM, 1984,27(11): 1134-1142 Schapire R. The strength of weak leamability. Machine Learning, 1990,5(2): 197-227 Freund Y, Schapire RE. A decision-theoretic generalization of on-line learning and an</p>
+
+<p>PQQZ &lsquo;iBomof Sunuesq</p>
+
+<p>auiqOTj^ saaoBKip ireuiSaia pnc jsoogepv &ldquo;noissajSai opsiSoq x -ra^ras *a sji^tps *K sutijoo [g] 9H-L6Z ：(€)££ ‘6661 ‘Supieaq amqocw</p>
+
+<p>•snopofpaid pojBj-Mnapijnoo 8msn sunpuoSjB Supsooq paAojduq •人 jaSojs ‘3H andeqas <a href="S">8</a>6Z *1002</p>
+
+<p>*sopsijBjs jo siEuay aaiqoBm Supsooq inajpaig e :aopennxoiddB aoijoaiy XpasjQ f nrnnpsuj [/,] LOP~L£€ ：83 ‘0002 &lsquo;sopspBisjo S[buuv (suoissnosip qjiM)</p>
+
+<p>Snpsooq jo msia jcopspBis b :uoissmSw opsi3o[ SAijippy raanqsqij, *i apscn *f ueaipsuj [9] L£~ZZ *S66l *W6 PA</p>
+
+<p>•aonaps jaindaioQ in sw)n amjoaq Xioain Suiareaq icaopejndiuo^) .3叩sooq oj nopeai[dde</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/07-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">07 支持向量机</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/09-em%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E6%8E%A8%E5%B9%BF/">
+            <span class="next-text nav-default">09 EM算法及其推广</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

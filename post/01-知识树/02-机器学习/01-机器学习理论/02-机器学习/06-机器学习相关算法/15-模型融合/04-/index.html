@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>4 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="【机器学习】模型融合方法概述 贝尔塔 我理解的Kaggle比赛中提高成绩主要有3个地方 特征工程 调参 模型融合 之前每次打比赛都只做了前两部分，最后的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/15-%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88/04-/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="4" />
+<meta property="og:description" content="【机器学习】模型融合方法概述 贝尔塔 我理解的Kaggle比赛中提高成绩主要有3个地方 特征工程 调参 模型融合 之前每次打比赛都只做了前两部分，最后的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/15-%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88/04-/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="4">
+<meta itemprop="description" content="【机器学习】模型融合方法概述 贝尔塔 我理解的Kaggle比赛中提高成绩主要有3个地方 特征工程 调参 模型融合 之前每次打比赛都只做了前两部分，最后的">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="1886">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="4"/>
+<meta name="twitter:description" content="【机器学习】模型融合方法概述 贝尔塔 我理解的Kaggle比赛中提高成绩主要有3个地方 特征工程 调参 模型融合 之前每次打比赛都只做了前两部分，最后的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">4</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 1886 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#机器学习-模型融合方法概述">【机器学习】模型融合方法概述</a>
+<ul>
+<li><a href="#一-voting"><strong>一、Voting</strong></a></li>
+<li><a href="#二-averaging"><strong>二、Averaging</strong></a></li>
+<li><a href="#三-bagging"><strong>三、Bagging</strong></a></li>
+<li><a href="#四-boosting"><strong>四、Boosting</strong></a></li>
+<li><a href="#五-stacking">五、Stacking</a>
+<ul>
+<li><a href="#python实现">python实现</a></li>
+<li><a href="#caretensemble包下的caretstack-方法">caretEnsemble包下的caretStack()方法</a></li>
+<li><a href="#h2o包的h2o-stack-方法">h2o包的h2o.stack()方法</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="机器学习-模型融合方法概述">【机器学习】模型融合方法概述</h1>
+
+<p><a href="https://www.zhihu.com/people/denotepython">贝尔塔</a></p>
+
+<p>我理解的Kaggle比赛中提高成绩主要有3个地方</p>
+
+<ol>
+<li>特征工程</li>
+<li>调参</li>
+<li>模型融合</li>
+</ol>
+
+<p>之前每次打比赛都只做了前两部分，最后的模型融合就是简单的加权平均，对于进阶的Stacking方法一直没尝试，这几天摸索了一下还是把Stacking方法给弄懂了。(本文重点讲解Stacking,Bagging和Boosting有很多权威的好教程，所以不详细介绍)最早的Stacking思想早些年就有论文发表，但是应用Stacking方法到比赛中的相关文章还是少之甚少，这有两篇<a href="https://link.zhihu.com/?target=https%3A//mlwave.com/kaggle-ensembling-guide/">https://mlwave.com/kaggle-ensembling-guide/</a>、<a href="https://link.zhihu.com/?target=https%3A//mlwave.com/human-ensemble-learning/">HUMAN ENSEMBLE LEARNING</a>讲的很棒，但是之前因为理解不到位，有几处卡住了。在<a href="http://www.zhihu.com/people/dichotomy42">@Wille</a> 的文章<a href="https://link.zhihu.com/?target=https%3A//dnc1994.com/2016/04/rank-10-percent-in-first-kaggle-competition/">如何在 Kaggle 首战中进入前 10%</a>中Stacking只是作为一部分提到。因此决定自己写一篇关于模型融合的文章。本文不涉及到各个算法原理层次的深度，目的在于从宏观上帮助理解这几个模型融合方法。</p>
+
+<h2 id="一-voting"><strong>一、Voting</strong></h2>
+
+<h2 id="二-averaging"><strong>二、Averaging</strong></h2>
+
+<h2 id="三-bagging"><strong>三、Bagging</strong></h2>
+
+<ol>
+<li>重复K次</li>
+</ol>
+
+<ul>
+<li>有放回地重复抽样建模</li>
+
+<li><p>训练子模型</p></li>
+
+<li><p>分类问题：voting</p></li>
+</ul>
+
+<p>-</p>
+
+<ul>
+<li>回归问题：average</li>
+</ul>
+
+<p>Bagging算法不用我们自己实现，随机森林就是基于Bagging算法的一个典型例子，采用的基分类器是决策树。R和python都集成好了，直接调用。</p>
+
+<h2 id="四-boosting"><strong>四、Boosting</strong></h2>
+
+<p>PPT</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/3bejDeLGHc.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/GbIeDELjff.png?imageslim" alt="mark" /></p>
+
+<h2 id="五-stacking">五、Stacking</h2>
+
+<ol>
+<li><p>基模型M1，对训练集train训练，然后用于预测train和test的标签列，分别是P1，T1
+$\begin{pmatrix} \vdots  \ P_1   \ \vdots  \ \vdots  \ \end{pmatrix} \begin{pmatrix} \vdots  \ T_1   \ \vdots  \ \vdots  \ \end{pmatrix}$
+对于M2和M3，重复相同的工作，这样也得到P2，T2,P3,T3。</p></li>
+
+<li><p>分别把P1,P2,P3以及T1,T2,T3合并，得到一个新的训练集和测试集train2,test2.$\begin{pmatrix} \vdots  \ P_1   \ \vdots  \ \vdots  \ \end{pmatrix} \begin{pmatrix} \vdots  \ P_2   \ \vdots  \ \vdots  \ \end{pmatrix} \begin{pmatrix} \vdots  \ P_3   \ \vdots  \ \vdots  \ \end{pmatrix} \implies \overbrace{\begin{pmatrix} \vdots &amp;\vdots  &amp;\vdots \ P_1 &amp; P_2 &amp;P_3   \ \vdots  &amp;\vdots &amp;\vdots \ \vdots &amp;\vdots &amp;\vdots  \ \end{pmatrix} }^{train2}$</p></li>
+</ol>
+
+<p>Stacking本质上就是这么直接的思路，但是这样肯定是不行的，问题在于P1的得到是有问题的，用整个训练集训练的模型反过来去预测训练集的标签，毫无疑问过拟合是非常非常严重的，因此现在的问题变成了<strong>如何在解决过拟合的前提下得到P1、P2、P3</strong>，这就变成了熟悉的节奏——K折交叉验证。我们以2折交叉验证得到P1为例,假设训练集为4行3列</p>
+
+<p>$\begin{pmatrix} a<em>{11} &amp; a</em>{12} &amp;a<em>{13}  \ a</em>{21} &amp; a<em>{22} &amp;a</em>{23}  \ a<em>{31} &amp; a</em>{32} &amp;a<em>{33}  \ a</em>{41} &amp; a<em>{42} &amp;a</em>{43}  \ \end{pmatrix}$
+将其划分为2部分</p>
+
+<p>$\overbrace{ \begin{pmatrix} a<em>{31} &amp; a</em>{32} &amp;a<em>{33}  \ a</em>{41} &amp; a<em>{42} &amp;a</em>{43}  \ \end{pmatrix} }^{trainb}$
+用traina训练模型M1，然后在trainb上进行预测得到preb3和pred4
+$\overbrace{ \begin{pmatrix} a<em>{11} &amp; a</em>{12} &amp;a<em>{13}  \ a</em>{21} &amp; a<em>{22} &amp;a</em>{23}  \ \end{pmatrix} }^{traina} \overbrace{\implies}^{train} \overbrace{ \begin{pmatrix} a<em>{31} &amp; a</em>{32} &amp;a<em>{33}  \ a</em>{41} &amp; a<em>{42} &amp;a</em>{43}  \ \end{pmatrix} }^{trainb} \overbrace{\implies}^{predict} \begin{pmatrix} pred3  \ pred4   \ \end{pmatrix}$
+在trainb上训练模型M1，然后在traina上进行预测得到pred1和pred2
+$\overbrace{ \begin{pmatrix} a<em>{31} &amp; a</em>{32} &amp;a<em>{33}  \ a</em>{41} &amp; a<em>{42} &amp;a</em>{43}  \ \end{pmatrix} }^{trainb} \overbrace{\implies}^{train} \overbrace{ \begin{pmatrix} a<em>{11} &amp; a</em>{12} &amp;a<em>{13}  \ a</em>{21} &amp; a<em>{22} &amp;a</em>{23}  \ \end{pmatrix} }^{traina} \overbrace{\implies}^{predict} \begin{pmatrix} pred1  \ pred2   \ \end{pmatrix}$
+然后把两个预测集进行拼接
+$\begin{pmatrix} pred1  \ pred2   \ \end{pmatrix} + \begin{pmatrix} pred3  \ pred4   \ \end{pmatrix} = \begin{pmatrix} pred1  \ pred2   \ pred3  \ pred4   \ \end{pmatrix} = \begin{pmatrix} \vdots  \ P_1   \ \vdots  \ \vdots  \ \end{pmatrix}$
+对于测试集T1的得到，有两种方法。注意到刚刚是2折交叉验证，M1相当于训练了2次，所以一种方法是每一次训练M1，可以直接对整个test进行预测，这样2折交叉验证后测试集相当于预测了2次，然后对这两列求平均得到T1。
+或者直接对测试集只用M1预测一次直接得到T1。
+P1、T1得到之后，P2、T2、P3、T3也就是同样的方法。理解了2折交叉验证，对于K折的情况也就理解也就非常顺利了。所以最终的代码是两层循环，第一层循环控制基模型的数目，每一个基模型要这样去得到P1，T1，第二层循环控制的是交叉验证的次数K，对每一个基模型，会训练K次最后拼接得到P1，取平均得到T1。这下再把@Wille博文中的那张图片放出来就很容易看懂了。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/hHe5ChAHaf.png?imageslim" alt="mark" /></p>
+
+<h3 id="python实现">python实现</h3>
+
+<p>Github</p>
+
+<pre><code class="language-python">def get_oof(clf, x_train, y_train, x_test):
+ oof_train = np.zeros((ntrain,))
+ oof_test = np.zeros((ntest,))
+ oof_test_skf = np.empty((NFOLDS, ntest))  #NFOLDS行，ntest列的二维array
+ for i, (train_index, test_index) in enumerate(kf): #循环NFOLDS次
+     x_tr = x_train[train_index]
+     y_tr = y_train[train_index]
+     x_te = x_train[test_index]
+     clf.fit(x_tr, y_tr)
+     oof_train[test_index] = clf.predict(x_te)
+     oof_test_skf[i, :] = clf.predict(x_test)  #固定行填充，循环一次，填充一行
+ oof_test[:] = oof_test_skf.mean(axis=0)  #axis=0,按列求平均，最后保留一行
+ return oof_train.reshape(-1, 1), oof_test.reshape(-1, 1)  #转置，从一行变为一列
+</code></pre>
+
+<h3 id="caretensemble包下的caretstack-方法">caretEnsemble包下的caretStack()方法</h3>
+
+<pre><code>algorithmList &lt;- c('lda', 'rpart', 'glm', 'knn', 'svmRadial')
+stackControl &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=3, savePredictions=TRUE, classProbs=TRUE)
+stack.glm &lt;- caretStack(models, method=&quot;glm&quot;, metric=&quot;Accuracy&quot;, trControl=stackControl)
+</code></pre>
+
+<p>博文</p>
+
+<h3 id="h2o包的h2o-stack-方法">h2o包的h2o.stack()方法</h3>
+
+<pre><code>nfolds &lt;- 5
+glm1 &lt;- h2o.glm(x = x, y = y, family = family,
+             training_frame = train,
+             nfolds = nfolds,
+             fold_assignment = &quot;Modulo&quot;,
+             keep_cross_validation_predictions = TRUE)
+gbm1 &lt;- h2o.gbm(x = x, y = y, distribution = &quot;bernoulli&quot;,
+             training_frame = train,
+             seed = 1,
+             nfolds = nfolds,
+             fold_assignment = &quot;Modulo&quot;,
+             keep_cross_validation_predictions = TRUE)
+rf1 &lt;- h2o.randomForest(x = x, y = y, # distribution not used for RF
+                     training_frame = train,
+                     seed = 1,
+                     nfolds = nfolds,
+                     fold_assignment = &quot;Modulo&quot;,
+                     keep_cross_validation_predictions = TRUE)
+dl1 &lt;- h2o.deeplearning(x = x, y = y, distribution = &quot;bernoulli&quot;,
+                     training_frame = train,
+                     nfolds = nfolds,
+                     fold_assignment = &quot;Modulo&quot;,
+                     keep_cross_validation_predictions = TRUE)
+models &lt;- list(glm1, gbm1, rf1, dl1)
+metalearner &lt;- &quot;h2o.glm.wrapper&quot;
+stack &lt;- h2o.stack(models = models,
+                response_frame = train[,y],
+                metalearner = metalearner,
+                seed = 1,
+                keep_levelone_data = TRUE)
+# Compute test set performance:
+perf &lt;- h2o.ensemble_performance(stack, newdata = test)
+</code></pre>
+
+<p>h2o的Github网站</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/GDFF1al4mB.png?imageslim" alt="mark" /></p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="http://zhuanlan.zhihu.com/p/25836678">http://zhuanlan.zhihu.com/p/25836678</a></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/22-%E9%99%84%E5%BD%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">22 附录</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E4%B9%A0%E9%A2%98/">
+            <span class="next-text nav-default">C&#43;&#43; 习题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

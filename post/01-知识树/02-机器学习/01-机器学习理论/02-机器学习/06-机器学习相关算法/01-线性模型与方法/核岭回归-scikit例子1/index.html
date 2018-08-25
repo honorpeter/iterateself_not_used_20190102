@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>核岭回归 （scikit）例子1 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="TODO 没想到sklearn 官网上竟然有这么好的例子，而且还有讲解，需要好好整理学习。 要好好整理下，结合理论 这个没怎么看，要仔细看下。是在之前一个" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/%E6%A0%B8%E5%B2%AD%E5%9B%9E%E5%BD%92-scikit%E4%BE%8B%E5%AD%901/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="核岭回归 （scikit）例子1" />
+<meta property="og:description" content="TODO 没想到sklearn 官网上竟然有这么好的例子，而且还有讲解，需要好好整理学习。 要好好整理下，结合理论 这个没怎么看，要仔细看下。是在之前一个" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/%E6%A0%B8%E5%B2%AD%E5%9B%9E%E5%BD%92-scikit%E4%BE%8B%E5%AD%901/" /><meta property="article:published_time" content="2018-07-27T14:44:33&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T14:44:33&#43;00:00"/>
+<meta itemprop="name" content="核岭回归 （scikit）例子1">
+<meta itemprop="description" content="TODO 没想到sklearn 官网上竟然有这么好的例子，而且还有讲解，需要好好整理学习。 要好好整理下，结合理论 这个没怎么看，要仔细看下。是在之前一个">
+
+
+<meta itemprop="datePublished" content="2018-07-27T14:44:33&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T14:44:33&#43;00:00" />
+<meta itemprop="wordCount" content="597">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="核岭回归 （scikit）例子1"/>
+<meta name="twitter:description" content="TODO 没想到sklearn 官网上竟然有这么好的例子，而且还有讲解，需要好好整理学习。 要好好整理下，结合理论 这个没怎么看，要仔细看下。是在之前一个"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">核岭回归 （scikit）例子1</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 597 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#完整代码">完整代码</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>TODO</p>
+
+<ul>
+<li><strong>没想到sklearn 官网上竟然有这么好的例子，而且还有讲解，需要好好整理学习。</strong></li>
+<li><strong>要好好整理下，结合理论</strong></li>
+</ul>
+
+<p>这个没怎么看，要仔细看下。是在之前一个网页中讲岭回归的时候提到的。没怎么讲</p>
+
+<h1 id="完整代码">完整代码</h1>
+
+<pre><code class="language-python"># Authors: Jan Hendrik Metzen &lt;jhm@informatik.uni-bremen.de&gt;
+# License: BSD 3 clause
+
+
+​
+from __future__ import division
+import time
+
+import numpy as np
+
+from sklearn.svm import SVR
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import learning_curve
+from sklearn.kernel_ridge import KernelRidge
+import matplotlib.pyplot as plt
+
+rng = np.random.RandomState(0)
+
+# #############################################################################
+# Generate sample data
+X = 5 * rng.rand(10000, 1)
+y = np.sin(X).ravel()
+
+# Add noise to targets
+y[::5] += 3 * (0.5 - rng.rand(X.shape[0] // 5))
+
+X_plot = np.linspace(0, 5, 100000)[:, None]
+
+# #############################################################################
+# Fit regression model
+train_size = 100
+svr = GridSearchCV(SVR(kernel='rbf', gamma=0.1), cv=5,
+                   param_grid={&quot;C&quot;: [1e0, 1e1, 1e2, 1e3],
+                               &quot;gamma&quot;: np.logspace(-2, 2, 5)})
+
+kr = GridSearchCV(KernelRidge(kernel='rbf', gamma=0.1), cv=5,
+                  param_grid={&quot;alpha&quot;: [1e0, 0.1, 1e-2, 1e-3],
+                              &quot;gamma&quot;: np.logspace(-2, 2, 5)})
+
+t0 = time.time()
+svr.fit(X[:train_size], y[:train_size])
+svr_fit = time.time() - t0
+print(&quot;SVR complexity and bandwidth selected and model fitted in %.3f s&quot;
+      % svr_fit)
+
+t0 = time.time()
+kr.fit(X[:train_size], y[:train_size])
+kr_fit = time.time() - t0
+print(&quot;KRR complexity and bandwidth selected and model fitted in %.3f s&quot;
+      % kr_fit)
+
+sv_ratio = svr.best_estimator_.support_.shape[0] / train_size
+print(&quot;Support vector ratio: %.3f&quot; % sv_ratio)
+
+t0 = time.time()
+y_svr = svr.predict(X_plot)
+svr_predict = time.time() - t0
+print(&quot;SVR prediction for %d inputs in %.3f s&quot;
+      % (X_plot.shape[0], svr_predict))
+
+t0 = time.time()
+y_kr = kr.predict(X_plot)
+kr_predict = time.time() - t0
+print(&quot;KRR prediction for %d inputs in %.3f s&quot;
+      % (X_plot.shape[0], kr_predict))
+
+
+​
+# #############################################################################
+# Look at the results
+sv_ind = svr.best_estimator_.support_
+plt.scatter(X[sv_ind], y[sv_ind], c='r', s=50, label='SVR support vectors',
+            zorder=2, edgecolors=(0, 0, 0))
+plt.scatter(X[:100], y[:100], c='k', label='data', zorder=1,
+            edgecolors=(0, 0, 0))
+plt.plot(X_plot, y_svr, c='r',
+         label='SVR (fit: %.3fs, predict: %.3fs)' % (svr_fit, svr_predict))
+plt.plot(X_plot, y_kr, c='g',
+         label='KRR (fit: %.3fs, predict: %.3fs)' % (kr_fit, kr_predict))
+plt.xlabel('data')
+plt.ylabel('target')
+plt.title('SVR versus Kernel Ridge')
+plt.legend()
+
+# Visualize training and prediction time
+plt.figure()
+
+# Generate sample data
+X = 5 * rng.rand(10000, 1)
+y = np.sin(X).ravel()
+y[::5] += 3 * (0.5 - rng.rand(X.shape[0] // 5))
+sizes = np.logspace(1, 4, 7, dtype=np.int)
+for name, estimator in {&quot;KRR&quot;: KernelRidge(kernel='rbf', alpha=0.1,
+                                           gamma=10),
+                        &quot;SVR&quot;: SVR(kernel='rbf', C=1e1, gamma=10)}.items():
+    train_time = []
+    test_time = []
+    for train_test_size in sizes:
+        t0 = time.time()
+        estimator.fit(X[:train_test_size], y[:train_test_size])
+        train_time.append(time.time() - t0)
+
+        t0 = time.time()
+        estimator.predict(X_plot[:1000])
+        test_time.append(time.time() - t0)
+
+    plt.plot(sizes, train_time, 'o-', color=&quot;r&quot; if name == &quot;SVR&quot; else &quot;g&quot;,
+             label=&quot;%s (train)&quot; % name)
+    plt.plot(sizes, test_time, 'o--', color=&quot;r&quot; if name == &quot;SVR&quot; else &quot;g&quot;,
+             label=&quot;%s (test)&quot; % name)
+
+plt.xscale(&quot;log&quot;)
+plt.yscale(&quot;log&quot;)
+plt.xlabel(&quot;Train size&quot;)
+plt.ylabel(&quot;Time (seconds)&quot;)
+plt.title('Execution Time')
+plt.legend(loc=&quot;best&quot;)
+
+# Visualize learning curves
+plt.figure()
+
+svr = SVR(kernel='rbf', C=1e1, gamma=0.1)
+kr = KernelRidge(kernel='rbf', alpha=0.1, gamma=0.1)
+train_sizes, train_scores_svr, test_scores_svr = \
+    learning_curve(svr, X[:100], y[:100], train_sizes=np.linspace(0.1, 1, 10),
+                   scoring=&quot;neg_mean_squared_error&quot;, cv=10)
+train_sizes_abs, train_scores_kr, test_scores_kr = \
+    learning_curve(kr, X[:100], y[:100], train_sizes=np.linspace(0.1, 1, 10),
+                   scoring=&quot;neg_mean_squared_error&quot;, cv=10)
+
+plt.plot(train_sizes, -test_scores_svr.mean(1), 'o-', color=&quot;r&quot;,
+         label=&quot;SVR&quot;)
+plt.plot(train_sizes, -test_scores_kr.mean(1), 'o-', color=&quot;g&quot;,
+         label=&quot;KRR&quot;)
+plt.xlabel(&quot;Train size&quot;)
+plt.ylabel(&quot;Mean Squared Error&quot;)
+plt.title('Learning curves')
+plt.legend(loc=&quot;best&quot;)
+
+plt.show()
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">SVR complexity and bandwidth selected and model fitted in 1.112 s
+KRR complexity and bandwidth selected and model fitted in 1.673 s
+Support vector ratio: 0.320
+SVR prediction for 100000 inputs in 0.096 s
+KRR prediction for 100000 inputs in 0.327 s
+</code></pre>
+
+<p>输出图像：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/47EF4iICC3.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DmJhk1Hb1G.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jbh9legB3i.png?imageslim" alt="mark" /></p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li><a href="http://scikit-learn.org/stable/auto_examples/plot_kernel_ridge_regression.html#sphx-glr-auto-examples-plot-kernel-ridge-regression-py">Comparison of kernel ridge regression and SVR</a></li>
+<li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.kernel_ridge.KernelRidge.html">sklearn.kernel_ridge.KernelRidge</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/%E5%86%B3%E7%AD%96%E6%A0%91/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">决策树</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/ai%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A17-%E6%97%A0%E5%81%8F%E4%BC%B0%E8%AE%A1%E4%B8%8E%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE/">
+            <span class="next-text nav-default">ai概率统计(7)-无偏估计与均方误差</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

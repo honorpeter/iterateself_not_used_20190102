@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 线性映射与矩阵 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-31 07:31:39&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-linear-mapping-and-matrix/ slug: ai-linear-algebra-linear-mapping-and-matrix title: wordpress_id: 2165 categories: - 随想与反思 tags: - &amp;lsquo;@want_to_know&amp;rsquo; [mathjax] REF： 1. 七月在线 机器学习 2. 伪逆矩阵的意义及求法？ 缘由： 对线性映射和矩阵进行总结。 需要" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/02-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/01-%E7%BA%BF%E6%80%A7%E6%98%A0%E5%B0%84%E4%B8%8E%E7%9F%A9%E9%98%B5/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 线性映射与矩阵" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-31 07:31:39&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-linear-mapping-and-matrix/ slug: ai-linear-algebra-linear-mapping-and-matrix title: wordpress_id: 2165 categories: - 随想与反思 tags: - &lsquo;@want_to_know&rsquo; [mathjax] REF： 1. 七月在线 机器学习 2. 伪逆矩阵的意义及求法？ 缘由： 对线性映射和矩阵进行总结。 需要" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/02-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/01-%E7%BA%BF%E6%80%A7%E6%98%A0%E5%B0%84%E4%B8%8E%E7%9F%A9%E9%98%B5/" /><meta property="article:published_time" content="2018-08-21T18:16:58&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:58&#43;00:00"/>
+<meta itemprop="name" content="01 线性映射与矩阵">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-31 07:31:39&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-linear-mapping-and-matrix/ slug: ai-linear-algebra-linear-mapping-and-matrix title: wordpress_id: 2165 categories: - 随想与反思 tags: - &lsquo;@want_to_know&rsquo; [mathjax] REF： 1. 七月在线 机器学习 2. 伪逆矩阵的意义及求法？ 缘由： 对线性映射和矩阵进行总结。 需要">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:58&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:58&#43;00:00" />
+<meta itemprop="wordCount" content="4530">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 线性映射与矩阵"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-31 07:31:39&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-linear-mapping-and-matrix/ slug: ai-linear-algebra-linear-mapping-and-matrix title: wordpress_id: 2165 categories: - 随想与反思 tags: - &lsquo;@want_to_know&rsquo; [mathjax] REF： 1. 七月在线 机器学习 2. 伪逆矩阵的意义及求法？ 缘由： 对线性映射和矩阵进行总结。 需要"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 线性映射与矩阵</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 4530 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#want-to-know">- &lsquo;@want_to_know&rsquo;</a></li>
+</ul></li>
+<li><a href="#ref">REF：</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#行列式">行列式：</a>
+<ul>
+<li><a href="#定义-方阵的行列式">定义：方阵的行列式</a></li>
+<li><a href="#范德蒙行列式vandermonde">范德蒙行列式Vandermonde</a></li>
+</ul></li>
+<li><a href="#线性空间与基">线性空间与基：</a>
+<ul>
+<li><a href="#线性空间">线性空间：</a></li>
+<li><a href="#基">基：</a></li>
+<li><a href="#坐标空间">坐标空间：</a></li>
+</ul></li>
+<li><a href="#线性映射与矩阵-在理解下">线性映射与矩阵 在理解下</a>
+<ul>
+<li><a href="#线性映射">线性映射：</a></li>
+<li><a href="#两个线性空间中的线性变换的矩阵描述">两个线性空间中的线性变换的矩阵描述</a></li>
+<li><a href="#小结-线性映射与矩阵">小结：线性映射与矩阵：</a></li>
+</ul></li>
+<li><a href="#矩阵的乘法">矩阵的乘法</a>
+<ul>
+<li><a href="#状态转移矩阵">状态转移矩阵：</a></li>
+<li><a href="#概率转移矩阵例子">概率转移矩阵例子：</a></li>
+<li><a href="#因此-导出平稳分布">因此，导出平稳分布</a></li>
+</ul></li>
+<li><a href="#矩阵的连乘的两个问题">矩阵的连乘的两个问题：</a>
+<ul>
+<li><a href="#解">解：</a></li>
+</ul></li>
+<li><a href="#矩阵和向量的乘法">矩阵和向量的乘法</a></li>
+<li><a href="#矩阵的秩">矩阵的秩</a>
+<ul>
+<li><a href="#概念">概念：</a></li>
+<li><a href="#秩与线性方程组的解的关系">秩与线性方程组的解的关系：</a></li>
+<li><a href="#线性表示-与-等价">线性表示 与 等价</a></li>
+<li><a href="#系数矩阵">系数矩阵</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+<li><a href="#需要添加的-先放在这里">需要添加的，先放在这里：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-31 07:31:39+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/31/ai-linear-algebra-linear-mapping-and-matrix/">http://106.15.37.116/2018/03/31/ai-linear-algebra-linear-mapping-and-matrix/</a>
+slug: ai-linear-algebra-linear-mapping-and-matrix
+title:
+wordpress_id: 2165
+categories:
+- 随想与反思
+tags:</p>
+
+<h2 id="want-to-know">- &lsquo;@want_to_know&rsquo;</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<h1 id="ref">REF：</h1>
+
+<pre><code>1. 七月在线 机器学习
+</code></pre>
+
+<p>2.</p>
+
+<p><a href="https://www.zhihu.com/question/47688307">伪逆矩阵的意义及求法？</a></p>
+
+<hr />
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对线性映射和矩阵进行总结。</p>
+
+<p>需要添加伪逆矩阵的知识，在回归和PCA的SVD中都有用到过。</p>
+
+<h1 id="行列式">行列式：</h1>
+
+<h2 id="定义-方阵的行列式">定义：方阵的行列式</h2>
+
+<ul>
+<li><p>1阶方阵的行列式为该元素本身</p></li>
+
+<li><p>n阶方阵的行列式等于它的任一行(或列)的各元素与其对应的代数余子式乘积之和。</p></li>
+</ul>
+
+<h2 id="范德蒙行列式vandermonde">范德蒙行列式Vandermonde</h2>
+
+<p>证明范德蒙行列式 Vandermonde</p>
+
+<p>[D_n=\begin{vmatrix} 1 &amp;1 &amp;1 &amp;\cdots &amp;1 \ x_1 &amp; x_2 &amp;x_3 &amp; \cdots &amp;x_n \ x_1^2&amp;x_2^2 &amp;x_3^2 &amp; \cdots &amp;x_n^2 \ \vdots &amp; \vdots &amp;\vdots &amp;\ddots &amp; \vdots \ x_1^{n-1}&amp; x_2^{n-1} &amp; x_3^{n-1} &amp; \cdots &amp; x<em>n^{n-1} \end{vmatrix}=\prod</em>{n\geq i&gt;j\geq 1} (x_i-y_j)]</p>
+
+<p>提示：数学归纳法 <strong>到底什么是数学归纳法？明确的是什么？</strong></p>
+
+<p>注：参考数学分析中的Lagrange/Newton 插值法。<strong>怎么插值？数学分析？什么是插值法？这个地方怎么使用插值法？n个点最高可以用n-1阶的多项式来插值这些店，并且我画的曲线一定是过这所有点的？</strong></p>
+
+<p><strong>这个范德蒙行列式到底作用是什么？</strong></p>
+
+<p><strong>怎么证明？</strong></p>
+
+<h1 id="线性空间与基">线性空间与基：</h1>
+
+<p>实系数线性空间是一个由向量组成的集合, 向量之间可以做加减法, 向量与实数之间可以做乘法, 而且这些加，减，乘运算要求满足常见的交换律和结合律. 我们也可以类似地定义其他系数的线性空间.</p>
+
+<h2 id="线性空间">线性空间：</h2>
+
+<p>线性空间就是有原点的平面。</p>
+
+<p>如果平面有一个原点 (O)，那么平面上任何一个点(P)， 都对应着一个向量(\overrightarrow{OP})，这些向量以及他们的运算结构放在一起，就组成一个向量空间。即原点(O)在空间中引入了线性结构。（向量之间的加法，以及向量与实数的乘法）<strong>这句话有些厉害，原点O在空间中引入了线性结构。</strong></p>
+
+<h2 id="基">基：</h2>
+
+<p>基是线性空间里的一组向量，使得任何一个向量都可以唯一的表示成这组基的线性组合.</p>
+
+<h2 id="坐标空间">坐标空间：</h2>
+
+<p>坐标空间就是：有原点的平面，加上一组基({\overrightarrow{X},\overrightarrow{Y}})。</p>
+
+<p>此时，在这个空间里，任何一个向量(\overrightarrow{OP})，都可以唯一表达成(\overrightarrow{OP}=a\overrightarrow{X}+b\overrightarrow{Y}) 的形式</p>
+
+<p>而((a,b))就可以称为(P)点的坐标。</p>
+
+<p>基给出了定量描述线性结构的方法&ndash;坐标系。</p>
+
+<h1 id="线性映射与矩阵-在理解下">线性映射与矩阵 在理解下</h1>
+
+<p><strong>再理解下这个地方，线性映射和矩阵之间是什么关系。比较核心。</strong></p>
+
+<p>矩阵是为了研究线性空间才使用的这个工具。矩阵本来是不存在的。矩阵是一个工具</p>
+
+<h2 id="线性映射">线性映射：</h2>
+
+<p>(V)和(W)是两个实线性空间，(T:V\rightarrow W)如果满足如下条件那就是一个线性映射：</p>
+
+<p>[(i)T(v_1+v_2)=T(v_1)+T(v_2),\forall v_1,v_2\in V]</p>
+
+<p>[(ii)T(\lambda v)=\lambda T(v),\forall \lambda \in\mathbb{R},v\in V]</p>
+
+<p><strong>什么意思？为什么上面两个公式没有W的东西呢？</strong></p>
+
+<p>线性映射的本质就是保持线性结构的映射。到自身的线性映射(T:V\rightarrow V)叫做线性变换。<strong>嗯，到自身的线性映射叫做线性变换。</strong></p>
+
+<h2 id="两个线性空间中的线性变换的矩阵描述">两个线性空间中的线性变换的矩阵描述</h2>
+
+<p>(V,W) 分别为 (n,m) 维的线性空间， (\alpha={\alpha_1,\cdots ,\alpha_n}) ， (\beta ={\beta_1,\cdots ,\beta<em>m}) 分别是(V,W)的一组基。而 (T:V\rightarrow W) 是一个线性映射。于是 (T,\alpha ,\beta ) 唯一决定一个矩阵 (A</em>{\alpha ,\beta }(T)=[A<em>{ij}]</em>{m\times n}) ，使得：<strong>注意，T不是转置，是一个线性映射，或者说是一种对应关系。</strong></p>
+
+<p>[T(\alpha<em>j)=\sum</em>{i=1}^{m}A_{ij}*\beta_i,\forall j\in 1,\cdots ,n]</p>
+
+<p>等价于：</p>
+
+<p>[T(\alpha_1,\cdots ,\alpha_n)=(\beta_1,\cdots ,\beta<em>m)\cdot A</em>{\alpha ,\beta }(T)]</p>
+
+<p>简记为：</p>
+
+<p>[T(\alpha )=\beta \cdot A_{\alpha ,\beta }(T) \tag{1}]</p>
+
+<p>如果我们选取(V,W)的另一组基， (\widetilde{\alpha }=\alpha \cdot P) ， (\widetilde{\beta }=\beta \cdot Q) 。那么在矩阵 (A_{\widetilde{\alpha },\widetilde{\beta } }(T))  使得，</p>
+
+<p>[T(\widetilde{\alpha })=\widetilde{\beta }\cdot A_{\widetilde{\alpha },\widetilde{\beta } }(T)]</p>
+
+<p>两边分别带入(\widetilde{\alpha })与(\widetilde{\beta })得到：</p>
+
+<p>[T(\alpha )\cdot P=T(\alpha \cdot P)=\beta \cdot Q\cdot A_{\widetilde{\alpha },\widetilde{\beta } }(T)]</p>
+
+<p>与(1)比较我们得到矩阵变换公式：</p>
+
+<p>[Q\cdot A<em>{\widetilde{\alpha },\widetilde{\beta } }(T)\cdot P^{-1}=A</em>{\alpha ,\beta }(T)]</p>
+
+<p>可见，两个线性空间的不同基的线性映射实际上是有关系的。</p>
+
+<p>矩阵是干什么的呢？是用来描述线性变换的，而当你换了基之后我们需要直到不同的基之间的关系是什么，上面这个式子就是告诉你这个关系的。</p>
+
+<h2 id="小结-线性映射与矩阵">小结：线性映射与矩阵：</h2>
+
+<p>矩阵是线性映射在特定基下的一种定量的描述</p>
+
+<p>[T(\alpha )=\beta \cdot A_{\alpha ,\beta }(T)]</p>
+
+<p>基变化下的矩阵变换公式的推导方法：即换了基之后，新的线性变换矩阵和旧的线性变换矩阵之间的关系。</p>
+
+<p>[Q\cdot A<em>{\widetilde{\alpha },\widetilde{\beta } }(T)\cdot P^{-1}=A</em>{\alpha ,\beta }(T)]</p>
+
+<h1 id="矩阵的乘法">矩阵的乘法</h1>
+
+<p>A为 (m\times s) 阶的矩阵，B为 (s\times n) 阶的矩阵，那么 (C=A\times B) 是mxn阶的矩阵，其中，</p>
+
+<p>[c<em>{ij}=\sum</em>{k=1}^{s}a<em>{ik}b</em>{kj}]</p>
+
+<h2 id="状态转移矩阵">状态转移矩阵：</h2>
+
+<p>考虑某随机过程π，它的状态有n个，用1~n表示。记在当前时刻t时位于i状态，它在 t+1 时刻位于 j 状态的概率为 P(i,j)=P(j|i)：</p>
+
+<p>即状态转移的概率只依赖于前一个状态。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/843ej6e5g4.png?imageslim" alt="mark" /></p>
+
+<h2 id="概率转移矩阵例子">概率转移矩阵例子：</h2>
+
+<p>假定按照经济状况将人群分成上、中、下三个阶层，用1、2、3表示。假定当前处于某阶层只和上一代有关，即：考察父代为第i阶层，则子代为第j阶层的概率。假定为如下转移概率矩阵：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/f38g0fhH66.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cKmKhec5j5.png?imageslim" alt="mark" /></p>
+
+<p>第n+1代中处于第j个阶层的概率为：<strong>这个式子依据的是全概率公式</strong></p>
+
+<p>[\pi(X<em>{n+1}=j)=\sum</em>{i=1}^{K}\pi(X<em>n=i)\cdot P(X</em>{n+1}=j\mid X_n=i)</p>
+
+<p>可以得到：</p>
+
+<p>[\pi^{n+1}=\pi^{n}\cdot P</p>
+
+<p>因此，矩阵P即为（条件）概率转移矩阵。</p>
+
+<p>第i行元素表示：在上一个状态为i时的分布概率，即：每一行元素的和为1.</p>
+
+<p>那么初始概率分布(\pi)对最终分布的影响？</p>
+
+<p>初始概率π= [0.21, 0.68, 0.1]进行迭代:    初始概率π= [0.75, 0.15, 0.1] 进行迭代：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jmhHa2h6dm.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dcFKFAc4Gi.png?imageslim" alt="mark" /></p>
+
+<h2 id="因此-导出平稳分布">因此，导出平稳分布</h2>
+
+<p>初始概率不同，但经过若干次迭代，(\pi)最终稳定收敛在某个分布上。从而这是转移矩阵P的性质，而非初始分布的性质。事实上，上述矩阵P的n次幂，每行都是(0.28,0.49,0.225),n&gt;20</p>
+
+<p>如果一个非周期马尔科夫随机过程具有转移概率矩阵P，而且他的任意两个状态都是联通的，则(\lim<em>{n\rightarrow \infty}P</em>{ij}^n)存在，记作(\lim<em>{n\rightarrow \infty}P</em>{ij}^n=\pi(j))。<strong>一定要是任意两个状态都是联通的吗？</strong></p>
+
+<p>注意，强连通不是非周期唯一稳态分布的充分条件，因为可能是震荡的。</p>
+
+<p><strong>但是为什么之前的状态不影响现在的状态？只是上一个状态才影响？任意两个状态都是联通的是什么意思？什么是非周期马尔科夫随机过程？</strong></p>
+
+<p>事实上，下面两种写法等价：</p>
+
+<p>[\lim<em>{n\rightarrow \infty}P</em>{ij}^n=\pi(j)]</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5dkkEAb26B.png?imageslim" alt="mark" /></p>
+
+<p>同时，若概率密度分布(\pi P=\pi)，说明：</p>
+
+<ul>
+<li><p>该多项分布(\pi)是状态转移矩阵P的平稳分布。</p></li>
+
+<li><p>线性方程(xP=x)的非负解为(\pi)，而(P^n)唯一，因此(\pi)是线性方程(xP=x)的唯一非负解。<strong>为什么？</strong></p></li>
+</ul>
+
+<p>该问题将在马尔科夫模型中继续探讨。</p>
+
+<p><strong>有个人提到了网页连接权重的随机访问模型，然后提到了随机游走，和谱聚类。</strong></p>
+
+<p><strong>为什么是唯一非负解？在马尔科夫模型中探讨的时候是什么样子的？</strong></p>
+
+<h1 id="矩阵的连乘的两个问题">矩阵的连乘的两个问题：</h1>
+
+<p>1.根据定义来计算 C=A×B，需要 m*n*s 次乘法。即：若 A 、B 都是 n 阶方阵，C 的计算时间复杂度为O(n 3 )问：可否设计更快的算法？</p>
+
+<p>2.三个矩阵A、B、C的阶分别是(a_0 ×a_1 , a_1 ×a_2 ,a_2 ×a_3) ，从而(A×B)×C和A×(B×C)的乘法次数是(a_0a_1a_2 +a_0a_2a_3 ,a_1a_2a_3 +a_0a_1a_3) ，二者一般情况是不相等的。问：给定n个矩阵的连乘积：(A_1 ×A_2 ×A_3 \cdots ×A_n) ，如何添加括号来改变计算次序，使得乘法的计算量最小？</p>
+
+<h2 id="解">解：</h2>
+
+<p>这两个是算法中的经典问题</p>
+
+<p>1.矩阵乘法C=A×B优化问题，如果只考虑顺序执行，不考虑并行，可以用分治法，最优应该是O(log2(7))。到底怎么做的？什么是分治法</p>
+
+<p>2.矩阵连乘的加括号最优策略：动态规划，什么是动态归纳法？</p>
+
+<p>斜线的意思表示的是计算顺序</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l4K0CEjEjH.png?imageslim" alt="mark" /></p>
+
+<p>代码如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l2lDHga3bG.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Gk6lIddAb1.png?imageslim" alt="mark" /></p>
+
+<p> 上面连乘之后得到的数字就是非常著名的卡特兰数，这个数面试中经常会考到。比如n个括号有多少种考查方式。</p>
+
+<h1 id="矩阵和向量的乘法">矩阵和向量的乘法</h1>
+
+<p>(A) 为 (m×n) 的矩阵， (x) 为 (n×1) 的列向量，则 (Ax) 为 (m×1) 的列向量，记(\overline{y}=A\cdot \overline{x})。</p>
+
+<ul>
+<li><p>而由于n维列向量和n维空间的点一一对应，因此实际上上式给出了从n维空间的点到m为空间点的线性变换。这些变换有旋转、平移、错切等等。<strong>嗯 是的  这个地方提到了其次坐标，将(x,y,x)变成(x,y,z,1)，这样就把平移划归成一定意义上的旋转了。没明白？</strong></p></li>
+
+<li><p>特殊的，若 (m=n) ，且 (A) 为<strong>行列式为1的方阵</strong>， (x) 为<strong>模为1的列向量</strong>，则完成了n维空间点的旋转变换。<strong>嗯厉害，注意要保证(A)的行列式为1。这样旋转后长度不变。</strong></p></li>
+</ul>
+
+<p>这种旋转和平移主要用在图像处理和机械运动控制方面。</p>
+
+<h1 id="矩阵的秩">矩阵的秩</h1>
+
+<h2 id="概念">概念：</h2>
+
+<p>在(m×n)矩阵(A)中，任取(k)行(k)列，不改变这(k^2) 个元素在A中的次序，得到k阶方阵，称为矩阵A的(k)阶子式。显然，m×n矩阵A的k阶子式有(C_m^kC_n^k) 个。</p>
+
+<p>设在矩阵A中有一个不等于 0 的 r 阶子式 D，且所有 (r+1) 阶子式(如果存在的话)全等于0，那么，D称为矩阵A的最高阶非零子式，r 称为矩阵 A 的秩，记做 R(A)=r 。嗯，是的秩的定义就是这个。</p>
+
+<p>因此，n×n的行列式如果不等于0的话就是一个可逆的矩阵，秩也就为n。而可逆矩阵又称做满秩矩阵。</p>
+
+<p><strong>秩是为了表征这个矩阵的什么特征呢？表征这个矩阵有多少个线性无关的数据。比如如果秩等于r，相当于可以用r个向量来表征这个矩阵。剩下的都可以用这r个线性写出来。感觉就像这个矩阵对应的空间的维数？</strong></p>
+
+<p>矩阵的秩等于它行(列)向量组的秩</p>
+
+<h2 id="秩与线性方程组的解的关系">秩与线性方程组的解的关系：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/32cDIe810d.png?imageslim" alt="mark" /></p>
+
+<p>A是m行n列的。</p>
+
+<p>对于n元线性方程组Ax=b，</p>
+
+<ul>
+<li>无解的充要条件是R(A)&lt;R(A,b)</li>
+<li>有唯一解的充要条件是R(A)=R(A,b)=n</li>
+<li>有无限多解的充要条件是R(A)=R(A,b)&lt;n</li>
+</ul>
+
+<p>可以很快得到：</p>
+
+<ul>
+<li>Ax=0有非零解的充要条件是R(A)&lt;n</li>
+<li>Ax=b有解的充要条件是R(A)=R(A,b)，有可能有唯一解，有可能有很多解。</li>
+</ul>
+
+<h2 id="线性表示-与-等价">线性表示 与 等价</h2>
+
+<p>向量b能由向量组(A:a_1 ,a_2 ,\cdots ,a_m) 线性表示的充要条件是矩阵(A=(a_1 ,a_2 ,\cdots ,a_m)) 的秩等于矩阵(B=(a_1 ,a_2 ,\cdots ,a_m ,b))的秩。</p>
+
+<p>设有两个向量组(A:a_1 ,a_2 ,\cdots ,a_m) 及(B:b_1 ,b_2 ,\cdots ,b_n) ，如果B组的向量都能由向量组A线性表示，则称向量组B能由向量组A线性表示。若向量组A与向量组B能相互线性表示，则称两个向量组等价。</p>
+
+<h2 id="系数矩阵">系数矩阵</h2>
+
+<p>将向量组A和B所构成的矩阵依次记作(A=(a_1,a_2,\cdots a_m))和(B=(b_1,b_2,\cdots b_n))，B组横由A组线性表示，即对每个向量(b<em>j),存在(k</em>{1j},k<em>{2j},\cdots ,k</em>{mj})使得：</p>
+
+<p>[b<em>j=k</em>{1j}a<em>1+k</em>{2j}a<em>2+ \cdots +k</em>{mj}a_m=(a_1\;a_2\;\cdots \;a<em>m)\begin{pmatrix}k</em>{1j}\k<em>{2j}\ \cdots \k</em>{mj}\end{pmatrix}]</p>
+
+<p>把所有的(b_j)都这么写，从而得到系数矩阵：</p>
+
+<p>[(b_1\;b_2\;\cdots \;b_n)=(a_1\;a_2\;\cdots\;a<em>m)\begin{pmatrix}k</em>{11}&amp;k<em>{12}&amp;\cdots&amp;k</em>{1n}\k<em>{21}&amp;k</em>{22}&amp;\cdots &amp;k<em>{2n}\ \vdots&amp;\vdots&amp;\ddots&amp;\vdots \k</em>{m1}&amp;k<em>{m2}&amp;\cdots &amp;k</em>{mn}\end{pmatrix}]</p>
+
+<p>所以，B被A线性表出了。</p>
+
+<p>这时候，可以对C=A×B进行重新认识：<strong>再理解下</strong></p>
+
+<ul>
+<li><p>可以看成矩阵C的列向量能由A的列向量线性表示，B即为这一表示的系数矩阵。</p></li>
+
+<li><p>也可以看成矩阵C的行向量能由B的行向量线性表示，A即为这一表示的系数矩阵</p></li>
+</ul>
+
+<p>向量组(B:b_1 ,b_2 ,\cdots ,b_n)能由向量组(A:a_1 ,a_2 ,\cdots ,a_m) 线性表示的充要条件是矩阵(A=(a_1,a_2,\cdots a_m))的秩等于矩阵((A,B)=(a_1 ,a_2 ,\cdots ,a_m ,b_1 ,b_2 ,\cdots ,b_n ))的秩，即：(R(A)=R(A,B))。</p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p>#</p>
+
+<h1 id="需要添加的-先放在这里">需要添加的，先放在这里：</h1>
+
+<p>再次谈一下伪逆，再线性回归中谈到了伪逆的额现象，是用最小二乘搞定的，什么是伪逆？</p>
+
+<p>求伪逆</p>
+
+<p>奇异值分解可以被用来计算矩阵的伪逆。若矩阵A的奇异值分解为(A=U\sum<em>{}^{ } V^T)，那么A的伪逆为：(A^+=V\sum</em>{}^{ } ^+U^T)</p>
+
+<p>其中(\sum<em>{}^{ }^+)是(\sum</em>{}^{ })的伪逆，是将主对角线上每个非零元素都求倒数之后再转制得到的。</p>
+
+<ul>
+<li>求伪逆通常可以用来求解最小二乘法问题。</li>
+</ul>
+
+<p><strong>为什么伪逆是这样得到的？为什么可以用来求解最小二乘法问题？</strong></p>
+
+<p>为什么求伪逆可以用来求解最小二乘问题？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cB4H7BF48J.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/b18hfCC4b0.png?imageslim" alt="mark" />这个公式中的<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/m4f4LK536c.png?imageslim" alt="mark" />这个是伪逆和<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/F4CgLjE17e.png?imageslim" alt="mark" />这个是伪逆是完全一样的。为什么？</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E7%AC%AC%E4%B8%80%E7%B1%BB%E6%96%B9%E6%B3%95%E6%95%B0%E6%8D%AE%E5%88%86%E5%B8%83%E8%87%AA%E9%80%82%E5%BA%94/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">TL 第一类方法：数据分布自适应</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/09-%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/04-%E5%9B%BE%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/">
+            <span class="next-text nav-default">04 图半监督学习</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

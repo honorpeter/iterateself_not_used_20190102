@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>07 调试推理算法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="优化验证测试 The Optimization Verification test 假设你在构建一个语音识别系统。系统通过输入一个音频剪辑A，并对每个可能的输出语句S计算某个Score_A(S)来工作。例" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/07-%E8%B0%83%E8%AF%95%E6%8E%A8%E7%90%86%E7%AE%97%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="07 调试推理算法" />
+<meta property="og:description" content="优化验证测试 The Optimization Verification test 假设你在构建一个语音识别系统。系统通过输入一个音频剪辑A，并对每个可能的输出语句S计算某个Score_A(S)来工作。例" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/07-%E8%B0%83%E8%AF%95%E6%8E%A8%E7%90%86%E7%AE%97%E6%B3%95/" /><meta property="article:published_time" content="2018-08-12T19:30:30&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T19:30:30&#43;00:00"/>
+<meta itemprop="name" content="07 调试推理算法">
+<meta itemprop="description" content="优化验证测试 The Optimization Verification test 假设你在构建一个语音识别系统。系统通过输入一个音频剪辑A，并对每个可能的输出语句S计算某个Score_A(S)来工作。例">
+
+
+<meta itemprop="datePublished" content="2018-08-12T19:30:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T19:30:30&#43;00:00" />
+<meta itemprop="wordCount" content="3339">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="07 调试推理算法"/>
+<meta name="twitter:description" content="优化验证测试 The Optimization Verification test 假设你在构建一个语音识别系统。系统通过输入一个音频剪辑A，并对每个可能的输出语句S计算某个Score_A(S)来工作。例"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">07 调试推理算法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 3339 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#优化验证测试-the-optimization-verification-test">优化验证测试 The Optimization Verification test</a></li>
+<li><a href="#优化验证集的一般形式-general-form-of-optimization-verification-test">优化验证集的一般形式 General form of Optimization Verification test</a></li>
+<li><a href="#chapter-46-reinforcement-learning-example">Chapter 46、Reinforcement learning example</a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="优化验证测试-the-optimization-verification-test">优化验证测试 The Optimization Verification test</h2>
+
+<p>假设你在构建一个语音识别系统。系统通过输入一个音频剪辑A，并对每个可能的输出语句S计算某个<code>Score_A(S)</code>来工作。例如，给定输入音频A，你可能尝试去估计<code>Score_A(S) = P(S|A)</code>，即正确输出转录语句是S的概率。</p>
+
+<p>给定计算<code>Score_A(S)</code>的方法，你仍然需要去寻找最大化它的英语语句S：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/k365KH31f1.png?imageslim" alt="mark" /></p>
+
+<p>你如何计算上面的“arg max”？如果英语语言有5w个词汇，那么长度为N的语句就有(5w)^N种可能——太多而无法详尽列举。所以，你需要应用一个近似搜索算法，试图找出优化（最大化）<code>Score_A(S)</code>的值S。一个搜索算法的例子是“束搜索(beam search)”，其在搜索的过程中保持只保留K个最高候选人（就本章而言，你不需要了解束搜索的细节）。像这种算法不能保证找到最大化<code>Score_A(S)</code>的值S。</p>
+
+<p>假设一个音频剪辑A记录有人说“我爱机器学习”。但你的系统不是正确的转录输出，而是输出错误的“我爱机器人”。有两种出错的可能性：</p>
+
+<ol>
+<li><strong>搜索算法问题</strong>。近似的搜索算法（束算法）未能寻找到最大化<code>Score_A(S)</code>的值S。</li>
+<li><strong>目标（打分函数）问题</strong>。我们对<code>Score_A(S) = P(S|A)</code>的估计不准确。特别地，我们选择的<code>Score_A(S)</code>没能识别出“我爱机器学习”是的正确的转录。</li>
+</ol>
+
+<p>根据这些中的哪个是失败的原因，你应该以不同的方式优先考虑你的努力。如果#1是问题，你应该致力于提升搜索算法。如果#2是问题，你应该致力于估计<code>Score_A(S)</code>的学习算法。</p>
+
+<p>面对这种情况，一些研究者将随机决定使用搜索算法；另一些研究者将随机以更好的方式去学习<code>Score_A(S)</code>的值。但除非你知道哪个是错误的根本原因，否则你的努力可能会被浪费。你怎样更系统的决定要做什么？</p>
+
+<p>让S_out表示输出转录（“我爱机器人”）。让<code>S*</code>表示正确的转录（“我爱机器学习”）。为了了解上面的#1和#2哪个是问题，你可以执行<strong>优化验证测试</strong>：首先，计算Score_A(<code>S*</code>)和Score_A(S_out)。然后检查是否Score_A(<code>S*</code>) &gt; Score_A(S_out)。有两种可能：</p>
+
+<p>Case 1：Score_A(<code>S*</code>) &gt; Score_A(S_out)</p>
+
+<p>在这种情况下，你的学习算法已经正确地给出<code>S*</code>比S_out更高的分数。尽管如此，我们的近似搜索算法选择了S_out，而不是<code>S*</code>。这告诉你近似搜索算法未能选择最大化<code>Score_A(S)</code>的值S。在这种情况下，优化验证测试告诉你你的搜索算法有问题，你应该专注在该问题上。例如，你可以尝试增加束算法的束宽。</p>
+
+<p>Case 2：Score_A(<code>S*</code>) &lt;= Score_A(S_out)</p>
+
+<p>在这种情况下，你了解到计算<code>Score_A(.)</code>的方式不对：相比错误的输出S_out，它并没有给正确的输出<code>S*</code>严格更高的分数。优化验证测试告诉你你的目标（打分）函数有问题。因此，你应该专注于提高对不同语句S的学习或近似<code>Score_A(S)</code>。</p>
+
+<p>我们的讨论集中在一个例子上。为了在实践中应用优化验证测试，你应该检测开发集中的错误。对每个错误，你可以测试是否Score_A(<code>S*</code>) &gt; Score_A(S_out)。该不等式所持有的每个开发样例将标记为由优化算法引起的错误。不等式Score_A(<code>S*</code>) &lt;= Score_A(S_out)所持有的每个样例由于计算Score_A(.)的方式不对而被视为错误。</p>
+
+<p>例如，假设你发现95%的错误是由打分函数Score_A(.)引起的，只有5%的错误是因为优化算法。现在你知道不论你改进了多少优化程序，你只会真实地消除约5%的错误。因此，你应该专注于改进评估Score_A(.)的方式。</p>
+
+<h2 id="优化验证集的一般形式-general-form-of-optimization-verification-test">优化验证集的一般形式 General form of Optimization Verification test</h2>
+
+<p>当给定输入x，你知道如何计算表示响应y对输入x有多好的Score_x(y)时，你可以应用优化验证测试。而且，你正在使用近似算法来试图找到<code>arg max_y Score_x(y)</code>，但怀疑搜索算法有时不能找到最大值。在我们前面的语音识别示例中，x=A是一个音频剪辑，y=S是输出转录。</p>
+
+<p>假设<code>y*</code>是“正确的”输出，但算法输出y_out。那么关键测试是测量是否Score_x(<code>y*</code>) &gt; Score_x(y_out)。如果该不等式成立，那么我们会将错误归咎于优化算法。参考前一章以确保你理解其背后的逻辑。否则，我们将归咎于Score_x(y)的计算。</p>
+
+<p>让我们再看一个例子。假设你正在构建一个中译英的机器翻译系统。系统通过输入中文句子C，并为每个可能的翻译E计算Score_c(E)。例如，你可能使用Score_c(E)=P(E|C)，给定输入语句C，翻译为E的概率。</p>
+
+<p>你的算法通过尝试如下计算来翻译句子：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/64E86eL966.png?imageslim" alt="mark" /></p>
+
+<p>然而，所有可能的英语语句E的集合太大了，所以你依靠启发式搜索算法。</p>
+
+<p>假设你的算法输出错误的翻译 E_out，而不是正确的翻译<code>E*</code>。那么优化验证测试将要求你计算是否Score_c(<code>E*</code>) &gt; Score_c(E_out)。如果该不等式成立，那么Score_c(.)正确地将<code>E*</code>识别为比E_out更好的输出；因此，你会将此错误归咎于近似搜索算法。否则，你将此错误归咎于Score_c(.)的计算。</p>
+
+<p>这是AI中一个非常常见的“设计模式”，首先学习一个近似打分函数Score_x(.)，然后使用一个近似最大化算法。如果你能够发现该模式，那么你将能够使用优化验证测试来了解您的错误来源。</p>
+
+<h2 id="chapter-46-reinforcement-learning-example">Chapter 46、Reinforcement learning example</h2>
+
+<p><strong>强化学习样本</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/GJKaI7a0GD.png?imageslim" alt="mark" /></p>
+
+<p>假设你正在使用机器学习去教直升机复杂的演习。 这是计算机控制器直升机在发动机关闭时执行着陆时的延时照片。</p>
+
+<p>这被称为“自动旋转”演习。即使发动机意外失效，它也允许直升机着陆。人类飞行员将该演习作为他们的训练的一部分。你的目标是使用学习算法通过以安全着陆为结尾的轨迹T飞行直升机。</p>
+
+<p>为了应用增强学习，你必须开发一个“奖励函数”R(.)，它给一个分数来衡量每个可能的轨迹T有多好。例如，如果T导致直升机坠毁，那么可能奖励是R(T)=-1000——大的负值奖励。导致安全着陆的轨迹T根据其着陆的平滑程度可能导致一个具体的正的R(T)值。通常通过手动选择奖励函数R(.)来量化不同轨迹T的理想程度。它必须权衡着陆时的颠簸程度，直升机是否准确着陆在期望地点，乘客下来的路有多崎岖，等等。设计一个好的奖励函数不简单。</p>
+
+<p>给定一个奖励函数R(T)，强化学习算法的工作是去控制直升机以便获取 <code>max_T R(T)</code>。然而，强化学习算法产生很多近似值，并且可能不会成功实现它的最大化。</p>
+
+<p>假设你选择了某个奖励R(.)并运行了你的学习算法。然而，它的表现比人类飞行员要差的远——比起人类飞行员，其着陆颠簸而且看起来不安全。你怎么知道该缺点与增强学习算法有关（算法试图执行一条达到<code>max_T R(T)</code>的轨迹），或者与奖励函数有关（其试图衡量及指定乘坐颠簸和着陆点准确性之间的理想权衡）？</p>
+
+<p>为了应用优化验证测试，让T_human作为人类飞行员实现的轨迹，T_out作为算法实现的轨迹。根据我们之前的描述，T_human是一条比T_out更好的轨迹。因此，关键测试如下：</p>
+
+<p>不等式<code>R(T_human) &gt; R(T_out)</code> 是否成立？</p>
+
+<p>Case 1：如果该不等式成立，那么奖励函数R(.)正确地评估出T_human优于T_out。但我们的强化学习算法找到较差的T_out。这表明致力于提升强化学习算法是值得的。</p>
+
+<p>Case 2：该不等式不成立：<code>R(T_human) &lt;= R(T_out)</code>。这意味着尽管T_human是更优的轨迹，R(.)仍然为其分配了一个更糟的分数。你应该致力于提升R(.)以更好捕获对应于良好着陆的折衷。</p>
+
+<p>很多机器学习应用都有这种使用近似搜索算法来优化近似打分函数Score_x(.)的“模式”。有时，没有指定的输入x，所以这只会减少Score(.)。在我们上面的例子中，打分函数就是奖励函数Score(T)=R(T)，优化函数是试图执行良好轨迹T的强化学习算法。</p>
+
+<p>在该例子和以前例子的一个区别是，与其和“最优”输出进行比较，不如和人类水平的表现T_human进行比较。我们假设T_human是非常好的，即使不是最优的。一般来说，只要你有某个<code>y*</code>（在该例子中是T_human），它是比你当前学习算法表现更好的输出（即使它不是“最优”输出），那么优化验证测试可以指示它是否更有希望提升优化算法或打分函数。</p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://github.com/xiaqunfeng/machine-learning-yearning/">machine-learning-yearning</a></li>
+<li>《Machine Learning Yearning》 by Andrew NG</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%A0%87%E7%AD%BE%E4%BC%A0%E9%80%92%E7%AE%97%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">标签传递算法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/06-%E5%9C%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E5%88%86%E5%B8%83%E4%B8%8A%E8%AE%AD%E7%BB%83%E4%B8%8E%E6%B5%8B%E8%AF%95/">
+            <span class="next-text nav-default">06 在不同的分布上训练与测试</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

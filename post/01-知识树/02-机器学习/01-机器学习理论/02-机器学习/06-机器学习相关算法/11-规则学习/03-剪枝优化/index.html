@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 剪枝优化 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="剪枝优化 规则生成本质上是一个贪心搜索过程，需有一定的机制来缓解过拟合的风险，最常见的做法是剪枝（pruning）。与决策树相似，剪枝可发生在" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/11-%E8%A7%84%E5%88%99%E5%AD%A6%E4%B9%A0/03-%E5%89%AA%E6%9E%9D%E4%BC%98%E5%8C%96/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 剪枝优化" />
+<meta property="og:description" content="剪枝优化 规则生成本质上是一个贪心搜索过程，需有一定的机制来缓解过拟合的风险，最常见的做法是剪枝（pruning）。与决策树相似，剪枝可发生在" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/11-%E8%A7%84%E5%88%99%E5%AD%A6%E4%B9%A0/03-%E5%89%AA%E6%9E%9D%E4%BC%98%E5%8C%96/" /><meta property="article:published_time" content="2018-07-07T16:46:19&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-07T16:46:19&#43;00:00"/>
+<meta itemprop="name" content="03 剪枝优化">
+<meta itemprop="description" content="剪枝优化 规则生成本质上是一个贪心搜索过程，需有一定的机制来缓解过拟合的风险，最常见的做法是剪枝（pruning）。与决策树相似，剪枝可发生在">
+
+
+<meta itemprop="datePublished" content="2018-07-07T16:46:19&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-07T16:46:19&#43;00:00" />
+<meta itemprop="wordCount" content="1496">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 剪枝优化"/>
+<meta name="twitter:description" content="剪枝优化 规则生成本质上是一个贪心搜索过程，需有一定的机制来缓解过拟合的风险，最常见的做法是剪枝（pruning）。与决策树相似，剪枝可发生在"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 剪枝优化</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-07 </span>
+        
+        <span class="more-meta"> 1496 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>剪枝优化</p>
+
+<p>规则生成本质上是一个贪心搜索过程，需有一定的机制来缓解过拟合的风险，最常见的做法是剪枝（pruning）。与决策树相似，剪枝可发生在规则生长过程中，即“预剪枝”，也可发生在规则产生后，即“后剪枝”：通常是基于某种性能度量指标来评估增/删逻辑文字前后的规则性能，或增/删规则前后的规则集性能，从而判断是否要进行剪枝.</p>
+
+<p>剪枝还可借助统计显著性检验来进行。例如CN2算法［Clark and Niblett, 1989］在预剪枝时，假设用规则集进行预测必须显著优于直接基于训练样例集 后验概率分布进行预测。为便于计算，CN2使用了似然率统计量（Likelihood Ratio Statistics,简称LHS）.令 $m<em>+$ , $m</em>-$ 分别表示训练样例集中的正、反例数目，则有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/dB5hi92AJg.png?imageslim" alt="mark" /></p>
+
+<p>这实际上是一种信息量指标，衡量了规则（集）覆盖样例的分布与训练集经验分 布的差别：
+- LRS越大，说明采用规则（集）进行预测与直接使用训练集正、反例 比率进行猜测的差别越大；
+- LRS越小，说明规则（集）的效果越可能仅是偶然现象</p>
+
+<p>在数据量比较大的现实任务中，通常设置为在LRS很大（例如0.99）时CN2 算法才停止规则（集）生长.</p>
+
+<p>后剪枝最常用的策略是 “减错剪枝” (Reduced Error Pruning,简称REP),其基本做法是：将样例集划分为训练集和验证集,从训练集上学得规则集 $\mathcal{R}$ 后进行多轮剪枝，在每一轮穷举所有可能的剪枝操作,包括删除规则中某个文字、删除规则结尾文字、删除规则尾部多个文字、 删除整条规则等，然后用验证集对剪枝产生的所有候选规则集进行评估，保留最好的那个规则集进行下一轮剪枝，如此继续，直到无法通过剪枝提高验证集上的性能为止。</p>
+
+<p>REP剪枝通常很有效，但其复杂度是 $O(m^4)$ ，m 为训练样例数目。IREP (Incremental REP) 将复杂度降到 $O(mlog^2m)$ ,其做法是：在生成每条规则前，先将当前样例集划分为训练集和验证集，在训练集上生成一条规则 $r$，立即在验证集上对其进行REP剪枝，得到规则 $r&rsquo;$ ;将 $r&rsquo;$ 覆盖的样例去除，在更新后的样例集上重复上述过程。显然，REP 是针对规则集进行剪枝，而 IREP 仅对单条规则进行剪枝， 因此后者比前者更高效.</p>
+
+<p>若将剪枝机制与其他一些后处理手段结合起来对规则集进行优化，则往往能获得更好的效果.以著名的规则学习算法 RIPPER 为例，其泛化性能超过很多决策树算法，而且学习速度也比大多数决策树算法更快，奥妙就在于将剪枝与后处理优化相结合.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/j8BK5165B4.png?imageslim" alt="mark" /></p>
+
+<p>RIPPER算法描述如图 15.2 所示.它先使用 $IREP<em>$ 剪枝机制生成规则集 $\mathcal{R}$ 。$IREP</em>$  是IREP的改进，主要是以 $\frac{\hat{m}+(m<em>&ndash;\hat{m}</em>-)}{m<em>++m</em>-}$ 取代了 IREP 使用的准确率作为规则性能度量指标，在剪枝时删除规则尾部的多个文字，并在最终得到规则集之后再进行一次 IREP 剪枝。RIPPER中的后处理机制是为了在剪枝的基础上进一步提升性能.对 $\mathcal{R}$ 中的每条规则 $r_i$ ,RIPPER 为它产生两个变体：</p>
+
+<ul>
+<li>$r_i&rsquo;$:基于 $r_i$ 覆盖的样例，用 IREP* 重新生成一条规则 $r_i&rsquo;$ ,该规则称为替换规则(replacement rule)</li>
+<li>$r_i&rdquo;$:对 $r_i$ 増加文字进行特化，然后再用 IREP* 剪枝生成一条规则$r_i&rdquo;$,该规则称为修订规则(revised rule)</li>
+</ul>
+
+<p>接下来，把$r_i&rsquo;$和$r_i&rdquo;$分别与 $\mathcal{R}$ 中除 $r_i$ 之外的规则放在一起，组成规则集 $\mathcal{R}&lsquo;$ 和 $\mathcal{R}&ldquo;$ ,将它们与 $\mathcal{R}$ 一起进行比较，选择最优的规则集保留下来，这就是图 15.2 中算法第4行做的操作.</p>
+
+<p>为什么RIPPER的优化策略会有效呢？原因很简单：最初生成 $\mathcal{R}$ 的时候，规则是按序生成的，每条规则都没有对其后产生的规则加以考虑，这样的贪心 算法本质常导致算法陷入局部最优；RIPPER的后处理优化过程将 $\mathcal{R}$ 中的所有规则放在一起重新加以优化，恰是通过全局的考虑来缓解贪心算法的局部性，从而往往能得到更好的效果。</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-07</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%AE%97%E6%B3%95/02-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/05-%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 最长递增子序列</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/11-%E8%A7%84%E5%88%99%E5%AD%A6%E4%B9%A0/02-%E5%BA%8F%E8%B4%AF%E8%A6%86%E7%9B%96/">
+            <span class="next-text nav-default">02 序贯覆盖</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

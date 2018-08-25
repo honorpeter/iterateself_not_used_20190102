@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 矩阵变换与特征值 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-31 07:31:59&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-matrix-transformation-and-eigenvalues/ slug: ai-linear-algebra-matrix-transformation-and-eigenvalues title: wordpress_id: 2167 categories: - 随想与反思 tags: - &amp;lsquo;@todo&amp;rsquo; - &amp;lsquo;@want_to_know&amp;rsquo; [mathjax] REF： 七月在线 机器学习 TODO 向量的求导要单独拿出来，把矩阵论的向量求导那一篇整合进来" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/02-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/02-%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2%E4%B8%8E%E7%89%B9%E5%BE%81%E5%80%BC/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 矩阵变换与特征值" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-31 07:31:59&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-matrix-transformation-and-eigenvalues/ slug: ai-linear-algebra-matrix-transformation-and-eigenvalues title: wordpress_id: 2167 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 机器学习 TODO 向量的求导要单独拿出来，把矩阵论的向量求导那一篇整合进来" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/02-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/02-%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2%E4%B8%8E%E7%89%B9%E5%BE%81%E5%80%BC/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="02 矩阵变换与特征值">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-31 07:31:59&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-matrix-transformation-and-eigenvalues/ slug: ai-linear-algebra-matrix-transformation-and-eigenvalues title: wordpress_id: 2167 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 机器学习 TODO 向量的求导要单独拿出来，把矩阵论的向量求导那一篇整合进来">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="4235">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 矩阵变换与特征值"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-31 07:31:59&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-linear-algebra-matrix-transformation-and-eigenvalues/ slug: ai-linear-algebra-matrix-transformation-and-eigenvalues title: wordpress_id: 2167 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 机器学习 TODO 向量的求导要单独拿出来，把矩阵论的向量求导那一篇整合进来"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 矩阵变换与特征值</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 4235 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#want-to-know">- &lsquo;@want_to_know&rsquo;</a></li>
+</ul></li>
+<li><a href="#ref">REF：</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#相似变换-把矩阵看作线性映射就容易理解了">相似变换：把矩阵看作线性映射就容易理解了</a>
+<ul>
+<li><a href="#方阵的相似变换">方阵的相似变换</a></li>
+<li><a href="#那么相似变换下不变的性质都有什么呢">那么相似变换下不变的性质都有什么呢？</a></li>
+<li><a href="#最重要的一个相似变换的性质-特征值">最重要的一个相似变换的性质：特征值</a></li>
+</ul></li>
+<li><a href="#相和变换-二次型">相和变换（二次型）</a>
+<ul>
+<li><a href="#方阵的相合变换">方阵的相合变换</a></li>
+</ul></li>
+<li><a href="#方阵的正交相似变换">方阵的正交相似变换</a>
+<ul>
+<li><a href="#方阵的正交相似标准型">方阵的正交相似标准型</a></li>
+</ul></li>
+<li><a href="#正交阵">正交阵：</a>
+<ul>
+<li><a href="#两道思考题">两道思考题：</a></li>
+</ul></li>
+<li><a href="#特征值和特征向量">特征值和特征向量</a>
+<ul>
+<li><a href="#定义">定义：</a></li>
+<li><a href="#特征值的性质">特征值的性质：</a></li>
+<li><a href="#两个点">两个点：</a></li>
+<li><a href="#不同特征值-的-特征向量">不同特征值 的 特征向量</a></li>
+<li><a href="#引理">引理：</a></li>
+<li><a href="#实对称阵不同特征值的特征向量正交">实对称阵不同特征值的特征向量正交</a></li>
+<li><a href="#最终结论">最终结论</a></li>
+</ul></li>
+<li><a href="#二次型">二次型</a></li>
+<li><a href="#正定阵-还是不熟悉-什么是正定-什么是半正定">正定阵 还是不熟悉？什么是正定？什么是半正定？</a>
+<ul>
+<li><a href="#正定阵的定义">正定阵的定义</a></li>
+<li><a href="#正定阵的判定">正定阵的判定：</a></li>
+<li><a href="#两道题目">两道题目：</a></li>
+<li><a href="#向量的导数">向量的导数</a></li>
+<li><a href="#标量对向量的导数">标量对向量的导数</a>
+<ul>
+<li><a href="#注意-这个没讲">注意： <strong>这个没讲</strong></a></li>
+</ul></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-31 07:31:59+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/31/ai-linear-algebra-matrix-transformation-and-eigenvalues/">http://106.15.37.116/2018/03/31/ai-linear-algebra-matrix-transformation-and-eigenvalues/</a>
+slug: ai-linear-algebra-matrix-transformation-and-eigenvalues
+title:
+wordpress_id: 2167
+categories:
+- 随想与反思
+tags:
+- &lsquo;@todo&rsquo;</p>
+
+<h2 id="want-to-know">- &lsquo;@want_to_know&rsquo;</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+<hr />
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><p><strong>向量的求导要单独拿出来，把矩阵论的向量求导那一篇整合进来。</strong></p></li>
+
+<li><p><strong>实对称阵不同特征值的特征向量正交，这个在一些机器学习的公式推理的时候用到很多次了，要再理解下。</strong></p></li>
+</ul>
+
+<p>*</p>
+
+<h1 id="motive">MOTIVE</h1>
+
+<p>总结矩阵变换和特征值的知识</p>
+
+<p>数学中，字母上面加横线读作拔(a)表示求平均的意思。</p>
+
+<hr />
+
+<h1 id="相似变换-把矩阵看作线性映射就容易理解了">相似变换：把矩阵看作线性映射就容易理解了</h1>
+
+<p>如果(T:V\rightarrow V)是一个线性变换，那么对于(V)的两组基(\alpha )与(\widetilde{\alpha}=\alpha \cdot P)，线性变换(T)的矩阵分别为：</p>
+
+<p>[A<em>{\alpha}(T)\, and \, A</em>{\widetilde{\alpha} }(T)=P^{-1}\cdot A_{\alpha}(T)\cdot P]</p>
+
+<p><strong>厉害了，这</strong><strong>个是由</strong><strong>线性映射与矩阵 这个知识点得到的。因为这里是P与Q是相等的。所以根据基变换下的矩阵变换公式得来的。</strong></p>
+
+<h2 id="方阵的相似变换">方阵的相似变换</h2>
+
+<p>如果两个方阵 (A) 和 (\widetilde{A}) 满足，(\widetilde(A)=P^{-1}AP) 。那么这两个方阵就互为相似矩阵。</p>
+
+<p>相似矩阵的几何意义是同一个线性变换在不同的基下的表达形式。<strong>嗯 是的厉害。</strong>当研究对象是线性变换的时候，我们只关心矩阵在相似变换下不变的几何性质。<strong>是的，你其实不是关心两个不同的基是什么，而只是关心这种相似变换的T。</strong></p>
+
+<h2 id="那么相似变换下不变的性质都有什么呢">那么相似变换下不变的性质都有什么呢？</h2>
+
+<ul>
+<li>行列式(det)：<strong>行列式是det吗？到这个地方才讲到行列式，行列式其实是相似变换下的不变量。因为这个不变量很重要，因此很多书把这个提到第一个来讲。为什么是不变量呢？证明如下：</strong></li>
+</ul>
+
+<p>[\begin{align<em>} (P^{-1}AP)&amp;=det(P^{-1})det(A)det(P)\&amp;=det(P^{-1})det(P)det(A)\&amp;=det(A)\end{align</em>}]</p>
+
+<ul>
+<li>迹(trace)：<strong>什么是迹？</strong></li>
+</ul>
+
+<p>[tr(AB)=tr(BA)]</p>
+
+<p>[tr(P^{-1}AP)=tr(APP^{-1})=tr(A\cdot I)=tr(A)]</p>
+
+<ul>
+<li>秩(rank) 秩就是一个矩阵的极大线性无关组中的向量个数。</li>
+</ul>
+
+<h2 id="最重要的一个相似变换的性质-特征值">最重要的一个相似变换的性质：特征值</h2>
+
+<p>最重要的一个相似变换不变的性质是什么？是特征值，前面的三个都可以用特征值来表示。</p>
+
+<ul>
+<li>特征值：特征方程(det(A-\lambda I)=0)的根。如果(det(A-\lambda I)=0)，那么(det(P^{-1}(A-\lambda I)P)=0)，于是(det(P^{-1}AP-\lambda I)=0) <strong>厉害</strong></li>
+</ul>
+
+<p>特征值是最重要的相似不变量，利用这个相似不变量可以方便的得出上面的所有的不变量。</p>
+
+<ul>
+<li><p>行列式是什么？行列式就是所有特征值相乘。</p></li>
+
+<li><p>迹是什么？是所有特征值相加。</p></li>
+
+<li><p>秩是什么？是非0特征值的个数。</p></li>
+</ul>
+
+<p>所以有了特征值的信息之后，前面的三个都比较简单了。<strong>没想到特征值的作用这么大。</strong></p>
+
+<p>下面简单介绍一下上面一些概念的几何意义：</p>
+
+<ul>
+<li><p>行列式是什么？如果T是从V到V的线性变换，那么取一组基你就得到矩阵，那么行列式就是V里面的单位体积的东西经过映射之后就得到了行列式。行列式就是体积膨胀的系数。</p></li>
+
+<li><p>迹的几何意义是：把这个映射看成是流体的向量场，流体的向量场所显示的流动的体积膨胀系数。</p></li>
+
+<li><p>秩说的是：比如V本来的维数是n，映射到的子空间的维数就是秩？<strong>没明白，在Wiki查一下。</strong></p></li>
+</ul>
+
+<p>#</p>
+
+<p>#</p>
+
+<h1 id="相和变换-二次型">相和变换（二次型）</h1>
+
+<p>假设 (V) 是一个实系数线性空间，那么线性空间上的度量指的是空间中向量的内积关系 (G(v_1,v_2)) 。如果 (\alpha {\alpha_1,\cdot ,\alpha<em>k }) 是空间 V 的一组基，那么这个内积一般可以用一个对称矩阵 (H</em>\alpha =[h<em>{ij}]</em>{n \times n}) 来表示。<strong>为什么这个内积可以用这个对称矩阵来表示？ 为什么度量是向量的内积关系？</strong></p>
+
+<p>[h_{ij}=G(\alpha_i,\alpha_j)]</p>
+
+<p>这个时候对于任意两个变量(v_1,v_2)，如果(v_1=\alpha \cdot x_1)，(v_2=\alpha \cdot x_2)，那么：</p>
+
+<p>[G(v_1,v_2)=x<em>1^TH</em>{\alpha}x_2]</p>
+
+<p><strong>这个(H_\alpha )是什么？</strong></p>
+
+<h2 id="方阵的相合变换">方阵的相合变换</h2>
+
+<p>如果两个对称方阵 (A) 和 (\widetilde{A}) 满足 (\widetilde{A}=P^TAP) 。那么这两个方阵就互为相合矩阵。</p>
+
+<p>相似矩阵的几何意义是同一个内积结构在不同基下的表示形式。之前介绍的相似变换是同一个线性变换在不同的基下的表示。</p>
+
+<p><strong>这个地方怎么又说是相似矩阵了？不是相合矩阵吗？而且(\widetilde{A})是什么？</strong></p>
+
+<h1 id="方阵的正交相似变换">方阵的正交相似变换</h1>
+
+<p>有了相似变换和相和变换之后，才讲正交相似变换。</p>
+
+<p>正交相似变换同时满足相似与相合变换的条件，也就是说它同时保持了矩阵的相似与相和不变量。</p>
+
+<p>如果两个对称方阵 (A) 和 (\widetilde{A}) 满足 (\widetilde{A}=P^TAP) 。而且 (P) 是正交矩阵： (P^T=P^{-1}) 。那么这 (A) 和 (\widetilde{A}) 就互为正交相似。即既是相和的又是相似的。</p>
+
+<h2 id="方阵的正交相似标准型">方阵的正交相似标准型</h2>
+
+<p>任何一个对称矩阵 (A) 都可以正交相似于一个对角矩阵 (D) 。即总存在一个正交矩阵 (P) ，使得 (A=P^TDP) 。这个公式就是我们要学的PCA，即主成分分析的数学原理。</p>
+
+<p>为什么要做这些相似相和的东西？就是给定一个矩阵A，你希望它相似一个非常简单的矩阵，而这个简单的矩阵几乎蕴含了你原来矩阵里面的所有的信息。什么是最简单的矩阵？对角矩阵就是最简单的矩阵。而这个定理告诉你，任何一个对称矩阵都可以正交相似与一个对角矩阵。就是说，这个对称矩阵从一定意义上来说都是非常简单的。然后PCA就是说：本来你只有这个A，然后你通过找到D来简化这个问题。</p>
+
+<h1 id="正交阵">正交阵：</h1>
+
+<p>若n阶矩阵A满足(A^TA=I)，成A为正交矩阵，简称正交阵。A是正交阵的充要条件：A的列(行)向量都是单位向量，且两两正交。</p>
+
+<p>A是正交阵，x为向量，则(A\cdot x)称作正交变换。正交变换不改变向量长度。</p>
+
+<h2 id="两道思考题">两道思考题：</h2>
+
+<p>若A、B都是n阶正交阵，那么，A×B是正交阵吗？是的。</p>
+
+<p>正交阵和对称阵，能够通过何种操作获得一定意义下的联系？昨天学的协方差矩阵就是对称阵。</p>
+
+<h1 id="特征值和特征向量">特征值和特征向量</h1>
+
+<h2 id="定义">定义：</h2>
+
+<p>A是n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么，数λ称为A的特征值，x称为A的对应于特征值λ的特征向量。</p>
+
+<p>根据定义，立刻得到((A-λI)x = 0)，令关于λ 的多项式(|A-λI|)为0，方程(|A-λI|=0)的根为A的特征值；将根λ_0 带入方程组(A-λI)x = 0 ，求得到的非零解，即λ_0 对应的特征向量。</p>
+
+<h2 id="特征值的性质">特征值的性质：</h2>
+
+<p>设n阶矩阵(A=(a_{ij} ))的特征值为(λ_1 ,λ_2 ,&hellip;λ_n ),则</p>
+
+<ul>
+<li><p>(λ_1 +λ_2 +&hellip;+λ<em>n =a</em>{11} +a<em>{22}+…+a</em>{nn})</p></li>
+
+<li><p>(λ_1 \;λ_2 …λ_n =|A|)</p></li>
+</ul>
+
+<p>矩阵A主行列式的元素和，称作矩阵A的迹。</p>
+
+<p><strong>特征值的意义，在聚类和谱聚类里面由好的实践方面的应用。后面学到回来补充下。</strong></p>
+
+<h2 id="两个点">两个点：</h2>
+
+<p>已知λ是方阵A的特征值，则：<strong>用定义怎么解决？</strong></p>
+
+<ul>
+<li><p>(\lambda^2) 是(A^2)的特征值</p></li>
+
+<li><p>A可逆时，(\lambda^{-1})是(A^{-1})的特征值。</p></li>
+</ul>
+
+<h2 id="不同特征值-的-特征向量">不同特征值 的 特征向量</h2>
+
+<p>设(λ_1 ,λ_2 ,&hellip;,λ_m )是方阵A的m个特征值，(p_1 ,p_2 ,&hellip;,p_m)是依次与之对应的特征向量，若(λ_1 ,λ_2 ,&hellip;,λ_m )各不相等，则(p_1 ,p_2 ,&hellip;,p_m)线性无关。</p>
+
+<p>总结与思考</p>
+
+<ul>
+<li><p>不同特征值对应的特征向量，线性无关。</p></li>
+
+<li><p>若方阵A是对称阵呢？结论是否会加强？<strong>什么叫线性无关的结论得到加强？嗯，加强到正交了。</strong></p>
+
+<ul>
+<li><p>协方差矩阵、二次型矩阵、无向图的邻接矩阵等都是对称阵</p></li>
+
+<li><p>在谱聚类中将会有所涉及</p></li>
+</ul></li>
+</ul>
+
+<h2 id="引理">引理：</h2>
+
+<p>实对称阵的特征值是实数</p>
+
+<p>设复数λ为对称阵A的特征值，复向量x为对应的特征向量，即Ax=λx(x≠0)，现在证明附属λ一定是实数：</p>
+
+<p>用(\overline{\lambda}) 表示(\lambda)的共轭复数，(\overline{x}) 表示x的共轭复向量，而A是实矩阵，有(\overline{A}=A) ，如果(\lambda)是实数，说明(\overline{\lambda}) =(\lambda)</p>
+
+<p>证明：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Cdh44ifbff.png?imageslim" alt="mark" /></p>
+
+<p>这个是想告诉大家是对称阵的特征值一定是实数。</p>
+
+<p>而因为实数λ带入方程组(A- λ I)x=0，该方程组为实系数方程组，因此，实对称阵的特征向量只能是实向量。</p>
+
+<h2 id="实对称阵不同特征值的特征向量正交">实对称阵不同特征值的特征向量正交</h2>
+
+<p>证明如下：</p>
+
+<p>令实对称矩阵为A，它的两个不同的特征值(λ_1) ，(λ_2) 对应的特征向量分别是(μ_1) (μ_2) ；其中，(λ_1) (λ_2) (μ_1) (μ_2) 都是实数或是实向量。</p>
+
+<ul>
+<li><p>则有：(Aμ 1 =λ_1 μ_1) ，( Aμ_2 =λ_2 μ_2)</p></li>
+
+<li><p>((Aμ_1 )^T =(λ_1 μ_1 )^ T) ，从而：(μ_1^TA=λ_1 μ_1^T)</p></li>
+
+<li><p>所以：(μ_1^T Aμ_2 =λ_1 μ_1^T μ_2)</p></li>
+
+<li><p>同时，(μ_1^T Aμ_2 =μ_1^T (Aμ_2 )=μ_1^T λ_2 μ_2 = λ_2 μ_1^T μ_2)</p></li>
+
+<li><p>所以，(λ_1 μ_1^T μ_2 =λ_2 μ_1^T μ_2)</p></li>
+
+<li><p>故：((λ_1 -λ_2 ) μ_1^T μ_2 =0)</p></li>
+
+<li><p>而(λ_1 ≠λ_2 )，所以(μ_1^T μ_2 =0)，即：(μ_1) ，(μ_2 )正交。</p></li>
+</ul>
+
+<h2 id="最终结论">最终结论</h2>
+
+<p>设A为n阶的对称阵，则必有正交阵P，使得：</p>
+
+<p>[P^{-1}AP=P^TAP=\Lambda)</p>
+
+<p>(\Lambda)是以A的n个特征值为对角元的对角阵。</p>
+
+<p>一个对称阵总有一个正交阵，把它对角化。该变换称为“合同变换”，(A)和(\Lambda)互为合同矩阵。</p>
+
+<h1 id="二次型">二次型</h1>
+
+<p>含有n个变量的二次齐次函数，称为二次型。二次型本身跟线性代数没有关系。一个二次型对应一个对称阵，而上面说了对称阵可以由正交阵对角化，从而二次型可以化成只有n个变量平方项的标准型，而这个正交阵，对应着坐标系的旋转变化。<strong>嗯也是。用的地方比如：可以将方程化简看是椭圆还是双曲线什么的。</strong></p>
+
+<h1 id="正定阵-还是不熟悉-什么是正定-什么是半正定">正定阵 还是不熟悉？什么是正定？什么是半正定？</h1>
+
+<h2 id="正定阵的定义">正定阵的定义</h2>
+
+<p>对于n阶方阵A，若任意n阶向量x，都有x^TAx&gt;0，则称A是正定阵。可以看成是1阶的正数负数到方阵的推广。</p>
+
+<p>若条件变成x^TAx≥0，则A称作半正定阵，类似还有负定阵，半负定阵。</p>
+
+<h2 id="正定阵的判定">正定阵的判定：</h2>
+
+<p>对称阵A为正定阵；A的特征值都为正；A的顺序主子式（主对角线上的）大于0；这三个命题等价。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/fe186Ccgii.png?imageslim" alt="mark" /></p>
+
+<p>用在那里呢？taylor展开式的时候，如果是n元的变量，求一阶导数，则是一个n阶的向量，求二阶导数就是一个n^2的一个方阵，这个方阵判定的话就是用的正定负定。<strong>没明白？</strong></p>
+
+<h2 id="两道题目">两道题目：</h2>
+
+<p>给定凸锥的定义如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dfmJJdcA1D.png?imageslim" alt="mark" /></p>
+
+<p>试证明：n阶半正定方阵的集合为凸锥。[note]<a href="http://106.15.37.116/2018/03/31/ai-convex-optimization-optimization-and-convex-optimization/">凸锥</a>[/note]这个是凸优化方面的一个题目。这个证明题本身没有价值，价值在于通过证明过程理解定义。考察的是半正定阵的定义。</p>
+
+<p>利用定义证明：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3hB60kL644.png?imageslim" alt="mark" /></p>
+
+<h2 id="向量的导数">向量的导数</h2>
+
+<p>A为m×n的矩阵， x为n×1的列向量，则Ax为m×1的列向量，记(\overrightarrow{y}=A\cdot \overrightarrow{x})。思考：</p>
+
+<p>[\frac{\partial \overrightarrow{y} }{\partial \overrightarrow{x} }=?]</p>
+
+<p>推导：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3i62FlCJab.png?imageslim" alt="mark" /></p>
+
+<p><strong>上面的，矩阵的求偏导的计算方式是什么样子的？</strong></p>
+
+<p>理论与直接推广：向量偏导公式</p>
+
+<ul>
+<li><p>(\frac{\partial A \overrightarrow{x} }{\partial \overrightarrow{x} }=A^T)</p></li>
+
+<li><p>(\frac{\partial A^T \overrightarrow{x} }{\partial \overrightarrow{x} }=A)</p></li>
+
+<li><p>(\frac{\partial A \overrightarrow{x} }{\partial \overrightarrow{x}^T}=A)</p></li>
+</ul>
+
+<p>在线性回归中将直接使用该公式。使用的时候注意回来补充一下怎么用的。</p>
+
+<h2 id="标量对向量的导数">标量对向量的导数</h2>
+
+<p>A为(n\times n)的矩阵，x为(n\times 1)的列向量，记 (y=\overrightarrow{x}^T\cdot A\cdot \overrightarrow{x})</p>
+
+<p>这个时候y是一个数。这时可得：<strong>怎么求出来的？</strong></p>
+
+<p>[\frac{\partial y}{\partial \overrightarrow{x} }=\frac{\partial(\overrightarrow{x}^T\cdot A\cdot \overrightarrow{x})}{\partial \overrightarrow{x} }=(A^T+A)\cdot \overrightarrow{x}]</p>
+
+<p>如果A为对称阵，则有：</p>
+
+<p>[\frac{\partial y}{\partial \overrightarrow{x} }=\frac{\partial(\overrightarrow{x}^T\cdot A\cdot \overrightarrow{x})}{\partial \overrightarrow{x} }=2A\cdot \overrightarrow{x}]</p>
+
+<p>###</p>
+
+<h3 id="注意-这个没讲">注意： <strong>这个没讲</strong></h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/g00JIIgdC8.png?imageslim" alt="mark" /></p>
+
+<p>##</p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>感觉还需要整理 梳理。</strong></p>
+
+<p><strong>很多地方不明白，而且为什么奇异值分解不能放在这里？而是要单开？还是说上面有一部分是属于奇异值分解的？</strong></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/02-%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 条件概率与贝叶斯公式</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/10-%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/02-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E9%9A%8F%E6%9C%BA%E5%9C%BA/">
+            <span class="next-text nav-default">02 马尔科夫随机场</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

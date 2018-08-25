@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>10 序列的修改、散列和切片 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第 10 章 序列的修改、散列和切片 不要检查它是不是鸭子、它的叫声像不像鸭子、它的走路姿势像不像鸭子，等等。 具体检查什么取决于你想使用语言的哪些行为" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/10-%E5%BA%8F%E5%88%97%E7%9A%84%E4%BF%AE%E6%94%B9%E6%95%A3%E5%88%97%E5%92%8C%E5%88%87%E7%89%87/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="10 序列的修改、散列和切片" />
+<meta property="og:description" content="第 10 章 序列的修改、散列和切片 不要检查它是不是鸭子、它的叫声像不像鸭子、它的走路姿势像不像鸭子，等等。 具体检查什么取决于你想使用语言的哪些行为" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/10-%E5%BA%8F%E5%88%97%E7%9A%84%E4%BF%AE%E6%94%B9%E6%95%A3%E5%88%97%E5%92%8C%E5%88%87%E7%89%87/" /><meta property="article:published_time" content="2018-06-26T21:37:45&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:37:45&#43;00:00"/>
+<meta itemprop="name" content="10 序列的修改、散列和切片">
+<meta itemprop="description" content="第 10 章 序列的修改、散列和切片 不要检查它是不是鸭子、它的叫声像不像鸭子、它的走路姿势像不像鸭子，等等。 具体检查什么取决于你想使用语言的哪些行为">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:37:45&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:37:45&#43;00:00" />
+<meta itemprop="wordCount" content="16105">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="10 序列的修改、散列和切片"/>
+<meta name="twitter:description" content="第 10 章 序列的修改、散列和切片 不要检查它是不是鸭子、它的叫声像不像鸭子、它的走路姿势像不像鸭子，等等。 具体检查什么取决于你想使用语言的哪些行为"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">10 序列的修改、散列和切片</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 16105 words </span>
+        <span class="more-meta"> 33 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#第-10-章-序列的修改-散列和切片">第 10 章 序列的修改、散列和切片</a>
+<ul>
+<li><a href="#10-1-vector类-用户定义的序列类型">10.1 Vector类：用户定义的序列类型</a></li>
+<li><a href="#10-2-vector类第1版-与vector2d类兼容">10.2 Vector类第1版：与Vector2d类兼容</a></li>
+<li><a href="#10-3-协议和鸭子类型">10.3 协议和鸭子类型</a></li>
+<li><a href="#10-4-vector类第2版-可切片的序列">10.4 Vector类第2版：可切片的序列</a></li>
+<li><a href="#10-6-vector类第4版-散列和快速等值测试">10.6 Vector类第4版：散列和快速等值测试</a>
+<ul>
+<li><a href="#使用-reduce-函数">使用 reduce 函数。</a></li>
+<li><a href="#5-10-1-节讲过-operator-模块以函数的形式提供了-python-的全部中缀运算符-从而减少-使用-lambda-表达式">5.10.1 节讲过， operator 模块以函数的形式提供了 Python 的全部中缀运算符，从而减少 使用 lambda 表达式。</a></li>
+</ul></li>
+<li><a href="#10-7-vector类第5版-格式化">10.7 Vector类第5版：格式化</a>
+<ul>
+<li><a href="#❶-为了在-format-方法中使用-chain-函数-导入-itertools-模块">❶ 为了在 <strong>format</strong> 方法中使用 chain 函数，导入 itertools 模块。</a></li>
+<li><a href="#❷使用-w维球体-词条-http-en-wikipedia-org-wiki-n-sphere-http-en-wikipedia-org-wiki-n-sphere-中的公式计算某个角坐标">❷使用“w维球体”词条(<a href="http://en.wikipedia.org/wiki/N-sphere">http://en+wikipedia+org/wiki/N-sphere</a>)中的公式计算某个角坐标。</a></li>
+<li><a href="#❸-创建生成器表达式-按需计算所有角坐标">❸ 创建生成器表达式，按需计算所有角坐标。</a></li>
+<li><a href="#❻-配置使用圆括号显示笛卡儿坐标">❻ 配置使用圆括号显示笛卡儿坐标。</a></li>
+</ul></li>
+<li><a href="#10-8-本章小结">10.8 本章小结</a></li>
+<li><a href="#10-9-延伸阅读">10.9 延伸阅读</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="第-10-章-序列的修改-散列和切片">第 10 章 序列的修改、散列和切片</h2>
+
+<p>不要检查它是不是鸭子、它的叫声像不像鸭子、它的走路姿势像不像鸭子，等等。</p>
+
+<p>具体检查什么取决于你想使用语言的哪些行为。（comp.lang.python，2000年7</p>
+
+<p>月 26 日）</p>
+
+<p>——Alex Martelli</p>
+
+<p>本章将以第 9 章定义的二维向量 Vector2d 类为基础，向前迈出一大步，定义表示多维向</p>
+
+<p>量的 Vector 类。这个类的行为与 Python 中标准的不可变扁平序列一样。 Vector 实例中 的元素是浮点数，本章结束后 Vector 类将支持下述功能：</p>
+
+<p>•基本的序列协议-<strong>len</strong>和<strong>getitem</strong></p>
+
+<p>•正确表述拥有很多元素的实例 •适当的切片支持，用于生成新的Vector实例 •综合各个元素的值计算散列值</p>
+
+<p>•自定义的格式语言扩展</p>
+
+<p>此外，我们还将通过 <strong>getattr</strong> 方法实现属性的动态存取，以此取代 Vector2d 使用 的只读特性——不过，序列类型通常不会这么做。</p>
+
+<p>在大量代码之间，我们将穿插讨论一个概念：把协议当作正式接口。我们将说明协议和</p>
+
+<p>鸭子类型之间的关系，以及对自定义类型的实际影响。</p>
+
+<p>我们开始吧！</p>
+
+<p>三维以上向量的应用</p>
+
+<p>谁需要 1000 维向量呢？提示：不是 3D 艺术家！不过，信息检索领域经常使用 n 维 向量（《是很大的数），查询的文档和文本使用向量表示，一个单词一个维度。这叫</p>
+
+<p>向量空间模型（ <a href="https://en.wikipedia.org/wiki/Vector_space_model">https://en.wikipedia.org/wiki/Vector_space_model</a>） 。在这个模型中，</p>
+
+<p>一个关键的相关指标是余弦相关性（即查询向量与文档向量夹角的余弦）。夹角越 小，余弦值越趋近于 1，文档与查询的相关性就越大。</p>
+
+<p>不过，本章定义的 Vector 类是为了教学而举的例子，不会涉及很多数学原理。我们 的目的是以序列类型为背景说明 Python 的几个特殊方法。</p>
+
+<p>如果在实际使用中需要做向量运算，应该使用 NumPy 和 SciPy。 Radim Rehurek 开发 的 PyPI 包 gensim （<a href="https://pypi.python.org/pypi/gensim）使用">https://pypi.python.org/pypi/gensim）使用</a> NumPy 和 SciPy 实现了用</p>
+
+<p>于处理自然语言和检索信息的向量空间模型。</p>
+
+<h3 id="10-1-vector类-用户定义的序列类型">10.1 Vector类：用户定义的序列类型</h3>
+
+<p>我们将使用组合模式实现 Vector 类，而不使用继承。向量的分量存储在浮点数数组中 而且还将实现不可变扁平序列所需的方法。</p>
+
+<p>不过，在实现序列方法之前，我们要确保 Vector 类与前一章定义的 Vector2d 类兼容，</p>
+
+<p>除非有些地方让二者兼容没有什么意义。</p>
+
+<h3 id="10-2-vector类第1版-与vector2d类兼容">10.2 Vector类第1版：与Vector2d类兼容</h3>
+
+<p>Vector 类的第 1 版要尽量与前一章定义的 Vector2d 类兼容。</p>
+
+<p>然而我们会故意不让 Vector 的构造方法与 Vector2d 的构造方法兼容。为了编写 Vector(3, 4) 和 Vector(3, 4, 5) 这样的代码，我们可以让 <strong>init</strong> 方法接受任意</p>
+
+<p>个参数(通过*args);但是，序列类型的构造方法最好接受可迭代的对象为参数，因为</p>
+
+<p>所有内置的序列类型都是这样做的。示例 10-1 展示了 Vector 类的几种实例化方式。</p>
+
+<p>示例 10-1 测试 Vector.<strong>init</strong> 和 Vector.<strong>repr</strong> 方法</p>
+
+<p>&gt;&gt;&gt; Vector([3.1, 4.2])</p>
+
+<p>Vector([3.1, 4.2])</p>
+
+<p>&gt;&gt;&gt; Vector((3, 4, 5))</p>
+
+<p>Vector([3.0, 4.0, 5.0])</p>
+
+<p>&gt;&gt;&gt; Vector(range(10))</p>
+
+<p>Vector([0.0, 1.0, 2.0, 3.0, 4.0, &hellip;])</p>
+
+<p>除了新构造方法的签名外，我还确保了传入两个分量(如 Vector([3, 4]))</p>
+
+<p>时， Vector2d 类(如 Vector2d(3, 4))的每个测试都能通过，而且得到相同的结果。</p>
+
+<p>如果 Vector 实例的分量超过 6 个， repr() 生成的字符串就会使用 &hellip; 省略一部 分，如示例 10-1 中的最后一行所示。包含大量元素的集合类型一定要这么做，因为 字符串表示形式是用于调试的(因此不想让大型对象在控制台或日志中输出几千行内 容)。使用 reprlib 模块可以生成长度有限的表示形式，如示例 10-2 所示。</p>
+
+<p>在 Python 2 中， reprlib 模块的名字是 repr。 2to3 工具能自动重写 repr 导入的内 容。</p>
+
+<p>示例 10-2 是第 1 版 Vector 类的实现代码(以示例 9-2 和示例 9-3 中的代码为基础)。</p>
+
+<p>示例 10-2 vector_v1.py:从 vector2d_v1.py 衍生而来</p>
+
+<p>from array import array import reprlib import math</p>
+
+<p>class Vector: typecode = &rsquo;d&rsquo;</p>
+
+<p>def <strong>init</strong>(self, components):</p>
+
+<p>self._components = array(self.typecode, components) O</p>
+
+<p>return iter(self._components) ©</p>
+
+<p>def <strong>repr</strong>(self):</p>
+
+<p>components = reprlib.repr(self._components) © components = components[components.find(&rsquo;[&lsquo;):-1]    ©</p>
+
+<p>return &lsquo;Vector({})&rsquo;.format(components)</p>
+
+<p>def <strong>str</strong>(self):</p>
+
+<p>return str(tuple(self))</p>
+
+<p>def <strong>bytes</strong>(self):</p>
+
+<p>return (bytes([ord(self.typecode)]) +</p>
+
+<p>bytes(self._components))❺</p>
+
+<p>def <strong>eq</strong>(self, other):</p>
+
+<p>return tuple(self) == tuple(other)</p>
+
+<p>def <strong>abs</strong>(self):</p>
+
+<p>return math.sqrt(sum(x * x for x in self))    ©</p>
+
+<p>def <strong>bool</strong>(self):</p>
+
+<p>return bool(abs(self))</p>
+
+<p>@classmethod</p>
+
+<p>def frombytes(cls, octets): typecode = chr(octets[0]) memv = memoryview(octets[1:]).cast(typecode) return cls(memv) &amp;</p>
+
+<p>调用方式所构建的 Vector 对象是一样的，所以我选择使用更简单的句法，即传入列表参 数。</p>
+
+<p>编写 <strong>repr</strong> 方法时，本可以使用这个表达式生成简化的 components 显示形 式：reprlib.repr(list(self._components))。然而，这么做有点浪费，因为要把 self._components 中的每个元素复制到一个列表中，然后使用列表的表示形式。我没 有这么做，而是直接把 self._components 传给 reprlib.repr 函数，然后去掉 [] 外面 的字符，如示例 10-2 中 <strong>repr</strong> 方法的第二行所示。</p>
+
+<p>调用repr()函数的目的是调试，因此绝对不能抛出异常。如果<strong>repr</strong>方 法的实现有问题，那么必须处理，尽量输出有用的内容，让用户能够识别目标对象。</p>
+
+<p>注意， <strong>str</strong>、<strong>eq</strong> 和 <strong>bool</strong> 方法与 Vector2d 类中的一样，而 frombytes 方</p>
+
+<p>法也只变了一个字符(最后一行把 * 去掉了)。这是 Vector2d 可迭代的好处之一。</p>
+
+<p>顺便说一下，我们本可以让Vector继承Vector2d，但是我没这么做，原因有二。其 一，两个构造方法不兼容，因此不建议继承。这一点可以通过适当处理 <strong>init</strong> 方法的 参数解决，不过第二个原因更重要：我想把 Vector 类当作单独的示例，以此实现序列协 议。接下来，我们先讨论协议这个术语，然后实现序列协议。</p>
+
+<h3 id="10-3-协议和鸭子类型">10.3 协议和鸭子类型</h3>
+
+<p>在第 1 章我们就说过，在 Python 中创建功能完善的序列类型无需使用继承，只需实现符 合序列协议的方法。不过，这里说的协议是什么呢？</p>
+
+<p>在面向对象编程中，协议是非正式的接口，只在文档中定义，在代码中不定义。例如，</p>
+
+<p>Python的序列协议只需要_len<strong>和</strong>getitem__两个方法。任何类(如Spam)，只</p>
+
+<p>要使用标准的签名和语义实现了这两个方法，就能用在任何期待序列的地方。 Spam 是不</p>
+
+<p>是哪个类的子类无关紧要，只要提供了所需的方法即可。示例 1-1 中见过一例，这里再次</p>
+
+<p>给出代码，</p>
+
+<p>如示例 10-3 所示。</p>
+
+<p>示例 10-3 示例 1-1 的代码，为了方便，再次给出</p>
+
+<p>import collections</p>
+
+<p>Card = collections.namedtuple(&lsquo;Card&rsquo;, [&lsquo;rank&rsquo;, &lsquo;suit&rsquo;]) class FrenchDeck:</p>
+
+<p>ranks = [str(n) for n in range(2, 11)] + list(&lsquo;JQKA&rsquo;) suits = &lsquo;spades diamonds clubs hearts&rsquo;.split() def <strong>init</strong>(self):</p>
+
+<p>self._cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]</p>
+
+<p>def <strong>len</strong>(self):</p>
+
+<p>return len(self._cards)</p>
+
+<p>def <strong>getitem</strong>(self, position): return self._cards[position]</p>
+
+<p>示例 10-3 中的 FrenchDeck 类能充分利用 Python 的很多功能，因为它实现了序列协议，</p>
+
+<p>不过代码中并没有声明这一点。任何有经验的 Python 程序员只要看一眼就知道它是序 列，即便它是 object 的子类也无妨。我们说它是序列，因为它的行为像序列，这才是重</p>
+
+<p>点。</p>
+
+<p>根据本章开头引用的 Alex Martelli 的帖子，人们称其为鸭子类型( duck typing)。</p>
+
+<p>协议是非正式的，没有强制力，因此如果你知道类的具体使用场景，通常只需要实现一个</p>
+
+<p>协议的部分。例如，为了支持迭代，只需实现 <strong>getitem</strong> 方法，没必要提供 <strong>len</strong> 方法。</p>
+
+<p>下面，我们将在 Vector 类中实现序列协议。我们先不支持完美的切片，稍后再完善。</p>
+
+<h3 id="10-4-vector类第2版-可切片的序列">10.4 Vector类第2版：可切片的序列</h3>
+
+<p>如 FrenchDeck 类所示，如果能委托给对象中的序列属性(如 self._components 数 组)，支持序列协议特别简单。下述只有一行代码的 <strong>len</strong> 和 <strong>getitem</strong> 方法是个 好的开始：</p>
+
+<p>class Vector:</p>
+
+<p># 省略了很多行</p>
+
+<p># &hellip;</p>
+
+<p>def <strong>len</strong>(self):</p>
+
+<p>return len(self._components)</p>
+
+<p>def <strong>getitem</strong>(self, index):</p>
+
+<p>return self._components[index]</p>
+
+<p>添加这两个方法之后，就能执行下述操作了：</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5]) &gt;&gt;&gt; len(v1)</p>
+
+<p>3</p>
+
+<p>&gt;&gt;&gt; v1[0], v1[-1]</p>
+
+<p>(3.0, 5.0)</p>
+
+<p>&gt;&gt;&gt; v7 = Vector(range(7)) &gt;&gt;&gt; v7[1:4]</p>
+
+<p>array(&rsquo;d&rsquo;, [1.0, 2.0, 3.0])</p>
+
+<p>可以看到，现在连切片都支持了，不过尚不完美。如果 Vector 实例的切片也是 Vector 实例，而不是数组，那就更好了。前面那个 FrenchDeck 类也有类似的问题：切片得到的 是列表。对 Vector 来说，如果切片生成普通的数组，将会缺失大量功能。 想想内置的序列类型，切片得到的都是各自类型的新实例，而不是其他类型。</p>
+
+<p>为了把 Vector 实例的切片也变成 Vector 实例，我们不能简单地委托给数组切片。我们 要分析传给 <strong>getitem</strong> 方法的参数，做适当的处理。</p>
+
+<p>下面来看 Python 如何把 my_seq[1:3] 句法变成传给 my_seq.<strong>getitem</strong>(&hellip;) 的参</p>
+
+<p>数。</p>
+
+<p>10.4.1 切片原理</p>
+
+<p>一例胜千言，我们来看看示例 10-4。</p>
+
+<p>示例 10-4 了解 <strong>getitem</strong> 和切片的行为</p>
+
+<p>&gt;&gt;&gt; s = MySeq()</p>
+
+<p>&gt;&gt;&gt; s[1]    # ©</p>
+
+<p>1</p>
+
+<p>&gt;&gt;&gt; s[1:4]</p>
+
+<p>)0 #9 ]s</p>
+
+<p>e ,9,</p>
+
+<p>n# ]):)</p>
+
+<p>o )9272</p>
+
+<p>#N 2</p>
+
+<p>9, None))</p>
+
+<p>7</p>
+
+<p>slice(1, 4,</p>
+
+<p>&gt;&gt;&gt; s[1:4:2]</p>
+
+<p>slice(1, 4,</p>
+
+<p>&gt;&gt;&gt; s[1:4:2,</p>
+
+<p>(slice(1, 4,</p>
+
+<p>&gt;&gt;&gt; s[1:4:2,</p>
+
+<p>(slice(1, 4,</p>
+
+<p>❶ 在这个示例中， <strong>getitem</strong> 直接返回传给它的值。</p>
+
+<p>❷ 单个索引，没什么新奇的。</p>
+
+<p>❸ 1:4 表示法变成了 slice(1, 4, None)。</p>
+
+<p>❹ slice(1, 4, 2) 的意思是从 1 开始，到 4 结束，步幅为 2。</p>
+
+<p>❺ 神奇的事发生了：如果 [] 中有逗号，那么 <strong>getitem</strong> 收到的是元组 ❻ 元组中甚至可以有多个切片对象。</p>
+
+<p>现在，我们来仔细看看 slice 本身，如示例 10-5 所示。</p>
+
+<p>示例 10-5 查看 slice 类的属性</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; slice # o</th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><class 'slice'></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; dir(slice)</td>
+<td># ©</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>[&rsquo;<strong>class</strong>&rsquo;, &lsquo;</td>
+<td><strong>delattr</strong>&lsquo;</td>
+<td>, &lsquo;<strong>dir</strong>&rsquo;, &lsquo;_</td>
+<td>_doc<strong>&rsquo;, &lsquo;</strong>eq__&lsquo;,</td>
+</tr>
+
+<tr>
+<td>&lsquo;<strong>format</strong>&rsquo;,</td>
+<td>&lsquo;<strong>ge</strong>&rsquo;, &lsquo;_</td>
+<td>_getattribute__</td>
+<td>&rsquo;, &lsquo;<strong>gt</strong>&rsquo;,</td>
+</tr>
+
+<tr>
+<td>&lsquo;<strong>hash</strong>&rsquo;, &lsquo;_</td>
+<td>_init_<em>&rsquo;, &lsquo;</em></td>
+<td>_le<strong>&rsquo;, &lsquo;</strong>lt__</td>
+<td>&rsquo;, &lsquo;<strong>ne</strong>&rsquo;,</td>
+</tr>
+
+<tr>
+<td>&lsquo;<strong>new</strong>&rsquo;, &lsquo;__</td>
+<td>reduce__&lsquo;, &lsquo;</td>
+<td><strong>reduce_ex</strong>&rsquo;,</td>
+<td>&lsquo;<strong>repr</strong>&rsquo;,</td>
+</tr>
+
+<tr>
+<td>&lsquo;<strong>setattr</strong>&rsquo;,</td>
+<td>&lsquo;<strong>sizeof</strong></td>
+<td>&rsquo;, &lsquo;<strong>str</strong>&rsquo;, &lsquo;</td>
+<td><strong>subclasshook</strong>&rsquo;,</td>
+</tr>
+
+<tr>
+<td>&lsquo;indices&rsquo;, &lsquo;start&rsquo;, &lsquo;step&rsquo;</td>
+<td>, &lsquo;stop&rsquo;]</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>❶ slice 是内置的类型(2.4.2 节首次出现)。</p>
+
+<p>❷通过审查slice，发现它有start、stop和step数据属性，以及indices方法。</p>
+
+<p>在示例 10-5 中，调用 dir(slice) 得到的结果中有个 indices 属性，这个方法有很大的 作用，但是鲜为人知。 help(slice.indices) 给出的信息如下。</p>
+
+<p>S.indices(len) -&gt; (start, stop, stride)</p>
+
+<p>给定长度为len的序列，计算S表示的扩展切片的起始(start)和结尾(stop) 索引，以及步幅(stride)。超出边界的索引会被截掉，这与常规切片的处理方式一 样。</p>
+
+<p>换句话说， indices 方法开放了内置序列实现的棘手逻辑，用于优雅地处理缺失索引和 负数索引，以及长度超过目标序列的切片。这个方法会“整顿”元组，把 start、stop 和 stride 都变成非负数，而且都落在指定长度序列的边界内。</p>
+
+<p>下面举几个例子。假设有个长度为 5 的序列，例如 &lsquo;ABCDE&rsquo;：</p>
+
+<p>&gt;&gt;&gt; slice(None, 10, 2).indices(5) # O (0, 5, 2)</p>
+
+<p>&gt;&gt;&gt; slice(-3, None, None).indices(5) # ©</p>
+
+<p>(2, 5, 1)</p>
+
+<p>❶ &lsquo;ABCDE&rsquo;[:10:2] 等同于 &lsquo;ABCDE&rsquo;[0:5:2] ❷ &lsquo;ABCDE&rsquo;[-3:] 等同于 &lsquo;ABCDE&rsquo;[2:5:1]</p>
+
+<p>写作本书时，在线版Python库参考好像还没有slice.indices方法的文 档。 <a href="#bookmark15">1</a>Python Python/C API 参考手册中有类似的 C 语言函数的文档，</p>
+
+<p>PySlice_GetIndicesEx ( <a href="https://docs">https://docs</a>. python. org/3/c-</p>
+
+<p><a href="https://docs.python.org/3/c-api/slice.html%23c.PySlice_GetIndicesEx">api/slice.html#c.PySlice_GetIndicesEx</a><a href="https://docs.python.org/3/c-api/slice.html%23c.PySlice_GetIndicesEx">) 。研究切片</a>对象时，我在 Python 控制台中执行 了 dir()和help()，这才发现slice.indices()方法。这也表明交互式控制台是</p>
+
+<p>个有价值的工具，能发现新事物。</p>
+
+<p>| <a href="#bookmark15">1</a>现在己经有了，参见：<a href="https://docs.python.org/3/reference/datamodel.html?highlight=indices%23slice.indices">https://docs.python.org/3/reference/datamodel.htmT?highlight=indices#slice.indices</a>。-编者注</p>
+
+<p>在 Vector 类中无需使用 slice.indices() 方法，因为收到切片参数时，我们会委托 _components 数组处理。但是，如果你没有底层序列类型作为依靠，那么使用这个方法</p>
+
+<p>能节省大量时间。</p>
+
+<p>现在我们知道如何处理切片了，下面来看 Vector.<strong>getitem</strong> 方法改进后的实现。</p>
+
+<p>10.4.2 能处理切片的<strong>getitem</strong>方法</p>
+
+<p>示例 10-6 列出了让 Vector 表现为序列所需的两个方法： <strong>len</strong> 和 <strong>getitem</strong> (后</p>
+
+<p>者现在能正确地处理切片了)。</p>
+
+<p>示例 10-6 vector_v2.py 的部分代码：为 vector_v1.py 中的 Vector 类(见示例 10-2)添加 <strong>len</strong> 和<strong>getitem</strong> 方法</p>
+
+<p>msg = &lsquo;{cls.<strong>name</strong>} indices must be integers raise TypeError(msg.format(cls=cls)) ©</p>
+
+<p>❶获取实例所属的类(即Vector),供后面使用。</p>
+
+<p>❷ 如果 index 参数的值是 slice 对象……</p>
+
+<p>❸&hellip;&hellip;调用类的构造方法，使用_components数组的切片构建一个新Vector实例。</p>
+
+<p>❹ 如果 index 是 int 或其他整数类型……3</p>
+
+<p>| 3必须在vector_v2.py的开头加上import numbers。 编者注</p>
+
+<p>❺ ……那就返回 _components 中相应的元素。</p>
+
+<p>❻ 否则，抛出异常。</p>
+
+<p>大量使用isinstance可能表明面向对象设计得不好，不过在<strong>getitem</strong></p>
+
+<p>方法中使用它处理切片是合理的。注意，示例 10-6 中测试时用的是</p>
+
+<p>numbers . Integral，这是一个抽象基类(Abstract Base Class，ABC)。在</p>
+
+<p>isinstance 中使用抽象基类做测试能让 API 更灵活且更容易更新，原因参见第 11</p>
+
+<p>章。可惜， Python 3.4 的标准库中没有 slice 的抽象基类。</p>
+
+<p>为了确定在 <strong>getitem</strong> 的 else 子句中会抛出哪个异常，我在交互式控制台中查看了</p>
+
+<p>&lsquo;ABC&rsquo;[1, 2]的结果。我发现，Python抛出的是TypeError；我还从错误消息中复制了 表述方式，“indices must be integers”。为了创建符合Python风格的对象，我们要模仿 Python 内置的对象。</p>
+
+<p>把示例 10-6 中的代码添加到 Vector 类中之后，切片行为就正确了，如示例 10-7 所示。 示例 10-7 测试示例 10-6 中改进的 Vector.<strong>getitem</strong> 方法</p>
+
+<p>&gt;&gt;&gt; v7 = Vector(range(7))</p>
+
+<p>&gt;&gt;&gt; v7[-1] O</p>
+
+<p>6.0</p>
+
+<p>&gt;&gt;&gt; v7[1:4] ©</p>
+
+<p>Vector([1.0, 2.0, 3.0])</p>
+
+<p>&gt;&gt;&gt; v7[-1:] ©</p>
+
+<p>Vector([6.0])</p>
+
+<p>&gt;&gt;&gt; v7[1,2]    ©</p>
+
+<p>Traceback (most recent call last): TypeError: Vector indices must be integers</p>
+
+<p>❶ 单个整数索引只获取一个分量，值为浮点数。</p>
+
+<p>❷ 切片索引创建一个新 Vector 实例。</p>
+
+<p>❸ 长度为 1 的切片也创建一个 Vector 实例。</p>
+
+<p>❹ Vector 不支持多维索引，因此索引元组或多个切片会抛出错误。</p>
+
+<p>Vector2d 变成 Vector 之后，就没办法通过名称访问向量的分量了（如 v.x 和 v.y）。 现在我们处理的向量可能有大量分量。不过，若能通过单个字母访问前几个分量的话会比 较方便。比如，用 x、 y 和 z 代替 v[0]、 v[1] 和 v[2]。</p>
+
+<p>我们想额外提供下述句法，用于读取向量的前四个分量：</p>
+
+<p>&gt;&gt;&gt; v = Vector(range(10))</p>
+
+<p>&gt;&gt;&gt; v.x</p>
+
+<p>0.0</p>
+
+<p>&gt;&gt;&gt; v.y, v.z, v.t (1.0, 2.0, 3.0)</p>
+
+<p>在 Vector2d 中，我们使用 @property 装饰器把 x 和 y 标记为只读特性（见示例 9-7）。我们可以在 Vector 中编写四个特性，但这样太麻烦。特殊方法 <strong>getattr</strong> 提供</p>
+
+<p>了更好的方式。</p>
+
+<p>属性查找失败后，解释器会调用 <strong>getattr</strong> 方法。简单来说，对 my_obj.x 表达式， Python 会检查 my_obj 实例有没有名为 x 的属性；如果没有，到类 （my_obj.<strong>class</strong>）中查找；如果还没有，顺着继承树继续查找。 4 如果依旧找不 到，调用 my_obj 所属类中定义的 <strong>getattr</strong> 方法，传入 self 和属性名称的字符串 形式（如 &lsquo;x&rsquo;）。</p>
+
+<p>4属性查找机制比这复杂得多，复杂的细节在第六部分讲解。目前知道这种简单的说明即可。</p>
+
+<p>示例 10-8 中列出的是我们为 Vector 类定义的 <strong>getattr</strong> 方法。这个方法的作用很简 单，它检查所查找的属性是不是 xyzt 中的某个字母，如果是，那么返回对应的分量。</p>
+
+<p>示例 10-8 vector_v3.py 的部分代码：在 vector_v2.py 中定义的 Vector 类里添加</p>
+
+<p><strong>getattr</strong> 方法</p>
+
+<p>shortcut_names = &lsquo;xyzt&rsquo;</p>
+
+<p>def <strong>getattr</strong>(self, name):</p>
+
+<p>cls = type(self) o</p>
+
+<p>if len(name) == 1: ©</p>
+
+<p>pos = cls.shortcut_names.find(name) © if 0 &lt;= pos &lt; len(self._components): © return self._components[pos] msg = &lsquo;{.<em>name</em>!r} object has no attribute {!r}&rsquo;    ❺</p>
+
+<p>raise AttributeError(msg.format(cls, name))</p>
+
+<p>❶获取Vector，后面待用。</p>
+
+<p>❷ 如果属性名只有一个字母，可能是 shortcut_names 中的一个。</p>
+
+<p>❸查找那个字母的位置；str.find还会定位&rsquo;yz&rsquo;，但是我们不需要，因此在前一行做 了测试。</p>
+
+<p>❹ 如果位置落在范围内，返回数组中对应的元素。</p>
+
+<p>❺如果测试都失败了，抛出AttributeError，并指明标准的消息文本。</p>
+
+<p><strong>getattr</strong> 方法的实现不难，但是这样实现还不够。看看示例 10-9 中古怪的交互行 为。</p>
+
+<p>示例 10-9 不恰当的行为：为 v.x 赋值没有抛出错误，但是前后矛盾</p>
+
+<p>&gt;&gt;&gt; v = Vector(range(5))</p>
+
+<p>&gt;&gt;&gt; v</p>
+
+<p>Vector([0.0, 1.0, 2.0, 3.0, 4.0])</p>
+
+<p>&gt;&gt;&gt; v.x # O</p>
+
+<p>0.0</p>
+
+<p>&gt;&gt;&gt; v.x = 10 # ©</p>
+
+<p>&gt;&gt;&gt; v.x # ©</p>
+
+<p>10</p>
+
+<p>&gt;&gt;&gt; v</p>
+
+<p>Vector([0.0, 1.0, 2.0, 3.0, 4.0]) # ©</p>
+
+<p>❶ 使用 v.x 获取第一个元素（ v[0]）。</p>
+
+<p>❷ 为 v.x 赋新值。这个操作应该抛出异常。</p>
+
+<p>❸读取v.x，得到的是新值，10。</p>
+
+<p>❹ 可是，向量的分量没变。</p>
+
+<p>你能解释为什么会这样吗？具体而言，如果向量的分量数组中没有新值，为什么 v.x 返 回 10 ？如果你不能立即给出解释，再看看示例 10-8 前面对 <strong>getattr</strong> 方法的说明。 原因不是很明显，但却是理解本书后面内容的重要基础。</p>
+
+<p>示例 10-9 之所以前后矛盾，是 <strong>getattr</strong> 的运作方式导致的：仅当对象没有指定名称</p>
+
+<p>的属性时， Python 才会调用那个方法，这是一种后备机制。可是，像 v.x = 10 这样赋值 之后， v 对象有 x 属性了，因此使用 v.x 获取 x 属性的值时不会调用 <strong>getattr</strong> 方法 了，解释器直接返回绑定到 v.x 上的值，即 10。另一方面， <strong>getattr</strong> 方法的实现没 有考虑到 self._components 之外的实例属性，而是从这个属性中获取</p>
+
+<p>shortcut_names 中所列的“虚拟属性”。</p>
+
+<p>为了避免这种前后矛盾的现象，我们要改写 Vector 类中设置属性的逻辑。</p>
+
+<p>回想第 9 章的最后一个 Vector2d 示例中，如果为 .x 或 .y 实例属性赋值，会抛出 AttributeError。为了避免歧义，在Vector类中，如果为名称是单个小写字母的属性 赋值，我们也想抛出那个异常。为此，我们要实现 <strong>setattr</strong> 方法，如示例 10-10 所 示。</p>
+
+<p>示例 10-10 vector_v3.py 的部分代码：在 Vector 类中实现 <strong>setattr</strong> 方法</p>
+
+<p>def <strong>setattr</strong>(self, name, value): cls = type(self) if len(name) == 1: O</p>
+
+<p>if name in cls.shortcut_names:    ©</p>
+
+<p>error = &lsquo;readonly attribute {attr_name!r}&rsquo; elif name.islower(): ©</p>
+
+<p>error = &ldquo;can&rsquo;t set attributes &lsquo;a&rsquo; to &lsquo;z&rsquo; in {cls_name!r}&rdquo; else:</p>
+
+<p>error = &ldquo;    ©</p>
+
+<p>if error: ❺</p>
+
+<p>msg = error.format(cls_name=cls.<strong>name</strong>, attr_name=name) raise AttributeError(msg) super().<em>setattr</em>(name, value) ©</p>
+
+<p>❶ 特别处理名称是单个字符的属性。</p>
+
+<p>❷ 如果 name 是 xyzt 中的一个，设置特殊的错误消息。</p>
+
+<p>❸ 如果 name 是小写字母，为所有小写字母设置一个错误消息。 ❹ 否则，把错误消息设为空字符串。</p>
+
+<p>❺ 如果有错误消息，抛出 AttributeError。</p>
+
+<p>❻ 默认情况：在超类上调用 <strong>setattr</strong> 方法，提供标准行为。</p>
+
+<p>super()函数用于动态访问超类的方法，对Python这样支持多重继承的动态</p>
+
+<p>语言来说，必须能这么做。程序员经常使用这个函数把子类方法的某些任务委托给超 类中适当的方法，如示例 10-10 所示。 12.2 节会进一步探讨 super() 函数。</p>
+
+<p>为了给 AttributeError 选择错误消息，我查看了内置的 complex 类型的行为，因为 complex对象是不可变的，而且有一对数据属性：real和imag。如果试图修改任何一个 属性，complex实例会抛出AttributeError，而且把错误消息设为&rdquo;can&rsquo;t set attribute&rdquo;。而如果尝试为受特性保护的只读属性赋值(像9.6节那样做)，得到的错 误消息是&rdquo;readonly attribute&rdquo;。在<strong>setitem</strong>方法中为error字符串选词时，我 参考了这两个错误消息，而且更为明确地指出了禁止赋值的属性。</p>
+
+<p>注意，我们没有禁止为全部属性赋值，只是禁止为单个小写字母属性赋值，以防与只读属 性 x、y、z 和 t 混淆。</p>
+
+<p>我们知道，在类中声明<strong>slots</strong>属性可以防止设置新实例属性；因此， 你可能想使用这个功能，而不像这里所做的，实现 <strong>setattr</strong> 方法。可是，正如 9.8.1 节所指出的，不建议只为了避免创建实例属性而使用 <strong>slots</strong> 属 性。 <strong>slots</strong> 属性只应该用于节省内存，而且仅当内存严重不足时才应该这么 做。</p>
+
+<p>虽然这个示例不支持为 Vector 分量赋值，但是有一个问题要特别注意：多数时候，如果 实现了 <strong>getattr</strong> 方法，那么也要定义 <strong>setattr</strong> 方法，以防对象的行为不一</p>
+
+<p>致。</p>
+
+<p>如果想允许修改分量，可以使用 <strong>setitem</strong> 方法，支持 v[0] = 1.1 这样的赋值，以 及（或者）实现 <strong>setattr</strong> 方法，支持 v.x = 1.1 这样的赋值。不过，我们要保持 Vector 是不可变的，因为在下一节中，我们将把它变成可散列的。</p>
+
+<h3 id="10-6-vector类第4版-散列和快速等值测试">10.6 Vector类第4版：散列和快速等值测试</h3>
+
+<p>我们要再次实现 <strong>hash</strong> 方法。加上现有的 <strong>eq</strong> 方法，这会把 Vector 实例变成可 散列的对象。</p>
+
+<p>示例9-8中的<strong>hash</strong>方法简单地计算hash(self.x) A hash(self.y)。这一次，我 们要使用△(异或)运算符依次计算各个分量的散列值，像这样：v[0] - v[1]-</p>
+
+<p>v[2]&hellip;。这正是 functools.reduce 函数的作用。之前我说 reduce 没有以往那么常</p>
+
+<p>用， 5 但是计算向量所有分量的散列值非常适合使用这个函数。 reduce 函数的整体思路</p>
+
+<p>如图 10-1 所示。</p>
+
+<p>5sum、any和all涵盖了 reduce的大部分用途。参见5.2.1节的讨论。</p>
+
+<p>[△△△△△△]</p>
+
+<p>图10-1：归约函数(reduce、sum、any、all)把序列或有限的可迭代对象变成一个</p>
+
+<p>聚合结果 我们己经知道functools.reduce()可以替换成sum()，下面说说它的原理。它的关键 思想是，把一系列值归约成单个值。 reduce() 函数的第一个参数是接受两个参数的函 数，第二个参数是一个可迭代的对象。假如有个接受两个参数的 fn 函数和一个 lst 列</p>
+
+<p>表。调用 reduce(fn, lst) 时， fn 会应用到第一对元素上，即 fn(lst[0], lst[1])，生成第一个结果rl。然后，fn会应用到rl和下一个元素上，即fn(r1, lst[2])，生成第二个结果r2。接着，调用fn(r2, lst[3])，生成r3 + + + + + +直到最后一</p>
+
+<p>个元素，返回最后得到的结果 rN。</p>
+
+<p>使用 reduce 函数可以计算 5!(5 的阶乘)：</p>
+
+<p>&gt;&gt;&gt; 2 * 3 * 4 * 5 # 想要的结果是：5! == l20 l20</p>
+
+<p>&gt;&gt;&gt; import functools</p>
+
+<p>&gt;&gt;&gt; functools.reduce(lambda a,b: a*b, range(l, 6))</p>
+
+<p>l20</p>
+
+<p>回到散列问题上。示例 10-11 展示了计算聚合异或的 3 种方式：一种使用 for 循环，两种</p>
+
+<h4 id="使用-reduce-函数">使用 reduce 函数。</h4>
+
+<p>示例 10-11 计算整数 0~5 的累计异或的 3 种方式</p>
+
+<p>&gt;&gt;&gt; n = 0</p>
+
+<p>&gt;&gt;&gt; for i in range(1, 6):    # O</p>
+
+<p>… n A= i</p>
+
+<p>&gt;&gt;&gt; n</p>
+
+<p>1</p>
+
+<p>&gt;&gt;&gt; import functools</p>
+
+<p>&gt;&gt;&gt; functools.reduce(lambda a, b: aAb, range(6)) # ©</p>
+
+<p>1</p>
+
+<p>&gt;&gt;&gt; import operator</p>
+
+<p>&gt;&gt;&gt; functools.reduce(operator.xor, range(6)) # ©</p>
+
+<p>1</p>
+
+<p>❶ 使用 for 循环和累加器变量计算聚合异或。</p>
+
+<p>❷ 使用 functools.reduce 函数，传入匿名函数。</p>
+
+<p>❸ 使用 functools.reduce 函数，把 lambda 表达式换成 operator.xor。</p>
+
+<p>示例 10-11 中的 3 种方式里，我最喜欢最后一种，其次是 for 循环。你呢？</p>
+
+<h4 id="5-10-1-节讲过-operator-模块以函数的形式提供了-python-的全部中缀运算符-从而减少-使用-lambda-表达式">5.10.1 节讲过， operator 模块以函数的形式提供了 Python 的全部中缀运算符，从而减少 使用 lambda 表达式。</h4>
+
+<p>为了使用我喜欢的方式编写 Vector.<strong>hash</strong> 方法，我们要导入 functools 和 operator 模块。 Vector 类的相关变化如示例 10-12 所示。</p>
+
+<p>示例 10-12 vector_v4.py 的部分代码：在 vector_v3.py 中 Vector 类的基础上导入两</p>
+
+<p>个模块，添加 <strong>hash</strong> 方法</p>
+
+<p>from array import array import reprlib import math import functools # O import operator # ©</p>
+
+<p>class Vector:</p>
+
+<p>typecode = &rsquo;d&rsquo;</p>
+
+<p># 排版需要，省略了很多行 &hellip;</p>
+
+<p>def <strong>eq</strong>(self, other): # ©</p>
+
+<p>return tuple(self) == tuple(other)</p>
+
+<p>def <strong>hash</strong>(self):</p>
+
+<p>hashes = (hash(x) for x in self._components) # © return functools.reduce(operator.xor, hashes, 0)    # ❺</p>
+
+<p># 省略了很多行&hellip;</p>
+
+<p>❶ 为了使用 reduce 函数，导入 functools 模块。</p>
+
+<p>❷ 为了使用 xor 函数，导入 operator 模块。</p>
+
+<p>❸ <strong>eq</strong> 方法没变；我把它列出来是为了把它和 <strong>hash</strong> 方法放在一起，因为它们要 结合在一起使用。</p>
+
+<p>❹ 创建一个生成器表达式，惰性计算各个分量的散列值。</p>
+
+<p>❺ 把 hashes 提供给 reduce 函数，使用 xor 函数计算聚合的散列值；第三个参数， 0 是</p>
+
+<p>初始值（参见下面的警告框）。</p>
+
+<p>使用reduce函数时最好提供第三个参数，reduce（function, iterable, initializer），这样能避免这个异常：TypeError: reduce（） of empty sequence with no initial value （这个错误消息很棒，说明了问题，还提供了 解决方法）。如果序列为空， initializer 是返回的结果；否则，在归约中使用它 作为第一个参数，因此应该使用恒等值。比如，对+、|和A来说，initializer 应该是 0；而对 * 和 &amp; 来说，应该是 1。</p>
+
+<p>示例 10-12 中实现的 <strong>hash</strong> 方法是一种映射归约计算（见图 10-2）。</p>
+
+<p>[△△△△△△]</p>
+
+<p>map</p>
+
+<p><img src="08414584Python-50.jpg" alt="img" /></p>
+
+<p>图10-2：映射归约：把函数应用到各个元素上，生成一个新序列（映射，map），然 后计算聚合值（归约， reduce ）</p>
+
+<p>映射过程计算各个分量的散列值，归约过程则使用 xor 运算符聚合所有散列值。把生成 器表达式替换成 map 方法，映射过程更明显：</p>
+
+<p>def <strong>hash</strong>(self):</p>
+
+<p>hashes = map(hash, self._components) return functools.reduce(operator.xor, hashes)</p>
+
+<p>在Python 2中使用map函数效率低些，因为map函数要使用结果构建一个列 表。但是在 Python 3 中， map 函数是惰性的，它会创建一个生成器，按需产出结果， 因此能节省内存——这与示例 10-12 中使用生成器表达式定义 <strong>hash</strong> 方法的原理 一样。</p>
+
+<p>既然讲到了归约函数，那就把前面草草实现的 <strong>eq</strong> 方法修改一下，减少处理时间和内 存用量——至少对大型向量来说是这样。如示例 9-2 所示， <strong>eq</strong> 方法的实现可以非常 简洁：</p>
+
+<p>def <strong>eq</strong>(self, other):</p>
+
+<p>return tuple(self) == tuple(other)</p>
+
+<p>Vector2d 和 Vector 都可以这样做，它甚至还会认为 Vector([1, 2]) 和 (1, 2) 相 等。这或许是个问题，不过我们暂且忽略。 6 可是，这样做对有几千个分量的 Vector 实 例来说，效率十分低下。上述实现方式要完整复制两个操作数，构建两个元组，而这么做 只是为了使用tuple类型的<strong>eq</strong>方法。对Vector2d (只有两个分量)来说，这是个 捷径，但是对维数很多的向量来说情况就不同了。示例 10-13 中比较两个 Vector 实例 (或者比较一个 Vector 实例与一个可迭代对象)的方式更好。</p>
+
+<p>613.1节会认真对待Vector([1, 2]) == (1, 2)这个问题。</p>
+
+<p>示例 10-13 为了提高比较的效率， Vector.<strong>eq</strong> 方法在 for 循环中使用 zip 函 数</p>
+
+<p>def <strong>eq</strong>(self, other):</p>
+
+<p>if len(self) != len(other): # O return False</p>
+
+<p>for a, b in zip(self, other): # © if a != b: # © return False</p>
+
+<p>return True # o</p>
+
+<p>❶ 如果两个对象的长度不一样，那么它们不相等。</p>
+
+<p>❷ zip 函数生成一个由元组构成的生成器，元组中的元素来自参数传入的各个可迭代对</p>
+
+<p>象。如果不熟悉 zip 函数，请阅读“出色的 zip 函数”附注栏。前面比较长度的测试是有 必要的，因为一旦有一个输入耗尽， zip 函数会立即停止生成值，而且不发出警告。</p>
+
+<p>❸只要有两个分量不同，返回False，退出。</p>
+
+<p>❹ 否则，对象是相等的。</p>
+
+<p>示例 10-13 的效率很好，不过用于计算聚合值的整个 for 循环可以替换成一行 all 函数 调用：如果所有分量对的比较结果都是True，那么结果就是True。只要有一次比较的结 果是False，all函数就返回False。使用all函数实现<strong>eq</strong>方法的方式如示例10-</p>
+
+<p>14 所示。</p>
+
+<p>示例 10-14 使用 zip 和 all 函数实现 Vector.<strong>eq</strong> 方法，逻辑与示例 10-13 一 样</p>
+
+<p>def <strong>eq</strong>(self, other):</p>
+
+<p>return len(self) == len(other) and all(a == b for a, b in zip(self, other))</p>
+
+<p>注意，首先要检查两个操作数的长度是否相同，因为 zip 函数会在最短的那个操作数耗 尽时停止。</p>
+
+<p>我们选择在 vector_v4.py 中采用示例 10-14 中实现的 <strong>eq</strong> 方法。</p>
+
+<p>本章最后要像 Vector2d 类那样，为 Vector 类实现 <strong>format</strong> 方法。</p>
+
+<p>出色的 zip 函数</p>
+
+<p>使用 for 循环迭代元素不用处理索引变量，还能避免很多缺陷，但是需要一些特殊 的实用函数协助。其中一个是内置的 zip 函数。使用 zip 函数能轻松地并行迭代两 个或更多可迭代对象，它返回的元组可以拆包成变量，分别对应各个并行输入中的一 个元素。如示例 10-15 所示。</p>
+
+<p>zip函数的名字取自拉链系结物(zipper fastener)，因为这个物品用于把 两个拉链边的链牙咬合在一起，这形象地说明了 zip(left, right) 的作 用。 zip 函数与文件压缩没有关系。</p>
+
+<p>示例 10-15 zip 内置函数的使用示例</p>
+
+<p>[(0, &lsquo;A&rsquo;, 0.0), (l, &lsquo;B&rsquo;, l.l), (2, &lsquo;C&rsquo;, 2.2)]</p>
+
+<p>&gt;&gt;&gt; from itertools import zip_longest # ©</p>
+
+<p>&gt;&gt;&gt; list(zip_longest(range(3), &lsquo;ABC&rsquo;, [0.0, 1.1, 2.2, 3.3], fillvalue=-1)) [(0, &lsquo;A&rsquo;, 0.0), (1, &lsquo;B&rsquo;, 1.1), (2, &lsquo;C&rsquo;, 2.2), (-1, -1, 3.3)]</p>
+
+<p>❶ zip 函数返回一个生成器，按需生成元组。</p>
+
+<p>❷ 为了输出，构建一个列表；通常，我们会迭代生成器。</p>
+
+<p>❸ zip 有个奇怪的特性：当一个可迭代对象耗尽后，它不发出警告就停止。 <a href="#bookmark21">2</a></p>
+
+<p>❹itertools.zip_longest函数的行为有所不同：使用可选的fillvalue (默认 值为None)填充缺失的值，因此可以继续产出，直到最长的可迭代对象耗尽。</p>
+
+<p>为了避免在 for 循环中手动处理索引变量，还经常使用内置的 enumerate 生成器函 数。如果你不熟悉enumerate函数，一定要阅读“Build-in Functions”文档</p>
+
+<p>(<a href="https://docs.python.org/3/library/functions.html%23enumerate">https://docs.python.org/3/library/functions.html#enumerate</a>) 。内置的 zip 和 enumerate 函数，以及标准库中其他几个生成器函数在 14.9 节讨论。</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>def <strong>len</strong>(self):</p>
+
+<p>return len(self._components)</p>
+
+<p>def <strong>getitem</strong>(self, index): cls = type(self) O if isinstance(index, slice): ©</p>
+
+<p>return cls(self._components[index])    ©</p>
+
+<p>elif isinstance(index, numbers.Integral):    ©</p>
+
+<p>return self._components[index]❺ else:</p>
+
+<p><a href="#footnote2">2</a></p>
+
+<p>至少对我来说，这是奇怪的。我认为，当组合不同长度的可迭代对象时，zip应该抛出ValueError。</p>
+
+<h3 id="10-7-vector类第5版-格式化">10.7 Vector类第5版：格式化</h3>
+
+<p>Vector 类的 <strong>format</strong> 方法与 Vector2d 类的相似，但是不使用极坐标，而使用球面</p>
+
+<p>坐标(也叫超球面坐标)，因为 Vector 类支持 n 个维度，而超过四维后，球体变成 了“超球体”。 <a href="#bookmark2">1</a> 因此，我们会把自定义的格式后缀由 &lsquo;p&rsquo; 变成 &lsquo;h&rsquo;。</p>
+
+<p>1 <a href="#bookmark2">1</a>Wolfram Mathworld 网站中有一篇介绍超球体的文章(<a href="http://mathworld.wolfram.com/Hypersphere.html">http://mathworld.wolfram.com/Hypersphere.html</a>)；维基百科会 把“超球体”词条重定向到“w维球体”词条(<a href="http://en.wikipedia.org/wiki/N-sphere">http://en.wikipedia.orgwiki/N-sphere</a>)。</p>
+
+<p><img src="08414584Python-51.jpg" alt="img" /></p>
+
+<p>9.5 节说过，扩展格式规范微语言</p>
+
+<p>(<a href="https://docs.python.org/3/library/string.html%23formatspec">https://docs.python+org/3/library/string.html#formatspec</a>)时，最好避免重用内置类型</p>
+
+<p>支持的格式代码。这里对微语言的扩展还会用到浮点数的格式代码’eEfFgGn%&lsquo;，而 且保持原意，因此绝对要避免重用代码。整数使用的格式代码有&rsquo;bcdoxXn&rsquo;，字符 串使用的是’s•。在Vector2d类中，我选择使用’p&rsquo;表示极坐标。使用’h&rsquo;表示</p>
+
+<p>超球面坐标(hyperspherical coordinate)是个不错的选择。</p>
+
+<p>例如，对四维空间(len(v) == 4)中的Vector对象来说，’h’代码得到的结果是这 样：＜r, $1, $2,①3＞。其中，r是模(abs(v))，余下三个数是角坐标O2和山3。</p>
+
+<p>下面几个示例摘自vector_v5.py的doctest (参见示例10-16)，是四维球面坐标格式:</p>
+
+<p>&gt;&gt;&gt; format(Vector([-1, -1, -1, -1]), ’h’)</p>
+
+<p>’<2.0, 2.0943951023931957, 2.186276035465284, 3.9269908169872414>’</p>
+
+<p>&gt;&gt;&gt; format(Vector([2, 2, 2, 2]), ’.3eh’)</p>
+
+<p>’<4.000e+00, 1.047e+00, 9.553e-01, 7.854e-01>’</p>
+
+<p>&gt;&gt;&gt; format(Vector([0, 1, 0, 0]), ’0.5fh’)</p>
+
+<p>’<1.00000, 1.57080, 0.00000, 0.00000>’</p>
+
+<p>在小幅改动<strong>format</strong>方法之前，我们要定义两个辅助方法：一个是angle(n)，用于 计算某个角坐标(如另一个是angles()，返回由所有角坐标构成的可迭代对象。 我们不会讲解其中涉及的数学原理，如果你好奇的话，可以查看维基百科中的“w维球 体”词条(<a href="https://en.wikipedia.org/wiki/N-sphere">https://en+wikipedia+org/wiki/N-sphere</a>)，那里有几个公式，我就是使用它们把 Vector 实例分量数组内的笛卡儿坐标转换成球面坐标的。</p>
+
+<p>示例 10-16 是 vector_v5.py 脚本的完整代码，包含自 10.2 节以来实现的所有代码和本节实 现的自定义格式。</p>
+
+<p>示例 10-16 vector_v5.py： Vector 类最终版的 doctest 和全部代码；带标号的那几行 是为了支持 <strong>format</strong> 方法而添加的代码</p>
+
+<p>&gt;&gt;&gt; Vector([3.1, 4.2])</p>
+
+<p>Vector([3.1, 4.2])</p>
+
+<p>&gt;&gt;&gt; Vector((3, 4, 5))</p>
+
+<p>Vector([3.0, 4.0, 5.0])</p>
+
+<p>&gt;&gt;&gt; Vector(range(10))</p>
+
+<p>Vector([0.0, 1.0, 2.0, 3.0, 4.0, &hellip;])</p>
+
+<p>Tests with two dimensions (same results as &ldquo;vector2d_v1.py&rdquo;)::</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4])</p>
+
+<p>&gt;&gt;&gt; x, y = v1 &gt;&gt;&gt; x, y (3.0, 4.0)</p>
+
+<p>&gt;&gt;&gt; v1</p>
+
+<p>Vector([3.0, 4.0])</p>
+
+<p>&gt;&gt;&gt; v1_clone = eval(repr(v1))</p>
+
+<p>&gt;&gt;&gt; v1 == v1_clone True</p>
+
+<p>&gt;&gt;&gt; print(v1)</p>
+
+<p>(3.0, 4.0)</p>
+
+<p>&gt;&gt;&gt; octets = bytes(v1)</p>
+
+<p>&gt;&gt;&gt; octets</p>
+
+<p>b&rsquo;d\x00\x00\x00\x00\x00\x00\x08@\x00\x00\x00\x00\x00\x00\x10@&rsquo;</p>
+
+<p>&gt;&gt;&gt; abs(v1)</p>
+
+<p>5.0</p>
+
+<p>&gt;&gt;&gt; bool(v1), bool(Vector([0, 0]))</p>
+
+<p>(True, False)</p>
+
+<p>Test of &ldquo;.frombytes()&rdquo; class method:</p>
+
+<p>&gt;&gt;&gt; v1_clone = Vector.frombytes(bytes(v1)) &gt;&gt;&gt; v1_clone Vector([3.0, 4.0])</p>
+
+<p>&gt;&gt;&gt; v1 == v1_clone True</p>
+
+<p>Tests with three dimensions::</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; x, y, z = v1 &gt;&gt;&gt; x, y, z (3.0, 4.0, 5.0)</p>
+
+<p>&gt;&gt;&gt; v1</p>
+
+<p>Vector([3.0, 4.0, 5.0])</p>
+
+<p>&gt;&gt;&gt; v1_clone = eval(repr(v1))</p>
+
+<p>&gt;&gt;&gt; v1 == v1_clone True</p>
+
+<p>&gt;&gt;&gt; print(v1)</p>
+
+<p>(3.0, 4.0, 5.0)</p>
+
+<p>&gt;&gt;&gt; abs(v1) # doctest:+ELLIPSIS 7.071067811&hellip;</p>
+
+<p>&gt;&gt;&gt; bool(v1), bool(Vector([0, 0, 0])) (True, False)</p>
+
+<p>&gt;&gt;&gt; v7 = Vector(range(7))</p>
+
+<p>&gt;&gt;&gt; v7</p>
+
+<p>Vector([0.0, 1.0, 2.0, 3.0, 4.0, &hellip;])</p>
+
+<p>&gt;&gt;&gt; abs(v7) # doctest:+ELLIPSIS 9.53939201&hellip;</p>
+
+<p>Test of &ldquo;.<em>bytes</em>&rdquo; and &ldquo;.frombytes()&rdquo; methods::</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; v1_clone = Vector.frombytes(bytes(v1))</p>
+
+<p>&gt;&gt;&gt; v1_clone</p>
+
+<p>Vector([3.0, 4.0, 5.0])</p>
+
+<p>&gt;&gt;&gt; v1 == v1_clone True</p>
+
+<p>Tests of sequence behavior::</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; len(v1)</p>
+
+<p>3</p>
+
+<p>&gt;&gt;&gt; v1[0], v1[len(v1)-1], v1[-1]</p>
+
+<p>(3.0, 5.0, 5.0)</p>
+
+<p>Test of slicing::</p>
+
+<p>&gt;&gt;&gt; v7 = Vector(range(7))</p>
+
+<p>&gt;&gt;&gt; v7[-1]</p>
+
+<p>6.0</p>
+
+<p>&gt;&gt;&gt; v7[1:4]</p>
+
+<p>Vector([1.0, 2.0, 3.0])</p>
+
+<p>&gt;&gt;&gt; v7[-1:]</p>
+
+<p>Vector([6.0])</p>
+
+<p>&gt;&gt;&gt; v7[1,2]</p>
+
+<p>Traceback (most recent call last): TypeError: Vector indices must be integers</p>
+
+<p>Tests of dynamic attribute access::</p>
+
+<p>&gt;&gt;&gt; v7 = Vector(range(10))</p>
+
+<p>&gt;&gt;&gt; v7.x 0.0</p>
+
+<p>&gt;&gt;&gt; v7.y, v7.z, v7.t (1.0, 2.0, 3.0)</p>
+
+<p>Dynamic attribute lookup failures::</p>
+
+<p>&gt;&gt;&gt; v7.k</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>AttributeError: &lsquo;Vector&rsquo; object has no attribute &lsquo;k &gt;&gt;&gt; v3 = Vector(range(3))</p>
+
+<p>&gt;&gt;&gt; v3.t</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>AttributeError: &lsquo;Vector&rsquo; object has no attribute &rsquo;t&rsquo; &gt;&gt;&gt; v3.spam</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>AttributeError: &lsquo;Vector&rsquo; object has no attribute &lsquo;spam</p>
+
+<p>Tests of hashing::</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4])</p>
+
+<p>&gt;&gt;&gt; v2 = Vector([3.1, 4.2])</p>
+
+<p>&gt;&gt;&gt; v3 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; v6 = Vector(range(6))</p>
+
+<p>&gt;&gt;&gt; hash(v1), hash(v3), hash(v6) (7, 2, 1)</p>
+
+<p>Most hash values of non-integers vary from a 32-bit to 64-bit CPython build:: &gt;&gt;&gt; import sys</p>
+
+<p>&gt;&gt;&gt; hash(v2) == (384307168202284039 if sys.maxsize &gt; 2**32 else 357915986) True</p>
+
+<p>Tests of &ldquo;format()&rdquo; with Cartesian coordinates in 2D::</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4])</p>
+
+<p>&gt;&gt;&gt; format(v1)</p>
+
+<p>&rsquo;(3.0, 4.0)&rsquo;</p>
+
+<p>&gt;&gt;&gt; format(v1, &lsquo;.2f&rsquo;)</p>
+
+<p>&rsquo;(3.00, 4.00)&rsquo;</p>
+
+<p>&gt;&gt;&gt; format(v1, &lsquo;.3e&rsquo;)</p>
+
+<p>&rsquo;(3.000e+00, 4.000e+00)&rsquo;</p>
+
+<p>Tests of &ldquo;format()&rdquo; with Cartesian coordinates in 3D and 7D::</p>
+
+<p>&gt;&gt;&gt; v3 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; format(v3)</p>
+
+<p>&rsquo;(3.0, 4.0, 5.0)&rsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector(range(7)))</p>
+
+<p>&rsquo;(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0)&rsquo;</p>
+
+<p>Tests of &ldquo;format()&rdquo; with spherical coordinates in 2D, 3D and 4D::</p>
+
+<p>&gt;&gt;&gt; format(Vector([1, 1]), &lsquo;h&rsquo;)    # doctest:+ELLIPSIS</p>
+
+<p>&lsquo;<1.414213..., 0.785398...>&lsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector([1, 1]), &lsquo;.3eh&rsquo;)</p>
+
+<p>&lsquo;<1.414e+00, 7.854e-01>&lsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector([1, 1]), &lsquo;0.5fh&rsquo;)</p>
+
+<p>&lsquo;<1.41421, 0.78540>&lsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector([1, 1, 1]), &lsquo;h&rsquo;)    # doctest:+ELLIPSIS</p>
+
+<p>&lsquo;<1.73205..., 0.95531..., 0.78539...>&lsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector([2, 2, 2]), &lsquo;.3eh&rsquo;)</p>
+
+<p>&lsquo;<3.464e+00, 9.553e-01, 7.854e-01>&lsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector([0, 0, 0]), &lsquo;0.5fh&rsquo;)</p>
+
+<p>&lsquo;<0.00000, 0.00000, 0.00000>&lsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector([-1, -1, -1, -1]), &lsquo;h&rsquo;)    # doctest:+ELLIPSIS</p>
+
+<p>&lsquo;<2.0, 2.09439..., 2.18627..., 3.92699...>&lsquo;</p>
+
+<p>&gt;&gt;&gt; format(Vector([2, 2, 2, 2]), &lsquo;.3eh&rsquo;)</p>
+
+<p>&lsquo;<4.000e+00, 1.047e+00, 9.553e-01, 7.854e-01></p>
+
+<p>&gt;&gt;&gt; format(Vector([0, 1, 0, 0]), &lsquo;0.5fh&rsquo;)</p>
+
+<p>&lsquo;<1.00000, 1.57080, 0.00000, 0.00000>&lsquo;</p>
+
+<p>from array import array import reprlib import math import numbers import functools import operator import itertools O</p>
+
+<p>class Vector:</p>
+
+<p>typecode = &rsquo;d&rsquo;</p>
+
+<p>def <strong>init</strong>(self, components):</p>
+
+<p>self._components = array(self.typecode, components)</p>
+
+<p>def <strong>iter</strong>(self):</p>
+
+<p>return iter(self._components)</p>
+
+<p>def <strong>repr</strong>(self):</p>
+
+<p>components = reprlib.repr(self._components) components = components[components.find(&rsquo;[&lsquo;):-1] return &lsquo;Vector({})&rsquo;.format(components)</p>
+
+<p>def <strong>str</strong>(self):</p>
+
+<p>return str(tuple(self))</p>
+
+<p>def <strong>bytes</strong>(self):</p>
+
+<p>return (bytes([ord(self.typecode)]) +</p>
+
+<p>bytes(self._components))</p>
+
+<p>def <strong>eq</strong>(self, other):</p>
+
+<p>return (len(self) == len(other) and</p>
+
+<p>all(a == b for a, b in zip(self, other)))</p>
+
+<p>def <strong>hash</strong>(self):</p>
+
+<p>hashes = (hash(x) for x in self)</p>
+
+<p>return functools.reduce(operator.xor, hashes, 0)</p>
+
+<p>def <strong>abs</strong>(self):</p>
+
+<p>return math.sqrt(sum(x * x for x in self))</p>
+
+<p>def <strong>bool</strong>(self):</p>
+
+<p>return bool(abs(self))</p>
+
+<p>def <strong>len</strong>(self):</p>
+
+<p>return len(self._components)</p>
+
+<p>def <strong>getitem</strong>(self, index): cls = type(self) if isinstance(index, slice):</p>
+
+<p>return cls(self._components[index]) elif isinstance(index, numbers.Integral):</p>
+
+<p>return self._components[index] else:</p>
+
+<p>msg = ’{.<strong>name</strong>} indices must be integers’ raise TypeError(msg.format(cls))</p>
+
+<p>shortcut_names = ’xyzt’</p>
+
+<p>def <strong>getattr</strong>(self, name): cls = type(self) if len(name) == 1:</p>
+
+<p>pos = cls.shortcut_names.find(name) if 0 &lt;= pos &lt; len(self._components):</p>
+
+<p>return self._components[pos] msg = ’{.<strong>name</strong>!r} object has no attribute {!r}’ raise AttributeError(msg.format(cls, name))</p>
+
+<p>def angle(self, n):    ©</p>
+
+<p>r = math.sqrt(sum(x * x for x in self[n:])) a = math.atan2(r, self[n-1])</p>
+
+<p>if (n == len(self) - 1) and (self[-1] &lt; 0): return math.pi * 2 - a</p>
+
+<p>else:</p>
+
+<p>return a</p>
+
+<p>def angles(self): ©</p>
+
+<p>return (self.angle(n) for n in range(1, len(self)))</p>
+
+<p>def <strong>format</strong>(self, fmt_spec=’’):</p>
+
+<p>if fmt_spec.endswith(’h’): # 超球面坐标</p>
+
+<p>fmt_spec = fmt_spec[:-1]</p>
+
+<p>coords = itertools.chain([abs(self)],</p>
+
+<p>self.angles()) o</p>
+
+<p>outer_fmt = ’&lt;{}&gt;’    ❺</p>
+
+<p>else:</p>
+
+<p>coords = self outer_fmt = ’({})’    ©</p>
+
+<p>components = (format(c, fmt_spec) for c in coords) &amp; return outer_fmt.format(’, ’.join(components))❻</p>
+
+<p>@classmethod</p>
+
+<p>def frombytes(cls, octets): typecode = chr(octets[0]) memv = memoryview(octets[1:]).cast(typecode) return cls(memv)</p>
+
+<h4 id="❶-为了在-format-方法中使用-chain-函数-导入-itertools-模块">❶ 为了在 <strong>format</strong> 方法中使用 chain 函数，导入 itertools 模块。</h4>
+
+<h4 id="❷使用-w维球体-词条-http-en-wikipedia-org-wiki-n-sphere-http-en-wikipedia-org-wiki-n-sphere-中的公式计算某个角坐标">❷使用“w维球体”词条(<a href="http://en.wikipedia.org/wiki/N-sphere">http://en+wikipedia+org/wiki/N-sphere</a>)中的公式计算某个角坐标。</h4>
+
+<h4 id="❸-创建生成器表达式-按需计算所有角坐标">❸ 创建生成器表达式，按需计算所有角坐标。</h4>
+
+<p>❹ 使用 itertools.chain 函数生成生成器表达式，无缝迭代向量的模和各个角坐标。 ❺ 配置使用尖括号显示球面坐标。</p>
+
+<h4 id="❻-配置使用圆括号显示笛卡儿坐标">❻ 配置使用圆括号显示笛卡儿坐标。</h4>
+
+<p>❼ 创建生成器表达式，按需格式化各个坐标元素。 ❽ 把以逗号分隔的格式化分量插入尖括号或圆括号。</p>
+
+<p>我们在<strong>format</strong>、angle和angles中大量使用了生成器表达式，不过我 们的目的是让 Vector 类的 <strong>format</strong> 方法与 Vector2d 类处在同一水平上。第 14 章讨论生成器时会使用 Vector 类中的部分代码举例，然后详细说明生成器的技巧。</p>
+
+<p>本章的任务到此结束。第 13 章会改进 Vector 类，让它支持中缀运算符。本章的目的是 探讨如何编写集合类广泛使用的几个特殊方法。</p>
+
+<h3 id="10-8-本章小结">10.8 本章小结</h3>
+
+<p>本章所举的 Vector 示例故意与 Vector2d 兼容，不过二者的构造方法签名不同， Vector</p>
+
+<p>类的构造方法接受一个可迭代的对象，这与内置的序列类型一样。 Vector 的行为之所以 像序列，是因为它实现了 <strong>getitem</strong> 和 <strong>len</strong> 方法；借此，我们讨论了协议，这是</p>
+
+<p>鸭子类型语言使用的非正式接口。</p>
+
+<p>然后，我们说明了 my_seq[a🅱️c] 句法背后的工作原理：创建 slice(a, b, c) 对象， 交给 <strong>getitem</strong> 方法处理。了解这一点之后，我们让 Vector 正确处理切片，像符合 Python 风格的序列那样返回新的 Vector 实例。</p>
+
+<p>接下来，我们为 Vector 实例的头几个分量提供了只读访问功能，使用 my_vec.x 这样的 表示法。这一点通过 <strong>getattr</strong> 方法实现。实现这一功能之后，用户会想通过 my_vec.x = 7 这样的写法为头几个分量赋值——这是一个潜在的缺陷。为了解决这个问 题，我们又实现了 <strong>setattr</strong> 方法，通过它禁止为单字母属性赋值。大多数时候，如</p>
+
+<p>果定义了 <strong>getattr</strong> 方法，那么也要定义 <strong>setattr</strong> 方法，这样才能避免行为不 一致。</p>
+
+<p>实现<strong>hash</strong>方法特别适合使用functools. reduce函数，因为我们要把异或运算符A</p>
+
+<p>依次应用到各个分量的散列值上，生成整个向量的聚合散列值。在 <strong>hash</strong> 方法中使用 reduce 函数之后，我们又使用内置的归约函数 all 实现了效率更高的 <strong>eq</strong> 方法。</p>
+
+<p>Vector 类的最后一项改进是在 Vector2d 的基础上重新实现 <strong>format</strong> 方法，这一</p>
+
+<p>次，除了支持笛卡儿坐标，我们还支持了球面坐标。为了定义 <strong>format</strong> 方法及其辅助 方法，我们用到了很多数学知识和几个生成器，但这些是实现细节。第 14 章会再次讨论 生成器。最后一节的目的是支持自定义格式，从而兑现承诺，让 Vector 与 Vector2d 兼 容，此外还能做更多的事情。</p>
+
+<p>与第 9 章一样，我们经常分析 Python 标准对象的行为，然后进行模仿，让 Vector 的行为 符合 Python 风格。</p>
+
+<p>第 13 章将为 Vector 实现几个中缀运算符。第 13 章使用的数学知识比 angle() 方法用</p>
+
+<p>到的简单多了，但是通过了解 Python 中缀运算符的工作方式，我们对面向对象设计的认 识将更进一步。讨论运算符重载之前，我们将先定义一个类，说明如何使用接口和继承组 织多个类——这是第 11 章和第 12 章的话题。</p>
+
+<h3 id="10-9-延伸阅读">10.9 延伸阅读</h3>
+
+<p>Vector 类中的大多数特殊方法在第 9 章定义的 Vector2d 类中也有，因此前一章给出的 延伸阅读材料同样适合本章。</p>
+
+<p>强大的高阶函数 reduce 也叫合拢、累计、聚合、压缩和注入。更多信息参见维基百科中</p>
+
+<p>的“Fold (higher-order function)”词条(<a href="https://en.wikipedia.org/wiki/Fold_(higher-order_fbnction)">https://en.wikipedia.org/wiki/Fold_(higher-order_fbnction)</a>%e3%80%82%e8%bf%99%e7%af%87%e6%96%87%e7%ab%a0%e5%b1%95%e7%a4%ba%e4%ba%86%e9%ab%98%e9%98%b6%e5%87%bd%e6%95%b0%e7%9a%84%e7%94%a8%e9%80%94%ef%bc%8c%e7%9d%80%e9%87%8d%e8%af%b4%e6%98%8e%e4%ba%86%e5%85%b7%e6%9c%89%e9%80%92%e5%bd%92%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e7%9a%84%e5%87%bd)<a href="https://en.wikipedia.org/wiki/Fold_(higher-order_fbnction)">)。这篇文章展示了高阶函数的用途，着重说明了具有递归数据结构的函</a>%e3%80%82%e8%bf%99%e7%af%87%e6%96%87%e7%ab%a0%e5%b1%95%e7%a4%ba%e4%ba%86%e9%ab%98%e9%98%b6%e5%87%bd%e6%95%b0%e7%9a%84%e7%94%a8%e9%80%94%ef%bc%8c%e7%9d%80%e9%87%8d%e8%af%b4%e6%98%8e%e4%ba%86%e5%85%b7%e6%9c%89%e9%80%92%e5%bd%92%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e7%9a%84%e5%87%bd)</p>
+
+<p>数式语言。这篇文章中还有一个表格，列出了很多编程语言中起合拢作用的函数。</p>
+
+<p>杂谈</p>
+
+<p>把协议当作非正式的接口</p>
+
+<p>协议不是 Python 发明的。 Smalltalk 团队，也就是“面向对象”的发明者，使用“协议”这</p>
+
+<p>个词表示现在我们称之为接口的特性。某些 Smalltalk 编程环境允许程序员把一组方 法标记为协议，但这只不过是一种文档，用于辅助导航，语言不对其施加特定措施。 因此，向熟悉正式(而且编译器会施加措施)接口的人解释“协议”时，我会简单地说 它是“非正式的接口”。</p>
+
+<p>动态类型语言中的既定协议会自然进化。所谓动态类型是指在运行时检查类型，因为 方法签名和变量没有静态类型信息。 Ruby 是一门重要的面向对象动态类型语言，它</p>
+
+<p>也使用协议。</p>
+
+<p>在 Python 文档中，如果看到“文件类对象”这样的表述，通常说的就是协议。这是一 种简短的说法，意思是：“行为基本与文件一致，实现了部分文件接口，满足上下文 相关需求的东西。 ”</p>
+
+<p>你可能觉得只实现协议的一部分不够严谨，但是这样做的优点是简单。 “Data</p>
+
+<p><a href="https://docs.python.org/3/reference/datamodel.html%23special-method-names">Model”</a><a href="https://docs.python.org/3/reference/datamodel.html%23special-method-names">一章的 3.3 节(https://docs.python.org/3/reference/datamodel.html#special-method-</a>names)建议：</p>
+
+<p>模仿内置类型实现类时，记住一点：模仿的程度对建模的对象来说合理即可。例</p>
+
+<p>如，有些序列可能只需要获取单个元素，而不必提取切片。</p>
+
+<p>-Python语言参考手册中“Data Model” 一章</p>
+
+<p>不要为了满足过度设计的接口契约和让编译器开心，而去实现不需要的方法，我们要 遵守 KISS 原则( <a href="http://en.wikipedia.org/wiki/KISS_principle">http://en.wikipedia.org/wiki/KISS_principle </a>) 。</p>
+
+<p>第 11 章还会讨论协议和接口，这正是那一章的主要话题。</p>
+
+<p>鸭子类型的起源</p>
+
+<p>我相信 Ruby 社区在“鸭子类型”这个术语的推广过程中起了主要作用，因为他们向大 量 Java 使用者宣扬了这个说法。但是，在 Ruby 或 Python 流行起来之前， Python 就使</p>
+
+<p>用这个术语了。根据维基百科，在面向对象编程中较早使用鸭子作比喻的人是 Alex</p>
+
+<p>Martelli，在他于2000年7月26日发到Python-list中的一篇文章里：“polymorphism <a href="https://mail.python.org/pipermail/python-list/2000-July/046184.html">(was Re: Type checking in python?)” </a><a href="https://mail.python.org/pipermail/python-list/2000-July/046184.html">(https://mail+python+org/pipermail/python-list/2000-</a>July/046184+html)。本章开头引用的那句话就出自那篇文章。如果你想知道“鸭子类 型”这个术语的真正起源，以及很多编程语言对这个面向对象概念的运用，请阅读维 基百科中的“Duck typing”词条(<a href="http://en.wikipedia.org/wiki/Duck_typing">http://en+wikipedia+org/wiki/Duck_typing</a>)。</p>
+
+<p>安全的 <strong>format</strong> 方法，增强可用性</p>
+
+<p>实现 <strong>format</strong> 方法时，我们没有采取措施防范 Vector 实例拥有大量分量，不过 在 <strong>repr</strong> 方法中我们使用 reprlib 做了预防。这是因为 repr() 函数用于调试 和记录日志，所以必须生成可用的输出；而 <strong>format</strong> 方法用于向最终用户显示输 出，他们大概想看到整个Vector。如果你觉得这样做危险，可以再为格式规范微语 言实现一个扩展。</p>
+
+<p>如果是我，我会这么做：默认情况下，格式化的 Vector 实例显示有限个分量，比如 说 30 个。如果元素数量超过上限，默认的行为是像 reprlib 那样，截断超出的部 分，使用 &hellip; 表示。然而，如果格式说明符后面有特殊的 * 代码(意思是“全 部”)，那么就不限制显示的元素数量。因此，用户在不知情的情况下不会被特别长</p>
+
+<p>的输出吓到。如果默认的上限碍事，那么 &hellip; 的存在对用户是个提醒，用户研究文</p>
+
+<p>档后会发现 * 格式代码。</p>
+
+<p><a href="https://github.com/fluentpython/example-code">如果你实现了，请向本书的 </a><a href="https://github.com/fluentpython/example-code">GitHub 仓库(https://github+com/fluentpython/example-</a>code)发一个拉取请求。</p>
+
+<p>寻找符合 Python 风格的求和方式</p>
+
+<p>就像“什么是美”没有确切的答案一样， “什么是 Python 风格”也没有标准答案。如果回 答“地道的Python” (我通常会这样说)，不能让人100%满意，因为对你来说是“地 道的”，在我看来却可能不是。但我可以肯定的是， “地道”并不是指使用最鲜为人知 的语言特性。</p>
+
+<p>Python-list (<a href="https://mail.python.org/mailman/listinfo/python-list">https://mail+python+org/mailman/listinfo/python-list</a>)中有一篇发表于 2003 年 4 月的话题，题为“Pythonic Way to Sum n-th List</p>
+
+<p>Element?” (<a href="https://mail.python.org/pipermail/python-list/2003-April/218568.html">https://mail+python+org/pipermail/python-list/2003-April/218568+html</a>) 。这个 话题与本章讨论的 reduce 函数有关。</p>
+
+<p>该话题的发起人 Guy Middleton 说他不喜欢使用 lambda 表达式，问下面这个方案有 没有办法改进： 9</p>
+
+<p>&gt;&gt;&gt; my_list = [[1, 2, 3], [40, 50, 60], [9, 8, 7]]</p>
+
+<p>&gt;&gt;&gt; import functools</p>
+
+<p>&gt;&gt;&gt; functools.reduce(lambda a, b: a+b, [sub[1] for sub in my_list])</p>
+
+<p>60</p>
+
+<p>这段代码有很多习惯用法： lambda、 reduce 和列表推导。最终，这可能会变成人气 竞赛，因为它冒犯了讨厌 lambda 的人和看不上列表推导的人——这两种人都很多。</p>
+
+<p>如果使用lambda，或许就不应该使用列表推导一过滤除外，但这不是过滤。</p>
+
+<p>下面是我给出的方案，这能讨得 lambda 拥护者的欢心：</p>
+
+<p>&gt;&gt;&gt; functools.reduce(lambda a, b: a + b[1], my_list, 0) 60</p>
+
+<p>我没有参与那个话题，而且我不会在真实的代码中使用上述方案，因为我非常不喜欢</p>
+
+<p>lambda 表达式。这里只是为了举例说明不使用列表推导怎么做。</p>
+
+<p>第一个答案是 Fernando Perez 给出的，他是 IPython 的创建者，他的答案强调了 NumPy 支持 n 维数组和 n 维切片：</p>
+
+<p>&gt;&gt;&gt; import numpy as np</p>
+
+<p>&gt;&gt;&gt; my_array = np.array(my_list)</p>
+
+<p>&gt;&gt;&gt; np.sum(my_array[:, 1])</p>
+
+<p>60</p>
+
+<p>我觉得 Perez 的方案很棒，不过 Guy Middleton 推崇 Paul Rubin 和 Skip Montanaro 给出 的下述方案：</p>
+
+<p>&gt;&gt;&gt; import operator</p>
+
+<p>&gt;&gt;&gt; functools.reduce(operator.add, [sub[1] for sub in my_list], 0)</p>
+
+<p>60</p>
+
+<p>随后， Evan Simpson 问道：“这样做有什么错？</p>
+
+<p>&gt;&gt;&gt; total = 0 &gt;&gt;&gt; for sub in my_list: &hellip; total += sub[1] &gt;&gt;&gt; total</p>
+
+<p>60</p>
+
+<p>许多人都觉得这也很符合 Python 风格。 Alex Martelli 甚至说， Guido 或许就会这么</p>
+
+<p>做。</p>
+
+<p>我喜欢 Evan Simpson 的代码，不过也喜欢 David Eppstein 对此给出的评论：</p>
+
+<p>如果你想计算列表中各个元素的和，写出的代码应该看起来像是在“计算元素之</p>
+
+<p>和”，而不是“迭代元素，维护一个变量z，再执行一系列求和操作”。如果不能站</p>
+
+<p>在一定高度上表明意图，让语言去关注低层操作，那么要高级语言干嘛？</p>
+
+<p>之后 Alex Martelli 又建议：</p>
+
+<p>求和操作经常需要，我不介意 Python 提供一个这样的内置函数。但是，在我看 来， “reduce(operator.add, &hellip;”不是好方法(作为一名 APL 老程序员和 FP 语言的爱</p>
+
+<p>好者，我应该喜欢，但是我并不喜欢）。</p>
+
+<p>随后， Alex 建议提供并实现了 sum（） 函数。这次讨论之后三个月， Python 2.3 就内置 了这个函数。因此， Alex 喜欢的句法变成了标准：</p>
+
+<p>&gt;&gt;&gt; sum([sub[1] for sub in my_list]) 60</p>
+
+<p>下一年年末（2004 年 11 月）， Python 2.4 发布了，这一版引入了生成器表达式。因</p>
+
+<p>此，在我看来， Guy Middleton 那个问题目前最符合 Python 风格的答案是：</p>
+
+<p>&gt;&gt;&gt; sum(sub[1] for sub in my_list) 60</p>
+
+<p>这样写不仅比使用 reduce 函数更易阅读，而且还能避免空序列导致的陷 阱： sum（［］） 的结果是 0，就这么简单。</p>
+
+<p>在这次讨论中， Alex Martelli 指出， Python 2 内置的 reduce 函数成事不足败事有</p>
+
+<p>余，因为它推荐的地道编程方式难以理解。他的观点最有说服力： Python 3 把</p>
+
+<p>reduce 函数移到 functools 模块中了。</p>
+
+<p>当然， functools.reduce 函数仍有它的作用。实现 Vector.<strong>hash</strong> 方法时我就 用了它，我觉得我的实现方式算得上符合 Python 风格。</p>
+
+<p>9为了在此展示，我稍微修改了这段代码，因为在 2003 年， reduce 是内置函数，而在 Python 3 中要导入。此外，我把</p>
+
+<p>x和y换成了 my_list和sub （表示子串）。</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>A multidimensional &ldquo;Vector&rdquo; class, take 5</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/13-%E6%AD%A3%E7%A1%AE%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">13 正确重载运算符</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/11-%E6%8E%A5%E5%8F%A3%E4%BB%8E%E5%8D%8F%E8%AE%AE%E5%88%B0%E6%8A%BD%E8%B1%A1%E5%9F%BA%E7%B1%BB/">
+            <span class="next-text nav-default">11 接口：从协议到抽象基类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

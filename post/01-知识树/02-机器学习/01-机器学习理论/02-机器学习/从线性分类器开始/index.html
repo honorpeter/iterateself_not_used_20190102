@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>从线性分类器开始 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="从线性分类器开始 REF 七月在线 深度学习 缘由 实际上这个线性分类器是机器学习的内容，但是由于深度学习在作分类的任务的时候，实际上是相当于把网络抽取的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E4%BB%8E%E7%BA%BF%E6%80%A7%E5%88%86%E7%B1%BB%E5%99%A8%E5%BC%80%E5%A7%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="从线性分类器开始" />
+<meta property="og:description" content="从线性分类器开始 REF 七月在线 深度学习 缘由 实际上这个线性分类器是机器学习的内容，但是由于深度学习在作分类的任务的时候，实际上是相当于把网络抽取的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E4%BB%8E%E7%BA%BF%E6%80%A7%E5%88%86%E7%B1%BB%E5%99%A8%E5%BC%80%E5%A7%8B/" /><meta property="article:published_time" content="2018-08-21T18:16:48&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:48&#43;00:00"/>
+<meta itemprop="name" content="从线性分类器开始">
+<meta itemprop="description" content="从线性分类器开始 REF 七月在线 深度学习 缘由 实际上这个线性分类器是机器学习的内容，但是由于深度学习在作分类的任务的时候，实际上是相当于把网络抽取的">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:48&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:48&#43;00:00" />
+<meta itemprop="wordCount" content="3033">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="从线性分类器开始"/>
+<meta name="twitter:description" content="从线性分类器开始 REF 七月在线 深度学习 缘由 实际上这个线性分类器是机器学习的内容，但是由于深度学习在作分类的任务的时候，实际上是相当于把网络抽取的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">从线性分类器开始</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 3033 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#从线性分类器开始">从线性分类器开始</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+<li><a href="#缘由">缘由</a></li>
+<li><a href="#线性分类器">线性分类器</a>
+<ul>
+<li><a href="#为什么要讲线性分类器">为什么要讲线性分类器？</a></li>
+<li><a href="#线性分类器的得分函数">线性分类器的得分函数</a></li>
+</ul></li>
+<li><a href="#有两种方式理解这个线性分类器">有两种方式理解这个线性分类器</a>
+<ul>
+<li><a href="#线性分类器的理解1-空间划分">线性分类器的理解1：空间划分</a></li>
+<li><a href="#线性分类器的理解2-模板匹配">线性分类器的理解2：模板匹配：</a></li>
+</ul></li>
+<li><a href="#损失函数">损失函数</a>
+<ul>
+<li><a href="#损失函数1-合页损失-hinge-loss-支持向量机损失-为什么说是hinge-loss">损失函数1：合页损失 hinge loss （支持向量机损失） 为什么说是hinge loss？</a></li>
+<li><a href="#损失函数2-交叉熵损失-cross-entropy-loss-softmax分类器">损失函数2：交叉熵损失 Cross-entropy loss（softmax分类器）</a></li>
+<li><a href="#损失函数3-least-squares-l2-loss">损失函数3：Least squares (L2 loss)</a></li>
+<li><a href="#对两种损失函数的理解">对两种损失函数的理解：</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="从线性分类器开始">从线性分类器开始</h1>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li>七月在线 深度学习</li>
+</ol>
+
+<h1 id="缘由">缘由</h1>
+
+<p>实际上这个线性分类器是机器学习的内容，但是由于深度学习在作分类的任务的时候，实际上是相当于把网络抽取的特征输入到线性分类器中，来达到对样本进行分类的目的，因此，线性分类器再介绍一下，实际上看过机器学习的内容的话这个地方是差不多的。</p>
+
+<h1 id="线性分类器">线性分类器</h1>
+
+<h2 id="为什么要讲线性分类器">为什么要讲线性分类器？</h2>
+
+<p>因为很多的神经网络的最后一层都是接的一层线性分类器，来达到分类的目的，因此，在学习神经网络之前，先讲一下线性分类器。</p>
+
+<h2 id="线性分类器的得分函数">线性分类器的得分函数</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HFga00H8FB.png?imageslim" alt="mark" /></p>
+
+<p>即希望去根据矩阵判定它对应的每个类别的得分是多少。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Gdfa569Hie.png?imageslim" alt="mark" /></p>
+
+<p>输入的矩阵reshape为一个3072*1的一个向量，3072行，1列。W是一个10行，3072列的矩阵。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/H4kdchcfJA.png?imageslim" alt="mark" /></p>
+
+<p>假如一张图片只有4个值。为了拿到3个类别的得分向量，那么W就是3*4，b就可以把y=Wx这条直线上下平移，现在这个结果中的cat的得分很低，那么我们要做的就是修正这个W，使得可以在一张图片过来之后，可以在正确的类别上有比较高的得分，在错误的类别上有比较低的得分。</p>
+
+<p><strong>上面这三张图的确对(f=Wx+b)解释的非常好！</strong></p>
+
+<h1 id="有两种方式理解这个线性分类器">有两种方式理解这个线性分类器</h1>
+
+<h2 id="线性分类器的理解1-空间划分">线性分类器的理解1：空间划分</h2>
+
+<p>对于 y=Wx+b 来说， 是W里面的一个行向量乘以 x 再加上 b ，才得到对应于 y 中间的某一个分类的得分，所以 W 中的3个行向量因此就对应了不同的类别。</p>
+
+<p>而把每一行和对应的类别单单拿出来看的时候，这个 (y_i=W_ix+b_i)就可以看作是一条直线，输入是x，输出是某一个类别的得分。因此，对于W中的3个行向量来说，不同的行向量就对应了不同的直线 。画图如下：</p>
+
+<p>x每输入一张图片的时候，就能在三条直线上得到3个不同的得分值。<strong>这个地方感觉有些奇怪，这个得分值于线对应的区域有关系吗？箭头指的是什么？而且图片的位置不是应该画在x这条水平线上面吗？而且这个直线是不是有范围的？如果没有范围的话deer岂不是始终取不到了？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/86JGbeDBEB.png?imageslim" alt="mark" /></p>
+
+<h2 id="线性分类器的理解2-模板匹配">线性分类器的理解2：模板匹配：</h2>
+
+<p>上面说了三个行向量对应三个不同的分类，那么可以把每一行看成对应的类别的模板，而每类得分，实际上就是像素点模板匹配度。只不过我的模板匹配的方式是内积计算而已。<strong>这也行？这个将W的每一行看作一个模板的看法是有特殊的什么作用吗？或者能对这个有一些特别的理解？而且用内积的方式来作为模板的匹配度感觉有些奇怪吧？</strong></p>
+
+<p>这个是CIFAR-10的<strong>W的每一行reshape为32*32*3的图像的显示</strong>：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Fbk880cFhe.png?imageslim" alt="mark" /></p>
+
+<p><strong>？上面这个图是什么意思？是W的每一行reshape为32*32*3的图像的显示吗？相知道这个到底是什么？最好自己试验下。</strong></p>
+
+<p>后面学卷积神经网络，每个神经元可以看作一个filter，它实际上也是一种模板，也是可以做可视化的。<strong>每个神经元也是一个模板吗？每个神经元怎么做可视化？</strong></p>
+
+<h1 id="损失函数">损失函数</h1>
+
+<p>loss function</p>
+
+<p>先给定一个W，就可以由像素映射到类目得分，然后不断调整参数/权重W，目标就是使映射的结果和实际类别吻合。</p>
+
+<p>而用怎么衡量吻合程度呢？是用的损失函数。损失函数的别的称呼：代价函数（cost function） 和客观度（objective）。</p>
+
+<p>其实我们有很多中的损失函数，虽然评判的手段不一样，但是他们都能形容我们的吻合程度，</p>
+
+<p>那么怎么去最小化这个loss呢？</p>
+
+<h2 id="损失函数1-合页损失-hinge-loss-支持向量机损失-为什么说是hinge-loss">损失函数1：合页损失 hinge loss （支持向量机损失） 为什么说是hinge loss？</h2>
+
+<p>对于训练集中的第 (i) 张图片数据 (x_i) ，在W下会有一个得分结果向量 (f(x_i,W)) ，第 (j) 类的得分为我们记作 (f(x_i,W)_j) 。则在该样本上的损失我们由下列公式计算得到：</p>
+
+<p>[L<em>i=\sum</em>{j\neq y_i}^{ }max(0,f(x_i,W)_j-f(x<em>i,W)</em>{y_i}+\Delta )]</p>
+
+<p>(f(x<em>i,W)</em>{y_i})是我在正确的类别上的得分。因此这个式子说的是：我想让你在正确的类别上的得分比错误的类别上的得分高出来一段，这一段叫做(\Delta)。下面举个例子：<strong>(\Delta )是什么？怎么确定 (\Delta ) 而且为什么要求和？为什么要求max？</strong></p>
+
+<p>例子：</p>
+
+<p>假如我们现在有三个类别，而得分函数计算某张图片的得分为：\f(x_i,W)=[13,-7,11])，而实际的结果是第一类((y_i=0))。假设(\Delta =10) 。上面的公式把错误类别(j\neq y_i)都遍历了一遍，求值加和：</p>
+
+<p>[L_i=max(0,-7-13+10)+max(0,11-13+10)]</p>
+
+<p>对于(max(0,-7-13+10))来说，-7是错误的类别的得分，13是正确的类别的得分，那么13比-7高20，20比10大，那么(max(0,-7-13+10))就是0，表示你在这两类的区分上面已经做的很好了，不用再看这两类之间的差别了。<strong>嗯，原来是这样，这样的值保证了强调了最容易混淆的类的误差。但是为什么要这样计算呢？理论基础是什么？</strong></p>
+
+<p>继续优化上面的 (L_i) ，因为是线性模型，因此可以简化为：</p>
+
+<p>[L<em>i=\sum</em>{j\neq y_i}^{ } max(0,w_j^Tx<em>i-w</em>{y_i}^Tx_i+\Delta )]</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bEKfij7iJm.png?imageslim" alt="mark" /></p>
+
+<p>嗯 ，上面这个图的意思是：我有很多的类别的得分，然后我设置了一条警戒线，总是比正确类别小(\Delta)。如果警戒线之外，说明做得很好了，如果在警戒线之内，越过多少就把多少作为代价。<strong>(\Delta)是否要归一化？</strong></p>
+
+<p>加正则化项后得到：<strong>这个正则化项是哪里来的？ 这个没讲</strong></p>
+
+<p>[L=\underset{data\, loss}{\underbrace{\frac{1}{N}\sum_{i}^{ }L_i} }+\underset{regularization\, loss}{\underbrace{\lambda R(W)} }]</p>
+
+<p>即：</p>
+
+<p>[L=\frac{1}{N}\sum<em>{i}^{ }\sum</em>{j\neq y_i}^{ } [max(0,f(x_i,W)_j-f(x<em>i,W)</em>{y<em>i}+\Delta)]+\lambda \sum</em>{k}^{ }\sum_{l}^{ }]</p>
+
+<p><strong>上面这个式子是怎么得到的？为什么(L<em>i)还要求和？regularization loss是什么？为什么等于(\lambda \sum</em>{k}^{ }\sum_{l}^{ })？</strong></p>
+
+<h2 id="损失函数2-交叉熵损失-cross-entropy-loss-softmax分类器">损失函数2：交叉熵损失 Cross-entropy loss（softmax分类器）</h2>
+
+<p>向找到一个办法，来算出属于不同分类的概率是多少，这样也好进行评判。</p>
+
+<p>那么我们怎么计算不同分类的概率呢？我们不是直接根据评分在总分中的占比来做，而是先求exp。<strong>为什么要先求exp呢？因为如果不用exp的值去做归一化，会出现负数。概率是不可能有负数的，对我知道不能出现负数，但是为什么要用exp，而不用别的呢？</strong></p>
+
+<p>因此对于训练集中的第(i)张图片数据(x<em>i)在W下会有一个得分结果向量(f</em>{y_i})。则损失函数记作：</p>
+
+<p>[L<em>i=-log(\frac{e^{f</em>{y<em>i} } }{\sum</em>{j}^{ } e^{f_j} })]</p>
+
+<p>或者</p>
+
+<p>[L<em>i=-f</em>{y<em>i}+log\sum</em>{j}^{ }e^{f_j}]</p>
+
+<p>那么这个时候我就想知道正确的概率向量和我刚计算出的概率限量之间的距离。两个向量之间的距离，可以从最大似然的角度来理解，也可以从KL散度的角度来理解。<strong>怎么理解的？</strong>最后计算出来的损失叫做交叉熵损失 (-\sum p\,log(q))，它评估的是两个概率向量之间的距离。<strong>交叉熵损失这个地方只是提了一下，要补充一下。</strong></p>
+
+<p>那么这个时候又有一个问题了：如果类别的评分很大，(e^{1000})结果溢出怎么办？所以，为了保证计算结果的稳定性，实际工程中一般这么算：</p>
+
+<p>[\frac{e^{f_{y<em>i} } }{\sum</em>{j}^{ }e^{f<em>j} }=\frac{Ce^{f</em>{y<em>i} } }{C\sum</em>{j}^{ }e^{f<em>j} }=\frac{e^{f</em>{y<em>i}+log\, C} }{\sum</em>{j}^{ }e^{f_j+log\, C} }]</p>
+
+<p><strong>为什么交叉熵是这样的函数？上面这个实际工程的公式的 (C) 是什么？是多少？</strong></p>
+
+<h2 id="损失函数3-least-squares-l2-loss">损失函数3：Least squares (L2 loss)</h2>
+
+<p>Least squares (L2 loss)    (L_i=||f-y_i||_2^2)  <strong>这个为什么没讲？</strong></p>
+
+<p><strong>损失函数到底总共有几种？</strong></p>
+
+<h2 id="对两种损失函数的理解">对两种损失函数的理解：</h2>
+
+<p>所以本质上来说：</p>
+
+<ul>
+<li><p>一个老师是设定了一个界限，然后要求正确的选项的得分至少比错误的选项的得分高(\Delta)。</p></li>
+
+<li><p>而另一个老师说：去做一个归一化，然后告诉我，你认为某个选项是标准答案的概率是多少？然后我这边是有一份正确的概率向量的，然后我会去评估这两个概率向量之间的距离。</p></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/EmJmHFfB4J.png?imageslim" alt="mark" /></p>
+
+<p><strong>厉害的normalize，这样就sum为1，也就是说(\sum_{j}^{ } e^{f<em>j})就是0，这样直接算(-log(e^{f</em>{y_i} }))就行。也就是说(-log(0.353))就行，但是为什么是1.04？(-log(0.353))不是0.45吗？</strong></p>
+
+<p>拿到了loss之后我们有一系列的方式去做最优化，它本质上是一个函数，然后求最小值，求最小值就有很多方法，比如随机梯度下降，牛顿法，拟牛顿法，BFTS。<strong>什么是拟牛顿法和BFTS？</strong></p>
+
+<p>到现在为止，这个基础叫做线性分类器。</p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>损失函数感觉讲的不是很透彻。是不是只有这两个？还是要在机器学习中仔细补充这方面的。</strong></p>
+
+<p><strong>而且还是有几个问题没有明白的。</strong></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb-%E6%9E%81%E7%AE%80%E5%AE%9E%E8%B7%B5%E5%85%A5%E9%97%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">MongoDB 极简实践入门</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/%E5%86%B3%E7%AD%96%E6%A0%91-%E4%BE%8B%E5%AD%901%E5%88%A4%E5%AE%9A%E9%B1%BC%E7%B1%BB%E5%92%8C%E9%9D%9E%E9%B1%BC%E7%B1%BB/">
+            <span class="next-text nav-default">决策树 例子1：判定鱼类和非鱼类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

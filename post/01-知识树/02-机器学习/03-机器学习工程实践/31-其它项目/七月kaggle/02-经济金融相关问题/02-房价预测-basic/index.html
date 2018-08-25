@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 房价预测 basic - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Kaggle竞赛：房价预测 题目 依据⼀个房⼦的全⽅位信息，包括⾯积，地段，环境，等等。预测出房⼦的价格 X: [房源信息] y: 房价 文件描述 特征描述 SalePrice 就" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/02-%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/02-%E6%88%BF%E4%BB%B7%E9%A2%84%E6%B5%8B-basic/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 房价预测 basic" />
+<meta property="og:description" content="Kaggle竞赛：房价预测 题目 依据⼀个房⼦的全⽅位信息，包括⾯积，地段，环境，等等。预测出房⼦的价格 X: [房源信息] y: 房价 文件描述 特征描述 SalePrice 就" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/02-%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/02-%E6%88%BF%E4%BB%B7%E9%A2%84%E6%B5%8B-basic/" /><meta property="article:published_time" content="2018-07-21T20:16:44&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-21T20:16:44&#43;00:00"/>
+<meta itemprop="name" content="02 房价预测 basic">
+<meta itemprop="description" content="Kaggle竞赛：房价预测 题目 依据⼀个房⼦的全⽅位信息，包括⾯积，地段，环境，等等。预测出房⼦的价格 X: [房源信息] y: 房价 文件描述 特征描述 SalePrice 就">
+
+
+<meta itemprop="datePublished" content="2018-07-21T20:16:44&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-21T20:16:44&#43;00:00" />
+<meta itemprop="wordCount" content="3629">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 房价预测 basic"/>
+<meta name="twitter:description" content="Kaggle竞赛：房价预测 题目 依据⼀个房⼦的全⽅位信息，包括⾯积，地段，环境，等等。预测出房⼦的价格 X: [房源信息] y: 房价 文件描述 特征描述 SalePrice 就"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 房价预测 basic</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-21 </span>
+        
+        <span class="more-meta"> 3629 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#kaggle竞赛-房价预测">Kaggle竞赛：房价预测</a>
+<ul>
+<li><a href="#题目">题目</a></li>
+<li><a href="#文件描述">文件描述</a></li>
+<li><a href="#特征描述">特征描述</a></li>
+</ul></li>
+<li><a href="#房价预测案例">房价预测案例</a>
+<ul>
+<li><a href="#step-1-检视源数据集">Step 1: 检视源数据集</a>
+<ul>
+<li>
+<ul>
+<li><a href="#读入数据">读入数据</a></li>
+<li><a href="#检视源数据">检视源数据</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#step-2-合并数据">Step 2: 合并数据</a></li>
+<li><a href="#step-3-变量转化">Step 3: 变量转化</a>
+<ul>
+<li>
+<ul>
+<li><a href="#正确化变量属性">正确化变量属性</a></li>
+<li><a href="#把-category-的变量转变成-numerical-表达形式">把 category 的变量转变成 numerical 表达形式</a></li>
+<li><a href="#处理好numerical变量">处理好numerical变量</a></li>
+<li><a href="#标准化-numerical-数据">标准化 numerical 数据</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#step-4-建立模型">Step 4: 建立模型</a>
+<ul>
+<li>
+<ul>
+<li><a href="#把数据集分回-训练-测试集">把数据集分回 训练/测试集</a></li>
+<li><a href="#ridge-regression">Ridge Regression</a></li>
+<li><a href="#random-forest">Random Forest</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#step-5-ensemble">Step 5: Ensemble</a></li>
+<li><a href="#step-6-提交结果">Step 6: 提交结果</a></li>
+<li><a href="#ref">REF</a></li>
+<li><a href="#数据下载地址">数据下载地址</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="kaggle竞赛-房价预测">Kaggle竞赛：房价预测</h1>
+
+<h2 id="题目">题目</h2>
+
+<p>依据⼀个房⼦的全⽅位信息，包括⾯积，地段，环境，等等。预测出房⼦的价格</p>
+
+<ul>
+<li>X: [房源信息]</li>
+<li>y: 房价</li>
+</ul>
+
+<h2 id="文件描述">文件描述</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180720/i29DDkG0D6.png?imageslim" alt="mark" /></p>
+
+<h2 id="特征描述">特征描述</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180720/A301hG4k9L.png?imageslim" alt="mark" /></p>
+
+<p>SalePrice 就是 Y</p>
+
+<h1 id="房价预测案例">房价预测案例</h1>
+
+<h2 id="step-1-检视源数据集">Step 1: 检视源数据集</h2>
+
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+</code></pre>
+
+<h4 id="读入数据">读入数据</h4>
+
+<ul>
+<li><p>一般来说源数据的 <code>index</code> 那一栏没什么用，我们可以用来作为我们 pandas dataframe 的 <code>index</code> 。这样之后要是检索起来也省事儿。</p></li>
+
+<li><p>Kaggle上默认把数据放在 <em>input</em> 文件夹下。所以我们没事儿写个教程什么的，也可以依据这个 <strong>convention</strong> 来，显得自己很有逼格。。</p></li>
+</ul>
+
+<pre><code class="language-python">train_df = pd.read_csv('../input/train.csv', index_col=0)
+test_df = pd.read_csv('../input/test.csv', index_col=0)
+</code></pre>
+
+<h4 id="检视源数据">检视源数据</h4>
+
+<pre><code class="language-python">train_df.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>MSSubClass</th>
+<th>MSZoning</th>
+<th>LotFrontage</th>
+<th>LotArea</th>
+<th>Street</th>
+<th>Alley</th>
+<th>LotShape</th>
+<th>LandContour</th>
+<th>Utilities</th>
+<th>LotConfig</th>
+<th>&hellip;</th>
+<th>PoolArea</th>
+<th>PoolQC</th>
+<th>Fence</th>
+<th>MiscFeature</th>
+<th>MiscVal</th>
+<th>MoSold</th>
+<th>YrSold</th>
+<th>SaleType</th>
+<th>SaleCondition</th>
+<th>SalePrice</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>60</td>
+<td>RL</td>
+<td>65.0</td>
+<td>8450</td>
+<td>Pave</td>
+<td>NaN</td>
+<td>Reg</td>
+<td>Lvl</td>
+<td>AllPub</td>
+<td>Inside</td>
+<td>&hellip;</td>
+<td>0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>2</td>
+<td>2008</td>
+<td>WD</td>
+<td>Normal</td>
+<td>208500</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>20</td>
+<td>RL</td>
+<td>80.0</td>
+<td>9600</td>
+<td>Pave</td>
+<td>NaN</td>
+<td>Reg</td>
+<td>Lvl</td>
+<td>AllPub</td>
+<td>FR2</td>
+<td>&hellip;</td>
+<td>0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>5</td>
+<td>2007</td>
+<td>WD</td>
+<td>Normal</td>
+<td>181500</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>60</td>
+<td>RL</td>
+<td>68.0</td>
+<td>11250</td>
+<td>Pave</td>
+<td>NaN</td>
+<td>IR1</td>
+<td>Lvl</td>
+<td>AllPub</td>
+<td>Inside</td>
+<td>&hellip;</td>
+<td>0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>9</td>
+<td>2008</td>
+<td>WD</td>
+<td>Normal</td>
+<td>223500</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>70</td>
+<td>RL</td>
+<td>60.0</td>
+<td>9550</td>
+<td>Pave</td>
+<td>NaN</td>
+<td>IR1</td>
+<td>Lvl</td>
+<td>AllPub</td>
+<td>Corner</td>
+<td>&hellip;</td>
+<td>0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>2</td>
+<td>2006</td>
+<td>WD</td>
+<td>Abnorml</td>
+<td>140000</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>60</td>
+<td>RL</td>
+<td>84.0</td>
+<td>14260</td>
+<td>Pave</td>
+<td>NaN</td>
+<td>IR1</td>
+<td>Lvl</td>
+<td>AllPub</td>
+<td>FR2</td>
+<td>&hellip;</td>
+<td>0</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>0</td>
+<td>12</td>
+<td>2008</td>
+<td>WD</td>
+<td>Normal</td>
+<td>250000</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 80 columns</p>
+
+<p>这时候大概心里可以有数，哪些地方需要人为的处理一下，以做到源数据更加好被 process 。</p>
+
+<h2 id="step-2-合并数据">Step 2: 合并数据</h2>
+
+<p><span style="color:red;">这个地方要注意：在现实中，我们该怎么做还是怎么做，然后把对训练数据的处理写成一个 function ，然后把测试集的数据上应用这个 function 。但是对于竞赛而言，由于已经拿到了训练街和测试集，因此可以合并后同意处理。</span></p>
+
+<p>这么做主要是为了用 DataFrame 进行数据预处理的时候更加方便。等所有的需要的预处理进行完之后，我们再把他们分隔开。<span style="color:red;">嗯。</span></p>
+
+<p>首先，<code>SalePrice</code>作为我们的训练目标，只会出现在训练集中，不会在测试集中（要不然你测试什么？）。所以，我们先把 <code>SalePrice</code> 这一列给拿出来，不让它碍事儿。</p>
+
+<p>我们先看一下 <code>SalePrice</code> 是什么样子：</p>
+
+<p><span style="color:red;">可见，在认识数据这一步，也要看看数据是不是均匀分布的。然后在这里才会对数据进行这种 <code>log1p</code> 的处理。还是没有理解数据要满足什么样子？</span></p>
+
+<pre><code class="language-python">%matplotlib inline
+prices = pd.DataFrame({&quot;price&quot;:train_df[&quot;SalePrice&quot;], &quot;log(price + 1)&quot;:np.log1p(train_df[&quot;SalePrice&quot;])})
+prices.hist()
+</code></pre>
+
+<pre><code>array([[&lt;matplotlib.axes._subplots.AxesSubplot object at 0x10864a5f8&gt;,
+        &lt;matplotlib.axes._subplots.AxesSubplot object at 0x1092429b0&gt;]], dtype=object)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180721/l5HH5dj85D.png?imageslim" alt="mark" /></p>
+
+<p>从上图可以看出，上面的 price  不是类正态的一个分部。由于我的数据集是偏着的，我的出来的结果也会偏着。<span style="color:red;">没明白为什么这样处理之后结果就不偏了？</span></p>
+
+<p>可见，label 本身并不平滑。为了我们分类器的学习更加准确，我们会首先把 label 给“平滑化”（正态化）。<span style="color:red;">什么叫不平滑？还有哪些可以使数据平滑的方式？</span></p>
+
+<p><span style="color:red;">老师说，只有对这种回归问题才要做这个平滑性的处理，对于二分类或多分类问题就不用这么做。</span></p>
+
+<p>这一步大部分同学会 miss 掉，导致自己的结果总是达不到一定标准。</p>
+
+<p>这里我们使用最有逼格的<code>log1p</code>, 也就是 <code>log(x+1)</code>，避免了复值的问题。</p>
+
+<p>记住哟，如果我们这里把数据都给平滑化了，那么最后算结果的时候，要记得把预测到的平滑数据给变回去。</p>
+
+<p>按照“怎么来的怎么去”原则，<code>log1p()</code>就需要<code>expm1()</code>; 同理，<code>log()</code>就需要<code>exp()</code>, &hellip; etc。</p>
+
+<pre><code class="language-python">y_train = np.log1p(train_df.pop('SalePrice'))
+</code></pre>
+
+<p>然后我们把剩下的部分合并起来</p>
+
+<pre><code class="language-python">all_df = pd.concat((train_df, test_df), axis=0)
+</code></pre>
+
+<p>此刻，我们可以看到<code>all_df</code>就是我们合在一起的 DataFrame</p>
+
+<pre><code class="language-python">all_df.shape
+</code></pre>
+
+<pre><code>(2919, 79)
+</code></pre>
+
+<p>而 <code>y_train</code> 则是 <code>SalePrice</code> 那一列</p>
+
+<pre><code class="language-python">y_train.head()
+</code></pre>
+
+<pre><code>Id
+1    12.247699
+2    12.109016
+3    12.317171
+4    11.849405
+5    12.429220
+Name: SalePrice, dtype: float64
+</code></pre>
+
+<h2 id="step-3-变量转化">Step 3: 变量转化</h2>
+
+<p>其实就是特征工程的一部分，把数据中的乱七八糟的东西统一成用数字表现的形式。</p>
+
+<p>这一步没有什么标准化的方式，你要看这个数据到底是什么样子的。然后你要思考到底要怎么才能用数据化的方式表达出来。</p>
+
+<h4 id="正确化变量属性">正确化变量属性</h4>
+
+<p>首先，我们注意到，<code>MSSubClass</code> 的值其实应该是一个 category ，怎么知道的呢？这个就是 data_description.txt 里面会说的。因此数据说明的文档一定要读，不然你根本没法处理好数据。</p>
+
+<p>由于 <code>MSSubClass</code> 的值实际上表达的是这个房子的等级，比如 60 就是 60 级的房子。因此这个等级的值之间其实我们是不关心他们相对大小的。而这个事情 Pandas 是不会自动知道的，在我们使用 DataFrame 的时候，这类数字符号只会被默认记成数字。</p>
+
+<p>因此这种情况的数字就很有误导性，我们需要把它变回成 <code>string</code>。</p>
+
+<pre><code class="language-python">all_df['MSSubClass'].dtypes
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>dtype('int64')
+</code></pre>
+
+<p>我们把它变成 <code>str</code> 格式：</p>
+
+<pre><code class="language-python">all_df['MSSubClass'] = all_df['MSSubClass'].astype(str)
+</code></pre>
+
+<p>变成 <code>str</code> 以后，我们统计一下这些层级各有多少房子：</p>
+
+<pre><code class="language-python">all_df['MSSubClass'].value_counts()
+</code></pre>
+
+<pre><code>20     1079
+60      575
+50      287
+120     182
+30      139
+70      128
+160     128
+80      118
+90      109
+190      61
+85       48
+75       23
+45       18
+180      17
+40        6
+150       1
+Name: MSSubClass, dtype: int64
+</code></pre>
+
+<h4 id="把-category-的变量转变成-numerical-表达形式">把 category 的变量转变成 numerical 表达形式</h4>
+
+<p>上面，我们把类别中的层级数字转化成 <code>str</code> 了，但是这些是不能被 pandas 处理的，因此，我们要再把他们处理成 numerical 的形式。</p>
+
+<p>当我们用 numerical 来表达 categorical 的时候，要注意，数字本身有大小的含义，所以乱用数字会给之后的模型学习带来麻烦。于是我们可以用 One-Hot的方法来表达 <code>category</code>。</p>
+
+<p>pandas自带的<code>get_dummies</code>方法，可以帮你一键做到 One-Hot。</p>
+
+<pre><code class="language-python">pd.get_dummies(all_df['MSSubClass'], prefix='MSSubClass').head()
+</code></pre>
+
+<p><span style="color:red;">如果 <code>MSSubClass</code> 里面有 <code>NaN</code> ，那么这个 get_dummies 会有什么结果？</span></p>
+
+<table>
+<thead>
+<tr>
+<th>MSSubClass_120</th>
+<th>MSSubClass_150</th>
+<th>MSSubClass_160</th>
+<th>MSSubClass_180</th>
+<th>MSSubClass_190</th>
+<th>MSSubClass_20</th>
+<th>MSSubClass_30</th>
+<th>MSSubClass_40</th>
+<th>MSSubClass_45</th>
+<th>MSSubClass_50</th>
+<th>MSSubClass_60</th>
+<th>MSSubClass_70</th>
+<th>MSSubClass_75</th>
+<th>MSSubClass_80</th>
+<th>MSSubClass_85</th>
+<th>MSSubClass_90</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>此刻 <em>MSSubClass</em> 被我们分成了12个 column，每一个代表一个 category 。是就是1，不是就是0。</p>
+
+<p>同理，我们把所有的 category 数据，都给 One-Hot 了</p>
+
+<pre><code class="language-python">all_dummy_df = pd.get_dummies(all_df)
+all_dummy_df.head()
+</code></pre>
+
+<p><span style="color:red;">这样处理，里面的分类的值为 NaN 的怎么办？</span></p>
+
+<table>
+<thead>
+<tr>
+<th>LotFrontage</th>
+<th>LotArea</th>
+<th>OverallQual</th>
+<th>OverallCond</th>
+<th>YearBuilt</th>
+<th>YearRemodAdd</th>
+<th>MasVnrArea</th>
+<th>BsmtFinSF1</th>
+<th>BsmtFinSF2</th>
+<th>BsmtUnfSF</th>
+<th>&hellip;</th>
+<th>SaleType_ConLw</th>
+<th>SaleType_New</th>
+<th>SaleType_Oth</th>
+<th>SaleType_WD</th>
+<th>SaleCondition_Abnorml</th>
+<th>SaleCondition_AdjLand</th>
+<th>SaleCondition_Alloca</th>
+<th>SaleCondition_Family</th>
+<th>SaleCondition_Normal</th>
+<th>SaleCondition_Partial</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Id</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>65.0</td>
+<td>8450</td>
+<td>7</td>
+<td>5</td>
+<td>2003</td>
+<td>2003</td>
+<td>196.0</td>
+<td>706.0</td>
+<td>0.0</td>
+<td>150.0</td>
+<td>&hellip;</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>80.0</td>
+<td>9600</td>
+<td>6</td>
+<td>8</td>
+<td>1976</td>
+<td>1976</td>
+<td>0.0</td>
+<td>978.0</td>
+<td>0.0</td>
+<td>284.0</td>
+<td>&hellip;</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>68.0</td>
+<td>11250</td>
+<td>7</td>
+<td>5</td>
+<td>2001</td>
+<td>2002</td>
+<td>162.0</td>
+<td>486.0</td>
+<td>0.0</td>
+<td>434.0</td>
+<td>&hellip;</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>60.0</td>
+<td>9550</td>
+<td>7</td>
+<td>5</td>
+<td>1915</td>
+<td>1970</td>
+<td>0.0</td>
+<td>216.0</td>
+<td>0.0</td>
+<td>540.0</td>
+<td>&hellip;</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>84.0</td>
+<td>14260</td>
+<td>8</td>
+<td>5</td>
+<td>2000</td>
+<td>2000</td>
+<td>350.0</td>
+<td>655.0</td>
+<td>0.0</td>
+<td>490.0</td>
+<td>&hellip;</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>1.0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 303 columns</p>
+
+<h4 id="处理好numerical变量">处理好numerical变量</h4>
+
+<p>就算是 numerical 的变量，也还会有一些小问题。</p>
+
+<p>比如，有一些数据是缺失的：<span style="color:red;">对于缺失值得处理还是要看一下 data_description.txt 的介绍</span></p>
+
+<pre><code class="language-python">all_dummy_df.isnull().sum().sort_values(ascending=False).head(10)
+</code></pre>
+
+<pre><code>LotFrontage     486
+GarageYrBlt     159
+MasVnrArea       23
+BsmtHalfBath      2
+BsmtFullBath      2
+BsmtFinSF2        1
+GarageCars        1
+TotalBsmtSF       1
+BsmtUnfSF         1
+GarageArea        1
+dtype: int64
+</code></pre>
+
+<p>可以看到，缺失最多的 column 是 <code>LotFrontage</code></p>
+
+<p>处理这些缺失的信息，得靠好好审题。一般来说，数据集的描述里会写的很清楚，这些缺失都代表着什么。当然，如果实在没有的话，也只能靠自己的『想当然』。。</p>
+
+<p>在这里，我们用平均值来填满这些空缺。</p>
+
+<pre><code class="language-python">mean_cols = all_dummy_df.mean()
+mean_cols.head(10)
+</code></pre>
+
+<pre><code>LotFrontage        69.305795
+LotArea         10168.114080
+OverallQual         6.089072
+OverallCond         5.564577
+YearBuilt        1971.312778
+YearRemodAdd     1984.264474
+MasVnrArea        102.201312
+BsmtFinSF1        441.423235
+BsmtFinSF2         49.582248
+BsmtUnfSF         560.772104
+dtype: float64
+</code></pre>
+
+<p><span style="color:red;">这样直接使用 <code>fillna</code> 是不是太粗暴了？ 想要详细的填充要怎么办？</span></p>
+
+<pre><code class="language-python">all_dummy_df = all_dummy_df.fillna(mean_cols)
+</code></pre>
+
+<p>看看是不是没有空缺了？</p>
+
+<pre><code class="language-python">all_dummy_df.isnull().sum().sum()
+</code></pre>
+
+<pre><code>0
+</code></pre>
+
+<h4 id="标准化-numerical-数据">标准化 numerical 数据</h4>
+
+<p>这一步并不是必要，但是得看你想要用的分类器是什么。一般来说，regression 的分类器都比较傲娇，最好是把源数据给放在一个标准分布内。不要让数据间的差距太大。<span style="color:red;">为什么呢？什么是一个标准分布？</span></p>
+
+<p>这里，我们当然不需要把 One-Hot 的那些 0/1 数据给标准化。我们的目标应该是那些本来就是 numerical 的数据：<span style="color:red;">嗯。</span></p>
+
+<p>先来看看哪些是 numerical 的：</p>
+
+<pre><code class="language-python">numeric_cols = all_df.columns[all_df.dtypes != 'object']
+numeric_cols
+</code></pre>
+
+<pre><code>Index(['LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt',
+       'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF',
+       'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea',
+       'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr',
+       'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt',
+       'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF',
+       'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal',
+       'MoSold', 'YrSold'],
+      dtype='object')
+</code></pre>
+
+<p>计算标准分布： $(X-X&rsquo;)/s$</p>
+
+<p>让我们的数据点更平滑，更便于计算。</p>
+
+<p>注意：我们这里也是可以继续使用<code>Log</code>的，我只是给大家展示一下多种“使数据平滑”的办法。</p>
+
+<pre><code class="language-python">numeric_col_means = all_dummy_df.loc[:, numeric_cols].mean()
+numeric_col_std = all_dummy_df.loc[:, numeric_cols].std()
+all_dummy_df.loc[:, numeric_cols] = (all_dummy_df.loc[:, numeric_cols] - numeric_col_means) / numeric_col_std
+</code></pre>
+
+<p><span style="color:red;">上面这个例子没有特别掌握。要仔细看下。</span></p>
+
+<h2 id="step-4-建立模型">Step 4: 建立模型</h2>
+
+<h4 id="把数据集分回-训练-测试集">把数据集分回 训练/测试集</h4>
+
+<pre><code class="language-python">dummy_train_df = all_dummy_df.loc[train_df.index]
+dummy_test_df = all_dummy_df.loc[test_df.index]
+</code></pre>
+
+<pre><code class="language-python">dummy_train_df.shape, dummy_test_df.shape
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>((1460, 303), (1459, 303))
+</code></pre>
+
+<h4 id="ridge-regression">Ridge Regression</h4>
+
+<p>用 Ridge Regression 模型来跑一遍看看。（对于多因子的数据集，这种模型可以方便的把所有的 var 都无脑的放进去） <span style="color:red;">Ridge Regression 是回归模型的一种</span></p>
+
+<pre><code class="language-python">from sklearn.linear_model import Ridge
+from sklearn.model_selection import cross_val_score
+</code></pre>
+
+<p>这一步不是很必要，只是把 DataFrame 转化成 Numpy Array，这跟Sklearn更加配：<span style="color:red;">嗯。</span></p>
+
+<pre><code class="language-python">X_train = dummy_train_df.values
+X_test = dummy_test_df.values
+</code></pre>
+
+<p>用 Sklearn 自带的 cross validation 交叉验证方法来测试模型：</p>
+
+<pre><code class="language-python">alphas = np.logspace(-3, 2, 50)
+test_scores = []
+for alpha in alphas:
+    clf = Ridge(alpha)
+    test_score = np.sqrt(-cross_val_score(clf, X_train, y_train, cv=10, scoring='neg_mean_squared_error'))
+    test_scores.append(np.mean(test_score))
+</code></pre>
+
+<p><span style="color:red;">这个 test_score 为什么是这个式子？表示什么意思？</span></p>
+
+<p>test_scores 把每次交叉验证的得分记录下来。这个参数的调参方法是直接用循环来便利搜索，其实有更好的方法是 gridsearch 。</p>
+
+<p>存下所有的 CV 值，看看哪个alpha值更好（这就是调参数的过程）</p>
+
+<pre><code class="language-python">import matplotlib.pyplot as plt
+%matplotlib inline
+plt.plot(alphas, test_scores)
+plt.title(&quot;Alpha vs CV Error&quot;);
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180721/CHj7De3B84.png?imageslim" alt="mark" /></p>
+
+<p>可见，大概 alpha=10~20 的时候，可以把 score 达到 0.135 左右。这时候就比较低了。这时候还可以吧范围设定到 10~20 ，然后继续搜索。</p>
+
+<h4 id="random-forest">Random Forest</h4>
+
+<pre><code class="language-python">from sklearn.ensemble import RandomForestRegressor
+</code></pre>
+
+<pre><code class="language-python">max_features = [.1, .3, .5, .7, .9, .99]
+test_scores = []
+for max_feat in max_features:
+    clf = RandomForestRegressor(n_estimators=200, max_features=max_feat)
+    test_score = np.sqrt(-cross_val_score(clf, X_train, y_train, cv=5, scoring='neg_mean_squared_error'))
+    test_scores.append(np.mean(test_score))
+</code></pre>
+
+<p><code>max_features</code> 树最多使用百分之多少的特征。</p>
+
+<pre><code class="language-python">plt.plot(max_features, test_scores)
+plt.title(&quot;Max Features vs CV Error&quot;);
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180721/7j0AHCae4k.png?imageslim" alt="mark" /></p>
+
+<p>也就是说每棵树使用 30% 的特征的时候错误率最低，为 0.137</p>
+
+<h2 id="step-5-ensemble">Step 5: Ensemble</h2>
+
+<p>上面我们已经找到了一个有最优超参的 Ridge 模型和一个 有最优超参的随机森林模型。</p>
+
+<p>因此这时候，我们就可以结合着两个最优的模型：这里我们用一个 Stacking 的思维来汲取两种或者多种模型的优点</p>
+
+<p>首先，我们把最好的 parameter 拿出来，做成我们最终的 model</p>
+
+<pre><code class="language-python">ridge = Ridge(alpha=15)
+rf = RandomForestRegressor(n_estimators=500, max_features=.3)
+</code></pre>
+
+<p>我们使用这两个模型分别 fit 训练集：<span style="color:red;"> fit 是什么意思？是在固定超参数的情况下把里面的参数训练出来吗？</span></p>
+
+<pre><code class="language-python">ridge.fit(X_train, y_train)
+rf.fit(X_train, y_train)
+</code></pre>
+
+<pre><code>RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None,
+           max_features=0.3, max_leaf_nodes=None, min_impurity_split=1e-07,
+           min_samples_leaf=1, min_samples_split=2,
+           min_weight_fraction_leaf=0.0, n_estimators=500, n_jobs=1,
+           oob_score=False, random_state=None, verbose=0, warm_start=False)
+</code></pre>
+
+<p>上面提到了，因为最前面我们给<code>label</code>做了个<code>log(1+x)</code>, 于是这里我们需要把predit的值给<code>exp</code>回去，并且减掉那个&rdquo;1&rdquo;</p>
+
+<p>所以就是我们的<code>expm1()</code>函数。exp minus 1。</p>
+
+<pre><code class="language-python">y_ridge = np.expm1(ridge.predict(X_test))
+y_rf = np.expm1(rf.predict(X_test))
+</code></pre>
+
+<p>一个正经的Ensemble是把这群model的预测结果作为新的input，再做一次预测。这里我们简单的方法，就是直接『平均化』。相当于一个投票的方式。</p>
+
+<pre><code class="language-python">y_final = (y_ridge + y_rf) / 2
+</code></pre>
+
+<p><span style="color:red;">上面生成的 Ridge 和 RandomForest 算是弱优化器吗？他们两个的 ensamble 没有问题吗？</span></p>
+
+<h2 id="step-6-提交结果">Step 6: 提交结果</h2>
+
+<p>要看一下提交的格式要求是什么，然后创建对应的 DataFrame。</p>
+
+<pre><code class="language-python">submission_df = pd.DataFrame(data= {'Id' : test_df.index, 'SalePrice': y_final})
+</code></pre>
+
+<p>我们的 <code>submission</code> 大概长这样：</p>
+
+<pre><code class="language-python">submission_df.head(10)
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Id</th>
+<th>SalePrice</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>1461</td>
+<td>119595.627405</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>1462</td>
+<td>152127.359971</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>1463</td>
+<td>174472.484621</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>1464</td>
+<td>189936.942219</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>1465</td>
+<td>193934.290197</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>1466</td>
+<td>175889.222850</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>1467</td>
+<td>177835.726832</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>1468</td>
+<td>169239.114752</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>1469</td>
+<td>184864.220939</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>1470</td>
+<td>123773.699896</td>
+</tr>
+</tbody>
+</table>
+
+<p>到这里，一个简单的标准版过程就完成了。但是结果并没有特别的优。OK，advance 会讲到底怎么把结果提高一些。</p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques">https://www.kaggle.com/c/house-prices-advanced-regression-techniques</a></li>
+</ul>
+
+<h2 id="数据下载地址">数据下载地址</h2>
+
+<ul>
+<li>链接：<a href="https://pan.baidu.com/s/1aSG9ytuZfC4MTdLcpNBtzw">https://pan.baidu.com/s/1aSG9ytuZfC4MTdLcpNBtzw</a> 密码：staq</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/02-%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/04-%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 特征工程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/02-%E7%BB%8F%E6%B5%8E%E9%87%91%E8%9E%8D%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98/03-%E6%88%BF%E4%BB%B7%E9%A2%84%E6%B5%8B-advace/">
+            <span class="next-text nav-default">03 房价预测 advace</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

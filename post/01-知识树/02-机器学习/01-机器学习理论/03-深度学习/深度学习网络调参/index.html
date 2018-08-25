@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>深度学习网络调参 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="深度学习网络调参 之前曾经写过一篇文章，讲了一些深度学习训练的技巧，其中包含了部分调参心得：深度学习训练心得。不过由于一般深度学习实验，相比普" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%B0%83%E5%8F%82/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="深度学习网络调参" />
+<meta property="og:description" content="深度学习网络调参 之前曾经写过一篇文章，讲了一些深度学习训练的技巧，其中包含了部分调参心得：深度学习训练心得。不过由于一般深度学习实验，相比普" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%B0%83%E5%8F%82/" /><meta property="article:published_time" content="2018-08-12T20:26:48&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:26:48&#43;00:00"/>
+<meta itemprop="name" content="深度学习网络调参">
+<meta itemprop="description" content="深度学习网络调参 之前曾经写过一篇文章，讲了一些深度学习训练的技巧，其中包含了部分调参心得：深度学习训练心得。不过由于一般深度学习实验，相比普">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:26:48&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:26:48&#43;00:00" />
+<meta itemprop="wordCount" content="2687">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="深度学习网络调参"/>
+<meta name="twitter:description" content="深度学习网络调参 之前曾经写过一篇文章，讲了一些深度学习训练的技巧，其中包含了部分调参心得：深度学习训练心得。不过由于一般深度学习实验，相比普"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">深度学习网络调参</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 2687 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#深度学习网络调参">深度学习网络调参</a></li>
+<li><a href="#好的实验环境是成功的一半">好的实验环境是成功的一半</a></li>
+<li><a href="#画图">画图</a></li>
+<li><a href="#从粗到细分阶段调参">从粗到细分阶段调参</a></li>
+<li><a href="#提高速度">提高速度</a></li>
+<li><a href="#超参数范围">超参数范围</a></li>
+<li><a href="#经验参数">经验参数</a></li>
+<li><a href="#自动调参">自动调参</a></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#参考资料">参考资料</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="深度学习网络调参">深度学习网络调参</h1>
+
+<p>之前曾经写过一篇文章，讲了一些深度学习训练的技巧，其中包含了部分调参心得：<a href="https://zhuanlan.zhihu.com/p/20767428">深度学习训练心得</a>。不过由于一般深度学习实验，相比普通机器学习任务，时间较长，因此调参技巧就显得尤为重要。同时个人实践中，又有一些新的调参心得，因此这里单独写一篇文章，谈一下自己对深度学习调参的理解，大家如果有其他技巧，也欢迎多多交流。</p>
+
+<h1 id="好的实验环境是成功的一半">好的实验环境是成功的一半</h1>
+
+<p>由于深度学习实验超参众多，代码风格良好的实验环境，可以让你的人工或者自动调参更加省力，有以下几点可能需要注意：</p>
+
+<ul>
+<li><p>将各个参数的设置部分集中在一起。如果参数的设置分布在代码的各个地方，那么修改的过程想必会非常痛苦。</p></li>
+
+<li><p>可以输出模型的损失函数值以及训练集和验证集上的准确率。</p></li>
+
+<li><p>可以考虑设计一个子程序，可以根据给定的参数，启动训练并监控和周期性保存评估结果。再由一个主程序，分配参数以及并行启动一系列子程序。</p></li>
+</ul>
+
+<h1 id="画图">画图</h1>
+
+<p>画图是一个很好的习惯，一般是训练数据遍历一轮以后，就输出一下训练集和验证集准确率。同时画到一张图上。这样训练一段时间以后，如果模型一直没有收敛，那么就可以停止训练，尝试其他参数了，以节省时间。
+如果训练到最后，训练集，测试集准确率都很低，那么说明模型有可能欠拟合。那么后续调节参数方向，就是增强模型的拟合能力。例如增加网络层数，增加节点数，减少dropout值，减少L2正则值等等。
+如果训练集准确率较高，测试集准确率比较低，那么模型有可能过拟合，这个时候就需要向提高模型泛化能力的方向，调节参数。</p>
+
+<h1 id="从粗到细分阶段调参">从粗到细分阶段调参</h1>
+
+<p>实践中，一般先进行初步范围搜索，然后根据好结果出现的地方，再缩小范围进行更精细的搜索。</p>
+
+<ol>
+<li><p>建议先参考相关论文，以论文中给出的参数作为初始参数。至少论文中的参数，是个不差的结果。</p></li>
+
+<li><p>如果找不到参考，那么只能自己尝试了。可以先从比较重要，对实验结果影响比较大的参数开始，同时固定其他参数，得到一个差不多的结果以后，在这个结果的基础上，再调其他参数。例如学习率一般就比正则值，dropout值重要的话，学习率设置的不合适，不仅结果可能变差，模型甚至会无法收敛。</p></li>
+
+<li><p>如果实在找不到一组参数，可以让模型收敛。那么就需要检查，是不是其他地方出了问题，例如模型实现，数据等等。可以参考我写的<a href="https://zhuanlan.zhihu.com/p/20792837">深度学习网络调试技巧</a></p></li>
+</ol>
+
+<h1 id="提高速度">提高速度</h1>
+
+<p>调参只是为了寻找合适的参数，而不是产出最终模型。一般在小数据集上合适的参数，在大数据集上效果也不会太差。因此可以尝试对数据进行精简，以提高速度，在有限的时间内可以尝试更多参数。</p>
+
+<ul>
+<li><p>对训练数据进行采样。例如原来100W条数据，先采样成1W，进行实验看看。</p></li>
+
+<li><p>减少训练类别。例如手写数字识别任务，原来是10个类别，那么我们可以先在2个类别上训练，看看结果如何。</p></li>
+</ul>
+
+<h1 id="超参数范围">超参数范围</h1>
+
+<p>建议优先在对数尺度上进行超参数搜索。比较典型的是学习率和正则化项，我们可以从诸如0.001 0.01 0.1 1 10，以10为阶数进行尝试。因为他们对训练的影响是相乘的效果。不过有些参数，还是建议在原始尺度上进行搜索，例如dropout值: 0.3 0.5 0.7)。</p>
+
+<h1 id="经验参数">经验参数</h1>
+
+<p>这里给出一些参数的经验值，避免大家调参的时候，毫无头绪。</p>
+
+<ul>
+<li><p>learning rate: 1 0.1 0.01 0.001, 一般从1开始尝试。很少见learning rate大于10的。学习率一般要随着训练进行衰减。衰减系数一般是0.5。 衰减时机，可以是验证集准确率不再上升时，或固定训练多少个周期以后。
+不过更建议使用自适应梯度的办法，例如adam,adadelta,rmsprop等，这些一般使用相关论文提供的默认值即可，可以避免再费劲调节学习率。对RNN来说，有个经验，如果RNN要处理的序列比较长，或者RNN层数比较多，那么learning rate一般小一些比较好，否则有可能出现结果不收敛，甚至Nan等问题。</p></li>
+
+<li><p>网络层数： 先从1层开始。</p></li>
+
+<li><p>每层结点数： 16 32 128，超过1000的情况比较少见。超过1W的从来没有见过。</p></li>
+
+<li><p>batch size: 128上下开始。batch size值增加，的确能提高训练速度。但是有可能收敛结果变差。如果显存大小允许，可以考虑从一个比较大的值开始尝试。因为batch size太大，一般不会对结果有太大的影响，而batch size太小的话，结果有可能很差。</p></li>
+
+<li><p>clip c(梯度裁剪): 限制最大梯度,其实是value = sqrt(w1^2+w2^2….),如果value超过了阈值，就算一个衰减系系数,让value的值等于阈值: 5,10,15</p></li>
+
+<li><p>dropout： 0.5</p></li>
+
+<li><p>L2正则：1.0，超过10的很少见。</p></li>
+
+<li><p>词向量embedding大小：128，256</p></li>
+
+<li><p>正负样本比例： 这个是非常忽视，但是在很多分类问题上，又非常重要的参数。很多人往往习惯使用训练数据中默认的正负类别比例，当训练数据非常不平衡的时候，模型很有可能会偏向数目较大的类别，从而影响最终训练结果。除了尝试训练数据默认的正负类别比例之外，建议对数目较小的样本做过采样，例如进行复制。提高他们的比例，看看效果如何，这个对多分类问题同样适用。
+在使用mini-batch方法进行训练的时候，尽量让一个batch内，各类别的比例平衡，这个在图像识别等多分类任务上非常重要。</p></li>
+</ul>
+
+<h1 id="自动调参">自动调参</h1>
+
+<p>人工一直盯着实验，毕竟太累。自动调参当前也有不少研究。下面介绍几种比较实用的办法：</p>
+
+<ul>
+<li><p>Gird Search. 这个是最常见的。具体说，就是每种参数确定好几个要尝试的值，然后像一个网格一样，把所有参数值的组合遍历一下。优点是实现简单暴力，如果能全部遍历的话，结果比较可靠。缺点是太费时间了，特别像神经网络，一般尝试不了太多的参数组合。</p></li>
+
+<li><p>Random Search。Bengio在<a href="https://link.zhihu.com/?target=http%3A//www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a>中指出，Random Search比Gird Search更有效。实际操作的时候，一般也是先用Gird Search的方法，得到所有候选参数，然后每次从中随机选择进行训练。</p></li>
+
+<li><p>Bayesian Optimization. 贝叶斯优化，考虑到了不同参数对应的实验结果值，因此更节省时间。和网络搜索相比简直就是老牛和跑车的区别。具体原理可以参考这个论文： <a href="https://link.zhihu.com/?target=http%3A//papers.nips.cc/paper/4522-practical-bayesian-optimization-of-machine-learning-algorithms.pdf">Practical Bayesian Optimization of Machine Learning Algorithms</a> ，这里同时推荐两个实现了贝叶斯调参的Python库，可以上手即用：</p>
+
+<ul>
+<li><p><a href="https://link.zhihu.com/?target=https%3A//github.com/jaberg/hyperopt">jaberg/hyperopt</a>, 比较简单。</p></li>
+
+<li><p><a href="https://link.zhihu.com/?target=https%3A//github.com/fmfn/BayesianOptimization">fmfn/BayesianOptimization</a>， 比较复杂，支持并行调参。</p></li>
+</ul></li>
+</ul>
+
+<h1 id="总结">总结</h1>
+
+<ul>
+<li><p>合理性检查，确定模型，数据和其他地方没有问题。</p></li>
+
+<li><p>训练时跟踪损失函数值，训练集和验证集准确率。</p></li>
+
+<li><p>使用Random Search来搜索最优超参数，分阶段从粗（较大超参数范围训练较少周期）到细（较小超参数范围训练较长周期）进行搜索。</p></li>
+</ul>
+
+<h1 id="参考资料">参考资料</h1>
+
+<p>这里列了一些参数资料，大家有时间，可以进一步阅读。
+<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1206.5533">Practical recommendations for gradient-based training of deep architectures by Yoshua Bengio (2012)</a>
+<a href="https://link.zhihu.com/?target=http%3A//yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient BackProp, by Yann LeCun, Léon Bottou, Genevieve Orr and Klaus-Robert Müller</a>
+<a href="https://link.zhihu.com/?target=http%3A//www.springer.com/computer/theoretical%2Bcomputer%2Bscience/book/978-3-642-35288-1">Neural Networks: Tricks of the Trade, edited by Grégoire Montavon, Geneviève Orr, and Klaus-Robert Müller.</a></p>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/24720954">深度学习网络调参技巧</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%B0%83%E8%AF%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">深度学习网络调试</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83/">
+            <span class="next-text nav-default">深度学习网络训练</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

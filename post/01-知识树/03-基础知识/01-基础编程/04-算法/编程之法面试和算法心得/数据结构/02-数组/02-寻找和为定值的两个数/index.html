@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 寻找和为定值的两个数 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="寻找和为定值的两个数 题目描述 输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。 要求时间复杂度是O(N)。如果有多" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/02-%E6%95%B0%E7%BB%84/02-%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 寻找和为定值的两个数" />
+<meta property="og:description" content="寻找和为定值的两个数 题目描述 输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。 要求时间复杂度是O(N)。如果有多" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/02-%E6%95%B0%E7%BB%84/02-%E5%AF%BB%E6%89%BE%E5%92%8C%E4%B8%BA%E5%AE%9A%E5%80%BC%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%95%B0/" /><meta property="article:published_time" content="2018-06-20T10:30:28&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-20T10:30:28&#43;00:00"/>
+<meta itemprop="name" content="02 寻找和为定值的两个数">
+<meta itemprop="description" content="寻找和为定值的两个数 题目描述 输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。 要求时间复杂度是O(N)。如果有多">
+
+
+<meta itemprop="datePublished" content="2018-06-20T10:30:28&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-20T10:30:28&#43;00:00" />
+<meta itemprop="wordCount" content="2344">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 寻找和为定值的两个数"/>
+<meta name="twitter:description" content="寻找和为定值的两个数 题目描述 输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。 要求时间复杂度是O(N)。如果有多"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 寻找和为定值的两个数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-20 </span>
+        
+        <span class="more-meta"> 2344 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#寻找和为定值的两个数">寻找和为定值的两个数</a>
+<ul>
+<li><a href="#题目描述">题目描述</a>
+<ul>
+<li><a href="#分析与解法">分析与解法</a>
+<ul>
+<li><a href="#解法一">解法一</a></li>
+<li><a href="#解法二">解法二</a></li>
+<li><a href="#解法三">解法三</a></li>
+</ul></li>
+<li><a href="#解法总结">解法总结</a></li>
+</ul></li>
+<li><a href="#问题扩展">问题扩展</a></li>
+<li><a href="#举一反三">举一反三</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="寻找和为定值的两个数">寻找和为定值的两个数</h1>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>输入一个数组和一个数字，在数组中查找两个数，使得它们的和正好是输入的那个数字。</p>
+
+<p>要求时间复杂度是O(N)。如果有多对数字的和等于输入的数字，输出任意一对即可。</p>
+
+<p>例如输入数组1、2、4、7、11、15和数字15。由于4+11=15，因此输出4和11。</p>
+
+<h3 id="分析与解法">分析与解法</h3>
+
+<p>咱们试着一步一步解决这个问题（注意阐述中数列有序无序的区别）：</p>
+
+<p>直接穷举，从数组中任意选取两个数，判定它们的和是否为输入的那个数字。此举复杂度为O(N^2)。很显然，我们要寻找效率更高的解法</p>
+
+<p>题目相当于，对每个a[i]，查找sum-a[i]是否也在原始序列中，每一次要查找的时间都要花费为O(N)，这样下来，最终找到两个数还是需要O（N^2）的复杂度。那如何提高查找判断的速度呢？</p>
+
+<p>答案是二分查找，可以将O(N)的查找时间提高到O(log N)，这样对于N个a[i]，都要花logN的时间去查找相对应的sum-a[i]是否在原始序列中，总的时间复杂度已降为O(N log N)，且空间复杂度为O(1)。
+（如果有序，直接二分O(N log N)，如果无序，先排序后二分，复杂度同样为O（N log N + N log N）= O(N log N)，空间复杂度总为O(1)）。</p>
+
+<p>可以继续优化做到时间O(N)么？</p>
+
+<h4 id="解法一">解法一</h4>
+
+<p>根据前面的分析，a[i]在序列中，如果a[i]+a[k]=sum的话，那么sum-a[i]（a[k])也必然在序列中。
+举个例子，如下：
+原始序列：
+ - 1、 2、 4、 7、11、15</p>
+
+<p>用输入数字15减一下各个数，得到对应的序列为：
+ - 14、13、11、8、4、 0</p>
+
+<p>第一个数组以一指针i 从数组最左端开始向右扫描，第二个数组以一指针j 从数组最右端开始向左扫描，如果第一个数组出现了和第二个数组一样的数，即a[*i]=a[*j]，就找出这俩个数来了。
+如上，i，j最终在第一个，和第二个序列中找到了相同的数4和11，所以符合条件的两个数，即为4+11=15。
+怎么样，两端同时查找，时间复杂度瞬间缩短到了O(N)，但却同时需要O(N)的空间存储第二个数组。</p>
+
+<h4 id="解法二">解法二</h4>
+
+<p>当题目对时间复杂度要求比较严格时，我们可以考虑下用空间换时间，上述解法一即是此思想，此外，构造hash表也是典型的用空间换时间的处理办法。</p>
+
+<p>即给定一个数字，根据hash映射查找另一个数字是否也在数组中，只需用O(1)的时间，前提是经过O(N)时间的预处理，和用O(N)的空间构造hash表。</p>
+
+<p>但能否做到在时间复杂度为O(N)的情况下，空间复杂度能进一步降低达到O(1)呢？</p>
+
+<h4 id="解法三">解法三</h4>
+
+<p>如果数组是无序的，先排序(N log N)，然后用两个指针i，j，各自指向数组的首尾两端，令i=0，j=n-1，然后i++，j&ndash;，逐次判断a[i]+a[j]?=sum，</p>
+
+<ul>
+<li>如果某一刻a[i]+a[j] &gt; sum，则要想办法让sum的值减小，所以此刻i不动，j&ndash;；</li>
+<li>如果某一刻a[i]+a[j] &lt; sum，则要想办法让sum的值增大，所以此刻i++，j不动。</li>
+</ul>
+
+<p>所以，数组无序的时候，时间复杂度最终为O(N log N + N)=O(N log N)。</p>
+
+<p>如果原数组是有序的，则不需要事先的排序，直接用两指针分别从头和尾向中间扫描，O(N)搞定，且空间复杂度还是O(1)。</p>
+
+<p>下面，咱们先来实现此思路（这里假定数组已经是有序的），代码可以如下编写：</p>
+
+<pre><code class="language-c">void TwoSum(int data[], unsigned int length, int sum)
+{
+	//sort(s, s+n);   如果数组非有序的，那就事先排好序O(N log N)
+
+	int begin = 0;
+	int end = length - 1;
+
+	//俩头夹逼，或称两个指针两端扫描法，很经典的方法，O(N)
+	while (begin &lt; end)
+	{
+		long currSum = data[begin] + data[end];
+
+		if (currSum == sum)
+		{
+			//题目只要求输出满足条件的任意一对即可
+			printf(&quot;%d %d\n&quot;, data[begin], data[end]);
+
+			//如果需要所有满足条件的数组对，则需要加上下面两条语句：
+			//begin++
+			//end--
+			break;
+		}
+		else{
+			if (currSum &lt; sum)
+				begin++;
+			else
+				end--;
+		}
+	}
+}
+</code></pre>
+
+<h3 id="解法总结">解法总结</h3>
+
+<p>不论原序列是有序还是无序，解决这类题有以下三种办法：</p>
+
+<ul>
+<li>1、二分（若无序，先排序后二分），时间复杂度总为O(N log N)，空间复杂度为O（1）；</li>
+<li>2、扫描一遍X-S[i]  映射到一个数组或构造hash表，时间复杂度为O(N)，空间复杂度为O(N)；</li>
+<li>3、两个指针两端扫描（若无序，先排序后扫描），时间复杂度最后为：有序O(N)，无序O(N log N + N)=O(N log N)，空间复杂度都为O(1)。</li>
+</ul>
+
+<p>所以，要想达到时间O(N)，空间O(1)的目标，除非原数组是有序的（指针扫描法），不然，当数组无序的话，就只能先排序，后指针扫描法或二分（时间 O(Nlog N)，空间O(1)），或映射或hash（时间O(N)，空间O(N)）。时间或空间，必须牺牲一个，达到平衡。</p>
+
+<p>综上，若是数组有序的情况下，优先考虑两个指针两端扫描法，以达到最佳的时O(N)，空O(1)效应。否则，如果要排序的话，时间复杂度最快当然是只能达到O(N log N)，空间O(1)则不在话下。</p>
+
+<h2 id="问题扩展">问题扩展</h2>
+
+<ol>
+<li>如果在返回找到的两个数的同时，还要求你返回这两个数的位置列？</li>
+<li>如果需要输出所有满足条件的整数对呢?</li>
+<li>如果把题目中的要你寻找的两个数改为“多个数”，或任意个数列?</li>
+</ol>
+
+<h2 id="举一反三">举一反三</h2>
+
+<p>1、在二元树中找出和为某一值的所有路径
+输入一个整数和一棵二元树，从树的根结点开始往下访问一直到叶结点所经过的所有结点形成一条路径，然后打印出和与输入整数相等的所有路径。
+例如输入整数22和如下二元树</p>
+
+<pre><code>    10  
+  /   \   
+ 5    12   
+/ \     
+4  7
+</code></pre>
+
+<p>则打印出两条路径：10, 12和10, 5, 7。
+其中，二元树节点的数据结构定义为：</p>
+
+<pre><code>struct BinaryTreeNode // a node in the binary tree
+{
+    int m_nValue; // value of node
+    BinaryTreeNode *m_pLeft; // left child of node
+    BinaryTreeNode *m_pRight; // right child of node
+};
+</code></pre>
+
+<p>2、有一个数组a，设有一个值n。在数组中找到两个元素a[i]和a[j]，使得a[i]+a[j]等于n，求出所有满足以上条件的i和j。</p>
+
+<p>3、3-sum问题</p>
+
+<p>给定一个整数数组，判断能否从中找出3个数a、b、c，使得他们的和为0，如果能，请找出所有满足和为0个3个数对。</p>
+
+<p>4、4-sum问题</p>
+
+<p>给定一个整数数组，判断能否从中找出4个数a、b、c、d，使得他们的和为0，如果能，请找出所有满足和为0个4个数对。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-20</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/01-%E5%AD%97%E7%AC%A6%E4%B8%B2/02-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%85%E5%90%AB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 字符串包含</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/03-%E6%9B%B4%E5%A4%9A%E9%A2%98%E5%9E%8B/02-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/">
+            <span class="next-text nav-default">02 概率统计</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

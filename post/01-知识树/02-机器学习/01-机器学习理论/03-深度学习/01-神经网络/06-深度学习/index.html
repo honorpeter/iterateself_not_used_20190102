@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 深度学习 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="深度学习 理论上来说，参数越多的模型复杂度越高、“容量”(capacity)越大，这意味着它能完成更复杂的学习任务。但一般情形下，复杂模型的训" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 深度学习" />
+<meta property="og:description" content="深度学习 理论上来说，参数越多的模型复杂度越高、“容量”(capacity)越大，这意味着它能完成更复杂的学习任务。但一般情形下，复杂模型的训" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" /><meta property="article:published_time" content="2018-06-27T12:39:27&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-27T12:39:27&#43;00:00"/>
+<meta itemprop="name" content="06 深度学习">
+<meta itemprop="description" content="深度学习 理论上来说，参数越多的模型复杂度越高、“容量”(capacity)越大，这意味着它能完成更复杂的学习任务。但一般情形下，复杂模型的训">
+
+
+<meta itemprop="datePublished" content="2018-06-27T12:39:27&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-27T12:39:27&#43;00:00" />
+<meta itemprop="wordCount" content="3023">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 深度学习"/>
+<meta name="twitter:description" content="深度学习 理论上来说，参数越多的模型复杂度越高、“容量”(capacity)越大，这意味着它能完成更复杂的学习任务。但一般情形下，复杂模型的训"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 深度学习</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-27 </span>
+        
+        <span class="more-meta"> 3023 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#comment">COMMENT</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>深度学习</p>
+
+<p>理论上来说，参数越多的模型复杂度越高、“容量”(capacity)越大，这意味着它能完成更复杂的学习任务。但一般情形下，复杂模型的训练效率低，易陷入过拟合，因此难以受到人们青睐。而随着云计算、大数据时代的到来，计算能力的大幅提高可缓解训练低效性，训练数据的大幅增加则可降低过故合风险, 因此，以 “深度学习” (deep learning) 为代表的复杂模型开始受到人们的关注。</p>
+
+<p>典型的深度学习模型就是很深层的神经网络。显然，对神经网络模型，提高容量的一个简单办法是増加隐层的数目。隐层多了，相应的神经元连接权、阈值等参数就会更多。模型复杂度也可通过单纯增加隐层神经元的数目来实现，前面我们谈到过，单隐层的多层前馈网络已具有很强大的学习能力；但从增加模型复杂度的角度来看，増加隐层的数目显然比增加隐层神经元的数目更有效， 因为增加隐层数不仅增加了拥有激活函数的神经元数目，还増加了激活函数嵌套的层数。</p>
+
+<p>然而，多隐层神经网络难以直接用经典算法(例如标准BP算法)进行训练，因为误差在多隐层内逆传播时，往往会 “发散”(diverge) 而不能收敛到稳定状态。</p>
+
+<p>无监督逐层训练(unsupervised layer-wise training)是多隐层网络训练的有效手段，其基本思想是每次训练一层隐结点，训练时将上一层隐结点的输出作为输入，而本层隐结点的输出作为下一层隐结点的输入，这称为 “预训练” (pre-training)<span style="color:red;">这个地方有一点非常想知道：怎么知道这层输出的是不是我想要的？即这层的输出怎么判断误差是多少？</span>；在预训练全部完成后，再对整个网络进行 “微调”(fine-tuning) 训练。例如，在深度信念网络(deep belief network,简称DBN) [Hinton et al., 2006]中<span style="color:red;">什么是深度信念网络？</span>，每层都是一个受限 Boltzmann 机，即整个网络可视为若干个 RBM 堆叠而得。在使用无监督逐层训练时，首先训练第一层，这是关于训练样本的RBM模型，可按标准的RBM训练；然后，将第一层预训练好的隐结点视为第二层的输入结点，对第二层进行预训练 <span style="color:red;">怎么对第二层进行训练的？第二层的输出的误差怎么得到？</span>；&hellip; 各层预训练完成后，再利用 BP 算法等对整个网络进行训练。</p>
+
+<p>事实上，“预训练+微调” 的做法可视为将大量参数分组，对每组先找到局部看来比较好的设置，然后再基于这些局部较优的结果联合起来进行全局寻优. 这样就在利用了模型大量参数所提供的自由度的同时，有效地节省了训练开销。<span style="color:red;">嗯，但是这个局部最优值怎么算出来的？</span></p>
+
+<p>另一种节省训练开销的策略是 “权共享” (weight sharing)，即让一组神经元使用相同的连接权。这个策略在卷积神经网络(Convolutional Neural Network,简称 CNN) [LeCun and Bengio, 1995; LeCun et al., 1998]中发挥了重要作用。以CNN进行手写数字识别任务为例[LeCun et al., 1998],如图 5.15</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180627/jC9J8aFl3E.png?imageslim" alt="mark" /></p>
+
+<p>所示，网络输入是一个 32x32 的手写数字图像，输出是其识别结果，CNN 复合多个 “卷积层” 和 “采样层”对输入信号进行加工，然后在连接层实现与输出目标之间的映射。每个卷积层都包含多个特征映射(feature map)，每个特征映射是一个由多个神经元构成的 “平面”，通过一种卷积滤波器提取输入的一种特征.例如，图5.15中第一个卷积层由6个特征映射构成，每个特征映射是一个 28x28 的神经元阵列，其中每个神经元负责从 5x5 的区域通过卷积滤波器提取局部特征.采样层亦称为 “汇合”(pooling) 层，其作用是基于局部相关性原理进行亚采样，从而在减少数据量的同时保留有用信息。例如图5.15中第一个采样层有6个14x14的特征映射，其中每个神经元与上一层中对应特征映射的2x2邻域相连，并据此计算输出。通过复合卷积层和采样层，图5.15中的 CNN 将原始图像映射成120维特征向量，最后通过一个由84个神经元构成的 连接层和输出层连接完成识别任务。CNN 可用 BP 算法进行训练，但在训练中，无论是卷积层还是采样层，其每一组神经元 (即图5.15中的每个“平面”) 都是用相同的连接权，从而大幅减少了需要训练的参数数目。</p>
+
+<p>我们可以从另一个角度来理解深度学习.无论是 DBN 还是 CNN，其多隐层堆叠、每层对上一层的输出进行处理的机制，可看作是在对输入信号进行逐层加工，从而把初始的、与输出目标之间联系不太密切的输入表示，转化成与输出目标联系更密切的表示，使得原来仅基于最后一层输出映射难以完成的任务成为可能。</p>
+
+<p>换言之，通过多层处理，逐渐将初始的 “低层” 特征表示转化为“高层”特征表示后，用 “简单模型” 即可完成复杂的分类等学习任务.由此可将深度学习理解为进行 “特征学习” (feature learning)或 “表示学 习” (representation learning)。<span style="color:red;">嗯，是的</span></p>
+
+<p>以往在机器学习用于现实任务时，描述样本的特征通常需由人类专家来设计，这称为 “特征工程” (feature engineering)。众所周知，特征的好坏对泛化性能有至关重要的影响，人类专家设计出好特征也并非易事；特征学习则通过机器学习技术自身来产生好特征，这使机器学习向 “全自动数据分析” 又前进了一步。<span style="color:red;">是呀。不知道现在的进展怎么样了。</span></p>
+
+<h1 id="comment">COMMENT</h1>
+
+<p>下面是补充阅读的内容</p>
+
+<p>2012年前的名称是 IEEE Transactions on Neural Networks.</p>
+
+<p>近来NIPS更偏重于机 器学习.</p>
+
+<p>LMS 亦称 Widrow-Hoff 规则或(5规则.</p>
+
+<p>［Haykin，1998］是很好的神经网络教科书，［Bishop, 1995］则偏重于机器学 习和模式识别.神经网络领域的主流学术期刊有Neural Computation、Neural Networks、 IEEE Transactions on Neural Networks and Learning Systems; 主要国际学术会议有国际神经信息处理系统会议(NIPS)和国际神经网络联合 会议(IJCNN)，区域性国际会议主要有欧洲神经网络会议(ICANN)和亚太神经 网络会议(ICONIP).</p>
+
+<p>M-P神经元模型使用最为广泛，但还有一些神经元模型也受到关注，如考 虑了电位脉冲发放时间而不仅是累积电位的脉冲神经元(spiking neuron)模型 ［Gerstner and Kistler, 2002］.</p>
+
+<p>BP 算法由［Werbos, 1974］首先提出，此后［Rumelhart et al.5 1986a，b］重新 发明.BP算法实质是LMS (Least Mean Square)算法的推广.LMS试图使网 络的输出均方误差最小化，可用于神经元激活函数可微的感知机学习；将LMS 推广到由非线性可微神经元组成的多层前馈网络，就得到BP算法，因此BP算 法亦称广义 S 规则［Chauvin and Rumelhart, 1995］.</p>
+
+<p>［MacKay, 1992］在贝叶斯框架下提出了自动确定神经网络正则化参数的 方法.［Gori and Tesi，1992］对BP网络的局部极小问题进行了详细讨论.［Yao, 1999］综述了利用以遗传算法为代表的演化计算(evolutionary computation)技 术来生成神经网络的研究工作.对BP算法的改进有大量研究，例如为了提速， 可在训练过程中自适应缩小学习率，即先使用较大的学习率然后逐步缩小，更 多“窍门” (trick)可参阅［Reed and Marks, 1998; Orr and Muller, 1998］.</p>
+
+<p>关于 RBF 网络训练过程可参阅［Schwenker et al., 2001］. ［Carpenter and Grossberg，1991］介绍了 ART族算法.SOM网络在聚类、高维数据可视化、 图像分割等方面有广泛应用，可参阅［Kohonen，2001］, ［Benglo et al., 2013］综 述了深度学习方面的研究进展.</p>
+
+<p>神经网络是一种难解释的“黑箱模型”，但已有一些工作尝试改善神经 网络的可解释性，主要途径是从神经网络中抽取易于理解的符号规则，可参阅 ［Tickle et al.，1998; Zhou, 2004］.</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/01-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96%E8%AE%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 贝叶斯决策论</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/05-%E5%85%B6%E5%AE%83%E5%B8%B8%E8%A7%81%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
+            <span class="next-text nav-default">05 其它常见神经网络</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 命令模式（Command） - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 23:47:15&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89&amp;rsquo; title: 设计模式 命令模式（Command） wordpress_id: 7192 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8Fcommand/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 命令模式（Command）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 23:47:15&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89&rsquo; title: 设计模式 命令模式（Command） wordpress_id: 7192 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8Fcommand/" /><meta property="article:published_time" content="2018-07-27T17:56:02&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T17:56:02&#43;00:00"/>
+<meta itemprop="name" content="设计模式 命令模式（Command）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 23:47:15&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89&rsquo; title: 设计模式 命令模式（Command） wordpress_id: 7192 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。">
+
+
+<meta itemprop="datePublished" content="2018-07-27T17:56:02&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T17:56:02&#43;00:00" />
+<meta itemprop="wordCount" content="1413">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 命令模式（Command）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 23:47:15&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89&rsquo; title: 设计模式 命令模式（Command） wordpress_id: 7192 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 命令模式（Command）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 1413 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#命令模式-command">命令模式（Command）</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 23:47:15+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89/">http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%91%bd%e4%bb%a4%e6%a8%a1%e5%bc%8f%ef%bc%88command%ef%bc%89&rsquo;
+title: 设计模式 命令模式（Command）
+wordpress_id: 7192
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="命令模式-command">命令模式（Command）</h1>
+
+<ol>
+<li><p>命令模式：将请求分装为对象，将请求和执行分开，可以用不同的请求对客户参数化。可以对请求排队、通过或否决、记录日志、撤销或重做。</p></li>
+
+<li><p>基于敏捷开发原则，不要给代码添加基于猜测而实际不需要的功能，在需要的时候通过重构实现。</p></li>
+</ol>
+
+<p>7 Command 模式
+■问题
+Command模式通过将请求封装到一个对象（Command）中，并将请求的接受者存放到</p>
+
+<p>具体的ConcreteCommand类中（Receiver）中，从而实现调用操作的对象和操作的具体实现 者之间的解耦。</p>
+
+<p>■模式选择
+Command模式的典型结构图为:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0B9G8i6H64.png?imageslim" alt="mark" /></p>
+
+<p>图 2-1： Command Pattern 结构图</p>
+
+<p>Command 模式结构图中，将请求的接收者（处理者）放到 Command 的具体子类 ConcreteCommand中，当请求到来时（Invoker发出Invoke消息激活Command对象）， ConcreteCommand将处理请求交给Receiver对象进行处理。</p>
+
+<p>-实现
+♦完整代码示例</p>
+
+<p>command.h</p>
+
+<pre><code>#ifndef DESIGN_PATTERNS_COMMAND_H
+#define DESIGN_PATTERNS_COMMAND_H
+
+#include &lt;vector&gt;
+
+class Barbecuer {
+public:
+  void BakeMutton();
+  void BakeChicken();
+};
+
+class Command {
+public:
+  Command() {}
+  Command(Barbecuer*);
+  virtual ~Command() {}
+  virtual void ExecuteCommand() = 0;
+
+protected:
+  Barbecuer* barbecuer_;
+};
+
+class BakeMuttonCommand: public Command {
+public:
+  BakeMuttonCommand() {}
+  BakeMuttonCommand(Barbecuer*);
+  void ExecuteCommand();
+};
+
+class BakeChickenCommand: public Command {
+public:
+  BakeChickenCommand() {}
+  BakeChickenCommand(Barbecuer*);
+  void ExecuteCommand();
+};
+
+class Waiter {
+public:
+  void SetOrder(Command*);
+  void CancelOrder(Command*);
+  void Notify();
+
+private:
+  std::vector &lt;Command*&gt; commands_;
+};
+
+
+#endif //DESIGN_PATTERNS_COMMAND_H
+</code></pre>
+
+<p>command.cpp</p>
+
+<pre><code>#include &quot;command.h&quot;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+#include &lt;typeinfo&gt;
+
+void Barbecuer::BakeMutton() {
+  std::cout &lt;&lt; &quot;bake mutton&quot; &lt;&lt; std::endl;
+}
+
+void Barbecuer::BakeChicken() {
+  std::cout &lt;&lt; &quot;bake chicken&quot; &lt;&lt; std::endl;
+}
+
+Command::Command(Barbecuer *barbecuer): barbecuer_(barbecuer) {}
+
+BakeMuttonCommand::BakeMuttonCommand(Barbecuer *barbecuer): Command(barbecuer) {}
+
+void BakeMuttonCommand::ExecuteCommand() {
+  barbecuer_-&gt;BakeMutton();
+}
+
+BakeChickenCommand::BakeChickenCommand(Barbecuer *barbecuer): Command(barbecuer) {}
+
+void BakeChickenCommand::ExecuteCommand() {
+  barbecuer_-&gt;BakeChicken();
+}
+
+void Waiter::SetOrder(Command *command) {
+  if(dynamic_cast&lt;BakeChickenCommand*&gt;(command)){
+    std::cout &lt;&lt; &quot;chicken sold out&quot; &lt;&lt; std::endl;
+  } else {
+    commands_.push_back(command);
+    std::cout &lt;&lt; &quot;add: &quot; &lt;&lt; std::string(typeid(*command).name()).substr(2) &lt;&lt; std::endl;
+  }
+}
+
+void Waiter::CancelOrder(Command *command) {
+  for(std::vector &lt;Command*&gt; ::iterator it = commands_.begin(); it != commands_.end(); ++it) {
+    if(*it == command) {
+      commands_.erase(it);
+      std::cout &lt;&lt; &quot;cancel: &quot; &lt;&lt; std::string(typeid(*command).name()).substr(2) &lt;&lt; std::endl;
+      return;
+    }
+  }
+}
+
+void Waiter::Notify() {
+  for (std::vector&lt;Command *&gt;::iterator it = commands_.begin(); it != commands_.end(); ++it) {
+    (*it)-&gt;ExecuteCommand();
+  }
+}
+</code></pre>
+
+<p>main.cpp</p>
+
+<pre><code>#include &quot;command.h&quot;
+#include &lt;iostream&gt;
+
+
+int main() {
+    Barbecuer *barbecuer_;
+    Command *bake_mutton_command1_;
+    Command *bake_mutton_command2_;
+    Command *bake_chicken_command_;
+    Waiter *waiter_;
+    barbecuer_ = new Barbecuer();
+    bake_mutton_command1_ = new BakeMuttonCommand(barbecuer_);
+    bake_mutton_command2_ = new BakeMuttonCommand(barbecuer_);
+    bake_chicken_command_ = new BakeChickenCommand(barbecuer_);
+    waiter_ = new Waiter();
+    waiter_-&gt;SetOrder(bake_mutton_command1_);
+    waiter_-&gt;SetOrder(bake_mutton_command2_);
+    waiter_-&gt;SetOrder(bake_chicken_command_);
+    waiter_-&gt;CancelOrder(bake_mutton_command2_);
+    waiter_-&gt;Notify();
+    delete barbecuer_;
+    delete bake_mutton_command1_;
+    delete bake_mutton_command2_;
+    delete bake_chicken_command_;
+    delete waiter_;
+
+
+    return 0;
+}
+</code></pre>
+
+<p>注意到上面通过模板的方式来参数化请求的接收者，当然是为了简单演示。在复杂的情 况下我们会提供一个抽象Command对象，然后创建Command的子类以支持更复杂的处理。</p>
+
+<p>■讨论
+Command 模式的思想非常简单，但是 Command 模式也十分常见，并且威力不小。实 际上，Command模式关键就是提供一个抽象的Command类，并将执行操作封装到Command 类接口中，Command类中一般就是只是一些接口的集合，并不包含任何的数据属性(当然 在示例代码中，我们的Command类有一个处理操作的Receiver类的引用，但是其作用也仅 仅就是为了实现这个Command的Excute接口)。这种方式在是纯正的面向对象设计者最为 鄙视的设计方式，就像OO设计新手做系统设计的时候，仅仅将Class作为一个关键字，将 C种的全局函数找一个类封装起来就以为是完成了面向对象的设计。</p>
+
+<p>但是世界上的事情不是绝对的，上面提到的方式在OO设计种绝大部分的时候可能是一 个不成熟的体现，但是在Command模式中却是起到了很好的效果。主要体现在：</p>
+
+<p>1) Command 模式将调用操作的对象和知道如何实现该操作的对象解耦。在上面 Command的结构图中，Invoker对象根本就不知道具体的是那个对象在处理Excute 操作(当然要知道是Command类别的对象，也仅此而已)。</p>
+
+<p>2) 在 Command 要增加新的处理操作对象很容易，我们可以通过创建新的继承自 Command 的子类来实现这一点。</p>
+
+<p>3) Command模式可以和Memento模式结合起来，支持取消的操作。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8Fmediator/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 中介者模式（Mediator）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8Ffacade/">
+            <span class="next-text nav-default">设计模式 外观模式（Facade）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

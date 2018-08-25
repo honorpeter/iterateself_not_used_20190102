@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 观察者模式（Observer） - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 23:45:40&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89&amp;rsquo; title: 设计模式 观察者模式（Observer） wordpress_id: 7182 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8Fobserver/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 观察者模式（Observer）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 23:45:40&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89&rsquo; title: 设计模式 观察者模式（Observer） wordpress_id: 7182 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8Fobserver/" /><meta property="article:published_time" content="2018-07-27T19:18:20&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T19:18:20&#43;00:00"/>
+<meta itemprop="name" content="设计模式 观察者模式（Observer）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 23:45:40&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89&rsquo; title: 设计模式 观察者模式（Observer） wordpress_id: 7182 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL">
+
+
+<meta itemprop="datePublished" content="2018-07-27T19:18:20&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T19:18:20&#43;00:00" />
+<meta itemprop="wordCount" content="2181">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 观察者模式（Observer）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 23:45:40&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89&rsquo; title: 设计模式 观察者模式（Observer） wordpress_id: 7182 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 观察者模式（Observer）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 2181 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#观察者模式-observer">观察者模式（Observer）</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 23:45:40+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89/">http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%82%e5%af%9f%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88observer%ef%bc%89&rsquo;
+title: 设计模式 观察者模式（Observer）
+wordpress_id: 7182
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="观察者模式-observer">观察者模式（Observer）</h1>
+
+<ol>
+<li><p>观察者模式：多个观察者对象同时监听某一主题（通知者）对象，当该主题对象状态变化时会通知所有观察者对象，使它们能更新自己。</p></li>
+
+<li><p>具体观察者保存一个指向具体主题对象的引用，抽象主题保存一个抽象观察者的引用集合，提供一个可以添加或删除观察者的接口。</p></li>
+
+<li><p>抽象模式中有两方面，一方面依赖另一方面，使用观察者模式可将两者独立封装，解除耦合。</p></li>
+
+<li><p>观察者模式让主题和观察者双方都依赖于抽象接口，而不依赖于具体。</p></li>
+
+<li><p>委托就是一种引用方法类型。委托可看作函数的类，委托的实例代表具体函数。在主题对象内声明委托，不再依赖抽象观察者。</p></li>
+
+<li><p>一个委托可以搭载多个相同原形和形式（参数和返回值）的方法，这些方法不需要属于一个类，且被依次唤醒。</p></li>
+</ol>
+
+<p>Observer 模式
+■问题
+Observer 模式应该可以说是应用最多、影响最广的模式之一，因为 Observer 的一个实 例Model/View/Control （MVC）结构在系统开发架构设计中有着很重要的地位和意义，MVC 实现了业务逻辑和表示层的解耦。个人也认为Observer模式是软件开发过程中必须要掌握 和使用的模式之一。在MFC中，Doc/View （文档视图结构）提供了实现MVC的框架结构 （有一个从设计模式（Observer模式）的角度分析分析Doc/View的文章正在进一步的撰写 当中，遗憾的是时间：））。在Java阵容中，Struts则提供和MFC中Doc/View结构类似的实 现MVC的框架。另外Java语言本身就提供了 Observer模式的实现接口，这将在讨论中给 出。</p>
+
+<p>当然，MVC只是Observer模式的一个实例。Observer模式要解决的问题为：建立一个 一（Subject）对多（Observer）的依赖关系，并且做到当“一”变化的时候，依赖这个“一” 的多也能够同步改变。最常见的一个例子就是:对同一组数据进行统计分析时候，我们希望</p>
+
+<p>能够提供多种形式的表示（例如以表格进行统计显示、柱状图统计显示、百分比统计显示等）。</p>
+
+<p>这些表示都依赖于同一组数据，我们当然需要当数据改变的时候，所有的统计的显示都能够 同时改变。Observer模式就是解决了这一个问题。</p>
+
+<p>■模式选择
+Observer模式典型的结构图为:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ckh3K1hbc6.png?imageslim" alt="mark" /></p>
+
+<p>图 2-1: Observer Pattern 结构图</p>
+
+<p>这里的目标Subject提供依赖于它的观察者Observer的注册（Attach）和注销（Detach） 操作，并且提供了使得依赖于它的所有观察者同步的操作（Notify）。观察者Observer则提 供一个Update操作，注意这里的Observer的Update操作并不在Observer改变了 Subject目 标状态的时候就对自己进行更新，这个更新操作要延迟到Subject对象发出Notify通知所有 Observer进行修改（调用Update）。</p>
+
+<p>-实现
+♦完整代码示例</p>
+
+<p>observer.h</p>
+
+<pre><code>#ifndef DESIGN_PATTERNS_OBSERVER_H
+#define DESIGN_PATTERNS_OBSERVER_H
+
+#include &lt;string&gt;
+#include &lt;vector&gt;
+
+class Notifier;
+
+class Observer {
+public:
+  Observer() {}
+  Observer(std::string);
+  virtual ~Observer() {}
+  void SetNotifier(Notifier *);
+  virtual void Update() = 0;
+
+protected:
+  std::string name_;
+  Notifier *notifier_;
+};
+
+class StockObserver: public Observer {
+public:
+  StockObserver() {}
+  StockObserver(std::string);
+  void Update();
+};
+
+class NbaObserver: public Observer {
+public:
+  NbaObserver() {}
+  NbaObserver(std::string);
+  void Update();
+};
+
+class Notifier {
+public:
+  virtual ~Notifier() {}
+  void Attach(Observer *);
+  void Detach(Observer *);
+  void SetState(std::string);
+  std::string GetState();
+  void Notify();
+
+protected:
+  std::vector &lt;Observer*&gt; observers_;
+  std::string state_;
+};
+
+class Secretary: public Notifier {
+};
+
+class Boss: public Notifier {
+};
+
+
+#endif //DESIGN_PATTERNS_OBSERVER_H
+</code></pre>
+
+<p>observer.cpp</p>
+
+<pre><code>#include &quot;observer.h&quot;
+#include &lt;iostream&gt;
+
+Observer::Observer(std::string name): name_(name) {}
+
+void Observer::SetNotifier(Notifier *notifier) {
+  notifier_ = notifier;
+}
+
+void Notifier::Attach(Observer * observer) {
+  observers_.push_back(observer);
+}
+
+void Notifier::Detach(Observer * observer) {
+  for(std::vector &lt;Observer*&gt; ::iterator it = observers_.begin(); it != observers_.end(); ++it) {
+    if(*it == observer) {
+      observers_.erase(it);
+      return;
+    }
+  }
+}
+
+void Notifier::SetState(std::string state) {
+  state_ = state;
+}
+
+std::string Notifier::GetState() {
+  return state_;
+}
+
+void Notifier::Notify() {
+  for(std::vector &lt;Observer*&gt; ::iterator it = observers_.begin(); it != observers_.end(); ++it) {
+    (*it)-&gt;Update();
+  }
+}
+
+StockObserver::StockObserver(std::string name): Observer(name) {}
+
+void StockObserver::Update() {
+  std::cout &lt;&lt; name_ &lt;&lt; &quot;, &quot; &lt;&lt; notifier_-&gt;GetState() &lt;&lt; &quot;, close stock&quot; &lt;&lt; std::endl;
+}
+
+NbaObserver::NbaObserver(std::string name): Observer(name) {}
+
+void NbaObserver::Update() {
+  std::cout &lt;&lt; name_ &lt;&lt; &quot;, &quot; &lt;&lt; notifier_-&gt;GetState() &lt;&lt; &quot;, close NBA&quot; &lt;&lt; std::endl;
+}
+</code></pre>
+
+<p>main.cpp</p>
+
+<pre><code>#include &quot;observer.h&quot;
+#include &lt;iostream&gt;
+
+
+int main() {
+    Boss *boss_;
+    StockObserver *stock_observer_;
+    NbaObserver *nba_observer_;
+    boss_ = new Boss();
+    stock_observer_ = new StockObserver(&quot;Alice&quot;);
+    nba_observer_ = new NbaObserver(&quot;Bob&quot;);
+    boss_-&gt;SetState(&quot;boss is back himself&quot;);
+
+    stock_observer_-&gt;SetNotifier(boss_);
+    nba_observer_-&gt;SetNotifier(boss_);
+    boss_-&gt;Attach(stock_observer_);
+    boss_-&gt;Attach(nba_observer_);
+    boss_-&gt;Notify();
+
+    boss_-&gt;Detach(nba_observer_);
+    boss_-&gt;Notify();
+    delete boss_;
+    delete stock_observer_;
+    delete nba_observer_;
+
+
+    return 0;
+}
+</code></pre>
+
+<p>♦代码说明</p>
+
+<p>在Observer模式的实现中，Subject维护一个list作为存储其所有观察者的容器。每当 调用Notify操作就遍历list中的Observer对象，并广播通知改变状态（调用Observer的Update 操作）。目标的状态state可以由Subject自己改变（示例），也可以由Observer的某个操作引 起state的改变（可调用Subject的SetState操作）。Notify操作可以由Subject目标主动广播 （示例），也可以由Observer观察者来调用（因为Observer维护一个指向Subject的指针）。</p>
+
+<p>运行示例程序，可以看到当Subject处于状态“old”时候，依赖于它的两个观察者都显 示“old”，当目标状态改变为“new”的时候，依赖于它的两个观察者也都改变为“new”。</p>
+
+<p>■讨论
+Observer是影响极为深远的模式之一，也是在大型系统开发过程中要用到的模式之一。 除了 MFC&gt;Struts提供了 MVC的实现框架，在Java语言中还提供了专门的接口实现Observer 模式：通过专门的类Observable及Observer接口来实现MVC编程模式，其UML图可以表 示为:</p>
+
+<p>Java中实现MVC的UML图。</p>
+
+<p>这里的Observer就是观察者，Observable则充当目标Subject的角色。</p>
+
+<p>Observer模式也称为发布一订阅（publish-subscribe），目标就是通知的发布者，观察者</p>
+
+<p>则是通知的订阅者（接受通知）。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8Finterpreter/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 解释器模式（Interpreter）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8Fchain-of-responsibility/">
+            <span class="next-text nav-default">设计模式 职责链模式（Chain of Responsibility）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

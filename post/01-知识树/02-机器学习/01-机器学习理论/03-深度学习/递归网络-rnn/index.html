@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>递归网络 RNN - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="递归网络 RNN TODO 关于RNN的部分没有看，要看完同时配合书或者文章梳理一下。 很多东西需要补充和拆分。 这部分的视频没有怎么看，也要整合到RNN那篇文" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E9%80%92%E5%BD%92%E7%BD%91%E7%BB%9C-rnn/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="递归网络 RNN" />
+<meta property="og:description" content="递归网络 RNN TODO 关于RNN的部分没有看，要看完同时配合书或者文章梳理一下。 很多东西需要补充和拆分。 这部分的视频没有怎么看，也要整合到RNN那篇文" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E9%80%92%E5%BD%92%E7%BD%91%E7%BB%9C-rnn/" /><meta property="article:published_time" content="2018-07-28T22:56:15&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-28T22:56:15&#43;00:00"/>
+<meta itemprop="name" content="递归网络 RNN">
+<meta itemprop="description" content="递归网络 RNN TODO 关于RNN的部分没有看，要看完同时配合书或者文章梳理一下。 很多东西需要补充和拆分。 这部分的视频没有怎么看，也要整合到RNN那篇文">
+
+
+<meta itemprop="datePublished" content="2018-07-28T22:56:15&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-28T22:56:15&#43;00:00" />
+<meta itemprop="wordCount" content="1546">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="递归网络 RNN"/>
+<meta name="twitter:description" content="递归网络 RNN TODO 关于RNN的部分没有看，要看完同时配合书或者文章梳理一下。 很多东西需要补充和拆分。 这部分的视频没有怎么看，也要整合到RNN那篇文"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">递归网络 RNN</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-28 </span>
+        
+        <span class="more-meta"> 1546 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#递归网络-rnn">递归网络 RNN</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#递归网络-rnn-1">递归网络（RNN）</a>
+<ul>
+<li><a href="#为什么要用rnn">为什么要用RNN</a></li>
+<li><a href="#序列样本的几种形态">序列样本的几种形态</a></li>
+<li><a href="#序列预测">序列预测：</a></li>
+<li><a href="#序列预测模型">序列预测模型</a></li>
+<li><a href="#rnn训练">RNN训练：</a>
+<ul>
+<li><a href="#bptt算法-backprop-through-time">BPTT算法-BackProp Through Time</a></li>
+<li><a href="#bptt算法-计算实现">BPTT算法：计算实现</a></li>
+<li><a href="#lstm-long-short-term-memory">LSTM（ Long Short Term Memory)</a></li>
+</ul></li>
+<li><a href="#lstm-cell-state">LSTM：cell state</a></li>
+<li><a href="#lstm-forget-input-unit">LSTM: forget / input unit</a></li>
+<li><a href="#lstm-其他变形">LSTM 其他变形</a>
+<ul>
+<li><a href="#gated-recurrent-unit">Gated Recurrent Unit</a></li>
+</ul></li>
+<li><a href="#lstm的训练">LSTM的训练</a></li>
+<li><a href="#使-用lstm">使⽤用LSTM</a></li>
+<li><a href="#rnn算法应用">RNN算法应用</a></li>
+<li><a href="#rnn实验1-基于torch构建rnn网络">RNN实验1：基于Torch构建RNN网络</a></li>
+<li><a href="#rnn实验2-char-cnn分析">RNN实验2：char_cnn分析</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="递归网络-rnn">递归网络 RNN</h1>
+
+<h1 id="todo">TODO</h1>
+
+<p><strong>关于RNN的部分没有看，要看完同时配合书或者文章梳理一下。</strong>
+<strong>很多东西需要补充和拆分。</strong>
+<strong>这部分的视频没有怎么看，也要整合到RNN那篇文章里面去。</strong></p>
+
+<h1 id="递归网络-rnn-1">递归网络（RNN）</h1>
+
+<h2 id="为什么要用rnn">为什么要用RNN</h2>
+
+<p>我们之前的大部分算法处理的都是IID的数据，即独立同分布的数据，这类数据可以处理成分类问题，回归问题，特征表达问题。</p>
+
+<p>但是我们很多的数据是不满足IID的要求的，特别是序列数据：</p>
+
+<ul>
+<li><p>序列分析（Tagging，Annotation)</p></li>
+
+<li><p>序列⽣生成，如语⾔言翻译，⾃自动⽂文本⽣生成</p></li>
+
+<li><p>内容提取（Content Extraction），如图像描述</p></li>
+</ul>
+
+<p>这些问题很难用前面的这些只有单向的神经网络来分析，比如前向全连接，或者卷积网络这种前向部分连接的。</p>
+
+<p>处理序列，只有前向是不够的。</p>
+
+<h2 id="序列样本的几种形态">序列样本的几种形态</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1G3mgJECk2.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li><p>one to one 分类 <strong>没明白？</strong></p></li>
+
+<li><p>one to many 信号的生成</p></li>
+
+<li><p>many to one 序列的分类 输入一串序列，得到一个向量</p></li>
+
+<li><p>many to many 有时延的多对多</p></li>
+
+<li><p>many to many 没有时延的多对多</p></li>
+</ul>
+
+<p>RNN不仅能够处理序列输出，也能得到序列输出，这里序列指的是向量的序列。</p>
+
+<p>RNN学习出来的是程序，不是函数。<strong>什么意思？ 神经网络前向的可以认为是一个函数，相同的输入一定会得到相同的输出，但是RNN学出来的可以认为是一个程序，它是有状态的，不同时候的相同输入可能会得到不同的结果。这种行为很像程序。利害的。</strong></p>
+
+<h2 id="序列预测">序列预测：</h2>
+
+<p>模型输入的是时间变化向量序列： (x<em>{t-2} , x</em>{t-1} , x<em>t , x</em>{t+1} , x<em>{t+2}) ，然后在 t 时刻通过模型来估计 (x</em>{t+1}=f(x<em>t,&hellip;,x</em>{t-\tau }))。</p>
+
+<p>但是存在这两个问题：</p>
+
+<ul>
+<li><p>真实的这个 f 是非常难以建模和观察的，因为它有内部状态，而我只有输入的向量。</p></li>
+
+<li><p>对长时间范围的场景 (context) 也是难以建模和观察</p></li>
+</ul>
+
+<p>那么我们怎么来设计一个 f&rsquo; 来逼近这个真实的 f 呢？我们可以引⼊入内部隐含状态变量：<strong>嗯，感觉与HMM有些类似，仔细感受下。为什么这个是可行的？</strong></p>
+
+<p>即假设 (x_{t+1 })  除了与之前的 x 有关，还与之前的状态变量 z 有关：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/16fclLFbF0.png?imageslim" alt="mark" /></p>
+
+<p>而 z 本身也是与之前的 x 和隐含状态有关的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LiGEa3JCKl.png?imageslim" alt="mark" /></p>
+
+<p>那么这两行就已经形成了一个递归的方式。</p>
+
+<h2 id="序列预测模型">序列预测模型</h2>
+
+<p>我们知道之前的模型是关于t的，但是我们可以按照时间为横坐标展开成一个固定的网络结构。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/722CL7970b.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9jFg7iggEJ.png?imageslim" alt="mark" /></p>
+
+<p>h_t里面的维度对应到全连接网络里面的hidden-unit number ，因此这个h的维度是与模型的复杂度直接相关的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/dAGkLi9AA6.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9EBKkc5H4a.png?imageslim" alt="mark" /></p>
+
+<h2 id="rnn训练">RNN训练：</h2>
+
+<p>前向计算，相同的W矩阵需要乘以多次</p>
+
+<p>多步之前的输入x，会影响当前的输出</p>
+
+<p>在后向计算的时候，同样相同的矩阵也会乘以多次</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FEAm5A4cj4.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i2f4lbgjaA.png?imageslim" alt="mark" /></p>
+
+<h3 id="bptt算法-backprop-through-time">BPTT算法-BackProp Through Time</h3>
+
+<p>RNN前向计算</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GL7ImeJBC5.png?imageslim" alt="mark" /></p>
+
+<p>计算W的偏导，需要把所有Time Step加起来</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Bjm63746Dj.png?imageslim" alt="mark" /></p>
+
+<p>应⽤用链式规则</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/B7K9gajflh.png?imageslim" alt="mark" /></p>
+
+<h3 id="bptt算法-计算实现">BPTT算法：计算实现</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/15K3EjkJ5G.png?imageslim" alt="mark" /></p>
+
+<p>BPTT算法：梯度 vanishing/exploding 现象分析</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bd1iel08Ff.png?imageslim" alt="mark" /></p>
+
+<p>BPTT算法：解决⽅方案</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6BFDkKAbBb.png?imageslim" alt="mark" /></p>
+
+<p>Long Term Memory?</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/05ldJ5k5CG.png?imageslim" alt="mark" /></p>
+
+<h3 id="lstm-long-short-term-memory">LSTM（ Long Short Term Memory)</h3>
+
+<p>应⽤用最为广泛、成功的RNN</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l4BgjGJKfm.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bjfb5aCa4m.png?imageslim" alt="mark" /></p>
+
+<h2 id="lstm-cell-state">LSTM：cell state</h2>
+
+<p>可以长期保存某个状态，cell state值通过forget gate控制实现保留多少“老”的状态</p>
+
+<p>Layer 把 输入维度x变成输出维度h</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/EE7hJ08HiH.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4HK93Fjhb8.png?imageslim" alt="mark" /></p>
+
+<p>×处为gate</p>
+
+<p>σ处为sigmoid Layer with weights and bias</p>
+
+<h2 id="lstm-forget-input-unit">LSTM: forget / input unit</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3ED4L1hgba.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1GBkCaK3Ld.png?imageslim" alt="mark" /></p>
+
+<p>LSTM: update cell</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b0G678HfbF.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/798mLm791I.png?imageslim" alt="mark" /></p>
+
+<p>LSTM: output</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2L76Ch6A5e.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b7hIfgLh3L.png?imageslim" alt="mark" /></p>
+
+<p>LSTM</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a1HlagIj6K.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a1f3f4dcF2.png?imageslim" alt="mark" /></p>
+
+<h2 id="lstm-其他变形">LSTM 其他变形</h2>
+
+<h3 id="gated-recurrent-unit">Gated Recurrent Unit</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kc6I455fAA.png?imageslim" alt="mark" /></p>
+
+<h2 id="lstm的训练">LSTM的训练</h2>
+
+<p>不需记忆BP公式，使用层次关系，可以简单开发出BPTT算法</p>
+
+<p>LSTM 具备一定抑制梯度 vanishing/exploding 特性</p>
+
+<h2 id="使-用lstm">使⽤用LSTM</h2>
+
+<ul>
+<li>将多个LSTM单元组合为层</li>
+<li>网络中有多层</li>
+<li>复杂的结构能够处理更大范围的动态性</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/BdhDb6F7dG.png?imageslim" alt="mark" /></p>
+
+<h2 id="rnn算法应用">RNN算法应用</h2>
+
+<ul>
+<li>手写文字输出：
+
+<ul>
+<li><a href="http://www.cs.toronto.edu/~graves/handwriting.html">http://www.cs.toronto.edu/~graves/handwriting.html</a></li>
+</ul></li>
+<li>文本生成</li>
+<li>机器翻译</li>
+<li>非常好的介绍文章：<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">http://karpathy.github.io/2015/05/21/rnn-effectiveness/</a></li>
+</ul>
+
+<h2 id="rnn实验1-基于torch构建rnn网络">RNN实验1：基于Torch构建RNN网络</h2>
+
+<ul>
+<li>使⽤用 nngraph 模块可以构造复杂的有向图</li>
+<li>BPTT 算法依旧基于 nn 模块提供的 BP 算法</li>
+<li>各种 optim 算法依旧适用 RNN</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/G56hj41jK5.png?imageslim" alt="mark" /></p>
+
+<h2 id="rnn实验2-char-cnn分析">RNN实验2：char_cnn分析</h2>
+
+<ul>
+<li><p>基于字符的⽂文本⽣生成⼯工具</p>
+
+<ul>
+<li><p><a href="https://github.com/karpathy/char-rnn">https://github.com/karpathy/char-rnn</a></p></li>
+
+<li><p>生成汪峰⻛风格的歌词: <a href="https://github.com/phunterlau/wangfeng-rnn">https://github.com/phunterlau/wangfeng-rnn</a></p></li>
+
+<li><p>莫奈⻛风格绘画⽣生成：<a href="http://blog.manugarri.com/teaching-recurrent-neural-networks-about-monet/">http://blog.manugarri.com/teaching-recurrent-neural-networks-about-monet/</a></p></li>
+</ul></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-28</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/%E9%87%87%E6%A0%B7/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">采样</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/06-%E8%81%9A%E7%B1%BB/%E8%B0%B1%E8%81%9A%E7%B1%BB/">
+            <span class="next-text nav-default">谱聚类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>向量的内积和外积 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="向量的内积和外积 TODO 自己再补充一下 缘由： 在看 CNN 的时候，窗口的 W 与窗口对应的 x 是内积，感觉对这个内积的概念再明确下。 向量是由 n 个实数组成的一个 n" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E5%90%91%E9%87%8F%E7%9A%84%E5%86%85%E7%A7%AF%E5%92%8C%E5%A4%96%E7%A7%AF/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="向量的内积和外积" />
+<meta property="og:description" content="向量的内积和外积 TODO 自己再补充一下 缘由： 在看 CNN 的时候，窗口的 W 与窗口对应的 x 是内积，感觉对这个内积的概念再明确下。 向量是由 n 个实数组成的一个 n" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E5%90%91%E9%87%8F%E7%9A%84%E5%86%85%E7%A7%AF%E5%92%8C%E5%A4%96%E7%A7%AF/" /><meta property="article:published_time" content="2018-08-03T11:15:57&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:15:57&#43;00:00"/>
+<meta itemprop="name" content="向量的内积和外积">
+<meta itemprop="description" content="向量的内积和外积 TODO 自己再补充一下 缘由： 在看 CNN 的时候，窗口的 W 与窗口对应的 x 是内积，感觉对这个内积的概念再明确下。 向量是由 n 个实数组成的一个 n">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:15:57&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:15:57&#43;00:00" />
+<meta itemprop="wordCount" content="793">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="向量的内积和外积"/>
+<meta name="twitter:description" content="向量的内积和外积 TODO 自己再补充一下 缘由： 在看 CNN 的时候，窗口的 W 与窗口对应的 x 是内积，感觉对这个内积的概念再明确下。 向量是由 n 个实数组成的一个 n"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">向量的内积和外积</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 793 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#向量的内积和外积">向量的内积和外积</a>
+<ul>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#点乘公式">点乘公式</a></li>
+<li><a href="#点乘几何意义">点乘几何意义</a></li>
+<li><a href="#叉乘几何意义">叉乘几何意义</a></li>
+</ul></li>
+<li><a href="#ref">REF：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="向量的内积和外积">向量的内积和外积</h1>
+
+<h2 id="todo">TODO</h2>
+
+<ul>
+<li><strong>自己再补充一下</strong></li>
+</ul>
+
+<h2 id="缘由">缘由：</h2>
+
+<p>在看 CNN 的时候，窗口的 W 与窗口对应的 x 是内积，感觉对这个内积的概念再明确下。</p>
+
+<p>向量是由 n 个实数组成的一个 n 行 1 列（<code>n*1</code>）或一个 1 行 n 列（<code>1*n</code>）的有序数组；</p>
+
+<p>向量的点乘，也叫向量的内积、数量积，对两个向量执行点乘运算，就是对这两个向量对应位一一相乘之后求和的操作，点乘的结果是一个标量。</p>
+
+<h2 id="点乘公式">点乘公式</h2>
+
+<p>对于向量a和向量b：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/lil0jkKg7J.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/Bbdme01D8g.png?imageslim" alt="mark" /></p>
+
+<p>a和b的点积公式为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/5J74i6Dejc.png?imageslim" alt="mark" /></p>
+
+<p>要求一维向量a和向量b的行列数相同。</p>
+
+<h2 id="点乘几何意义">点乘几何意义</h2>
+
+<p>点乘的几何意义是可以用来表征或计算两个向量之间的夹角，以及在b向量在a向量方向上的投影，有公式：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/b7Jfajc3J1.png?imageslim" alt="mark" /></p>
+
+<p>推导过程如下，首先看一下向量组成：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/DFifBk8IFB.png?imageslim" alt="mark" /></p>
+
+<p>定义向量：</p>
+
+<p>$$c=a-b$$</p>
+
+<p>根据三角形余弦定理有：</p>
+
+<p>$$c^2=a^2+b^2-2|a||b|cos\theta$$</p>
+
+<p>根据关系c=a-b（a、b、c均为向量）有：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/C211EJI81L.png?imageslim" alt="mark" /></p>
+
+<p>即：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/JjLj5f9Hh7.png?imageslim" alt="mark" /></p>
+
+<p>向量a，b的长度都是可以计算的已知量，从而有a和b间的夹角θ：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/Ef68H093Hj.png?imageslim" alt="mark" /></p>
+
+<p>根据这个公式就可以计算向量a和向量b之间的夹角。从而就可以进一步判断这两个向量是否是同一方向，是否正交(也就是垂直)等方向关系，具体对应关系为：</p>
+
+<ul>
+<li><p>a·b&gt;0    方向基本相同，夹角在0°到90°之间</p></li>
+
+<li><p>a·b=0    正交，相互垂直</p></li>
+
+<li><p>a·b&lt;0    方向基本相反，夹角在90°到180°之间</p></li>
+</ul>
+
+<p><strong>叉乘公式</strong></p>
+
+<p>两个向量的叉乘，又叫向量积、外积、叉积，叉乘的运算结果是一个向量而不是一个标量。并且两个向量的叉积与这两个向量组成的坐标平面垂直。</p>
+
+<p>对于向量a和向量b：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/3BhJf2I0FI.png?imageslim" alt="mark" /></p>
+
+<p>a和b的叉乘公式为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/8K41gdikiK.png?imageslim" alt="mark" /></p>
+
+<p>其中：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/4B2C0J7h9k.png?imageslim" alt="mark" /></p>
+
+<p>根据i、j、k间关系，有：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/f25jBh6Ijm.png?imageslim" alt="mark" /></p>
+
+<h2 id="叉乘几何意义">叉乘几何意义</h2>
+
+<p>在三维几何中，向量a和向量b的叉乘结果是一个向量，更为熟知的叫法是法向量，该向量垂直于a和b向量构成的平面。</p>
+
+<p>在3D图像学中，叉乘的概念非常有用，可以通过两个向量的叉乘，生成第三个垂直于a，b的法向量，从而构建X、Y、Z坐标系。如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/8k5egAjeBc.png?imageslim" alt="mark" /></p>
+
+<p>在二维空间中，叉乘还有另外一个几何意义就是：aXb等于由向量a和向量b构成的平行四边形的面积。</p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li><a href="https://blog.csdn.net/dcrmg/article/details/52416832">向量点乘（内积）和叉乘（外积、向量积）概念及几何意义解读</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/02-numpy/03-%E6%95%B0%E7%BB%84%E5%AF%BC%E5%90%91%E7%BC%96%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 数组导向编程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/ridge-%E5%9B%9E%E5%BD%92/">
+            <span class="next-text nav-default">Ridge 回归</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

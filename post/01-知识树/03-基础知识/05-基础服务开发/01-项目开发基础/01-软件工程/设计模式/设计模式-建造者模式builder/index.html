@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 建造者模式（Builder） - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 10:20:24&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89&amp;rsquo; title: 设计模式 建造者模式（Builder） wordpress_id: 7148 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8Fbuilder/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 建造者模式（Builder）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 10:20:24&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89&rsquo; title: 设计模式 建造者模式（Builder） wordpress_id: 7148 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8Fbuilder/" /><meta property="article:published_time" content="2018-07-27T17:56:36&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T17:56:36&#43;00:00"/>
+<meta itemprop="name" content="设计模式 建造者模式（Builder）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 10:20:24&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89&rsquo; title: 设计模式 建造者模式（Builder） wordpress_id: 7148 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中">
+
+
+<meta itemprop="datePublished" content="2018-07-27T17:56:36&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T17:56:36&#43;00:00" />
+<meta itemprop="wordCount" content="1672">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 建造者模式（Builder）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 10:20:24&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89&rsquo; title: 设计模式 建造者模式（Builder） wordpress_id: 7148 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 建造者模式（Builder）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 1672 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#builder-模式是什么样子的">Builder 模式是什么样子的？</a></li>
+<li><a href="#builder-模式是用来解决什么问题的">Builder 模式是用来解决什么问题的？</a></li>
+<li><a href="#builder-模式介绍">Builder 模式介绍</a></li>
+<li><a href="#完整代码">完整代码</a>
+<ul>
+<li><a href="#代码如下">代码如下</a></li>
+<li><a href="#代码说明">代码说明</a></li>
+</ul></li>
+<li><a href="#builder-模式的优缺点">Builder 模式的优缺点</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 10:20:24+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89/">http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%bb%ba%e9%80%a0%e8%80%85%e6%a8%a1%e5%bc%8f%ef%bc%88builder%ef%bc%89&rsquo;
+title: 设计模式 建造者模式（Builder）
+wordpress_id: 7148
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<ol>
+<li><p>建造者模式：将复杂对象的创建与表示分开，使得相同的创建过程可以有不同的表示。用户只需制定需要建造的类型，不需要知道建造的过程和细节。</p></li>
+
+<li><p>指挥者是建造者模式中重要的类，用于控制建造过程，也可以隔离用户与建造过程的关联。</p></li>
+
+<li><p>建造者隐藏了产品的组装细节，若需要改变一个产品的内部表示，可以再定义一个具体的建造者。</p></li>
+
+<li><p>建造者模式是在当前创造复杂对象的算法，独立于该对象的组成部分和装配方式时适用的模式。</p></li>
+</ol>
+
+<h1 id="builder-模式是什么样子的">Builder 模式是什么样子的？</h1>
+
+<p>生活中有着很多的Builder的例子，比如说大学生活就是一个 Builder 模式的最好体验：</p>
+
+<p>一般将大学教育过程分成 4 个学期进行，每个学期可以看作是作为一个完整大学教育的一部分的构建过程，每个人在经过这4个阶段的构建之后得到的结果是不一样的，因为四个阶段的构建中可能会引入很多的参数，比如机会、际遇等。</p>
+
+<h1 id="builder-模式是用来解决什么问题的">Builder 模式是用来解决什么问题的？</h1>
+
+<p>当我们要创建的对象很复杂的时候（通常是由很多其他的对象组合而成），我们要把复杂对象的创建过程和这个对象的表示（展示）分离开来，这样做的好处就是通过一步步的进行复杂对象的构建，由于在每一步的构造过程中可以引入参数，使得经过相同的步骤创建最后得到的对象的展示不一样。<strong>还是没明白，这一段讲的是什么？</strong></p>
+
+<p>这就是 Builder 模式。</p>
+
+<h1 id="builder-模式介绍">Builder 模式介绍</h1>
+
+<p>Builder模式结构图为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HEFLeGjlJb.png?imageslim" alt="mark" /></p>
+
+<p>它的关键是其中的 Director 对象并不直接返回对象，而是通过Builder 一步步 （BuildPartA，BuildPartB，BuildPartC）的来创建对象。当然这里 Director 可以提供一个默认的返回对象的接口（即返回通用的复杂对象的创建，即不指定或者特定唯一指定BuildPart中的参数）。<strong>什么意思？</strong></p>
+
+<h1 id="完整代码">完整代码</h1>
+
+<h2 id="代码如下">代码如下</h2>
+
+<p>builder.h：</p>
+
+<pre><code>#ifndef DESIGN_PATTERNS_BUILDER_H
+#define DESIGN_PATTERNS_BUILDER_H
+
+class Pen {
+};
+class Graphics {
+};
+
+
+
+
+
+class PersonBuilder {
+public:
+  PersonBuilder() {
+  };
+  PersonBuilder(Pen*, Graphics*);
+  virtual ~PersonBuilder() {
+  };
+
+  virtual void BuildHead() {
+  };
+  virtual void BuildBody() {
+  };
+
+protected:
+  Pen* pen_;
+  Graphics* graphics_;
+};
+
+//两个不同的构建者
+class PersonThinBuilder: public PersonBuilder {
+public:
+  PersonThinBuilder(Pen*, Graphics*);
+  void BuildHead();
+  void BuildBody();
+};
+class PersonFatBuilder: public PersonBuilder {
+public:
+  PersonFatBuilder(Pen*, Graphics*);
+  void BuildHead();
+  void BuildBody();
+};
+
+
+class PersonDirector {
+public:
+    PersonDirector(PersonBuilder*);
+    void CreatePerson();
+private:
+    PersonBuilder* person_builder_;
+};
+
+
+#endif //DESIGN_PATTERNS_BUILDER_H
+</code></pre>
+
+<p>builder.cpp：</p>
+
+<pre><code>#include &quot;builder.h&quot;
+#include &lt;iostream&gt;
+
+
+PersonBuilder::PersonBuilder(Pen* pen, Graphics* graphics): pen_(pen), graphics_(graphics){
+}
+
+
+PersonThinBuilder::PersonThinBuilder(Pen* pen, Graphics* graphics): PersonBuilder(pen, graphics) {
+
+}
+void PersonThinBuilder::BuildHead() {
+  std::cout&lt;&lt; &quot;Build Thin Head&quot;&lt;&lt;std::endl;
+}
+void PersonThinBuilder::BuildBody() {
+  std::cout&lt;&lt; &quot;Build Thin Body&quot; &lt;&lt; std::endl;
+}
+
+
+PersonFatBuilder::PersonFatBuilder(Pen* pen, Graphics* graphics): PersonBuilder(pen, graphics) {
+
+}
+void PersonFatBuilder::BuildHead() {
+  std::cout&lt;&lt; &quot;Build Fat Head&quot; &lt;&lt; std::endl;
+}
+void PersonFatBuilder::BuildBody() {
+  std::cout&lt;&lt; &quot;Build Fat Body&quot; &lt;&lt; std::endl;
+}
+
+
+//这个 Director 并不关心传进来的是胖构建者还是瘦构建者
+//它只知道这个传进来的是一个构建者就可以
+PersonDirector::PersonDirector(PersonBuilder* person_builder) : person_builder_(person_builder) {
+
+}
+void PersonDirector::CreatePerson() {
+    person_builder_-&gt;BuildBody();
+    person_builder_-&gt;BuildHead();
+}
+</code></pre>
+
+<p>main.cpp：</p>
+
+<pre><code>#include &quot;builder.h&quot;
+
+
+//对于每一个 胖构建者和瘦构建者来说，它里面就可以放一些特殊的参数，但是它们作为构建者的本质没有变，
+//相当于 是不同的面包模板，可以生产不同的面包，但是面包的形状是存放在不同的面包模板里面的。
+int main() {
+
+    Pen *pPen;
+    Graphics *pGraphics;
+    PersonBuilder* pPersonBuilder;
+    PersonDirector* pPersonDirector;
+
+    pPen = new Pen;
+    pGraphics = new Graphics;
+
+    // 创建一个瘦人
+    pPersonBuilder = new PersonThinBuilder(pPen, pGraphics);
+    pPersonDirector = new PersonDirector(pPersonBuilder);
+    pPersonDirector-&gt;CreatePerson();
+
+    // 创建一个胖人
+    // 只需要把 PersonThinBuilder 替换成 PersonFatBuilder 即可
+    pPersonBuilder = new PersonFatBuilder(pPen, pGraphics);
+    pPersonDirector = new PersonDirector(pPersonBuilder);
+    pPersonDirector-&gt;CreatePerson();
+
+    delete pPen;
+    delete pGraphics;
+    delete pPersonBuilder;
+    delete pPersonDirector;
+
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="代码说明">代码说明</h2>
+
+<p>对于每一个 胖构建者和瘦构建者来说，它里面就可以放一些特殊的参数，但是它们作为构建者的本质没有变。这样就可以得到不同的细微差别的复杂对象了。</p>
+
+<p>相当于 是不同的面包模板，可以生产不同的面包，但是面包的形状是存放在不同的面包模板里面的。</p>
+
+<p><strong>感觉这个例子不是特别贴切，找找有没有更贴切的例子。而且，builder 一定要这样用吗？有没有什么别的形式？</strong></p>
+
+<h1 id="builder-模式的优缺点">Builder 模式的优缺点</h1>
+
+<p>Builder 模式起到了 将一个复杂对象的构建与它的表示分离的作用，而且使得同样的构建过程可以创建不同的表示。<strong>对象的构建与表示分离，到底是什么意思？</strong></p>
+
+<p>Builder 模式与 AbstractFactory 有什么关联与区别吗？</p>
+
+<p>Builder 模式和 AbstractFactory 模式在功能上是很相似的，因为都是用来创建大的复杂的对象的，它们的区别在于：</p>
+
+<ul>
+<li><p>Builder 模式强调的是一步步创建对象，并通过相同的创建过程可以获得不同的结果对象，一般来说Builder 模式中对象不是直接返回的。</p></li>
+
+<li><p>而在 AbstractFactory 模式中对象是直接返回的，AbstractFactory 模式强调的是为创建多个相互依赖的对象提供一个同一的接口。</p></li>
+</ul>
+
+<p>嗯，这个的确是区别的地方。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8Fabstract-factory/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 抽象工厂模式（Abstract Factory）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8Ffactory-method/">
+            <span class="next-text nav-default">设计模式 工厂方法模式（Factory Method）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

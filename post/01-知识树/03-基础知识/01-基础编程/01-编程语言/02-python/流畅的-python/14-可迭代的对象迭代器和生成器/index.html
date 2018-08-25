@@ -1,0 +1,2665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>14 可迭代的对象、迭代器和生成器 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第五部分 控制流程 第 14 章 可迭代的对象、迭代器和生成器 当我在自己的程序中发现用到了模式，我觉得这就表明某个地方出错了。程序的形式 应该仅仅反映它所" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/14-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%AF%B9%E8%B1%A1%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="14 可迭代的对象、迭代器和生成器" />
+<meta property="og:description" content="第五部分 控制流程 第 14 章 可迭代的对象、迭代器和生成器 当我在自己的程序中发现用到了模式，我觉得这就表明某个地方出错了。程序的形式 应该仅仅反映它所" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/14-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%AF%B9%E8%B1%A1%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/" /><meta property="article:published_time" content="2018-06-26T21:37:47&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:37:47&#43;00:00"/>
+<meta itemprop="name" content="14 可迭代的对象、迭代器和生成器">
+<meta itemprop="description" content="第五部分 控制流程 第 14 章 可迭代的对象、迭代器和生成器 当我在自己的程序中发现用到了模式，我觉得这就表明某个地方出错了。程序的形式 应该仅仅反映它所">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:37:47&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:37:47&#43;00:00" />
+<meta itemprop="wordCount" content="26610">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="14 可迭代的对象、迭代器和生成器"/>
+<meta name="twitter:description" content="第五部分 控制流程 第 14 章 可迭代的对象、迭代器和生成器 当我在自己的程序中发现用到了模式，我觉得这就表明某个地方出错了。程序的形式 应该仅仅反映它所"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">14 可迭代的对象、迭代器和生成器</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 26610 words </span>
+        <span class="more-meta"> 54 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#第-14-章-可迭代的对象-迭代器和生成器">第 14 章 可迭代的对象、迭代器和生成器</a>
+<ul>
+<li><a href="#14-1-sentence类第1版-单词序列">14.1 Sentence类第1版：单词序列</a></li>
+<li><a href="#14-2-可迭代的对象与迭代器的对比">14.2 可迭代的对象与迭代器的对比</a>
+<ul>
+<li><a href="#在-python-3-4-中-lib-types-py-https-hg-python-org-cpython-file-3-4-lib-types-py-模块的源">在 Python 3.4 中，Lib/types.py (<a href="https://hg.python.org/cpython/file/3.4/Lib/types.py">https://hg.python.org/cpython/file/3.4/Lib/types.py</a>)模块的源</a></li>
+<li><a href="#其实-这就是-abc-iterator-抽象基类中-subclasshook-方法的作用-参见示例-14-3">其实，这就是 abc.Iterator 抽象基类中 <strong>subclasshook</strong> 方法的作用(参见示例 14-3)。</a></li>
+<li><a href="#这里之所以这么做-是为了清楚地说明可迭代的对象和迭代器之间的重要区别-以及二者">这里之所以这么做，是为了清楚地说明可迭代的对象和迭代器之间的重要区别，以及二者</a></li>
+<li><a href="#示例14-4-sentence-iter-py-使用迭代器模式实现sentence类">示例14-4 sentence_iter.py：使用迭代器模式实现Sentence类</a></li>
+<li><a href="#下面全面说明生成器函数">下面全面说明生成器函数。</a></li>
+<li><a href="#关键字-有些人认为定义生成器函数应该使用一个新的关键字-例如gen-而不该使">关键字。有些人认为定义生成器函数应该使用一个新的关键字，例如gen，而不该使</a></li>
+<li><a href="#❶只要python函数中包含关键字yield-该函数就是生成器函数">❶只要Python函数中包含关键字yield，该函数就是生成器函数。</a></li>
+<li><a href="#❷-生成器函数的定义体中通常都有循环-不过这不是必要条件-这里我重复使用-3-次">❷ 生成器函数的定义体中通常都有循环，不过这不是必要条件；这里我重复使用 3 次</a></li>
+</ul></li>
+<li><a href="#14-5-sentence类第4版-惰性实现">14.5 Sentence类第4版：惰性实现</a></li>
+<li><a href="#14-7-何时使用生成器表达式">14.7 何时使用生成器表达式</a></li>
+<li><a href="#14-8-另一个示例-等差数列生成器">14.8 另一个示例：等差数列生成器</a>
+<ul>
+<li><a href="#示例14-12-aritprog-gen生成器函数">示例14-12 aritprog_gen生成器函数</a></li>
+<li><a href="#示例-14-12-很棒-不过始终要记住-标准库中有许多现成的生成器-下一节会使用-itertools-模块实现-那个版本更棒">示例 14-12 很棒，不过始终要记住，标准库中有许多现成的生成器。下一节会使用 itertools 模块实现，那个版本更棒。</a></li>
+<li><a href="#python-3-4-中的-itertools-模块提供了-19-个生成器函数-结合起来使用能实现很多有趣-的用法">Python 3.4 中的 itertools 模块提供了 19 个生成器函数，结合起来使用能实现很多有趣 的用法。</a></li>
+<li><a href="#例如-itertools-count函数返回的生成器能生成多个数-如果不传入参-数-itertools-count函数会生成从零开始的整数数列-不过-我们可以提供可选的-start-和-step-值-这样实现的作用与-aritprog-gen-函数十分相似">例如，itertools.count函数返回的生成器能生成多个数。如果不传入参 数，itertools.count函数会生成从零开始的整数数列。不过，我们可以提供可选的 start 和 step 值，这样实现的作用与 aritprog_gen 函数十分相似：</a></li>
+<li><a href="#然而-itertools-count-函数从不停止-因此-如果调用-list-count-python-会创-建一个特别大的列表-超出可用内存-在调用失败之前-电脑会疯狂地运转">然而， itertools.count 函数从不停止，因此，如果调用 list(count())， Python 会创 建一个特别大的列表，超出可用内存，在调用失败之前，电脑会疯狂地运转。</a></li>
+<li><a href="#不过-itertools-takewhile-函数则不同-它会生成一个使用另一个生成器的生成器">不过， itertools.takewhile 函数则不同，它会生成一个使用另一个生成器的生成器，</a></li>
+<li><a href="#在指定的条件计算结果为-false-时停止-因此-可以把这两个函数结合在一起使用-编-写下述代码">在指定的条件计算结果为 False 时停止。因此，可以把这两个函数结合在一起使用，编 写下述代码：</a></li>
+<li><a href="#示例-14-13-利用-takewhile-和-count-函数-写出的代码流畅而简短">示例 14-13 利用 takewhile 和 count 函数，写出的代码流畅而简短。</a></li>
+<li><a href="#示例14-13-aritprog-v3-py-与前面的aritprog-gen函数作用相同">示例14-13 aritprog_v3.py：与前面的aritprog_gen函数作用相同</a></li>
+<li><a href="#注意-示例-14-13-中的-aritprog-gen-不是生成器函数-因为定义体中没有-yield-关键-字-但是它会返回一个生成器-因此它与其他生成器函数一样-也是生成器工厂函数">注意，示例 14-13 中的 aritprog_gen 不是生成器函数，因为定义体中没有 yield 关键 字。但是它会返回一个生成器，因此它与其他生成器函数一样，也是生成器工厂函数。</a></li>
+<li><a href="#示例-14-13-想表达的观点是-实现生成器时要知道标准库中有什么可用-否则很可能会重-新发明轮子-鉴于此-下一节会介绍一些现成的生成器函数">示例 14-13 想表达的观点是，实现生成器时要知道标准库中有什么可用，否则很可能会重 新发明轮子。鉴于此，下一节会介绍一些现成的生成器函数。</a></li>
+</ul></li>
+<li><a href="#14-9-标准库中的生成器函数">14.9 标准库中的生成器函数</a>
+<ul>
+<li><a href="#你可能知道本节所述的全部函数-但是某些函数没有得到充分利用-因此快速-概览一遍能让你知道有什么函数可用">你可能知道本节所述的全部函数，但是某些函数没有得到充分利用，因此快速 概览一遍能让你知道有什么函数可用。</a></li>
+<li><a href="#示例-14-14-在控制台中演示表-14-1-中各个函数的用法">示例 14-14 在控制台中演示表 14-1 中各个函数的用法。</a></li>
+<li><a href="#示例-14-14-演示用于过滤的生成器函数">示例 14-14 演示用于过滤的生成器函数</a></li>
+<li><a href="#❷-从-0-到-10-计算各个整数的平方">❷ 从 0 到 10，计算各个整数的平方。</a></li>
+<li><a href="#❸-计算两个可迭代对象中对应位置上的两个元素之积-元素最少的那个可迭代对象到头">❸ 计算两个可迭代对象中对应位置上的两个元素之积，元素最少的那个可迭代对象到头</a></li>
+<li><a href="#❻-计算平均值">❻ 计算平均值。</a></li>
+<li><a href="#示例-14-17-展示-itertools-chain-和-zip-生成器函数及其同胞的用法-再次提醒-zip-函数的名称出自zip-fastener或zipper-拉链-与zip压缩没有关系-出色的zip函">示例 14-17 展示 itertools.chain 和 zip 生成器函数及其同胞的用法。再次提醒， zip 函数的名称出自zip fastener或zipper （拉链，与ZIP压缩没有关系）。“出色的zip函</a></li>
+<li><a href="#少也要使用指定的标准分组各个元素">少也要使用指定的标准分组各个元素。</a></li>
+<li><a href="#示例-14-21-itertools-groupby-函数的用法">示例 14-21 itertools.groupby 函数的用法</a></li>
+<li><a href="#❸-为了使用-groupby-函数-要排序输入-这里按照单词的长度排序">❸ 为了使用 groupby 函数，要排序输入；这里按照单词的长度排序。</a></li>
+<li><a href="#这一组里的最后一个生成器函数是iterator-tee-这个函数只有一个作用-从输入的一">这一组里的最后一个生成器函数是iterator.tee，这个函数只有一个作用：从输入的一</a></li>
+<li><a href="#示例14-22-itertools-tee函数产出多个生成器-每个生成器都可以产出输入的-各个元素">示例14-22 itertools.tee函数产出多个生成器，每个生成器都可以产出输入的 各个元素</a></li>
+<li><a href="#注意-这一节的示例多次把不同的生成器函数组合在一起使用-这是这些函数的优秀特">注意，这一节的示例多次把不同的生成器函数组合在一起使用。这是这些函数的优秀特</a></li>
+</ul></li>
+<li><a href="#14-10-python-3-3中新出现的句法-yield-from">14.10 Python 3.3中新出现的句法：yield from</a></li>
+<li><a href="#14-11-可迭代的归约函数">14.11 可迭代的归约函数</a></li>
+<li><a href="#14-12深入分析iter函数">14.12深入分析iter函数</a></li>
+<li><a href="#14-13-案例分析-在数据库转换工具中使用生成器">14.13 案例分析：在数据库转换工具中使用生成器</a></li>
+<li><a href="#14-14-把生成器当成协程">14.14 把生成器当成协程</a></li>
+<li><a href="#14-15-本章小结">14.15 本章小结</a></li>
+<li><a href="#14-16-延伸阅读">14.16 延伸阅读</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>第五部分 控制流程</p>
+
+<h2 id="第-14-章-可迭代的对象-迭代器和生成器">第 14 章 可迭代的对象、迭代器和生成器</h2>
+
+<p>当我在自己的程序中发现用到了模式，我觉得这就表明某个地方出错了。程序的形式 应该仅仅反映它所要解决的问题。代码中其他任何外加的形式都是一个信号，(至少 对我来说)表明我对问题的抽象还不够深——这通常意味着自己正在手动完成的事 情，本应该通过写代码来让宏的扩展自动实现。 1</p>
+
+<p>2</p>
+
+<p>——Paul Graham</p>
+
+<p>Lisp 黑客和风险投资人</p>
+
+<p>摘自一篇博客文章，“Revenge of the Nerds” (“书呆子的复仇”，<a href="http://www.paulgraham.com/icad.html">http://www+paulgraham+com/icad+html</a>)。</p>
+
+<p>2Paul Graham的文集《黑客与画家：来自计算机时代的高见》己由人民邮电出版社出版，书号：978-7-115-32656-0。 —编者注</p>
+
+<p>迭代是数据处理的基石。扫描内存中放不下的数据集时，我们要找到一种惰性获取数据</p>
+
+<p>项的方式，即按需一次获取一个数据项。这就是迭代器模式(Iterator pattern)。本章说明 Python 语言是如何内置迭代器模式的，这样就避免了自己手动去实现。</p>
+
+<p>与 Lisp(Paul Graham 最喜欢的语言)不同， Python 没有宏，因此为了抽象出迭3代器模 式，需要改动语言本身。为此， Python 2.2(2001 年)加入了 yield 关键字。 3 这个关键 字用于构建生成器(generator)，其作用与迭代器一样。</p>
+
+<p>I3Python 2.2 的用户可以使用 from <strong>future</strong> import generators 指令获取 yield 关键字；在 Python 2.3 中，yield关键字默认可用。    _    _</p>
+
+<p>所有生成器都是迭代器，因为生成器完全实现了迭代器接口。不过，根据《设 计模式：可复用面向对象软件的基础》一书的定义，迭代器用于从集合中取出元素； 而生成器用于“凭空”生成元素。通过斐波纳契数列能很好地说明二者之间的区别：斐 波纳契数列中的数有无穷个，在一个集合里放不下。不过要知道，在 Python 社区 中，大多数时候都把迭代器和生成器视作同一概念。</p>
+
+<p>在 Python 3 中，生成器有广泛的用途。现在，即使是内置的 range() 函数也返回一个类</p>
+
+<p>似生成器的对象，而以前则返回完整的列表。如果一定要让 range() 函数返回列表，那 么必须明确指明(例如， list(range(100)))。</p>
+
+<p>在 Python 中，所有集合都可以迭代。在 Python 语言内部，迭代器用于支持：</p>
+
+<p>• for循环</p>
+
+<p>•构建和扩展集合类型 •逐行遍历文本文件</p>
+
+<p>•列表推导、字典推导和集合推导 •元组拆包</p>
+
+<p>•调用函数时，使用*拆包实参</p>
+
+<p>本章涵盖以下话题：</p>
+
+<p>•语言内部使用iter(&hellip;)内置函数处理可迭代对象的方式 •如何使用Python实现经典的迭代器模式 •详细说明生成器函数的工作原理 •如何使用生成器函数或生成器表达式代替经典的迭代器 •如何使用标准库中通用的生成器函数 •如何使用yield from语句合并生成器</p>
+
+<p>•案例分析：在一个数据库转换工具中使用生成器函数处理大型数据集 •为什么生成器和协程看似相同，实则差别很大，不能混淆</p>
+
+<p>首先来研究 iter(&hellip;) 函数如何把序列变得可以迭代。</p>
+
+<h3 id="14-1-sentence类第1版-单词序列">14.1 Sentence类第1版：单词序列</h3>
+
+<p>我们要实现一个 Sentence 类，以此打开探索可迭代对象的旅程。我们向这个类的构造方</p>
+
+<p>法传入包含一些文本的字符串，然后可以逐个单词迭代。第 1 版要实现序列协议，这个类 的对象可以迭代，因为所有序列都可以迭代——这一点前面已经说过，不过现在要说明真</p>
+
+<p>正的原因。</p>
+
+<p>示例 14-1 定义了一个 Sentence 类，通过索引从文本中提取单词。</p>
+
+<p>示例14-1 sentence.py：把句子划分为单词序列</p>
+
+<p>import re</p>
+
+<p>import reprlib</p>
+
+<p>RE_WORD = re.compile(&rsquo;\w+&lsquo;) class Sentence:</p>
+
+<p>def <strong>init</strong>(self, text): self.text = text</p>
+
+<p>self.words = RE_WORD.findall(text) O</p>
+
+<p>def <strong>getitem</strong>(self, index):</p>
+
+<p>return self.words[index] ©</p>
+
+<p>def <strong>len</strong>(self):    ©</p>
+
+<p>return len(self.words)</p>
+
+<p>def <strong>repr</strong>(self):</p>
+
+<p>return &lsquo;Sentence(%s)&rsquo; % reprlib.repr(self.text) ©</p>
+
+<p>❶ re.findall 函数返回一个字符串列表，里面的元素是正则表达式的全部非重叠匹配。</p>
+
+<p>❷ self.words 中保存的是 .findall 函数返回的结果，因此直接返回指定索引位上的单 词。</p>
+
+<p>❸ 为了完善序列协议，我们实现了 <strong>len</strong> 方法；不过，为了让对象可以迭代，没必要 实现这个方法。</p>
+
+<p>❹ reprlib.repr 这个实用函数用于生成大型数据结构的简略字符串表示形式。 4 4首次使用reprlib模块是在10.2节。</p>
+
+<p>默认情况下， reprlib.repr 函数生成的字符串最多有 30 个字符。 Sentence 类的用法参</p>
+
+<p>见示例 14-2 中的控制台会话。</p>
+
+<p>示例 14-2 测试 Sentence 实例能否迭代</p>
+
+<p>&gt;&gt;&gt; s = Sentence(&lsquo;&ldquo;The time has come,&rdquo; the Walrus said,&rsquo;) # o</p>
+
+<p>&gt;&gt;&gt; s</p>
+
+<p>Sentence(&lsquo;&ldquo;The time ha&hellip; Walrus said,&rsquo;) # ©</p>
+
+<p>&gt;&gt;&gt; for word in s: # &amp;</p>
+
+<p>&hellip; print(word)</p>
+
+<p>The</p>
+
+<p>time</p>
+
+<p>has</p>
+
+<p>come</p>
+
+<p>the</p>
+
+<p>Walrus</p>
+
+<p>said</p>
+
+<p>&gt;&gt;&gt; list(s) # ©</p>
+
+<p>[&lsquo;The&rsquo;, &lsquo;time&rsquo;, &lsquo;has&rsquo;, &lsquo;come&rsquo;, &lsquo;the&rsquo;, &lsquo;Walrus&rsquo;, &lsquo;said&rsquo;]</p>
+
+<p>❶ 传入一个字符串，创建一个 Sentence 实例。</p>
+
+<p>❷ 注意， <strong>repr</strong> 方法的输出中包含 reprlib.repr 方法生成的 &hellip;。</p>
+
+<p>❸ Sentence 实例可以迭代，稍后说明原因。</p>
+
+<p>❹ 因为可以迭代，所以 Sentence 对象可以用于构建列表和其他可迭代的类型。</p>
+
+<p>在接下来的几页中，我们还要开发其他 Sentence 类，而且都能通过示例 14-2 中的测 试。不过，示例 14-1 中的实现与其他实现都不同，因为这一版 Sentence 类也是序列， 可以按索引获取单词：</p>
+
+<p>&gt;&gt;&gt; s[0] &lsquo;The&rsquo;</p>
+
+<p>&gt;&gt;&gt; s[5] &lsquo;Walrus&rsquo; &gt;&gt;&gt; s[-1] &lsquo;said&rsquo;</p>
+
+<p>所有 Python 程序员都知道，序列可以迭代。下面说明具体的原因。</p>
+
+<p>序列可以迭代的原因：iter函数</p>
+
+<p>解释器需要迭代对象 x 时，会自动调用 iter(x)。</p>
+
+<p>内置的 iter 函数有以下作用。</p>
+
+<p>(1)    检查对象是否实现了 <strong>iter</strong> 方法，如果实现了就调用它，获取一个迭代器。</p>
+
+<p>(2)    如果没有实现 <strong>iter</strong> 方法，但是实现了 <strong>getitem</strong> 方法， Python 会创建一个迭</p>
+
+<p>代器，尝试按顺序(从索引 0 开始)获取元素。</p>
+
+<p>(3)    如果尝试失败，Python抛出TypeError异常，通常会提示“C object is not iterable” (C</p>
+
+<p>对象不可迭代)，其中 C 是目标对象所属的类。</p>
+
+<p>任何 Python 序列都可迭代的原因是，它们都实现了 <strong>getitem</strong> 方法。其实，标准的序 列也都实现了 <strong>iter</strong> 方法，因此你也应该这么做。之所以对 <strong>getitem</strong> 方法做特 殊处理，是为了向后兼容，而未来可能不会再这么做(不过，写作本书时还未弃用)。</p>
+
+<p>11.2节提到过，这是鸭子类型(duck typing)的极端形式：不仅要实现特殊的<strong>iter</strong></p>
+
+<p>方法，还要实现 <strong>getitem</strong> 方法，而且 <strong>getitem</strong> 方法的参数是从 0 开始的整数</p>
+
+<p>(int)，这样才认为对象是可迭代的。</p>
+
+<p>在白鹅类型(goose-typing)理论中，可迭代对象的定义简单一些，不过没那么灵活：如 果实现了 <strong>iter</strong> 方法，那么就认为对象是可迭代的。此时，不需要创建子类，也不用 注册，因为 abc.Iterable 类实现了 <strong>subclasshook</strong> 方法，如 11.10 节所述。下面 举个例子：</p>
+
+<p>&gt;&gt;&gt; class Foo:</p>
+
+<p>&hellip; def <strong>iter</strong>(self):</p>
+
+<p>&hellip;    pass</p>
+
+<p>&gt;&gt;&gt; from collections import abc &gt;&gt;&gt; issubclass(Foo, abc.Iterable) True</p>
+
+<p>&gt;&gt;&gt; f = Foo()</p>
+
+<p>&gt;&gt;&gt; isinstance(f, abc.Iterable) True</p>
+
+<p>不过要注意，虽然前面定义的 Sentence 类是可以迭代的，但却无法通过 issubclass (Sentence, abc.Iterable) 测试。</p>
+
+<p>从Python 3.4开始，检查对象x能否迭代，最准确的方法是：调用iter(x)函 数，如果不可迭代，再处理 TypeError 异常。这比使用 isinstance(x, abc.Iterable) 更准确，因为 iter(x) 函数会考虑到遗留的 <strong>getitem</strong> 方法，</p>
+
+<p>而 abc.Iterable 类则不考虑。</p>
+
+<p>迭代对象之前显式检查对象是否可迭代或许没必要，毕竟尝试迭代不可迭代的对象时，</p>
+
+<p>Python 抛出的异常信息很明确：TypeError: &lsquo;C&rsquo; object is not iterable。如果除</p>
+
+<p>了抛出 TypeError 异常之外还要做进一步的处理，可以使用 try/except 块，而无需显 式检查。如果要保存对象，等以后再迭代，或许可以显式检查，因为这种情况可能需要尽</p>
+
+<p>早捕获错误。</p>
+
+<p>下一节详述可迭代的对象和迭代器之间的关系。</p>
+
+<h3 id="14-2-可迭代的对象与迭代器的对比">14.2 可迭代的对象与迭代器的对比</h3>
+
+<p>从 14.1.1 节的解说可以推知下述定义。</p>
+
+<p>可迭代的对象</p>
+
+<p>使用 iter 内置函数可以获取迭代器的对象。如果对象实现了能返回迭代器的 <strong>iter</strong> 方法，那么对象就是可迭代的。序列都可以迭代；实现了 <strong>getitem</strong> 方 法，而且其参数是从零开始的索引，这种对象也可以迭代。</p>
+
+<p>我们要明确可迭代的对象和迭代器之间的关系： Python 从可迭代的对象中获取迭代器。</p>
+
+<p>下面是一个简单的 for 循环，迭代一个字符串。这里，字符串 &lsquo;ABC&rsquo; 是可迭代的对象。 背后是有迭代器的，只不过我们看不到：</p>
+
+<p>&gt;&gt;&gt; s = &lsquo;ABC&rsquo;</p>
+
+<p>&gt;&gt;&gt; for char in s:</p>
+
+<p>&hellip; print(char)</p>
+
+<p>A</p>
+
+<p>B</p>
+
+<p>C</p>
+
+<p>如果没有 for 语句，不得不使用 while 循环模拟，要像下面这样写：</p>
+
+<p>&gt;&gt;&gt; s = &lsquo;ABC&rsquo;</p>
+
+<p>&gt;&gt;&gt; it = iter(s) # O</p>
+
+<p>&gt;&gt;&gt; while True:</p>
+
+<p>&hellip;    try:</p>
+
+<p>&hellip;    print(next(it))    # ©</p>
+
+<p>&hellip;    except StopIteration: # ©</p>
+
+<p>&hellip;    del it # ©</p>
+
+<p>…    break # ©</p>
+
+<p>A</p>
+
+<p>B</p>
+
+<p>C</p>
+
+<p>❶ 使用可迭代的对象构建迭代器 it。</p>
+
+<p>❷ 不断在迭代器上调用 next 函数，获取下一个字符。</p>
+
+<p>❸ 如果没有字符了，迭代器会抛出 StopIteration 异常。</p>
+
+<p>❹ 释放对 it 的引用，即废弃迭代器对象。</p>
+
+<p>❺ 退出循环。</p>
+
+<p>StopIteration 异常表明迭代器到头了。 Python 语言内部会处理 for 循环和其他迭代上 下文(如列表推导、元组拆包，等等)中的 StopIteration 异常。</p>
+
+<p>标准的迭代器接口有两个方法。</p>
+
+<p><strong>next</strong></p>
+
+<p>返回下一个可用的元素，如果没有元素了，抛出 StopIteration 异常。</p>
+
+<p><strong>iter</strong></p>
+
+<p>返回self，以便在应该使用可迭代对象的地方使用迭代器，例如在for循环中。</p>
+
+<p>这个接口在 collections.abc.Iterator 抽象基类中制定。这个类定义了 <strong>next</strong> 抽 象方法，而且继承自 Iterable 类；<strong>iter</strong> 抽象方法则在 Iterable 类中定义。如图</p>
+
+<p>14-1 所示。</p>
+
+<p>图 14-1： Iterable 和 Iterator 抽象基类。以斜体显示的是抽象方法。具体的 Iterable.<strong>iter</strong> 方法应该返回一个 Iterator 实例。具体的 Iterator 类必须实 现 <strong>next</strong> 方法。 Iterator.<strong>iter</strong> 方法直接返回实例本身</p>
+
+<p>Iterator抽象基类实现_iter__方法的方式是返回实例本身(return self)。这 样，在需要可迭代对象的地方可以使用迭代器。示例 14-3 是 abc.Iterator 类的源码。</p>
+
+<p>示例 14-3 abc.Iterator 类，摘自</p>
+
+<p>Lib/_coll ecti ons_abc.py ( <a href="https://hg.python.org/cpython/file/3.4/Lib/_collections_abc.py%23l93">https://hg.python.org/cpython/fil e/3.4/Lib/_coll ecti ons_abc.py#l93 </a>)</p>
+
+<p>class Iterator(Iterable):</p>
+
+<p><strong>slots</strong> = ()</p>
+
+<p>@abstractmethod def <strong>next</strong>(self):</p>
+
+<p>&lsquo;Return the next item from the iterator. When exhausted, raise StopIteration&rsquo; raise StopIteration</p>
+
+<p>def <strong>iter</strong>(self): return self</p>
+
+<p>@classmethod</p>
+
+<p>def <strong>subclasshook</strong>(cls, C): if cls is Iterator:</p>
+
+<p>if (any(&rdquo;<strong>next</strong>&rdquo; in B.<strong>dict</strong> for B in C.<strong>mro</strong>) and any(&rdquo;<strong>iter</strong>&rdquo; in B.<strong>dict</strong> for B in C.<strong>mro</strong>)):</p>
+
+<p>return True return NotImplemented</p>
+
+<p><img src="08414584Python-71.jpg" alt="img" /></p>
+
+<p>在Python 3中，Iterator抽象基类定义的抽象方法是it.<strong>next</strong>()，而 在Python 2中是it.next()。一如既往，我们应该避免直接调用特殊方法，使用 next(it) 即可，这个内置的函数在 Python 2 和 Python 3 中都能使用。</p>
+
+<h4 id="在-python-3-4-中-lib-types-py-https-hg-python-org-cpython-file-3-4-lib-types-py-模块的源">在 Python 3.4 中，Lib/types.py (<a href="https://hg.python.org/cpython/file/3.4/Lib/types.py">https://hg.python.org/cpython/file/3.4/Lib/types.py</a>)模块的源</h4>
+
+<p>码里有下面这段注释：</p>
+
+<p>#    Iterators in Python aren&rsquo;t a matter of type but of protocol. A large</p>
+
+<p>#    and changing number of builtin types implement <em>some</em> flavor of</p>
+
+<p>#    iterator. Don&rsquo;t check the type! Use hasattr to check for both</p>
+
+<p>#    &ldquo;<strong>iter</strong>&rdquo; and &ldquo;<strong>next</strong>&rdquo; attributes instead.</p>
+
+<h4 id="其实-这就是-abc-iterator-抽象基类中-subclasshook-方法的作用-参见示例-14-3">其实，这就是 abc.Iterator 抽象基类中 <strong>subclasshook</strong> 方法的作用(参见示例 14-3)。</h4>
+
+<p><img src="08414584Python-72.jpg" alt="img" /></p>
+
+<p>考虑到Lib/types.py中的建议，以及Lib/_collections_abc.py中的实现逻辑，检 查对象x是否为迭代器最好的方式是调用isinstance(x, abc.Iterator)。得益 于 Iterator.<strong>subclasshook</strong> 方法，即使对象 x 所属的类不是 Iterator 类的 真实子类或虚拟子类，也能这样检查。</p>
+
+<p>再看示例 14-1 中定义的 Sentence 类，在 Python 控制台中能清楚地看出如何使用 iter(&hellip;) 函数构建迭代器，以及如何使用 next(&hellip;) 函数使用迭代器：</p>
+
+<p>&gt;&gt;&gt; s3 = Sentence(&lsquo;Pig and Pepper&rsquo;)    # O</p>
+
+<p>&gt;&gt;&gt; it = iter(s3) # ©</p>
+
+<p>&gt;&gt;&gt; it # doctest: +ELLIPSIS <iterator object at 0x...></p>
+
+<p>&gt;&gt;&gt; next(it)</p>
+
+<p>&lsquo;Pig&rsquo;</p>
+
+<p>&gt;&gt;&gt; next(it)</p>
+
+<p>&lsquo;and&rsquo;</p>
+
+<p>&gt;&gt;&gt; next(it)</p>
+
+<p>&lsquo;Pepper&rsquo;</p>
+
+<p>&gt;&gt;&gt; next(it) # ©</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>StopIteration</p>
+
+<p>&gt;&gt;&gt; list(it) # ❺</p>
+
+<p>[]</p>
+
+<p>&gt;&gt;&gt; list(iter(s3))    # ©</p>
+
+<p>[&lsquo;Pig&rsquo;, &lsquo;and&rsquo;, &lsquo;Pepper&rsquo;]</p>
+
+<p>❶创建一个Sentence实例s3，包含3个单词。</p>
+
+<p>❷ 从 s3 中获取迭代器。</p>
+
+<p>❸调用next(it)，获取下一个单词。</p>
+
+<p>❹ 没有单词了，因此迭代器抛出 StopIteration 异常。</p>
+
+<p>❺ 到头后，迭代器没用了。</p>
+
+<p>❻ 如果想再次迭代，要重新构建迭代器。</p>
+
+<p>因为迭代器只需 <strong>next</strong> 和 <strong>iter</strong> 两个方法，所以除了调用 next() 方法，以及捕 获 StopIteration 异常之外，没有办法检查是否还有遗留的元素。此外，也没有办 法“还原”迭代器。如果想再次迭代，那就要调用 iter(&hellip;)，传入之前构建迭代器的可 迭代对象。传入迭代器本身没用，因为前面说过 Iterator.<strong>iter</strong> 方法的实现方式是 返回实例本身，所以传入迭代器无法还原已经耗尽的迭代器。</p>
+
+<p>根据本节的内容，可以得出迭代器的定义如下。</p>
+
+<p>迭代器</p>
+
+<p>迭代器是这样的对象：实现了无参数的 <strong>next</strong> 方法，返回序列中的下一个元素； 如果没有元素了，那么抛出 StopIteration 异常。 Python 中的迭代器还实现了 <strong>iter</strong> 方法，因此迭代器也可以迭代。</p>
+
+<p>因为内置的 iter(&hellip;) 函数会对序列做特殊处理，所以第 1 版 Sentence 类可以迭代。 接下来要实现标准的可迭代协议。</p>
+
+<p>第 2 版 Sentence 类根据《设计模式：可复用面向对象软件的基础》一书给出的模型，实 现典型的迭代器设计模式。注意，这不符合 Python 的习惯做法，后面重构时会说明原 因。不过，通过这一版能明确可迭代的集合和迭代器对象之间的关系。</p>
+
+<p>示例 14-4 中定义的 Sentence 类可以迭代，因为它实现了特殊的 <strong>iter</strong> 方法，构建 并返回一个 SentenceIterator 实例。《设计模式：可复用面向对象软件的基础》一书 就是这样描述迭代器设计模式的。</p>
+
+<h4 id="这里之所以这么做-是为了清楚地说明可迭代的对象和迭代器之间的重要区别-以及二者">这里之所以这么做，是为了清楚地说明可迭代的对象和迭代器之间的重要区别，以及二者</h4>
+
+<p>之间的联系。</p>
+
+<h4 id="示例14-4-sentence-iter-py-使用迭代器模式实现sentence类">示例14-4 sentence_iter.py：使用迭代器模式实现Sentence类</h4>
+
+<p>import re import reprlib</p>
+
+<p>RE_WORD = re.compile(&rsquo;\w+&lsquo;)</p>
+
+<p>class Sentence:</p>
+
+<p>def <strong>init</strong>(self, text): self.text = text</p>
+
+<p>self.words = RE_WORD.findall(text) def <strong>repr</strong>(self):</p>
+
+<p>return &lsquo;Sentence(%s)&rsquo; % reprlib.repr(self.text)</p>
+
+<p>def <strong>iter</strong>(self): O</p>
+
+<p>return SentenceIterator(self.words)</p>
+
+<p>class SentenceIterator:</p>
+
+<p>def <strong>init</strong>(self, words): self.words = words &amp; self.index = 0 o</p>
+
+<p>def <strong>next</strong>(self): try:</p>
+
+<p>word = self.words[self.index] ❺ except IndexError:</p>
+
+<p>raise StopIteration() © self.index += 1 &amp; return word ©</p>
+
+<p>def <strong>iter</strong>(self): 0 return self</p>
+
+<p>❶ 与前一版相比，这里只多了一个 <strong>iter</strong> 方法。这一版没有 <strong>getitem</strong> 方法，为 的是明确表明这个类可以迭代，因为实现了 <strong>iter</strong> 方法。</p>
+
+<p>❷ 根据可迭代协议， <strong>iter</strong> 方法实例化并返回一个迭代器。</p>
+
+<p>❸ SentenceIterator 实例引用单词列表。</p>
+
+<p>❹ self.index 用于确定下一个要获取的单词。</p>
+
+<p>❺ 获取 self.index 索引位上的单词。</p>
+
+<p>❻ 如果 self.index 索引位上没有单词，那么抛出 StopIteration 异常。</p>
+
+<p>❼ 递增 self.index 的值。</p>
+
+<p>❽ 返回单词。</p>
+
+<p>❾ 实现 self.<strong>iter</strong> 方法。</p>
+
+<p>示例 14-4 中的代码能通过示例 14-2 中的测试。</p>
+
+<p>注意，对这个示例来说，其实没必要在 SentenceIterator 类中实现 <strong>iter</strong> 方法， 不过这么做是对的，因为迭代器应该实现 <strong>next</strong> 和 <strong>iter</strong> 两个方法，而且这么做 能让迭代器通过 issubclass(SentenceInterator, abc.Iterator) 测试。如果让 SentenceIterator 类继承 abc.Iterator 类，那么它会继承 abc.Iterator.<strong>iter</strong></p>
+
+<p>这个具体方法。</p>
+
+<p>这一版的工作量很大(对懒惰的 Python 程序员来说确实如此)。注</p>
+
+<p>意， SentenceIterator 类的大多数代码都在处理迭代器的内部状态。稍后会说明如何</p>
+
+<p>简化。不过，在此之前我们先稍微离题，讨论一个看似合理实则错误的实现捷径。</p>
+
+<p>把Sentence变成迭代器：坏主意</p>
+
+<p>构建可迭代的对象和迭代器时经常会出现错误，原因是混淆了二者。要知道，可迭代的对 象有个 <strong>iter</strong> 方法，每次都实例化一个新的迭代器；而迭代器要实现 <strong>next</strong> 方 法，返回单个元素，此外还要实现 <strong>iter</strong> 方法，返回迭代器本身。</p>
+
+<p>因此，迭代器可以迭代，但是可迭代的对象不是迭代器。</p>
+
+<p>除了 <strong>iter</strong> 方法之外，你可能还想在 Sentence 类中实现 <strong>next</strong> 方法，让 Sentence 实例既是可迭代的对象，也是自身的迭代器。可是，这种想法非常糟糕。根据</p>
+
+<p>有大量 Python 代码审查经验的 Alex Martelli 所说，这也是常见的反模式。</p>
+
+<p>《设计模式：可复用面向对象软件的基础》一书讲解迭代器设计模式时，在“适用性”一节</p>
+
+<p>中说： <a href="#bookmark21">3</a></p>
+
+<p>迭代器模式可用来：</p>
+
+<p>•访问一个聚合对象的内容而无需暴露它的内部表示 •支持对聚合对象的多种遍历</p>
+
+<p>•为遍历不同的聚合结构提供一个统一的接口(即支持多态迭代)</p>
+
+<p>为了“支持多种遍历”，必须能从同一个可迭代的实例中获取多个独立的迭代器，而且各个 迭代器要能维护自身的内部状态，因此这一模式正确的实现方式是，每次调用 iter(my_iterable) 都新建一个独立的迭代器。这就是为什么这个示例需要定义 SentenceIterator 类。</p>
+
+<p>可迭代的对象一定不能是自身的迭代器。也就是说，可迭代的对象必须实现</p>
+
+<p><strong>iter</strong> 方法，但不能实现 <strong>next</strong> 方法。</p>
+
+<p>另一方面，迭代器应该一直可以迭代。迭代器的 <strong>iter</strong> 方法应该返回自身。</p>
+
+<p>至此，我们演示了如何正确地实现典型的迭代器模式。本节至此告一段落，下一节展示如</p>
+
+<p>何使用更符合 Python 习惯的方式实现 Sentence 类。</p>
+
+<p>实现相同功能，但却符合 Python 习惯的方式是，用生成器函数代替 SentenceIterator 类。先看示例 14-5，然后详细说明生成器函数。</p>
+
+<p>示例14-5 sentence_gen.py：使用生成器函数实现Sentence类</p>
+
+<p>import re import reprlib</p>
+
+<p>RE_WORD = re.compile(&rsquo;\w+&lsquo;) class Sentence:</p>
+
+<p>def <strong>init</strong>(self, text): self.text = text</p>
+
+<p>self.words = RE_WORD.findall(text) def <strong>repr</strong>(self):</p>
+
+<p>return &lsquo;Sentence(%s)&rsquo; % reprlib.repr(self.text)</p>
+
+<p>def <strong>iter</strong>(self):</p>
+
+<p>for word in self.words: O yield word &amp; return &amp;</p>
+
+<p># 完成！ o</p>
+
+<p>❶ 迭代 self.words。</p>
+
+<p>❷ 产出当前的 word。</p>
+
+<p>❸ 这个 return 语句不是必要的；这个函数可以直接“落空”，自动返回。不管有没有</p>
+
+<p>return 语句，生成器函数都不会抛出 StopIteration 异常，而是在生成完全部值之后</p>
+
+<p>会直接退出。 <a href="#bookmark22">4</a></p>
+
+<h4 id="下面全面说明生成器函数">下面全面说明生成器函数。</h4>
+
+<p>生成器函数的工作原理</p>
+
+<p>只要 Python 函数的定义体中有 yield 关键字，该函数就是生成器函数。调用生成器函数 时，会返回一个生成器对象。也就是说，生成器函数是生成器工厂。</p>
+
+<p>普通的函数与生成器函数在句法上唯一的区别是，在后者的定义体中有yield</p>
+
+<p><img src="08414584Python-74.jpg" alt="img" /></p>
+
+<h4 id="关键字-有些人认为定义生成器函数应该使用一个新的关键字-例如gen-而不该使">关键字。有些人认为定义生成器函数应该使用一个新的关键字，例如gen，而不该使</h4>
+
+<p>用def，但是Guido不同意。他的理由参见“PEP 255—Simple</p>
+
+<p>Generators”(<a href="https://www.python.org/dev/peps/pep-0255/">https://www.python.org/dev/peps/pep-0255/</a>)。 7</p>
+
+<p>7有时，我会在生成器函数的名称中加上gen前缀或后缀，不过这不是习惯做法。显然，如果实现的是迭代器，那就 不能这么做，因为所需的特殊方法必须命名为<strong>iter</strong>。 下面以一个特别简单的函数说明生成器的行为： 8 8感谢David Kwast建议使用这个示例。</p>
+
+<p>&hellip; print(i)</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>&gt;&gt;&gt; g = gen_123()    # ©</p>
+
+<p>&gt;&gt;&gt; next(g) # O 1</p>
+
+<p>&gt;&gt;&gt; next(g)</p>
+
+<p>2</p>
+
+<p>&gt;&gt;&gt; next(g)</p>
+
+<p>3</p>
+
+<p>&gt;&gt;&gt; next(g) # ❻</p>
+
+<p>Traceback (most recent call last): StopIteration</p>
+
+<h4 id="❶只要python函数中包含关键字yield-该函数就是生成器函数">❶只要Python函数中包含关键字yield，该函数就是生成器函数。</h4>
+
+<h4 id="❷-生成器函数的定义体中通常都有循环-不过这不是必要条件-这里我重复使用-3-次">❷ 生成器函数的定义体中通常都有循环，不过这不是必要条件；这里我重复使用 3 次</h4>
+
+<p>yield。</p>
+
+<p>❸ 仔细看， gen_123 是函数对象。</p>
+
+<p>❹ 但是调用时， gen_123() 返回一个生成器对象。</p>
+
+<p>❺ 生成器是迭代器，会生成传给 yield 关键字的表达式的值。</p>
+
+<p>❻ 为了仔细检查，我们把生成器对象赋值给 g。</p>
+
+<p>❼ 因为 g 是迭代器，所以调用 next(g) 会获取 yield 生成的下一个元素。</p>
+
+<p>❽ 生成器函数的定义体执行完毕后，生成器对象会抛出 StopIteration 异常。</p>
+
+<p>生成器函数会创建一个生成器对象，包装生成器函数的定义体。把生成器传给</p>
+
+<p>next(&hellip;) 函数时，生成器函数会向前，执行函数定义体中的下一个 yield 语句，返回</p>
+
+<p>产出的值，并在函数定义体的当前位置暂停。最终，函数的定义体返回时，外层的生成器</p>
+
+<p>对象会抛出 StopIteration 异常——这一点与迭代器协议一致。</p>
+
+<p>我觉得，使用准确的词语描述从生成器中获取结果的过程，有助于理解生成 器。注意，我说的是产出或生成值。如果说生成器“返回”值，就会让人难以理解。</p>
+
+<p>函数返回值；调用生成器函数返回生成器；生成器产出或生成值。生成器不会以常规 的方式“返回”值：生成器9函数定义体中的 return 语句会触发生成器对象抛出 StopIteration 异常。 9</p>
+
+<p>9在 Python 3.3 之前，如果生成器函数中的 return 语句有返回值，那么会报错。现在可以这么做，不过 return 语句 仍会导致 StopIteration 异常抛出。调用方可以从异常对象中获取返回值。可是，只有把生成器函数当成协程使用 时，这么做才有意义，详情参见 16.6 节。</p>
+
+<p>示例 14-6 使用 for 循环更清楚地说明了生成器函数定义体的执行过程。 示例 14-6 运行时打印消息的生成器函数</p>
+
+<p>print(&lsquo;&ndash;&gt;&rsquo;, c) # ©</p>
+
+<p>start ©</p>
+
+<p>-&gt; A❻</p>
+
+<p>continue o &ndash;&gt; B ©</p>
+
+<p>end. ®</p>
+
+<p>&gt;&gt;&gt; ©</p>
+
+<p>❶ 定义生成器函数的方式与普通的函数无异，只不过要使用 yield 关键字。</p>
+
+<p>❷在for循环中第一次隐式调用next()函数时(序号❺)，会打印&rsquo;start&rsquo;，然后停 在第一个 yield 语句，生成值 &lsquo;A&rsquo;。</p>
+
+<p>❸在for循环中第二次隐式调用next()函数时，会打印’continue&rsquo;，然后停在第二个 yield 语句，生成值 &lsquo;B&rsquo;。</p>
+
+<p>❹第三次调用next()函数时，会打印&rsquo;end.&lsquo;，然后到达函数定义体的末尾，导致生成 器对象抛出 StopIteration 异常。</p>
+
+<p>❺ 迭代时， for 机制的作用与 g = iter(gen_AB()) 一样，用于获取生成器对象，然后 每次迭代时调用 next(g)。</p>
+
+<p>❻ 循环块打印 &ndash;&gt; 和 next(g) 返回的值。但是，生成器函数中的 print 函数输出结果之 后才会看到这个输出。</p>
+
+<p>❼ &lsquo;start&rsquo; 是生成器函数定义体中 print(&lsquo;start&rsquo;) 输出的结果。</p>
+
+<p>❽生成器函数定义体中的yield &lsquo;A&rsquo;语句会生成值A，提供给for循环使用，而A会赋 值给变量C，最终输出&ndash;&gt; A。</p>
+
+<p>❾第二次调用next(g)，继续迭代，生成器函数定义体中的代码由yield &lsquo;A&rsquo;前进到 yield &lsquo;B&rsquo;。文本continue是由生成器函数定义体中的第二个print函数输出的。</p>
+
+<p>❿yield &lsquo;B&rsquo;语句生成值B，提供给for循环使用，而B会赋值给变量c，所以循环打 印出 &ndash;&gt; B。</p>
+
+<p>®第三次调用next(it)，继续迭代，前进到生成器函数的末尾。文本end.是由生成器 函数定义体中的第三个 print 函数输出的。到达生成器函数定义体的末尾时，生成器对 象抛出 StopIteration 异常。 for 机制会捕获异常，因此循环终止时没有报错。</p>
+
+<p>©现在，希望你己经知道示例14-5中Sentence.<strong>iter</strong>方法的作用了： <strong>iter</strong></p>
+
+<p>方法是生成器函数，调用时会构建一个实现了迭代器接口的生成器对象，因此不用再定义</p>
+
+<p>SentenceIterator 类了。</p>
+
+<p>这一版 Sentence 类比前一版简短多了，但是还不够懒惰。如今，人们认为惰性是好的特 质，至少在编程语言和 API 中是如此。惰性实现是指尽可能延后生成值。这样做能节省 内存，而且或许还可以避免做无用的处理。</p>
+
+<p>下一节以这种惰性方式定义 Sentence 类。</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>❶ “PEP 8—Style Guide for Python Code”(<a href="https://www.python.org/dev/peps/pep-">https://www.python.org/dev/peps/pep-</a></p>
+
+<p><a href="https://www.python.org/dev/peps/pep-0008/%23imports">0008/#imports</a><a href="https://www.python.org/dev/peps/pep-0008/%23imports">)建议，把导入标准库的语句放在导入自己编写的模块之前。</a></p>
+
+<p>❷ AddableBingoCage 扩展 BingoCage。</p>
+
+<p>❸ <strong>add</strong> 方法的第二个操作数只能是 Tombola 实例。</p>
+
+<p>❹ 如果 other 是 Tombola 实例，从中获取元素。</p>
+
+<p>❺ 否则，尝试使用 other 创建迭代器。 11</p>
+
+<p><a href="#footnote2">2</a></p>
+
+<p>11内置的iter函数在下一章讨论。这里，本可以使用tuple(other)，这样做是可以的，但是.load(&hellip;)方法迭代 参数时要构建大量元组，资源消耗大。</p>
+
+<p>❻ 如果尝试失败，抛出异常，并且告知用户该怎么做。如果可能，错误消息应该明确指 导用户怎么解决问题。</p>
+
+<p>❼ 如果能执行到这里，把 other_iterable 载入 self。</p>
+
+<p>❽ 重要提醒：增量赋值特殊方法必须返回 self。</p>
+
+<p>通过示例 13-18 中 <strong>add</strong> 和 <strong>iadd</strong> 返回结果的方式可以总结出就地运算符的原 理。</p>
+
+<p><strong>add</strong></p>
+
+<p>调用 AddableBingoCage 构造方法构建一个新实例，作为结果返回。</p>
+
+<p><strong>iadd</strong></p>
+
+<p>把修改后的 self 作为结果返回。</p>
+
+<p>最后，示例 13-18 中还有一点要注意：从设计上看， AddableBingoCage 不用定义 <strong>radd</strong> 方法，因为不需要。如果右操作数是相同类型，那么正向方法 <strong>add</strong> 会处 理，因此， Python 计算 a + b 时，如果 a 是 AddableBingoCage 实例，而 b 不是，那么 会返回NotImplemented，此时或许可以让b所属的类接手处理。可是，如果表达式是b + a，而 b 不是 AddableBingoCage 实例，返回了 NotImplemented，那么 Python 最好</p>
+
+<p><a href="#footnote3">3</a></p>
+
+<p>《设计模式：可复用面向对象软件的基础》第172页。</p>
+
+<p><a href="#footnote4">4</a></p>
+
+<p>Alex Martelli审查这段代码时建议简化这个方法的定义体，直接使用return iter(self.words)。当然，他是对的，</p>
+
+<p>毕竟调用 <strong>iter</strong> 方法得到的就是迭代器。不过，这里我用的是 for 循环，而且用到了 yield 关键字，这样做是为 了介绍生成器函数的句法。下一节会详细说明。</p>
+
+<p>❹ 不用再单独定义一个迭代器类！</p>
+
+<p>我们又使用一种不同的方式实现了 Sentence 类，而且也能通过示例 14-2 中的测试。</p>
+
+<p>在示例 14-4 定义的 Sentence 类中， <strong>iter</strong> 方法调用 SentenceIterator 类的构造</p>
+
+<p>方法创建一个迭代器并将其返回。而在示例 14-5 中，迭代器其实是生成器对象，每次调 用 <strong>iter</strong> 方法都会自动创建，因为这里的 <strong>iter</strong> 方法是生成器函数。</p>
+
+<h3 id="14-5-sentence类第4版-惰性实现">14.5 Sentence类第4版：惰性实现</h3>
+
+<p>设计 Iterator 接口时考虑到了惰性： next(my_iterator) 一次生成一个元素。懒惰的 反义词是急迫，其实，惰性求值(lazy evaluation)和及早求值(eager evaluation)是编程</p>
+
+<p>语言理论方面的技术术语。</p>
+
+<p>目前实现的几版 Sentence 类都不具有惰性，因为 <strong>init</strong> 方法急迫地构建好了文本中 的单词列表，然后将其绑定到 self.words 属性上。这样就得处理整个文本，列表使用的 内存量可能与文本本身一样多(或许更多，这取决于文本中有多少非单词字符)。如果只 需迭代前几个单词，大多数工作都是白费力气。</p>
+
+<p>只要使用的是 Python 3，思索着做某件事有没有懒惰的方式，答案通常都是肯定的。</p>
+
+<p>re.finditer 函数是 re.findall 函数的惰性版本，返回的不是列表，而是一个生成 器，按需生成 re.MatchObject 实例。如果有很多匹配， re.finditer 函数能节省大量 内存。我们要使用这个函数让第 4 版 Sentence 类变得懒惰，即只在需要时才生成下一个</p>
+
+<p>单词。代码如示例 14-7 所示。</p>
+
+<p>示例 14-7 sentence_gen2.py： 在生成器函数中调用 re.finditer 生成器函数，实现 Sentence 类</p>
+
+<table>
+<thead>
+<tr>
+<th>import re import reprlib</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>RE_WORD</td>
+<td>= re.compile(&rsquo;\w+&lsquo;)</td>
+</tr>
+
+<tr>
+<td>class Sentence:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>def</td>
+<td><strong>init</strong>(self, text): self.text = text O</td>
+</tr>
+
+<tr>
+<td>def</td>
+<td><strong>repr</strong>(self):return &lsquo;Sentence(%s)&rsquo; % reprlib.repr(self.text)</td>
+</tr>
+
+<tr>
+<td>def</td>
+<td><strong>iter</strong>(self):for match in RE_WORD.finditer(self.text): © yield match.group() ©</td>
+</tr>
+</tbody>
+</table>
+
+<p>❶ 不再需要 words 列表。</p>
+
+<p>❷ finditer 函数构建一个迭代器，包含 self.text 中匹配 RE_WORD 的单词，产出 MatchObject 实例。</p>
+
+<p>❸ match.group() 方法从 MatchObject 实例中提取匹配正则表达式的具体文本。 生成器函数已经极大地简化了代码，但是使用生成器表达式甚至能把代码变得更简短。</p>
+
+<p>简单的生成器函数，如前面的 Sentence 类中使用的那个(见示例 14-7)，可以替换成生 成器表达式。</p>
+
+<p>生成器表达式可以理解为列表推导的惰性版本：不会迫切地构建列表，而是返回一个生成</p>
+
+<p>器，按需惰性生成元素。也就是说，如果列表推导是制造列表的工厂，那么生成器表达式</p>
+
+<p>就是制造生成器的工厂。</p>
+
+<p>示例 14-8 演示了一个简单的生成器表达式，并且与列表推导做了对比。</p>
+
+<p>示例 14-8 先在列表推导中使用 gen_AB 生成器函数，然后在生成器表达式中使用</p>
+
+<p>&gt;&gt;&gt; def gen_AB(): # O &hellip;    print(&lsquo;start&rsquo;)</p>
+
+<p>&hellip;    yield &lsquo;A&rsquo;</p>
+
+<p>&hellip;    print(&lsquo;continue&rsquo;)</p>
+
+<p>&hellip;    yield &lsquo;B&rsquo;</p>
+
+<p>&hellip;    print(&lsquo;end.&rsquo;)</p>
+
+<p>&gt;&gt;&gt; resl = [x*3 for x in gen_AB()] # ©</p>
+
+<p>start</p>
+
+<p>continue</p>
+
+<p>end.</p>
+
+<p>&gt;&gt;&gt; for i in res1: # ©</p>
+
+<p>&hellip;    print(&lsquo;&ndash;&gt;&rsquo;, i)</p>
+
+<p>&ndash;&gt; AAA &ndash;&gt; BBB</p>
+
+<p>&gt;&gt;&gt; res2 = (x*3 for x in gen_AB()) # ©</p>
+
+<p>&gt;&gt;&gt; res2 # ❺</p>
+
+<p><generator object <genexpr> at 0x10063c240&gt; &gt;&gt;&gt; for i in res2: # ©</p>
+
+<p>&hellip;    print(&lsquo;&ndash;&gt;&rsquo;, i)</p>
+
+<p>start &ndash;&gt; AAA continue &ndash;&gt; BBB end.</p>
+
+<p>❶ gen_AB 函数与示例 14-6 中的一样。</p>
+
+<p>❷列表推导迫切地迭代gen_AB()函数生成的生成器对象产出的元素：’A•和’B•。注 意，下面的输出是 start、continue 和 end.。</p>
+
+<p>❸ 这个 for 循环迭代列表推导生成的 res1 列表。</p>
+
+<p>❹把生成器表达式返回的值赋值给res2。只需调用gen_AB()函数，虽然调用时会返回 一个生成器，但是这里并不使用。</p>
+
+<p>❺ res2 是一个生成器对象。</p>
+
+<p>❻ 只有 for 循环迭代 res2 时， gen_AB 函数的定义体才会真正执行。 for 循环每次迭代 时会隐式调用next(res2)，前进到gen_AB函数中的下一个yield语句。注 意， gen_AB 函数的输出与 for 循环中 print 函数的输出夹杂在一起。</p>
+
+<p>可以看出，生成器表达式会产出生成器，因此可以使用生成器表达式进一步减少 Sentence 类的代码，如示例 14-9 所示。</p>
+
+<p>示例14-9 sentence_genexp.py:使用生成器表达式实现Sentence类</p>
+
+<p>import re import reprlib</p>
+
+<p>RE_WORD = re.compile(&rsquo;\w+&lsquo;) class Sentence:</p>
+
+<p>def <strong>init</strong>(self, text): self.text = text</p>
+
+<p>def <strong>repr</strong>(self):</p>
+
+<p>return &lsquo;Sentence(%s)&rsquo; % reprlib.repr(self.text) def <strong>iter</strong>(self):</p>
+
+<p>return (match.group() for match in RE_WORD.finditer(self.text))</p>
+
+<p>与示例14-7唯一的区别是_iter_方法，这里不是生成器函数了(没有yield)，而 是使用生成器表达式构建生成器，然后将其返回。不过，最终的效果一样：调用 <strong>iter</strong> 方法会得到一个生成器对象。</p>
+
+<p>生成器表达式是语法糖：完全可以替换成生成器函数，不过有时使用生成器表达式更便</p>
+
+<p>利。下一节说明生成器表达式的用途。</p>
+
+<h3 id="14-7-何时使用生成器表达式">14.7 何时使用生成器表达式</h3>
+
+<p>在示例 10-16 中，为了实现 Vector 类，我用了几个生成器表达</p>
+
+<p>式， <strong>eq</strong>、<strong>hash</strong>、<strong>abs</strong>、angle、angles、format、<strong>add</strong> 和 <strong>mul</strong> 方法中各有一个生成器表达式。在这些方法中使用列表推导也行，不过立即返回的列表要</p>
+
+<p>使用更多的内存。</p>
+
+<p>通过示例 14-9 可知，生成器表达式是创建生成器的简洁句法，这样无需先定义函数再调</p>
+
+<p>用。不过，生成器函数灵活得多，可以使用多个语句实现复杂的逻辑，也可以作为协程 使用（参见第 16 章）。</p>
+
+<p>遇到简单的情况时，可以使用生成器表达式，因为这样扫一眼就知道代码的作用，如</p>
+
+<p>Vector 类的示例所示。</p>
+
+<p>根据我的经验，选择使用哪种句法很容易判断：如果生成器表达式要分成多行写，我倾向</p>
+
+<p>于定义生成器函数，以便提高可读性。此外，生成器函数有名称，因此可以重用。</p>
+
+<p>如果函数或构造方法只有一个参数，传入生成器表达式时不用写一对调用函数的括</p>
+
+<p>号，再写一对括号围住生成器表达式，只写一对括号就行了，如示例 10-16 中 <strong>mul</strong> 方法对 Vector 构造方法的调用，转摘如下。然而，如果生成器表达式后面 还有其他参数，那么必须使用括号围住，否则会抛出 SyntaxError 异常：</p>
+
+<p>def <strong>mul</strong>(self, scalar):</p>
+
+<p>if isinstance(scalar, numbers.Real):</p>
+
+<p>return Vector(n * scalar for n in self) else:</p>
+
+<p>return NotImplemented</p>
+
+<p>目前所见的 Sentence 类示例说明了如何把生成器当作典型的迭代器使用，即从集合中获</p>
+
+<p>取元素。不过，生成器也可用于生成不受数据源限制的值。下一节会举例说明。</p>
+
+<h3 id="14-8-另一个示例-等差数列生成器">14.8 另一个示例：等差数列生成器</h3>
+
+<p>典型的迭代器模式作用很简单——遍历数据结构。不过，即便不是从集合中获取元素，而</p>
+
+<p>是获取序列中即时生成的下一个值时，也用得到这种基于方法的标准接口。例如，内置的 range函数用于生成有穷整数等差数列(Arithmetic Progression，</p>
+
+<p>AP)， itertools.count 函数用于生成无穷等差数列。</p>
+
+<p>下一节会说明 itertools.count 函数，本节探讨如何生成不同数字类型的有穷等差数 列。</p>
+
+<p>下面我们在控制台中对稍后实现的 ArithmeticProgression 类做一些测试，如示例 1410 所示。这里，构造方法的签名是 ArithmeticProgression(begin, step[, end])。 range() 函数与这个 ArithmeticProgression 类的作用类似，不过签名是 range(start, stop[, step])。我选择使用不同的签名是因为，创建等差数列时必须 指定公差(step)，而末项(end)是可选的。我还把参数的名称由start/stop改成了 begin/end，以明确表明签名不同。在示例14-10里的每个测试中，我都调用了 list() 函数，用于查看生成的值。</p>
+
+<p>示例 14-10 演示 ArithmeticProgression 类的用法</p>
+
+<p>&gt;&gt;&gt; ap = ArithmeticProgression(0, 1, 3)</p>
+
+<p>&gt;&gt;&gt; list(ap)</p>
+
+<p>[0, 1, 2]</p>
+
+<p>&gt;&gt;&gt; ap = ArithmeticProgression(1, .5, 3)</p>
+
+<p>&gt;&gt;&gt; list(ap)</p>
+
+<p>[1.0, 1.5, 2.0, 2.5]</p>
+
+<p>&gt;&gt;&gt; ap = ArithmeticProgression(0, <sup>1</sup>&frasl;<sub>3</sub>, 1)</p>
+
+<p>&gt;&gt;&gt; list(ap)</p>
+
+<p>[0.0, 0.3333333333333333, 0.6666666666666666]</p>
+
+<p>&gt;&gt;&gt; from fractions import Fraction</p>
+
+<p>&gt;&gt;&gt; ap = ArithmeticProgression(0, Fraction(1, 3), 1)</p>
+
+<p>&gt;&gt;&gt; list(ap)</p>
+
+<p>[Fraction(0, 1), Fraction(1, 3), Fraction(2, 3)]</p>
+
+<p>&gt;&gt;&gt; from decimal import Decimal</p>
+
+<p>&gt;&gt;&gt; ap = ArithmeticProgression(0, Decimal(&lsquo;.1&rsquo;), .3)</p>
+
+<p>&gt;&gt;&gt; list(ap)</p>
+
+<p>[Decimal(&lsquo;0.0&rsquo;), Decimal(&lsquo;0.1&rsquo;), Decimal(&lsquo;0.2&rsquo;)]</p>
+
+<p>注意，在得到的等差数列中，数字的类型与 begin 或 step 的类型一致。如果需要，会根</p>
+
+<p>据 Python 算术运算的规则强制转换类型。在示例 14-10 中，有 int、float、Fraction 和 Decimal 数字组成的列表。</p>
+
+<p>示例 14-11 列出的是 ArithmeticProgression 类的实现。</p>
+
+<p>示例 14-11 ArithmeticProgression 类</p>
+
+<p>def <strong>init</strong>(self, begin, step, end=None): O self.begin = begin self.step = step</p>
+
+<p>self.end = end # None -&gt; 无穷数列 def <strong>iter</strong>(self):</p>
+
+<p>result = type(self.begin + self.step)(self.begin) © forever = self.end is None © index = 0</p>
+
+<p>while forever or result &lt; self.end: © yield result ❺ index += 1</p>
+
+<p>result = self.begin + self.step * index ©</p>
+
+<p>❶<strong>init</strong>方法需要两个参数：begin和step。end是可选的，如果值是None，那么</p>
+
+<p>生成的是无穷数列。</p>
+
+<p>❷这一行把self.begin赋值给result，不过会先强制转换成前面的加法算式得到的类</p>
+
+<p>型。 10</p>
+
+<p>10Python 2 内置了 coerce() 函数，不过 Python 3 没有内置。开发者觉得没必要内置，因为算术运算符会隐式应用数值 强制转换规则。所以，为了让数列的首项与其他项的类型一样，我能想到最好的方式是，先做加法运算，然后使用计</p>
+
+<p>算结果的类型强制转换生成的结果。我在Python邮件列表中问了这个问题，Steven D&rsquo;Aprano给出了妙极的答复</p>
+
+<p>(<a href="https://mail.python.org/pipermail/python-list/2014-December/682651.html">https://mail.python.org/pipermail/python-list/2014-December/682651.html</a>)。</p>
+
+<p>❸为了提高可读性，我们创建了 forever变量，如果self.end属性的值是None，那么</p>
+
+<p>forever的值是True，因此生成的是无穷数列。</p>
+
+<p>❹ 这个循环要么一直执行下去，要么当 result 大于或等于 self.end 时结束。如果循环 退出了，那么这个函数也随之退出。</p>
+
+<p>❺ 生成当前的 result 值。</p>
+
+<p>❻ 计算可能存在的下一个结果。这个值可能永远不会产出，因为 while 循环可能会终 止。</p>
+
+<p>在示例14-11中的最后一行，我没有直接使用self.step不断地增加result，而是选择 使用 index 变量，把 self.begin 与 self.step 和 index 的乘积相加，计算 result 的</p>
+
+<p>各个值，以此降低处理浮点数时累积效应致错的风险。</p>
+
+<p>示例 14-11 中定义的 ArithmeticProgression 类能按预期那样使用。这是个简单的示 例，说明了如何使用生成器函数实现特殊的 <strong>iter</strong> 方法。然而，如果一个类只是为了 构建生成器而去实现 <strong>iter</strong> 方法，那还不如使用生成器函数。毕竟，生成器函数是制 造生成器的工厂。</p>
+
+<p>示例 14-12 中定义了一个名为 aritprog_gen 的生成器函数，作用与</p>
+
+<p>ArithmeticProgression 类一样，只不过代码量更少。如果把</p>
+
+<p>ArithmeticProgression 类换成 aritprog_gen 函数，示例 14-10 中的测试也都能通 过。 11</p>
+
+<p>11 本书源码仓库(<a href="https://github.com/fluentpython/example-code">https://gihub.com/fluentpython/example-code</a>)中的 14-it-generator/目录里包含 doctest,以及一个 aritprog_runner.py 脚本，用于测试 aritprog*.py 脚本的所有版本。</p>
+
+<h4 id="示例14-12-aritprog-gen生成器函数">示例14-12 aritprog_gen生成器函数</h4>
+
+<p>def aritprog_gen(begin, step, end=None): result = type(begin + step)(begin) forever = end is None index = 0</p>
+
+<p>while forever or result &lt; end: yield result index += 1</p>
+
+<p>result = begin + step * index</p>
+
+<h4 id="示例-14-12-很棒-不过始终要记住-标准库中有许多现成的生成器-下一节会使用-itertools-模块实现-那个版本更棒">示例 14-12 很棒，不过始终要记住，标准库中有许多现成的生成器。下一节会使用 itertools 模块实现，那个版本更棒。</h4>
+
+<p>使用itertools模块生成等差数列</p>
+
+<h4 id="python-3-4-中的-itertools-模块提供了-19-个生成器函数-结合起来使用能实现很多有趣-的用法">Python 3.4 中的 itertools 模块提供了 19 个生成器函数，结合起来使用能实现很多有趣 的用法。</h4>
+
+<h4 id="例如-itertools-count函数返回的生成器能生成多个数-如果不传入参-数-itertools-count函数会生成从零开始的整数数列-不过-我们可以提供可选的-start-和-step-值-这样实现的作用与-aritprog-gen-函数十分相似">例如，itertools.count函数返回的生成器能生成多个数。如果不传入参 数，itertools.count函数会生成从零开始的整数数列。不过，我们可以提供可选的 start 和 step 值，这样实现的作用与 aritprog_gen 函数十分相似：</h4>
+
+<h4 id="然而-itertools-count-函数从不停止-因此-如果调用-list-count-python-会创-建一个特别大的列表-超出可用内存-在调用失败之前-电脑会疯狂地运转">然而， itertools.count 函数从不停止，因此，如果调用 list(count())， Python 会创 建一个特别大的列表，超出可用内存，在调用失败之前，电脑会疯狂地运转。</h4>
+
+<h4 id="不过-itertools-takewhile-函数则不同-它会生成一个使用另一个生成器的生成器">不过， itertools.takewhile 函数则不同，它会生成一个使用另一个生成器的生成器，</h4>
+
+<h4 id="在指定的条件计算结果为-false-时停止-因此-可以把这两个函数结合在一起使用-编-写下述代码">在指定的条件计算结果为 False 时停止。因此，可以把这两个函数结合在一起使用，编 写下述代码：</h4>
+
+<p>&gt;&gt;&gt; gen = itertools.takewhile(lambda n: n &lt; 3, itertools.count(1, .5)) &gt;&gt;&gt; list(gen)</p>
+
+<p>[1, 1.5, 2.0, 2.5]</p>
+
+<h4 id="示例-14-13-利用-takewhile-和-count-函数-写出的代码流畅而简短">示例 14-13 利用 takewhile 和 count 函数，写出的代码流畅而简短。</h4>
+
+<h4 id="示例14-13-aritprog-v3-py-与前面的aritprog-gen函数作用相同">示例14-13 aritprog_v3.py：与前面的aritprog_gen函数作用相同</h4>
+
+<p>import itertools</p>
+
+<p>def aritprog_gen(begin, step, end=None): first = type(begin + step)(begin) ap_gen = itertools.count(first, step) if end is not None:</p>
+
+<p>ap_gen = itertools.takewhile(lambda n: n &lt; end, ap_gen) return ap_gen</p>
+
+<h4 id="注意-示例-14-13-中的-aritprog-gen-不是生成器函数-因为定义体中没有-yield-关键-字-但是它会返回一个生成器-因此它与其他生成器函数一样-也是生成器工厂函数">注意，示例 14-13 中的 aritprog_gen 不是生成器函数，因为定义体中没有 yield 关键 字。但是它会返回一个生成器，因此它与其他生成器函数一样，也是生成器工厂函数。</h4>
+
+<h4 id="示例-14-13-想表达的观点是-实现生成器时要知道标准库中有什么可用-否则很可能会重-新发明轮子-鉴于此-下一节会介绍一些现成的生成器函数">示例 14-13 想表达的观点是，实现生成器时要知道标准库中有什么可用，否则很可能会重 新发明轮子。鉴于此，下一节会介绍一些现成的生成器函数。</h4>
+
+<h3 id="14-9-标准库中的生成器函数">14.9 标准库中的生成器函数</h3>
+
+<p>标准库提供了很多生成器，有用于逐行迭代纯文本文件的对象，还有出色的 os.walk 函 数(<a href="https://docs.python.org/3/library/os.html%23os.walk">https://docs.python.Org/3/library/os.html#os.walk</a>)。这个函数在遍历目录树的过程中产</p>
+
+<p>出文件名，因此递归搜索文件系统像 for 循环那样简单。</p>
+
+<p>os.walk 生成器函数的作用令人赞叹，不过本节专注于通用的函数：参数为任意的可迭 代对象，返回值是生成器，用于生成选中的、计算出的和重新排列的元素。在下述几个表 格中，我会概述其中的 24 个，有些是内置的，有些在 itertools 和 functools 模块 中。为了方便，我按照函数的高阶功能分组，而不管函数是在哪里定义的。</p>
+
+<h4 id="你可能知道本节所述的全部函数-但是某些函数没有得到充分利用-因此快速-概览一遍能让你知道有什么函数可用">你可能知道本节所述的全部函数，但是某些函数没有得到充分利用，因此快速 概览一遍能让你知道有什么函数可用。</h4>
+
+<p>第一组是用于过滤的生成器函数：从输入的可迭代对象中产出元素的子集，而且不修改元 素本身。本章前面的 14.8.1 节用过 itertools.takewhile 函数。与 takewhile 函数一 样，表14-1中的大多数函数都接受一个断言参数(predicate)。这个参数是个布尔函 数，有一个参数，会应用到输入中的每个元素上，用于判断元素是否包含在输出中。 表14-1：用于过滤的生成器函数</p>
+
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>itertools</td>
+<td>compress(it,selector_it)</td>
+<td>并行处理两个可迭代的对象；如果 selector_it 中的元素是真值， 产出 it 中对应的元素</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>dropwhile(predicate, it)</td>
+<td>处理it，跳过predicate的计算结果为真值的元素，然后产出剩下的各个元素(不再进一步检查)</td>
+</tr>
+
+<tr>
+<td>(内置)</td>
+<td>filter(predicate, it)</td>
+<td>把it中的各个兀素传给predicate，如果pnedicate(item)返回真 值，那么产出对应的元素；如果predicate是None，那么只产出真 值元素</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>filterfalse(predicate,it)</td>
+<td>与 filter 函数的作用类似，不过 predicate 的逻辑是相反 的：predicate返回假值时产出对应的元素</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>islice(it, stop) 或 islice(it, start, stop, step=1)</td>
+<td>产出it的切片，作用类似于s[:stop]或s[start:stop:step]，不过it 可以是任何可迭代的对象，而且这个函数实现的是惰性操作</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>takewhile(predicate, it)</td>
+<td>predicate 返回真值时产出对应的元素，然后立即停止，不再继续检查</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="示例-14-14-在控制台中演示表-14-1-中各个函数的用法">示例 14-14 在控制台中演示表 14-1 中各个函数的用法。</h4>
+
+<h4 id="示例-14-14-演示用于过滤的生成器函数">示例 14-14 演示用于过滤的生成器函数</h4>
+
+<p>&gt;&gt;&gt; def vowel&copy;:</p>
+
+<p>&hellip; return c.lower() in &lsquo;aeiou&rsquo;</p>
+
+<p>&gt;&gt;&gt; list(filter(vowel, &lsquo;Aardvark&rsquo;))</p>
+
+<p>[&lsquo;A&rsquo;, &lsquo;a&rsquo;, &lsquo;a&rsquo;]</p>
+
+<p>&gt;&gt;&gt; import itertools</p>
+
+<p>&gt;&gt;&gt; list(itertools.filterfalse(vowel, &lsquo;Aardvark&rsquo;))</p>
+
+<p>[&lsquo;r&rsquo;, &rsquo;d&rsquo;, &lsquo;v&rsquo;, &lsquo;r&rsquo;, &lsquo;k&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(itertools.dropwhile(vowel, &lsquo;Aardvark&rsquo;))</p>
+
+<p>[&lsquo;r&rsquo;, &rsquo;d&rsquo;, &lsquo;v&rsquo;, &lsquo;a&rsquo;, &lsquo;r&rsquo;, &lsquo;k&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(itertools.takewhile(vowel, &lsquo;Aardvark&rsquo;))</p>
+
+<p>[&lsquo;A&rsquo;, &lsquo;a&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(itertools.compress(&lsquo;Aardvark&rsquo;, (1,0,1,1,0,1))) [&lsquo;A&rsquo;, &lsquo;r&rsquo;, &rsquo;d&rsquo;, &lsquo;a&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(itertools.islice(&lsquo;Aardvark&rsquo;, 4))</p>
+
+<p>[&lsquo;A&rsquo;, &lsquo;a&rsquo;, &lsquo;r&rsquo;, &rsquo;d&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(itertools.islice(&lsquo;Aardvark&rsquo;, 4, 7))</p>
+
+<p>[&lsquo;v&rsquo;, &lsquo;a&rsquo;, &lsquo;r&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(itertools.islice(&lsquo;Aardvark&rsquo;, 1, 7, 2))</p>
+
+<p>[&lsquo;a&rsquo;, &rsquo;d&rsquo;, &lsquo;a&rsquo;]</p>
+
+<p>下一组是用于映射的生成器函数：在输入的单个可迭代对象（map和starmap函数处理 多个可迭代的对象）中的各个元素上做计算，然后返回结果。 12 表 14-2 中的生成器函数 会从输入的可迭代对象中的各个元素中产出一个元素。如果输入来自多个可迭代的对象， 第一个可迭代的对象到头后就停止输出。</p>
+
+<p>12这里所说的“映射”与字典没有关系，而与内置的map函数有关。</p>
+
+<p>表14-2：用于映射的生成器函数</p>
+
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>itertools</td>
+<td>accumulate(it,[func])</td>
+<td>产出累积的总和；如果提供了 func，那么把前两个元素传给它，然后把计算结果和下一个元素传给它，以此类推，最后产出结果</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>enumerate(iterable,start=0)</td>
+<td>产出由两个兀素组成的兀组，结构是（index, item），其中index从start 开始计数， item 则从 iterable 中获取</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>map(func, it1,[it2, &hellip;, itN])</td>
+<td>把it中的各个元素传给func，产出结果；如果传入W个可迭代的对象，那么 func 必须能接受 N 个参数，而且要并行处理各个可迭代的对象</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>starmap(func, it)</td>
+<td>把it中的各个元素传给func，产出结果；输入的可迭代对象应该产出可 迭代的元素iit，然后以func（*iit）这种形式调用func</td>
+</tr>
+</tbody>
+</table>
+
+<p>示例 14-15 演示 itertools.accumulate 函数的几个用法。 示例14-15 演示itertools.accumulate生成器函数</p>
+
+<p>&gt;&gt;&gt; sample = [5, 4, 2, 8, 7, 6, 3, 0, 9, 1]</p>
+
+<p>&gt;&gt;&gt; import itertools</p>
+
+<p>&gt;&gt;&gt; list(itertools.accumulate(sample)) # O</p>
+
+<p>[5, 9, 11, 19, 26, 32, 35, 35, 44, 45]</p>
+
+<p>&gt;&gt;&gt; list(itertools.accumulate(sample, min)) # &amp;</p>
+
+<p>[5, 4, 2, 2, 2, 2, 2, 0, 0, 0]</p>
+
+<p>&gt;&gt;&gt; list(itertools.accumulate(sample, max))    # ©</p>
+
+<p>[5, 5, 5, 8, 8, 8, 8, 8, 9, 9]</p>
+
+<p>&gt;&gt;&gt; import operator</p>
+
+<p>&gt;&gt;&gt; list(itertools.accumulate(sample, operator.mul)) # &amp;</p>
+
+<p>[5, 20, 40, 320, 2240, 13440, 40320, 0, 0, 0]</p>
+
+<p>&gt;&gt;&gt; list(itertools.accumulate(range(1, 11), operator.mul)) [1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]    # ❺</p>
+
+<p>❶ 计算总和。</p>
+
+<p>❷ 计算最小值。</p>
+
+<p>❸ 计算最大值。</p>
+
+<p>❹ 计算乘积。</p>
+
+<p>❺ 从 1! 到 10!，计算各个数的阶乘。</p>
+
+<p>表 14-2 中剩余函数的演示如示例 14-16 所示</p>
+
+<p>示例14-16演示用于映射的生成器函数</p>
+
+<p>&gt;&gt;&gt; list(enumerate(&lsquo;albatroz&rsquo;, 1)) # O</p>
+
+<p>[(1, &lsquo;a&rsquo;), (2, &lsquo;l&rsquo;), (3, &lsquo;b&rsquo;), (4, &lsquo;a&rsquo;), (5, &rsquo;t&rsquo;), (6, &lsquo;r&rsquo;), (7, &lsquo;o&rsquo;), (8, &lsquo;z&rsquo;)] &gt;&gt;&gt; import operator</p>
+
+<p>&gt;&gt;&gt; list(map(operator.mul, range(11), range(11)))    # ©</p>
+
+<p>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</p>
+
+<p>&gt;&gt;&gt; list(map(operator.mul, range(11), [2, 4, 8])) # ©</p>
+
+<p>[0, 4, 16]</p>
+
+<p>&gt;&gt;&gt; list(map(lambda a, b: (a, b), range(11), [2, 4, 8]))    # ©</p>
+
+<p>[(0, 2), (1, 4), (2, 8)]</p>
+
+<p>&gt;&gt;&gt; import itertools</p>
+
+<p>&gt;&gt;&gt; list(itertools.starmap(operator.mul, enumerate(&lsquo;albatroz&rsquo;, 1))) # ❺</p>
+
+<p>[&lsquo;a&rsquo;, &rsquo;ll&rsquo;, &lsquo;bbb&rsquo;, &lsquo;aaaa&rsquo;, &lsquo;ttttt&rsquo;, &lsquo;rrrrrr&rsquo;, &lsquo;ooooooo&rsquo;, &lsquo;zzzzzzzz&rsquo;]</p>
+
+<p>&gt;&gt;&gt; sample = [5, 4, 2, 8, 7, 6, 3, 0, 9, 1]</p>
+
+<p>&gt;&gt;&gt; list(itertools.starmap(lambda a, b: b/a,</p>
+
+<p>… enumerate(itertools.accumulate(sample), 1)))    # ©</p>
+
+<p>[5.0, 4.5, 3.6666666666666665, 4.75, 5.2, 5.333333333333333,</p>
+
+<p>5.0, 4.375, 4.888888888888889, 4.5]</p>
+
+<p>❶ 从 1 开始，为单词中的字母编号。</p>
+
+<h4 id="❷-从-0-到-10-计算各个整数的平方">❷ 从 0 到 10，计算各个整数的平方。</h4>
+
+<h4 id="❸-计算两个可迭代对象中对应位置上的两个元素之积-元素最少的那个可迭代对象到头">❸ 计算两个可迭代对象中对应位置上的两个元素之积，元素最少的那个可迭代对象到头</h4>
+
+<p>后就停止。</p>
+
+<p>❹ 作用等同于内置的 zip 函数。</p>
+
+<p>❺ 从 1 开始，根据字母所在的位置，把字母重复相应的次数。</p>
+
+<h4 id="❻-计算平均值">❻ 计算平均值。</h4>
+
+<p>接下来这一组是用于合并的生成器函数，这些函数都从输入的多个可迭代对象中产出元 素。 chain 和 chain.from_iterable 按顺序（一个接一个）处理输入的可迭代对象，而 product、zip 和 zip_longest 并行处理输入的各个可迭代对象。如表 14-3 所示。 表14-3：合并多个可迭代对象的生成器函数</p>
+
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>itertools</td>
+<td>chain(it1, &hellip;, itN)</td>
+<td>先产出 it1 中的所有元素，然后产出 it2 中的所有元素，以此类推，无缝连接在一起</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>chain.from_iterable(it)</td>
+<td>产出 it 生成的各个可迭代对象中的元素，一个接一个，无缝连接在 一起； it 应该产出可迭代的元素，例如可迭代的对象列表</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>product(it1, &hellip;, itN, repeat=1)</td>
+<td>计算笛卡儿积：从输入的各个可迭代对象中获取元素，合并成由 N个元素组成的元组，与嵌套的 for 循环效果一样； repeat 指明重复处理多少次输入的可迭代对象</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>zip(it1, &hellip;, itN)</td>
+<td>并行从输入的各个可迭代对象中获取元素，产出由 N 个元素组成的元组，只要有一个可迭代的对象到头了，就默默地停止</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>zip_longest(it1, &hellip;, itN, fillvalue=None)</td>
+<td>并行从输入的各个可迭代对象中获取元素，产出由 N 个元素组成的元组，等到最长的可迭代对象到头后才停止，空缺的值使用 fillvalue 填充</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="示例-14-17-展示-itertools-chain-和-zip-生成器函数及其同胞的用法-再次提醒-zip-函数的名称出自zip-fastener或zipper-拉链-与zip压缩没有关系-出色的zip函">示例 14-17 展示 itertools.chain 和 zip 生成器函数及其同胞的用法。再次提醒， zip 函数的名称出自zip fastener或zipper （拉链，与ZIP压缩没有关系）。“出色的zip函</h4>
+
+<p>数”附注栏介绍过 zip 和 itertools.zip_longest 函数。</p>
+
+<p>示例 14-17 演示用于合并的生成器函数</p>
+
+<p>[(0, &lsquo;A&rsquo;), (1, &lsquo;B&rsquo;), (2, &lsquo;C&rsquo;)]</p>
+
+<p>&gt;&gt;&gt; list(itertools.chain.from_iterable(enumerate(&lsquo;ABC&rsquo;))) # ©</p>
+
+<p>[0, &lsquo;A&rsquo;, 1, &lsquo;B&rsquo;, 2, &lsquo;C&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(zip(&lsquo;ABC&rsquo;, range(5))) # ©</p>
+
+<p>[(&lsquo;A&rsquo;, 0), (&lsquo;B&rsquo;, 1), (&lsquo;C&rsquo;, 2)]</p>
+
+<p>&gt;&gt;&gt; list(zip(&lsquo;ABC&rsquo;, range(5), [10, 20, 30, 40]))    # ❺</p>
+
+<p>[(&lsquo;A&rsquo;, 0, 10), (&lsquo;B&rsquo;, 1, 20), (&lsquo;C&rsquo;, 2, 30)]</p>
+
+<p>&gt;&gt;&gt; list(itertools.zip_longest(&lsquo;ABC&rsquo;, range(5))) # ©</p>
+
+<p>[(&lsquo;A&rsquo;, 0), (&lsquo;B&rsquo;, 1), (&lsquo;C&rsquo;, 2), (None, 3), (None, 4)]</p>
+
+<p>&gt;&gt;&gt; list(itertools.zip_longest(&lsquo;ABC&rsquo;, range(5), fillvalue=&lsquo;?&rsquo;)) # O [(&lsquo;A&rsquo;, 0), (&lsquo;B&rsquo;, 1), (&lsquo;C&rsquo;, 2), (&lsquo;?&rsquo;, 3), (&lsquo;?&rsquo;, 4)]</p>
+
+<p>❶ 调用 chain 函数时通常传入两个或更多个可迭代对象。</p>
+
+<p>❷ 如果只传入一个可迭代的对象，那么 chain 函数没什么用。</p>
+
+<p>❸ 但是 chain.from_iterable 函数从可迭代的对象中获取每个元素，然后按顺序把元 素连接起来，前提是各个元素本身也是可迭代的对象。</p>
+
+<p>❹ zip 常用于把两个可迭代的对象合并成一系列由两个元素组成的元组。</p>
+
+<p>❺ zip 可以并行处理任意数量个可迭代的对象，不过只要有一个可迭代的对象到头了， 生成器就停止。</p>
+
+<p>❻ itertools.zip_longest 函数的作用与 zip 类似，不过输入的所有可迭代对象都会 处理到头，如果需要会填充 None。</p>
+
+<p>❼ fillvalue 关键字参数用于指定填充的值。</p>
+
+<p>itertools.product 生成器是计算笛卡儿积的惰性方式；在 2.2.3 节，我们在多个 for 子句中使用列表推导计算过笛卡儿积。此外，也可以使用包含多个 for 子句的生成器表 达式，以惰性方式计算笛卡儿积。示例 14-18 演示 itertools.product 函数的用法。</p>
+
+<p>示例 14-18 演示 itertools.product 生成器函数</p>
+
+<p>&gt;&gt;&gt; list(itertools.product(&lsquo;ABC&rsquo;, range(2))) # O</p>
+
+<p>[(&lsquo;A&rsquo;, 0), (&lsquo;A&rsquo;, 1), (&lsquo;B&rsquo;, 0), (&lsquo;B&rsquo;, 1), (&lsquo;C&rsquo;, 0), (&lsquo;C&rsquo;, 1)]</p>
+
+<p>&gt;&gt;&gt; suits = &lsquo;spades hearts diamonds clubs&rsquo;.split()</p>
+
+<p>&gt;&gt;&gt; list(itertools.product(&lsquo;AK&rsquo;, suits)) # ©</p>
+
+<p>[(&lsquo;A&rsquo;, &lsquo;spades&rsquo;), (&lsquo;A&rsquo;, &lsquo;hearts&rsquo;), (&lsquo;A&rsquo;, &lsquo;diamonds&rsquo;), (&lsquo;A&rsquo;, &lsquo;clubs&rsquo;), (&lsquo;K&rsquo;, &lsquo;spades&rsquo;), (&lsquo;K&rsquo;, &lsquo;hearts&rsquo;), (&lsquo;K&rsquo;, &lsquo;diamonds&rsquo;), (&lsquo;K&rsquo;, &lsquo;clubs&rsquo;)] &gt;&gt;&gt; list(itertools.product(&lsquo;ABC&rsquo;)) # ©</p>
+
+<p>[(&lsquo;A&rsquo;,), (&lsquo;B&rsquo;,), (&lsquo;C&rsquo;,)]</p>
+
+<p>&gt;&gt;&gt; list(itertools.product(&lsquo;ABC&rsquo;, repeat=2)) # ©</p>
+
+<p>[(&lsquo;A&rsquo;, &lsquo;A&rsquo;), (&lsquo;A&rsquo;, &lsquo;B&rsquo;), (&lsquo;A&rsquo;, &lsquo;C&rsquo;), (&lsquo;B&rsquo;, &lsquo;A&rsquo;), (&lsquo;B&rsquo;, &lsquo;B&rsquo;),</p>
+
+<p>(&lsquo;B&rsquo;, &lsquo;C&rsquo;), (&lsquo;C&rsquo;, &lsquo;A&rsquo;), (&lsquo;C&rsquo;, &lsquo;B&rsquo;), (&lsquo;C&rsquo;, &lsquo;C&rsquo;)]</p>
+
+<p>&gt;&gt;&gt; list(itertools.product(range(2), repeat=3))</p>
+
+<p>[(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1), (1, 0, 0),</p>
+
+<p>(1, 0, 1), (1, 1, 0), (1, 1, 1)]</p>
+
+<p>&gt;&gt;&gt; rows = itertools.product(&lsquo;AB&rsquo;, range(2), repeat=2)</p>
+
+<p>&gt;&gt;&gt; for row in rows: print(row)</p>
+
+<table>
+<thead>
+<tr>
+<th>(</th>
+<th>A&rsquo;,</th>
+<th>0,</th>
+<th>&lsquo;A&rsquo;,</th>
+<th>1)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>(</td>
+<td>A&rsquo;,</td>
+<td>0,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>0)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>A&rsquo;,</td>
+<td>0,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>1)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>A&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;A&rsquo;,</td>
+<td>0)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>A&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;A&rsquo;,</td>
+<td>1)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>A&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>0)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>A&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>1)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>0,</td>
+<td>&lsquo;A&rsquo;,</td>
+<td>0)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>0,</td>
+<td>&lsquo;A&rsquo;,</td>
+<td>1)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>0,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>0)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>0,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>1)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;A&rsquo;,</td>
+<td>0)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;A&rsquo;,</td>
+<td>1)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>0)</td>
+</tr>
+
+<tr>
+<td>(</td>
+<td>B&rsquo;,</td>
+<td>1,</td>
+<td>&lsquo;B&rsquo;,</td>
+<td>1)</td>
+</tr>
+</tbody>
+</table>
+
+<p>❶ 三个字符的字符串与两个整数的值域得到的笛卡儿积是六个元组(因为 3 * 2 等于 6)。</p>
+
+<p>❷两张牌(’AK&rsquo;)与四种花色得到的笛卡儿积是八个元组。</p>
+
+<p>❸ 如果传入一个可迭代的对象， product 函数产出的是一系列只有一个元素的元组，不 是特别有用。</p>
+
+<p>❹ repeat=N 关键字参数告诉 product 函数重复 N 次处理输入的各个可迭代对象。</p>
+
+<p>有些生成器函数会从一个元素中产出多个值，扩展输入的可迭代对象，如表 14-4 所示。</p>
+
+<p>表14-4：把输入的各个元素扩展成多个输出元素的生成器函数</p>
+
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>itertools</td>
+<td>combinations(it, out_len)</td>
+<td>把it产出的out_len个元素组合在一起，然后产出</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>combinations_with_replacement(it,out_len)</td>
+<td>把 it 产出的 out_len 个元素组合在一起，然后产出，包 含相同元素的组合</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>count(start=0, step=1)</td>
+<td>从start开始不断产出数字，按step指定的步幅增加</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>cycle(it)</td>
+<td>从 it 中产出各个元素，存储各个元素的副本，然后按顺 序重复不断地产出各个元素</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>permutations(it, out_len=None)</td>
+<td>把 out_len 个 it 产出的元素排列在一起，然后产出这些排列；out_len的默认值等于len(list(it))</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>repeat(item, [times])</td>
+<td>重复不断地产出指定的元素，除非提供times，指定次数</td>
+</tr>
+</tbody>
+</table>
+
+<p>itertools 模块中的 count 和 repeat 函数返回的生成器“无中生有”：这两个函数都不 接受可迭代的对象作为输入。 14.8.1 节见过 itertools.count 函数。 cycle 生成器会备 份输入的可迭代对象，然后重复产出对象中的元素。示例 14-19 演示 count、repeat 和 cycle 的用法。</p>
+
+<p>示例 14-19 演示 count、repeat 和 cycle 的用法</p>
+
+<p>&gt;&gt;&gt; ct = itertools.count() # O &gt;&gt;&gt; next(ct) # ©</p>
+
+<p>0</p>
+
+<p>&gt;&gt;&gt; next(ct), next(ct), next(ct) # ©</p>
+
+<p>(1, 2, 3)</p>
+
+<p>&gt;&gt;&gt; list(itertools.islice(itertools.count(1, .3), 3))    # ©</p>
+
+<p>[1, 1.3, 1.6]</p>
+
+<p>&gt;&gt;&gt; cy = itertools.cycle(&lsquo;ABC&rsquo;) # ❺</p>
+
+<p>&gt;&gt;&gt; next(cy)</p>
+
+<p>&lsquo;A&rsquo;</p>
+
+<p>&gt;&gt;&gt; list(itertools.islice(cy, 7))    # ©</p>
+
+<p>[&lsquo;B&rsquo;, &lsquo;C&rsquo;, &lsquo;A&rsquo;, &lsquo;B&rsquo;, &lsquo;C&rsquo;, &lsquo;A&rsquo;, &lsquo;B&rsquo;]</p>
+
+<p>&gt;&gt;&gt; rp = itertools.repeat(7) # ©</p>
+
+<p>&gt;&gt;&gt; next(rp), next(rp)</p>
+
+<p>(7, 7)</p>
+
+<p>&gt;&gt;&gt; list(itertools.repeat(8, 4))    # ❻</p>
+
+<p>[8, 8, 8, 8]</p>
+
+<p>&gt;&gt;&gt; list(map(operator.mul, range(11), itertools.repeat(5)))    # ©</p>
+
+<p>[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]</p>
+
+<p>❶ 使用 count 函数构建 ct 生成器。</p>
+
+<p>❷ 获取 ct 中的第一个元素。</p>
+
+<p>❸ 不能使用 ct 构建列表，因为 ct 是无穷的，所以我获取接下来的 3 个元素。</p>
+
+<p>❹ 如果使用 islice 或 takewhile 函数做了限制，可以从 count 生成器中构建列表。</p>
+
+<p>❺使用&rsquo;ABC&rsquo;构建一个cycle生成器，然后获取第一个元素-&lsquo;A&rsquo;。</p>
+
+<p>❻ 只有受到 islice 函数的限制，才能构建列表；这里获取接下来的 7 个元素。</p>
+
+<p>❼ 构建一个 repeat 生成器，始终产出数字 7。</p>
+
+<p>❽ 传入 times 参数可以限制 repeat 生成器生成的元素数量：这里会生成 4 次数字 8。</p>
+
+<p>❾ repeat 函数的常见用途：为 map 函数提供固定参数，这里提供的是乘数 5。</p>
+
+<p>在 itertools 模块的文档中</p>
+
+<p>(<a href="https://docs.python.org/3/library/itertools.html">https://docs.python.org/3/library/itertools.html</a>) ， combinations、combinations_with_r 和permutations生成器函数，连同product函数，称为组合学生成器(combinatoric generator)。 itertools.product 函数和其余的组合学函数有紧密的联系，如示例 1420 所示。</p>
+
+<p>示例 14-20 组合学生成器函数会从输入的各个元素中产出多个值</p>
+
+<p>[(&lsquo;A&rsquo;, &lsquo;B&rsquo;), (&lsquo;A&rsquo;, &lsquo;C&rsquo;), (&lsquo;B&rsquo;, &lsquo;A&rsquo;), (&lsquo;B&rsquo;, &lsquo;C&rsquo;), (&lsquo;C&rsquo;, &lsquo;A&rsquo;), (&lsquo;C&rsquo;, &lsquo;B&rsquo;)] &gt;&gt;&gt; list(itertools.product(&lsquo;ABC&rsquo;, repeat=2)) # ©</p>
+
+<p>[(&lsquo;A&rsquo;, &lsquo;A&rsquo;), (&lsquo;A&rsquo;, &lsquo;B&rsquo;), (&lsquo;A&rsquo;, &lsquo;C&rsquo;), (&lsquo;B&rsquo;, &lsquo;A&rsquo;), (&lsquo;B&rsquo;, &lsquo;B&rsquo;), (&lsquo;B&rsquo;, &lsquo;C&rsquo;), (&lsquo;C&rsquo;, &lsquo;A&rsquo;), (&lsquo;C&rsquo;, &lsquo;B&rsquo;), (&lsquo;C&rsquo;, &lsquo;C&rsquo;)]</p>
+
+<p>❶&rsquo;ABC&rsquo;中每两个元素（len（）==2）的各种组合；在生成的元组中，元素的顺序无关紧</p>
+
+<p>要（可以视作集合）。</p>
+
+<p>❷&rsquo;ABC&rsquo;中每两个元素（len（）==2）的各种组合，包括相同元素的组合。</p>
+
+<p>❸&rsquo;ABC&rsquo;中每两个元素（len（）==2）的各种排列；在生成的元组中，元素的顺序有重要</p>
+
+<p>意义。</p>
+
+<p>❹ &lsquo;ABC&rsquo; 和 &lsquo;ABC&rsquo;（repeat=2 的效果）的笛卡儿积。</p>
+
+<p>本节要讲的最后一组生成器函数用于产出输入的可迭代对象中的全部元素，不过会以某种 方式重新排列。其中有两个函数会返回多个生成器，分别是 itertools.groupby 和</p>
+
+<p>itertools.tee。这一组里的另一个生成器函数，内置的reversed函数，是本节所述</p>
+
+<p>的函数中唯一一个不接受可迭代的对象，而只接受序列为参数的函数。这在情理之中，因 为 reversed 函数从后向前产出元素，而只有序列的长度已知时才能工作。不过，这个函 数会按需产出各个元素，因此无需创建反转的副本。我把 itertools.product 函数划分</p>
+
+<p>为用于合并的生成器，列在表 14-3 中，因为那一组函数都处理多个可迭代的对象，而表 14-5 中的生成器最多只能接受一个可迭代的对象。</p>
+
+<p>表14-5：用于重新排列元素的生成器函数</p>
+
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>itertools</td>
+<td>groupby(it,key=None)</td>
+<td>产出由两个元素组成的元素，形式为（key, group），其中key是分组标 准，group是生成器，用于产出分组里的元素</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>reversed(seq)</td>
+<td>从后向前，倒序产出seq中的元素；seq必须是序列，或者是实现了<strong>reversed</strong> 特殊方法的对象</td>
+</tr>
+
+<tr>
+<td>itertools</td>
+<td>tee(it, n=2)</td>
+<td>产出一个由 n 个生成器组成的元组，每个生成器用于单独产出输入的可 迭代对象中的元素</td>
+</tr>
+</tbody>
+</table>
+
+<p>示例 14-21 演示 itertools.groupby 函数和内置的 reversed 函数的用法。注 意， itertools.groupby 假定输入的可迭代对象要使用分组标准排序；即使不排序，至</p>
+
+<h4 id="少也要使用指定的标准分组各个元素">少也要使用指定的标准分组各个元素。</h4>
+
+<h4 id="示例-14-21-itertools-groupby-函数的用法">示例 14-21 itertools.groupby 函数的用法</h4>
+
+<p>&gt;&gt;&gt; list(itertools.groupby(&lsquo;LLLLAAGGG&rsquo;)) # O</p>
+
+<p>[(&lsquo;L&rsquo;, <itertools._grouper object at 0x102227cc0>),</p>
+
+<p>(&lsquo;A&rsquo;, <itertools._grouper object at 0x102227b38>),</p>
+
+<p>(&lsquo;G&rsquo;, <itertools._grouper object at 0x102227b70>)]</p>
+
+<p>&gt;&gt;&gt; for char, group in itertools.groupby(&lsquo;LLLLAAAGG&rsquo;): # ©</p>
+
+<p>&hellip; print(char, &lsquo;-&gt;&rsquo;, list(group))</p>
+
+<p>L -&gt; [&lsquo;L&rsquo;, &lsquo;L&rsquo;, &lsquo;L&rsquo;, &lsquo;L&rsquo;]</p>
+
+<p>A -&gt; [&lsquo;A&rsquo;, &lsquo;A&rsquo;,]</p>
+
+<p>G -&gt; [&lsquo;G&rsquo;, &lsquo;G&rsquo;, &lsquo;G&rsquo;]</p>
+
+<p>&gt;&gt;&gt; animals = [&lsquo;duck&rsquo;, &lsquo;eagle&rsquo;, &lsquo;rat&rsquo;, &lsquo;giraffe&rsquo;, &lsquo;bear&rsquo;,</p>
+
+<p>&hellip;    &lsquo;bat&rsquo;, &lsquo;dolphin&rsquo;, &lsquo;shark&rsquo;, &lsquo;lion&rsquo;]</p>
+
+<p>&gt;&gt;&gt; animals.sort(key=len) # ©</p>
+
+<p>&gt;&gt;&gt; animals</p>
+
+<p>[&lsquo;rat&rsquo;, &lsquo;bat&rsquo;, &lsquo;duck&rsquo;, &lsquo;bear&rsquo;, &lsquo;lion&rsquo;, &lsquo;eagle&rsquo;, &lsquo;shark&rsquo;,</p>
+
+<p>&lsquo;giraffe&rsquo;, &lsquo;dolphin&rsquo;]</p>
+
+<p>&gt;&gt;&gt; for length, group in itertools.groupby(animals, len): # ©</p>
+
+<p>&hellip; print(length, &lsquo;-&gt;&rsquo;, list(group))</p>
+
+<p>3    -&gt; [&lsquo;rat&rsquo;, &lsquo;bat&rsquo;]</p>
+
+<p>4    -&gt; [&lsquo;duck&rsquo;, &lsquo;bear&rsquo;, &lsquo;lion&rsquo;]</p>
+
+<p>5    -&gt; [&lsquo;eagle&rsquo;, &lsquo;shark&rsquo;]</p>
+
+<p>7 -&gt; [&lsquo;giraffe&rsquo;, &lsquo;dolphin&rsquo;]</p>
+
+<p>&gt;&gt;&gt; for length, group in itertools.groupby(reversed(animals), len): # ❺</p>
+
+<p>&hellip; print(length, &lsquo;-&gt;&rsquo;, list(group))</p>
+
+<p>7 -&gt; [&lsquo;dolphin&rsquo;, &lsquo;giraffe&rsquo;]</p>
+
+<p>5 -&gt; [&lsquo;shark&rsquo;, &lsquo;eagle&rsquo;]</p>
+
+<p>4 -&gt; [&lsquo;lion&rsquo;, &lsquo;bear&rsquo;, &lsquo;duck&rsquo;]</p>
+
+<p>3 -&gt; [&lsquo;bat&rsquo;, &lsquo;rat&rsquo;]</p>
+
+<p>&gt;&gt;&gt;</p>
+
+<p>❶ groupby 函数产出 (key, group_generator) 这种形式的元组。</p>
+
+<p>❷ 处理 groupby 函数返回的生成器要嵌套迭代：这里在外层使用 for 循环，内层使用列 表推导。</p>
+
+<h4 id="❸-为了使用-groupby-函数-要排序输入-这里按照单词的长度排序">❸ 为了使用 groupby 函数，要排序输入；这里按照单词的长度排序。</h4>
+
+<p>❹ 再次遍历 key 和 group 值对，把 key 显示出来，并把 group 扩展成列表。</p>
+
+<p>❺ 这里使用 reverse 生成器从右向左迭代 animals。</p>
+
+<h4 id="这一组里的最后一个生成器函数是iterator-tee-这个函数只有一个作用-从输入的一">这一组里的最后一个生成器函数是iterator.tee，这个函数只有一个作用：从输入的一</h4>
+
+<p>个可迭代对象中产出多个生成器，每个生成器都可以产出输入的各个元素。产出的生成器 可以单独使用，如示例 14-22 所示。</p>
+
+<h4 id="示例14-22-itertools-tee函数产出多个生成器-每个生成器都可以产出输入的-各个元素">示例14-22 itertools.tee函数产出多个生成器，每个生成器都可以产出输入的 各个元素</h4>
+
+<p>&gt;&gt;&gt; list(itertools.tee(&lsquo;ABC&rsquo;))</p>
+
+<p>[<itertools._tee object at 0x10222abc8>, <itertools._tee object at 0x10222ac08>] &gt;&gt;&gt; g1, g2 = itertools.tee(&lsquo;ABC&rsquo;)</p>
+
+<p>&gt;&gt;&gt; next(g1)</p>
+
+<p>&lsquo;A&rsquo;</p>
+
+<p>&gt;&gt;&gt; next(g2)</p>
+
+<p>&lsquo;A&rsquo;</p>
+
+<p>&gt;&gt;&gt; next(g2)</p>
+
+<p>&lsquo;B&rsquo;</p>
+
+<p>&gt;&gt;&gt; list(g1)</p>
+
+<p>[&lsquo;B&rsquo;, &lsquo;C&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(g2)</p>
+
+<p>[&lsquo;C&rsquo;]</p>
+
+<p>&gt;&gt;&gt; list(zip(*itertools.tee(&lsquo;ABC&rsquo;)))</p>
+
+<p>[(&lsquo;A&rsquo;, &lsquo;A&rsquo;), (&lsquo;B&rsquo;, &lsquo;B&rsquo;), (&lsquo;C&rsquo;, &lsquo;C&rsquo;)]</p>
+
+<h4 id="注意-这一节的示例多次把不同的生成器函数组合在一起使用-这是这些函数的优秀特">注意，这一节的示例多次把不同的生成器函数组合在一起使用。这是这些函数的优秀特</h4>
+
+<p>性：这些函数的参数都是生成器，而返回的结果也是生成器，因此能以很多不同的方式结</p>
+
+<p>合在一起使用。</p>
+
+<p>既然讲到了这个话题，那就介绍一下 Python 3.3 中新出现的 yield from 语句。这个语句 的作用就是把不同的生成器结合在一起使用。</p>
+
+<h3 id="14-10-python-3-3中新出现的句法-yield-from">14.10 Python 3.3中新出现的句法：yield from</h3>
+
+<p>如果生成器函数需要产出另一个生成器生成的值，传统的解决方法是使用嵌套的 for 循</p>
+
+<p>环。</p>
+
+<p>例如，下面是我们自己实现的 chain 生成器：13 13标准库中的itertools.chain函数是使用C语言编写的。</p>
+
+<p>&gt;&gt;&gt; def chain(*iterables): &hellip; for it in iterables: &hellip;    for i in it:</p>
+
+<p>&hellip;    yield i</p>
+
+<p>&gt;&gt;&gt; s = &lsquo;ABC</p>
+
+<p>&gt;&gt;&gt; t = tuple(range(3)) &gt;&gt;&gt; list(chain(s, t)) [&lsquo;A&rsquo;, &lsquo;B&rsquo;, &lsquo;C&rsquo;, 0, 1, 2]</p>
+
+<p>chain 生成器函数把操作依次交给接收到的各个可迭代对象处理。为此， “PEP 380 — Syntax for Delegating to a Subgenerator” (<a href="https://www.python.org/dev/peps/pep-0380/">https://www.python.org/dev/peps/pep-0380/</a>)引入了</p>
+
+<p>一个新句法，如下述控制台中的代码清单所示：</p>
+
+<p>&gt;&gt;&gt; def chain(*iterables): &hellip; for i in iterables: &hellip;    yield from i</p>
+
+<p>&gt;&gt;&gt;</p>
+
+<p>[&lsquo;A&rsquo;</p>
+
+<p>list , &lsquo;B</p>
+
+<p>,0</p>
+
+<p>s</p>
+
+<p>(,</p>
+
+<p>n&rsquo;</p>
+
+<p>iC</p>
+
+<p>a&rsquo;</p>
+
+<p>c, /V I</p>
+
+<p>t))</p>
+
+<p>1,</p>
+
+<p>2]</p>
+
+<p>可以看出， yield from i 完全代替了内层的 for 循环。在这个示例中使用 yield from</p>
+
+<p>是对的，而且代码读起来更顺畅，不过感觉更像是语法糖。除了代替循环之外， yield from 还会创建通道，把内层生成器直接与外层生成器的客户端联系起来。把生成器当成 协程使用时，这个通道特别重要，不仅能为客户端代码生成值，还能使用客户端代码提供 的值。第 16 章会深入讲解协程，其中有几页会说明为什么 yield from 不只是语法糖而</p>
+
+<p>已。</p>
+
+<p>一瞥 yield from 之后，我们回过头继续复习标准库中善于处理可迭代对象的函数。</p>
+
+<h3 id="14-11-可迭代的归约函数">14.11 可迭代的归约函数</h3>
+
+<p>表 14-6 中的函数都接受一个可迭代的对象，然后返回单个结果。这些函数叫“归约”函</p>
+
+<p>数、“合拢”函数或“累加”函数。其实，这里列出的每个内置函数都可以使用</p>
+
+<p>functools.reduce 函数实现，内置是因为使用它们便于解决常见的问题。此外，对 all 和 any 函数来说，有一项重要的优化措施是 reduce 函数做不到的：这两个函数会短路</p>
+
+<p>（即一旦确定了结果就立即停止使用迭代器）。参见示例 14-23 中 any 函数的最后一个测 试。</p>
+
+<p>表14-6：读取迭代器，返回单个值的内置函数</p>
+
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>（内置）</td>
+<td>all(it)</td>
+<td>it中的所有元素都为真值时返回True，否则返回False； all（［］）返回True</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>any(it)</td>
+<td>只要it中有兀素为真值就返回True，否则返回False； any（［］）返回False</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>max(it,[key=,][default=])</td>
+<td>返回 it 中值最大的元素； <a href="#bookmark2">1</a>key 是排序函数，与 sorted 函数中的一样；如果可 迭代的对象为空，返回 default</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>min(it,[key=,][default=])</td>
+<td>返回 it 中值最小的元素； #key 是排序函数，与 sorted 函数中的一样；如果可 迭代的对象为空，返回 default</td>
+</tr>
+
+<tr>
+<td>functools</td>
+<td>reduce (func,it, [initial])</td>
+<td>把前两个元素传给func，然后把计算结果和第三个元素传给func，以此类 推，返回最后的结果；如果提供了 initial，把它当作第一个元素传入</td>
+</tr>
+
+<tr>
+<td>（内置）</td>
+<td>sum(it,start=0)</td>
+<td>it中所有元素的总和，如果提供可选的start，会把它加上（计算浮点数的加 法时，可以使用 math.fsum 函数提高精度）</td>
+</tr>
+</tbody>
+</table>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; any([1, 2, 3])</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; any([1, 0, 3])</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; any([0, 0.0])</p>
+
+<p>False</p>
+
+<p>&gt;&gt;&gt; any([])</p>
+
+<p>False</p>
+
+<p>&gt;&gt;&gt; g = (n for n in [0, 0.0, 7, 8])</p>
+
+<p>&gt;&gt;&gt; any(g)</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; next(g)</p>
+
+<p>8</p>
+
+<h3 id="14-12深入分析iter函数">14.12深入分析iter函数</h3>
+
+<p>如前所述，在 Python 中迭代对象 x 时会调用 iter(x)。</p>
+
+<p>可是， iter 函数还有一个鲜为人知的用法：传入两个参数，使用常规的函数或任何可调 用的对象创建迭代器。这样使用时，第一个参数必须是可调用的对象，用于不断调用(没 有参数)，产出各个值；第二个值是哨符，这是个标记值，当可调用的对象返回这个值 时，触发迭代器抛出 StopIteration 异常，而不产出哨符。</p>
+
+<p>下述示例展示如何使用 iter 函数掷骰子，直到掷出 1 点为止：14</p>
+
+<p>| 14需要在这个示例的最前面添加一句：from random import randint。 编者注</p>
+
+<p>&gt;&gt;&gt; def d6():</p>
+
+<p>&hellip; return randint(1, 6)</p>
+
+<p>&gt;&gt;&gt; d6_iter = iter(d6, 1)</p>
+
+<p>&gt;&gt;&gt; d6_iter</p>
+
+<p><callable_iterator object at 0x00000000029BE6A0></p>
+
+<p>&gt;&gt;&gt; for roll in d6_iter:</p>
+
+<p>&hellip; print(roll)</p>
+
+<p>4</p>
+
+<p>3</p>
+
+<p>6</p>
+
+<p>3</p>
+
+<p>注意，这里的 iter 函数返回一个 callable_iterator 对象。示例中的 for 循环可能运 行特别长的时间，不过肯定不会打印 1，因为 1 是哨符。与常规的迭代器一样，这个示例 中的 d6_iter 对象一旦耗尽就没用了。如果想重新开始，必须再次调用 iter(&hellip;)，重</p>
+
+<p>新构建迭代器。</p>
+
+<p>内置函数 iter 的文档(<a href="https://docs.python.org/3/library/functions.html%23iter">https://docs+pyhon+org/3/library/fUnctions.html#iter</a>)中有个实用的</p>
+
+<p>例子。这段代码逐行读取文件，直到遇到空行或者到达文件末尾为止：</p>
+
+<p>with open(&lsquo;mydata.txt&rsquo;) as fp:</p>
+
+<p>for line in iter(fp.readline, &lsquo;\n&rsquo;): process_line(line)</p>
+
+<p>结束本章之前，我要举个实用的例子，说明如何使用生成器高效处理大量数据。</p>
+
+<h3 id="14-13-案例分析-在数据库转换工具中使用生成器">14.13 案例分析：在数据库转换工具中使用生成器</h3>
+
+<p>几年前，我在 BIREME 工作，这是 PAHO/WHO （ Pan-American Health Organization/World Health Organization,泛美卫生组织/世界卫生组织）在圣保罗运营的一家数字图书馆。 BIREME 制作的众多书目数据集中包含 LILACS（ Latin American and Caribbean Health Sciences index,拉美和加勒比地区健康科学索引）和 SciELO （Scientific Electronic Library Online,电子科学在线图书馆），这两个数据库完整索引了这一地区发布的科学和技术作 品。</p>
+
+<p>从20世纪80年代后期开始，管理LILACS的数据库系统是CDS/ISIS。这是UNESCO开 发的非关系型文档数据库,后来为了在 GNU/Linux 服务器上运行, BIREME 使用 C 语言 重写了。我的工作之一是探索替代方案，把 LILACS 移植到现代的开源文档数据库（最终 还要移植大得多的SciELO），例如CouchDB或MongoDB。</p>
+
+<p>在探索的过程中，我编写了一个Python脚本-isis2json.py,把CDS/ISIS文件转换成适</p>
+
+<p>合导入 CouchDB 或 MongoDB 的 JSON 文件。起初，这个脚本读取文件的是 CDS/ISIS 导 出的 ISO-2709 格式。读写过程必须采用渐进方式，因为完整的数据集比主内存大得多。</p>
+
+<p>解决方法很简单：主 for 循环每次迭代时从 .iso 文件中读取一个记录，转换后将其写入 .json 文件。</p>
+
+<p>然而，在实际操作中有必要让isis2json.py支持CDS/ISIS的另一种数据格式——BIREME 在生产环境中使用的二进制 .mst 文件，避免导出为 ISO-2709 格式时消耗过多资源。</p>
+
+<p>现在我遇到一个问题：用来读取 ISO-2709 和 .mst 文件的库提供的 API 差别很大。而输出</p>
+
+<p>JSON 格式的循环已经很复杂了，因为这个脚本要接受多个命令行选项，每次输出时调整 记录的结构。在同一个for循环中使用两个不同的API，同时还要生成JSON，这样太难 以管理了。</p>
+
+<p>解决方法是隔离读取逻辑，写进两个生成器函数中：一个函数支持一种输入格式。最终， 我把isis2json.py脚本分成了四个函数。使用Python 2编写的主脚本如示例A-5，带依赖的 完整源码在 Gi tHub 中的 fluentpython/i si s2j son 仓库里</p>
+
+<p>（<a href="https://github.com/fluentpython/isis2json）">https://github.com/fluentpython/isis2json）</a> 。</p>
+
+<p>下面概览这个脚本的结构。</p>
+
+<p>main</p>
+
+<p>main 函数使用 argparse 模块读取命令行选项，用于配置输出记录的结构。根据输 入文件的扩展名， main 函数会选择一个合适的生成器函数，逐个读取数据，然后产出记 录。</p>
+
+<p>iter_iso_records</p>
+
+<p>这个生成器函数用于读取 .iso 文件（假设是 ISO-2709 格式），有两个参数：一个是 文件名；另一个是isis_json_type，即一个与记录结构有关的选项。在这个函数的for 循环中，每次迭代读取一个记录，然后创建一个空字典，把数据填充进字段之后产出字</p>
+
+<p>典。</p>
+
+<p>iter_mst_records</p>
+
+<p>这也是一个生成器函数，用于读取 .mst 文件。15 阅读 isis2json.py 脚本的源码后你会 发现，这个函数没有 iter_iso_records 函数简单，不过接口和整体结构是相同的：参 数是文件名和 isis_json_type， for 循环每次迭代时构建并产出一个字典，表示一个记 录。</p>
+
+<p>15用来读取复杂的 .mst 二进制文件的库其实是用 Java 编写的，因此只有使用 Jython 解释器 2.5 或以上版本执行 isis2json.py 脚本才能使用这个功能。详情参见仓库里的 README.rst 文件</p>
+
+<p>(<a href="https://github.com/fluentpython/isis2json/blob/master/README.rst">https://github.com/fluentpython/isis2json/blob/master/README.rst</a>)。因为依赖在需要使用的生成器函数中导入，所以即</p>
+
+<p>便只有一个外部依赖可用，这个脚本仍能运行。</p>
+
+<p>write_json</p>
+
+<p>这个函数把记录输出为 JSON 格式，而且一次输出一个记录。它的参数很多，其中第</p>
+
+<p>一个参数(input_gen)是对某个生成器函数的引用：iter_iso_records或 iter_mst_records。write_json函数的主for循环迭代input_gen引用的生成器产</p>
+
+<p>出的字典，根据命令行选项设定的方式处理，然后把 JSON 格式的记录附加到输出文件</p>
+
+<p>里。</p>
+
+<p>我利用生成器函数解耦了读逻辑和写逻辑。当然，解耦二者最简单的方式是，把所有记录</p>
+
+<p>读进内存，然后写入硬盘。可是这样并不可行，因为数据集很大。而使用生成器的话，可</p>
+
+<p>以交叉读写，因此这个脚本可以处理任意大小的文件。</p>
+
+<p>现在，如果 isis2json.py 脚本需要再支持一种输入格式，比如说美国国会图书馆用于表示 ISO-2709 格式数据的 MARCXML 文档格式，只需再添加一个生成器函数，实现读逻辑，</p>
+
+<p>而复杂的 write_json 函数无需任何改动。</p>
+
+<p>这不是什么尖端科技，可是通过这个实例我们看到了生成器的灵活性。使用生成器处理数</p>
+
+<p>据库时，我们把记录看成数据流，这样消耗的内存量最低，而且不管数据有多大都能处</p>
+
+<p>理。只要管理着大型数据集，都有可能在实践中找到机会使用生成器。</p>
+
+<p>下一节讨论暂时要跳过的一个生成器特性。为什么要跳过呢？原因如下。</p>
+
+<h3 id="14-14-把生成器当成协程">14.14 把生成器当成协程</h3>
+
+<p>Python 2+2引入了 yield关键字实现的生成器函数，大约五年后，Python 2+5实现了“PEP 342 — Coroutines via Enhanced Generators”(<a href="https://www.python.org/dev/peps/pep-0342/">https://www+python+org/dev/peps/pep-0342/</a>) 。 这个提案为生成器对象添加了额外的方法和功能，其中最值得关注的是 .send() 方法。</p>
+
+<p>与 .<strong>next</strong>() 方法一样， .send() 方法致使生成器前进到下一个 yield 语句。不 过， .send() 方法还允许使用生成器的客户把数据发给自己，即不管传给 .send() 方法 什么参数，那个参数都会成为生成器函数定义体中对应的 yield 表达式的值。也就是 说， .send() 方法允许在客户代码和生成器之间双向交换数据。而 .<strong>next</strong>() 方法只 允许客户从生成器中获取数据。</p>
+
+<p>这是一项重要的“改进”，甚至改变了生成器的本性：像这样使用的话，生成器就变身为协 程。在 PyCon US 2009 期间举办的一场著名的课程中</p>
+
+<p>(<a href="http://www.dabeaz.com/coroutines/">http://www+dabeaz+com/coroutines/</a>) ， David Beazley (可能是 Python 社区中在协程方面 最多产的作者和演讲者)提醒道：</p>
+
+<p>•生成器用于生成供迭代的数据</p>
+
+<p>•协程是数据的消费者</p>
+
+<p>•为了避免脑袋炸裂，不能把这两个概念混为一谈 •协程与迭代无关</p>
+
+<p>•注意，虽然在协程中会使用yield产出值，但这与迭代无关16</p>
+
+<p>——David Beazley “A Curious Course on Coroutines and Concurrency”</p>
+
+<p>16摘自 “A Curious Course on Coroutines and Concurrency” (<a href="http://www.dabeaz.com/coroutines/Coroutines.pdf">http://www+ dabeaz+com/coroutines/Coroutines+pdf</a>)的第 33 张幻灯 片，题为&rdquo;Keeping It Straight”。</p>
+
+<p>我会遵从他的建议，至此结束本章(因为本章真正讨论的是迭代技术)，而不涉及把生成</p>
+
+<p>器当成协程使用的 send 方法和其他特性。第 16 章会讨论协程。</p>
+
+<h3 id="14-15-本章小结">14.15 本章小结</h3>
+
+<p>Python语言对迭代的支持如此深入，因此我经常说，Python己经融合(grok) 了迭代</p>
+
+<p>器。 17Python 从语义上集成迭代器模式是个很好的例证，说明设计模式在各种编程语言中 使用的方式并不相同。在 Python 中，自己动手实现的典型迭代器(如示例 14-4 所示)没 有实际用途，只能用作教学示例。</p>
+
+<p>I 17根据新黑客字典(Jargon file，<a href="http://catb.org/~esr/jargon/html/G/grok.html">http://catb.org/~esr/jargon/html/G/grok.html</a>) ，grok 的意思不仅是学会了新知识，还要充 分吸收知识，做到“人剑合一”。</p>
+
+<p>本章中编写了一个类的几个版本，用于读取内容可能很多的文件，并迭代里面的单词。因 为用了生成器，所以在重构的过程中， Sentence 类越来越简短，越来越易于阅读。最</p>
+
+<p>终，我们知道了生成器的工作原理。</p>
+
+<p>后来，我们编写了一个用于生成等差数列的生成器，还说明了如何利用 itertools 模块 做简化。随后，概览了标准库中 24 个通用的生成器函数。</p>
+
+<p>接着，我们分析了内置的 iter 函数：首先说明，以 iter(o) 的形式调用时返回的是迭 代器；之后分析，以 iter(func, sentinel) 的形式调用时，能使用任何函数构建迭代 器。</p>
+
+<p>分析实例时，我说明了一个数据库转换工具的实现方式，指明如何使用生成器函数解耦读</p>
+
+<p>写逻辑，如何高效处理大型数据集，以及如何轻易支持多种数据输入格式。</p>
+
+<p>本章还提到了 Python 3.3 中新出现的 yield from 句法，还有协程。这里只对二者做了简</p>
+
+<p>单介绍，本书后面会更为深入地讨论。</p>
+
+<h3 id="14-16-延伸阅读">14.16 延伸阅读</h3>
+
+<p>在 Python 语言参考手册中， “6.2.9. Yield</p>
+
+<p>expressions” (<a href="https://docs.python.org/3/reference/expressions.html%23yieldexpr">https://docs.python.org/3/reference/expressions.html#yieldexpr</a>)从技术层面深 入说明了生成器。定义生成器函数的PEP是“PEP 255—Simple Generators” (<a href="https://www.python.org/dev/peps/pep-0255/">https://www.python.org/dev/peps/pep-0255/</a>) 。</p>
+
+<p>itertools 模块的文档(<a href="https://docs.python.org/3/library/itertools.html">https://docs+python+org/3/library/itertools+html</a>)写得很棒，包含大 量示例。虽然那个模块里的函数是使用 C 语言实现的，不过文档展示了如何使用 Python 实现部分函数，这通常要利用模块里的其他函数。用法示例也很好，例如，有一个代码片 段说明如何使用 accumulate 函数计算带利息的分期还款，得出每次要还多少。文档中还 <a href="https://docs.python.org/3/library/itertools.html%23itertools-recipes">有一节是</a><a href="https://docs.python.org/3/library/itertools.html%23itertools-recipes">“Itertools Recipes” (https://docs+python+org/3/library/itertools+html#itertools-</a>recipes)，说明如何使用itertools模块中的现有函数实现额外的高性能函数。</p>
+
+<p>在 David Beazley 与 Brian K+ Jones 的《Python Cookbook (第 3 版)中文版》一书中，第 4</p>
+
+<p>章有 16 个诀窍涵盖了这个话题，虽然角度不同，但都关注实际应用。</p>
+
+<p>“What&rsquo;s New in Python 3+3”(参见“PEP 380: Syntax for Delegating to a</p>
+
+<p>Subgenerator”， <a href="https://docs+python+org/3/whatsnew/3+3+html#pep-380-syntax-for-delegating-to-a-subgenerator)通过示例说明了[">https://docs+python+org/3/whatsnew/3+3+html#pep-380-syntax-for-delegating-to-a-subgenerator)通过示例说明了[</a> ](<a href="https://docs.python.org/3/whatsnew/3.3.html%23pep-380-syntax-for-delegating-to-a-subgenerator)[yield">https://docs.python.org/3/whatsnew/3.3.html%23pep-380-syntax-for-delegating-to-a-subgenerator)[yield</a> from句法。本书16+7节和16+8节还会讨论这个句](<a href="https://docs.python.org/3/whatsnew/3.3.html%23pep-380-syntax-for-delegating-to-a-subgenerator">https://docs.python.org/3/whatsnew/3.3.html%23pep-380-syntax-for-delegating-to-a-subgenerator</a>)</p>
+
+<p>法。</p>
+
+<p>如果你对文档数据库感兴趣，想进一步了解 14+13 节的背景，可以阅读我发布在 Code4Lib Journal (涵盖图书馆与技术交集)上的论文，题为“From ISIS to CouchDB: Databases and Data Models for Bibliographic Records” (<a href="http://journal.code4lib.org/articles/4893">http://journal+code4lib+org/articles/4893</a>) ，其中有 一节对 isis2json+py 脚本做了说明。这篇论文的剩余内容说明文档数据库(如 CouchDB 和 MongoDB)实现半结构化数据模型的方式，以及为什么这种模型比关系模型更适合用于 收集书目数据。</p>
+
+<p>杂谈</p>
+
+<p>生成器函数的语法糖多一些更好</p>
+
+<p>在设计不同目的的控制和显示设备时，设计师需要确认它们之间具有明显差异。</p>
+
+<p>——Donald Norman</p>
+
+<p>《设计心理学》</p>
+
+<p>在编程语言中，源码是“控制和显示设备”。我觉得 Python 设计得特别好，源码的可 读性通常很高，好像伪代码一样。可是，没有什么是完美的。 Guido van Rossum 应该 遵从 Donald Norman 的建议(如上述引文)，引入新的关键字，用于定义生成器函 数，而不该继续使用def。其实，“PEP 255 — Simple</p>
+
+<p>Generators” (<a href="https://www.python.org/dev/peps/pep-0255/">https://www+python+org/dev/peps/pep-0255/</a>)中的“BDFL Pronouncements” 一 节己经提议：</p>
+
+<p>深藏于定义体中的“yield”语句不足以提醒语义发生了重大变化。</p>
+
+<p>可是， Guido 讨厌引入新关键字，而且觉得这项提议没有说服力，因此我们只好被迫</p>
+
+<p>接受 def。</p>
+
+<p>沿用函数句法定义生成器会导致几个不好的后果。在 Politz 等人发布的试验成果论</p>
+
+<p>18</p>
+
+<p>文“Python, the Full Monty: A Tested Semantics for the Python Programming Language</p>
+
+<p>中，有个简单的生成器函数示例（这篇论文的 4+1 节）：</p>
+
+<p>def f(): x=0 while True:</p>
+
+<p>x += 1</p>
+
+<p>yield x</p>
+
+<p>然后，论文的作者指出，我们无法通过函数调用抽象产出这个过程（如示例 14-24 所</p>
+
+<p>示）。</p>
+
+<p>示例 14-24 “ （这样）似乎能简单地抽象产出这个过程” （Politz 等人）</p>
+
+<p>def f():</p>
+
+<p>def do_yield(n): yield n</p>
+
+<p>x = 0</p>
+
+<p>while True:</p>
+
+<p>x += 1 do_yield(x)</p>
+
+<p>如果调用示例14-24中的f（），会得到一个无限循环，而不是生成器，因为yield关 键字只能把最近的外层函数变成生成器函数。虽然生成器函数看起来像函数，可是我 们不能通过简单的函数调用把职责委托给另一个生成器函数。与此相比， Lua 语言就 没有强加这一限制。在 Lua 中，协程可以调用其他函数，而且其中任何一个函数都能 把职责交给原来的调用方。</p>
+
+<p>Python 新引入的 yield from 句法允许生成器或协程把工作委托给第三方完成，这样 就无需嵌套 for 循环作为变通了。在函数调用前面加上 yield from 能“解决”示例 14-24 中的问题，如示例 14-25 所示。</p>
+
+<p>示例 14-25 这样才能简单地抽象产出这个过程</p>
+
+<p>def f():</p>
+
+<p>def do_yield(n): yield n</p>
+
+<p>x = 0</p>
+
+<p>while True: x += 1</p>
+
+<p>yield from do_yield(x)</p>
+
+<p>沿用 def 声明生成器犯了可用性方面的错误，而 Python 2+5 引入的协程（也写成包含</p>
+
+<p>yield 关键字的函数)把这个问题进一步恶化了。在协程中， yield 碰巧(通常)出 现在赋值语句的右手边，因为 yield 用于接收客户传给 .send() 方法的参数。正如</p>
+
+<p>David Beazley 所说的：</p>
+
+<p>尽管有一些相同之处，但是生成器和协程基本上是两个不同的概念。 19</p>
+
+<p>我觉得协程也应该有专用的关键字。读到后文你会发现，协程经常会用到特殊的装饰</p>
+
+<p>器，这样就能与其他的函数区分开。可是，生成器函数不常使用装饰器，因此我们不</p>
+
+<p>得不扫描函数的定义体，看有没有 yield 关键字，以此判断它究竟是普通的函数， 还是完全不同的洪水猛兽。</p>
+
+<p>也许有人会说，这么做是为了在不增加句法的前提下支持这些特性，即便添加额外的 句法，也只是“语法糖”。可是，如果能让不同的特性看起来也不同，那么我更喜欢语 法糖。 Lisp 代码难以阅读的主要原因就是缺少语法糖，这也导致 Lisp 语言中的所有 结构看起来都像是函数调用。</p>
+
+<p>生成器与迭代器的语义对比</p>
+
+<p>思考迭代器与生成器之间的关系时，至少可以从三方面入手。</p>
+
+<p>第一方面是接口。 Python 的迭代器协议定义了两个方法： <strong>next</strong> 和 <strong>iter</strong>。 生成器对象实现了这两个方法，因此从这方面来看，所有生成器都是迭代器。由此可 以得知，内置的 enumerate() 函数创建的对象是迭代器：</p>
+
+<p>&gt;&gt;&gt; from collections import abc &gt;&gt;&gt; e = enumerate(&lsquo;ABC&rsquo;)</p>
+
+<p>&gt;&gt;&gt; isinstance(e, abc.Iterator)</p>
+
+<p>True</p>
+
+<p>第二方面是实现方式。从这个角度来看，生成器这种 Python 语言结构可以使用两种</p>
+
+<p>方式编写：含有 yield 关键字的函数，或者生成器表达式。调用生成器函数或者执 行生成器表达式得到的生成器对象属于语言内部的 GeneratorType 类型</p>
+
+<p>(<a href="https://docs.python.org/3/library/types.html%23types.GeneratorType">https://docs.python.org/3/library/types.html#types.GeneratorType</a>) 。从这方面来看，所</p>
+
+<p>有生成器都是迭代器，因为 GeneratorType 类型的实例实现了迭代器接口。不过， 我们可以编写不是生成器的迭代器，方法是实现经典的迭代器模式，如示例 14-4 所 示，或者使用 C 语言编写扩展。从这方面来看， enumerate 对象不是生成器：</p>
+
+<p>&gt;&gt;&gt; import types</p>
+
+<p>&gt;&gt;&gt; e = enumerate(&lsquo;ABC&rsquo;)</p>
+
+<p>&gt;&gt;&gt; isinstance(e, types.GeneratorType)</p>
+
+<p>False</p>
+
+<p>这是因为 types.GeneratorType 类型</p>
+
+<p>(<a href="https://docs.python.org/3/library/types.html%23types.GeneratorType">https://docs.python.org/3/library/types.html#types.GeneratorType</a>)是这样定义的：“生</p>
+
+<p>成器－迭代器对象的类型，调用生成器函数时生成。 ”</p>
+
+<p>第三方面是概念。根据《设计模式：可复用面向对象软件的基础》一书的定义，在典 型的迭代器设计模式中，迭代器用于遍历集合，从中产出元素。迭代器可能相当复 杂，例如，遍历树状数据结构。但是，不管典型的迭代器中有多少逻辑，都是从现有 的数据源中读取值；而且，调用 next(it) 时，迭代器不能修改从数据源中读取的 值，只能原封不动地产出值。</p>
+
+<p>而生成器可能无需遍历集合就能生成值，例如 range 函数。即便依附了集合，生成 器不仅能产出集合中的元素，还可能会产出派生自元素的其他值。 enumerate 函数 是很好的例子。根据迭代器设计模式的原始定义， enumerate 函数返回的生成器不 是迭代器，因为创建的是生成器产出的元组。</p>
+
+<p>从概念方面来看，实现方式无关紧要。不使用 Python 生成器对象也能编写生成器。 为了表明这一点，我写了一个斐波纳契数列生成器，如示例 14-26 所示。</p>
+
+<p>示例14-26 fibo_by_hand+py：不使用GeneratorType实例实现斐波纳契数列生</p>
+
+<p>成器</p>
+
+<table>
+<thead>
+<tr>
+<th>class Fibonacci:def <strong>iter</strong>(self):</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>return</td>
+<td>FibonacciGenerator()</td>
+</tr>
+
+<tr>
+<td>class FibonacciGenerator:</td>
+<td></td>
+</tr>
+
+<tr>
+<td>def _<em>init</em></td>
+<td>_(self):</td>
+</tr>
+
+<tr>
+<td>self.a</td>
+<td>= 0</td>
+</tr>
+
+<tr>
+<td>self.b</td>
+<td>= 1</td>
+</tr>
+
+<tr>
+<td>def _<em>next</em></td>
+<td>_(self):</td>
+</tr>
+
+<tr>
+<td>result</td>
+<td>= self.a</td>
+</tr>
+
+<tr>
+<td>self.a,</td>
+<td>self.b = self.b, self.a + self.b</td>
+</tr>
+
+<tr>
+<td>return</td>
+<td>result</td>
+</tr>
+</tbody>
+</table>
+
+<p>示例 14-26 虽然可行，但只是一个愚蠢的示例。符合 Python 风格的斐波纳契数列生成 器如下所示：</p>
+
+<p>def fibonacci(): a, b = 0, 1</p>
+
+<p>while True:</p>
+
+<p>yield a</p>
+
+<p>a, b = b, a + b</p>
+
+<p>当然，始终可以使用生成器这个语言结构履行迭代器的基本职责：遍历集合，并从中</p>
+
+<p>产出元素。</p>
+
+<p>事实上， Python 程序员不会严格区分二者，即便在官方文档中也把生成器称作迭代 器。Python 词汇表(<a href="https://docs.python.org/dev/glossary.html%23term-iterator">https://docs+python+ org/dev/glossary.html#term-iterator</a>)对迭代器下</p>
+
+<p>的权威定义比较笼统，涵盖了迭代器和生成器。</p>
+
+<p>迭代器：表示数据流的对象++++++</p>
+
+<p>建议你读一下 Python 词汇表中对迭代器的完整定义 (<a href="https://docs.python.org/3/glossary.html%23term-iterator">https://docs+python+org/3/glossary+html#term-iterator</a>) 。而在生成器的定义中 (<a href="https://docs.python.org/3/glossary.html%23term-generator">https://docs+python+org/3/glossary+html#term-generator</a>) ，迭代器和生成器是同义</p>
+
+<p>词， “生成器”指代生成器函数，以及生成器函数构建的生成器对象。因此，在 Python 社区的行话中，迭代器和生成器在一定程度上是同义词。</p>
+
+<p>Python 中最简的迭代器接口</p>
+
+<p>《设计模式：可复用面向对象软件的基础》一书讲解迭代器模式时，在“实现”一节中</p>
+
+<p>说道： 20</p>
+
+<p>迭代器的最小接口由 First、Next、IsDone 和 CurrentItem 操作组成。 不过，这句话有个脚注：</p>
+
+<p>甚至可以将 Next、IsDone 和 CurrentItem 并入到一个操作中，该操作前进到下一</p>
+
+<p>个对象并返回这个对象，如果遍历结束，那么这个操作返回一个特定的值(例 如， 0)标志该迭代结束。这样我们就使这个接口变得更小了。</p>
+
+<p>这与 Python 的做法接近：只用一个 <strong>next</strong> 方法完成这项工作。不过，为了表明 迭代结束，这个方法没有使用哨符，因为哨符可能不小心被忽略，而是使用 StopIteration 异常。简单且正确，这正是 Python 之道。</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>也可以像这样调用：max（arg1, arg2,    ［key=?］），此时返回参数中的最大值（</p>
+
+<p>#也可以像这样调用：min（arg1, arg2,    ［key=?］），此时返回参数中的最小值</p>
+
+<p>all 和 any 函数的操作演示如示例 14-23 所示。</p>
+
+<p>示例 14-23 把几个序列传给 all 和 any 函数后得到的结果</p>
+
+<p>10.6 节更为深入地解释过 functools.reduce 函数。</p>
+
+<p>还有一个内置的函数接受一个可迭代的对象，返回不同的值-sorted。reversed是生</p>
+
+<p>成器函数，与此不同， sorted 会构建并返回真正的列表。毕竟，要读取输入的可迭代对 象中的每一个元素才能排序，而且排序的对象是列表，因此 sorted 操作完成后返回排序 后的列表。我在这里提到sorted，是因为它可以处理任意的可迭代对象。</p>
+
+<p>当然， sorted 和这些归约函数只能处理最终会停止的可迭代对象。否则，这些函数会一</p>
+
+<p>直收集元素，永远无法返回结果。</p>
+
+<p>下面，我们回过头来分析内置的 iter() 函数，它还有一个鲜为人知的特性没有介绍。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/16-%E5%8D%8F%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">16 协程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/15-%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8%E5%92%8Celse-%E5%9D%97/">
+            <span class="next-text nav-default">15 上下文管理器和else 块</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

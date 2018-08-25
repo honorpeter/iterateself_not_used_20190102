@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 案例4：cat_dog - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="实际上，不管你使用什么特征来处理这种图片，都已经 out 了。现在基本大家都使用 DL 来处理图片了。 gan 深度对抗网络，后面的课会讲。 猫狗辨别 Kaggle竞" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/05-%E6%A1%88%E4%BE%8B4cat_dog/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 案例4：cat_dog" />
+<meta property="og:description" content="实际上，不管你使用什么特征来处理这种图片，都已经 out 了。现在基本大家都使用 DL 来处理图片了。 gan 深度对抗网络，后面的课会讲。 猫狗辨别 Kaggle竞" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/05-%E6%A1%88%E4%BE%8B4cat_dog/" /><meta property="article:published_time" content="2018-07-26T17:56:31&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-26T17:56:31&#43;00:00"/>
+<meta itemprop="name" content="05 案例4：cat_dog">
+<meta itemprop="description" content="实际上，不管你使用什么特征来处理这种图片，都已经 out 了。现在基本大家都使用 DL 来处理图片了。 gan 深度对抗网络，后面的课会讲。 猫狗辨别 Kaggle竞">
+
+
+<meta itemprop="datePublished" content="2018-07-26T17:56:31&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-26T17:56:31&#43;00:00" />
+<meta itemprop="wordCount" content="2026">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 案例4：cat_dog"/>
+<meta name="twitter:description" content="实际上，不管你使用什么特征来处理这种图片，都已经 out 了。现在基本大家都使用 DL 来处理图片了。 gan 深度对抗网络，后面的课会讲。 猫狗辨别 Kaggle竞"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 案例4：cat_dog</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-26 </span>
+        
+        <span class="more-meta"> 2026 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#猫狗辨别">猫狗辨别</a>
+<ul>
+<li><a href="#准备数据">准备数据</a></li>
+<li><a href="#cnn模型构造">CNN模型构造</a></li>
+<li><a href="#训练与预测">训练与预测</a></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>实际上，不管你使用什么特征来处理这种图片，都已经 out 了。现在基本大家都使用 DL 来处理图片了。</p>
+
+<p>gan 深度对抗网络，后面的课会讲。</p>
+
+<h1 id="猫狗辨别">猫狗辨别</h1>
+
+<p>Kaggle竞赛：<a href="https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition">https://www.kaggle.com/c/dogs-vs-cats-redux-kernels-edition</a></p>
+
+<p>标准的 ConvNet 做图片分类。</p>
+
+<p>先导入要用的库</p>
+
+<pre><code class="language-python">import os, cv2, random
+import numpy as np
+import pandas as pd
+
+import matplotlib.pyplot as plt
+from matplotlib import ticker
+import seaborn as sns
+%matplotlib inline
+
+from keras.models import Sequential
+from keras.layers import Input, Dropout, Flatten, Convolution2D, MaxPooling2D, Dense, Activation
+from keras.optimizers import RMSprop
+from keras.callbacks import ModelCheckpoint, Callback, EarlyStopping
+from keras.utils import np_utils
+</code></pre>
+
+<pre><code>Using Theano backend.
+</code></pre>
+
+<p><span style="color:red;">使用 Theano 和 Tensorflow 的 backend 有什么区别？现在是不是没什么人使用 Theano 了？</span></p>
+
+<h2 id="准备数据">准备数据</h2>
+
+<p>我们先把所有的数据 load 进来。</p>
+
+<p>因为时间关系，就不 train 所有的数据集了。。太慢。。</p>
+
+<p>我把猫和狗里面各拿出100个来跑一个：</p>
+
+<pre><code class="language-python">TRAIN_DIR = '../input/train/'
+TEST_DIR = '../input/test/'
+
+# 把猫和狗分开读入
+# 想全部读入的话，就把那个 if 去掉。
+# 记得把 label 也存好（0/1）
+train_dogs =   [(TRAIN_DIR+i, 1) for i in os.listdir(TRAIN_DIR) if 'dog' in i]
+train_cats =   [(TRAIN_DIR+i, 0) for i in os.listdir(TRAIN_DIR) if 'cat' in i]
+
+# 训练集还是得全盘放进来的
+# 这个 testset 就随便放个 label
+test_images =  [(TEST_DIR+i, -1) for i in os.listdir(TEST_DIR)]
+
+# 合成一个数据集（取个 100 个玩玩）
+train_images = train_dogs[:100] + train_cats[:100]
+# 把数据散好
+random.shuffle(train_images)
+# 取个10个玩玩
+test_images =  test_images[:10]
+</code></pre>
+
+<p>我们需要用到 OpenCV 去读入图片（ IMREAD() ）</p>
+
+<p>为了图片标准统一，我们把所有的图片 resize 进 <code>64*64</code> 的方格。<span style="color:red;">这个是图片预处理中比较重要的，这样才能接上卷积神经网络。</span></p>
+
+<pre><code class="language-python">ROWS = 64
+COLS = 64
+
+def read_image(tuple_set):
+    file_path = tuple_set[0]
+    label = tuple_set[1]
+    img = cv2.imread(file_path, cv2.IMREAD_COLOR)
+    # 你这里的参数，可以是彩色或者灰度(GRAYSCALE)
+    return cv2.resize(img, (ROWS, COLS), interpolation=cv2.INTER_CUBIC), label
+    # 这里，可以选择压缩图片的方式，zoom（cv2.INTER_CUBIC &amp; cv2.INTER_LINEAR）还是shrink（cv2.INTER_AREA）
+</code></pre>
+
+<p>一般来说，为了保持图片的信息特征不被扭曲，会使用 INTER_CUBIC 这个形式，他会成比例缩放，空的地方会补全。</p>
+
+<p>预处理图片：</p>
+
+<p>把图片数据变成我们便于用的numpy数组</p>
+
+<pre><code class="language-python">CHANNELS = 3
+# 代表RGB三个颜色频道
+
+def prep_data(images):
+    no_images = len(images)
+    data = np.ndarray((no_images, CHANNELS, ROWS, COLS), dtype=np.uint8)
+    labels = []
+
+    for i, image_file in enumerate(images):
+        image, label = read_image(image_file)
+        data[i] = image.T
+        labels.append(label)
+    return data, labels
+</code></pre>
+
+<p>好的，这下我们可以一步刷完所有的 train 和 test 集了</p>
+
+<p>这个我们有个木有用的 y_shit，记得扔一边儿去</p>
+
+<pre><code class="language-python">x_train, y_train = prep_data(train_images)
+x_test, y_shit = prep_data(test_images)
+</code></pre>
+
+<p>看看shape：</p>
+
+<pre><code class="language-python">print(x_train.shape)
+print(x_test.shape)
+</code></pre>
+
+<pre><code>(200, 3, 64, 64)
+(10, 3, 64, 64)
+</code></pre>
+
+<h2 id="cnn模型构造">CNN模型构造</h2>
+
+<p>这个是一个标准的 VGG CNN 构造形式。VGG 这样的构造形式在很多图片数据集上都跑过，的确是比很多的别的构造要好一些。这个VGG 他们也不是有理论来说就这么构建就最好，他们实际上也是无数次试验之后，发现这个结构是最好的。</p>
+
+<p>论文里有讲为什么选32、64、128、256 这些逐级放大的意义。</p>
+
+<pre><code class="language-python">optimizer = RMSprop(lr=1e-4)
+objective = 'binary_crossentropy'
+
+# 建造模型
+model = Sequential()
+
+model.add(Convolution2D(32, 3, 3, border_mode='same', input_shape=(3, ROWS, COLS), activation='relu'))
+model.add(Convolution2D(32, 3, 3, border_mode='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
+model.add(Convolution2D(64, 3, 3, border_mode='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Convolution2D(128, 3, 3, border_mode='same', activation='relu'))
+model.add(Convolution2D(128, 3, 3, border_mode='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Convolution2D(256, 3, 3, border_mode='same', activation='relu'))
+model.add(Convolution2D(256, 3, 3, border_mode='same', activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+model.add(Flatten())
+model.add(Dense(256, activation='relu'))
+model.add(Dropout(0.5))
+
+model.add(Dense(256, activation='relu'))
+model.add(Dropout(0.5))
+
+model.add(Dense(1))
+model.add(Activation('sigmoid'))
+
+model.compile(loss=objective, optimizer=optimizer, metrics=['accuracy'])
+</code></pre>
+
+<h2 id="训练与预测">训练与预测</h2>
+
+<p>这里，<strong>做图片处理，很容易 overfitting，</strong> 我们可以用 keras 自带的 earlyStopping 来检测 validation data (取20%数据)。</p>
+
+<p>什么是提前结束呢？你在训练的时候，从你的train 里面拿出了一小部分作为 validation data，用来判断每次训练之后的 model 是变好了还是变坏了。用它我们可以设定一些政策，如果说我们走了10步，准确度一直没有在降，就可以说，我们已经 overfitting 了，我们就可以让他停下来，然后输出10步之前没有 overfitting.</p>
+
+<p>earlystopping 在图片里面是非常重要的。</p>
+
+<pre><code class="language-python">nb_epoch = 10
+batch_size = 10
+
+## 每个 epoch 之后，存下 loss，便于画出图
+class LossHistory(Callback):
+    def on_train_begin(self, logs={}):
+        self.losses = []
+        self.val_losses = []
+
+    def on_epoch_end(self, batch, logs={}):
+        self.losses.append(logs.get('loss'))
+        self.val_losses.append(logs.get('val_loss'))
+
+early_stopping = EarlyStopping(monitor='val_loss', patience=3, verbose=1, mode='auto')
+
+# 跑模型
+history = LossHistory()
+
+model.fit(x_train, y_train, batch_size=batch_size, nb_epoch=nb_epoch,
+          validation_split=0.2, verbose=0, shuffle=True, callbacks=[history, early_stopping])
+
+predictions = model.predict(x_test, verbose=0)
+</code></pre>
+
+<p>上面的LossHistory 从 Callback 继承，是一个标准的写法，</p>
+
+<p>EarlyStopping 是一个 keras 自带的一个类。patience 就是容忍我的程序一直不提升几步，这里是三步。verbose 是是否输出中间计算的一些记录。</p>
+
+<p>batch_size 就是把多少张图片放在一起放进去做计算，nb_epoch 就是要跑多少个 epoch。validation_split 是在我们的训练集中分出多少作为我们的验证集，shuffle 是是否要把原数据进行洗牌。callbacks 放入我们的history 和early_stopping 。</p>
+
+<p>epoch 就是一轮的意思。<span style="color:red;">什么叫一轮呢？好像 w 的调整就是根据连续的几张图片计算出的平均的误差进行调整，而调整一次叫做一轮。确认下。</span></p>
+
+<pre><code>Epoch 00005: early stopping
+</code></pre>
+
+<p>在第 5 次跑完所有样本的时候就已经提前结束了。</p>
+
+<pre><code class="language-python">loss = history.losses
+val_loss = history.val_losses
+
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('VGG-16 Loss Trend')
+plt.plot(loss, 'blue', label='Training Loss')
+plt.plot(val_loss, 'green', label='Validation Loss')
+plt.xticks(range(0,nb_epoch)[0::2])
+plt.legend()
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/da5mll8c7d.png?imageslim" alt="mark" /></p>
+
+<p>由于是第5次的时候停止的，而patience =3，所以是在第2次的时候停下来最好。<span style="color:red;">这个地方是5-3=2 还是 5-3+1=3？ 确认下。而且，我最后生成的模型在哪里？我怎么生成第二个 epoch 的时候的模型？而且模型要怎么加载？这些这里没有讲。</span></p>
+
+<h2 id="总结">总结</h2>
+
+<p>跟之前的分类问题一样。</p>
+
+<p>这是一套整个图片分类的流程。</p>
+
+<p>真正实战的情况下，你需要一台够好的电脑，最好带显卡。</p>
+
+<p>这个猫狗分类与其他的分类其实也差不多，不过少了一堆特征处理的过程。由于我们使用深度学习的时候，更加希望这个是一个端对端的过程，就是图片进，label 出，中间不做任何的认为处理，全部交给算法本身来做。</p>
+
+<p><span style="color:red;">没明白，为什么深度学习一定要做成端到端的学习？有这个硬性要求吗？还是说这样做有些好处？</span></p>
+
+<p>OK，上面这些就是一个标准的，也是经常会给出最好结果的，CNN 用来处理图片的程序的模板，。</p>
+
+<p>上面这个猫狗分类的最后一层是 <code>model.add(Dense(1))</code> ，如果是多分类问题，可以构建成 one-hot 。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/01-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/06-%E5%B7%A5%E4%B8%9A%E7%95%8C%E5%AE%8C%E6%95%B4%E7%9A%84ctr-%E9%A2%84%E4%BC%B0/">
+            <span class="next-text nav-default">06 工业界完整的CTR 预估</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

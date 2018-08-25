@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ai概率统计(7)-无偏估计与均方误差 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-27 10:14:02&#43;00:00 layout: post link: http://106.15.37.116/2018/03/27/ai-probability-statistics-unbiased-estimates-and-mean-square-errors/ slug: ai-probability-statistics-unbiased-estimates-and-mean-square-errors title: ai概率统计(7)-无偏估计与均方误差 wordpress_id: 938 categories: - 随想与反思 tags: - &amp;lsquo;@todo&amp;rsquo; - &amp;lsquo;@want_to_know&amp;rsquo; [mathjax] 缘由： 对无偏估计和均方误差的东西再进行探讨。" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/ai%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A17-%E6%97%A0%E5%81%8F%E4%BC%B0%E8%AE%A1%E4%B8%8E%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="ai概率统计(7)-无偏估计与均方误差" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-27 10:14:02&#43;00:00 layout: post link: http://106.15.37.116/2018/03/27/ai-probability-statistics-unbiased-estimates-and-mean-square-errors/ slug: ai-probability-statistics-unbiased-estimates-and-mean-square-errors title: ai概率统计(7)-无偏估计与均方误差 wordpress_id: 938 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] 缘由： 对无偏估计和均方误差的东西再进行探讨。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/ai%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A17-%E6%97%A0%E5%81%8F%E4%BC%B0%E8%AE%A1%E4%B8%8E%E5%9D%87%E6%96%B9%E8%AF%AF%E5%B7%AE/" /><meta property="article:published_time" content="2018-07-27T13:39:28&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T13:39:28&#43;00:00"/>
+<meta itemprop="name" content="ai概率统计(7)-无偏估计与均方误差">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-27 10:14:02&#43;00:00 layout: post link: http://106.15.37.116/2018/03/27/ai-probability-statistics-unbiased-estimates-and-mean-square-errors/ slug: ai-probability-statistics-unbiased-estimates-and-mean-square-errors title: ai概率统计(7)-无偏估计与均方误差 wordpress_id: 938 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] 缘由： 对无偏估计和均方误差的东西再进行探讨。">
+
+
+<meta itemprop="datePublished" content="2018-07-27T13:39:28&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T13:39:28&#43;00:00" />
+<meta itemprop="wordCount" content="496">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ai概率统计(7)-无偏估计与均方误差"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-27 10:14:02&#43;00:00 layout: post link: http://106.15.37.116/2018/03/27/ai-probability-statistics-unbiased-estimates-and-mean-square-errors/ slug: ai-probability-statistics-unbiased-estimates-and-mean-square-errors title: ai概率统计(7)-无偏估计与均方误差 wordpress_id: 938 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] 缘由： 对无偏估计和均方误差的东西再进行探讨。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ai概率统计(7)-无偏估计与均方误差</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 496 words </span>
+        <span class="more-meta"> 1 min read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#want-to-know">- &lsquo;@want_to_know&rsquo;</a></li>
+</ul></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#无偏估计">无偏估计</a>
+<ul>
+<li><a href="#无偏性">无偏性：</a></li>
+<li><a href="#举例子">举例子：</a></li>
+<li><a href="#样本均值和方差是总体的无偏估计">样本均值和方差是总体的无偏估计</a></li>
+</ul></li>
+<li><a href="#均方误差准则">均方误差准则：</a></li>
+<li><a href="#comment">COMMENT：</a></li>
+<li><a href="#ref">REF：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-27 10:14:02+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/27/ai-probability-statistics-unbiased-estimates-and-mean-square-errors/">http://106.15.37.116/2018/03/27/ai-probability-statistics-unbiased-estimates-and-mean-square-errors/</a>
+slug: ai-probability-statistics-unbiased-estimates-and-mean-square-errors
+title: ai概率统计(7)-无偏估计与均方误差
+wordpress_id: 938
+categories:
+- 随想与反思
+tags:
+- &lsquo;@todo&rsquo;</p>
+
+<h2 id="want-to-know">- &lsquo;@want_to_know&rsquo;</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对无偏估计和均方误差的东西再进行探讨。</p>
+
+<h1 id="无偏估计">无偏估计</h1>
+
+<h2 id="无偏性">无偏性：</h2>
+
+<p>利用已知样本 (X_1,X_2,\cdots \X_n)能够得到参数的一个估计 (\hat{\theta})，因此， (\hat{\theta})可以写成 (\hat{\theta}(X_1,X_2,\cdots \X_n))，对于不同的样本， (\hat{\theta}) 的值一般不同。因此，可以看成是关于样本的随机变量。因此它是可以求均值的：(E(\hat{\theta}))</p>
+
+<p>如果(E(\hat{\theta}))等于总体的实际分布(\theta)，就说这个估计是无偏估计(E(\hat{\theta})=\theta)。</p>
+
+<p>用 (\hat{\theta}) 去估计(\theta)，有时偏高，有时偏低，但平均来说，它等于未知参数(\theta) 。</p>
+
+<h2 id="举例子">举例子：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cmBJ4hFJhj.png?imageslim" alt="mark" /></p>
+
+<h2 id="样本均值和方差是总体的无偏估计">样本均值和方差是总体的无偏估计</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l7134KcB72.png?imageslim" alt="mark" /></p>
+
+<p>为什么呢？我们先看下均值：</p>
+
+<p>均值的无偏性</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/g5K2A59L2l.png?imageslim" alt="mark" /></p>
+
+<p>那么方差又是什么原因呢？</p>
+
+<p>方差的无偏性</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3IfHGd4f88.png?imageslim" alt="mark" />
+<strong>上面这个没明白怎么推出来的？要自己推一下。</strong></p>
+
+<p>标准差是有偏的。</p>
+
+<p>下面在聚类里面或多或少会用到这个准则。</p>
+
+<h1 id="均方误差准则">均方误差准则：</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HjF1mclLD2.png?imageslim" alt="mark" /></p>
+
+<p>如果是无偏估计，所谓的均方误差就是估计量的方差</p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>再看下 感觉掌握的不全面</strong></p>
+
+<p><strong>没有很明白</strong></p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/%E6%A0%B8%E5%B2%AD%E5%9B%9E%E5%BD%92-scikit%E4%BE%8B%E5%AD%901/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">核岭回归 （scikit）例子1</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/01-%E5%BE%AE%E7%A7%AF%E5%88%86/%E7%89%9B%E9%A1%BF%E6%B3%95/">
+            <span class="next-text nav-default">牛顿法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

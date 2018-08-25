@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Logistic回归 例子1 使用 Logistic 回归在简单数据集上进行分类 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="TODO alpha的动态设定有什么需要注意的吗？ 这个例子虽然简单，但是还是要好好理解的。 每个weights的变化过程的图要画出来 为什么第二个随机梯" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/logistic%E5%9B%9E%E5%BD%92-%E4%BE%8B%E5%AD%901-%E4%BD%BF%E7%94%A8-logistic-%E5%9B%9E%E5%BD%92%E5%9C%A8%E7%AE%80%E5%8D%95%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8A%E8%BF%9B%E8%A1%8C%E5%88%86%E7%B1%BB/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Logistic回归 例子1 使用 Logistic 回归在简单数据集上进行分类" />
+<meta property="og:description" content="TODO alpha的动态设定有什么需要注意的吗？ 这个例子虽然简单，但是还是要好好理解的。 每个weights的变化过程的图要画出来 为什么第二个随机梯" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/logistic%E5%9B%9E%E5%BD%92-%E4%BE%8B%E5%AD%901-%E4%BD%BF%E7%94%A8-logistic-%E5%9B%9E%E5%BD%92%E5%9C%A8%E7%AE%80%E5%8D%95%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%8A%E8%BF%9B%E8%A1%8C%E5%88%86%E7%B1%BB/" /><meta property="article:published_time" content="2018-08-03T12:13:58&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T12:13:58&#43;00:00"/>
+<meta itemprop="name" content="Logistic回归 例子1 使用 Logistic 回归在简单数据集上进行分类">
+<meta itemprop="description" content="TODO alpha的动态设定有什么需要注意的吗？ 这个例子虽然简单，但是还是要好好理解的。 每个weights的变化过程的图要画出来 为什么第二个随机梯">
+
+
+<meta itemprop="datePublished" content="2018-08-03T12:13:58&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T12:13:58&#43;00:00" />
+<meta itemprop="wordCount" content="2083">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Logistic回归 例子1 使用 Logistic 回归在简单数据集上进行分类"/>
+<meta name="twitter:description" content="TODO alpha的动态设定有什么需要注意的吗？ 这个例子虽然简单，但是还是要好好理解的。 每个weights的变化过程的图要画出来 为什么第二个随机梯"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Logistic回归 例子1 使用 Logistic 回归在简单数据集上进行分类</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 2083 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#项目概述">项目概述</a></li>
+<li><a href="#项目数据">项目数据</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><strong>alpha的动态设定有什么需要注意的吗？</strong></li>
+<li><strong>这个例子虽然简单，但是还是要好好理解的。</strong></li>
+<li><strong>每个weights的变化过程的图要画出来</strong></li>
+<li><strong>为什么第二个随机梯度下降方法中对于rand_index的变动能够减少周期性波动？</strong></li>
+</ul>
+
+<h1 id="项目概述">项目概述</h1>
+
+<p>在一个简单的数据集上，采用梯度下降法找到 Logistic 回归分类器在此数据集上的最佳回归系数。</p>
+
+<h1 id="项目数据">项目数据</h1>
+
+<p>链接：<a href="https://pan.baidu.com/s/1mOj31hJDdyrKa5hTp3ZpLg">https://pan.baidu.com/s/1mOj31hJDdyrKa5hTp3ZpLg</a> 密码：86r6</p>
+
+<p>数据格式如下：</p>
+
+<pre><code>-0.017612   14.053064   0
+-1.395634   4.662541    1
+-0.752157   6.538620    0
+-1.322371   7.152853    0
+0.423363    11.054677   0
+</code></pre>
+
+<p>使用Logistic回归的时候，由于需要进行距离计算，因此要求数据类型为数值型。另外，结构化数据格式则最佳。</p>
+
+<p>完整代码</p>
+
+<p>​
+    import numpy as np
+    import matplotlib.pyplot as plt</p>
+
+<p>​
+    # 加载数据集
+    def load_data_set(file_name=&lsquo;testSet.txt&rsquo;):
+        datas = []
+        labels = []
+        fr = open(file_name)
+        for line in fr.readlines():
+            lineArr = line.strip().split()
+            # 为什么前面要加上一个1.0? 应该是为了把 b 作为 w 的一部分，嗯
+            datas.append([1.0, float(lineArr[0]), float(lineArr[1])])
+            labels.append(int(lineArr[2]))
+        return datas, labels</p>
+
+<p>​
+    def sigmoid(inX):
+        return 1.0 / (1 + np.exp(-inX))</p>
+
+<p>​
+    # 再仔细看一下这个梯度下降
+    def gradient_descent(datas, labels, alpha=0.001, max_cycles=500):
+        # 转化为矩阵[[1,1,2],[1,1,2]&hellip;.]
+        data_mat = np.mat(datas)
+        # 转化为矩阵[[0,1,0,1,0,1&hellip;..]]，并转制[[0],[1],[0]&hellip;..]
+        label_mat = np.mat(labels).transpose()  # convert to NumPy matrix
+        row_num, column_num = np.shape(data_mat)
+        # 生成一个长度和特征数相同的矩阵 -&gt; [[1],[1],[1]]
+        weights = np.ones((column_num, 1))</p>
+
+<pre><code>    for k in range(max_cycles):  # heavy on matrix operations
+        # alpha = 1 / (10.0 +k) + 0.0001   把 alpha设定为动态的好像还不如固定为 0.1效果好，为什么呢？
+        h = sigmoid(data_mat * weights)  # m*3 的矩阵 * 3*1 的单位矩阵 ＝ m*1的矩阵
+        error = (label_mat - h)  # vector subtraction
+        weights = weights + alpha * data_mat.transpose() * error  # matrix mult
+        if k % 10 == 0:
+            print(np.average(error))
+    return weights
+</code></pre>
+
+<p>​
+    # 这是一个随机梯度下降的方法
+    def stoc_gradient_descent0(datas, labels, alpha=0.01, num_iter=150):
+        data_mat = np.mat(datas)
+        label_mat = np.mat(labels).transpose()
+        row_num, column_num = np.shape(data_mat)
+        weights = np.ones((column_num, 1))  # initialize to all ones
+        for j in range(num_iter):
+            for i in range(row_num):
+                h = sigmoid(sum(data_mat[i] * weights))
+                error = float(label_mat[i] - h)
+                weights = weights + alpha * error * data_mat[i].transpose()
+                if j % 10 == 0 and i == 0:
+                    print(error)
+        return weights</p>
+
+<p>​
+    # 这也是一个随机梯度下降的方法，不过alpha是变动的
+    def stoc_gradient_descent1(datas, labels, num_iter=150):
+        data_mat = np.mat(datas)
+        label_mat = np.mat(labels).transpose()
+        row_num, column_num = np.shape(data_mat)
+        weights = np.ones((column_num, 1))  # initialize to all ones
+        print(weights)
+        for j in range(num_iter):
+            data_index = list(range(row_num))
+            for i in range(row_num):
+                alpha = 4 / (1.0 + j + i) + 0.0001  # apha decreases with iteration, does not
+                rand_index = int(np.random.uniform(0, len(data_index)))  # go to 0 because of the constant
+                h = sigmoid(sum(data_mat[rand_index] * weights))
+                error = float(label_mat[rand_index] - h)
+                weights = weights + alpha * error * (data_mat[rand_index]).transpose()
+                del (data_index[rand_index])
+                if j % 10 == 0 and i == 0:
+                    print(error)
+        return weights</p>
+
+<p>​
+    def plot_graph(weights):
+        datas, labels = load_data_set()
+        data_array = np.array(datas)
+        row_num = np.shape(data_array)[0]  # 行数
+        # 将正样本和负样本的xy值整理一下 画出散点
+        xcord1 = []
+        ycord1 = []
+        xcord2 = []
+        ycord2 = []
+        for i in range(row_num):
+            if int(labels[i]) == 1:
+                xcord1.append(data_array[i, 1])
+                ycord1.append(data_array[i, 2])
+            else:
+                xcord2.append(data_array[i, 1])
+                ycord2.append(data_array[i, 2])
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.scatter(xcord1, ycord1, s=30, c=&lsquo;red&rsquo;, marker=&rsquo;s&rsquo;)
+        ax.scatter(xcord2, ycord2, s=30, c=&lsquo;green&rsquo;)
+        # 画出直线
+        x = np.arange(-3.0, 3.0, 0.1)
+        y = (-weights[0] - weights[1] * x) / weights[2]
+        ax.plot(x, y)
+        plt.xlabel(&lsquo;X1&rsquo;)
+        plt.ylabel(&lsquo;X2&rsquo;)
+        plt.show()</p>
+
+<p>​
+    if <strong>name</strong> == &ldquo;<strong>main</strong>&ldquo;:
+        datas, labels = load_data_set()</p>
+
+<pre><code>    # 这三种方法都可以尝试下，对比下
+    weights = gradient_descent(datas, labels, alpha=0.01, max_cycles=1000)
+    # weights = stoc_gradient_descent0(datas, labels, alpha=0.001,num_iter=150)
+    # weights=stoc_gradient_descent1(datas,labels,num_iter=150)
+    print(weights)
+    print(type(weights))
+    # weights = [weights[0, 0], weights[1, 0], weights[2, 0]]
+    w = np.mat(weights).transpose()
+    weights = w.tolist()[0]
+    print(w)
+    print(weights)
+    print(type(weights))
+    plot_graph(weights)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>-0.364142533131
+0.388933945962
+....中间略去
+0.000875800828433
+0.000869776249191
+0.00086380449892
+[[ 13.29983296]
+ [  1.15405391]
+ [ -1.80922946]]
+&lt;class 'numpy.matrixlib.defmatrix.matrix'&gt;
+[[ 13.29983296   1.15405391  -1.80922946]]
+[13.29983296444853, 1.1540539141963142, -1.8092294578016879]
+&lt;class 'list'&gt;
+</code></pre>
+
+<p>输出图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AeAckL2EKj.png?imageslim" alt="mark" /></p>
+
+<p>上面的代码的一些疑问和总结：</p>
+
+<p><strong>1.我将alpha设置为动态的时候，比如：alpha = 1 / (10.0 +k) + 0.0001 这个时候的效果好像还不如固定为 0.1效果好，为什么呢？alpha的动态设定有什么需要注意的吗？</strong></p>
+
+<p>2.这个地方：datas.append([1.0, float(lineArr[0]), float(lineArr[1])]) 之所以加上一个1.0，应该是为了把 b 作为 w 的一部分，嗯。这样计算的时候，就可以统一计算了。</p>
+
+<p>3.之前不知道</p>
+
+<pre><code>[[ 13.29983296]
+[ 1.15405391]
+[ -1.80922946]]
+</code></pre>
+
+<p>这种形式的数据怎么转换成</p>
+
+<pre><code>[13.29983296444853, 1.1540539141963142, -1.8092294578016879]
+</code></pre>
+
+<p>直接：np.mat(weights).transpose()[0] 这样是不行的，这个时候的 np.mat(weights).transpose() 还是 matrix 类型的，好像是不支持[0]的，因此先转化成 list 。<strong>确认下matrix是不是不支持[0]的。</strong></p>
+
+<p>4.关于梯度下降和随机梯度下降</p>
+
+<p>梯度下降算法在每次更新回归系数时都需要遍历整个数据集，该方法在处理 100 个左右的数据集时尚可，但如果有数十亿样本和成千上万的特征，那么该方法的计算复杂度就太高了。</p>
+
+<p>一种改进方法是一次仅用一个样本点来更新回归系数，该方法称为 随机梯度下降算法。由于可以在新样本到来时对分类器进行增量式更新，因而 <strong>随机梯度上升算法是一个在线学习算法。</strong>与 “在线学习” 相对应，一次处理所有数据被称作是 “批处理”。</p>
+
+<p>下图展示了 stoc_gradient_descent0 算法在 200 次迭代过程中回归系数的变化情况。其中的系数2，也就是 X2 很快就稳定了，但系数 1 和 0 则需要更多次的迭代。如下图所示：<strong>这个图哪里来的？随机梯度下降很容易震荡吗？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EAeDCBbk6B.png?imageslim" alt="mark" /></p>
+
+<p>因此 stoc_gradient_descent1 做出了改进：</p>
+
+<p>第一处改进为 alpha 的值。alpha 在每次迭代的时候都会调整，这回缓解上面波动图的数据波动或者高频波动。另外，虽然 alpha 会随着迭代次数不断减少，但永远不会减小到 0，因为我们在计算公式中添加了一个常数项。</p>
+
+<p>第二处修改为 rand_index 更新，这里通过随机选取样本来更新回归系数。这种方法将减少周期性的波动。这种方法每次随机从列表中选出一个值，然后从列表中删掉该值（再进行下一次迭代）。<strong>？为什么能够减少周期性波动？</strong></p>
+
+<p>OK，这里我们把上面的 weight 的变化的曲线画一下：</p>
+
+<pre><code class="language-python">from numpy import *
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+
+from Ch05 import simple_logistic
+
+
+​
+def stoc_gradient_descent0(data_mat, label_mat):
+    m, n = shape(data_mat)
+    alpha = 0.5
+    weights = ones(n)  # initialize to all ones
+    weights_history = zeros((500 * m, n))
+    for j in range(500):
+        for i in range(m):
+            h = simple_logistic.sigmoid(sum(data_mat[i] * weights))
+            error = label_mat[i] - h
+            weights = weights + alpha * error * data_mat[i]
+            weights_history[j * m + i, :] = weights
+    return weights_history
+
+
+​
+def stoc_gradient_descent1(data_mat, label_mat):
+    m, n = shape(data_mat)
+    alpha = 0.4
+    weights = ones(n)  # initialize to all ones
+    weights_history = zeros((40 * m, n))
+    for j in range(40):
+        dataIndex = list(range(m))
+        for i in range(m):
+            alpha = 4 / (1.0 + j + i) + 0.01
+            randIndex = int(random.uniform(0, len(dataIndex)))
+            h = simple_logistic.sigmoid(sum(data_mat[randIndex] * weights))
+            error = label_mat[randIndex] - h
+            # print error
+            weights = weights + alpha * error * data_mat[randIndex]
+            weights_history[j * m + i, :] = weights
+            del (dataIndex[randIndex])
+    print(weights)
+    return weights_history
+
+
+​
+def plot_graph(data_arr, my_hist):
+    n = shape(data_arr)[0]  # number of points to create
+    xcord1 = []
+    ycord1 = []
+    xcord2 = []
+    ycord2 = []
+    markers = []
+    colors = []
+
+    fig = plt.figure()
+    ax = fig.add_subplot(311)
+    type1 = ax.plot(my_hist[:, 0])
+    plt.ylabel('X0')
+    ax = fig.add_subplot(312)
+    type1 = ax.plot(my_hist[:, 1])
+    plt.ylabel('X1')
+    ax = fig.add_subplot(313)
+    type1 = ax.plot(my_hist[:, 2])
+    plt.xlabel('iteration')
+    plt.ylabel('X2')
+    plt.show()
+
+
+​
+if __name__ == &quot;__main__&quot;:
+    data_mat, label_mat = simple_logistic.load_data_set(&quot;../testSet.txt&quot;)
+    data_arr = array(data_mat)
+    my_hist = stoc_gradient_descent1(data_arr, label_mat)
+    plot_graph(data_arr, my_hist)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>[ 12.42965515   1.31174961  -1.95749652]
+</code></pre>
+
+<p>图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0KJcAIf0Fj.png?imageslim" alt="mark" /></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/logistic%E5%9B%9E%E5%BD%92-%E4%BE%8B%E5%AD%902-%E4%BB%8E%E7%96%9D%E6%B0%94%E7%97%85%E7%97%87%E9%A2%84%E6%B5%8B%E7%97%85%E9%A9%AC%E7%9A%84%E5%AD%98%E6%B4%BB%E9%97%AE%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Logistic回归 例子2 从疝气病症预测病马的存活问题</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/%E5%B2%AD%E5%9B%9E%E5%BD%92-%E4%BE%8B%E5%AD%902%E9%A2%84%E6%B5%8B%E4%B9%90%E9%AB%98%E7%8E%A9%E5%85%B7%E5%A5%97%E8%A3%85%E7%9A%84%E4%BB%B7%E6%A0%BC/">
+            <span class="next-text nav-default">岭回归 例子2：预测乐高玩具套装的价格</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

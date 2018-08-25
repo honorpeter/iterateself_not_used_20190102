@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>AI 研究方法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="[TOC] TODO 没有怎么细看，需要重点完善和扩充一下。 研究方法 目前没有统一的原理或范式指导人工智能研究。许多问题上研究者都存在争论。 其中几个长久以来仍没" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/01-%E6%99%BA%E8%83%BD%E6%8E%A2%E7%B4%A2/01-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/03-%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%BC%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/01-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9A%84%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/ai-%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="AI 研究方法" />
+<meta property="og:description" content="[TOC] TODO 没有怎么细看，需要重点完善和扩充一下。 研究方法 目前没有统一的原理或范式指导人工智能研究。许多问题上研究者都存在争论。 其中几个长久以来仍没" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/01-%E6%99%BA%E8%83%BD%E6%8E%A2%E7%B4%A2/01-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/03-%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%BC%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/01-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9A%84%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/ai-%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/" /><meta property="article:published_time" content="2018-06-12T13:58:03&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-12T13:58:03&#43;00:00"/>
+<meta itemprop="name" content="AI 研究方法">
+<meta itemprop="description" content="[TOC] TODO 没有怎么细看，需要重点完善和扩充一下。 研究方法 目前没有统一的原理或范式指导人工智能研究。许多问题上研究者都存在争论。 其中几个长久以来仍没">
+
+
+<meta itemprop="datePublished" content="2018-06-12T13:58:03&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-12T13:58:03&#43;00:00" />
+<meta itemprop="wordCount" content="2313">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="AI 研究方法"/>
+<meta name="twitter:description" content="[TOC] TODO 没有怎么细看，需要重点完善和扩充一下。 研究方法 目前没有统一的原理或范式指导人工智能研究。许多问题上研究者都存在争论。 其中几个长久以来仍没"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">AI 研究方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-12 </span>
+        
+        <span class="more-meta"> 2313 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#研究方法">研究方法</a></li>
+<li><a href="#控制论与大脑模拟">控制论与大脑模拟</a></li>
+<li><a href="#符号处理">符号处理</a>
+<ul>
+<li><a href="#认知模拟">认知模拟</a></li>
+<li><a href="#基于逻辑">基于逻辑</a></li>
+<li><a href="#反逻辑">反逻辑</a></li>
+<li><a href="#基于知识">基于知识</a></li>
+</ul></li>
+<li><a href="#子符号方法">子符号方法</a>
+<ul>
+<li><a href="#自下而上-接口-agent-嵌入环境-机器人-行为主义-新式ai">自下而上、接口 agent 、嵌入环境（机器人）、行为主义、新式AI</a></li>
+<li><a href="#计算智能">计算智能</a></li>
+</ul></li>
+<li><a href="#统计学方法">统计学方法</a></li>
+<li><a href="#集成方法">集成方法</a>
+<ul>
+<li><a href="#智能-agent-范式">智能 agent 范式</a></li>
+<li><a href="#agent-体系结构和认知体系结构">agent 体系结构和认知体系结构</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>[TOC]</p>
+
+<p>TODO</p>
+
+<ul>
+<li><strong>没有怎么细看，需要重点完善和扩充一下。</strong></li>
+</ul>
+
+<hr />
+
+<h1 id="研究方法">研究方法</h1>
+
+<p>目前没有统一的原理或范式指导人工智能研究。许多问题上研究者都存在争论。</p>
+
+<p>其中几个长久以来仍没有结论的问题是：</p>
+
+<ul>
+<li><p>是否应从心理或神经方面模拟人工智能?或者像鸟类生物学对于航空工程一样，人类生物学对于人工智能研究是没有关系的？</p></li>
+
+<li><p>智能行为能否用简单的原则（如逻辑或优化）来描述？还是必须解决大量完全无关的问题？</p></li>
+
+<li><p>智能是否可以使用高级符号表达，如词和想法？还是需要“子符号”的处理？</p></li>
+</ul>
+
+<p>约翰·豪格兰德（John Haugeland）提出了GOFAI（出色的老式人工智能）的概念，也提议人工智能应归类为synthetic intelligence，[36]这个概念后来被某些非GOFAI研究者采纳。</p>
+
+<h1 id="控制论与大脑模拟">控制论与大脑模拟</h1>
+
+<p>主条目：控制论和计算神经科学</p>
+
+<p>20世纪40年代到50年代，许多研究者探索神经学、信息理论及控制论之间的联系。其中还造出一些使用电子网络构造的初步智能，如格雷·华特（W. Grey Walter）的乌龟（turtle）和约翰霍普金斯野兽（Johns Hopkins Beast）。</p>
+
+<p>这些研究者还经常在普林斯顿大学和英国的Ratio Club举行技术协会会议。[39]直到1960，大部分人已经放弃这个方法，尽管在80年代再次提出这些原理。</p>
+
+<h1 id="符号处理">符号处理</h1>
+
+<p>主条目：GOFAI</p>
+
+<ul>
+<li><p>20世纪50年代，数字计算机研制成功，研究者开始探索人类智能是否能简化成符号处理。研究主要集中在卡内基梅隆大学，斯坦福大学和麻省理工学院，而各自有独立的研究风格。约翰·豪格兰德（John Haugeland）称这些方法为GOFAI（出色的老式人工智能）。</p></li>
+
+<li><p>60年代，符号方法在小型证明程序上模拟高级思考有很大的成就。基于控制论或神经网络的方法则置于次要。</p></li>
+
+<li><p>60－70年代的研究者确信符号方法最终可以成功创造强人工智能的机器，同时这也是他们的目标。</p></li>
+</ul>
+
+<h2 id="认知模拟">认知模拟</h2>
+
+<p>经济学家赫伯特·西蒙和艾伦·纽厄尔研究人类问题解决能力和尝试将其形式化，同时他们为人工智能的基本原理打下基础，如认知科学、运筹学和经营科学。他们的研究团队使用心理学实验的结果开发模拟人类解决问题方法的程序。这方法一直在卡内基梅隆大学沿袭下来，并在80年代于Soar发展到高峰。</p>
+
+<h2 id="基于逻辑">基于逻辑</h2>
+
+<p>不像艾伦·纽厄尔和赫伯特·西蒙，约翰·麦卡锡认为机器不需要模拟人类的思想，而应尝试找到抽象推理和解决问题的本质，不管人们是否使用同样的算法。他在斯坦福大学的实验室致力于使用形式化逻辑解决多种问题，包括知识表示，智能规划和机器学习。致力于逻辑方法的还有爱丁堡大学，而促成欧洲的其他地方开发编程语言Prolog和逻辑编程科学。</p>
+
+<h2 id="反逻辑">反逻辑</h2>
+
+<p>斯坦福大学的研究者 （如马文·闵斯基和西摩尔·派普特）发现要解决计算机视觉和自然语言处理的困难问题，需要专门的方案：他们主张不存在简单和通用原理（如逻辑）能够达到所有的智能行为。</p>
+
+<p>罗杰·单克（Roger Schank）描述他们的 “反逻辑” 方法为 “scruffy” 。常识知识库（如道格拉斯·莱纳特的Cyc）就是“scruffy”AI的例子，因为他们必须人工一次编写一个复杂的概念。</p>
+
+<h2 id="基于知识">基于知识</h2>
+
+<p>大约在1970年出现大容量内存计算机，研究者分别以三个方法开始把知识构造成应用软件。这场 “知识革命” 促成专家系统的开发与计划，这是第一个成功的人工智能软件形式。“知识革命” 同时让人们意识到许多简单的人工智能软件可能需要大量的知识。</p>
+
+<h1 id="子符号方法">子符号方法</h1>
+
+<p>1980年代符号人工智能停滞不前，很多人认为符号系统永远不可能模仿人类所有的认知过程，特别是感知、机器人、机器学习和模式识别。很多研究者开始关注子符号方法解决特定的人工智能问题。</p>
+
+<h2 id="自下而上-接口-agent-嵌入环境-机器人-行为主义-新式ai">自下而上、接口 agent 、嵌入环境（机器人）、行为主义、新式AI</h2>
+
+<p>机器人领域相关的研究者，如罗德尼·布鲁克斯（Rodney Brooks），否定符号人工智能而专注于机器人移动和求生等基本的工程问题。他们的工作再次关注早期控制论研究者的观点，同时提出了在人工智能中使用控制理论。这与认知科学领域中的表征感知论点是一致的:更高的智能需要个体的表征（如移动，感知和形象）。</p>
+
+<h2 id="计算智能">计算智能</h2>
+
+<p>1980年代中大卫·鲁姆哈特（David E. Rumelhart）等再次提出神经网络和联结主义。这和其他的子符号方法，如模糊控制和进化计算，都属于计算智能学科研究范畴。</p>
+
+<h1 id="统计学方法">统计学方法</h1>
+
+<p>1990年代，人工智能研究发展出复杂的数学工具来解决特定的分支问题。这些工具是真正的科学方法，即这些方法的结果是可测量的和可验证的，同时也是近期人工智能成功的原因。共用的数学语言也允许已有学科的合作（如数学，经济或运筹学）。Stuart J. Russell 和 Peter Norvig 指出这些进步不亚于 “革命” 和 “neats的成功” 。有人批评这些技术太专注于特定的问题，而没有考虑长远的强人工智能目标。</p>
+
+<h1 id="集成方法">集成方法</h1>
+
+<h2 id="智能-agent-范式">智能 agent 范式</h2>
+
+<p>智能 agent 是一个会感知环境并作出行动以达致目标的系统。最简单的智能 agent 是那些可以解决特定问题的程序。更复杂的 agent 包括人类和人类组织（如公司）。这些范式可以让研究者研究单独的问题和找出有用且可验证的方案，而不需考虑单一的方法。一个解决特定问题的 agent 可以使用任何可行的方法-一些 agent 用符号方法和逻辑方法，一些则是子符号神经网络或其他新的方法。范式同时也给研究者提供一个与其他领域沟通的共同语言&ndash;如决策论和经济学（也使用abstract agents的概念）。1990年代智能agent范式被广泛接受。</p>
+
+<h2 id="agent-体系结构和认知体系结构">agent 体系结构和认知体系结构</h2>
+
+<p>研究者设计出一些系统来处理多 agent 系统中智能 agent 之间的相互作用。一个系统中包含符号和子符号部分的系统称为混合智能系统，而对这种系统的研究则是人工智能系统集成。分级控制系统则给反应级别的子符号AI和最高级别的传统符号AI提供桥梁，同时放宽了规划和世界建模的时间。</p>
+
+<hr />
+
+<p>REF</p>
+
+<ol>
+<li><a href="https://zh.wikipedia.org/wiki/人工智能">人工智能 wiki</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/01-%E6%99%BA%E8%83%BD%E6%8E%A2%E7%B4%A2/01-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/03-%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%BC%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/03-%E5%85%B7%E4%BD%93%E7%A0%94%E7%A9%B6%E8%AF%BE%E9%A2%98/ai-%E7%A0%94%E7%A9%B6%E8%8C%83%E7%95%B4/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">AI 研究范畴</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/01-%E6%99%BA%E8%83%BD%E6%8E%A2%E7%B4%A2/01-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/03-%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%BC%BA%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/02-%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%B6%89%E5%8F%8A%E7%9A%84%E5%AD%A6%E7%A7%91/ai-%E6%B6%89%E5%8F%8A%E5%88%B0%E7%9A%84%E5%AD%A6%E7%A7%91/">
+            <span class="next-text nav-default">AI 涉及到的学科</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

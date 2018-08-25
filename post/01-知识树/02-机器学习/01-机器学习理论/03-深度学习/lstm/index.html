@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>LSTM - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="LSTM TODO 讲的还是很透彻的，但是我想知道，LSTM的cell在程序中是怎么实现的？还有那些求导的过程在程序中是怎么实现的？还是要学习一下有没有什么" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/lstm/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="LSTM" />
+<meta property="og:description" content="LSTM TODO 讲的还是很透彻的，但是我想知道，LSTM的cell在程序中是怎么实现的？还有那些求导的过程在程序中是怎么实现的？还是要学习一下有没有什么" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/lstm/" /><meta property="article:published_time" content="2018-08-12T20:23:54&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:23:54&#43;00:00"/>
+<meta itemprop="name" content="LSTM">
+<meta itemprop="description" content="LSTM TODO 讲的还是很透彻的，但是我想知道，LSTM的cell在程序中是怎么实现的？还有那些求导的过程在程序中是怎么实现的？还是要学习一下有没有什么">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:23:54&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:23:54&#43;00:00" />
+<meta itemprop="wordCount" content="2243">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LSTM"/>
+<meta name="twitter:description" content="LSTM TODO 讲的还是很透彻的，但是我想知道，LSTM的cell在程序中是怎么实现的？还有那些求导的过程在程序中是怎么实现的？还是要学习一下有没有什么"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">LSTM</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 2243 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#lstm">LSTM</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#lstm简介">LSTM简介</a></li>
+<li><a href="#lstm结构">LSTM结构</a>
+<ul>
+<li><a href="#之前提到的rnn结构如下">之前提到的RNN结构如下：</a></li>
+<li><a href="#而lstm的记忆细胞如下">而LSTM的记忆细胞如下：</a></li>
+<li><a href="#lstm关键-细胞状态">LSTM关键：“细胞状态”</a></li>
+<li><a href="#说明一下这中间的-sigmoid">说明一下这中间的 Sigmoid</a></li>
+</ul></li>
+<li><a href="#lstm的几个关键-门-与操作">LSTM的几个关键”门“与操作</a>
+<ul>
+<li><a href="#第1步-决定从-细胞状态-中丢弃什么信息-忘记门-forget-gate">第1步：决定从”细胞状态“中丢弃什么信息？=&gt; “忘记门”  forget gate</a></li>
+<li><a href="#第2步-决定放什么新信息到-细胞状态-中">第2步：决定放什么新信息到”细胞状态“中</a></li>
+<li><a href="#第3步-更新-细胞状态">第3步：更新”细胞状态“</a></li>
+<li><a href="#第4步-基于-细胞状态-得到输出">第4步：基于 ”细胞状态“ 得到输出</a></li>
+</ul></li>
+<li><a href="#那么为什么lstm比rnn更能解决记忆长时依赖的问题">那么为什么LSTM比RNN更能解决记忆长时依赖的问题？</a></li>
+<li><a href="#lstm的变体">LSTM的变体</a>
+<ul>
+<li><a href="#变种1">变种1：</a></li>
+<li><a href="#变种2">变种2：</a></li>
+<li><a href="#变种3-gru-gated-recurrent-unit">变种3：GRU （Gated Recurrent Unit）</a></li>
+</ul></li>
+<li><a href="#rnn拓展">RNN拓展</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="lstm">LSTM</h1>
+
+<p>TODO</p>
+
+<ul>
+<li>讲的还是很透彻的，但是我想知道，LSTM的cell在程序中是怎么实现的？还有那些求导的过程在程序中是怎么实现的？还是要学习一下有没有什么代码或者库的源码？</li>
+</ul>
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对LSTM进行总结。</p>
+
+<h1 id="lstm简介">LSTM简介</h1>
+
+<p>RNN解决了对之前的信息保存的问题。</p>
+
+<p>但是！存在长期依赖的问题：比如说：看电影的时候，某些情节的推断需要依赖很久以前的一些细节。很多其他任务也一样。但是RNN会丢失很长一段时间之前的信息。也就是说，RNN的记忆容量是有限的。那么怎么办呢？LSTM。</p>
+
+<p>LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 cell 被改造过。使得该记的信息会一直传递，不该记的会被门截断。</p>
+
+<p>#</p>
+
+<h1 id="lstm结构">LSTM结构</h1>
+
+<h2 id="之前提到的rnn结构如下">之前提到的RNN结构如下：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/amEb5BK0cA.png?imageslim" alt="mark" /></p>
+
+<p>即可以写成如下的形式：<strong>嗯 是的</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Hecfm41e7C.png?imageslim" alt="mark" /></p>
+
+<h2 id="而lstm的记忆细胞如下">而LSTM的记忆细胞如下：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0c29Aj2ba7.png?imageslim" alt="mark" /></p>
+
+<p>解释一下：</p>
+
+<ul>
+<li>黄色的标记是一个非线性处理的模块。</li>
+<li>红点是一些逐点的运算，比如逐点的乘法</li>
+</ul>
+
+<p>下面我们开始讲最关键的东西：</p>
+
+<h2 id="lstm关键-细胞状态">LSTM关键：“细胞状态”</h2>
+
+<p>细胞状态（cell state 也就是之前RNN中提到的S，即细胞的记忆）类似于传送带，直接在整个链上运行，只有一些少量的线性交互，信息在上面流传保持不变会很容易。可见，从 (C<em>{t-1}) 到 (C</em>{t}) 是从上一个时刻的记忆到这个时刻的记忆。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/alh50LlGI8.png?imageslim" alt="mark" /></p>
+
+<h2 id="说明一下这中间的-sigmoid">说明一下这中间的 Sigmoid</h2>
+
+<p>可以通过 ”门“ 让信息选择性通过，来去除或者增加信息到细胞状态。那么这个”门“是什么呢？它其实就是一个 Sigmoid 层。Sigmoid 层输出0到1之间的概率值，描述每个部分有多少量可以通过，其中0代表不允许任何量通过，1代表允许任意量通过。所以，用这个层与之前过来的记忆做一个 pointwise  乘法就可以控制之前状态过来的记忆信息的通过程度。<strong>为什么不用ReLU？因为要0~1才能起到信息筛选的作用。只有这样的话，C才能会被保持在一定的范围内，如果用ReLU的话，信息就会不断膨胀。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/47iJKad8DB.png?imageslim" alt="mark" /></p>
+
+<h1 id="lstm的几个关键-门-与操作">LSTM的几个关键”门“与操作</h1>
+
+<h2 id="第1步-决定从-细胞状态-中丢弃什么信息-忘记门-forget-gate">第1步：决定从”细胞状态“中丢弃什么信息？=&gt; “忘记门”  forget gate</h2>
+
+<p>比如完形填空中填 “他” 或者 “她“ 的问题，细胞状态可能包含当前主语的类别，当我们看到新的代词，我们希望忘记旧的代词。</p>
+
+<p>所以我用上一个时刻的输出和这个时刻的输入来一起决定我以多大的程度来忘却之前的细胞记忆 cell state，(\sigma )就是一个Sigmoid函数，(f_t)就是得到的留下的概率。</p>
+
+<p><strong>注意：这里的([h_{t-1},x_t])指的是向量的拼接操作。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/k71DgHLJ7f.png?imageslim" alt="mark" /></p>
+
+<h2 id="第2步-决定放什么新信息到-细胞状态-中">第2步：决定放什么新信息到”细胞状态“中</h2>
+
+<p>之前我已经忘掉一些信息了，那么我补什么新信息进来呢？</p>
+
+<ol>
+<li><p>(i_t)是一个概率，</p></li>
+
+<li><p>(\widetilde{C<em>t}) 是候选值向量。**没明白，为什么是与(h</em>{t-1})和(x_t)有关的？不是只与(x_t)有关吗？**</p></li>
+
+<li><p>相乘之后，就加到了我的cell state中。</p></li>
+</ol>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Je9KhlHHl8.png?imageslim" alt="mark" /></p>
+
+<h2 id="第3步-更新-细胞状态">第3步：更新”细胞状态“</h2>
+
+<ol>
+<li><p>在完成上面两步之后，开始更新 (C_{t-1})为(C_t)</p></li>
+
+<li><p>把旧状态与(f_t)相乘，丢弃掉我们确定需要丢弃的信息</p></li>
+
+<li><p>加上(i_t*\widetilde{C_t})。这就是新的候选值，根据我们决定更新每个状态的程度进行变化</p></li>
+</ol>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Kdh6F67lIi.png?imageslim" alt="mark" /></p>
+
+<h2 id="第4步-基于-细胞状态-得到输出">第4步：基于 ”细胞状态“ 得到输出</h2>
+
+<ol>
+<li><p>首先运行一个sigmoid层来确定细胞状态的哪个部分将输出。</p></li>
+
+<li><p>接着用tanh处理细胞状态（得到一个在-1到1之间的值），再将它和sigmoid门的输出相乘，输出我们确定输出的那部分。</p></li>
+
+<li><p>比如我们可能需要单复数信息来确定输出”他“还是”他们“</p></li>
+</ol>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ALHd954jea.png?imageslim" alt="mark" /></p>
+
+<h1 id="那么为什么lstm比rnn更能解决记忆长时依赖的问题">那么为什么LSTM比RNN更能解决记忆长时依赖的问题？</h1>
+
+<p>之前的RNN中，(S_t=tanh(Wx<em>t+VS</em>{t-1}))是一个复合函数，那么它求偏导的时候由于里面的激活函数是tanh，因此在求偏导的时候，有可能是约等于0的，如果约等于0，那么就意味着RNN学不到什么东西，而什么时候会出现约等于0呢？链路越长越有可能存在一个是约等于0的，那么这种链路很长的情况下，就会带来梯度消失。</p>
+
+<p>而LSTM呢？它实际上是两个函数求和： (C_t=f<em>t*C</em>{t-1}+i_t*\widetilde{C_t}) ，两个函数之和求偏导的话就是两个偏导求和，这时候，如果有一个是约等于0的，那么结果也不一定会是0，也就是说，会减少出现梯度消失的情况，也就是说，即使信息出现的时间比较远，也是可能学的到的。</p>
+
+<p>也就是说LSTM最大的变化就是把RNN中的连乘的形式变成求和的形式。</p>
+
+<h1 id="lstm的变体">LSTM的变体</h1>
+
+<p>LSTM的变体实际上是非常多的。</p>
+
+<h2 id="变种1">变种1：</h2>
+
+<p>为什么只使用我上次的输出和我这次的输入作为忘掉或记住的依据？而不用我之前的状态和现在的状态作为依据？这种变体就是考虑这个的，它增加了 &ldquo;peephole connection&rdquo; ，让门层也会接受细胞状态的输入。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ILlcCccC7g.png?imageslim" alt="mark" /></p>
+
+<h2 id="变种2">变种2：</h2>
+
+<p>为什么遗忘和记忆的概率是不一样的呢？能不能忘掉多少就补充多少？这个变体就是对应这个的。它通过使用 coupled 忘记和输入门。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lH8cLGBbbF.png?imageslim" alt="mark" /></p>
+
+<h2 id="变种3-gru-gated-recurrent-unit">变种3：GRU （Gated Recurrent Unit）</h2>
+
+<p>这是一个比较著名的变种。2014年提出，将忘记门和输入门合成了一个单一的更新门，同样还混合了细胞状态和隐藏状态，和其他一些改动，比LSTM更简单。<strong>看起来有些利害，C没有了，但是感觉整个流程又差不多。这个没有细讲，要仔细了解下。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KfF4fffDb6.png?imageslim" alt="mark" /></p>
+
+<h1 id="rnn拓展">RNN拓展</h1>
+
+<p>2015的paper《LSTM：A Search Space Odyssey》中，对各种变体做了对比，发现其实本质上它们大同小异。</p>
+
+<p>2015的paper《An Empirical Exploration of Recurrent Network Architectures》中，google和facebook的大神尝试了很多种RNN架构，发现并非所有任务上LSTM都表现最好。<strong>为什么呢？难道记忆反而会有反作用？</strong></p>
+
+<p>现在有更多的RNN研究方向和应用（attention model ，Grid LSTM等）参见：<a href="https://github.com/kjw0612/awesome-rnn ">https://github.com/kjw0612/awesome-rnn </a>    <strong>awesome系列，还是要跟进学习的。</strong></p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>七月在线  深度学习</li>
+<li><a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">Understanding LSTM Networks</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%BF%83%E7%90%86%E5%AD%A6/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">RL 心理学</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/03-%E9%9D%9E%E6%A0%B8%E5%BF%83/markdown/rst-%E8%BD%AC-markdown/">
+            <span class="next-text nav-default">rst 转 markdown</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

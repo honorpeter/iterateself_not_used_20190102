@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 切片 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2.4 切片 在Python里，像列表(list)、元组(tuple)和字符串(str)这类序列类型都支持切 片操作，但是实际上切片操作比人们所想象的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/04-%E5%88%87%E7%89%87/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 切片" />
+<meta property="og:description" content="2.4 切片 在Python里，像列表(list)、元组(tuple)和字符串(str)这类序列类型都支持切 片操作，但是实际上切片操作比人们所想象的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/04-%E5%88%87%E7%89%87/" /><meta property="article:published_time" content="2018-07-11T15:00:17&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-11T15:00:17&#43;00:00"/>
+<meta itemprop="name" content="04 切片">
+<meta itemprop="description" content="2.4 切片 在Python里，像列表(list)、元组(tuple)和字符串(str)这类序列类型都支持切 片操作，但是实际上切片操作比人们所想象的">
+
+
+<meta itemprop="datePublished" content="2018-07-11T15:00:17&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-11T15:00:17&#43;00:00" />
+<meta itemprop="wordCount" content="2187">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 切片"/>
+<meta name="twitter:description" content="2.4 切片 在Python里，像列表(list)、元组(tuple)和字符串(str)这类序列类型都支持切 片操作，但是实际上切片操作比人们所想象的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 切片</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-11 </span>
+        
+        <span class="more-meta"> 2187 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#2-4-切片">2.4 切片</a>
+<ul>
+<li><a href="#另一个例子是在第-1-章中用-deck-12-13-的形式在未洗过的牌里把每种花色的-a-拿出">另一个例子是在第 1 章中用 deck[12::13] 的形式在未洗过的牌里把每种花色的 A 拿出</a></li>
+<li><a href="#a-c-这种用法只能作为索引或者下标用在-中来返回一个切片对象-slice-a-b">a🅱️c 这种用法只能作为索引或者下标用在 [] 中来返回一个切片对象： slice(a, b,</a></li>
+<li><a href="#示例-2-11-纯文本文件形式的收据以一行字符串的形式被解析">示例 2-11 纯文本文件形式的收据以一行字符串的形式被解析</a></li>
+<li><a href="#在10-4节还有更多机会来了解切片-slice-对象-如果从python用户的角度出发-切-片还有个两个额外的功能-多维切片和省略表示法">在10.4节还有更多机会来了解切片(slice)对象。如果从Python用户的角度出发，切 片还有个两个额外的功能：多维切片和省略表示法(&hellip;)。</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h3 id="2-4-切片">2.4 切片</h3>
+
+<p>在Python里，像列表(list)、元组(tuple)和字符串(str)这类序列类型都支持切</p>
+
+<p>片操作，但是实际上切片操作比人们所想象的要强大很多。</p>
+
+<p>这一节主要讨论的是这些高级切片形式的用法，它们的实现方法则会在第 10 章的一个自 定义类里提到。这么做主要是为了符合这本书的哲学：先讲用法，第四部分中再来讲如何</p>
+
+<p>创建新类。</p>
+
+<p>2.4.1 为什么切片和区间会忽略最后一个元素</p>
+
+<p>在切片和区间操作里不包含区间范围的最后一个元素是 Python 的风格，这个习惯符合 Python、 C 和其他语言里以 0 作为起始下标的传统。这样做带来的好处如下。</p>
+
+<p>•当只有最后一个位置信息时，我们也可以快速看出切片和区间里有几个元</p>
+
+<p>素：range(3)和my_list[:3]都返回3个元素。</p>
+
+<p>•当起止位置信息都可见时，我们可以快速计算出切片和区间的长度，用后一个数减去</p>
+
+<p>第一个下标(stop - start)即可。</p>
+
+<p>•这样做也让我们可以利用任意一个下标来把序列分割成不重叠的两部分，只要写成</p>
+
+<p>my_list[：x] 和 my_list[x：] 就可以了，如下所示。</p>
+
+<p>&gt;&gt;&gt; l = [10, 20, 30, 40, 50, 60]</p>
+
+<p>&gt;&gt;&gt; l[：2] # 在下标2的地方分割</p>
+
+<p>[10, 20]</p>
+
+<p>&gt;&gt;&gt; l[2：]</p>
+
+<p>[30, 40, 50, 60]</p>
+
+<p>&gt;&gt;&gt; l[：3] # 在下标3的地方分割</p>
+
+<p>[10, 20, 30]</p>
+
+<p>&gt;&gt;&gt; l[3：]</p>
+
+<p>[40, 50, 60]</p>
+
+<p>计算机科学家 Edsger W. Dijkstar 对这一风格的解释应该是最好的，详见“延伸阅读”中给出</p>
+
+<p>的最后一个参考资料。</p>
+
+<p>接下来进一步看看 Python 解释器是如何理解切片操作的。</p>
+
+<p>2.4.2 对对象进行切片</p>
+
+<p>一个众所周知的秘密是，我们还可以用 s[a：b：c] 的形式对 s 在 a 和 b 之间以 c 为间隔</p>
+
+<p>取值。 c 的值还可以为负，负值意味着反向取值。下面的 3 个例子更直观些：</p>
+
+<h4 id="另一个例子是在第-1-章中用-deck-12-13-的形式在未洗过的牌里把每种花色的-a-拿出">另一个例子是在第 1 章中用 deck[12::13] 的形式在未洗过的牌里把每种花色的 A 拿出</h4>
+
+<p>来：</p>
+
+<p>&gt;&gt;&gt; deck[12::13]</p>
+
+<p>[Card(rank=&lsquo;A&rsquo;, suit=&lsquo;spades&rsquo;), Card(rank=&lsquo;A&rsquo;, suit=&lsquo;diamonds&rsquo;), Card(rank=&lsquo;A&rsquo;, suit=&lsquo;clubs&rsquo;), Card(rank=&lsquo;A&rsquo;, suit=&lsquo;hearts&rsquo;)]</p>
+
+<h4 id="a-c-这种用法只能作为索引或者下标用在-中来返回一个切片对象-slice-a-b">a🅱️c 这种用法只能作为索引或者下标用在 [] 中来返回一个切片对象： slice(a, b,</h4>
+
+<p>c)。在10.4.1节中会讲到，对seq[start:stop:step]进行求值的时候，Python会调用 seq.<strong>getitem</strong>(slice(start, stop, step))。就算你还不会自定义序列类型，了</p>
+
+<p>解一下切片对象也是有好处的。例如你可以给切片命名，就像电子表格软件里给单元格区</p>
+
+<p>域取名字一样。</p>
+
+<p>比如，要解析示例 2-11 中所示的纯文本文件，这时使用有名字的切片比用硬编码的数字 区间要方便得多，注意示例里的 for 循环的可读性有多强。</p>
+
+<h4 id="示例-2-11-纯文本文件形式的收据以一行字符串的形式被解析">示例 2-11 纯文本文件形式的收据以一行字符串的形式被解析</h4>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt;</th>
+<th>invoice = &ldquo;&rdquo;&ldquo;0&hellip;..6&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;</th>
+<th>.40&hellip;&hellip;..52.</th>
+<th>..55.</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td></td>
+<td>1909 Pimoroni PiBrella</td>
+<td>$17.50</td>
+<td>3</td>
+<td>$52.50</td>
+</tr>
+
+<tr>
+<td></td>
+<td>1489 6mm Tactile Switch x20</td>
+<td>$4.95</td>
+<td>2</td>
+<td>$9.90</td>
+</tr>
+
+<tr>
+<td></td>
+<td>1510 Panavise Jr. - PV-201</td>
+<td>$28.00</td>
+<td>1</td>
+<td>$28.00</td>
+</tr>
+
+<tr>
+<td></td>
+<td>1601 PiTFT Mini Kit 320x240</td>
+<td>$34.95</td>
+<td>1</td>
+<td>$34.95</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>SKU = slice(0, 6)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>DESCRIPTION = slice(6, 40)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>UNIT_PRICE = slice(40, 52)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>QUANTITY = slice(52, 55)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>ITEM_TOTAL = slice(55, None)</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>line_items = invoice.split(&rsquo;\n&rsquo;)[2:]</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>for item in line_items:</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>print(item[UNIT_PRICE], item[DESCRIPTION])</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>$17.50 Pimoroni PiBrella $4.95 6mm Tactile Switch x20 $28.00    Panavise Jr. - PV-201$34.95    PiTFT Mini Kit 320x240</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="在10-4节还有更多机会来了解切片-slice-对象-如果从python用户的角度出发-切-片还有个两个额外的功能-多维切片和省略表示法">在10.4节还有更多机会来了解切片(slice)对象。如果从Python用户的角度出发，切 片还有个两个额外的功能：多维切片和省略表示法(&hellip;)。</h4>
+
+<p>2.4.3 多维切片和省略</p>
+
+<p>[] 运算符里还可以使用以逗号分开的多个索引或者是切片，外部库 NumPy 里就用到了这</p>
+
+<p>个特性，二维的 numpy.ndarray 就可以用 a[i, j] 这种形式来获取，抑或是用 a[m:n,</p>
+
+<p>k:l] 的方式来得到二维切片。稍后的示例 2-22 会展示这个用法。要正确处理这种 [] 运</p>
+
+<p>算符的话，对象的特殊方法 <strong>getitem</strong> 和 <strong>setitem</strong> 需要以元组的形式来接收 a[i, j] 中的索引。也就是说，如果要得到 a[i, j] 的值， Python 会调用 a.<strong>getitem</strong>((i, j))。</p>
+
+<p>Python 内置的序列类型都是一维的，因此它们只支持单一的索引，成对出现的索引是没有 用的。</p>
+
+<p>省略(ellipsis)的正确书写方法是三个英语句号(&hellip;)，而不是Unicdoe码位U+2026 表示的半个省略号(&hellip;)。省略在 Python 解析器眼里是一个符号，而实际上它是 Ellipsis 对象的别名，而 Ellipsis 对象又是 ellipsis 类的单一实例。 2 它可以当作切片规范的 一部分，也可以用在函数的参数清单中，比如f(a, &hellip;, z)，或a[i:&hellip;]。在NumPy 中， &hellip; 用作多维数组切片的快捷方式。如果 x 是四维数组，那么 x[i, &hellip;] 就是 x[i, :,:,:]的缩写。如果想了解更多，请参见“Tentative NumPy</p>
+
+<p>Tutorial”( <a href="http://wiki.scipy.org/Tentative_NumPy_Tutorial">http://wiki.scipy.org/Tentative_NumPy_Tutorial</a>)。</p>
+
+<p>I 2是的，你没看错，ellipsis是类名，全小写，而它的内置实例写作Ellipsis。这其实跟bool是小写，但是它的两 个实例写作True和False异曲同工。</p>
+
+<p>在写这本书的时候，我还没有发现在 Python 的标准库里有任何 Ellipsis 或者是多维索 引的用法。如果你知道，请告诉我。这些句法上的特性主要是为了支持用户自定义类或者 扩展，比如 NumPy 就是个例子。</p>
+
+<p>除了用来提取序列里的内容，切片还可以用来就地修改可变序列，也就是说修改的时候不</p>
+
+<p>需要重新组建序列。</p>
+
+<p>2.4.4 给切片赋值</p>
+
+<p>如果把切片放在赋值语句的左边，或把它作为 del 操作的对象，我们就可以对序列进行</p>
+
+<p>嫁接、切除或就地修改操作。通过下面这几个例子，你应该就能体会到这些操作的强大功</p>
+
+<p>能：</p>
+
+<p>&gt;&gt;&gt; l = list(range(10))</p>
+
+<p>&gt;&gt;&gt; l</p>
+
+<p>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</p>
+
+<p>&gt;&gt;&gt; l[2:5] = [20, 30]</p>
+
+<p>&gt;&gt;&gt; l</p>
+
+<p>[0, 1, 20, 30, 5, 6, 7, 8, 9]</p>
+
+<p>&gt;&gt;&gt; del l[5:7]</p>
+
+<p>&gt;&gt;&gt; l</p>
+
+<p>[0, 1, 20, 30, 5, 8, 9]</p>
+
+<p>&gt;&gt;&gt; l[3::2] = [11, 22]</p>
+
+<p>&gt;&gt;&gt; l</p>
+
+<p>[0, 1, 20, 11, 5, 22, 9]</p>
+
+<p>&gt;&gt;&gt; l[2:5] = 100 O</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in <module> TypeError: can only assign an iterable &gt;&gt;&gt; l[2:5] = [100]</p>
+
+<p>&gt;&gt;&gt; l</p>
+
+<p>[0, 1, 100, 22, 9]</p>
+
+<p>O如果赋值的对象是一个切片，那么赋值语句的右侧必须是个可迭代对象。即便只有单</p>
+
+<p>独一个值，也要把它转换成可迭代的序列。</p>
+
+<p>序列的拼接操作可谓是众所周知，任何一本 Python 入门教材都会介绍 + 和 * 的用法，但 是在这些用法的背后还有一些可能被忽视的细节。下面就来看看这两种操作。</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>反向运算符在第 13 章中介绍。</p>
+
+<p>每个 Python 程序员都知道序列可以用 s[a:b] 的形式切片，但是关于切片，我还想说说它 的一些不太为人所知的方面。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/01-python-%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B/01-%E4%B8%80%E6%91%9E-python-%E9%A3%8E%E6%A0%BC%E7%9A%84%E7%BA%B8%E7%89%8C/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 一摞 Python 风格的纸牌</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/05-%E5%AF%B9%E5%BA%8F%E5%88%97%E4%BD%BF%E7%94%A8%E5%8A%A0%E5%92%8C%E4%B9%98/">
+            <span class="next-text nav-default">05 对序列使用加和乘</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>KNN - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="TODO 感觉讲的不是很系统，重新总结下，找一些权威的资料。 KNN到底跟聚类有没有关系？一般用来做什么？降维？ KNN到底属于什么聚类？密度聚类？ 回归" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/knn/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="KNN" />
+<meta property="og:description" content="TODO 感觉讲的不是很系统，重新总结下，找一些权威的资料。 KNN到底跟聚类有没有关系？一般用来做什么？降维？ KNN到底属于什么聚类？密度聚类？ 回归" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/knn/" /><meta property="article:published_time" content="2018-08-12T19:46:17&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T19:46:17&#43;00:00"/>
+<meta itemprop="name" content="KNN">
+<meta itemprop="description" content="TODO 感觉讲的不是很系统，重新总结下，找一些权威的资料。 KNN到底跟聚类有没有关系？一般用来做什么？降维？ KNN到底属于什么聚类？密度聚类？ 回归">
+
+
+<meta itemprop="datePublished" content="2018-08-12T19:46:17&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T19:46:17&#43;00:00" />
+<meta itemprop="wordCount" content="1374">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="KNN"/>
+<meta name="twitter:description" content="TODO 感觉讲的不是很系统，重新总结下，找一些权威的资料。 KNN到底跟聚类有没有关系？一般用来做什么？降维？ KNN到底属于什么聚类？密度聚类？ 回归"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">KNN</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1374 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#knn-是什么">KNN 是什么？</a></li>
+<li><a href="#再仔细看一下这三要素">再仔细看一下这三要素</a></li>
+<li><a href="#ok-那么knn算法有那些特点呢">OK，那么KNN算法有那些特点呢？</a></li>
+<li><a href="#ok-那么我们的算法流程是什么样子的">OK，那么我们的算法流程是什么样子的？</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>TODO</p>
+
+<ul>
+<li><strong>感觉讲的不是很系统，重新总结下，找一些权威的资料。</strong></li>
+<li><strong>KNN到底跟聚类有没有关系？一般用来做什么？降维？</strong></li>
+<li><strong>KNN到底属于什么聚类？密度聚类？</strong></li>
+<li><strong>回归问题中的KNN算法是什么样子的？看了这两个例子感觉都是分类问题</strong></li>
+<li><strong>KNN算法有什么变种吗？</strong></li>
+<li><strong>决策的时候除了多数表决的方法还有什么方法吗？</strong></li>
+</ul>
+
+<h1 id="knn-是什么">KNN 是什么？</h1>
+
+<p>k-近邻（kNN, k-NearestNeighbor）算法其实是一种分类算法，我们这里只讨论分类问题中的 k-近邻算法。其实它也可以用在回归问题里面。<strong>回归问题中的KNN算法是什么样子的？</strong></p>
+
+<p>k 近邻算法的：</p>
+
+<ul>
+<li>输入为实例的特征向量，对应于特征空间的点；</li>
+<li>输出为实例的类别，可以取多类。</li>
+</ul>
+
+<p>它的分类过程是这样的：假设我们已经给定一个训练数据集，其中的实例类别已定。OK，那么，对于一个新的实例，我们可以知道离它最近的 k 个样本的类别，然后，我们就可以通过多数表决等方式进行预测。<strong>等方式？除了多数表决还有什么方式？</strong></p>
+
+<p>因此，k近邻算法不具有显式的学习过程，它实际上是直接使用的训练集的数据来对特征空间进行划分，并作为它分类的“模型”。<strong>这个还是比较特别的。这句好像不是很通顺。</strong></p>
+
+<p>OK，从上面的分类过程可以看出，这其中的：</p>
+
+<ul>
+<li>K值的选择 ：到底选几个？</li>
+<li>距离度量：什么叫最近？</li>
+<li>分类决策规则：知道它周边的k个样本了，怎么来投票决定这个测试样本的类别？</li>
+</ul>
+
+<p>这三点其实就决定了一个KNN算法的效果，它们也是KNN算法的三个基本要素。</p>
+
+<h1 id="再仔细看一下这三要素">再仔细看一下这三要素</h1>
+
+<ul>
+<li><p>k 值的选择</p>
+
+<ul>
+<li>k 值的选择会对 k 近邻算法的结果产生重大的影响。</li>
+<li>如果选择较小的 k 值，就相当于用较小的邻域中的训练实例进行预测，“学习” 的近似误差（approximation error）会减小，只有与输入实例较近的（相似的）训练实例才会对预测结果起作用。但缺点是 “学习” 的估计误差（estimation error）会增大，预测结果会对近邻的实例点非常敏感。如果邻近的实例点恰巧是噪声，预测就会出错。换句话说，k 值的减小就意味着整体模型变得复杂，容易发生过拟合。<span style="color:red;">什么是近似误差和估计误差</span></li>
+<li>如果选择较大的 k 值，就相当于用较大的邻域中的训练实例进行预测。其优点是可以减少学习的估计误差。但缺点是学习的近似误差会增大。这时与输入实例较远的（不相似的）训练实例也会对预测起作用，使预测发生错误。 k 值的增大就意味着整体的模型变得简单。</li>
+</ul></li>
+
+<li><p>距离度量</p>
+
+<ul>
+<li>特征空间中两个实例点的距离是两个实例点相似程度的反映。</li>
+<li>k 近邻模型的特征空间一般是 n 维实数向量空间 (R^n)，使用的距离是欧氏距离，但也可以是其他距离，如更一般的 (L_p) 距离，或者 Minkowski 距离。</li>
+</ul></li>
+
+<li><p>分类决策规则</p>
+
+<ul>
+<li>k 近邻算法中的分类决策规则往往是多数表决，即由输入实例的 k 个邻近的训练实例中的多数类决定输入实例的类。<strong>除了多数表决的方法还有什么方法吗？</strong></li>
+</ul></li>
+</ul>
+
+<h1 id="ok-那么knn算法有那些特点呢">OK，那么KNN算法有那些特点呢？</h1>
+
+<p>优点：</p>
+
+<ul>
+<li>精度高、</li>
+<li>对异常值不敏感、</li>
+<li>无数据输入假定</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>计算复杂度高、</li>
+<li>空间复杂度高</li>
+</ul>
+
+<p>适用数据范围：</p>
+
+<ul>
+<li>数值型和标称型 <strong>什么是标称型？</strong></li>
+</ul>
+
+<h1 id="ok-那么我们的算法流程是什么样子的">OK，那么我们的算法流程是什么样子的？</h1>
+
+<p>假设有一个带有标签的样本数据集（训练样本集），其中包含每条数据与所属分类的对应关系。那么：</p>
+
+<ol>
+<li>输入没有标签的新数据后，计算新数据与样本数据集中每条数据的距离。</li>
+<li>对求得的所有距离进行排序（从小到大，越小表示越相似）。</li>
+<li>取前 k （k 一般小于等于 20 ）个样本数据对应的分类标签。</li>
+<li>求 k 个数据中出现次数最多的分类标签作为新数据的分类。</li>
+</ol>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li><a href="http://ml.apachecn.org/mlia/knn/">第2章 k-近邻算法</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/02-%E4%BD%8E%E7%BB%B4%E5%B5%8C%E5%85%A5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 低维嵌入</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/knn-%E4%BE%8B%E5%AD%902%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB%E7%B3%BB%E7%BB%9F/">
+            <span class="next-text nav-default">KNN-例子2：手写数字识别系统</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

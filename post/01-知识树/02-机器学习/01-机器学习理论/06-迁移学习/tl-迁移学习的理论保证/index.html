@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>TL 迁移学习的理论保证 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-20 15:03:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81 title: TL 迁移学习的理论保证 wordpress_id: 6118 categories: - 人工智能学习 tags: - &amp;lsquo;@todo&amp;rsquo; - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%90%86%E8%AE%BA%E4%BF%9D%E8%AF%81/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="TL 迁移学习的理论保证" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-20 15:03:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81 title: TL 迁移学习的理论保证 wordpress_id: 6118 categories: - 人工智能学习 tags: - &lsquo;@todo&rsquo; - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%90%86%E8%AE%BA%E4%BF%9D%E8%AF%81/" /><meta property="article:published_time" content="2018-08-21T18:16:22&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:22&#43;00:00"/>
+<meta itemprop="name" content="TL 迁移学习的理论保证">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-20 15:03:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81 title: TL 迁移学习的理论保证 wordpress_id: 6118 categories: - 人工智能学习 tags: - &lsquo;@todo&rsquo; - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:22&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:22&#43;00:00" />
+<meta itemprop="wordCount" content="1077">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TL 迁移学习的理论保证"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-20 15:03:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81 title: TL 迁移学习的理论保证 wordpress_id: 6118 categories: - 人工智能学习 tags: - &lsquo;@todo&rsquo; - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">TL 迁移学习的理论保证</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 1077 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#transfer-learning">- Transfer Learning</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a>
+<ul>
+<li><a href="#迁移学习的理论保证">迁移学习的理论保证</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-20 15:03:00+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81/">http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81/</a>
+slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%90%86%e8%ae%ba%e4%bf%9d%e8%af%81
+title: TL 迁移学习的理论保证
+wordpress_id: 6118
+categories:
+- 人工智能学习
+tags:
+- &lsquo;@todo&rsquo;</p>
+
+<h2 id="transfer-learning">- Transfer Learning</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><a href="https://github.com/jindongwang/transferlearning-tutorial">迁移学习简明手册</a>  <a href="https://zhuanlan.zhihu.com/p/35352154">王晋东</a></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><strong>要把涉及到的几篇论文都总结进来。要完全的弄清楚为什么迁移学习是科学的。</strong></li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p><strong>看到这篇的，可以以后再看。</strong></p>
+
+<h2 id="迁移学习的理论保证">迁移学习的理论保证</h2>
+
+<p>\textit{
+本部分的标题中带有*号，有一些难度，为可看可不看的内容。此部分最常见的形式是当自己提出的算法需要理论证明时，可以借鉴。}</p>
+
+<p>在第一章里我们介绍了两个重要的概念：迁移学习是什么，以及为什么需要迁移学习。但是，还有一个重要的问题没有得到解答：为什么可以进行迁移?也就是说，迁移学习的可行性还没有探讨。</p>
+
+<p>值得注意的是，就目前的研究成果来说，迁移学习领域的理论工作非常匮乏。我们在这里仅回答一个问题：为什么数据分布不同的两个领域之间，知识可以进行迁移？或者说，到底达到什么样的误差范围，我们才认为知识可以进行迁移？</p>
+
+<p>加拿大滑铁卢大学的Ben-David等人从2007年开始，连续发表了三篇文章~\cite{ben2007analysis,blitzer2008learning,ben2010theory}对迁移学习的理论进行探讨。在文中，作者将此称之为“Learning from different domains”。在三篇文章也成为了迁移学习理论方面的经典文章。文章主要回答的问题就是：在怎样的误差范围内，从不同领域进行学习是可行的？</p>
+
+<p>学习误差： 给定两个领域 (\mathcal{D}_s,\mathcal{D}_t) ， (X) 是定义在它们之上的数据，一个假设类 (\mathcal{H}) 。则两个领域 (\mathcal{D}_s,\mathcal{D}_t) 之间的 (\mathcal{H}) -divergence被定义为</p>
+
+<p>\begin{equation}
+\hat{d}_{\mathcal{H} }(\mathcal{D}_s,\mathcal{D}<em>t) = 2 \sup</em>{\eta \in \mathcal{H} } \left|\underset{\mathbf{x} \in \mathcal{D}_s}{P}[\eta(\mathbf{x}) = 1] - \underset{\mathbf{x} \in \mathcal{D}_t}{P}[\eta(\mathbf{x}) = 1] \right|
+\end{equation}</p>
+
+<p>因此，这个 (\mathcal{H}) -divergence依赖于假设 (\mathcal{H}) 来判别数据是来自于 (\mathcal{D}_s) 还是 (\mathcal{D}_t) 。作者证明了，对于一个对称的 (\mathcal{H}) ，我们可以通过如下的方式进行计算</p>
+
+<p>\begin{equation}
+d_\mathcal{H} (\mathcal{D}_s,\mathcal{D}<em>t) = 2 \left(1 - \min</em>{\eta \in \mathcal{H} } \left[\frac{1}{n<em>1} \sum</em>{i=1}^{n_1} I[\eta(\mathbf{x}_i)=0] + \frac{1}{n<em>2} \sum</em>{i=1}^{n_2} I[\eta(\mathbf{x}_i)=0]\right] \right)
+\end{equation}
+其中 (I[a]) 为指示函数：当 (a) 成立时其值为1,否则其值为0。</p>
+
+<p>在目标领域的泛化界：</p>
+
+<p>假设 (\mathcal{H}) 为一个具有 (d) 个VC维的假设类，则对于任意的 (\eta \in \mathcal{H}) ，下面的不等式有 (1 - \delta) 的概率成立：</p>
+
+<p>\begin{equation}
+R_{\mathcal{D}_t}(\eta) \le R<em>s(\eta) + \sqrt{\frac{4}{n}(d \log \frac{2en}{d} + \log \frac{4}{\delta})} + \hat{d}</em>{\mathcal{H} }(\mathcal{D}_s,\mathcal{D}<em>t) + 4 \sqrt{\frac{4}{n}(d \log \frac{2n}{d} + \log \frac{4}{\delta})} + \beta
+\end{equation}
+其中
+\begin{equation}
+\beta \ge \inf</em>{\eta^\star \in \mathcal{H} } [R_{\mathcal{D}<em>s}(\eta^\star) + R</em>{\mathcal{D}<em>t}(\eta^\star)]
+\end{equation}
+并且
+\begin{equation}
+R</em>{s}(\eta) = \frac{1}{n} \sum_{i=1}^{m} I[\eta(\mathbf{x}_i) \ne y_i]
+\end{equation}</p>
+
+<p>具体的理论证明细节，请参照上述提到的三篇文章。</p>
+
+<p>在自己的研究中，如果需要进行相关的证明，可以参考一些已经发表的文章的写法，例如~\cite{long2014adaptation}等。</p>
+
+<p>另外，英国的Gretton等人也在进行一些学习理论方面的研究，有兴趣的读者可以关注他的个人主页：\url{<a href="http://www.gatsby.ucl.ac.uk/~gretton/}。">http://www.gatsby.ucl.ac.uk/~gretton/}。</a></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E6%9C%9F%E5%88%8A%E4%BC%9A%E8%AE%AE%E5%AD%A6%E8%80%85/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">TL 迁移学习期刊、会议、学者</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/ai%E7%9F%A9%E9%98%B5%E8%AE%BA-%E5%90%91%E9%87%8F%E6%B1%82%E5%AF%BC/">
+            <span class="next-text nav-default">ai矩阵论-向量求导</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

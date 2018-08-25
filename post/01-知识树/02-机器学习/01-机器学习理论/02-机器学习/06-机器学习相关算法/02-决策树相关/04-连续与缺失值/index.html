@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 连续与缺失值 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="连续与缺失值处理 1. 连续值处理 到目前为止我们仅仅讨论了基于离散属性来生成决策树的方法，实际上，在现实学习任务中我们常常会遇到连续属性，因此，我" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/04-%E8%BF%9E%E7%BB%AD%E4%B8%8E%E7%BC%BA%E5%A4%B1%E5%80%BC/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 连续与缺失值" />
+<meta property="og:description" content="连续与缺失值处理 1. 连续值处理 到目前为止我们仅仅讨论了基于离散属性来生成决策树的方法，实际上，在现实学习任务中我们常常会遇到连续属性，因此，我" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/04-%E8%BF%9E%E7%BB%AD%E4%B8%8E%E7%BC%BA%E5%A4%B1%E5%80%BC/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="04 连续与缺失值">
+<meta itemprop="description" content="连续与缺失值处理 1. 连续值处理 到目前为止我们仅仅讨论了基于离散属性来生成决策树的方法，实际上，在现实学习任务中我们常常会遇到连续属性，因此，我">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="2713">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 连续与缺失值"/>
+<meta name="twitter:description" content="连续与缺失值处理 1. 连续值处理 到目前为止我们仅仅讨论了基于离散属性来生成决策树的方法，实际上，在现实学习任务中我们常常会遇到连续属性，因此，我"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 连续与缺失值</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 2713 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#连续与缺失值处理">连续与缺失值处理</a>
+<ul>
+<li><a href="#1-连续值处理">1. 连续值处理</a>
+<ul>
+<li><a href="#怎么用二分法对连续属性进行处理呢">怎么用二分法对连续属性进行处理呢？</a></li>
+</ul></li>
+<li><a href="#2-缺失值处理">2. 缺失值处理</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="连续与缺失值处理">连续与缺失值处理</h1>
+
+<h2 id="1-连续值处理">1. 连续值处理</h2>
+
+<p>到目前为止我们仅仅讨论了基于离散属性来生成决策树的方法，实际上，在现实学习任务中我们常常会遇到连续属性，因此，我们有必要讨论一下如何在决策树学习中使用连续属性。<span style="color:red;">嗯这个我一直想知道。</span></p>
+
+<p>由于连续属性的可取值数目不再有限，因此，我们不能直接根据连续属性的可取值来对结点进行划分。此时，连续属性离散化技术就可以派上用场了，最简单的策略是采用二分法 (bi-partition) 对连续属性进行处理，实际上，这正是 C4.5 决策树算法中采用的机制。<span style="color:red;">什么是连续属性离散化技术？</span></p>
+
+<h3 id="怎么用二分法对连续属性进行处理呢">怎么用二分法对连续属性进行处理呢？</h3>
+
+<p>OK，那么怎么用二分法对连续属性进行处理呢？</p>
+
+<p>我们给定样本集 D 和连续属性 a ，假定 a 在 D 上出现了 n 个不同的取值，然后我将这些值从小到大进行排序，记为 ${a^1,a^2,\cdots ,a^n}$ 。OK，这个时候，基于划分点 t 我们就可以将 D 分为子集 $D_t^-$ 和 子集 $D_t^+$ ，其中：</p>
+
+<ul>
+<li>$D_t^-$ 包含那些在属性 a 上取值不大于 t 的样本</li>
+<li>$D_t^+$ 包含那些在属性 a 上取值大于 t 的样本</li>
+</ul>
+
+<p>嗯，有一点很明显，对于相邻的属性取值 $a^i$ 与 $a^{i+1}$ 来说，t 在区间 $[a^i,a^{i+1})$ 中取任意一个值所产生的划分结果都是相同的，这里，我们就取这两个值的中间值 $\frac{a^i+a^{i+1} }{2}$ 作为划分点。（可将划分点设为该属性在训练集中出现的不大于中位点的最大值，从而使得最终决策树使用的划分点都在训练集中出现过。<span style="color:red;">这句话什么意思？不大于哪个中位点？</span>）</p>
+
+<p>OK，那么对连续属性 a 的 n 个属性值，我们就可以得到 n -1 个候选的划分值，每个都可以对整个的元素进行划分：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/LBhE0jhLcK.png?imageslim" alt="mark" /></p>
+
+<p>OK，这个时候，我们就可以像对待离散属性值一样来考察这些划分点了。</p>
+
+<p>例如，对于信息增益公式：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/iCj5DiEdfJ.png?imageslim" alt="mark" /></p>
+
+<p>我们可以写成：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/8De65gkc3i.png?imageslim" alt="mark" /></p>
+
+<p>其中 $Gain(D,a,t)$ 是样本集 D 基于划分点 t 二分后的信息增益，于是，我们就可以选择使 $Gain(D,a,t)$ 最大化的划分点。</p>
+
+<p>作为一个例子，我们在表4.1的西瓜数据集 2.0 上増加两个连续属性“密度”和“含糖率”，得到表4.3所示的西瓜数据集3.0.下面我们用这个数据集 来生成一棵决策树.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/BKke3850Fd.png?imageslim" alt="mark" /></p>
+
+<p>对属性“密度”，在决策树学习开始时，根结点包含的 17 个训练 样本在该属性上取值均不同。根据式（4.7），该属性的候选划分点集合 包含 16 个候选值： T_{密度}={0.244, 0.294, 0.351，0.381, 0.420, 0.459, 0.518, 0.574, 0.600, 0.621，0.636, 0.648, 0.661，0.681, 0.708, 0.746} .由式（4.8）可计算出属性“密度”的信息增益为0.262,对应于划分点0.381.</p>
+
+<p>对属性“含糖率”，其候选划分点集合也包含16个候选值 T_{含糖率}= {0.049, 0.074, 0.095, 0.101,0.126, 0.155, 0.179, 0.204, 0.213, 0.226, 0.250, 0.265, 0.292, 0.344, 0.373, 0.418} 。类似的，根据式（4.8）可计算出其信息増益为0.349, 对应于划分点0.126.</p>
+
+<p>再由4.2.1节可知，表4.3的数据上各属性的信息增益为：</p>
+
+<ul>
+<li>Gam（D,色泽）=0.109; Gain（P,根蒂）=0.143;</li>
+<li>Gain（P,敲声）=0.141; Gain（D?纹理）=0.381;</li>
+<li>Gain（P,脐部）=0.289; Gain（D，触感）=0.006;</li>
+<li>Gain（D,密度）=0.262; Gain（D5 含糖率）=0.349.</li>
+</ul>
+
+<p>于是，“纹理”被选作根结点划分属性,此后结点划分过程递归进行，最终生成如图 4.8 所示的决策树.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/F02jEbhl8m.png?imageslim" alt="mark" /></p>
+
+<p>需注意的是，与离散属性不同，若当前结点划分属性为连续属性，该属性还可作为其后代结点的划分属性.</p>
+
+<h2 id="2-缺失值处理">2. 缺失值处理</h2>
+
+<p>现实任务中常会遇到不完整样本，即样本的某些属性值缺失.例如由于诊测成本、隐私保护等因素，患者的医疗数据在某些属性上的取值（如 HIV 测试结果）未知；尤其是在属性数目较多的情况下，往往会有大量样本出现缺失值。如果简单地放弃不完整样本，仅使用无缺失值的样本来进行学习，显然是对数据信息极大的浪费。
+例如，表4.4是表4.1中的西瓜数据集2.0出现缺失值的版 本，如果放弃不完整样本，则仅有编号{4, 7, 14, 16} 的4个样本能被使用。显然，有必要考虑利用有缺失属性值的训练样例来进行学习.<span style="color:red;">嗯</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/60DCkg8cBK.png?imageslim" alt="mark" /></p>
+
+<p>我们需解决两个问题：</p>
+
+<ol>
+<li>如何在属性值缺失的情况下进行划分属性选择?</li>
+<li>给定划分属性,若样本在该属性上的值缺失，如何对样本进行划分？</li>
+</ol>
+
+<p>给定训练集 D 和属性 a ,令 $\widetilde{D}$ 表示 $D$ 中在属性 a 上没有缺失值的样本子集。对问题(1)，显然我们仅可根据 $\widetilde{D}$ 来判断属性 a 的优劣.假定属性 a 有 V 个可取值 ${a^1,a^2,\cdots ,a^V}$ 。令 $\widetilde{D}^v$ 表示  $\widetilde{D}$  中在属性 a 上取值为 $a^v$ 的样本子集，$\widetilde{D}<em>k$ 表示 $\widetilde{D}$ 中属于第 k 类 $(k=1,2,\cdots,|\mathcal{Y}|)$ 的样本子集，则显然有 $\widetilde{D}=\bigcup</em>{k=1}^{|\mathcal{Y}|}\widetilde{D}<em>k$ ,$\widetilde{D}=\bigcup</em>{v=1}^{|\mathcal{V}|}\widetilde{D}_v$ 。 假定我们为每个样本 x 赋予一个权重 $w_x$ ，并定义</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/94CD991Eij.png?imageslim" alt="mark" /></p>
+
+<p>直观地看，对属性 a，$\rho$ 表示无缺失值样本所占的比例，$\widetilde{p}_k$ 表示无缺失值样本中第 k 类所占的比例，$\widetilde{r}<em>v$ 则表示无缺失值样本中在属性 a 上取值 $a^v$ 的样本所占的比例。显然，$\sum</em>{k=1}^{|\mathcal{Y}|}\widetilde{p}<em>k=1$ ,$\sum</em>{v=1}^{|\mathcal{V}|}\widetilde{r}_v=1$ 。</p>
+
+<p>基于上述定义，我们可将信息增益的计算式(4.2)推广为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/e42jcdd2HA.png?imageslim" alt="mark" /></p>
+
+<p>其中由式(4.1)，有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/4Gj9kCjmDI.png?imageslim" alt="mark" /></p>
+
+<p>对问题(2)，若样本 x 在划分属性 a 上的取值已知，则将 x 划入与其取值对 应的子结点，且样本权值在子结点中保持为 $w_x$ 。若样本 x 在划分属性 a 上的取值未知，则将 x 同时划入所有子结点，且样本权值在与属性值 $a^v$ 对应的子结点中调整为 $\widetilde{r}_v\cdot w_x$ ；直观地看，这就是让同一个样本以不同的概率划入到不同的子结点中去.</p>
+
+<p>C4.5算法使用了上述解决方案[Quinlan, 1993].下面我们以表4.4的数据集为例来生成一棵决策树.</p>
+
+<p>在学习开始时，根结点包含样本集 D 中全部17个样例，各样例的权值均为1.以属性“色泽”为例，该属性上无缺失值的样例子集乃包含编号为 {2,3,4,6,7,8,9,10,11，12,14,15,16,17} 的 14 个样例.显然，D 的信息熵为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/EA80HA50GK.png?imageslim" alt="mark" /></p>
+
+<p>令 $\widetilde{D}^1$ ，$\widetilde{D}^2$ 与 $\widetilde{D}^3$ 分别表示在属性“色泽”上取值为“青绿” “乌黑”以及“浅白”的样本子集，有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/2bI4jdJDe4.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/G4bccja3fe.png?imageslim" alt="mark" /></p>
+
+<p>因此，样本子集 $\widetilde{D}$ 上属性 “色泽” 的信息増益为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/25GjklKEb2.png?imageslim" alt="mark" /></p>
+
+<p>于是，样本集 D 上属性 “色泽” 的信息增益为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/EigcelGD9b.png?imageslim" alt="mark" /></p>
+
+<p>类似地可计算出所有属性在I?上的信息增益：</p>
+
+<ul>
+<li>Gain（D,色泽）=0.252; Gain（D,根蒂）=0.171;</li>
+<li>Gain（D,敲声）=0.145; Gain（D,纹理）=0.424;</li>
+<li>Gain（D,脐部）=0.289; Gain（D,触感）=0.006;</li>
+</ul>
+
+<p>“纹理” 在所有属性中取得了最大的信息增益，被用于对根结点进行划分. 划分结果是使编号为 {1,2,3,4,5,6,15} 的样本进入“纹理=清晰”分支，编号为 {7,9,13,14,17} 的样本进入 “纹理=稍糊” 分支,而编号为 {11,12,16} 的样 本进入 “纹理=模糊” 分支，且样本在各子结点中的权重保持为1。需注意的 是，编号为 {8} 的样本在属性 “纹理” 上出现了缺失值，因此它将同时进入三个分支中，但权重在三个子结点中分别调整为 $\frac{7}{15}$、$\frac{5}{15}$ 和 $\frac{3}{15}$ 编号为 {10} 的样本有类似划分结果。</p>
+
+<p>上述结点划分过程递归执行，最终生成的决策树如图4.9所示.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/HeJ1B0dgBb.png?imageslim" alt="mark" /></p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/04-%E7%9F%A9%E4%BC%B0%E8%AE%A1%E4%B8%8E%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 矩估计与极大似然估计</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/10-%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/05-%E8%BF%91%E4%BC%BC%E6%8E%A8%E6%96%AD/">
+            <span class="next-text nav-default">05 近似推断</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

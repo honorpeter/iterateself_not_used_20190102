@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 生成式方法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="生成式方法 EM算法参见7.6节. 生成式方法（generative methods）是直接基于生成式模型的方法。此类方法 假设所有数据（无论是否有" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/09-%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E7%94%9F%E6%88%90%E5%BC%8F%E6%96%B9%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 生成式方法" />
+<meta property="og:description" content="生成式方法 EM算法参见7.6节. 生成式方法（generative methods）是直接基于生成式模型的方法。此类方法 假设所有数据（无论是否有" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/09-%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E7%94%9F%E6%88%90%E5%BC%8F%E6%96%B9%E6%B3%95/" /><meta property="article:published_time" content="2018-06-30T11:10:16&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-30T11:10:16&#43;00:00"/>
+<meta itemprop="name" content="02 生成式方法">
+<meta itemprop="description" content="生成式方法 EM算法参见7.6节. 生成式方法（generative methods）是直接基于生成式模型的方法。此类方法 假设所有数据（无论是否有">
+
+
+<meta itemprop="datePublished" content="2018-06-30T11:10:16&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-30T11:10:16&#43;00:00" />
+<meta itemprop="wordCount" content="1151">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 生成式方法"/>
+<meta name="twitter:description" content="生成式方法 EM算法参见7.6节. 生成式方法（generative methods）是直接基于生成式模型的方法。此类方法 假设所有数据（无论是否有"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 生成式方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-30 </span>
+        
+        <span class="more-meta"> 1151 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>生成式方法</p>
+
+<p>EM算法参见7.6节.</p>
+
+<p>生成式方法（generative methods）是直接基于生成式模型的方法。此类方法 假设所有数据（无论是否有标记）都是由同一个潜在的模型“生成”的.这个假设使得我们能通过潜在模型的参数将未标记数据与学习目标联系起来，而未标记数据的标记则可看作模型的缺失参数，通常可基于EM算法进行极大似然估计求解.此类方法的区别主要在于生成式模型的假设，不同的模型假设将产生不同的方法。</p>
+
+<p>给定样本 x ，其真实类别标记为 $y\in \mathcal{Y}$ 其中 $\mathcal{Y}={1,2,\cdots ,N}$ 为所有可能的类别.假设样本由高斯混合模型生成，且每个类别对应一个高斯混合成分.换言之，数据样本是基于如下概率密度生成：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/a8LilJ4Fc1.png?imageslim" alt="mark" /></p>
+
+<p>其中，混合系数 $\alpha<em>i\geq 0,\sum</em>{i=1}^{N}\alpha_i=1$;$p(x|\mu_i,\sum_i)$ 是样本 x 属于第 i 个高斯混合成分的概率；$\mu_i$ 和 $\sum_i$ 为该高斯混合成分的参数.</p>
+
+<p>令 $f(x)\in \mathcal{Y}$ 表示模型 $f$ 对 $x$ 的预测标记，$\Theta={1,2,\ldots,N}$ 表示样本 x 隶属的高斯混合成分.由最大化后验概率可知</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/A0f8DI3CiJ.png?imageslim" alt="mark" /></p>
+
+<p>其中</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/972JJ5HH8G.png?imageslim" alt="mark" /></p>
+
+<p>为样本 x 由第 i 个高斯混合成分生成的后验概率, $p(y=j|\Theta=i,x)$ 为 $x$ 由第 i 个高斯混合成分生成且其类别为 j 的概率.由于假设每个类别对应一个高斯混合成分，因此 $p(y=j|\Theta=i,x)$ 仅与样本 x 所属的高斯混合成分 $\Theta$ 有关， 可用 $p(y=j|\Theta=i)$ 代替.不失一般性，假定第 i 个类别对应于第 i  个高斯混合成分，即  $p(y=j|\Theta=i)= 1$ 当且仅当 $i=j$ ，否则  $p(y=j|\Theta=i)= 0$。</p>
+
+<p>不难发现，式(13.2)中估计 $p(y=j|\Theta=i,x)$ 需知道样本的标记，因此仅能使用有标记数据；而 $p(\Theta=i|x)$ 不涉及样本标记，因此有标记和未标记数据均可利用，通过引入大量的未标记数据，对这一项的估计可望由于数据量的增长而更为准确，于是式(13.2)整体的估计可能会更准确.由此可清楚地看出未标 记数据何以能辅助提高分类模型的性能.</p>
+
+<p>给定有标记样本集 $D_l={(x_1,y_1),(x_2,y_2),\cdots ,(x_l,y_l)}$ 和未标记样本集 $D<em>u={x</em>{l+1},x<em>{l+2},\ldots ,x</em>{l+u}}$,$l\ll u$ ，$l+u=m$ . 假定所有样本独问分布，且都是由同一个高斯混合模型生成的.用极大似然法来估计高斯混合模型的参数 ${(\alpha_i,\mu_i,\sum_i)|1\leq i\leq N}$ ,$D_l\bigcup D_u$ 的对数似然是</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/jCmagdh9i5.png?imageslim" alt="mark" /></p>
+
+<p>式(13.4)由两项组成：基于有标记数据的有监督项和基于未标记数据的无监督项.显然，高斯混合模型参数估计可用EM算法求解，迭代更新式如下：</p>
+
+<ul>
+<li><p>E步：根据当前模型参数计算未标记样本 $x_j$ 属于各高斯混合成分的概率
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/g9jhA8g3LH.png?imageslim" alt="mark" /></p></li>
+
+<li><p>M步：基于 $\gamma_{ji}$ 更新模型参数,其中$l_i$ 表示第 i 类的有标记样本数目
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/lFdi8b9067.png?imageslim" alt="mark" /></p></li>
+</ul>
+
+<p>以上过程不断迭代直至收敛，即可获得模型参数.然后由式(13.3)和(13.2)就能 对样本进行分类.</p>
+
+<p>将上述过程中的高斯混合模型换成混合专家模型、朴素贝叶斯模型等即可推导出其他的生成式半监督学习方法.此类方法简单，易于实现,在有标记数据极少的情形下往往比其他方法性能更好.</p>
+
+<p>然而，此类方法有一个关键：模型假设必须准确，即假设的生成式模型必须与真实数据分布吻合；否则利用未标记数据反倒会降低泛化性能 [Cozman and Cohen, 2002].遗憾的是，在现实任务中往往很难事先做出准确的模型假设，除非拥有充分可靠的领域知识。</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-30</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/09-%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/03-%E5%8D%8A%E7%9B%91%E7%9D%A3svm/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 半监督SVM</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/09-%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E6%9C%AA%E6%A0%87%E8%AE%B0%E6%A0%B7%E6%9C%AC/">
+            <span class="next-text nav-default">01 未标记样本</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

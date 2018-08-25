@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>svm 三重 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="SVM TODO 要完善整个数学推理逻辑。包括涉及到的公式和概念。 前言 SVM 支持向量机(support vector machine) 还是很重要的，关键是他的论证的过程还是很 nice 的，而且在" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/svm-%E4%B8%89%E9%87%8D/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="svm 三重" />
+<meta property="og:description" content="SVM TODO 要完善整个数学推理逻辑。包括涉及到的公式和概念。 前言 SVM 支持向量机(support vector machine) 还是很重要的，关键是他的论证的过程还是很 nice 的，而且在" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/svm-%E4%B8%89%E9%87%8D/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="svm 三重">
+<meta itemprop="description" content="SVM TODO 要完善整个数学推理逻辑。包括涉及到的公式和概念。 前言 SVM 支持向量机(support vector machine) 还是很重要的，关键是他的论证的过程还是很 nice 的，而且在">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="25259">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="svm 三重"/>
+<meta name="twitter:description" content="SVM TODO 要完善整个数学推理逻辑。包括涉及到的公式和概念。 前言 SVM 支持向量机(support vector machine) 还是很重要的，关键是他的论证的过程还是很 nice 的，而且在"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">svm 三重</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 25259 words </span>
+        <span class="more-meta"> 51 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#svm">SVM</a>
+<ul>
+<li><a href="#前言">前言</a></li>
+<li><a href="#第一层-了解svm">第一层 了解SVM</a>
+<ul>
+<li><a href="#1-1-分类标准的起源-logistic回归">1.1、分类标准的起源：Logistic回归</a></li>
+<li><a href="#1-2-线性分类的一个例子">1.2、线性分类的一个例子</a></li>
+<li><a href="#1-3-函数间隔-functional-margin-与几何间隔-geometrical-margin">1.3、函数间隔 Functional margin 与几何间隔 Geometrical margin</a></li>
+<li><a href="#1-4-最大间隔分类器-maximum-margin-classifier-的定义">1.4、最大间隔分类器 Maximum Margin Classifier 的定义</a></li>
+</ul></li>
+<li><a href="#第二层-深入svm">第二层、深入SVM</a>
+<ul>
+<li><a href="#2-1-从线性可分到线性不可分">2.1、从线性可分到线性不可分</a>
+<ul>
+<li><a href="#2-1-1-从原始问题到对偶问题的求解">2.1.1、从原始问题到对偶问题的求解</a></li>
+<li><a href="#2-1-2-kkt条件">2.1.2、KKT条件</a></li>
+<li><a href="#2-1-3-对偶问题求解的3个步骤">2.1.3、对偶问题求解的3个步骤</a></li>
+<li><a href="#2-1-5-线性不可分的情况">2.1.5、线性不可分的情况</a></li>
+</ul></li>
+<li><a href="#2-2-核函数kernel">*2.2*、核函数Kernel</a>
+<ul>
+<li><a href="#2-2-1-特征空间的隐式映射-核函数">2.2.1、特征空间的隐式映射：核函数</a></li>
+<li><a href="#2-2-2-核函数-如何处理非线性数据">2.2.2、核函数：如何处理非线性数据</a></li>
+<li><a href="#2-2-3-几个核函数">2.2.3、几个核函数</a></li>
+<li><a href="#2-2-4-核函数的本质">2.2.4、核函数的本质</a></li>
+</ul></li>
+<li><a href="#2-3-使用松弛变量处理-outliers-方法">*2.3*、使用松弛变量处理 outliers 方法</a></li>
+</ul></li>
+<li><a href="#第三层-证明svm">第三层、证明SVM</a>
+<ul>
+<li><a href="#3-1-线性学习器">*3.1*、线性学习器</a>
+<ul>
+<li><a href="#3-1-1-感知机算法">3.1.1、感知机算法</a></li>
+</ul></li>
+<li><a href="#3-2-非线性学习器">*3.2*、非线性学习器</a>
+<ul>
+<li><a href="#3-2-1-mercer定理">3.2.1、Mercer定理</a></li>
+</ul></li>
+<li><a href="#3-3-损失函数">*3.3*、损失函数</a></li>
+<li><a href="#3-4-最小二乘法">*3.4*、最小二乘法</a>
+<ul>
+<li>
+<ul>
+<li><a href="#3-4-1-什么是最小二乘法">3.4.1、什么是最小二乘法？</a></li>
+<li><a href="#3-4-2-最小二乘法的解法">3.4.2、最小二乘法的解法</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#3-5-smo算法">*3.5*、SMO算法</a>
+<ul>
+<li><a href="#3-5-1-smo算法的推导"><strong>3.5.1、SMO算法的推导</strong></a></li>
+<li><a href="#3-5-2-smo算法的步骤">3.5.2、SMO算法的步骤</a></li>
+<li><a href="#3-5-3-smo算法的实现">3.5.3、SMO算法的实现</a></li>
+</ul></li>
+<li><a href="#3-6-svm的应用">*3.6*、SVM的应用</a>
+<ul>
+<li><a href="#3-6-1-文本分类"><strong>3.6.1、文本分类</strong></a></li>
+</ul></li>
+</ul></li>
+<li><a href="#读者评论">读者评论</a></li>
+<li><a href="#参考文献及推荐阅读">参考文献及推荐阅读</a></li>
+<li><a href="#后记">后记</a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="svm">SVM</h1>
+
+<p>TODO</p>
+
+<ul>
+<li>要完善整个数学推理逻辑。包括涉及到的公式和概念。</li>
+</ul>
+
+<h2 id="前言">前言</h2>
+
+<p>SVM 支持向量机(support vector machine) 还是很重要的，关键是他的论证的过程还是很 nice 的，而且在工业中的使用也是会作为模型融合中的一个模型而使用到。</p>
+
+<p>因此，还是要好好总结下的。</p>
+
+<h2 id="第一层-了解svm">第一层 了解SVM</h2>
+
+<p>支持向量机 SVM support vector machine，通俗来讲，它是一种二分类问题模型，其基本模型定义为特征空间上的间隔最大的线性分类器，其学习策略便是间隔最大化，最终可转化为一个凸二次规划问题的求解。</p>
+
+<h3 id="1-1-分类标准的起源-logistic回归">1.1、分类标准的起源：Logistic回归</h3>
+
+<p>要想理解 SVM，必须先弄清楚一个概念：线性分类器。</p>
+
+<p>给定一些数据点，它们分别属于两个不同的类，现在要找到一个线性分类器把这些数据分成两类。如果用 $x$ 表示数据点，用 $y$ 表示类别（ $y$ 可以取 1或者-1，分别代表两个不同的类），一个线性分类器的学习目标便是要在 $n$ 维的数据空间中找到一个超平面（hyper plane），这个超平面的方程可以表示为：</p>
+
+<p>$$w^Tx+b=0$$</p>
+
+<p>可能有读者对类别取 1 或 -1 有疑问，事实上，这个 1 或 -1 的分类标准起源于 logistic 回归。<span style="color:red;">是这样吗？logistic 回归中的 logistic 不是为了替换阶跃函数吗？不是 0 和 1 吗？</span></p>
+
+<p>Logistic 回归目的是从特征学习出一个 0/1 分类模型，而这个模型是将特性的线性组合作为自变量，由于自变量的取值范围是负无穷到正无穷。因此，使用 logistic 函数（或称作 sigmoid 函数）将自变量映射到(0,1)上，映射后的值被认为是属于 y=1 的概率。<span style="color:red;">是呀，拿来的 -1？</span></p>
+
+<p>假设函数</p>
+
+<p>$$ h_\theta (x)=g(\theta^Tx)=\frac{1}{1+e^{-\theta^Tx} }$$</p>
+
+<p>其中 $x$ 是 $n$ 维特征向量，函数 $g$ 就是logistic函数。</p>
+
+<p>而 $g(x)=\frac{1}{1+e^{-z} }$ 的图像是：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180731/dDjJimALF8.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，将无穷映射到了(0,1)。</p>
+
+<p>而，我们假设函数就是特征属于y=1的概率。</p>
+
+<p>$$P(y=1|x;\theta)=h<em>\theta(x)$$
+$$P(y=0|x;\theta)=1-h</em>\theta(x)$$</p>
+
+<p>从而，当我们要判别一个新来的特征属于哪个类时，只需求 $h<em>\theta(x)$ 即可，若 $h</em>\theta(x)$ 大于0.5就是y=1的类，反之属于y=0类。</p>
+
+<p>此外， $h<em>\theta(x)$ 只和 $\theta^Tx$ 有关，$\theta^Tx&gt;0$ ，那么 $h</em>\theta(x)&gt;0.5$ ，而 $g(z)$ 只是用来映射，真实的类别决定权还是在于 $\theta^Tx$ 。再者，当 $\theta^Tx&gt;&gt;0$ 时 ，$h<em>\theta(x)=1$ ，反之 $h</em>\theta(x)=0$ 。如果我们只从 $\theta^Tx$ 出发，希望模型达到的目标就是让训练数据中 $y=1$ 的特征  $\theta^Tx&gt;&gt;0$ ，而是 $y=0$ 的特征 $\theta^Tx&lt;&lt;0$ 。</p>
+
+<p>Logistic 回归就是要学习得到 $\theta$ ，使得正例的特征远大于 $0$，负例的特征远小于 $0$，而且要在全部训练实例上达到这个目标。</p>
+
+<p>​接下来，尝试把 logistic 回归做个变形。首先，将使用的结果标签 $y = 0$ 和 $y = 1$ 替换为 $y = -1$，$y = 1$，然后将 $\theta^Tx=\theta_0+\theta_1x_1+\theta_2x_2+\cdots +\theta_nx_n(x_0=1)$  中的 $\theta_0$ 替换为 $b$，最后将后面的 $\theta_1x_1+\theta_2x_2+\cdots +\theta_nx<em>n$ 替换为 $w^Tx$ 。如此，则有  了 $\theta^Tx=w^Tx+b$ 。也就是说除了 $y$ 由 $y=0$ 变为 $y=-1$ 外，线性分类函数跟 logistic 回归的形式化表示 $h</em>\theta(x)=g(\theta^Tx)=g(w^Tx_b)$ 没区别。</p>
+
+<p>进一步，可以将假设函数 $h_{w,b}(x)=g(w^Tx+b)$ 中的 $g(z)$ 做一个简化，将其简单映射到 $y=-1$ 和 $y=1$ 上。映射关系如下：</p>
+
+<p>$$g(x)=\left{\begin{matrix} 1 &amp; z\geq 0 \ -1 &amp; z&lt; 0 \end{matrix}\right.$$</p>
+
+<h3 id="1-2-线性分类的一个例子">1.2、线性分类的一个例子</h3>
+
+<p>下面举个简单的例子。如下图所示，现在有一个二维平面，平面上有两种不同的数据，分别用圈和叉表示。由于这些数据是线性可分的，所以可以用一条直线将这两类数据分开，这条直线就相当于一个超平面，超平面一边的数据点所对应的 $y$ 全是 $-1$ ，另一边所对应的 $y$ 全是 $1$。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/I211gIe3ji.png?imageslim" alt="mark" /></p>
+
+<p>​这个超平面可以用分类函数 $f(x)=w^Tx+b$ 表示，当 $f(x)$ 等于 $0$ 的时候，$x$ 便是位于超平面上的点，而 $f(x)$ 大于 $0$ 的点对应 $y=1$ 的数据点，$f(x)$ 小于 $0$ 的点对应 $y=-1$ 的点，如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/57BA2HGcEL.png?imageslim" alt="mark" />
+​</p>
+
+<p>注：有的资料上定义特征到结果的输出函数 $u=\overrightarrow{w}\overrightarrow{x}-b$ ，与这里定义的 $f(x)=w^Tx+b$ 实质是一样的。为什么？因为无论是 $u=\overrightarrow{w}\overrightarrow{x}-b$ ，还是 $f(x)=w^Tx+b$ ，不影响最终优化结果。下文你将看到，当我们转化到优化 $max\frac{1}{||w||}$,$s.t.,y_i(w^Tx_i+b)\geq 1,i=1,2,\ldots ,n$ 的时候，为了求解方便，会把 $yf(x)$ 令为 $1$ ，即 $yf(x)$ 是 $y(w^Tx + b)$，还是 $y(w^Tx - b)$，对我们要优化的式子 $max\frac{1}/{||w||}$ 已无影响。</p>
+
+<p>​（有一朋友飞狗来自 Mare_Desiderii，看了上面的定义之后，问道：请教一下 SVM functional margin 为 $\hat{\gamma}=y(w^Tx+b)=yf(x)$ 中的 $y$ 是只取 $1$ 和 $-1$ 吗？ $y$ 的唯一作用就是确保 functional margin的非负性？真是这样的么？当然不是，详情请见本文评论下第43楼）<span style="color:red;">什么详情？</span></p>
+
+<p>换言之，在进行分类的时候，遇到一个新的数据点 $x$，将 $x$ 代入 $f(x)$ 中，如果 $f(x)$ 小于 $0$ 则将 $x$ 的类别赋为 $-1$ ，如果 $f(x)$ 大于 $0$ 则将 $x$ 的类别赋为 $1$。</p>
+
+<p>接下来的问题是，如何确定这个超平面呢？从直观上而言，这个超平面应该是最适合分开两类数据的直线。而判定“最适合”的标准就是这条直线离直线两边的数据的间隔最大。<strong>所以，得寻找有着最大间隔的超平面。</strong></p>
+
+<h3 id="1-3-函数间隔-functional-margin-与几何间隔-geometrical-margin">1.3、函数间隔 Functional margin 与几何间隔 Geometrical margin</h3>
+
+<p>​在超平面 $w^Tx+b=0$ 确定的情况下，$|w^Tx+b|$ 能够表示点 $x$ 到距离超平面的远近，而<strong>通过观察 $w^Tx+b$ 的符号与类标记 $y$ 的符号是否一致可判断分类是否正确</strong>，所以，可以用 $y*(w^Tx+b)$ 的正负性来判定或表示分类的正确性。于此，我们便引出了函数间隔（functional margin）的概念。</p>
+
+<p>定义函数间隔（用 $\hat{\gamma}$ 表示）为：</p>
+
+<p>$$\hat{\gamma}=y(w^Tx+b)=yf(x)$$</p>
+
+<p>而超平面 $(w，b)$ 关于 $T$ 中所有样本点 $(x_i，y_i)$ 的函数间隔最小值（其中，$x$ 是特征，$y$ 是结果标签，$i$ 表示第 $i$ 个样本），便为超平面 $(w, b)$ 关于训练数据集 $T$ 的函数间隔：</p>
+
+<p>$$\hat{\gamma}=min\hat{\gamma}_i\;i=1,\ldots ,n)$$</p>
+
+<p>但这样定义的函数间隔有问题，即如果成比例的改变 $w$ 和 $b$（如将它们改成 $2w$ 和 $2b$ ），则函数间隔的值 $f(x)$ 却变成了原来的 $2$ 倍（虽然此时超平面没有改变），所以只有函数间隔还远远不够。</p>
+
+<p>​事实上，我们可以对法向量 $w$ 加些约束条件，从而引出真正定义点到超平面的距离&ndash;几何间隔（geometrical margin）的概念。</p>
+
+<p>假定对于一个点 $x$ ，令其垂直投影到超平面上的对应点为 $x_0$ ，$w$ 是垂直于超平面的一个向量，$\gamma$ 为样本 $x$ 到超平面的距离，如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/75I0faHJkm.png?imageslim" alt="mark" /></p>
+
+<p>​根据平面几何知识，有</p>
+
+<p>$$x=x_0+\gamma\frac{w}{||w||}$$</p>
+
+<p>​其中 $||w||$ 为 $w$ 的二阶范数（范数是一个类似于模的表示长度的概念），$\frac{w}{||w||}$ 是单位向量（一个向量除以它的模称之为单位向量）。</p>
+
+<p>又由于是超平面上的点，满足  ，代入超平面的方程 $w^Tx+b=0$ ，可得 $w^Tx_0+b=0$ ，即 $w^Tx_0=-b$ 。</p>
+
+<p>​随即让此式 $x=x_0+\gamma\frac{w}{||w||}$ 的两边同时乘以 $w^T$ ，再根据 $w^Tx_0=-b$ 和 $w^Tw=||w||^2$ ，即可算出 $\gamma$ ：</p>
+
+<p>$$\gamma=\frac{w^Tx+b}{||w||}=\frac{f(x)}{||w||}$$
+​
+为了得到 $\gamma$ 的绝对值，令 $\gamma$ 乘上对应的类别 $y$，即可得出几何间隔（用 $\widetilde{\gamma}$ 表示）的定义：</p>
+
+<p>$$\widetilde{\gamma}=y\gamma=\frac{\hat{\gamma} }{||w||}$$</p>
+
+<p>​从上述函数间隔和几何间隔的定义可以看出：几何间隔就是函数间隔除以 $||w||$ ，而且函数间隔 $y*(w^Tx+b) = y*f(x)$ 实际上就是 $|f(x)|$ ，只是人为定义的一个间隔度量，而几何间隔 $|f(x)|/||w||$ 才是直观上的点到超平面的距离。</p>
+
+<h3 id="1-4-最大间隔分类器-maximum-margin-classifier-的定义">1.4、最大间隔分类器 Maximum Margin Classifier 的定义</h3>
+
+<p>对一个数据点进行分类，当超平面离数据点的“间隔”越大，分类的确信度（confidence）也越大。所以，为了使得分类的确信度尽量高，需要让所选择的超平面能够最大化这个“间隔”值。这个间隔就是下图中的 Gap 的一半。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/k1HmGIj3Ck.png?imageslim" alt="mark" /></p>
+
+<p>通过由前面的分析可知：函数间隔不适合用来最大化间隔值，因为在超平面固定以后，可以等比例地缩放 $w$ 的长度和 $b$ 的值，这样可以使得 $f(x)=w^Tx+b$ 的值任意大，亦即函数间隔 $\hat{\gamma}$ 可以在超平面保持不变的情况下被取得任意大。但几何间隔因为除上了 $||w||$ ，使得在缩放 $w$ 和 $b$ 的时候几何间隔 $\widetilde{\gamma}$ 的值是不会改变的，它只随着超平面的变动而变动，因此，这是更加合适的一个间隔。换言之，这里要找的最大间隔分类超平面中的“间隔”指的是几何间隔。</p>
+
+<p>于是最大间隔分类器（maximum margin classifier）的目标函数可以定义为：</p>
+
+<p>同时需满足一些条件，根据间隔的定义，有</p>
+
+<p>$$y_i(w^Tx_i+b)=\hat{\gamma}_i\geq \hat{\gamma},\;i=1,2,\ldots,n$$</p>
+
+<p>回顾下几何间隔的定义 $\widetilde{\gamma}=y\gamma=\frac{\hat{\gamma} }{||w||}$ ，可知：如果令函数间隔 $\hat{\gamma}$ 等于1（之所以令 $\hat{\gamma}$ 等于1，是为了方便推导和优化，且这样做对目标函数的优化没有影响，至于为什么，请见本文评论下第42楼回复），则有 $\hat{\gamma}= 1 / ||w||$ 且 $y_i(w^Tx_i+b)\geq 1,i=1,\ldots,n$ ，从而上述目标函数转化成了</p>
+
+<p>$$max\frac{1}{||w||},\;s.t.,y_i(w^Tx_i+b)\geq 1,i=1,2,\ldots,n$$</p>
+
+<p>相当于在相应的约束条件 $y_i(w^Tx_i+b)\geq 1,i=1,\ldots,n$ 下，最大化这个 $\frac{1}{||w||}$ 值，而 $\frac{1}{||w||}$ 便是几何间隔 $\widetilde{\gamma}$ 。</p>
+
+<p>​如下图所示，中间的实线便是寻找到的最优超平面（Optimal Hyper Plane），其到两条虚线边界的距离相等，这个距离便是几何间隔   $\widetilde{\gamma}$ ，两条虚线间隔边界之间的距离等于 $2\widetilde{\gamma}$，而虚线<strong>间隔边界上的点则是支持向量</strong>。由于这些支持向量刚好在虚线间隔边界上，所以它们满足 $y(w^Tx+b)=1$ （还记得我们把 functional margin 定为 $1$ 了吗？上节中：处于方便推导和优化的目的，我们可以令 $\widetilde{\gamma}=1$ ），而对于所有不是支持向量的点，则显然有 $y(w^Tx+b)&gt;1$ 。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/lC16Abag6c.png?imageslim" alt="mark" />&gt; &gt;</p>
+
+<p>​OK，到此为止，算是了解到了SVM的第一层，对于那些只关心怎么用 SVM 的朋友便已足够，不必再更进一层深究其更深的原理。</p>
+
+<h2 id="第二层-深入svm">第二层、深入SVM</h2>
+
+<h3 id="2-1-从线性可分到线性不可分">2.1、从线性可分到线性不可分</h3>
+
+<h4 id="2-1-1-从原始问题到对偶问题的求解">2.1.1、从原始问题到对偶问题的求解</h4>
+
+<p>​接着考虑之前得到的目标函数：</p>
+
+<p>$$max\frac{1}{||w||},\;s.t.,y_i(w^Tx_i+b)\geq 1,i=1,2,\ldots,n$$</p>
+
+<p>由于求 $\frac{1}{||w||}$ 的最大值相当于求 $\frac{1}{2}||w||^2$ 的最小值，所以上述目标函数等价于（$w$ 由分母变成分子，从而也有原来的 $max$ 问题变为 $min$ 问题，很明显，两者问题等价）：</p>
+
+<p>$$min\frac{1}{2}||w||,\;s.t.,y_i(w^Tx_i+b)\geq 1,i=1,2,\ldots,n$$</p>
+
+<p>​因为现在的目标函数是二次的，约束条件是线性的，所以它是一个凸二次规划问题。这个问题可以用现成的[QP (Quadratic Programming)]优化包进行求解。一言以蔽之：在一定的约束条件下，目标最优，损失最小。</p>
+
+<p>​此外，由于这个问题的特殊结构，还可以通过拉格朗日对偶性（Lagrange Duality）变换到对偶变量 (dual variable) 的优化问题，即通过求解与原问题等价的对偶问题（dual problem）得到原始问题的最优解，这就是线性可分条件下支持向量机的对偶算法。</p>
+
+<p>这样做的优点在于：</p>
+
+<ul>
+<li>一者对偶问题往往更容易求解；</li>
+<li>二者可以自然的引入核函数，进而推广到非线性分类问题。</li>
+</ul>
+
+<p>​那什么是拉格朗日对偶性呢？简单来讲，通过给每一个约束条件加上一个拉格朗日乘子（Lagrange multiplier） $\alpha$ ，定义拉格朗日函数（通过拉格朗日函数将约束条件融合到目标函数里去，从而只用一个函数表达式便能清楚的表达出我们的问题）：</p>
+
+<p>$$\mathcal{L}(w,b,\alpha)=\frac{1}{2}||w||^2-\sum_{i=1}^{n}\alpha_i(y_i(w^Tx_i+b)-1)$$</p>
+
+<p>然后令</p>
+
+<p>$$\theta(w)=\underset{a_i\geq 0}{max}\mathcal{L}(w,b,\alpha)$$</p>
+
+<p>容易验证，当某个约束条件不满足时，例如 $y_i(w^Tx_i+b)&lt;1$ ，那么显然有 $\theta(w)=\infty$ （只要令 $\alpha_i=\infty$ 即可）。而当所有约束条件都满足时，则最优值为 $\theta(w)=\frac12||w||^2$ ，亦即最初要最小化的量。</p>
+
+<p>因此，在要求约束条件得到满足的情况下最小化 $\frac12||w||^2$ ，实际上等价于直接最小化 $\theta(w)$ （当然，这里也有约束条件，就是 $\alpha_i$ ），因为如果约束条件没有得到满足， $\theta(w)$ 会等于无穷大，自然不会是我们所要求的最小值。</p>
+
+<p>​具体写出来，目标函数变成了：</p>
+
+<p>$$\underset{w,b}{min}\,\theta(w)=\underset{w,b}{min}\,\underset{a_i\geq 0}{max}\,\mathcal{L}(w,b,\alpha)=p^*$$</p>
+
+<p>​这里用 $p^*$ 表示这个问题的最优值，且和最初的问题是等价的。如果直接求解，那么一上来便得面对 $w$ 和 $b$ 两个参数，而 $\alpha_i$ 又是不等式约束，这个求解过程不好做。不妨把最小和最大的位置交换一下，变成：</p>
+
+<p>$$\underset{a_i\geq 0}{max}\,\underset{w,b}{min}\,\mathcal{L}(w,b,\alpha)=d^*$$</p>
+
+<p>​交换以后的新问题是原始问题的对偶问题，这个新问题的最优值用 $d^<em>$ 来表示。而且有 $d^</em>\leq p^*$ ，在满足某些条件的情况下，这两者相等，这个时候就可以通过求解对偶问题来间接地求解原始问题。</p>
+
+<p>换言之，之所以从 min max 的原始问题 $p^<em>$ ，转化为maxmin的对偶问题 $d^</em>$ ，一者因为 $d^<em>$ 是 $p^</em>$ 的近似解，二者，转化为对偶问题后，更容易求解。</p>
+
+<p>下面可以先求 $L$ 对 $w$、$b$ 的极小，再求 $L$ 对 $\alpha$ 的极大。</p>
+
+<h4 id="2-1-2-kkt条件">2.1.2、KKT条件</h4>
+
+<p>​上文中提到 “ $d^<em>\leq p^</em>$ 在满足某些条件的情况下，两者等价 ”，<del>这所谓的“满足某些条件”就是要满足 KKT 条件</del>。</p>
+
+<p><strong>勘误</strong>：经读者qq_28543029指出，这里的条件不应该是KKT条件，要让两者等价需满足strong duality （强对偶），而后有学者在强对偶下提出了KKT条件，且KKT条件的成立要满足constraint qualifications，而constraint qualifications之一就是Slater条件。所谓Slater 条件，即指：凸优化问题，如果存在一个点x，使得所有等式约束都成立，并且所有不等式约束都严格成立（即取严格不等号，而非等号），则满足 Slater 条件。对于此处，Slater 条件成立，所以 $d^<em>\leq p^</em>$ 可以取等号。</p>
+
+<p>一般地，一个最优化数学模型能够表示成下列标准形式：</p>
+
+<p>$$\begin{align<em>} min. \;&amp; f(x)\ s.t. \; &amp; h_j(x)=0,j=1,\ldots,p,\ &amp; g_k(x)\leq 0,k=1,\ldots,q,\ &amp; x\in X\subset \mathfrak{R}^n \end{align</em>}$$</p>
+
+<p>​其中，$f(x)$ 是需要最小化的函数，$h(x)$ 是等式约束，$g(x)$ 是不等式约束，$p$ 和 $q$ 分别为等式约束和不等式约束的数量。</p>
+
+<p>​同时，得明白以下两点：</p>
+
+<ul>
+<li><p>凸优化的概念：$\mathcal{X} \subset \mathbb{R}^n$ 为一凸集， $f:\mathcal{X}\to \mathbb{R}$ 为一凸函数。凸优化就是要找出一点 $x^\ast \in \mathcal{X}$ ，使得每一 $x \in \mathcal{X}$ 满足 $f(x^\ast)\le f(x)$ 。</p></li>
+
+<li><p>KKT条件的意义：它是一个非线性规划（Nonlinear Programming）问题能有最优化解法的必要和充分条件。</p></li>
+</ul>
+
+<p>​而 KKT 条件就是指上面最优化数学模型的标准形式中的最小点 $x^*$ 必须满足下面的条件：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/AlhHe8ALIa.png?imageslim" alt="mark" /></p>
+
+<p>​经过论证，我们这里的问题是满足 KKT 条件的（首先已经满足Slater条件，再者 $f$ 和 $g_i$ 也都是可微的，即 $L$ 对 $w$ 和 $b$ 都可导），因此现在我们便转化为求解第二个问题。</p>
+
+<p>​也就是说，原始问题通过满足 KKT 条件，已经转化成了对偶问题。而求解这个对偶学习问题，分为3个步骤：首先要让 $L(w，b，a)$ 关于 $w$ 和 $b$ 最小化，然后求对 $\alpha$ 的极大，最后利用 SMO 算法求解对偶问题中的拉格朗日乘子。</p>
+
+<h4 id="2-1-3-对偶问题求解的3个步骤">2.1.3、对偶问题求解的3个步骤</h4>
+
+<p><strong>（1）</strong>、首先固定 $\alpha$ ，要让 $L$ 关于 $w$ 和 $b$ 最小化，我们分别对 $w$ ，$b$ 求偏导数，即令 $\partial{L}/\partial{w}$ 和 $\partial{L}/\partial{b}$ 等于零（对 $w$ 求导结果的解释请看本文评论下第45楼回复）：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/ghcjI3g5j8.png?imageslim" alt="mark" /></p>
+
+<p>​将以上结果代入之前的 $L$</p>
+
+<p>$$\mathcal{L}(w,b,\alpha)=\frac{1}{2}||w||^2-\sum_{i=1}^{n}\alpha_i(y_i(w^Tx_i+b)-1)$$</p>
+
+<p>得到：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/bGc1DEADI6.png?imageslim" alt="mark" /></p>
+
+<p>提醒：有读者可能会问上述推导过程如何而来？说实话，其具体推导过程是比较复杂的，如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/eG9kGckmHB.png?imageslim" alt="mark" /></p>
+
+<p>最后，得到：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/L6bEe5aig7.png?imageslim" alt="mark" /></p>
+
+<p>​如 jerrylead所说：“倒数第4步” 推导到 “倒数第3步” 使用了线性代数的转置运算，由于 $a_i$ 和 $y_i$ 都是实数，因此转置后与自身一样。“倒数第3步” 推导到 “倒数第2步” 使用了<code>(a+b+c+…)(a+b+c+…)=aa+ab+ac+ba+bb+bc+…</code> 的乘法运算法则。最后一步是上一步的顺序调整。</p>
+
+<p>​从上面的最后一个式子，我们可以看出，此时的拉格朗日函数只包含了一个变量，那就是 $\alpha_i$ （求出了 $\alpha_i$ 便能求出 $w$，和 $b$，由此可见，上文第 1.2 节提出来的核心问题：分类函数 $f(x)=w^Tx+b$ 也就可以轻而易举的求出来了）。</p>
+
+<p><strong>（2）</strong>、求对 $\alpha$ 的极大，即是关于对偶问题的最优化问题。经过上面第一个步骤的求 $w$ 和 $b$，得到的拉格朗日函数式子已经没有了变量 $w$，$b$，只有 $\alpha$ 。从上面的式子得到：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/4BKgajK8i4.png?imageslim" alt="mark" /></p>
+
+<p>​这样，求出了 $\alpha<em>i$ ，根据 $w=\sum</em>{i=1}^{m}\alpha<em>iy^{(i)}x^{(i)}$ ，即可求出 $w$，然后通过 $b^*=-\frac{max</em>{i:y^{(i)}=-1}w^{*T}x^{(i)}+min_{i:y^{(i)}=1}w^{*T}x^{(i)} }{2}$ ，即可求出 $b$，最终得出分离超平面和分类决策函数。</p>
+
+<p>​<strong>（3）</strong> 在求得 $L(w, b, a)$ 关于 $w$ 和 $b$ 最小化，以及对 $\alpha$ 的极大之后，最后一步则可以利用 SMO 算法求解对偶问题中的拉格朗日乘子 $\alpha$ 。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/cGbj0L2Kma.png?imageslim" alt="mark" /></p>
+
+<p>上述式子要解决的是在参数 ${\alpha_1,\alpha_2,\ldots,\alpha_n}$ 上求最大值 $W$ 的问题，至于 $x^{(i)}$ 和  $y^{(i)}$ 都是已知数。要了解这个SMO算法是如何推导的，请跳到下文第3.5节、SMO 算法。</p>
+
+<p>​到目前为止，我们的 SVM 还比较弱，只能处理线性的情况，下面我们将引入核函数，进而推广到非线性分类问题。</p>
+
+<h4 id="2-1-5-线性不可分的情况">2.1.5、线性不可分的情况</h4>
+
+<p>​OK，为过渡到下节 2.2 节所介绍的核函数，让我们再来看看上述推导过程中得到的一些有趣的形式。首先就是关于我们的 hyper plane ，对于一个数据点  进行分类，实际上是通过把  带入到<img src="https://img-blog.csdn.net/20131107201211968" alt="img" />算出结果然后根据其正负号来进行类别划分的。而前面的推导中我们得到</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131111163543781" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    因此<strong>分类函数</strong>为：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/25/1351142572_5782.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    这里的形式的有趣之处在于，对于新点 *x*的预测，只需要计算它与训练数据点的内积即可（<img src="https://img-blog.csdn.net/20131111163753093" alt="img" />表示向量内积），这一点至关重要，是之后使用 Kernel 进行非线性推广的基本前提。此外，所谓 Supporting Vector 也在这里显示出来——事实上，所有非Supporting Vector 所对应的系数<img src="https://img-blog.csdn.net/20131111164022593" alt="img" />都是等于零的，因此对于新点的内积计算实际上只要针对少量的“支持向量”而不是所有的训练数据即可。</p>
+
+<p>​    为什么非支持向量对应的<img src="https://img-blog.csdn.net/20131111164022593" alt="img" />等于零呢？直观上来理解的话，就是这些“后方”的点——正如我们之前分析过的一样，对超平面是没有影响的，由于分类完全有超平面决定，所以这些无关的点并不会参与分类问题的计算，因而也就不会产生任何影响了。</p>
+
+<p>​    回忆一下我们2.1.1节中通过 Lagrange multiplier得到的目标函数：</p>
+
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/25/1351142613_4680.jpg" alt="img" /></p>
+</blockquote>
+
+<p>​     注意到如果  是支持向量的话，上式中红颜色的部分是等于 0 的（因为支持向量的 functional margin 等于 1 ），而对于非支持向量来说，functional margin 会大于 1 ，因此红颜色部分是大于零的，而<img src="https://img-blog.csdn.net/20131111163835968" alt="img" />又是非负的，为了满足最大化，<img src="https://img-blog.csdn.net/20131111163835968" alt="img" />必须等于 0 。这也就是这些非Supporting Vector 的点的局限性。</p>
+
+<p>​    从1.5节到上述所有这些东西，便得到了一个maximum margin hyper plane classifier，这就是所谓的支持向量机（Support Vector Machine）。当然，<strong>到目前为止，我们的 SVM 还比较弱，只能处理线性的情况</strong>，不过，在得到了对偶dual 形式之后，通过 <strong>Kernel 推广到非线性</strong>的情况就变成了一件非常容易的事情了(相信，你还记得本节开头所说的：“通过求解对偶问题得到最优解，这就是线性可分条件下支持向量机的对偶算法，这样做的优点在于：一者对偶问题往往更容易求解；二者可以自然的引入核函数，进而推广到非线性分类问题”)。</p>
+
+<h3 id="2-2-核函数kernel">*2.2*、核函数Kernel</h3>
+
+<h4 id="2-2-1-特征空间的隐式映射-核函数">2.2.1、特征空间的隐式映射：核函数</h4>
+
+<p>​    事实上，大部分时候数据并不是线性可分的，这个时候满足这样条件的超平面就根本不存在。在上文中，我们已经了解到了SVM处理线性可分的情况，那对于非线性的数据SVM咋处理呢？对于非线性的情况，SVM 的处理方法是选择一个核函数 κ(⋅,⋅) ，通过将数据映射到高维空间，来解决在原始空间中线性不可分的问题。</p>
+
+<p>​    具体来说，在线性不可分的情况下，支持向量机首先在低维空间中完成计算，然后通过核函数将输入空间映射到高维特征空间，最终在高维特征空间中构造出最优分离超平面，从而把平面上本身不好分的非线性数据分开。如图所示，一堆数据在二维空间无法划分，从而映射到三维空间里划分：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140830002108254" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    而在我们遇到核函数之前，如果用原始的方法，那么在用线性学习器学习一个非线性关系，需要选择一个非线性特征集，并且将数据写成新的表达形式，这等价于应用一个固定的非线性映射，将数据映射到特征空间，在特征空间中使用线性学习器，因此，考虑的假设集是这种类型的函数：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://my.csdn.net/uploads/201206/04/1338740718_7761.JPG" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    这里*ϕ*：X-&gt;F是从输入空间到某个特征空间的映射，这意味着建立非线性学习器分为两步：</p>
+
+<ol>
+<li>首先使用一个非线性映射将数据变换到一个特征空间F，</li>
+<li>然后在特征空间使用线性学习器分类。</li>
+</ol>
+
+<p>​    而由于对偶形式就是线性学习器的一个重要性质，这意味着假设可以表达为训练点的线性组合，因此决策规则可以用测试点和训练点的内积来表示：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="http://my.csdn.net/uploads/201206/04/1338741121_9867.JPG" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    如果有一种方式可以<strong>在特征空间中直接计算内积〈φ(xi · φ(x)</strong><strong>〉</strong>，就像在原始输入点的函数中一样，就有可能将两个步骤融合到一起建立一个非线性的学习器，<strong>这样直接计算法的方法称为核函数方法：</strong></p>
+
+<p>​    核是一个函数K，对所有x，z(-X，满足<img src="http://my.csdn.net/uploads/201206/04/1338741445_1451.JPG" alt="img" />，这里φ是从X到内积特征空间F的映射。</p>
+
+<h4 id="2-2-2-核函数-如何处理非线性数据">2.2.2、核函数：如何处理非线性数据</h4>
+
+<p>​    来看个核函数的例子。如下图所示的两类数据，分别分布为两个圆圈的形状，这样的数据本身就是线性不可分的，此时咱们该如何把这两类数据分开呢(下文将会有一个相应的三维空间图)？</p>
+
+<p><img src="http://my.csdn.net/uploads/201206/03/1338655829_6929.png" alt="img" /></p>
+
+<p>​    事实上，上图所述的这个数据集，是用两个半径不同的圆圈加上了少量的噪音生成得到的，所以，一个理想的分界应该是一个“圆圈”而不是一条线（超平面）。如果用<img src="https://img-blog.csdn.net/20180516164047334" alt="img" />和<img src="https://img-blog.csdn.net/20180516000114369" alt="img" />来表示这个二维平面的两个坐标的话，我们知道一条二次曲线（圆圈是二次曲线的一种特殊情况）的方程可以写作这样的形式：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20130820145508875" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    注意上面的形式，如果我们构造另外一个五维的空间，其中五个坐标的值分别为<img src="https://img-blog.csdn.net/20180509172308957" alt="img" />, <img src="https://img-blog.csdn.net/20180509172319524" alt="img" />, <img src="https://img-blog.csdn.net/20180509172331439" alt="img" />, <img src="https://img-blog.csdn.net/20180509172339511" alt="img" />，<img src="https://img-blog.csdn.net/20180509172349341" alt="img" />，那么显然，上面的方程在新的坐标系下可以写作：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20130820145522437" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    关于新的坐标<img src="https://img-blog.csdn.net/20180515235937497" alt="img" />，这正是一个 hyper plane 的方程！也就是说，如果我们做一个映射<img src="https://img-blog.csdn.net/20180515235946910" alt="img" />，将 <img src="https://img-blog.csdn.net/20180515235953955" alt="img" />按照上面的规则映射为<img src="https://img-blog.csdn.net/20180515235937497" alt="img" />，那么在新的空间中原来的数据将变成线性可分的，从而使用之前我们推导的线性分类算法就可以进行处理了。这正是 Kernel 方法处理非线性问题的基本思想。</p>
+
+<p>​    再进一步描述 Kernel 的细节之前，不妨再来看看上述例子在映射过后的直观形态。当然，你我可能无法把 5 维空间画出来，不过由于我这里生成数据的时候用了特殊的情形，所以这里的超平面实际的方程是这个样子的（圆心在<img src="https://img-blog.csdn.net/20180516000114369" alt="img" />轴上的一个正圆）：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20130820145544562" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    因此我只需要把它映射到<img src="https://img-blog.csdn.net/20180516000827595" alt="img" />，<img src="https://img-blog.csdn.net/20180516000840802" alt="img" />，<img src="https://img-blog.csdn.net/20180516000847353" alt="img" />这样一个三维空间中即可，下图即是映射之后的结果，将坐标轴经过适当的旋转，就可以很明显地看出，数据是可以通过一个平面来分开的(pluskid：下面的gif 动画，先用 Matlab 画出一张张图片，再用 Imagemagick 拼贴成)：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364952814_3505.gif" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    核函数相当于把原来的分类函数：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/25/1351142877_8481.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    映射成：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/25/1351142890_4908.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    而其中的<img src="https://img-blog.csdn.net/20131111164022593" alt="img" />可以通过求解如下 dual 问题而得到的：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/25/1351142906_9411.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    这样一来问题就解决了吗？似乎是的：拿到非线性数据，就找一个映射<img src="http://img.my.csdn.net/uploads/201304/03/1364953575_7320.jpg" alt="img" />，然后一股脑把原来的数据映射到新空间中，再做线性 SVM 即可。不过事实上好像并没有这么简单。</p>
+
+<p>​    细想一下，刚才的方法是不是有问题？</p>
+
+<ul>
+<li>在最初的例子里，我们对一个二维空间做映射，选择的新空间是原始空间的所有一阶和二阶的组合，得到了五个维度；</li>
+<li>如果原始空间是三维（一阶、二阶和三阶的组合），那么我们会得到：3(一次)+3(二次交叉)+3(平方)+3(立方)+1(x1*x2*x3)+2*3(交叉，一个一次一个二次，类似x1*x2^2) = 19维的新空间，这个数目是呈指数级爆炸性增长的，从而势必这给<img src="http://img.my.csdn.net/uploads/201304/03/1364953575_7320.jpg" alt="img" />的计算带来非常大的困难，而且如果遇到无穷维的情况，就根本无从计算了。</li>
+</ul>
+
+<p>​    这个时候，可能就需要 Kernel 出马了。</p>
+
+<p>​    不妨还是从最开始的简单例子出发，设两个向量<img src="http://img.my.csdn.net/uploads/201304/03/1364953480_7616.jpg" alt="img" />和<img src="http://img.my.csdn.net/uploads/201304/03/1364953493_7554.jpg" alt="img" />，而<img src="http://img.my.csdn.net/uploads/201304/03/1364953575_7320.jpg" alt="img" />即是到前面说的五维空间的映射，因此映射过后的内积为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364953615_2896.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​        （公式说明：上面的这两个推导过程中，所说的前面的五维空间的映射，这里说的前面便是文中2.2.1节的所述的映射方式，回顾下之前的映射规则，再看那第一个推导，其实就是计算x1，x2各自的内积，然后相乘相加即可，第二个推导则是直接平方，去掉括号，也很容易推出来）</p>
+
+<p>​    另外，我们又注意到：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364953683_4519.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​     二者有很多相似的地方，实际上，我们只要把某几个维度线性缩放一下，然后再加上一个常数维度，具体来说，上面这个式子的计算结果实际上和映射</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364953714_4455.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​     之后的内积<img src="http://img.my.csdn.net/uploads/201304/03/1364953751_4112.jpg" alt="img" />的结果是相等的，那么区别在于什么地方呢？</p>
+
+<ol>
+<li>一个是映射到高维空间中，然后再根据内积的公式进行计算；</li>
+<li>而另一个则<strong>直接在原来的低维空间中进行计算，而不需要显式地写出映射后的结果</strong>。</li>
+</ol>
+
+<p>​    （公式说明：上面之中，最后的两个式子，第一个算式，是带内积的完全平方式，可以拆开，然后，通过凑一个得到，第二个算式，也是根据第一个算式凑出来的）</p>
+
+<p>​    回忆刚才提到的映射的维度爆炸，在前一种方法已经无法计算的情况下，后一种方法却依旧能从容处理，甚至是无穷维度的情况也没有问题。</p>
+
+<p>​    我们把这里<strong>的计算两个向量在隐式映射过后的空间中的内积的函数叫做核函数</strong> (Kernel Function) ，例如，在刚才的例子中，我们的核函数为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364956440_7770.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    核函数能<strong>简化映射空间中的内积运算</strong>——刚好“碰巧”的是，在我们的 <strong>SVM 里需要计算的地方数据向量总是以内积的形式出现</strong>的。对比刚才我们上面写出来的式子，现在我们的<strong>分类函数</strong>为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364956916_5948.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    其中 由如下 dual 问题计算而得：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364957480_2629.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    这样一来计算的问题就算解决了，避开了直接在高维空间中进行计算，而结果却是等价的！当然，因为我们这里的例子非常简单，所以我可以手工构造出对应于<img src="http://img.my.csdn.net/uploads/201304/03/1364953575_7320.jpg" alt="img" />的核函数出来，如果对于任意一个映射，想要构造出对应的核函数就很困难了。</p>
+
+<h4 id="2-2-3-几个核函数">2.2.3、几个核函数</h4>
+
+<p>​    通常人们会从一些常用的核函数中选择（根据问题和数据的不同，选择不同的参数，实际上就是得到了不同的核函数），例如：</p>
+
+<ul>
+<li>多项式核，显然刚才我们举的例子是这里多项式核的一个特例（R = 1，d = 2）。虽然比较麻烦，而且没有必要，不过这个核所对应的映射实际上是可以写出来的，该空间的维度是<img src="http://img.my.csdn.net/uploads/201304/03/1364958204_2877.jpg" alt="img" />，其中 m 是原始空间的维度。</li>
+<li>高斯核<img src="http://img.my.csdn.net/uploads/201304/03/1364958259_8460.jpg" alt="img" />，这个核就是最开始提到过的会将原始空间映射为无穷维空间的那个家伙。不过，如果<img src="http://img.my.csdn.net/uploads/201304/03/1364958296_7554.jpg" alt="img" />选得很大的话，高次特征上的权重实际上衰减得非常快，所以实际上（数值上近似一下）相当于一个低维的子空间；反过来，如果<img src="http://img.my.csdn.net/uploads/201304/03/1364958296_7554.jpg" alt="img" />选得很小，则可以将任意的数据映射为线性可分——当然，这并不一定是好事，因为随之而来的可能是非常严重的过拟合问题。不过，总的来说，通过调控参数<img src="http://img.my.csdn.net/uploads/201304/03/1364958296_7554.jpg" alt="img" />，高斯核实际上具有相当高的灵活性，也是使用最广泛的核函数之一。下图所示的例子便是把低维线性不可分的数据通过高斯核函数映射到了高维空间：
+<img src="https://img-blog.csdn.net/20130919095640250" alt="img" /></li>
+<li>线性核<img src="http://img.my.csdn.net/uploads/201304/03/1364958354_7262.jpg" alt="img" />，这实际上就是原始空间中的内积。这个核存在的主要目的是使得“映射后空间中的问题”和“映射前空间中的问题”两者在形式上统一起来了(意思是说，咱们有的时候，写代码，或写公式的时候，只要写个模板或通用表达式，然后再代入不同的核，便可以了，于此，便在形式上统一了起来，不用再分别写一个线性的，和一个非线性的)。</li>
+</ul>
+
+<h4 id="2-2-4-核函数的本质">2.2.4、核函数的本质</h4>
+
+<p>​        上面说了这么一大堆，读者可能还是没明白核函数到底是个什么东西？我再简要概括下，即以下三点：</p>
+
+<ol>
+<li>实际中，我们会经常遇到线性不可分的样例，此时，我们的常用做法是把样例特征映射到高维空间中去(如上文2.2节最开始的那幅图所示，映射到高维空间后，相关特征便被分开了，也就达到了分类的目的)；</li>
+<li>但进一步，如果凡是遇到线性不可分的样例，一律映射到高维空间，那么这个维度大小是会高到可怕的(如上文中19维乃至无穷维的例子)。那咋办呢？</li>
+<li>此时，核函数就隆重登场了，核函数的价值在于它虽然也是将特征进行从低维到高维的转换，但核函数绝就绝在它事先在低维上进行计算，而将实质上的分类效果表现在了高维上，也就如上文所说的避免了直接在高维空间中的复杂计算。</li>
+</ol>
+
+<p>​    最后引用<a href="http://www.yaksis.com/posts/why-use-svm.html">这里</a>的一个例子举例说明下核函数解决非线性问题的直观效果。</p>
+
+<p>​    假设现在你是一个农场主，圈养了一批羊群，但为预防狼群袭击羊群，你需要搭建一个篱笆来把羊群围起来。但是篱笆应该建在哪里呢？你很可能需要依据牛群和狼群的位置建立一个“分类器”，比较下图这几种不同的分类器，我们可以看到SVM完成了一个很完美的解决方案。</p>
+
+<p><img src="https://img-blog.csdn.net/20131121105410546" alt="img" /></p>
+
+<p>​    这个例子从侧面简单说明了SVM使用非线性分类器的优势，而逻辑模式以及决策树模式都是使用了直线方法。</p>
+
+<p>不再做过多介绍了，对核函数有进一步兴趣的，还可以看看<a href="http://www.cnblogs.com/vivounicorn/archive/2010/12/13/1904720.html">此文</a>。</p>
+
+<h3 id="2-3-使用松弛变量处理-outliers-方法">*2.3*、使用松弛变量处理 outliers 方法</h3>
+
+<p>​    在本文第一节最开始讨论支持向量机的时候，我们就假定，数据是线性可分的，亦即我们可以找到一个可行的超平面将数据完全分开。后来为了处理非线性数据，在上文2.2节使用 Kernel 方法对原来的线性 SVM 进行了推广，使得非线性的的情况也能处理。虽然通过映射<img src="http://img.my.csdn.net/uploads/201304/03/1364953575_7320.jpg" alt="img" />将原始数据映射到高维空间之后，能够线性分隔的概率大大增加，但是对于某些情况还是很难处理。</p>
+
+<p>​    例如可能并不是因为数据本身是非线性结构的，而只是因为数据有噪音。对于这种偏离正常位置很远的数据点，我们称之为 outlier ，在我们原来的 SVM 模型里，outlier 的存在有可能造成很大的影响，因为超平面本身就是只有少数几个 support vector 组成的，如果这些 support vector 里又存在 outlier 的话，其影响就很大了。例如下图：</p>
+
+<p><img src="http://blog.pluskid.org/wp-content/uploads/2010/09/Optimal-Hyper-Plane-2.png" alt="Optimal Hyper Plane 2" /></p>
+
+<p>​    用黑圈圈起来的那个蓝点是一个 outlier ，它偏离了自己原本所应该在的那个半空间，如果直接忽略掉它的话，原来的分隔超平面还是挺好的，但是由于这个 outlier 的出现，导致分隔超平面不得不被挤歪了，变成途中黑色虚线所示（这只是一个示意图，并没有严格计算精确坐标），同时 margin 也相应变小了。当然，更严重的情况是，如果这个 outlier 再往右上移动一些距离的话，我们将无法构造出能将数据分开的超平面来。</p>
+
+<p>​    为了处理这种情况，SVM 允许数据点在一定程度上偏离一下超平面。例如上图中，黑色实线所对应的距离，就是该 outlier 偏离的距离，如果把它移动回来，就刚好落在原来的 <del>超平面</del> 蓝色间隔边界上，而不会使得超平面发生变形了。</p>
+
+<p>​    插播下一位读者@Copper_PKU的理解：<strong>“</strong>换言之，在有松弛的情况下outline点也属于支持向量SV，同时，对于不同的支持向量，拉格朗日参数的值也不同，如此篇论文《Large Scale Machine Learning》中的下图所示：</p>
+
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131126154347453" alt="img" /></p>
+</blockquote>
+
+<p>​    对于远离分类平面的点值为0；对于边缘上的点值在[0, 1/L]之间，其中，L为训练数据集个数，即数据集大小；对于outline数据和内部的数据值为1/L。更多请参看本文文末参考条目第51条。<strong>”</strong></p>
+
+<p>​    OK，继续回到咱们的问题。我们，原来的约束条件为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364959415_3450.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    现在考虑到outlier问题，约束条件变成了：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364959452_3595.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    其中<img src="http://img.my.csdn.net/uploads/201304/03/1364959520_2870.jpg" alt="img" />称为松弛变量 (slack variable) ，对应数据点<img src="http://img.my.csdn.net/uploads/201304/03/1364959545_2101.jpg" alt="img" />允许偏离的 functional margin 的量。当然，如果我们运行<img src="http://img.my.csdn.net/uploads/201304/03/1364959556_6974.jpg" alt="img" />任意大的话，那任意的超平面都是符合条件的了。所以，我们在原来的目标函数后面加上一项，使得这些<img src="http://img.my.csdn.net/uploads/201304/03/1364959556_6974.jpg" alt="img" />的总和也要最小：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364959830_8514.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    其中 是一个参数，用于控制目标函数中两项（“寻找 margin 最大的超平面”和“保证数据点偏差量最小”）之间的权重。注意，其中 是需要优化的变量（之一），而 是一个事先确定好的常量。完整地写出来是这个样子：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364959576_9747.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    用之前的方法将限制或约束条件加入到目标函数中，得到新的拉格朗日函数，如下所示：</p>
+
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364959743_1140.jpg" alt="img" /></p>
+</blockquote>
+
+<p>​     分析方法和前面一样，转换为另一个问题之后，我们先让<img src="http://img.my.csdn.net/uploads/201304/03/1364964405_5704.jpg" alt="img" />针对<img src="http://img.my.csdn.net/uploads/201304/03/1364964417_1635.jpg" alt="img" />、<img src="http://img.my.csdn.net/uploads/201304/03/1364964430_9778.jpg" alt="img" />和<img src="http://img.my.csdn.net/uploads/201304/03/1364964459_1257.jpg" alt="img" />最小化：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364964598_5617.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​     将  带回 并化简，得到和原来一样的目标函数：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364964812_9353.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​     不过，由于我们得到<img src="http://img.my.csdn.net/uploads/201304/03/1364965002_7084.jpg" alt="img" />而又有<img src="http://img.my.csdn.net/uploads/201304/03/1364965051_1161.jpg" alt="img" />（作为 Lagrange multiplier 的条件），因此有<img src="http://img.my.csdn.net/uploads/201304/03/1364965086_6201.jpg" alt="img" />，所以整个 dual 问题现在写作：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364965166_4508.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    把前后的结果对比一下（错误修正：图中的Dual formulation中的Minimize应为maxmize）：</p>
+
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20130919094508562" alt="img" /></p>
+</blockquote>
+
+<p>​</p>
+
+<p>可以看到唯一的区别就是现在 dual variable</p>
+
+<p>多了一个上限</p>
+
+<p>。而 Kernel 化的非线性形式也是一样的，只要把</p>
+
+<p>换成</p>
+
+<p>即可。这样一来，一个完整的，可以处理线性和非线性并能容忍噪音和 outliers 的支持向量机才终于介绍完毕了。</p>
+
+<p>​    行文至此，可以做个小结，不准确的说，SVM它本质上即是一个分类方法，用w^T+b定义分类函数，于是求w、b，为寻最大间隔，引出1/2||w||^2，继而引入拉格朗日因子，化为对拉格朗日乘子a的求解（求解过程中会涉及到一系列最优化或凸二次规划等问题），如此，求w.b与求a等价，而a的求解可以用一种快速学习算法SMO，至于核函数，是为处理非线性情况，若直接映射到高维计算恐维度爆炸，故在低维计算，等效高维表现。</p>
+
+<p>​    OK，理解到这第二层，已经能满足绝大部分人一窥SVM原理的好奇心，然对于那些想在证明层面理解SVM的则还很不够，但进入第三层理解境界之前，你必须要有比较好的数理基础和逻辑证明能力，不然你会跟我一样，吃不少苦头的。</p>
+
+<h2 id="第三层-证明svm">第三层、证明SVM</h2>
+
+<p>​    说实话，凡是涉及到要证明的东西.理论，便一般不是怎么好惹的东西。绝大部分时候，看懂一个东西不难，但证明一个东西则需要点数学功底，进一步，证明一个东西也不是特别难，难的是从零开始发明创造这个东西的时候，则显艰难(因为任何时代，大部分人的研究所得都不过是基于前人的研究成果，前人所做的是开创性工作，而这往往是最艰难最有价值的，他们被称为真正的先驱。牛顿也曾说过，他不过是站在巨人的肩上。你，我则更是如此)。</p>
+
+<p>​    正如陈希孺院士在他的著作《数理统计学简史》的第4章、最小二乘法中所讲：在科研上诸多观念的革新和突破是有着很多的不易的，或许某个定理在某个时期由某个人点破了，现在的我们看来一切都是理所当然，但在一切没有发现之前，可能许许多多的顶级学者毕其功于一役，耗尽一生，努力了几十年最终也是无功而返。</p>
+
+<p>​    话休絮烦，要证明一个东西先要弄清楚它的根基在哪，即构成它的基础是哪些理论。OK，以下内容基本是上文中未讲到的一些定理的证明，包括其背后的逻辑、来源背景等东西，还是读书笔记。</p>
+
+<p><strong>本部分导述</strong></p>
+
+<ul>
+<li>3.1节线性学习器中，主要阐述感知机算法；</li>
+<li>3.2节非线性学习器中，主要阐述mercer定理；</li>
+<li>3.3节、损失函数；</li>
+<li>3.4节、最小二乘法；</li>
+<li>3.5节、SMO算法；</li>
+<li>3.6节、简略谈谈SVM的应用；</li>
+</ul>
+
+<h3 id="3-1-线性学习器">*3.1*、线性学习器</h3>
+
+<h4 id="3-1-1-感知机算法">3.1.1、感知机算法</h4>
+
+<p>​    这个感知机算法是1956年提出的，年代久远，依然影响着当今，当然，可以肯定的是，此算法亦非最优，后续会有更详尽阐述。不过，有一点，你必须清楚，这个算法是为了干嘛的：不断的训练试错以期寻找一个合适的超平面(是的，就这么简单)。</p>
+
+<p><img src="http://my.csdn.net/uploads/201206/18/1340003331_2159.jpg" alt="img" /></p>
+
+<p>​    下面，举个例子。如下图所示，凭我们的直觉可以看出，图中的红线是最优超平面，蓝线则是根据感知机算法在不断的训练中，最终，若蓝线能通过不断的训练移动到红线位置上，则代表训练成功。</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131114203144875" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    既然需要通过不断的训练以让蓝线最终成为最优分类超平面，那么，到底需要训练多少次呢？Novikoff定理告诉我们当间隔是正的时候感知机算法会在有限次数的迭代中收敛，也就是说Novikoff定理证明了感知机算法的收敛性，即能得到一个界，不至于无穷循环下去。</p>
+
+<ul>
+<li>Novikoff定理：如果分类超平面存在, 仅需在序列S上迭代几次，在界为<img src="https://img-blog.csdn.net/20131114204028093" alt="img" />的错误次数下就可以找到分类超平面，算法停止。</li>
+</ul>
+
+<p>​    这里<img src="https://img-blog.csdn.net/20131114204038984" alt="img" />，<img src="https://img-blog.csdn.net/20131114204047671" alt="img" />为扩充间隔。根据误分次数公式可知, 迭代次数与对应于扩充(包括偏置)权重的训练集的间隔有关。</p>
+
+<p><strong>“</strong></p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://blog.pluskid.org/wp-content/uploads/2010/09/geometric_margin.png" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    在给出几何间隔的定义之前，咱们首先来看下，如上图所示，对于一个点x，令其垂直投影到超平面上的对应的为x0，由于w是垂直于超平面的一个向量，<img src="https://img-blog.csdn.net/20131107212633859" alt="img" />为样本x到分类间隔的距离，我们有</p>
+
+<p>​                           <img src="https://img-blog.csdn.net/20131107201720515" alt="img" /><strong>”</strong></p>
+
+<p>​    然后后续怎么推导出最大分类间隔请回到本文第一、二部分，此处不重复板书。</p>
+
+<p>​    同时有一点得注意：感知机算法虽然可以通过简单迭代对线性可分数据生成正确分类的超平面，但不是最优效果，那怎样才能得到最优效果呢，就是上文中第一部分所讲的寻找最大分类间隔超平面。此外，Novikoff定理的证明请见<a href="http://www.cs.columbia.edu/~mcollins/courses/6998-2012/notes/perc.converge.pdf">这里</a>。</p>
+
+<h3 id="3-2-非线性学习器">*3.2*、非线性学习器</h3>
+
+<h4 id="3-2-1-mercer定理">3.2.1、Mercer定理</h4>
+
+<p>​    Mercer定理 ：如果函数K是<img src="https://img-blog.csdn.net/20131114211056687" alt="img" />上的映射（也就是从两个n维向量映射到实数域）。那么如果K是一个有效核函数（也称为Mercer核函数），那么当且仅当对于训练样例<img src="https://img-blog.csdn.net/20131114211111875" alt="img" />，其相应的核函数矩阵是对称半正定的。</p>
+
+<p>​    要理解这个Mercer定理，先要了解什么是半正定矩阵，要了解什么是半正定矩阵，先得知道什么是<a href="http://zh.wikipedia.org/wiki/%E6%AD%A3%E5%AE%9A%E7%9F%A9%E9%98%B5">正定矩阵</a>（矩阵理论博大精深，关于矩阵推荐我正在看的一本《矩阵分析与应用》）。然后<a href="http://ftp136343.host106.web522.com/a/biancheng/matlab/2013/0120/648.html">这里</a>有一个此定理的证明，可以看下。</p>
+
+<p>​    正如@Copper_PKU所说：核函数在SVM的分类效果中起了重要的作用，最后<a href="http://www.cs.berkeley.edu/~bartlett/courses/281b-sp08/7.pdf">这里</a>有个tutorial可以看看。</p>
+
+<h3 id="3-3-损失函数">*3.3*、损失函数</h3>
+
+<p>​    在本文1.0节有这么一句话“支持向量机(SVM)是90年代中期发展起来的基于统计学习理论的一种机器学习方法，通过寻求结构化风险最小来提高学习机泛化能力，实现经验风险和置信范围的最小化，从而达到在统计样本量较少的情况下，亦能获得良好统计规律的目的。”但初次看到的读者可能并不了解什么是结构化风险，什么又是经验风险。要了解这两个所谓的“风险”，还得又从监督学习说起。</p>
+
+<p>​    监督学习实际上就是一个经验风险或者结构风险函数的最优化问题。风险函数度量平均意义下模型预测的好坏，模型每一次预测的好坏用损失函数来度量。它从假设空间F中选择模型f作为决策函数，对于给定的输入X，由f(X)给出相应的输出Y，这个输出的预测值f(X)与真实值Y可能一致也可能不一致，用一个损失函数来度量预测错误的程度。损失函数记为L(Y, f(X))。</p>
+
+<p>​    常用的损失函数有以下几种（基本引用自《统计学习方法》）：</p>
+
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131119171556593" alt="img" /></p>
+</blockquote>
+
+<p>​      <img src="https://img-blog.csdn.net/20131119171613656" alt="img" /></p>
+
+<p>​    如此，SVM有第二种理解，即最优化+损失最小，或如@夏粉_百度所说“可从损失函数和优化算法角度看SVM，boosting，LR等算法，可能会有不同收获”。</p>
+
+<p>​    OK，关于更多统计学习方法的问题，请参看<a href="http://blog.csdn.net/qll125596718/article/details/8351337">此文</a>。</p>
+
+<p>​    关于损失函数，如下文读者评论中所述：可以看看张潼的这篇《Statistical behavior and consistency of classification methods based on convex risk minimization》。各种算法中常用的损失函数基本都具有fisher一致性，优化这些损失函数得到的分类器可以看作是后验概率的“代理”。此外，张潼还有另外一篇论文《Statistical analysis of some multi-category large margin classification methods》，在多分类情况下margin loss的分析，这两篇对Boosting和SVM使用的损失函数分析的很透彻。</p>
+
+<h3 id="3-4-最小二乘法">*3.4*、最小二乘法</h3>
+
+<h5 id="3-4-1-什么是最小二乘法">3.4.1、什么是最小二乘法？</h5>
+
+<p>​    既然本节开始之前提到了最小二乘法，那么下面引用《正态分布的前世今生》里的内容稍微简单阐述下。</p>
+
+<p>​    我们口头中经常说：一般来说，平均来说。如平均来说，不吸烟的健康优于吸烟者，之所以要加“平均”二字，是因为凡事皆有例外，总存在某个特别的人他吸烟但由于经常锻炼所以他的健康状况可能会优于他身边不吸烟的朋友。而最小二乘法的一个最简单的例子便是算术平均。</p>
+
+<p>​    最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。利用最小二乘法可以简便地求得未知的数据，并使得这些求得的数据与实际数据之间误差的平方和为最小。用函数表示为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/24/1351083952_4721.png" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>使误差「所谓误差，当然是观察值与实际真实值的差量」平方和达到最小以寻求估计值的方法，就叫做最小二乘法，用最小二乘法得到的估计，叫做最小二乘估计。当然，取平方和作为目标函数只是众多可取的方法之一。</p>
+
+<p>最小二乘法的一般形式可表示为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/24/1351084127_2165.png" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    有效的最小二乘法是勒让德在 1805 年发表的，基本思想就是认为测量中有误差，所以所有方程的累积误差为</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131111201149062" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    我们求解出导致累积误差最小的参数即可：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131111200941109" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    勒让德在论文中对最小二乘法的优良性做了几点说明：</p>
+
+<ul>
+<li>最小二乘使得误差平方和最小，并在各个方程的误差之间建立了一种平衡，从而防止某一个极端误差取得支配地位</li>
+<li>计算中只要求偏导后求解线性方程组，计算过程明确便捷</li>
+<li>最小二乘可以导出算术平均值作为估计值</li>
+</ul>
+
+<p>​    对于最后一点，从统计学的角度来看是很重要的一个性质。推理如下：假设真值为<img src="https://img-blog.csdn.net/20131111201029218" alt="img" />，x1, &hellip; , xn为n次测量值, 每次测量的误差为ei = xi - <img src="https://img-blog.csdn.net/20131111201029218" alt="img" />，按最小二乘法，误差累积为</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131111201005062" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    求解<img src="https://img-blog.csdn.net/20131111201029218" alt="img" /> 使<img src="https://img-blog.csdn.net/20131111201045671" alt="img" />达到最小，正好是算术平均<img src="https://img-blog.csdn.net/20131111201056140" alt="img" />。</p>
+
+<p>​    由于算术平均是一个历经考验的方法，而以上的推理说明，算术平均是最小二乘的一个特例，所以从另一个角度说明了最小二乘方法的优良性，使我们对最小二乘法更加有信心。</p>
+
+<p>​    最小二乘法发表之后很快得到了大家的认可接受，并迅速的在数据分析实践中被广泛使用。不过历史上又有人把最小二乘法的发明归功于高斯，这又是怎么一回事呢。高斯在1809年也发表了最小二乘法，并且声称自己已经使用这个方法多年。高斯发明了小行星定位的数学方法，并在数据分析中使用最小二乘方法进行计算，准确的预测了谷神星的位置。</p>
+
+<p>​    说了这么多，貌似跟本文的主题SVM没啥关系呀，别急，请让我继续阐述。本质上说，最小二乘法即是一种参数估计方法，说到参数估计，咱们得从一元线性模型说起。</p>
+
+<h5 id="3-4-2-最小二乘法的解法">3.4.2、最小二乘法的解法</h5>
+
+<p>​    什么是一元线性模型呢？ 请允许我引用<a href="http://blog.csdn.net/qll125596718/article/details/8248249">这里</a>的内容，先来梳理下几个基本概念：</p>
+
+<ul>
+<li>监督学习中，如果预测的变量是离散的，我们称其为分类（如决策树，支持向量机等），如果预测的变量是连续的，我们称其为回归。</li>
+<li>回归分析中，如果只包括一个自变量和一个因变量，且二者的关系可用一条直线近似表示，这种回归分析称为一元线性回归分析。</li>
+<li>如果回归分析中包括两个或两个以上的自变量，且因变量和自变量之间是线性关系，则称为多元线性回归分析。</li>
+<li>对于二维空间线性是一条直线；对于三维空间线性是一个平面，对于多维空间线性是一个超平面&hellip;</li>
+</ul>
+
+<p>​    对于一元线性回归模型, 假设从总体中获取了n组观察值（X1，Y1），（X2，Y2）， …，（Xn，Yn）。对于平面中的这n个点，可以使用无数条曲线来拟合。要求样本回归函数尽可能好地拟合这组值。综合起来看，这条直线处于样本数据的中心位置最合理。</p>
+
+<p>​    选择最佳拟合曲线的标准可以确定为：使总的拟合误差（即总残差）达到最小。有以下三个标准可以选择：</p>
+
+<ol>
+<li>用“残差和最小”确定直线位置是一个途径。但很快发现计算“残差和”存在相互抵消的问题。</li>
+<li>用“残差绝对值和最小”确定直线位置也是一个途径。但绝对值的计算比较麻烦。</li>
+<li>最小二乘法的原则是以“残差平方和最小”确定直线位置。用最小二乘法除了计算比较方便外，得到的估计量还具有优良特性。这种方法对异常值非常敏感。　</li>
+</ol>
+
+<p>​     最常用的是普通最小二乘法（ Ordinary  Least Square，OLS）：所选择的回归模型应该使所有观察值的残差平方和达到最小，即采用平方损失函数。 　</p>
+
+<p>​     我们定义样本回归模型为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131119160327140" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    其中ei为样本（Xi, Yi）的误差。</p>
+
+<p>​    接着，定义平方损失函数Q：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131119160407609" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    则通过Q最小确定这条直线，即确定<img src="https://img-blog.csdn.net/20131119160453328" alt="img" />，以<img src="https://img-blog.csdn.net/20131119160502531" alt="img" />为变量，把它们看作是Q的函数，就变成了一个求极值的问题，可以通过求导数得到。</p>
+
+<p>​    求Q对两个待估参数的偏导数：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131119160514921" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    根据数学知识我们知道，函数的极值点为偏导为0的点。</p>
+
+<p>​    解得：</p>
+
+<blockquote>
+<blockquote>
+<p>​        <img src="https://img-blog.csdn.net/20131119160555593" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    这就是最小二乘法的解法，就是求得平方损失函数的极值点。自此，你看到求解最小二乘法与求解SVM问题何等相似，尤其是定义损失函数，而后通过偏导求得极值。</p>
+
+<p>OK，更多请参看陈希孺院士的《数理统计学简史》的第4章、最小二乘法。</p>
+
+<h3 id="3-5-smo算法">*3.5*、SMO算法</h3>
+
+<p>​    在上文中，我们提到了求解对偶问题的序列最小最优化SMO算法，但并未提到其具体解法。首先看下最后悬而未决的问题：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/03/1364965166_4508.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    等价于求解：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120105753218" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    1998年，Microsoft Research的John C. Platt在<a href="http://research.microsoft.com/en-us/um/people/jplatt/smoTR.pdf">论文</a>《Sequential Minimal Optimization：A Fast Algorithm for Training Support Vector Machines》中提出针对上述问题的解法：SMO算法，它很快便成为最快的二次规划优化算法，特别是在针对线性SVM和数据稀疏时性能更优。</p>
+
+<p>​    接下来，咱们便参考John C. Platt的<a href="http://research.microsoft.com/en-us/um/people/jplatt/smoTR.pdf">这篇</a>文章来看看SMO的解法是怎样的。</p>
+
+<h4 id="3-5-1-smo算法的推导"><strong>3.5.1、SMO算法的推导</strong></h4>
+
+<p>​    咱们首先来定义特征到结果的输出函数：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120103601656" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    注：这个u与我们之前定义的<img src="https://img-blog.csdn.net/20131107201211968" alt="img" />实质是一样的。</p>
+
+<p>​    接着，重新定义下咱们原始的优化问题，权当重新回顾，如下：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120103959046" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    求导得到：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120104205453" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    代入<img src="https://img-blog.csdn.net/20131120103601656" alt="img" />中，可得<img src="https://img-blog.csdn.net/20131120105420562" alt="img" />。</p>
+
+<p>​    通过引入拉格朗日乘子转换为对偶问题后，得：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120104258437" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<pre><code>            s.t：![img](https://img-blog.csdn.net/20131120104335796)
+</code></pre>
+
+<p>​                   且<img src="https://img-blog.csdn.net/20131120104344000" alt="img" /></p>
+
+<p>​    注：这里得到的min函数与我们之前的max函数实质也是一样，因为把符号变下，即由min转化为max的问题，且yi也与之前的<img src="https://img-blog.csdn.net/20131120104727609" alt="img" />等价，yj亦如此。</p>
+
+<p>​    经过加入松弛变量后，模型修改为：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120105112312" alt="img" /></p>
+
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120105326156" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    从而最终我们的问题变为：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120105753218" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    下面要解决的问题是：在<img src="https://img-blog.csdn.net/20140917223126859" alt="img" />上求上述目标函数的最小值。为了求解这些乘子，每次从中任意抽取两个乘子<img src="https://img-blog.csdn.net/20140917223344501" alt="img" />和<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />，然后固定<img src="https://img-blog.csdn.net/20140917223344501" alt="img" />和<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />以外的其它乘子<img src="https://img-blog.csdn.net/20140917223413501" alt="img" />，使得目标函数只是关于<img src="https://img-blog.csdn.net/20140917223344501" alt="img" />和<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />的函数。这样，不断的从一堆乘子中任意抽取两个求解，不断的迭代求解子问题，最终达到求解原问题的目的。</p>
+
+<p>​    而原对偶问题的子问题的目标函数可以表达为：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140909162540829" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    其中</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140909162911265" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    为了解决这个子问题，首要问题便是每次如何选取<img src="https://img-blog.csdn.net/20140917223344501" alt="img" />和<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />。实际上，其中一个乘子是违法KKT条件最严重的，另外一个乘子则由另一个约束条件选取。</p>
+
+<p>​    根据KKT条件可以得出目标函数中<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />取值的意义：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120105843187" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<ol>
+<li>对于第1种情况，表明<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />是正常分类，在间隔边界内部（我们知道正确分类的点<img src="https://img-blog.csdn.net/20140917223345468" alt="img" />）；</li>
+<li>对于第2种情况，表明了<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />是支持向量，在间隔边界上；</li>
+<li>对于第3种情况，表明了<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />是在两条间隔边界之间；</li>
+</ol>
+
+<ul>
+<li><img src="https://img-blog.csdn.net/20131120105945093" alt="img" />&lt;=1但是<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />&lt;C则是不满足的，而原本<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />=C</li>
+<li><img src="https://img-blog.csdn.net/20131120105945093" alt="img" />&gt;=1但是<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />&gt;0则是不满足的，而原本<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />=0</li>
+<li><img src="https://img-blog.csdn.net/20131120105945093" alt="img" />=1但是<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />=0或者<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />=C则表明不满足的，而原本应该是0&lt;<img src="https://img-blog.csdn.net/20131111195824031" alt="img" />&lt;C</li>
+</ul>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131120104344000" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    因此，如果假设选择的两个乘子<img src="https://img-blog.csdn.net/20140917211258703" alt="img" />和<img src="https://img-blog.csdn.net/20140917211309656" alt="img" />，它们在更新之前分别是<img src="https://img-blog.csdn.net/20140917211529672" alt="img" />、<img src="https://img-blog.csdn.net/20140917211547878" alt="img" />，更新之后分别是<img src="https://img-blog.csdn.net/20140917211603025" alt="img" />、<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />，那么更新前后的值需要满足以下等式才能保证和为0的约束：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917211428859" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    其中，</p>
+
+<p>是常数。</p>
+
+<p>​    两个因子不好同时求解，所以可先求第二个乘子<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />的解（<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />），得到<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />的解（<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />）之后，再用<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />的解（<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />）表示<img src="https://img-blog.csdn.net/20140917211258703" alt="img" />的解（<img src="https://img-blog.csdn.net/20140917211603025" alt="img" />）。</p>
+
+<p>​    为了求解<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />，得先确定<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />的取值范围。假设它的上下边界分别为H和L，那么有：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917212018772" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    接下来，综合<img src="https://img-blog.csdn.net/20140917212046369" alt="img" />和<img src="https://img-blog.csdn.net/20140917212056119" alt="img" />这两个约束条件，求取<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />的取值范围。</p>
+
+<p>​    当y1 != y2时，根据<img src="https://img-blog.csdn.net/20140917212056119" alt="img" />可得<img src="https://img-blog.csdn.net/20140917223713557" alt="img" />，所以有<img src="https://img-blog.csdn.net/20141210233122343" alt="img" />，<img src="https://img-blog.csdn.net/20141210233135376" alt="img" />，如下图所示：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917212349092" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    当y1 = y2时，同样根据<img src="https://img-blog.csdn.net/20140917212056119" alt="img" />可得：<img src="https://img-blog.csdn.net/20140917223614125" alt="img" />，所以有<img src="https://img-blog.csdn.net/20141210233152921" alt="img" />，<img src="https://img-blog.csdn.net/20141210233202208" alt="img" />，如下图所示：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917212546875" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    如此，根据y1和y2异号或同号，可得出<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />的上下界分别为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917212422859" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    回顾下第二个约束条件<img src="https://img-blog.csdn.net/20140917212056119" alt="img" />，令上式两边乘以y1，可得</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140909164502391" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    其中，<img src="https://img-blog.csdn.net/20140909164354343" alt="img" />。</p>
+
+<p>​    因此<img src="https://img-blog.csdn.net/20140917223344501" alt="img" />可以用<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />表示，<img src="https://img-blog.csdn.net/20140917225145364?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdl9KVUxZX3Y=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img" />，从而把子问题的目标函数转换为只含<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />的问题：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140909170457774" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    对<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />求导，可得</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140909170904988" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    化简下：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140909170907640" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    然后将<img src="https://img-blog.csdn.net/20140917225309870?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdl9KVUxZX3Y=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img" />、<img src="https://img-blog.csdn.net/20140909164502391" alt="img" />、和<img src="https://img-blog.csdn.net/20140909162911265" alt="img" />代入上式可得：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140921114838239" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    令<img src="https://img-blog.csdn.net/20131120102813671" alt="img" />（表示预测值与真实值之差），<img src="https://img-blog.csdn.net/20140917224103392" alt="img" />，然后上式两边同时除以<img src="https://img-blog.csdn.net/20140917223956515" alt="img" />，得到一个关于单变量<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />的解：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917213317884" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    这个解没有考虑其约束条件<img src="https://img-blog.csdn.net/20140917213244500" alt="img" />，即是未经剪辑时的解。</p>
+
+<p>​    然后考虑约束<img src="https://img-blog.csdn.net/20140917213244500" alt="img" />可得到经过剪辑后的<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />的解析解为：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917213408953" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    求出了后<img src="https://img-blog.csdn.net/20140917211615427" alt="img" />，便可以求出<img src="https://img-blog.csdn.net/20140917211603025" alt="img" />，得<img src="https://img-blog.csdn.net/20140917213703086" alt="img" />。</p>
+
+<p>​    那么如何选择乘子<img src="https://img-blog.csdn.net/20140917223344501" alt="img" />和<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />呢？</p>
+
+<ul>
+<li>对于<img src="https://img-blog.csdn.net/20140917223344501" alt="img" />，即第一个乘子，可以通过刚刚说的那3种不满足KKT的条件来找；</li>
+<li>而对于第二个乘子<img src="https://img-blog.csdn.net/20140917223154718" alt="img" />可以寻找满足条件：<img src="https://img-blog.csdn.net/20140917223934406" alt="img" />的乘子。</li>
+</ul>
+
+<p>​    而b在满足下述条件：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917213613796" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    下更新b：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20140917213709734" alt="img" /></p>
+
+<p><img src="https://img-blog.csdn.net/20140917213912504" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    且每次更新完两个乘子的优化后，都需要再重新计算b，及对应的Ei值。</p>
+
+<p>​    最后更新所有<img src="https://img-blog.csdn.net/20140917223408203" alt="img" />，y和b，这样模型就出来了，从而即可求出咱们开头提出的分类函数：</p>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201210/25/1351142877_8481.jpg" alt="img" /></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+
+<p>​    此外，<a href="http://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html">这里</a>也有一篇类似的文章，大家可以参考下。</p>
+
+<h4 id="3-5-2-smo算法的步骤">3.5.2、SMO算法的步骤</h4>
+
+<p>​    综上，总结下SMO的主要步骤，如下：</p>
+
+<blockquote>
+<blockquote>
+<p><img src="http://img.my.csdn.net/uploads/201304/05/1365177311_5726.png" alt="img" /></p>
+</blockquote>
+</blockquote>
+
+<p>​    意思是，</p>
+
+<ol>
+<li>第一步选取一对<img src="http://img.my.csdn.net/uploads/201304/05/1365177350_4416.png" alt="img" />和<img src="http://img.my.csdn.net/uploads/201304/05/1365177362_5226.png" alt="img" />，选取方法使用启发式方法；</li>
+<li>第二步，固定除<img src="http://img.my.csdn.net/uploads/201304/05/1365177350_4416.png" alt="img" />和<img src="http://img.my.csdn.net/uploads/201304/05/1365177362_5226.png" alt="img" />之外的其他参数，确定W极值条件下的<img src="http://img.my.csdn.net/uploads/201304/05/1365177350_4416.png" alt="img" />，<img src="http://img.my.csdn.net/uploads/201304/05/1365177362_5226.png" alt="img" />由<img src="http://img.my.csdn.net/uploads/201304/05/1365177350_4416.png" alt="img" />表示。</li>
+</ol>
+
+<p>​    假定在某一次迭代中，需要更新<img src="https://img-blog.csdn.net/20131106172310703" alt="img" />，<img src="https://img-blog.csdn.net/20131106172334265" alt="img" />对应的拉格朗日乘子<img src="https://img-blog.csdn.net/20131106172347593" alt="img" />，<img src="https://img-blog.csdn.net/20131106172359625" alt="img" />，那么这个小规模的二次规划问题写为：</p>
+
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131106172007546" alt="img" /></p>
+</blockquote>
+
+<p>这里</p>
+
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131106171714031" alt="img" /><img src="https://img-blog.csdn.net/20131106171728703" alt="img" /></p>
+</blockquote>
+
+<p>​    知道了如何更新乘子，那么选取哪些乘子进行更新呢？具体选择方法有以下两个步骤：</p>
+
+<ol>
+<li>步骤1：先“扫描”所有乘子，把第一个违反KKT条件的作为更新对象，令为a1；</li>
+<li>步骤2：在所有不违反KKT条件的乘子中，选择使|E1 −E2|最大的a2进行更新，使得能最大限度增大目标函数的值（类似于梯度下降. 此外<img src="https://img-blog.csdn.net/20131120102813671" alt="img" />，而<img src="https://img-blog.csdn.net/20131120103601656" alt="img" />，求出来的E代表函数ui对输入xi的预测值与真实输出类标记yi之差）。</li>
+</ol>
+
+<p>​    最后，每次更新完两个乘子的优化后，都需要再重新计算b，及对应的Ei值。</p>
+
+<p>​    综上，SMO算法的基本思想是将Vapnik在1982年提出的Chunking方法推到极致，SMO算法每次迭代只选出两个分量ai和aj进行调整，其它分量则保持固定不变，在得到解ai和aj之后，再用ai和aj改进其它分量。与通常的分解算法比较，尽管它可能需要更多的迭代次数，但每次迭代的计算量比较小，所以该算法表现出较好的快速收敛性，且不需要存储核矩阵，也没有矩阵运算。</p>
+
+<h4 id="3-5-3-smo算法的实现">3.5.3、SMO算法的实现</h4>
+
+<p>​    行文至此，我相信，SVM理解到了一定程度后，是的确能在脑海里从头至尾推导出相关公式的，最初分类函数，最大化分类间隔，max1/||w||，min1/2||w||^2，凸二次规划，拉格朗日函数，转化为对偶问题，SMO算法，都为寻找一个最优解，一个最优分类平面。一步步梳理下来，为什么这样那样，太多东西可以追究，最后实现。如下图所示：</p>
+
+<blockquote>
+<p><img src="https://img-blog.csdn.net/20131108093951609" alt="img" /></p>
+</blockquote>
+
+<p>​    至于下文中将阐述的核函数则为是为了更好的处理非线性可分的情况，而松弛变量则是为了纠正或约束少量“不安分”或脱离集体不好归类的因子。</p>
+
+<p>​    台湾的林智仁教授写了一个封装SVM算法的<a href="http://www.csie.ntu.edu.tw/~cjlin/libsvm/">libsvm库</a>，大家可以看看，此外<a href="http://www.pami.sjtu.edu.cn/people/gpliu/document/libsvm_src.pdf">这里</a>还有一份libsvm的注释文档。</p>
+
+<p>​    除了在这篇论文《fast training of support vector machines using sequential minimal optimization》中platt给出了SMO算法的逻辑代码之外，<a href="http://blog.csdn.net/techq/article/details/6171688">这里</a>也有一份SMO的实现代码，大家可以看下。</p>
+
+<h3 id="3-6-svm的应用">*3.6*、SVM的应用</h3>
+
+<p>​    或许我们已经听到过，SVM在很多诸如文本分类，图像分类，生物序列分析和生物数据挖掘，手写字符识别等领域有很多的应用，但或许你并没强烈的意识到，SVM可以成功应用的领域远远超出现在已经在开发应用了的领域。</p>
+
+<h4 id="3-6-1-文本分类"><strong>3.6.1、文本分类</strong></h4>
+
+<p>​    一个文本分类系统不仅是一个自然语言处理系统，也是一个典型的模式识别系统，系统的输入是需要进行分类处理的文本，系统的输出则是与文本关联的类别。由于篇幅所限，其它更具体内容本文将不再详述。</p>
+
+<p>​    OK，本节虽取标题为证明SVM，但聪明的读者们想必早已看出，其实本部分并无多少证明部分（特此致歉），怎么办呢？可以参阅《支持向量机导论》一书，此书精简而有趣。本节完。</p>
+
+<h2 id="读者评论">读者评论</h2>
+
+<p>本文发表后，<a href="http://weibo.com/julyweibo">微博</a>上的很多朋友给了不少意见，以下是节选的一些精彩评论：</p>
+
+<ol>
+<li>“压力”陡增的评论→//@藏了个锋：我是看着July大神的博文长大的啊//@zlkysl：就是看了最后那一篇才决定自己的研究方向为SVM的。&ndash;<a href="http://weibo.com/1580904460/zraWk0u6u?mod=weibotime">http://weibo.com/1580904460/zraWk0u6u?mod=weibotime</a>。</li>
+<li>@张金辉：<strong>“</strong>SVM的三重境界，不得不转的一篇。其实Coursera的课堂上Andrew Ng讲过支持向量机，但显然他没有把这作为重点，加上Ng讲支持向量机的方法我一时半会难以完全消化，所以听的也是一知半解。真正开始了解支持向量机就是看的这篇“三重境界”，之后才对这个算法有了大概的概念，以至如何去使用，再到其中的原理为何，再到支持向量机的证明等。总之，<strong>这篇文章开启了我长达数月的研究支持向量机阶段，直到今日</strong>。<strong>”</strong>&ndash;<a href="http://zhan.renren.com/profile/249335584?from=template#!//tag/%E4%B8%89%E9%87%8D%E5%A2%83%E7%95%8C">http://zhan.renren.com/profile/249335584?from=template#!//tag/三重境界</a>。</li>
+<li>@孤独之守望者：&rdquo;最后，推出svm的cost function 是hinge loss，然后对比其他的方法的cost function，说明其实他们的目标函数很像，那么问题是svm为什么这么popular呢？您可以再加些VC dimension跟一些error bound的数学，点一下，提供一个思路和方向&rdquo;。&ndash;<a href="http://weibo.com/1580904460/AiohoyDwq?mod=weibotime">http://weibo.com/1580904460/AiohoyDwq?mod=weibotime</a>。</li>
+<li>@夏粉_百度：<strong>“</strong>在面试时，考察SVM可考察机器学习各方面能力：目标函数,优化过程,并行方法，算法收敛性,样本复杂度，适用场景,调参经验，不过个人认为考察boosting和LR也还不错啊。此外，随着统计机器学习不断进步，SVM只被当成使用了一个替代01损失hinge研究，更通用的方法被提出，损失函数研究替代损失与贝叶斯损失关系，算法稳定性研究替代损失与推广性能关系,凸优化研究如何求解凸目标函数，SVM,boosting等算法只是这些通用方法的一个具体组建而已。<strong>”</strong></li>
+<li>@居里猴姐：关于SVM损失函数的问题，可以看看张潼老师的这篇《Statistical behavior and consistency of classification methods based on convex risk minimization》。各种算法中常用的损失函数基本都具有fisher一致性，优化这些损失函数得到的分类器可以看作是后验概率的“代理”。此外，张潼老师还有另外一篇论文《Statistical analysis of some multi-category large margin classification methods》，在多分类情况下margin loss的分析，这两篇对Boosting和SVM使用的损失函数分析的很透彻。</li>
+<li>@夏粉_百度：SVM用了hinge损失，hinge损失不可导，不如其它替代损失方便优化并且转换概率麻烦。核函数也不太用，现在是大数据时代，样本非常大，无法想象一个n^2的核矩阵如何存储和计算。 而且，现在现在非线性一般靠深度学习了。//@Copper_PKU:请教svm在工业界的应用典型的有哪些？工业界如何选取核函数，经验的方法？svm的训练过程如何优化？</li>
+<li>@Copper_PKU：July的svm tutorial 我个人觉得还可以加入和修改如下部分：(1) 对于支持向量解释，可以结合图和拉格朗日参数来表达，松弛中sv没有写出来. (2) SMO算法部分，加入Joachims论文中提到的算法，以及SMO算法选取workset的方法，包括SMO算法的收敛判断，还有之前共轭梯度求解方法，虽然是较早的算法，但是对于理解SMO算法有很好的效果。模型的优化和求解都是迭代的过程，加入历史算法增强立体感。&ndash;  <a href="http://weibo.com/1580904460/Akw6dl3Yk#_rnd1385474436177">http://weibo.com/1580904460/Akw6dl3Yk#_rnd1385474436177</a>。</li>
+<li>//@廖临川: 之所以sgd对大训练集的效果更好，1.因为SGD优化每次迭代使用样本子集，比使用训练全集（尤其是百万数量级）要快得多；2.如果目标函数是凸的或者伪凸的，SGD几乎必然可以收敛到全局最优；否则，则收敛到局部最优；3.SGD一般不需要收敛到全局最优，只要得到足够好的解，就可以立即停止。//@Copper_PKU：sgd的核心思想：是迭代训练，每拿到一个样本就算出基于当前w(t) 的loss function，t代表训练第t次，然后进行下一w（t+1）的更新，w(t+1)=w(t)-(learning rate) * loss function的梯度，这个类比神经网络中bp中的参数训练方法。 sample by sample就是每次仅处理一个样本 而不是一个batch。</li>
+<li>//@Copper_PKU：从损失函数角度说：primal问题可以理解为正则化项+lossfunction，求解目标是在两个中间取平衡 如果强调loss function最小则会overfitting，所以有C参数。 //@研究者July：SVM还真就是在一定限定条件下，即约束条件下求目标函数的最优值问题，同时，为减少误判率，尽量让损失最小。</li>
+<li>&hellip;</li>
+</ol>
+
+<p>​    非常享受这种全民大讨论的年代，没有谁一定就对或一定就错，而是各自发表各自的理解见解，真棒！</p>
+
+<h2 id="参考文献及推荐阅读">参考文献及推荐阅读</h2>
+
+<ol>
+<li>《<strong>支持向量机导论</strong>》，[英] Nello Cristianini / John Shawe-Taylor 著；</li>
+<li>支持向量机导论一书的支持网站：<a href="http://www.support-vector.net/">http://www.support-vector.net/</a>；</li>
+<li>《数据挖掘导论》，[美] Pang-Ning Tan / Michael Steinbach / Vipin Kumar 著；</li>
+<li>《数据挖掘：概念与技术》，(加)Jiawei Han;Micheline Kamber 著；</li>
+<li>《数据挖掘中的新方法：支持向量机》，邓乃扬 田英杰 著；</li>
+<li>《<strong>支持向量机&ndash;理论、算法和扩展</strong>》，邓乃扬 田英杰 著；</li>
+<li><strong>支持向量机系列</strong>，<strong>pluskid</strong>：<a href="http://blog.pluskid.org/?page_id=683">http://blog.pluskid.org/?page_id=683</a>；</li>
+<li><a href="http://www.360doc.com/content/07/0716/23/11966_615252.shtml">http://www.360doc.com/content/07/0716/23/11966_615252.shtml</a>；</li>
+<li><a href="http://blog.csdn.net/v_july_v/article/details/6142146">数据挖掘十大经典算法初探</a>；</li>
+<li>《模式识别支持向量机指南》，C.J.C Burges 著；</li>
+<li>《<strong>统计学习方法</strong>》，李航著；</li>
+<li>《统计自然语言处理》，宗成庆编著，第十二章、文本分类；</li>
+<li>SVM入门系列，Jasper：<a href="http://www.blogjava.net/zhenandaci/category/31868.html">http://www.blogjava.net/zhenandaci/category/31868.html</a>；</li>
+<li>最近邻决策和SVM数字识别的实现和比较，作者不详；</li>
+<li>纯白板手推SVM：<a href="http://www.julyedu.com/video/play/18/429">http://www.julyedu.com/video/play/18/429</a></li>
+<li>斯坦福大学机器学习课程原始讲义：<a href="http://www.cnblogs.com/jerrylead/archive/2012/05/08/2489725.html">http://www.cnblogs.com/jerrylead/archive/2012/05/08/2489725.html</a>；</li>
+<li><strong>斯坦福机器学习课程笔记</strong>：<a href="http://www.cnblogs.com/jerrylead/tag/Machine%20Learning/">http://www.cnblogs.com/jerrylead/tag/Machine%20Learning/</a>；</li>
+<li><a href="http://www.cnblogs.com/jerrylead/archive/2011/03/13/1982639.html">http://www.cnblogs.com/jerrylead/archive/2011/03/13/1982639.html</a>；</li>
+<li>SMO算法的数学推导：<a href="http://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html">http://www.cnblogs.com/jerrylead/archive/2011/03/18/1988419.html</a>；</li>
+<li><a href="http://blog.csdn.net/v_july_v/article/details/8308762">数据挖掘掘中所需的概率论与数理统计知识、上</a>；</li>
+<li>关于机器学习方面的文章，可以读读：<a href="http://www.cnblogs.com/vivounicorn/category/289453.html">http://www.cnblogs.com/vivounicorn/category/289453.html</a>；</li>
+<li>数学系教材推荐：<a href="http://blog.sina.com.cn/s/blog_5e638d950100dswh.html">http://blog.sina.com.cn/s/blog_5e638d950100dswh.html</a>；</li>
+<li>《神经网络与机器学习(原书第三版)》，[加] Simon Haykin 著；</li>
+<li>正态分布的前世今生：<a href="http://t.cn/zlH3Ygc">http://t.cn/zlH3Ygc</a>；</li>
+<li>《<strong>数理统计学简史</strong>》，陈希孺院士著；</li>
+<li>《最优化理论与算法(第2版)》，陈宝林编著；</li>
+<li><strong>A Gentle Introduction to Support Vector Machines in Biomedicine</strong>：<a href="http://www.nyuinformatics.org/downloads/supplements/SVM_Tutorial_2010/Final_WB.pdf">http://www.nyuinformatics.org/downloads/supplements/SVM_Tutorial_2010/Final_WB.pdf</a>，此PPT很赞，除了对引入拉格朗日对偶变量后的凸二次规划问题的深入度不够之外，其它都挺好，配图很精彩，本文有几张图便引自此PPT中；</li>
+<li>来自卡内基梅隆大学carnegie mellon university(CMU)的讲解SVM的PPT：<a href="http://www.autonlab.org/tutorials/svm15.pdf">http://www.autonlab.org/tutorials/svm15.pdf</a>；</li>
+<li>发明libsvm的台湾林智仁教授06年的机器学习讲义SVM：<a href="http://wenku.baidu.com/link?url=PWTGMYNb4HGUrUQUZwTH2B4r8pIMgLMiWIK1ymVORrds_11VOkHwp-JWab7IALDiors64JW_6mD93dtuWHwFWxsAk6p0rzchR8Qh5_4jWHC">http://wenku.baidu.com/link?url=PWTGMYNb4HGUrUQUZwTH2B4r8pIMgLMiWIK1ymVORrds_11VOkHwp-JWab7IALDiors64JW_6mD93dtuWHwFWxsAk6p0rzchR8Qh5_4jWHC</a>；</li>
+<li><a href="http://staff.ustc.edu.cn/~ketang/PPT/PRLec5.pdf">http://staff.ustc.edu.cn/~ketang/PPT/PRLec5.pdf</a>；</li>
+<li>Introduction to Support Vector Machines (SVM)，By Debprakash Patnai M.E (SSA)，<a href="https://www.google.com.hk/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CCwQFjAA&amp;url=http%3A%2F%2Fwww.pws.stu.edu.tw%2Fccfang%2Findex.files%2FAI%2FAI%26ML-Support%2520Vector%2520Machine-1.ppt&amp;ei=JRR6UqT5C-iyiQfWyIDgCg&amp;usg=AFQjCNGw1fTbpH4ltQjjmx1d25ZqbCN9nA">https://www.google.com.hk/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;ved=0CCwQFjAA&amp;url=http%3a%2f%2fwww%2epws%2estu%2eedu%2etw%2fccfang%2findex%2efiles%2fAI%2fAI%26ML-Support%2520Vector%2520Machine-1%2eppt&amp;ei=JRR6UqT5C-iyiQfWyIDgCg&amp;usg=AFQjCNGw1fTbpH4ltQjjmx1d25ZqbCN9nA</a>；</li>
+<li>多人推荐过的<strong>libsvm</strong>：<a href="http://www.csie.ntu.edu.tw/~cjlin/libsvm/">http://www.csie.ntu.edu.tw/~cjlin/libsvm/</a>；</li>
+<li>《machine learning in action》，中文版为《机器学习实战》；</li>
+<li><strong>SMO算法的提出：Sequential Minimal Optimization A Fast Algorithm for Training Support Vector Machines</strong>：<a href="http://research.microsoft.com/en-us/um/people/jplatt/smoTR.pdf">http://research.microsoft.com/en-us/um/people/jplatt/smoTR.pdf</a>；</li>
+<li>《统计学习理论的本质》，[美] Vladimir N. Vapnik著，非常晦涩，不做过多推荐；</li>
+<li>张兆翔，机器学习第五讲之支持向量机<a href="http://irip.buaa.edu.cn/~zxzhang/courses/MachineLearning/5.pdf">http://irip.buaa.edu.cn/~zxzhang/courses/MachineLearning/5.pdf</a>；</li>
+<li>VC维的理论解释：<a href="http://www.svms.org/vc-dimension/">http://www.svms.org/vc-dimension/</a>，中文VC维解释<a href="http://xiaoxia001.iteye.com/blog/1163338">http://xiaoxia001.iteye.com/blog/1163338</a>；</li>
+<li>来自NEC Labs America的Jason Weston关于SVM的讲义<a href="http://www.cs.columbia.edu/~kathy/cs4701/documents/jason_svm_tutorial.pdf">http://www.cs.columbia.edu/~kathy/cs4701/documents/jason_svm_tutorial.pdf</a>；</li>
+<li>来自MIT的SVM讲义：<a href="http://www.mit.edu/~9.520/spring11/slides/class06-svm.pdf">http://www.mit.edu/~9.520/spring11/slides/class06-svm.pdf</a>；</li>
+<li>PAC问题：<a href="http://www.cs.huji.ac.il/~shashua/papers/class11-PAC2.pdf">http://www.cs.huji.ac.il/~shashua/papers/class11-PAC2.pdf</a>；</li>
+<li>百度张潼老师的两篇论文：《Statistical behavior and consistency of classification methods based on convex risk minimization》<a href="http://home.olemiss.edu/~xdang/676/Consistency_of_Classification_Convex_Risk_Minimization.pdf">http://home.olemiss.edu/~xdang/676/Consistency_of_Classification_Convex_Risk_Minimization.pdf</a>，《Statistical analysis of some multi-category large margin classification methods》；</li>
+<li><a href="http://jacoxu.com/?p=39">http://jacoxu.com/?p=39</a>；</li>
+<li>《矩阵分析与应用》，清华张贤达著；</li>
+<li>SMO算法的实现：<a href="http://blog.csdn.net/techq/article/details/6171688">http://blog.csdn.net/techq/article/details/6171688</a>；</li>
+<li>常见面试之机器学习算法思想简单梳理：<a href="http://www.cnblogs.com/tornadomeet/p/3395593.html">http://www.cnblogs.com/tornadomeet/p/3395593.html</a>；</li>
+<li>矩阵的wikipedia页面：<a href="http://zh.wikipedia.org/wiki/%E7%9F%A9%E9%98%B5">http://zh.wikipedia.org/wiki/%E7%9F%A9%E9%98%B5</a>；</li>
+<li>最小二乘法及其实现：<a href="http://blog.csdn.net/qll125596718/article/details/8248249">http://blog.csdn.net/qll125596718/article/details/8248249</a>；</li>
+<li>统计学习方法概论：<a href="http://blog.csdn.net/qll125596718/article/details/8351337">http://blog.csdn.net/qll125596718/article/details/8351337</a>；</li>
+<li><a href="http://www.csdn.net/article/2012-12-28/2813275-Support-Vector-Machine">http://www.csdn.net/article/2012-12-28/2813275-Support-Vector-Machine</a>；</li>
+<li>A Tutorial on Support Vector Regression：<a href="http://alex.smola.org/papers/2003/SmoSch03b.pdf">http://alex.smola.org/papers/2003/SmoSch03b.pdf</a>；SVR简明版：<a href="http://www.cmlab.csie.ntu.edu.tw/~cyy/learning/tutorials/SVR.pdf">http://www.cmlab.csie.ntu.edu.tw/~cyy/learning/tutorials/SVR.pdf</a>。</li>
+<li>SVM Org：<a href="http://www.support-vector-machines.org/">http://www.support-vector-machines.org/</a>；</li>
+<li>R. Collobert. Large Scale Machine Learning. Université Paris VI phd thesis. 2004：<a href="http://ronan.collobert.com/pub/matos/2004_phdthesis_lip6.pdf">http://ronan.collobert.com/pub/matos/2004_phdthesis_lip6.pdf</a>；</li>
+<li>Making Large-Scale SVM Learning Practical：<a href="http://www.cs.cornell.edu/people/tj/publications/joachims_99a.pdf">http://www.cs.cornell.edu/people/tj/publications/joachims_99a.pdf</a>；</li>
+<li>文本分类与SVM：<a href="http://blog.csdn.net/zhzhl202/article/details/8197109">http://blog.csdn.net/zhzhl202/article/details/8197109</a>；</li>
+<li>Working Set Selection Using Second Order Information
+for Training Support Vector Machines：<a href="http://www.csie.ntu.edu.tw/~cjlin/papers/quadworkset.pdf">http://www.csie.ntu.edu.tw/~cjlin/papers/quadworkset.pdf</a>；</li>
+<li>SVM Optimization: Inverse Dependence on Training Set Size：<a href="http://icml2008.cs.helsinki.fi/papers/266.pdf">http://icml2008.cs.helsinki.fi/papers/266.pdf</a>；</li>
+<li>Large-Scale Support Vector Machines: Algorithms and Theory：<a href="http://cseweb.ucsd.edu/~akmenon/ResearchExam.pdf">http://cseweb.ucsd.edu/~akmenon/ResearchExam.pdf</a>；</li>
+<li>凸优化的概念：<a href="http://cs229.stanford.edu/section/cs229-cvxopt.pdf">http://cs229.stanford.edu/section/cs229-cvxopt.pdf</a>；</li>
+<li>《凸优化》，作者: Stephen Boyd / Lieven Vandenberghe，原作名: Convex Optimization；</li>
+<li>Large-scale Non-linear Classification: Algorithms and Evaluations，Zhuang Wang，讲了很多SVM算法的新进展：<a href="http://ijcai13.org/files/tutorial_slides/te2.pdf">http://ijcai13.org/files/tutorial_slides/te2.pdf</a>；</li>
+<li>基于SMO算法实现SVM：<a href="http://www.cs.iastate.edu/~honavar/smo-svm.pdf">http://www.cs.iastate.edu/~honavar/smo-svm.pdf</a>；</li>
+<li>copper推荐的一些SVM相关的论文（当然，其中不少论文在上面的条目中都已经提到）：<a href="http://c.blog.sina.com.cn/profile.php?blogid=68d0b92d89000h35">http://c.blog.sina.com.cn/profile.php?blogid=68d0b92d89000h35</a>；</li>
+<li>在线编辑Latex 公式：<a href="http://www.codecogs.com/latex/eqneditor.php?lang=zh-cn">http://www.codecogs.com/latex/eqneditor.php?lang=zh-cn</a>。</li>
+</ol>
+
+<h2 id="后记">后记</h2>
+
+<p>​    OK，此文从最初2012年5月开始动笔，到后续不断的修改，创造了三个之最，即所写时间最长，所花心血最大，所改次数最多，因为我的目标是让没有任何机器学习基础的都能看懂此文，所以总是不停的改，不停的改，不想放过任何一个小的细节。再者，引用侯捷的一句话是：天下大作，必作于细。</p>
+
+<p>​    最后，非常感谢pluskid及诸多朋友们的文章及著作，让我有机会在其基础上总结、深入。有任何问题，敬请广大读者随时不吝批评指正，感谢。</p>
+
+<p>本文PDF版</p>
+
+<ul>
+<li>13年11月25日，用chrome浏览器打开文章，右键打印，弹出打印框，把左上角的目标更改为“另存为PDF”，成第一个PDF：<a href="http://vdisk.weibo.com/s/zrFL6OXKghu5V">http://vdisk.weibo.com/s/zrFL6OXKghu5V</a>。</li>
+<li>13年12月7日，朋友吴新隆用“印象笔记”提取出博客正文，放到office内编辑成此PDF：<a href="http://vdisk.weibo.com/s/zrFL6OXKgQHm8">http://vdisk.weibo.com/s/zrFL6OXKgQHm8</a>，较上一版本添加了完整的书签。</li>
+</ul>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://blog.csdn.net/v_july_v/article/details/7624837">支持向量机通俗导论（理解SVM的三层境界）</a> 作者：July</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/13-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-nlp/01-%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/nlp-%E8%AF%8D%E5%B5%8C%E5%85%A5-word2vec-%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">nlp 词嵌入 word2vec 与相关应用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/%E5%9B%9E%E5%BD%92/">
+            <span class="next-text nav-default">回归</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

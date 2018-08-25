@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 工业界完整的CTR 预估 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Click-Through Rate Prediction 这是工业界真正在用的方式。 这是一个完整的CTR工业界预估pipeline。里面用到的数据集来源于 Criteo Labs，当然大家也知道这个数据集最" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/06-%E5%B7%A5%E4%B8%9A%E7%95%8C%E5%AE%8C%E6%95%B4%E7%9A%84ctr-%E9%A2%84%E4%BC%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 工业界完整的CTR 预估" />
+<meta property="og:description" content="Click-Through Rate Prediction 这是工业界真正在用的方式。 这是一个完整的CTR工业界预估pipeline。里面用到的数据集来源于 Criteo Labs，当然大家也知道这个数据集最" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/06-%E5%B7%A5%E4%B8%9A%E7%95%8C%E5%AE%8C%E6%95%B4%E7%9A%84ctr-%E9%A2%84%E4%BC%B0/" /><meta property="article:published_time" content="2018-07-26T16:54:52&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-26T16:54:52&#43;00:00"/>
+<meta itemprop="name" content="06 工业界完整的CTR 预估">
+<meta itemprop="description" content="Click-Through Rate Prediction 这是工业界真正在用的方式。 这是一个完整的CTR工业界预估pipeline。里面用到的数据集来源于 Criteo Labs，当然大家也知道这个数据集最">
+
+
+<meta itemprop="datePublished" content="2018-07-26T16:54:52&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-26T16:54:52&#43;00:00" />
+<meta itemprop="wordCount" content="6842">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 工业界完整的CTR 预估"/>
+<meta name="twitter:description" content="Click-Through Rate Prediction 这是工业界真正在用的方式。 这是一个完整的CTR工业界预估pipeline。里面用到的数据集来源于 Criteo Labs，当然大家也知道这个数据集最"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 工业界完整的CTR 预估</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-26 </span>
+        
+        <span class="more-meta"> 6842 words </span>
+        <span class="more-meta"> 14 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#click-through-rate-prediction"><strong>Click-Through Rate Prediction</strong></a>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#这是一个完整的ctr工业界预估pipeline-里面用到的数据集来源于-criteo-labs-http-labs-criteo-com-当然大家也知道这个数据集最近也用到了一个-kaggle比赛-里-https-www-kaggle-com-c-criteo-display-ad-challenge">这是一个完整的CTR工业界预估pipeline。里面用到的数据集来源于 <a href="http://labs.criteo.com/">Criteo Labs</a>，当然大家也知道这个数据集最近也用到了一个 [Kaggle比赛]里(<a href="https://www.kaggle.com/c/criteo-display-ad-challenge">https://www.kaggle.com/c/criteo-display-ad-challenge</a>).</a></li>
+<li><a href="#本流程会包含完整的spark-mllib建模过程">** 本流程会包含完整的spark mllib建模过程: **</a></li>
+<li><a href="#这里会尽量包含完整的spark机器学习建模流程-如果有任何不明白的-大家可以查-spark-s-python-api-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-以及-numpy-reference-http-docs-scipy-org-doc-numpy-reference-index-html">这里会尽量包含完整的spark机器学习建模流程，如果有任何不明白的，大家可以查<a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD">Spark&rsquo;s Python API</a> 以及 <a href="http://docs.scipy.org/doc/numpy/reference/index.html">NumPy Reference</a></a></li>
+</ul></li>
+<li><a href="#part-1-featurize-categorical-data-using-one-hot-encoding"><strong>Part 1: Featurize categorical data using one-hot-encoding</strong></a>
+<ul>
+<li><a href="#1a-one-hot-encoding">** (1a) One-hot-encoding **</a></li>
+<li><a href="#we-would-like-to-develop-code-to-convert-categorical-features-to-numerical-ones-and-to-build-intuition-we-will-work-with-a-sample-unlabeled-dataset-with-three-data-points-with-each-data-point-representing-an-animal-the-first-feature-indicates-the-type-of-animal-bear-cat-mouse-the-second-feature-describes-the-animal-s-color-black-tabby-and-the-third-optional-feature-describes-what-the-animal-eats-mouse-salmon">We would like to develop code to convert categorical features to numerical ones, and to build intuition, we will work with a sample unlabeled dataset with three data points, with each data point representing an animal. The first feature indicates the type of animal (bear, cat, mouse); the second feature describes the animal&rsquo;s color (black, tabby); and the third (optional) feature describes what the animal eats (mouse, salmon).</a></li>
+<li><a href="#in-a-one-hot-encoding-ohe-scheme-we-want-to-represent-each-tuple-of-featureid-category-via-its-own-binary-feature-we-can-do-this-in-python-by-creating-a-dictionary-that-maps-each-tuple-to-a-distinct-integer-where-the-integer-corresponds-to-a-binary-feature-to-start-manually-enter-the-entries-in-the-ohe-dictionary-associated-with-the-sample-dataset-by-mapping-the-tuples-to-consecutive-integers-starting-from-zero-ordering-the-tuples-first-by-featureid-and-next-by-category">In a one-hot-encoding (OHE) scheme, we want to represent each tuple of <code>(featureID, category)</code> via its own binary feature.  We can do this in Python by creating a dictionary that maps each tuple to a distinct integer, where the integer corresponds to a binary feature. To start, manually enter the entries in the OHE dictionary associated with the sample dataset by mapping the tuples to consecutive integers starting from zero,  ordering the tuples first by featureID and next by category.</a></li>
+<li><a href="#later-in-this-lab-we-ll-use-ohe-dictionaries-to-transform-data-points-into-compact-lists-of-features-that-can-be-used-in-machine-learning-algorithms">Later in this lab, we&rsquo;ll use OHE dictionaries to transform data points into compact lists of features that can be used in machine learning algorithms.</a></li>
+<li><a href="#1b-sparse-vectors">** (1b) Sparse vectors **</a></li>
+<li><a href="#data-points-can-typically-be-represented-with-a-small-number-of-non-zero-ohe-features-relative-to-the-total-number-of-features-that-occur-in-the-dataset-by-leveraging-this-sparsity-and-using-sparse-vector-representations-of-ohe-data-we-can-reduce-storage-and-computational-burdens-below-are-a-few-sample-vectors-represented-as-dense-numpy-arrays-use-sparsevector-https-spark-apache-org-docs-latest-api-python-pyspark-mllib-html-pyspark-mllib-linalg-sparsevector-to-represent-them-in-a-sparse-fashion-and-verify-that-both-the-sparse-and-dense-representations-yield-the-same-results-when-computing-dot-products-http-en-wikipedia-org-wiki-dot-product-we-will-later-use-mllib-to-train-classifiers-via-gradient-descent-and-mllib-will-need-to-compute-dot-products-between-sparsevectors-and-dense-parameter-vectors">Data points can typically be represented with a small number of non-zero OHE features relative to the total number of features that occur in the dataset.  By leveraging this sparsity and using sparse vector representations of OHE data, we can reduce storage and computational burdens.  Below are a few sample vectors represented as dense numpy arrays.  Use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.linalg.SparseVector">SparseVector</a> to represent them in a sparse fashion, and verify that both the sparse and dense representations yield the same results when computing <a href="http://en.wikipedia.org/wiki/Dot_product">dot products</a> (we will later use MLlib to train classifiers via gradient descent, and MLlib will need to compute dot products between SparseVectors and dense parameter vectors).</a></li>
+<li><a href="#use-sparsevector-size-args-to-create-a-new-sparse-vector-where-size-is-the-length-of-the-vector-and-args-is-either-a-dictionary-a-list-of-index-value-pairs-or-two-separate-arrays-of-indices-and-values-sorted-by-index-you-ll-need-to-create-a-sparse-vector-representation-of-each-dense-vector-adense-and-bdense">Use <code>SparseVector(size, *args)</code> to create a new sparse vector where size is the length of the vector and args is either a dictionary, a list of (index, value) pairs, or two separate arrays of indices and values (sorted by index).  You&rsquo;ll need to create a sparse vector representation of each dense vector <code>aDense</code> and <code>bDense</code>.</a></li>
+<li><a href="#1c-ohe-features-as-sparse-vectors">**(1c) OHE features as sparse vectors **</a></li>
+<li><a href="#now-let-s-see-how-we-can-represent-the-ohe-features-for-points-in-our-sample-dataset-using-the-mapping-defined-by-the-ohe-dictionary-from-part-1a-manually-define-ohe-features-for-the-three-sample-data-points-using-sparsevector-format-any-feature-that-occurs-in-a-point-should-have-the-value-1-0-for-example-the-densevector-for-a-point-with-features-2-and-4-would-be-0-0-0-0-1-0-0-0-1-0-0-0-0-0">Now let&rsquo;s see how we can represent the OHE features for points in our sample dataset.  Using the mapping defined by the OHE dictionary from Part (1a), manually define OHE features for the three sample data points using SparseVector format.  Any feature that occurs in a point should have the value 1.0.  For example, the <code>DenseVector</code> for a point with features 2 and 4 would be <code>[0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0]</code>.</a></li>
+<li><a href="#1d-define-a-ohe-function">**(1d) Define a OHE function **</a></li>
+<li><a href="#next-we-will-use-the-ohe-dictionary-from-part-1a-to-programatically-generate-ohe-features-from-the-original-categorical-data-first-write-a-function-called-onehotencoding-that-creates-ohe-feature-vectors-in-sparsevector-format-then-use-this-function-to-create-ohe-features-for-the-first-sample-data-point-and-verify-that-the-result-matches-the-result-from-part-1c">Next we will use the OHE dictionary from Part (1a) to programatically generate OHE features from the original categorical data.  First write a function called <code>oneHotEncoding</code> that creates OHE feature vectors in <code>SparseVector</code> format.  Then use this function to create OHE features for the first sample data point and verify that the result matches the result from Part (1c).</a></li>
+<li><a href="#1e-apply-ohe-to-a-dataset">**(1e) Apply OHE to a dataset **</a></li>
+<li><a href="#finally-use-the-function-from-part-1d-to-create-ohe-features-for-all-3-data-points-in-the-sample-dataset">Finally, use the function from Part (1d) to create OHE features for all 3 data points in the sample dataset.</a></li>
+</ul></li>
+<li><a href="#part-2-construct-an-ohe-dictionary">** Part 2: Construct an OHE dictionary **</a>
+<ul>
+<li><a href="#2a-pair-rdd-of-featureid-category">**(2a) Pair RDD of <code>(featureID, category)</code> **</a></li>
+<li><a href="#to-start-create-an-rdd-of-distinct-featureid-category-tuples-in-our-sample-dataset-the-7-items-in-the-resulting-rdd-are-0-bear-0-cat-0-mouse-1-black-1-tabby-2-mouse-2-salmon-notably-black-appears-twice-in-the-dataset-but-only-contributes-one-item-to-the-rdd-1-black-while-mouse-also-appears-twice-and-contributes-two-items-0-mouse-and-2-mouse-use-flatmap-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-flatmap-and-distinct-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-distinct">To start, create an RDD of distinct <code>(featureID, category)</code> tuples. In our sample dataset, the 7 items in the resulting RDD are <code>(0, 'bear')</code>, <code>(0, 'cat')</code>, <code>(0, 'mouse')</code>, <code>(1, 'black')</code>, <code>(1, 'tabby')</code>, <code>(2, 'mouse')</code>, <code>(2, 'salmon')</code>. Notably <code>'black'</code> appears twice in the dataset but only contributes one item to the RDD: <code>(1, 'black')</code>, while <code>'mouse'</code> also appears twice and contributes two items: <code>(0, 'mouse')</code> and <code>(2, 'mouse')</code>.  Use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.flatMap">flatMap</a> and <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.distinct">distinct</a>.</a></li>
+<li><a href="#2b-ohe-dictionary-from-distinct-features">** (2b) OHE Dictionary from distinct features **</a></li>
+<li><a href="#next-create-an-rdd-of-key-value-tuples-where-each-featureid-category-tuple-in-sampledistinctfeats-is-a-key-and-the-values-are-distinct-integers-ranging-from-0-to-number-of-keys-1-then-convert-this-rdd-into-a-dictionary-which-can-be-done-using-the-collectasmap-action-note-that-there-is-no-unique-mapping-from-keys-to-values-as-all-we-require-is-that-each-featureid-category-key-be-mapped-to-a-unique-integer-between-0-and-the-number-of-keys-in-this-exercise-any-valid-mapping-is-acceptable-use-zipwithindex-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-zipwithindex-followed-by-collectasmap-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-collectasmap">Next, create an <code>RDD</code> of key-value tuples, where each <code>(featureID, category)</code> tuple in <code>sampleDistinctFeats</code> is a key and the values are distinct integers ranging from 0 to (number of keys - 1).  Then convert this <code>RDD</code> into a dictionary, which can be done using the <code>collectAsMap</code> action.  Note that there is no unique mapping from keys to values, as all we require is that each <code>(featureID, category)</code> key be mapped to a unique integer between 0 and the number of keys.  In this exercise, any valid mapping is acceptable.  Use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.zipWithIndex">zipWithIndex</a> followed by <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.collectAsMap">collectAsMap</a>.</a></li>
+<li><a href="#in-our-sample-dataset-one-valid-list-of-key-value-tuples-is-0-bear-0-2-salmon-1-1-tabby-2-2-mouse-3-0-mouse-4-0-cat-5-1-black-6-the-dictionary-defined-in-part-1a-illustrates-another-valid-mapping-between-keys-and-integers">In our sample dataset, one valid list of key-value tuples is: <code>[((0, 'bear'), 0), ((2, 'salmon'), 1), ((1, 'tabby'), 2), ((2, 'mouse'), 3), ((0, 'mouse'), 4), ((0, 'cat'), 5), ((1, 'black'), 6)]</code>. The dictionary defined in Part (1a) illustrates another valid mapping between keys and integers.</a></li>
+<li><a href="#2c-automated-creation-of-an-ohe-dictionary">**(2c) Automated creation of an OHE dictionary **</a></li>
+<li><a href="#now-use-the-code-from-parts-2a-and-2b-to-write-a-function-that-takes-an-input-dataset-and-outputs-an-ohe-dictionary-then-use-this-function-to-create-an-ohe-dictionary-for-the-sample-dataset-and-verify-that-it-matches-the-dictionary-from-part-2b">Now use the code from Parts (2a) and (2b) to write a function that takes an input dataset and outputs an OHE dictionary.  Then use this function to create an OHE dictionary for the sample dataset, and verify that it matches the dictionary from Part (2b).</a></li>
+</ul></li>
+<li><a href="#part-3-parse-ctr-data-and-generate-ohe-features"><strong>Part 3: Parse CTR data and generate OHE features</strong></a>
+<ul>
+<li><a href="#before-we-can-proceed-you-ll-first-need-to-obtain-the-data-from-criteo-if-you-have-already-completed-this-step-in-the-setup-lab-just-run-the-cells-below-and-the-data-will-be-loaded-into-the-rawdata-variable">Before we can proceed, you&rsquo;ll first need to obtain the data from Criteo.  If you have already completed this step in the setup lab, just run the cells below and the data will be loaded into the <code>rawData</code> variable.</a></li>
+<li><a href="#below-is-criteo-s-data-sharing-agreement-after-you-accept-the-agreement-you-can-obtain-the-download-url-by-right-clicking-on-the-download-sample-button-and-clicking-copy-link-address-or-copy-link-location-depending-on-your-browser-paste-the-url-into-the-todo-cell-below-the-file-is-8-4-mb-compressed-the-script-below-will-download-the-file-to-the-virtual-machine-vm-and-then-extract-the-data">Below is Criteo&rsquo;s data sharing agreement.  After you accept the agreement, you can obtain the download URL by right-clicking on the &ldquo;Download Sample&rdquo; button and clicking &ldquo;Copy link address&rdquo; or &ldquo;Copy Link Location&rdquo;, depending on your browser.  Paste the URL into the <code># TODO</code> cell below.  The file is 8.4 MB compressed.  The script below will download the file to the virtual machine (VM) and then extract the data.</a></li>
+<li><a href="#if-running-the-cell-below-does-not-render-a-webpage-open-the-criteo-agreement-http-labs-criteo-com-downloads-2014-kaggle-display-advertising-challenge-dataset-in-a-separate-browser-tab-after-you-accept-the-agreement-you-can-obtain-the-download-url-by-right-clicking-on-the-download-sample-button-and-clicking-copy-link-address-or-copy-link-location-depending-on-your-browser-paste-the-url-into-the-todo-cell-below">If running the cell below does not render a webpage, open the <a href="http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/">Criteo agreement</a> in a separate browser tab.  After you accept the agreement, you can obtain the download URL by right-clicking on the &ldquo;Download Sample&rdquo; button and clicking &ldquo;Copy link address&rdquo; or &ldquo;Copy Link Location&rdquo;, depending on your browser.  Paste the URL into the <code># TODO</code> cell below.</a></li>
+<li><a href="#note-that-the-download-could-take-a-few-minutes-depending-upon-your-connection-speed">Note that the download could take a few minutes, depending upon your connection speed.</a></li>
+<li><a href="#3a-loading-and-splitting-the-data">**(3a) Loading and splitting the data **</a></li>
+<li><a href="#we-are-now-ready-to-start-working-with-the-actual-ctr-data-and-our-first-task-involves-splitting-it-into-training-validation-and-test-sets-use-the-randomsplit-method-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-randomsplit-with-the-specified-weights-and-seed-to-create-rdds-storing-each-of-these-datasets-and-then-cache-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-cache-each-of-these-rdds-as-we-will-be-accessing-them-multiple-times-in-the-remainder-of-this-lab-finally-compute-the-size-of-each-dataset">We are now ready to start working with the actual CTR data, and our first task involves splitting it into training, validation, and test sets.  Use the <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.randomSplit">randomSplit method</a> with the specified weights and seed to create RDDs storing each of these datasets, and then <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.cache">cache</a> each of these RDDs, as we will be accessing them multiple times in the remainder of this lab. Finally, compute the size of each dataset.</a></li>
+<li><a href="#3b-extract-features">** (3b) Extract features **</a></li>
+<li><a href="#we-will-now-parse-the-raw-training-data-to-create-an-rdd-that-we-can-subsequently-use-to-create-an-ohe-dictionary-note-from-the-take-command-in-part-3a-that-each-raw-data-point-is-a-string-containing-several-fields-separated-by-some-delimiter-for-now-we-will-ignore-the-first-field-which-is-the-0-1-label-and-parse-the-remaining-fields-or-raw-features-to-do-this-complete-the-implemention-of-the-parsepoint-function">We will now parse the raw training data to create an RDD that we can subsequently use to create an OHE dictionary. Note from the <code>take()</code> command in Part (3a) that each raw data point is a string containing several fields separated by some delimiter.  For now, we will ignore the first field (which is the 0-1 label), and parse the remaining fields (or raw features).  To do this, complete the implemention of the <code>parsePoint</code> function.</a></li>
+<li><a href="#3c-create-an-ohe-dictionary-from-the-dataset">**(3c) Create an OHE dictionary from the dataset **</a></li>
+<li><a href="#note-that-parsepoint-returns-a-data-point-as-a-list-of-featureid-category-tuples-which-is-the-same-format-as-the-sample-dataset-in-parts-1-and-2-of-this-lab-using-this-observation-create-an-ohe-dictionary-using-the-function-implemented-in-part-2c-note-that-we-will-assume-for-simplicity-that-all-features-in-our-ctr-dataset-are-categorical">Note that parsePoint returns a data point as a list of <code>(featureID, category)</code> tuples, which is the same format as the sample dataset in Parts 1 and 2 of this lab.  Using this observation, create an OHE dictionary using the function implemented in Part (2c). Note that we will assume for simplicity that all features in our CTR dataset are categorical.</a></li>
+<li><a href="#3d-apply-ohe-to-the-dataset">** (3d) Apply OHE to the dataset **</a></li>
+<li><a href="#now-let-s-use-this-ohe-dictionary-by-starting-with-the-raw-training-data-and-creating-an-rdd-of-labeledpoint-http-spark-apache-org-docs-1-3-1-api-python-pyspark-mllib-html-pyspark-mllib-regression-labeledpoint-objects-using-ohe-features-to-do-this-complete-the-implementation-of-the-parseohepoint-function-hint-parseohepoint-is-an-extension-of-the-parsepoint-function-from-part-3b-and-it-uses-the-onehotencoding-function-from-part-1d">Now let&rsquo;s use this OHE dictionary by starting with the raw training data and creating an RDD of <a href="http://spark.apache.org/docs/1.3.1/api/python/pyspark.mllib.html#pyspark.mllib.regression.LabeledPoint">LabeledPoint</a> objects using OHE features.  To do this, complete the implementation of the <code>parseOHEPoint</code> function. Hint: <code>parseOHEPoint</code> is an extension of the <code>parsePoint</code> function from Part (3b) and it uses the <code>oneHotEncoding</code> function from Part (1d).</a></li>
+<li><a href="#visualization-1-feature-frequency">**Visualization 1: Feature frequency **</a></li>
+<li><a href="#we-will-now-visualize-the-number-of-times-each-of-the-233-286-ohe-features-appears-in-the-training-data-we-first-compute-the-number-of-times-each-feature-appears-then-bucket-the-features-by-these-counts-the-buckets-are-sized-by-powers-of-2-so-the-first-bucket-corresponds-to-features-that-appear-exactly-once-scriptsize-2-0-the-second-to-features-that-appear-twice-scriptsize-2-1-the-third-to-features-that-occur-between-three-and-four-scriptsize-2-2-times-the-fifth-bucket-is-five-to-eight-scriptsize-2-3-times-and-so-on-the-scatter-plot-below-shows-the-logarithm-of-the-bucket-thresholds-versus-the-logarithm-of-the-number-of-features-that-have-counts-that-fall-in-the-buckets">We will now visualize the number of times each of the 233,286 OHE features appears in the training data. We first compute the number of times each feature appears, then bucket the features by these counts.  The buckets are sized by powers of 2, so the first bucket corresponds to features that appear exactly once ( $ \scriptsize 2^0 $ ), the second to features that appear twice ( $ \scriptsize 2^1 $ ), the third to features that occur between three and four ( $ \scriptsize 2^2 $ ) times, the fifth bucket is five to eight ( $ \scriptsize 2^3 $ ) times and so on. The scatter plot below shows the logarithm of the bucket thresholds versus the logarithm of the number of features that have counts that fall in the buckets.</a></li>
+<li><a href="#3e-handling-unseen-features">**(3e) Handling unseen features **</a></li>
+<li><a href="#we-naturally-would-like-to-repeat-the-process-from-part-3d-e-g-to-compute-ohe-features-for-the-validation-and-test-datasets-however-we-must-be-careful-as-some-categorical-values-will-likely-appear-in-new-data-that-did-not-exist-in-the-training-data-to-deal-with-this-situation-update-the-onehotencoding-function-from-part-1d-to-ignore-previously-unseen-categories-and-then-compute-ohe-features-for-the-validation-data">We naturally would like to repeat the process from Part (3d), e.g., to compute OHE features for the validation and test datasets.  However, we must be careful, as some categorical values will likely appear in new data that did not exist in the training data. To deal with this situation, update the <code>oneHotEncoding()</code> function from Part (1d) to ignore previously unseen categories, and then compute OHE features for the validation data.</a></li>
+</ul></li>
+<li><a href="#part-4-ctr-prediction-and-logloss-evaluation">** Part 4: CTR prediction and logloss evaluation **</a>
+<ul>
+<li><a href="#4a-logistic-regression">** (4a) Logistic regression **</a></li>
+<li><a href="#we-are-now-ready-to-train-our-first-ctr-classifier-a-natural-classifier-to-use-in-this-setting-is-logistic-regression-since-it-models-the-probability-of-a-click-through-event-rather-than-returning-a-binary-response-and-when-working-with-rare-events-probabilistic-predictions-are-useful-first-use-logisticregressionwithsgd-https-spark-apache-org-docs-latest-api-python-pyspark-mllib-html-pyspark-mllib-classification-logisticregressionwithsgd-to-train-a-model-using-ohetraindata-with-the-given-hyperparameter-configuration-logisticregressionwithsgd-returns-a-logisticregressionmodel-https-spark-apache-org-docs-latest-api-python-pyspark-mllib-html-pyspark-mllib-regression-logisticregressionmodel-next-use-the-logisticregressionmodel-weights-and-logisticregressionmodel-intercept-attributes-to-print-out-the-model-s-parameters-note-that-these-are-the-names-of-the-object-s-attributes-and-should-be-called-using-a-syntax-like-model-weights-for-a-given-model">We are now ready to train our first CTR classifier.  A natural classifier to use in this setting is logistic regression, since it models the probability of a click-through event rather than returning a binary response, and when working with rare events, probabilistic predictions are useful.  First use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.classification.LogisticRegressionWithSGD">LogisticRegressionWithSGD</a> to train a model using <code>OHETrainData</code> with the given hyperparameter configuration.  <code>LogisticRegressionWithSGD</code> returns a <a href="https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.regression.LogisticRegressionModel">LogisticRegressionModel</a>.  Next, use the <code>LogisticRegressionModel.weights</code> and <code>LogisticRegressionModel.intercept</code> attributes to print out the model&rsquo;s parameters.  Note that these are the names of the object&rsquo;s attributes and should be called using a syntax like <code>model.weights</code> for a given <code>model</code>.</a></li>
+<li><a href="#4b-log-loss">** (4b) Log loss **</a></li>
+<li><a href="#throughout-this-lab-we-will-use-log-loss-to-evaluate-the-quality-of-models-log-loss-is-defined-as-begin-align-scriptsize-ell-log-p-y-begin-cases-log-p-text-if-y-1-log-1-p-text-if-y-0-end-cases-end-align-where-scriptsize-p-is-a-probability-between-0-and-1-and-scriptsize-y-is-a-label-of-either-0-or-1-log-loss-is-a-standard-evaluation-criterion-when-predicting-rare-events-such-as-click-through-rate-prediction-it-is-also-the-criterion-used-in-the-criteo-kaggle-competition-https-www-kaggle-com-c-criteo-display-ad-challenge-write-a-function-to-compute-log-loss-and-evaluate-it-on-some-sample-inputs">Throughout this lab, we will use log loss to evaluate the quality of models.  Log loss is defined as: $$  \begin{align} \scriptsize \ell_{log}(p, y) = \begin{cases} -\log (p) &amp; \text{if } y = 1 \\ -\log(1-p) &amp; \text{if } y = 0 \end{cases} \end{align} $$ where $ \scriptsize p$ is a probability between 0 and 1 and $ \scriptsize y$ is a label of either 0 or 1. Log loss is a standard evaluation criterion when predicting rare-events such as click-through rate prediction (it is also the criterion used in the <a href="https://www.kaggle.com/c/criteo-display-ad-challenge">Criteo Kaggle competition</a>).  Write a function to compute log loss, and evaluate it on some sample inputs.</a></li>
+<li><a href="#4c-baseline-log-loss">** (4c)  Baseline log loss **</a></li>
+<li><a href="#next-we-will-use-the-function-we-wrote-in-part-4b-to-compute-the-baseline-log-loss-on-the-training-data-a-very-simple-yet-natural-baseline-model-is-one-where-we-always-make-the-same-prediction-independent-of-the-given-datapoint-setting-the-predicted-value-equal-to-the-fraction-of-training-points-that-correspond-to-click-through-events-i-e-where-the-label-is-one-compute-this-value-which-is-simply-the-mean-of-the-training-labels-and-then-use-it-to-compute-the-training-log-loss-for-the-baseline-model-the-log-loss-for-multiple-observations-is-the-mean-of-the-individual-log-loss-values">Next we will use the function we wrote in Part (4b) to compute the baseline log loss on the training data. A very simple yet natural baseline model is one where we always make the same prediction independent of the given datapoint, setting the predicted value equal to the fraction of training points that correspond to click-through events (i.e., where the label is one). Compute this value (which is simply the mean of the training labels), and then use it to compute the training log loss for the baseline model.  The log loss for multiple observations is the mean of the individual log loss values.</a></li>
+<li><a href="#4d-predicted-probability">** (4d) Predicted probability **</a></li>
+<li><a href="#in-order-to-compute-the-log-loss-for-the-model-we-trained-in-part-4a-we-need-to-write-code-to-generate-predictions-from-this-model-write-a-function-that-computes-the-raw-linear-prediction-from-this-logistic-regression-model-and-then-passes-it-through-a-sigmoid-function-http-en-wikipedia-org-wiki-sigmoid-function-scriptsize-sigma-t-1-e-t-1-to-return-the-model-s-probabilistic-prediction-then-compute-probabilistic-predictions-on-the-training-data">In order to compute the log loss for the model we trained in Part (4a), we need to write code to generate predictions from this model. Write a function that computes the raw linear prediction from this logistic regression model and then passes it through a <a href="http://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> $ \scriptsize \sigma(t) = (1+ e^{-t})^{-1} $ to return the model&rsquo;s probabilistic prediction. Then compute probabilistic predictions on the training data.</a></li>
+<li><a href="#note-that-when-incorporating-an-intercept-into-our-predictions-we-simply-add-the-intercept-to-the-value-of-the-prediction-obtained-from-the-weights-and-features-alternatively-if-the-intercept-was-included-as-the-first-weight-we-would-need-to-add-a-corresponding-feature-to-our-data-where-the-feature-has-the-value-one-this-is-not-the-case-here">Note that when incorporating an intercept into our predictions, we simply add the intercept to the value of the prediction obtained from the weights and features.  Alternatively, if the intercept was included as the first weight, we would need to add a corresponding feature to our data where the feature has the value one.  This is not the case here.</a></li>
+<li><a href="#4e-evaluate-the-model">** (4e) Evaluate the model **</a></li>
+<li><a href="#we-are-now-ready-to-evaluate-the-quality-of-the-model-we-trained-in-part-4a-to-do-this-first-write-a-general-function-that-takes-as-input-a-model-and-data-and-outputs-the-log-loss-then-run-this-function-on-the-ohe-training-data-and-compare-the-result-with-the-baseline-log-loss">We are now ready to evaluate the quality of the model we trained in Part (4a). To do this, first write a general function that takes as input a model and data, and outputs the log loss.  Then run this function on the OHE training data, and compare the result with the baseline log loss.</a></li>
+<li><a href="#4f-validation-log-loss">** (4f) Validation log loss **</a></li>
+<li><a href="#next-following-the-same-logic-as-in-parts-4c-and-4-e-compute-the-validation-log-loss-for-both-the-baseline-and-logistic-regression-models-notably-the-baseline-model-for-the-validation-data-should-still-be-based-on-the-label-fraction-from-the-training-dataset">Next, following the same logic as in Parts (4c) and 4(e), compute the validation log loss for both the baseline and logistic regression models. Notably, the baseline model for the validation data should still be based on the label fraction from the training dataset.</a></li>
+<li><a href="#visualization-2-roc-curve">**Visualization 2: ROC curve **</a></li>
+<li><a href="#we-will-now-visualize-how-well-the-model-predicts-our-target-to-do-this-we-generate-a-plot-of-the-roc-curve-the-roc-curve-shows-us-the-trade-off-between-the-false-positive-rate-and-true-positive-rate-as-we-liberalize-the-threshold-required-to-predict-a-positive-outcome-a-random-model-is-represented-by-the-dashed-line">We will now visualize how well the model predicts our target.  To do this we generate a plot of the ROC curve.  The ROC curve shows us the trade-off between the false positive rate and true positive rate, as we liberalize the threshold required to predict a positive outcome.  A random model is represented by the dashed line.</a></li>
+</ul></li>
+<li><a href="#part-5-reduce-feature-dimension-via-feature-hashing"><strong>Part 5: Reduce feature dimension via feature hashing</strong></a>
+<ul>
+<li><a href="#5a-hash-function">** (5a) Hash function **</a></li>
+<li><a href="#as-we-just-saw-using-a-one-hot-encoding-featurization-can-yield-a-model-with-good-statistical-accuracy-however-the-number-of-distinct-categories-across-all-features-is-quite-large-recall-that-we-observed-233k-categories-in-the-training-data-in-part-3c-moreover-the-full-kaggle-training-dataset-includes-more-than-33m-distinct-categories-and-the-kaggle-dataset-itself-is-just-a-small-subset-of-criteo-s-labeled-data-hence-featurizing-via-a-one-hot-encoding-representation-would-lead-to-a-very-large-feature-vector-to-reduce-the-dimensionality-of-the-feature-space-we-will-use-feature-hashing">As we just saw, using a one-hot-encoding featurization can yield a model with good statistical accuracy.  However, the number of distinct categories across all features is quite large &ndash; recall that we observed 233K categories in the training data in Part (3c).  Moreover, the full Kaggle training dataset includes more than 33M distinct categories, and the Kaggle dataset itself is just a small subset of Criteo&rsquo;s labeled data.  Hence, featurizing via a one-hot-encoding representation would lead to a very large feature vector. To reduce the dimensionality of the feature space, we will use feature hashing.</a></li>
+<li><a href="#5b-creating-hashed-features">** (5b) Creating hashed features **</a></li>
+<li><a href="#next-we-will-use-this-hash-function-to-create-hashed-features-for-our-ctr-datasets-first-write-a-function-that-uses-the-hash-function-from-part-5a-with-numbuckets-scriptsize-2-15-approx-33k-to-create-a-labeledpoint-with-hashed-features-stored-as-a-sparsevector-then-use-this-function-to-create-new-training-validation-and-test-datasets-with-hashed-features-hint-parsedhashpoint-is-similar-to-parseohepoint-from-part-3d">Next we will use this hash function to create hashed features for our CTR datasets. First write a function that uses the hash function from Part (5a) with numBuckets = $ \scriptsize 2^{15} \approx 33K $ to create a <code>LabeledPoint</code> with hashed features stored as a <code>SparseVector</code>.  Then use this function to create new training, validation and test datasets with hashed features. Hint: <code>parsedHashPoint</code> is similar to <code>parseOHEPoint</code> from Part (3d).</a></li>
+<li><a href="#5c-sparsity">** (5c) Sparsity **</a></li>
+<li><a href="#since-we-have-33k-hashed-features-versus-233k-ohe-features-we-should-expect-ohe-features-to-be-sparser-verify-this-hypothesis-by-computing-the-average-sparsity-of-the-ohe-and-the-hashed-training-datasets">Since we have 33K hashed features versus 233K OHE features, we should expect OHE features to be sparser. Verify this hypothesis by computing the average sparsity of the OHE and the hashed training datasets.</a></li>
+<li><a href="#note-that-if-you-have-a-sparsevector-named-sparse-calling-len-sparse-returns-the-total-number-of-features-not-the-number-features-with-entries-sparsevector-objects-have-the-attributes-indices-and-values-that-contain-information-about-which-features-are-nonzero-continuing-with-our-example-these-can-be-accessed-using-sparse-indices-and-sparse-values-respectively">Note that if you have a <code>SparseVector</code> named <code>sparse</code>, calling <code>len(sparse)</code> returns the total number of features, not the number features with entries.  <code>SparseVector</code> objects have the attributes <code>indices</code> and <code>values</code> that contain information about which features are nonzero.  Continuing with our example, these can be accessed using <code>sparse.indices</code> and <code>sparse.values</code>, respectively.</a></li>
+<li><a href="#5d-logistic-model-with-hashed-features">** (5d) Logistic model with hashed features **</a></li>
+<li><a href="#now-let-s-train-a-logistic-regression-model-using-the-hashed-features-run-a-grid-search-to-find-suitable-hyperparameters-for-the-hashed-features-evaluating-via-log-loss-on-the-validation-data-note-this-may-take-a-few-minutes-to-run-use-1-and-10-for-stepsizes-and-1e-6-and-1e-3-for-regparams">Now let&rsquo;s train a logistic regression model using the hashed features. Run a grid search to find suitable hyperparameters for the hashed features, evaluating via log loss on the validation data. Note: This may take a few minutes to run. Use <code>1</code> and <code>10</code> for <code>stepSizes</code> and <code>1e-6</code> and <code>1e-3</code> for <code>regParams</code>.</a></li>
+<li><a href="#visualization-3-hyperparameter-heat-map"><strong>Visualization 3: Hyperparameter heat map</strong></a></li>
+<li><a href="#we-will-now-perform-a-visualization-of-an-extensive-hyperparameter-search-specifically-we-will-create-a-heat-map-where-the-brighter-colors-correspond-to-lower-values-of-logloss">We will now perform a visualization of an extensive hyperparameter search.  Specifically, we will create a heat map where the brighter colors correspond to lower values of <code>logLoss</code>.</a></li>
+<li><a href="#the-search-was-run-using-six-step-sizes-and-six-values-for-regularization-which-required-the-training-of-thirty-six-separate-models-we-have-included-the-results-below-but-omitted-the-actual-search-to-save-time">The search was run using six step sizes and six values for regularization, which required the training of thirty-six separate models.  We have included the results below, but omitted the actual search to save time.</a></li>
+<li><a href="#5e-evaluate-on-the-test-set">** (5e) Evaluate on the test set **</a></li>
+<li><a href="#finally-evaluate-the-best-model-from-part-5d-on-the-test-set-compare-the-resulting-log-loss-with-the-baseline-log-loss-on-the-test-set-which-can-be-computed-in-the-same-way-that-the-validation-log-loss-was-computed-in-part-4f">Finally, evaluate the best model from Part (5d) on the test set.  Compare the resulting log loss with the baseline log loss on the test set, which can be computed in the same way that the validation log loss was computed in Part (4f).</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="click-through-rate-prediction"><strong>Click-Through Rate Prediction</strong></h1>
+
+<p>这是工业界真正在用的方式。</p>
+
+<h4 id="这是一个完整的ctr工业界预估pipeline-里面用到的数据集来源于-criteo-labs-http-labs-criteo-com-当然大家也知道这个数据集最近也用到了一个-kaggle比赛-里-https-www-kaggle-com-c-criteo-display-ad-challenge">这是一个完整的CTR工业界预估pipeline。里面用到的数据集来源于 <a href="http://labs.criteo.com/">Criteo Labs</a>，当然大家也知道这个数据集最近也用到了一个 [Kaggle比赛]里(<a href="https://www.kaggle.com/c/criteo-display-ad-challenge">https://www.kaggle.com/c/criteo-display-ad-challenge</a>).</h4>
+
+<h4 id="本流程会包含完整的spark-mllib建模过程">** 本流程会包含完整的spark mllib建模过程: **</h4>
+
+<ul>
+<li><em>Part 1:</em> 类别型特征的独热向量编码one-hot-encoding</li>
+<li><em>Part 2:</em> 构建OHE字典</li>
+<li><em>Part 3:</em> 解析CTR数据同时构建OHE
+
+<ul>
+<li><em>特征探索:</em> 特征频度</li>
+</ul></li>
+<li><em>Part 4:</em> CTR预估与logloss评估
+
+<ul>
+<li><em>评估可视化:</em> ROC曲线</li>
+</ul></li>
+<li><em>Part 5:</em> 通过特征hash等方法进行特征降维
+
+<ul>
+<li><em>可视化:</em> 超参数热力图</li>
+</ul></li>
+</ul>
+
+<p>全是用 pyspark 写的，包括怎么用one-hot 来处理我的特征，划分训练集和验证集，做LR ，用 Logloss 做评估</p>
+
+<h4 id="这里会尽量包含完整的spark机器学习建模流程-如果有任何不明白的-大家可以查-spark-s-python-api-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-以及-numpy-reference-http-docs-scipy-org-doc-numpy-reference-index-html">这里会尽量包含完整的spark机器学习建模流程，如果有任何不明白的，大家可以查<a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD">Spark&rsquo;s Python API</a> 以及 <a href="http://docs.scipy.org/doc/numpy/reference/index.html">NumPy Reference</a></h4>
+
+<pre><code class="language-python">labVersion = 'julyedu_ctr_demo'
+</code></pre>
+
+<h3 id="part-1-featurize-categorical-data-using-one-hot-encoding"><strong>Part 1: Featurize categorical data using one-hot-encoding</strong></h3>
+
+<h4 id="1a-one-hot-encoding">** (1a) One-hot-encoding **</h4>
+
+<h4 id="we-would-like-to-develop-code-to-convert-categorical-features-to-numerical-ones-and-to-build-intuition-we-will-work-with-a-sample-unlabeled-dataset-with-three-data-points-with-each-data-point-representing-an-animal-the-first-feature-indicates-the-type-of-animal-bear-cat-mouse-the-second-feature-describes-the-animal-s-color-black-tabby-and-the-third-optional-feature-describes-what-the-animal-eats-mouse-salmon">We would like to develop code to convert categorical features to numerical ones, and to build intuition, we will work with a sample unlabeled dataset with three data points, with each data point representing an animal. The first feature indicates the type of animal (bear, cat, mouse); the second feature describes the animal&rsquo;s color (black, tabby); and the third (optional) feature describes what the animal eats (mouse, salmon).</h4>
+
+<h4 id="in-a-one-hot-encoding-ohe-scheme-we-want-to-represent-each-tuple-of-featureid-category-via-its-own-binary-feature-we-can-do-this-in-python-by-creating-a-dictionary-that-maps-each-tuple-to-a-distinct-integer-where-the-integer-corresponds-to-a-binary-feature-to-start-manually-enter-the-entries-in-the-ohe-dictionary-associated-with-the-sample-dataset-by-mapping-the-tuples-to-consecutive-integers-starting-from-zero-ordering-the-tuples-first-by-featureid-and-next-by-category">In a one-hot-encoding (OHE) scheme, we want to represent each tuple of <code>(featureID, category)</code> via its own binary feature.  We can do this in Python by creating a dictionary that maps each tuple to a distinct integer, where the integer corresponds to a binary feature. To start, manually enter the entries in the OHE dictionary associated with the sample dataset by mapping the tuples to consecutive integers starting from zero,  ordering the tuples first by featureID and next by category.</h4>
+
+<h4 id="later-in-this-lab-we-ll-use-ohe-dictionaries-to-transform-data-points-into-compact-lists-of-features-that-can-be-used-in-machine-learning-algorithms">Later in this lab, we&rsquo;ll use OHE dictionaries to transform data points into compact lists of features that can be used in machine learning algorithms.</h4>
+
+<pre><code class="language-python"># Data for manual OHE
+# Note: the first data point does not include any value for the optional third feature
+sampleOne = [(0, 'mouse'), (1, 'black')]
+sampleTwo = [(0, 'cat'), (1, 'tabby'), (2, 'mouse')]
+sampleThree =  [(0, 'bear'), (1, 'black'), (2, 'salmon')]
+sampleDataRDD = sc.parallelize([sampleOne, sampleTwo, sampleThree])
+</code></pre>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+sampleOHEDictManual = {}
+sampleOHEDictManual[(0,'bear')] = 0
+sampleOHEDictManual[(0,'cat')] = 1
+sampleOHEDictManual[(0,'mouse')] = 2
+sampleOHEDictManual[(1, 'black')] = 3
+sampleOHEDictManual[(1, 'tabby')] = 4
+sampleOHEDictManual[(2, 'mouse')] = 5
+sampleOHEDictManual[(2, 'salmon')] = 6
+</code></pre>
+
+<pre><code class="language-python"># TEST One-hot-encoding (1a)
+from test_helper import Test
+
+Test.assertEqualsHashed(sampleOHEDictManual[(0,'bear')],
+                        'b6589fc6ab0dc82cf12099d1c2d40ab994e8410c',
+                        &quot;incorrect value for sampleOHEDictManual[(0,'bear')]&quot;)
+Test.assertEqualsHashed(sampleOHEDictManual[(0,'cat')],
+                        '356a192b7913b04c54574d18c28d46e6395428ab',
+                        &quot;incorrect value for sampleOHEDictManual[(0,'cat')]&quot;)
+Test.assertEqualsHashed(sampleOHEDictManual[(0,'mouse')],
+                        'da4b9237bacccdf19c0760cab7aec4a8359010b0',
+                        &quot;incorrect value for sampleOHEDictManual[(0,'mouse')]&quot;)
+Test.assertEqualsHashed(sampleOHEDictManual[(1,'black')],
+                        '77de68daecd823babbb58edb1c8e14d7106e83bb',
+                        &quot;incorrect value for sampleOHEDictManual[(1,'black')]&quot;)
+Test.assertEqualsHashed(sampleOHEDictManual[(1,'tabby')],
+                        '1b6453892473a467d07372d45eb05abc2031647a',
+                        &quot;incorrect value for sampleOHEDictManual[(1,'tabby')]&quot;)
+Test.assertEqualsHashed(sampleOHEDictManual[(2,'mouse')],
+                        'ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4',
+                        &quot;incorrect value for sampleOHEDictManual[(2,'mouse')]&quot;)
+Test.assertEqualsHashed(sampleOHEDictManual[(2,'salmon')],
+                        'c1dfd96eea8cc2b62785275bca38ac261256e278',
+                        &quot;incorrect value for sampleOHEDictManual[(2,'salmon')]&quot;)
+Test.assertEquals(len(sampleOHEDictManual.keys()), 7,
+                  'incorrect number of keys in sampleOHEDictManual')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="1b-sparse-vectors">** (1b) Sparse vectors **</h4>
+
+<h4 id="data-points-can-typically-be-represented-with-a-small-number-of-non-zero-ohe-features-relative-to-the-total-number-of-features-that-occur-in-the-dataset-by-leveraging-this-sparsity-and-using-sparse-vector-representations-of-ohe-data-we-can-reduce-storage-and-computational-burdens-below-are-a-few-sample-vectors-represented-as-dense-numpy-arrays-use-sparsevector-https-spark-apache-org-docs-latest-api-python-pyspark-mllib-html-pyspark-mllib-linalg-sparsevector-to-represent-them-in-a-sparse-fashion-and-verify-that-both-the-sparse-and-dense-representations-yield-the-same-results-when-computing-dot-products-http-en-wikipedia-org-wiki-dot-product-we-will-later-use-mllib-to-train-classifiers-via-gradient-descent-and-mllib-will-need-to-compute-dot-products-between-sparsevectors-and-dense-parameter-vectors">Data points can typically be represented with a small number of non-zero OHE features relative to the total number of features that occur in the dataset.  By leveraging this sparsity and using sparse vector representations of OHE data, we can reduce storage and computational burdens.  Below are a few sample vectors represented as dense numpy arrays.  Use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.linalg.SparseVector">SparseVector</a> to represent them in a sparse fashion, and verify that both the sparse and dense representations yield the same results when computing <a href="http://en.wikipedia.org/wiki/Dot_product">dot products</a> (we will later use MLlib to train classifiers via gradient descent, and MLlib will need to compute dot products between SparseVectors and dense parameter vectors).</h4>
+
+<h4 id="use-sparsevector-size-args-to-create-a-new-sparse-vector-where-size-is-the-length-of-the-vector-and-args-is-either-a-dictionary-a-list-of-index-value-pairs-or-two-separate-arrays-of-indices-and-values-sorted-by-index-you-ll-need-to-create-a-sparse-vector-representation-of-each-dense-vector-adense-and-bdense">Use <code>SparseVector(size, *args)</code> to create a new sparse vector where size is the length of the vector and args is either a dictionary, a list of (index, value) pairs, or two separate arrays of indices and values (sorted by index).  You&rsquo;ll need to create a sparse vector representation of each dense vector <code>aDense</code> and <code>bDense</code>.</h4>
+
+<pre><code class="language-python">import numpy as np
+from pyspark.mllib.linalg import SparseVector
+</code></pre>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+aDense = np.array([0., 3., 0., 4.])
+aSparse = SparseVector(4, [(1,3), (3,4)])
+
+bDense = np.array([0., 0., 0., 1.])
+bSparse = SparseVector(4, [(3, 1)])
+
+w = np.array([0.4, 3.1, -1.4, -.5])
+print aDense.dot(w)
+print aSparse.dot(w)
+print bDense.dot(w)
+print bSparse.dot(w)
+</code></pre>
+
+<pre><code>7.3
+7.3
+-0.5
+-0.5
+</code></pre>
+
+<pre><code class="language-python"># TEST Sparse Vectors (1b)
+Test.assertTrue(isinstance(aSparse, SparseVector), 'aSparse needs to be an instance of SparseVector')
+Test.assertTrue(isinstance(bSparse, SparseVector), 'aSparse needs to be an instance of SparseVector')
+Test.assertTrue(aDense.dot(w) == aSparse.dot(w),
+                'dot product of aDense and w should equal dot product of aSparse and w')
+Test.assertTrue(bDense.dot(w) == bSparse.dot(w),
+                'dot product of bDense and w should equal dot product of bSparse and w')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="1c-ohe-features-as-sparse-vectors">**(1c) OHE features as sparse vectors **</h4>
+
+<h4 id="now-let-s-see-how-we-can-represent-the-ohe-features-for-points-in-our-sample-dataset-using-the-mapping-defined-by-the-ohe-dictionary-from-part-1a-manually-define-ohe-features-for-the-three-sample-data-points-using-sparsevector-format-any-feature-that-occurs-in-a-point-should-have-the-value-1-0-for-example-the-densevector-for-a-point-with-features-2-and-4-would-be-0-0-0-0-1-0-0-0-1-0-0-0-0-0">Now let&rsquo;s see how we can represent the OHE features for points in our sample dataset.  Using the mapping defined by the OHE dictionary from Part (1a), manually define OHE features for the three sample data points using SparseVector format.  Any feature that occurs in a point should have the value 1.0.  For example, the <code>DenseVector</code> for a point with features 2 and 4 would be <code>[0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0]</code>.</h4>
+
+<pre><code class="language-python"># Reminder of the sample features
+# sampleOne = [(0, 'mouse'), (1, 'black')]
+# sampleTwo = [(0, 'cat'), (1, 'tabby'), (2, 'mouse')]
+# sampleThree =  [(0, 'bear'), (1, 'black'), (2, 'salmon')]
+</code></pre>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+sampleOneOHEFeatManual = SparseVector(7, [(2,1), (3,1)])
+sampleTwoOHEFeatManual = SparseVector(7, [(1,1),(4,1),(5,1)])
+sampleThreeOHEFeatManual = SparseVector(7,[(0,1),(3,1),(6,1)])
+</code></pre>
+
+<pre><code class="language-python"># TEST OHE Features as sparse vectors (1c)
+Test.assertTrue(isinstance(sampleOneOHEFeatManual, SparseVector),
+                'sampleOneOHEFeatManual needs to be a SparseVector')
+Test.assertTrue(isinstance(sampleTwoOHEFeatManual, SparseVector),
+                'sampleTwoOHEFeatManual needs to be a SparseVector')
+Test.assertTrue(isinstance(sampleThreeOHEFeatManual, SparseVector),
+                'sampleThreeOHEFeatManual needs to be a SparseVector')
+Test.assertEqualsHashed(sampleOneOHEFeatManual,
+                        'ecc00223d141b7bd0913d52377cee2cf5783abd6',
+                        'incorrect value for sampleOneOHEFeatManual')
+Test.assertEqualsHashed(sampleTwoOHEFeatManual,
+                        '26b023f4109e3b8ab32241938e2e9b9e9d62720a',
+                        'incorrect value for sampleTwoOHEFeatManual')
+Test.assertEqualsHashed(sampleThreeOHEFeatManual,
+                        'c04134fd603ae115395b29dcabe9d0c66fbdc8a7',
+                        'incorrect value for sampleThreeOHEFeatManual')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="1d-define-a-ohe-function">**(1d) Define a OHE function **</h4>
+
+<h4 id="next-we-will-use-the-ohe-dictionary-from-part-1a-to-programatically-generate-ohe-features-from-the-original-categorical-data-first-write-a-function-called-onehotencoding-that-creates-ohe-feature-vectors-in-sparsevector-format-then-use-this-function-to-create-ohe-features-for-the-first-sample-data-point-and-verify-that-the-result-matches-the-result-from-part-1c">Next we will use the OHE dictionary from Part (1a) to programatically generate OHE features from the original categorical data.  First write a function called <code>oneHotEncoding</code> that creates OHE feature vectors in <code>SparseVector</code> format.  Then use this function to create OHE features for the first sample data point and verify that the result matches the result from Part (1c).</h4>
+
+<pre><code class="language-python">def oneHotEncoding(rawFeats, OHEDict, numOHEFeats):
+    &quot;&quot;&quot;Produce a one-hot-encoding from a list of features and an OHE dictionary.
+
+    Note:
+        You should ensure that the indices used to create a SparseVector are sorted.
+
+    Args:
+        rawFeats (list of (int, str)): The features corresponding to a single observation.  Each
+            feature consists of a tuple of featureID and the feature's value. (e.g. sampleOne)
+        OHEDict (dict): A mapping of (featureID, value) to unique integer.
+        numOHEFeats (int): The total number of unique OHE features (combinations of featureID and
+            value).
+
+    Returns:
+        SparseVector: A SparseVector of length numOHEFeats with indicies equal to the unique
+            identifiers for the (featureID, value) combinations that occur in the observation and
+            with values equal to 1.0.
+    &quot;&quot;&quot;
+    return SparseVector(numOHEFeats, [(OHEDict[(featID, value)], 1) for (featID, value) in rawFeats])
+
+# Calculate the number of features in sampleOHEDictManual
+numSampleOHEFeats = len(sampleOHEDictManual.keys())
+
+# Run oneHotEnoding on sampleOne
+sampleOneOHEFeat = oneHotEncoding(sampleOne, sampleOHEDictManual, numSampleOHEFeats)
+
+print sampleOneOHEFeat
+</code></pre>
+
+<pre><code>(7,[2,3],[1.0,1.0])
+</code></pre>
+
+<pre><code class="language-python"># TEST Define an OHE Function (1d)
+Test.assertTrue(sampleOneOHEFeat == sampleOneOHEFeatManual,
+                'sampleOneOHEFeat should equal sampleOneOHEFeatManual')
+Test.assertEquals(sampleOneOHEFeat, SparseVector(7, [2,3], [1.0,1.0]),
+                  'incorrect value for sampleOneOHEFeat')
+Test.assertEquals(oneHotEncoding([(1, 'black'), (0, 'mouse')], sampleOHEDictManual,
+                                 numSampleOHEFeats), SparseVector(7, [2,3], [1.0,1.0]),
+                  'incorrect definition for oneHotEncoding')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="1e-apply-ohe-to-a-dataset">**(1e) Apply OHE to a dataset **</h4>
+
+<h4 id="finally-use-the-function-from-part-1d-to-create-ohe-features-for-all-3-data-points-in-the-sample-dataset">Finally, use the function from Part (1d) to create OHE features for all 3 data points in the sample dataset.</h4>
+
+<pre><code class="language-python">sampleOHEData = sampleDataRDD.map(lambda row: oneHotEncoding(row, sampleOHEDictManual, numSampleOHEFeats))
+print sampleOHEData.collect()
+</code></pre>
+
+<pre><code>[SparseVector(7, {2: 1.0, 3: 1.0}), SparseVector(7, {1: 1.0, 4: 1.0, 5: 1.0}), SparseVector(7, {0: 1.0, 3: 1.0, 6: 1.0})]
+</code></pre>
+
+<pre><code class="language-python"># TEST Apply OHE to a dataset (1e)
+sampleOHEDataValues = sampleOHEData.collect()
+Test.assertTrue(len(sampleOHEDataValues) == 3, 'sampleOHEData should have three elements')
+Test.assertEquals(sampleOHEDataValues[0], SparseVector(7, {2: 1.0, 3: 1.0}),
+                  'incorrect OHE for first sample')
+Test.assertEquals(sampleOHEDataValues[1], SparseVector(7, {1: 1.0, 4: 1.0, 5: 1.0}),
+                  'incorrect OHE for second sample')
+Test.assertEquals(sampleOHEDataValues[2], SparseVector(7, {0: 1.0, 3: 1.0, 6: 1.0}),
+                  'incorrect OHE for third sample')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+</code></pre>
+
+<h3 id="part-2-construct-an-ohe-dictionary">** Part 2: Construct an OHE dictionary **</h3>
+
+<h4 id="2a-pair-rdd-of-featureid-category">**(2a) Pair RDD of <code>(featureID, category)</code> **</h4>
+
+<h4 id="to-start-create-an-rdd-of-distinct-featureid-category-tuples-in-our-sample-dataset-the-7-items-in-the-resulting-rdd-are-0-bear-0-cat-0-mouse-1-black-1-tabby-2-mouse-2-salmon-notably-black-appears-twice-in-the-dataset-but-only-contributes-one-item-to-the-rdd-1-black-while-mouse-also-appears-twice-and-contributes-two-items-0-mouse-and-2-mouse-use-flatmap-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-flatmap-and-distinct-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-distinct">To start, create an RDD of distinct <code>(featureID, category)</code> tuples. In our sample dataset, the 7 items in the resulting RDD are <code>(0, 'bear')</code>, <code>(0, 'cat')</code>, <code>(0, 'mouse')</code>, <code>(1, 'black')</code>, <code>(1, 'tabby')</code>, <code>(2, 'mouse')</code>, <code>(2, 'salmon')</code>. Notably <code>'black'</code> appears twice in the dataset but only contributes one item to the RDD: <code>(1, 'black')</code>, while <code>'mouse'</code> also appears twice and contributes two items: <code>(0, 'mouse')</code> and <code>(2, 'mouse')</code>.  Use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.flatMap">flatMap</a> and <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.distinct">distinct</a>.</h4>
+
+<pre><code class="language-python">sampleDistinctFeats = sampleDataRDD.flatMap(lambda row: row).distinct()
+</code></pre>
+
+<pre><code class="language-python"># TEST Pair RDD of (featureID, category) (2a)
+Test.assertEquals(sorted(sampleDistinctFeats.collect()),
+                  [(0, 'bear'), (0, 'cat'), (0, 'mouse'), (1, 'black'),
+                   (1, 'tabby'), (2, 'mouse'), (2, 'salmon')],
+                  'incorrect value for sampleDistinctFeats')
+</code></pre>
+
+<pre><code>1 test passed.
+</code></pre>
+
+<h4 id="2b-ohe-dictionary-from-distinct-features">** (2b) OHE Dictionary from distinct features **</h4>
+
+<h4 id="next-create-an-rdd-of-key-value-tuples-where-each-featureid-category-tuple-in-sampledistinctfeats-is-a-key-and-the-values-are-distinct-integers-ranging-from-0-to-number-of-keys-1-then-convert-this-rdd-into-a-dictionary-which-can-be-done-using-the-collectasmap-action-note-that-there-is-no-unique-mapping-from-keys-to-values-as-all-we-require-is-that-each-featureid-category-key-be-mapped-to-a-unique-integer-between-0-and-the-number-of-keys-in-this-exercise-any-valid-mapping-is-acceptable-use-zipwithindex-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-zipwithindex-followed-by-collectasmap-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-collectasmap">Next, create an <code>RDD</code> of key-value tuples, where each <code>(featureID, category)</code> tuple in <code>sampleDistinctFeats</code> is a key and the values are distinct integers ranging from 0 to (number of keys - 1).  Then convert this <code>RDD</code> into a dictionary, which can be done using the <code>collectAsMap</code> action.  Note that there is no unique mapping from keys to values, as all we require is that each <code>(featureID, category)</code> key be mapped to a unique integer between 0 and the number of keys.  In this exercise, any valid mapping is acceptable.  Use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.zipWithIndex">zipWithIndex</a> followed by <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.collectAsMap">collectAsMap</a>.</h4>
+
+<h4 id="in-our-sample-dataset-one-valid-list-of-key-value-tuples-is-0-bear-0-2-salmon-1-1-tabby-2-2-mouse-3-0-mouse-4-0-cat-5-1-black-6-the-dictionary-defined-in-part-1a-illustrates-another-valid-mapping-between-keys-and-integers">In our sample dataset, one valid list of key-value tuples is: <code>[((0, 'bear'), 0), ((2, 'salmon'), 1), ((1, 'tabby'), 2), ((2, 'mouse'), 3), ((0, 'mouse'), 4), ((0, 'cat'), 5), ((1, 'black'), 6)]</code>. The dictionary defined in Part (1a) illustrates another valid mapping between keys and integers.</h4>
+
+<pre><code class="language-python">sampleOHEDict = sampleDistinctFeats.zipWithIndex().collectAsMap()
+print sampleOHEDict
+</code></pre>
+
+<pre><code>{(2, 'mouse'): 0, (0, 'cat'): 1, (0, 'bear'): 2, (2, 'salmon'): 3, (1, 'tabby'): 4, (1, 'black'): 5, (0, 'mouse'): 6}
+</code></pre>
+
+<pre><code class="language-python"># TEST OHE Dictionary from distinct features (2b)
+Test.assertEquals(sorted(sampleOHEDict.keys()),
+                  [(0, 'bear'), (0, 'cat'), (0, 'mouse'), (1, 'black'),
+                   (1, 'tabby'), (2, 'mouse'), (2, 'salmon')],
+                  'sampleOHEDict has unexpected keys')
+Test.assertEquals(sorted(sampleOHEDict.values()), range(7), 'sampleOHEDict has unexpected values')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="2c-automated-creation-of-an-ohe-dictionary">**(2c) Automated creation of an OHE dictionary **</h4>
+
+<h4 id="now-use-the-code-from-parts-2a-and-2b-to-write-a-function-that-takes-an-input-dataset-and-outputs-an-ohe-dictionary-then-use-this-function-to-create-an-ohe-dictionary-for-the-sample-dataset-and-verify-that-it-matches-the-dictionary-from-part-2b">Now use the code from Parts (2a) and (2b) to write a function that takes an input dataset and outputs an OHE dictionary.  Then use this function to create an OHE dictionary for the sample dataset, and verify that it matches the dictionary from Part (2b).</h4>
+
+<pre><code class="language-python">def createOneHotDict(inputData):
+    &quot;&quot;&quot;Creates a one-hot-encoder dictionary based on the input data.
+
+    Args:
+        inputData (RDD of lists of (int, str)): An RDD of observations where each observation is
+            made up of a list of (featureID, value) tuples.
+
+    Returns:
+        dict: A dictionary where the keys are (featureID, value) tuples and map to values that are
+            unique integers.
+    &quot;&quot;&quot;
+    distinctFeats = inputData.flatMap(lambda row: row).distinct()
+    return distinctFeats.zipWithIndex().collectAsMap()
+
+sampleOHEDictAuto = createOneHotDict(sampleDataRDD)
+print sampleOHEDictAuto
+</code></pre>
+
+<pre><code>{(2, 'mouse'): 0, (0, 'cat'): 1, (0, 'bear'): 2, (2, 'salmon'): 3, (1, 'tabby'): 4, (1, 'black'): 5, (0, 'mouse'): 6}
+</code></pre>
+
+<pre><code class="language-python"># TEST Automated creation of an OHE dictionary (2c)
+Test.assertEquals(sorted(sampleOHEDictAuto.keys()),
+                  [(0, 'bear'), (0, 'cat'), (0, 'mouse'), (1, 'black'),
+                   (1, 'tabby'), (2, 'mouse'), (2, 'salmon')],
+                  'sampleOHEDictAuto has unexpected keys')
+Test.assertEquals(sorted(sampleOHEDictAuto.values()), range(7),
+                  'sampleOHEDictAuto has unexpected values')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h3 id="part-3-parse-ctr-data-and-generate-ohe-features"><strong>Part 3: Parse CTR data and generate OHE features</strong></h3>
+
+<h4 id="before-we-can-proceed-you-ll-first-need-to-obtain-the-data-from-criteo-if-you-have-already-completed-this-step-in-the-setup-lab-just-run-the-cells-below-and-the-data-will-be-loaded-into-the-rawdata-variable">Before we can proceed, you&rsquo;ll first need to obtain the data from Criteo.  If you have already completed this step in the setup lab, just run the cells below and the data will be loaded into the <code>rawData</code> variable.</h4>
+
+<h4 id="below-is-criteo-s-data-sharing-agreement-after-you-accept-the-agreement-you-can-obtain-the-download-url-by-right-clicking-on-the-download-sample-button-and-clicking-copy-link-address-or-copy-link-location-depending-on-your-browser-paste-the-url-into-the-todo-cell-below-the-file-is-8-4-mb-compressed-the-script-below-will-download-the-file-to-the-virtual-machine-vm-and-then-extract-the-data">Below is Criteo&rsquo;s data sharing agreement.  After you accept the agreement, you can obtain the download URL by right-clicking on the &ldquo;Download Sample&rdquo; button and clicking &ldquo;Copy link address&rdquo; or &ldquo;Copy Link Location&rdquo;, depending on your browser.  Paste the URL into the <code># TODO</code> cell below.  The file is 8.4 MB compressed.  The script below will download the file to the virtual machine (VM) and then extract the data.</h4>
+
+<h4 id="if-running-the-cell-below-does-not-render-a-webpage-open-the-criteo-agreement-http-labs-criteo-com-downloads-2014-kaggle-display-advertising-challenge-dataset-in-a-separate-browser-tab-after-you-accept-the-agreement-you-can-obtain-the-download-url-by-right-clicking-on-the-download-sample-button-and-clicking-copy-link-address-or-copy-link-location-depending-on-your-browser-paste-the-url-into-the-todo-cell-below">If running the cell below does not render a webpage, open the <a href="http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/">Criteo agreement</a> in a separate browser tab.  After you accept the agreement, you can obtain the download URL by right-clicking on the &ldquo;Download Sample&rdquo; button and clicking &ldquo;Copy link address&rdquo; or &ldquo;Copy Link Location&rdquo;, depending on your browser.  Paste the URL into the <code># TODO</code> cell below.</h4>
+
+<h4 id="note-that-the-download-could-take-a-few-minutes-depending-upon-your-connection-speed">Note that the download could take a few minutes, depending upon your connection speed.</h4>
+
+<pre><code class="language-python"># Run this code to view Criteo's agreement
+from IPython.lib.display import IFrame
+
+IFrame(&quot;http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/&quot;,
+       600, 350)
+</code></pre>
+
+<pre><code>    &lt;iframe
+        width=&quot;600&quot;
+        height=&quot;350&quot;
+        src=&quot;http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/&quot;
+        frameborder=&quot;0&quot;
+        allowfullscreen
+    &gt;&lt;/iframe&gt;
+</code></pre>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+# Just replace &lt;FILL IN&gt; with the url for dac_sample.tar.gz
+import glob
+import os.path
+import tarfile
+import urllib
+import urlparse
+
+# Paste url, url should end with: dac_sample.tar.gz
+url = 'http://labs.criteo.com/wp-content/uploads/2015/04/dac_sample.tar.gz'
+
+url = url.strip()
+baseDir = os.path.join('data')
+inputPath = os.path.join('ctr_demo', 'dac_sample.txt')
+fileName = os.path.join(baseDir, inputPath)
+inputDir = os.path.split(fileName)[0]
+
+def extractTar(check = False):
+    # Find the zipped archive and extract the dataset
+    tars = glob.glob('dac_sample*.tar.gz*')
+    if check and len(tars) == 0:
+      return False
+
+    if len(tars) &gt; 0:
+        try:
+            tarFile = tarfile.open(tars[0])
+        except tarfile.ReadError:
+            if not check:
+                print 'Unable to open tar.gz file.  Check your URL.'
+            return False
+
+        tarFile.extract('dac_sample.txt', path=inputDir)
+        print 'Successfully extracted: dac_sample.txt'
+        return True
+    else:
+        print 'You need to retry the download with the correct url.'
+        print ('Alternatively, you can upload the dac_sample.tar.gz file to your Jupyter root ' +
+              'directory')
+        return False
+
+
+if os.path.isfile(fileName):
+    print 'File is already available. Nothing to do.'
+elif extractTar(check = True):
+    print 'tar.gz file was already available.'
+elif not url.endswith('dac_sample.tar.gz'):
+    print 'Check your download url.  Are you downloading the Sample dataset?'
+else:
+    # Download the file and store it in the same directory as this notebook
+    try:
+        urllib.urlretrieve(url, os.path.basename(urlparse.urlsplit(url).path))
+    except IOError:
+        print 'Unable to download and store: {0}'.format(url)
+
+    extractTar()
+</code></pre>
+
+<pre><code>File is already available. Nothing to do.
+</code></pre>
+
+<pre><code class="language-python">import os.path
+baseDir = os.path.join('data')
+inputPath = os.path.join('ctr_demo', 'dac_sample.txt')
+fileName = os.path.join(baseDir, inputPath)
+
+if os.path.isfile(fileName):
+    rawData = (sc
+               .textFile(fileName, 2)
+               .map(lambda x: x.replace('\t', ',')))  # work with either ',' or '\t' separated data
+    print rawData.take(1)
+</code></pre>
+
+<pre><code>[u'0,1,1,5,0,1382,4,15,2,181,1,2,,2,68fd1e64,80e26c9b,fb936136,7b4723c4,25c83c98,7e0ccccf,de7995b8,1f89b562,a73ee510,a8cd5504,b2cb9c98,37c9c164,2824a5f6,1adce6ef,8ba8b39a,891b62e7,e5ba7672,f54016b9,21ddcdc9,b1252a9d,07b5194c,,3a171ecb,c5c50484,e8b83407,9727dd16']
+</code></pre>
+
+<h4 id="3a-loading-and-splitting-the-data">**(3a) Loading and splitting the data **</h4>
+
+<h4 id="we-are-now-ready-to-start-working-with-the-actual-ctr-data-and-our-first-task-involves-splitting-it-into-training-validation-and-test-sets-use-the-randomsplit-method-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-randomsplit-with-the-specified-weights-and-seed-to-create-rdds-storing-each-of-these-datasets-and-then-cache-https-spark-apache-org-docs-latest-api-python-pyspark-html-pyspark-rdd-cache-each-of-these-rdds-as-we-will-be-accessing-them-multiple-times-in-the-remainder-of-this-lab-finally-compute-the-size-of-each-dataset">We are now ready to start working with the actual CTR data, and our first task involves splitting it into training, validation, and test sets.  Use the <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.randomSplit">randomSplit method</a> with the specified weights and seed to create RDDs storing each of these datasets, and then <a href="https://spark.apache.org/docs/latest/api/python/pyspark.html#pyspark.RDD.cache">cache</a> each of these RDDs, as we will be accessing them multiple times in the remainder of this lab. Finally, compute the size of each dataset.</h4>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+weights = [.8, .1, .1]
+seed = 42
+# Use randomSplit with weights and seed
+rawTrainData, rawValidationData, rawTestData = rawData.randomSplit(weights, seed)
+# Cache the data
+rawTrainData.cache()
+rawValidationData.cache()
+rawTestData.cache()
+
+nTrain = rawTrainData.count()
+nVal = rawValidationData.count()
+nTest = rawTestData.count()
+print nTrain, nVal, nTest, nTrain + nVal + nTest
+print rawData.take(1)
+</code></pre>
+
+<pre><code>79911 10075 10014 100000
+[u'0,1,1,5,0,1382,4,15,2,181,1,2,,2,68fd1e64,80e26c9b,fb936136,7b4723c4,25c83c98,7e0ccccf,de7995b8,1f89b562,a73ee510,a8cd5504,b2cb9c98,37c9c164,2824a5f6,1adce6ef,8ba8b39a,891b62e7,e5ba7672,f54016b9,21ddcdc9,b1252a9d,07b5194c,,3a171ecb,c5c50484,e8b83407,9727dd16']
+</code></pre>
+
+<pre><code class="language-python"># TEST Loading and splitting the data (3a)
+Test.assertTrue(all([rawTrainData.is_cached, rawValidationData.is_cached, rawTestData.is_cached]),
+                'you must cache the split data')
+Test.assertEquals(nTrain, 79911, 'incorrect value for nTrain')
+Test.assertEquals(nVal, 10075, 'incorrect value for nVal')
+Test.assertEquals(nTest, 10014, 'incorrect value for nTest')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="3b-extract-features">** (3b) Extract features **</h4>
+
+<h4 id="we-will-now-parse-the-raw-training-data-to-create-an-rdd-that-we-can-subsequently-use-to-create-an-ohe-dictionary-note-from-the-take-command-in-part-3a-that-each-raw-data-point-is-a-string-containing-several-fields-separated-by-some-delimiter-for-now-we-will-ignore-the-first-field-which-is-the-0-1-label-and-parse-the-remaining-fields-or-raw-features-to-do-this-complete-the-implemention-of-the-parsepoint-function">We will now parse the raw training data to create an RDD that we can subsequently use to create an OHE dictionary. Note from the <code>take()</code> command in Part (3a) that each raw data point is a string containing several fields separated by some delimiter.  For now, we will ignore the first field (which is the 0-1 label), and parse the remaining fields (or raw features).  To do this, complete the implemention of the <code>parsePoint</code> function.</h4>
+
+<pre><code class="language-python">#解析样本
+def parsePoint(point):
+    &quot;&quot;&quot;Converts a comma separated string into a list of (featureID, value) tuples.
+
+    Note:
+        featureIDs should start at 0 and increase to the number of features - 1.
+
+    Args:
+        point (str): A comma separated string where the first value is the label and the rest
+            are features.
+
+    Returns:
+        list: A list of (featureID, value) tuples.
+    &quot;&quot;&quot;
+    feats = point.split(',')[1:]
+    return [(idx, value) for (idx, value) in enumerate(feats)]
+
+parsedTrainFeat = rawTrainData.map(parsePoint)
+
+numCategories = (parsedTrainFeat
+                 .flatMap(lambda x: x)
+                 .distinct()
+                 .map(lambda x: (x[0], 1))
+                 .reduceByKey(lambda x, y: x + y)
+                 .sortByKey()
+                 .collect())
+
+print numCategories[2][1]
+</code></pre>
+
+<pre><code>855
+</code></pre>
+
+<pre><code class="language-python"># TEST Extract features (3b)
+Test.assertEquals(numCategories[2][1], 855, 'incorrect implementation of parsePoint')
+Test.assertEquals(numCategories[32][1], 4, 'incorrect implementation of parsePoint')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="3c-create-an-ohe-dictionary-from-the-dataset">**(3c) Create an OHE dictionary from the dataset **</h4>
+
+<h4 id="note-that-parsepoint-returns-a-data-point-as-a-list-of-featureid-category-tuples-which-is-the-same-format-as-the-sample-dataset-in-parts-1-and-2-of-this-lab-using-this-observation-create-an-ohe-dictionary-using-the-function-implemented-in-part-2c-note-that-we-will-assume-for-simplicity-that-all-features-in-our-ctr-dataset-are-categorical">Note that parsePoint returns a data point as a list of <code>(featureID, category)</code> tuples, which is the same format as the sample dataset in Parts 1 and 2 of this lab.  Using this observation, create an OHE dictionary using the function implemented in Part (2c). Note that we will assume for simplicity that all features in our CTR dataset are categorical.</h4>
+
+<pre><code class="language-python">ctrOHEDict = createOneHotDict(parsedTrainFeat)
+numCtrOHEFeats = len(ctrOHEDict.keys())
+print numCtrOHEFeats
+print ctrOHEDict[(0, '')]
+</code></pre>
+
+<pre><code>233286
+36177
+</code></pre>
+
+<pre><code class="language-python"># TEST Create an OHE dictionary from the dataset (3c)
+Test.assertEquals(numCtrOHEFeats, 233286, 'incorrect number of features in ctrOHEDict')
+Test.assertTrue((0, '') in ctrOHEDict, 'incorrect features in ctrOHEDict')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="3d-apply-ohe-to-the-dataset">** (3d) Apply OHE to the dataset **</h4>
+
+<h4 id="now-let-s-use-this-ohe-dictionary-by-starting-with-the-raw-training-data-and-creating-an-rdd-of-labeledpoint-http-spark-apache-org-docs-1-3-1-api-python-pyspark-mllib-html-pyspark-mllib-regression-labeledpoint-objects-using-ohe-features-to-do-this-complete-the-implementation-of-the-parseohepoint-function-hint-parseohepoint-is-an-extension-of-the-parsepoint-function-from-part-3b-and-it-uses-the-onehotencoding-function-from-part-1d">Now let&rsquo;s use this OHE dictionary by starting with the raw training data and creating an RDD of <a href="http://spark.apache.org/docs/1.3.1/api/python/pyspark.mllib.html#pyspark.mllib.regression.LabeledPoint">LabeledPoint</a> objects using OHE features.  To do this, complete the implementation of the <code>parseOHEPoint</code> function. Hint: <code>parseOHEPoint</code> is an extension of the <code>parsePoint</code> function from Part (3b) and it uses the <code>oneHotEncoding</code> function from Part (1d).</h4>
+
+<pre><code class="language-python">from pyspark.mllib.regression import LabeledPoint
+</code></pre>
+
+<pre><code class="language-python">def parseOHEPoint(point, OHEDict, numOHEFeats):
+    &quot;&quot;&quot;Obtain the label and feature vector for this raw observation.
+
+    Note:
+        You must use the function `oneHotEncoding` in this implementation or later portions
+        of this lab may not function as expected.
+
+    Args:
+        point (str): A comma separated string where the first value is the label and the rest
+            are features.
+        OHEDict (dict of (int, str) to int): Mapping of (featureID, value) to unique integer.
+        numOHEFeats (int): The number of unique features in the training dataset.
+
+    Returns:
+        LabeledPoint: Contains the label for the observation and the one-hot-encoding of the
+            raw features based on the provided OHE dictionary.
+    &quot;&quot;&quot;
+    label = point.split(',')[0]
+    features = oneHotEncoding(parsePoint(point), OHEDict, numCtrOHEFeats)
+    return LabeledPoint(label, features)
+
+OHETrainData = rawTrainData.map(lambda point: parseOHEPoint(point, ctrOHEDict, numCtrOHEFeats))
+OHETrainData.cache()
+print OHETrainData.take(1)
+
+# Check that oneHotEncoding function was used in parseOHEPoint
+backupOneHot = oneHotEncoding
+oneHotEncoding = None
+withOneHot = False
+try: parseOHEPoint(rawTrainData.take(1)[0], ctrOHEDict, numCtrOHEFeats)
+except TypeError: withOneHot = True
+oneHotEncoding = backupOneHot
+</code></pre>
+
+<pre><code>[LabeledPoint(0.0, (233286,[382,3101,6842,8311,8911,11887,12893,16211,17631,18646,23513,29366,33157,39536,55820,61797,81485,82753,93671,96986,109720,110662,112139,120263,128571,132400,132805,140595,160666,185457,190322,191105,195902,202638,204242,206037,222753,225966,229941],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]))]
+</code></pre>
+
+<pre><code class="language-python"># TEST Apply OHE to the dataset (3d)
+numNZ = sum(parsedTrainFeat.map(lambda x: len(x)).take(5))
+numNZAlt = sum(OHETrainData.map(lambda lp: len(lp.features.indices)).take(5))
+Test.assertEquals(numNZ, numNZAlt, 'incorrect implementation of parseOHEPoint')
+Test.assertTrue(withOneHot, 'oneHotEncoding not present in parseOHEPoint')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="visualization-1-feature-frequency">**Visualization 1: Feature frequency **</h4>
+
+<h4 id="we-will-now-visualize-the-number-of-times-each-of-the-233-286-ohe-features-appears-in-the-training-data-we-first-compute-the-number-of-times-each-feature-appears-then-bucket-the-features-by-these-counts-the-buckets-are-sized-by-powers-of-2-so-the-first-bucket-corresponds-to-features-that-appear-exactly-once-scriptsize-2-0-the-second-to-features-that-appear-twice-scriptsize-2-1-the-third-to-features-that-occur-between-three-and-four-scriptsize-2-2-times-the-fifth-bucket-is-five-to-eight-scriptsize-2-3-times-and-so-on-the-scatter-plot-below-shows-the-logarithm-of-the-bucket-thresholds-versus-the-logarithm-of-the-number-of-features-that-have-counts-that-fall-in-the-buckets">We will now visualize the number of times each of the 233,286 OHE features appears in the training data. We first compute the number of times each feature appears, then bucket the features by these counts.  The buckets are sized by powers of 2, so the first bucket corresponds to features that appear exactly once ( $ \scriptsize 2^0 $ ), the second to features that appear twice ( $ \scriptsize 2^1 $ ), the third to features that occur between three and four ( $ \scriptsize 2^2 $ ) times, the fifth bucket is five to eight ( $ \scriptsize 2^3 $ ) times and so on. The scatter plot below shows the logarithm of the bucket thresholds versus the logarithm of the number of features that have counts that fall in the buckets.</h4>
+
+<pre><code class="language-python">def bucketFeatByCount(featCount):
+    &quot;&quot;&quot;Bucket the counts by powers of two.&quot;&quot;&quot;
+    for i in range(11):
+        size = 2 ** i
+        if featCount &lt;= size:
+            return size
+    return -1
+
+featCounts = (OHETrainData
+              .flatMap(lambda lp: lp.features.indices)
+              .map(lambda x: (x, 1))
+              .reduceByKey(lambda x, y: x + y))
+featCountsBuckets = (featCounts
+                     .map(lambda x: (bucketFeatByCount(x[1]), 1))
+                     .filter(lambda (k, v): k != -1)
+                     .reduceByKey(lambda x, y: x + y)
+                     .collect())
+print featCountsBuckets
+</code></pre>
+
+<pre><code>[(256, 748), (1024, 255), (2, 24076), (4, 16639), (32, 4755), (8, 11440), (64, 2627), (128, 1476), (16, 7752), (512, 414), (1, 162813)]
+</code></pre>
+
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+x, y = zip(*featCountsBuckets)
+x, y = np.log(x), np.log(y)
+
+def preparePlot(xticks, yticks, figsize=(10.5, 6), hideLabels=False, gridColor='#999999',
+                gridWidth=1.0):
+    &quot;&quot;&quot;Template for generating the plot layout.&quot;&quot;&quot;
+    plt.close()
+    fig, ax = plt.subplots(figsize=figsize, facecolor='white', edgecolor='white')
+    ax.axes.tick_params(labelcolor='#999999', labelsize='10')
+    for axis, ticks in [(ax.get_xaxis(), xticks), (ax.get_yaxis(), yticks)]:
+        axis.set_ticks_position('none')
+        axis.set_ticks(ticks)
+        axis.label.set_color('#999999')
+        if hideLabels: axis.set_ticklabels([])
+    plt.grid(color=gridColor, linewidth=gridWidth, linestyle='-')
+    map(lambda position: ax.spines[position].set_visible(False), ['bottom', 'top', 'left', 'right'])
+    return fig, ax
+
+# generate layout and plot data
+fig, ax = preparePlot(np.arange(0, 10, 1), np.arange(4, 14, 2))
+ax.set_xlabel(r'$\log_e(bucketSize)$'), ax.set_ylabel(r'$\log_e(countInBucket)$')
+plt.scatter(x, y, s=14**2, c='#d6ebf2', edgecolors='#8cbfd0', alpha=0.75)
+pass
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/KdCIAEAJFL.png?imageslim" alt="mark" /></p>
+
+<h4 id="3e-handling-unseen-features">**(3e) Handling unseen features **</h4>
+
+<h4 id="we-naturally-would-like-to-repeat-the-process-from-part-3d-e-g-to-compute-ohe-features-for-the-validation-and-test-datasets-however-we-must-be-careful-as-some-categorical-values-will-likely-appear-in-new-data-that-did-not-exist-in-the-training-data-to-deal-with-this-situation-update-the-onehotencoding-function-from-part-1d-to-ignore-previously-unseen-categories-and-then-compute-ohe-features-for-the-validation-data">We naturally would like to repeat the process from Part (3d), e.g., to compute OHE features for the validation and test datasets.  However, we must be careful, as some categorical values will likely appear in new data that did not exist in the training data. To deal with this situation, update the <code>oneHotEncoding()</code> function from Part (1d) to ignore previously unseen categories, and then compute OHE features for the validation data.</h4>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+def oneHotEncoding(rawFeats, OHEDict, numOHEFeats):
+    &quot;&quot;&quot;Produce a one-hot-encoding from a list of features and an OHE dictionary.
+
+    Note:
+        If a (featureID, value) tuple doesn't have a corresponding key in OHEDict it should be
+        ignored.
+
+    Args:
+        rawFeats (list of (int, str)): The features corresponding to a single observation.  Each
+            feature consists of a tuple of featureID and the feature's value. (e.g. sampleOne)
+        OHEDict (dict): A mapping of (featureID, value) to unique integer.
+        numOHEFeats (int): The total number of unique OHE features (combinations of featureID and
+            value).
+
+    Returns:
+        SparseVector: A SparseVector of length numOHEFeats with indicies equal to the unique
+            identifiers for the (featureID, value) combinations that occur in the observation and
+            with values equal to 1.0.
+    &quot;&quot;&quot;
+    validTuples = []
+    for (featID, value) in rawFeats:
+        try:
+            validTuples.append((OHEDict[(featID, value)],1))
+        except KeyError:
+            pass
+    return SparseVector(numOHEFeats, validTuples)
+
+OHEValidationData = rawValidationData.map(lambda point: parseOHEPoint(point, ctrOHEDict, numCtrOHEFeats))
+OHEValidationData.cache()
+print OHEValidationData.take(1)
+</code></pre>
+
+<pre><code>[LabeledPoint(0.0, (233286,[7623,9238,15597,21650,31238,36177,36577,39536,49203,61797,66635,67253,68245,68344,73075,76724,81421,81485,92068,96986,98511,109720,117014,121550,141683,146472,147618,171119,184096,184644,185457,185819,194734,198514,201019,210722,213593,222178,227716],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]))]
+</code></pre>
+
+<pre><code class="language-python"># TEST Handling unseen features (3e)
+numNZVal = (OHEValidationData
+            .map(lambda lp: len(lp.features.indices))
+            .sum())
+Test.assertEquals(numNZVal, 372080, 'incorrect number of features')
+</code></pre>
+
+<pre><code>1 test passed.
+</code></pre>
+
+<h3 id="part-4-ctr-prediction-and-logloss-evaluation">** Part 4: CTR prediction and logloss evaluation **</h3>
+
+<h4 id="4a-logistic-regression">** (4a) Logistic regression **</h4>
+
+<h4 id="we-are-now-ready-to-train-our-first-ctr-classifier-a-natural-classifier-to-use-in-this-setting-is-logistic-regression-since-it-models-the-probability-of-a-click-through-event-rather-than-returning-a-binary-response-and-when-working-with-rare-events-probabilistic-predictions-are-useful-first-use-logisticregressionwithsgd-https-spark-apache-org-docs-latest-api-python-pyspark-mllib-html-pyspark-mllib-classification-logisticregressionwithsgd-to-train-a-model-using-ohetraindata-with-the-given-hyperparameter-configuration-logisticregressionwithsgd-returns-a-logisticregressionmodel-https-spark-apache-org-docs-latest-api-python-pyspark-mllib-html-pyspark-mllib-regression-logisticregressionmodel-next-use-the-logisticregressionmodel-weights-and-logisticregressionmodel-intercept-attributes-to-print-out-the-model-s-parameters-note-that-these-are-the-names-of-the-object-s-attributes-and-should-be-called-using-a-syntax-like-model-weights-for-a-given-model">We are now ready to train our first CTR classifier.  A natural classifier to use in this setting is logistic regression, since it models the probability of a click-through event rather than returning a binary response, and when working with rare events, probabilistic predictions are useful.  First use <a href="https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.classification.LogisticRegressionWithSGD">LogisticRegressionWithSGD</a> to train a model using <code>OHETrainData</code> with the given hyperparameter configuration.  <code>LogisticRegressionWithSGD</code> returns a <a href="https://spark.apache.org/docs/latest/api/python/pyspark.mllib.html#pyspark.mllib.regression.LogisticRegressionModel">LogisticRegressionModel</a>.  Next, use the <code>LogisticRegressionModel.weights</code> and <code>LogisticRegressionModel.intercept</code> attributes to print out the model&rsquo;s parameters.  Note that these are the names of the object&rsquo;s attributes and should be called using a syntax like <code>model.weights</code> for a given <code>model</code>.</h4>
+
+<pre><code class="language-python">from pyspark.mllib.classification import LogisticRegressionWithSGD
+
+# fixed hyperparameters
+numIters = 50
+stepSize = 10.
+regParam = 1e-6
+regType = 'l2'
+includeIntercept = True
+</code></pre>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+model0 = LogisticRegressionWithSGD.train(OHETrainData,
+                                         iterations=numIters,
+                                         step=stepSize,
+                                         regParam=regParam,
+                                         regType=regType,
+                                         intercept=includeIntercept)
+sortedWeights = sorted(model0.weights)
+print sortedWeights[:5], model0.intercept
+</code></pre>
+
+<pre><code>[-0.4589923685357562, -0.37973707648623972, -0.3699655826675331, -0.36934962879928285, -0.32697945415010637] 0.56455084025
+</code></pre>
+
+<pre><code class="language-python"># TEST Logistic regression (4a)
+Test.assertTrue(np.allclose(model0.intercept,  0.56455084025), 'incorrect value for model0.intercept')
+Test.assertTrue(np.allclose(sortedWeights[0:5],
+                [-0.45899236853575609, -0.37973707648623956, -0.36996558266753304,
+                 -0.36934962879928263, -0.32697945415010637]), 'incorrect value for model0.weights')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="4b-log-loss">** (4b) Log loss **</h4>
+
+<h4 id="throughout-this-lab-we-will-use-log-loss-to-evaluate-the-quality-of-models-log-loss-is-defined-as-begin-align-scriptsize-ell-log-p-y-begin-cases-log-p-text-if-y-1-log-1-p-text-if-y-0-end-cases-end-align-where-scriptsize-p-is-a-probability-between-0-and-1-and-scriptsize-y-is-a-label-of-either-0-or-1-log-loss-is-a-standard-evaluation-criterion-when-predicting-rare-events-such-as-click-through-rate-prediction-it-is-also-the-criterion-used-in-the-criteo-kaggle-competition-https-www-kaggle-com-c-criteo-display-ad-challenge-write-a-function-to-compute-log-loss-and-evaluate-it-on-some-sample-inputs">Throughout this lab, we will use log loss to evaluate the quality of models.  Log loss is defined as: $$  \begin{align} \scriptsize \ell_{log}(p, y) = \begin{cases} -\log (p) &amp; \text{if } y = 1 \\ -\log(1-p) &amp; \text{if } y = 0 \end{cases} \end{align} $$ where $ \scriptsize p$ is a probability between 0 and 1 and $ \scriptsize y$ is a label of either 0 or 1. Log loss is a standard evaluation criterion when predicting rare-events such as click-through rate prediction (it is also the criterion used in the <a href="https://www.kaggle.com/c/criteo-display-ad-challenge">Criteo Kaggle competition</a>).  Write a function to compute log loss, and evaluate it on some sample inputs.</h4>
+
+<pre><code class="language-python">from math import log
+
+def computeLogLoss(p, y):
+    &quot;&quot;&quot;Calculates the value of log loss for a given probabilty and label.
+
+    Note:
+        log(0) is undefined, so when p is 0 we need to add a small value (epsilon) to it
+        and when p is 1 we need to subtract a small value (epsilon) from it.
+
+    Args:
+        p (float): A probabilty between 0 and 1.
+        y (int): A label.  Takes on the values 0 and 1.
+
+    Returns:
+        float: The log loss value.
+    &quot;&quot;&quot;
+    epsilon = 10e-12
+    if p == 0:
+        p += epsilon
+    elif p == 1:
+        p -= epsilon
+    if y == 1:
+        return -log(p)
+    else:
+        return -log(1 - p)
+
+print computeLogLoss(.5, 1)
+print computeLogLoss(.5, 0)
+print computeLogLoss(.99, 1)
+print computeLogLoss(.99, 0)
+print computeLogLoss(.01, 1)
+print computeLogLoss(.01, 0)
+print computeLogLoss(0, 1)
+print computeLogLoss(1, 1)
+print computeLogLoss(1, 0)
+</code></pre>
+
+<pre><code>0.69314718056
+0.69314718056
+0.0100503358535
+4.60517018599
+4.60517018599
+0.0100503358535
+25.3284360229
+1.00000008275e-11
+25.3284359402
+</code></pre>
+
+<pre><code class="language-python"># TEST Log loss (4b)
+Test.assertTrue(np.allclose([computeLogLoss(.5, 1), computeLogLoss(.01, 0), computeLogLoss(.01, 1)],
+                            [0.69314718056, 0.0100503358535, 4.60517018599]),
+                'computeLogLoss is not correct')
+Test.assertTrue(np.allclose([computeLogLoss(0, 1), computeLogLoss(1, 1), computeLogLoss(1, 0)],
+                            [25.3284360229, 1.00000008275e-11, 25.3284360229]),
+                'computeLogLoss needs to bound p away from 0 and 1 by epsilon')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="4c-baseline-log-loss">** (4c)  Baseline log loss **</h4>
+
+<h4 id="next-we-will-use-the-function-we-wrote-in-part-4b-to-compute-the-baseline-log-loss-on-the-training-data-a-very-simple-yet-natural-baseline-model-is-one-where-we-always-make-the-same-prediction-independent-of-the-given-datapoint-setting-the-predicted-value-equal-to-the-fraction-of-training-points-that-correspond-to-click-through-events-i-e-where-the-label-is-one-compute-this-value-which-is-simply-the-mean-of-the-training-labels-and-then-use-it-to-compute-the-training-log-loss-for-the-baseline-model-the-log-loss-for-multiple-observations-is-the-mean-of-the-individual-log-loss-values">Next we will use the function we wrote in Part (4b) to compute the baseline log loss on the training data. A very simple yet natural baseline model is one where we always make the same prediction independent of the given datapoint, setting the predicted value equal to the fraction of training points that correspond to click-through events (i.e., where the label is one). Compute this value (which is simply the mean of the training labels), and then use it to compute the training log loss for the baseline model.  The log loss for multiple observations is the mean of the individual log loss values.</h4>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+# Note that our dataset has a very high click-through rate by design
+# In practice click-through rate can be one to two orders of magnitude lower
+classOneFracTrain = OHETrainData.map(lambda lp: lp.label).mean()
+print classOneFracTrain
+
+logLossTrBase = OHETrainData.map(lambda lp: computeLogLoss(classOneFracTrain, lp.label)).mean()
+print 'Baseline Train Logloss = {0:.3f}\n'.format(logLossTrBase)
+</code></pre>
+
+<pre><code>0.22717773523
+Baseline Train Logloss = 0.536
+</code></pre>
+
+<pre><code class="language-python"># TEST Baseline log loss (4c)
+Test.assertTrue(np.allclose(classOneFracTrain, 0.22717773523), 'incorrect value for classOneFracTrain')
+Test.assertTrue(np.allclose(logLossTrBase, 0.535844), 'incorrect value for logLossTrBase')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="4d-predicted-probability">** (4d) Predicted probability **</h4>
+
+<h4 id="in-order-to-compute-the-log-loss-for-the-model-we-trained-in-part-4a-we-need-to-write-code-to-generate-predictions-from-this-model-write-a-function-that-computes-the-raw-linear-prediction-from-this-logistic-regression-model-and-then-passes-it-through-a-sigmoid-function-http-en-wikipedia-org-wiki-sigmoid-function-scriptsize-sigma-t-1-e-t-1-to-return-the-model-s-probabilistic-prediction-then-compute-probabilistic-predictions-on-the-training-data">In order to compute the log loss for the model we trained in Part (4a), we need to write code to generate predictions from this model. Write a function that computes the raw linear prediction from this logistic regression model and then passes it through a <a href="http://en.wikipedia.org/wiki/Sigmoid_function">sigmoid function</a> $ \scriptsize \sigma(t) = (1+ e^{-t})^{-1} $ to return the model&rsquo;s probabilistic prediction. Then compute probabilistic predictions on the training data.</h4>
+
+<h4 id="note-that-when-incorporating-an-intercept-into-our-predictions-we-simply-add-the-intercept-to-the-value-of-the-prediction-obtained-from-the-weights-and-features-alternatively-if-the-intercept-was-included-as-the-first-weight-we-would-need-to-add-a-corresponding-feature-to-our-data-where-the-feature-has-the-value-one-this-is-not-the-case-here">Note that when incorporating an intercept into our predictions, we simply add the intercept to the value of the prediction obtained from the weights and features.  Alternatively, if the intercept was included as the first weight, we would need to add a corresponding feature to our data where the feature has the value one.  This is not the case here.</h4>
+
+<pre><code class="language-python">from math import exp #  exp(-t) = e^-t
+
+def getP(x, w, intercept):
+    &quot;&quot;&quot;Calculate the probability for an observation given a set of weights and intercept.
+
+    Note:
+        We'll bound our raw prediction between 20 and -20 for numerical purposes.
+
+    Args:
+        x (SparseVector): A vector with values of 1.0 for features that exist in this
+            observation and 0.0 otherwise.
+        w (DenseVector): A vector of weights (betas) for the model.
+        intercept (float): The model's intercept.
+
+    Returns:
+        float: A probability between 0 and 1.
+    &quot;&quot;&quot;
+    rawPrediction = w.dot(x) + intercept
+
+    # Bound the raw prediction value
+    rawPrediction = min(rawPrediction, 20)
+    rawPrediction = max(rawPrediction, -20)
+    return 1/(1 + exp(-rawPrediction))
+
+trainingPredictions = OHETrainData.map(lambda lp: getP(lp.features, model0.weights, model0.intercept))
+
+print trainingPredictions.take(5)
+</code></pre>
+
+<pre><code>[0.30262882023911125, 0.10362661997434075, 0.283634247838756, 0.17846102057880114, 0.5389775379218853]
+</code></pre>
+
+<pre><code class="language-python"># TEST Predicted probability (4d)
+Test.assertTrue(np.allclose(trainingPredictions.sum(), 18135.4834348),
+                'incorrect value for trainingPredictions')
+</code></pre>
+
+<pre><code>1 test passed.
+</code></pre>
+
+<h4 id="4e-evaluate-the-model">** (4e) Evaluate the model **</h4>
+
+<h4 id="we-are-now-ready-to-evaluate-the-quality-of-the-model-we-trained-in-part-4a-to-do-this-first-write-a-general-function-that-takes-as-input-a-model-and-data-and-outputs-the-log-loss-then-run-this-function-on-the-ohe-training-data-and-compare-the-result-with-the-baseline-log-loss">We are now ready to evaluate the quality of the model we trained in Part (4a). To do this, first write a general function that takes as input a model and data, and outputs the log loss.  Then run this function on the OHE training data, and compare the result with the baseline log loss.</h4>
+
+<pre><code class="language-python">def evaluateResults(model, data):
+    &quot;&quot;&quot;Calculates the log loss for the data given the model.
+
+    Args:
+        model (LogisticRegressionModel): A trained logistic regression model.
+        data (RDD of LabeledPoint): Labels and features for each observation.
+
+    Returns:
+        float: Log loss for the data.
+    &quot;&quot;&quot;
+    return (data
+            .map(lambda lp: (lp.label, getP(lp.features, model.weights, model.intercept)))
+            .map(lambda (label, prediction): computeLogLoss(prediction, label))
+            .mean())
+
+logLossTrLR0 = evaluateResults(model0, OHETrainData)
+print ('OHE Features Train Logloss:\n\tBaseline = {0:.3f}\n\tLogReg = {1:.3f}'
+       .format(logLossTrBase, logLossTrLR0))
+</code></pre>
+
+<pre><code>OHE Features Train Logloss:
+    Baseline = 0.536
+    LogReg = 0.457
+</code></pre>
+
+<pre><code class="language-python"># TEST Evaluate the model (4e)
+Test.assertTrue(np.allclose(logLossTrLR0, 0.456903), 'incorrect value for logLossTrLR0')
+</code></pre>
+
+<pre><code>1 test passed.
+</code></pre>
+
+<h4 id="4f-validation-log-loss">** (4f) Validation log loss **</h4>
+
+<h4 id="next-following-the-same-logic-as-in-parts-4c-and-4-e-compute-the-validation-log-loss-for-both-the-baseline-and-logistic-regression-models-notably-the-baseline-model-for-the-validation-data-should-still-be-based-on-the-label-fraction-from-the-training-dataset">Next, following the same logic as in Parts (4c) and 4(e), compute the validation log loss for both the baseline and logistic regression models. Notably, the baseline model for the validation data should still be based on the label fraction from the training dataset.</h4>
+
+<pre><code class="language-python">logLossValBase = OHEValidationData.map(lambda lp: computeLogLoss(classOneFracTrain, lp.label)).mean()
+
+logLossValLR0 = evaluateResults(model0, OHEValidationData)
+print ('OHE Features Validation Logloss:\n\tBaseline = {0:.3f}\n\tLogReg = {1:.3f}'
+       .format(logLossValBase, logLossValLR0))
+</code></pre>
+
+<pre><code>OHE Features Validation Logloss:
+    Baseline = 0.528
+    LogReg = 0.457
+</code></pre>
+
+<pre><code class="language-python"># TEST Validation log loss (4f)
+Test.assertTrue(np.allclose(logLossValBase, 0.527603), 'incorrect value for logLossValBase')
+Test.assertTrue(np.allclose(logLossValLR0, 0.456957), 'incorrect value for logLossValLR0')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="visualization-2-roc-curve">**Visualization 2: ROC curve **</h4>
+
+<h4 id="we-will-now-visualize-how-well-the-model-predicts-our-target-to-do-this-we-generate-a-plot-of-the-roc-curve-the-roc-curve-shows-us-the-trade-off-between-the-false-positive-rate-and-true-positive-rate-as-we-liberalize-the-threshold-required-to-predict-a-positive-outcome-a-random-model-is-represented-by-the-dashed-line">We will now visualize how well the model predicts our target.  To do this we generate a plot of the ROC curve.  The ROC curve shows us the trade-off between the false positive rate and true positive rate, as we liberalize the threshold required to predict a positive outcome.  A random model is represented by the dashed line.</h4>
+
+<pre><code class="language-python">labelsAndScores = OHEValidationData.map(lambda lp:
+                                            (lp.label, getP(lp.features, model0.weights, model0.intercept)))
+labelsAndWeights = labelsAndScores.collect()
+labelsAndWeights.sort(key=lambda (k, v): v, reverse=True)
+labelsByWeight = np.array([k for (k, v) in labelsAndWeights])
+
+length = labelsByWeight.size
+truePositives = labelsByWeight.cumsum()
+numPositive = truePositives[-1]
+falsePositives = np.arange(1.0, length + 1, 1.) - truePositives
+
+truePositiveRate = truePositives / numPositive
+falsePositiveRate = falsePositives / (length - numPositive)
+
+# Generate layout and plot data
+fig, ax = preparePlot(np.arange(0., 1.1, 0.1), np.arange(0., 1.1, 0.1))
+ax.set_xlim(-.05, 1.05), ax.set_ylim(-.05, 1.05)
+ax.set_ylabel('True Positive Rate (Sensitivity)')
+ax.set_xlabel('False Positive Rate (1 - Specificity)')
+plt.plot(falsePositiveRate, truePositiveRate, color='#8cbfd0', linestyle='-', linewidth=3.)
+plt.plot((0., 1.), (0., 1.), linestyle='--', color='#d6ebf2', linewidth=2.)  # Baseline model
+pass
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/770geb47Ee.png?imageslim" alt="mark" /></p>
+
+<h3 id="part-5-reduce-feature-dimension-via-feature-hashing"><strong>Part 5: Reduce feature dimension via feature hashing</strong></h3>
+
+<h4 id="5a-hash-function">** (5a) Hash function **</h4>
+
+<h4 id="as-we-just-saw-using-a-one-hot-encoding-featurization-can-yield-a-model-with-good-statistical-accuracy-however-the-number-of-distinct-categories-across-all-features-is-quite-large-recall-that-we-observed-233k-categories-in-the-training-data-in-part-3c-moreover-the-full-kaggle-training-dataset-includes-more-than-33m-distinct-categories-and-the-kaggle-dataset-itself-is-just-a-small-subset-of-criteo-s-labeled-data-hence-featurizing-via-a-one-hot-encoding-representation-would-lead-to-a-very-large-feature-vector-to-reduce-the-dimensionality-of-the-feature-space-we-will-use-feature-hashing">As we just saw, using a one-hot-encoding featurization can yield a model with good statistical accuracy.  However, the number of distinct categories across all features is quite large &ndash; recall that we observed 233K categories in the training data in Part (3c).  Moreover, the full Kaggle training dataset includes more than 33M distinct categories, and the Kaggle dataset itself is just a small subset of Criteo&rsquo;s labeled data.  Hence, featurizing via a one-hot-encoding representation would lead to a very large feature vector. To reduce the dimensionality of the feature space, we will use feature hashing.</h4>
+
+<p>####Below is the hash function that we will use for this part of the lab.  We will first use this hash function with the three sample data points from Part (1a) to gain some intuition.  Specifically, run code to hash the three sample points using two different values for <code>numBuckets</code> and observe the resulting hashed feature dictionaries.</p>
+
+<pre><code class="language-python">from collections import defaultdict
+import hashlib
+
+def hashFunction(numBuckets, rawFeats, printMapping=False):
+    &quot;&quot;&quot;Calculate a feature dictionary for an observation's features based on hashing.
+
+    Note:
+        Use printMapping=True for debug purposes and to better understand how the hashing works.
+
+    Args:
+        numBuckets (int): Number of buckets to use as features.
+        rawFeats (list of (int, str)): A list of features for an observation.  Represented as
+            (featureID, value) tuples.
+        printMapping (bool, optional): If true, the mappings of featureString to index will be
+            printed.
+
+    Returns:
+        dict of int to float:  The keys will be integers which represent the buckets that the
+            features have been hashed to.  The value for a given key will contain the count of the
+            (featureID, value) tuples that have hashed to that key.
+    &quot;&quot;&quot;
+    mapping = {}
+    for ind, category in rawFeats:
+        featureString = category + str(ind)
+        mapping[featureString] = int(int(hashlib.md5(featureString).hexdigest(), 16) % numBuckets)
+    if(printMapping): print mapping
+    sparseFeatures = defaultdict(float)
+    for bucket in mapping.values():
+        sparseFeatures[bucket] += 1.0
+    return dict(sparseFeatures)
+
+# Reminder of the sample values:
+# sampleOne = [(0, 'mouse'), (1, 'black')]
+# sampleTwo = [(0, 'cat'), (1, 'tabby'), (2, 'mouse')]
+# sampleThree =  [(0, 'bear'), (1, 'black'), (2, 'salmon')]
+</code></pre>
+
+<pre><code class="language-python"># Use four buckets
+sampOneFourBuckets = hashFunction(4, sampleOne, True)
+sampTwoFourBuckets = hashFunction(4, sampleTwo, True)
+sampThreeFourBuckets = hashFunction(4, sampleThree, True)
+
+# Use one hundred buckets
+sampOneHundredBuckets = hashFunction(100, sampleOne, True)
+sampTwoHundredBuckets = hashFunction(100, sampleTwo, True)
+sampThreeHundredBuckets = hashFunction(100, sampleThree, True)
+
+print '\t\t 4 Buckets \t\t\t 100 Buckets'
+print 'SampleOne:\t {0}\t\t {1}'.format(sampOneFourBuckets, sampOneHundredBuckets)
+print 'SampleTwo:\t {0}\t\t {1}'.format(sampTwoFourBuckets, sampTwoHundredBuckets)
+print 'SampleThree:\t {0}\t {1}'.format(sampThreeFourBuckets, sampThreeHundredBuckets)
+</code></pre>
+
+<pre><code>{'black1': 2, 'mouse0': 3}
+{'cat0': 0, 'tabby1': 0, 'mouse2': 2}
+{'bear0': 0, 'black1': 2, 'salmon2': 1}
+{'black1': 14, 'mouse0': 31}
+{'cat0': 40, 'tabby1': 16, 'mouse2': 62}
+{'bear0': 72, 'black1': 14, 'salmon2': 5}
+         4 Buckets           100 Buckets
+SampleOne:   {2: 1.0, 3: 1.0}        {14: 1.0, 31: 1.0}
+SampleTwo:   {0: 2.0, 2: 1.0}        {40: 1.0, 16: 1.0, 62: 1.0}
+SampleThree:     {0: 1.0, 1: 1.0, 2: 1.0}    {72: 1.0, 5: 1.0, 14: 1.0}
+</code></pre>
+
+<pre><code class="language-python"># TEST Hash function (5a)
+Test.assertEquals(sampOneFourBuckets, {2: 1.0, 3: 1.0}, 'incorrect value for sampOneFourBuckets')
+Test.assertEquals(sampThreeHundredBuckets, {72: 1.0, 5: 1.0, 14: 1.0},
+                  'incorrect value for sampThreeHundredBuckets')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="5b-creating-hashed-features">** (5b) Creating hashed features **</h4>
+
+<h4 id="next-we-will-use-this-hash-function-to-create-hashed-features-for-our-ctr-datasets-first-write-a-function-that-uses-the-hash-function-from-part-5a-with-numbuckets-scriptsize-2-15-approx-33k-to-create-a-labeledpoint-with-hashed-features-stored-as-a-sparsevector-then-use-this-function-to-create-new-training-validation-and-test-datasets-with-hashed-features-hint-parsedhashpoint-is-similar-to-parseohepoint-from-part-3d">Next we will use this hash function to create hashed features for our CTR datasets. First write a function that uses the hash function from Part (5a) with numBuckets = $ \scriptsize 2^{15} \approx 33K $ to create a <code>LabeledPoint</code> with hashed features stored as a <code>SparseVector</code>.  Then use this function to create new training, validation and test datasets with hashed features. Hint: <code>parsedHashPoint</code> is similar to <code>parseOHEPoint</code> from Part (3d).</h4>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+def parseHashPoint(point, numBuckets):
+    &quot;&quot;&quot;Create a LabeledPoint for this observation using hashing.
+
+    Args:
+        point (str): A comma separated string where the first value is the label and the rest are
+            features.
+        numBuckets: The number of buckets to hash to.
+
+    Returns:
+        LabeledPoint: A LabeledPoint with a label (0.0 or 1.0) and a SparseVector of hashed
+            features.
+    &quot;&quot;&quot;
+    fields = point.split(',')
+    label = fields[0]
+    features = parsePoint(point)
+    return LabeledPoint(label, SparseVector(numBuckets, hashFunction(numBuckets, features)))
+
+numBucketsCTR = 2 ** 15
+hashTrainData = rawTrainData.map(lambda lp: parseHashPoint(lp, numBucketsCTR))
+hashTrainData.cache()
+hashValidationData = rawValidationData.map(lambda lp: parseHashPoint(lp, numBucketsCTR))
+hashValidationData.cache()
+hashTestData = rawTestData.map(lambda lp: parseHashPoint(lp, numBucketsCTR))
+hashTestData.cache()
+
+print hashTrainData.take(1)
+</code></pre>
+
+<pre><code>[LabeledPoint(0.0, (32768,[1305,2883,3807,4814,4866,4913,6952,7117,9985,10316,11512,11722,12365,13893,14735,15816,16198,17761,19274,21604,22256,22563,22785,24855,25202,25533,25721,26487,26656,27668,28211,29152,29402,29873,30039,31484,32493,32708],[1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]))]
+</code></pre>
+
+<pre><code class="language-python"># TEST Creating hashed features (5b)
+hashTrainDataFeatureSum = sum(hashTrainData
+                           .map(lambda lp: len(lp.features.indices))
+                           .take(20))
+hashTrainDataLabelSum = sum(hashTrainData
+                         .map(lambda lp: lp.label)
+                         .take(100))
+hashValidationDataFeatureSum = sum(hashValidationData
+                                .map(lambda lp: len(lp.features.indices))
+                                .take(20))
+hashValidationDataLabelSum = sum(hashValidationData
+                              .map(lambda lp: lp.label)
+                              .take(100))
+hashTestDataFeatureSum = sum(hashTestData
+                          .map(lambda lp: len(lp.features.indices))
+                          .take(20))
+hashTestDataLabelSum = sum(hashTestData
+                        .map(lambda lp: lp.label)
+                        .take(100))
+
+Test.assertEquals(hashTrainDataFeatureSum, 772, 'incorrect number of features in hashTrainData')
+Test.assertEquals(hashTrainDataLabelSum, 24.0, 'incorrect labels in hashTrainData')
+Test.assertEquals(hashValidationDataFeatureSum, 776,
+                  'incorrect number of features in hashValidationData')
+Test.assertEquals(hashValidationDataLabelSum, 16.0, 'incorrect labels in hashValidationData')
+Test.assertEquals(hashTestDataFeatureSum, 774, 'incorrect number of features in hashTestData')
+Test.assertEquals(hashTestDataLabelSum, 23.0, 'incorrect labels in hashTestData')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="5c-sparsity">** (5c) Sparsity **</h4>
+
+<h4 id="since-we-have-33k-hashed-features-versus-233k-ohe-features-we-should-expect-ohe-features-to-be-sparser-verify-this-hypothesis-by-computing-the-average-sparsity-of-the-ohe-and-the-hashed-training-datasets">Since we have 33K hashed features versus 233K OHE features, we should expect OHE features to be sparser. Verify this hypothesis by computing the average sparsity of the OHE and the hashed training datasets.</h4>
+
+<h4 id="note-that-if-you-have-a-sparsevector-named-sparse-calling-len-sparse-returns-the-total-number-of-features-not-the-number-features-with-entries-sparsevector-objects-have-the-attributes-indices-and-values-that-contain-information-about-which-features-are-nonzero-continuing-with-our-example-these-can-be-accessed-using-sparse-indices-and-sparse-values-respectively">Note that if you have a <code>SparseVector</code> named <code>sparse</code>, calling <code>len(sparse)</code> returns the total number of features, not the number features with entries.  <code>SparseVector</code> objects have the attributes <code>indices</code> and <code>values</code> that contain information about which features are nonzero.  Continuing with our example, these can be accessed using <code>sparse.indices</code> and <code>sparse.values</code>, respectively.</h4>
+
+<pre><code class="language-python">def computeSparsity(data, d, n):
+    &quot;&quot;&quot;Calculates the average sparsity for the features in an RDD of LabeledPoints.
+
+    Args:
+        data (RDD of LabeledPoint): The LabeledPoints to use in the sparsity calculation.
+        d (int): The total number of features.
+        n (int): The number of observations in the RDD.
+
+    Returns:
+        float: The average of the ratio of features in a point to total features.
+    &quot;&quot;&quot;
+    return (data.map(lambda lp: len(lp.features.indices)).mean() / d)
+
+averageSparsityHash = computeSparsity(hashTrainData, numBucketsCTR, nTrain)
+averageSparsityOHE = computeSparsity(OHETrainData, numCtrOHEFeats, nTrain)
+
+print 'Average OHE Sparsity: {0:.7e}'.format(averageSparsityOHE)
+print 'Average Hash Sparsity: {0:.7e}'.format(averageSparsityHash)
+</code></pre>
+
+<pre><code>Average OHE Sparsity: 1.6717677e-04
+Average Hash Sparsity: 1.1805561e-03
+</code></pre>
+
+<pre><code class="language-python"># TEST Sparsity (5c)
+Test.assertTrue(np.allclose(averageSparsityOHE, 1.6717677e-04),
+                'incorrect value for averageSparsityOHE')
+Test.assertTrue(np.allclose(averageSparsityHash, 1.1805561e-03),
+                'incorrect value for averageSparsityHash')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+<h4 id="5d-logistic-model-with-hashed-features">** (5d) Logistic model with hashed features **</h4>
+
+<h4 id="now-let-s-train-a-logistic-regression-model-using-the-hashed-features-run-a-grid-search-to-find-suitable-hyperparameters-for-the-hashed-features-evaluating-via-log-loss-on-the-validation-data-note-this-may-take-a-few-minutes-to-run-use-1-and-10-for-stepsizes-and-1e-6-and-1e-3-for-regparams">Now let&rsquo;s train a logistic regression model using the hashed features. Run a grid search to find suitable hyperparameters for the hashed features, evaluating via log loss on the validation data. Note: This may take a few minutes to run. Use <code>1</code> and <code>10</code> for <code>stepSizes</code> and <code>1e-6</code> and <code>1e-3</code> for <code>regParams</code>.</h4>
+
+<pre><code class="language-python">numIters = 500
+regType = 'l2'
+includeIntercept = True
+
+# Initialize variables using values from initial model training
+bestModel = None
+bestLogLoss = 1e10
+</code></pre>
+
+<pre><code class="language-python"># TODO: Replace &lt;FILL IN&gt; with appropriate code
+stepSizes = [1, 10]
+regParams = [1e-6, 1e-3]
+for stepSize in stepSizes:
+    for regParam in regParams:
+        model = (LogisticRegressionWithSGD
+                 .train(hashTrainData, numIters, stepSize, regParam=regParam, regType=regType,
+                        intercept=includeIntercept))
+        logLossVa = evaluateResults(model, hashValidationData)
+        print ('\tstepSize = {0:.1f}, regParam = {1:.0e}: logloss = {2:.3f}'
+               .format(stepSize, regParam, logLossVa))
+        if (logLossVa &lt; bestLogLoss):
+            bestModel = model
+            bestLogLoss = logLossVa
+
+print ('Hashed Features Validation Logloss:\n\tBaseline = {0:.3f}\n\tLogReg = {1:.3f}'
+       .format(logLossValBase, bestLogLoss))
+</code></pre>
+
+<pre><code>    stepSize = 1.0, regParam = 1e-06: logloss = 0.470
+    stepSize = 1.0, regParam = 1e-03: logloss = 0.470
+    stepSize = 10.0, regParam = 1e-06: logloss = 0.448
+    stepSize = 10.0, regParam = 1e-03: logloss = 0.450
+Hashed Features Validation Logloss:
+    Baseline = 0.528
+    LogReg = 0.448
+</code></pre>
+
+<pre><code class="language-python"># TEST Logistic model with hashed features (5d)
+Test.assertTrue(np.allclose(bestLogLoss, 0.4481683608), 'incorrect value for bestLogLoss')
+</code></pre>
+
+<pre><code>1 test passed.
+</code></pre>
+
+<h4 id="visualization-3-hyperparameter-heat-map"><strong>Visualization 3: Hyperparameter heat map</strong></h4>
+
+<h4 id="we-will-now-perform-a-visualization-of-an-extensive-hyperparameter-search-specifically-we-will-create-a-heat-map-where-the-brighter-colors-correspond-to-lower-values-of-logloss">We will now perform a visualization of an extensive hyperparameter search.  Specifically, we will create a heat map where the brighter colors correspond to lower values of <code>logLoss</code>.</h4>
+
+<h4 id="the-search-was-run-using-six-step-sizes-and-six-values-for-regularization-which-required-the-training-of-thirty-six-separate-models-we-have-included-the-results-below-but-omitted-the-actual-search-to-save-time">The search was run using six step sizes and six values for regularization, which required the training of thirty-six separate models.  We have included the results below, but omitted the actual search to save time.</h4>
+
+<pre><code class="language-python">from matplotlib.colors import LinearSegmentedColormap
+
+# Saved parameters and results.  Eliminate the time required to run 36 models
+stepSizes = [3, 6, 9, 12, 15, 18]
+regParams = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
+logLoss = np.array([[ 0.45808431,  0.45808493,  0.45809113,  0.45815333,  0.45879221,  0.46556321],
+                    [ 0.45188196,  0.45188306,  0.4518941,   0.4520051,   0.45316284,  0.46396068],
+                    [ 0.44886478,  0.44886613,  0.44887974,  0.44902096,  0.4505614,   0.46371153],
+                    [ 0.44706645,  0.4470698,   0.44708102,  0.44724251,  0.44905525,  0.46366507],
+                    [ 0.44588848,  0.44589365,  0.44590568,  0.44606631,  0.44807106,  0.46365589],
+                    [ 0.44508948,  0.44509474,  0.44510274,  0.44525007,  0.44738317,  0.46365405]])
+
+numRows, numCols = len(stepSizes), len(regParams)
+logLoss = np.array(logLoss)
+logLoss.shape = (numRows, numCols)
+
+fig, ax = preparePlot(np.arange(0, numCols, 1), np.arange(0, numRows, 1), figsize=(8, 7),
+                      hideLabels=True, gridWidth=0.)
+ax.set_xticklabels(regParams), ax.set_yticklabels(stepSizes)
+ax.set_xlabel('Regularization Parameter'), ax.set_ylabel('Step Size')
+
+colors = LinearSegmentedColormap.from_list('blue', ['#0022ff', '#000055'], gamma=.2)
+image = plt.imshow(logLoss,interpolation='nearest', aspect='auto',
+                    cmap = colors)
+pass
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/GkhmhkKE4m.png?imageslim" alt="mark" /></p>
+
+<h4 id="5e-evaluate-on-the-test-set">** (5e) Evaluate on the test set **</h4>
+
+<h4 id="finally-evaluate-the-best-model-from-part-5d-on-the-test-set-compare-the-resulting-log-loss-with-the-baseline-log-loss-on-the-test-set-which-can-be-computed-in-the-same-way-that-the-validation-log-loss-was-computed-in-part-4f">Finally, evaluate the best model from Part (5d) on the test set.  Compare the resulting log loss with the baseline log loss on the test set, which can be computed in the same way that the validation log loss was computed in Part (4f).</h4>
+
+<pre><code class="language-python"># Log loss for the best model from (5d)
+logLossTest = evaluateResults(bestModel, hashTestData)
+
+# Log loss for the baseline model
+OHETestData = rawTestData.map(lambda point: parseOHEPoint(point, ctrOHEDict, numCtrOHEFeats))
+logLossTestBaseline = OHETestData.map(lambda lp: computeLogLoss(classOneFracTrain, lp.label)).mean()
+
+print ('Hashed Features Test Log Loss:\n\tBaseline = {0:.3f}\n\tLogReg = {1:.3f}'
+       .format(logLossTestBaseline, logLossTest))
+</code></pre>
+
+<pre><code>Hashed Features Test Log Loss:
+	Baseline = 0.537
+	LogReg = 0.456
+</code></pre>
+
+<pre><code class="language-python"># TEST Evaluate on the test set (5e)
+Test.assertTrue(np.allclose(logLossTestBaseline, 0.537438),
+                'incorrect value for logLossTestBaseline')
+Test.assertTrue(np.allclose(logLossTest, 0.455616931), 'incorrect value for logLossTest')
+</code></pre>
+
+<pre><code>1 test passed.
+1 test passed.
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/05-%E6%A1%88%E4%BE%8B4cat_dog/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 案例4：cat_dog</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/04-%E6%A1%88%E4%BE%8B3image-search-/">
+            <span class="next-text nav-default">04 案例3：image search</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

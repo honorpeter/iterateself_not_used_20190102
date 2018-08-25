@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 数组导向编程 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="向量化的数组运算比纯python同等程度的运算要快很多。 一个简单的例子，假设我们想要评价函数sqrt(x^2 &#43; y^2)。np.meshgri" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/02-numpy/03-%E6%95%B0%E7%BB%84%E5%AF%BC%E5%90%91%E7%BC%96%E7%A8%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 数组导向编程" />
+<meta property="og:description" content="向量化的数组运算比纯python同等程度的运算要快很多。 一个简单的例子，假设我们想要评价函数sqrt(x^2 &#43; y^2)。np.meshgri" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/02-numpy/03-%E6%95%B0%E7%BB%84%E5%AF%BC%E5%90%91%E7%BC%96%E7%A8%8B/" /><meta property="article:published_time" content="2018-08-03T11:19:17&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:19:17&#43;00:00"/>
+<meta itemprop="name" content="03 数组导向编程">
+<meta itemprop="description" content="向量化的数组运算比纯python同等程度的运算要快很多。 一个简单的例子，假设我们想要评价函数sqrt(x^2 &#43; y^2)。np.meshgri">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:19:17&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:19:17&#43;00:00" />
+<meta itemprop="wordCount" content="2468">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 数组导向编程"/>
+<meta name="twitter:description" content="向量化的数组运算比纯python同等程度的运算要快很多。 一个简单的例子，假设我们想要评价函数sqrt(x^2 &#43; y^2)。np.meshgri"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 数组导向编程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 2468 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#1-expressing-conditional-logic-as-array-operations-像数组操作一样表示逻辑条件">1 Expressing Conditional Logic as Array Operations (像数组操作一样表示逻辑条件)</a></li>
+<li><a href="#2-mathematical-and-statistical-methods-数学和统计方法">2 Mathematical and Statistical Methods (数学和统计方法)</a></li>
+<li><a href="#3-methods-for-boolean-arrays-布尔数组的方法">3 Methods for Boolean Arrays（布尔数组的方法）</a></li>
+<li><a href="#4-sorting-排序">4 Sorting（排序）</a></li>
+<li><a href="#5-unique-and-other-set-logic-单一性和其他集合逻辑">5 Unique and Other Set Logic (单一性和其他集合逻辑)</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>向量化的数组运算比纯python同等程度的运算要快很多。</p>
+
+<p>一个简单的例子，假设我们想要评价函数<code>sqrt(x^2 + y^2)</code>。<code>np.meshgrid</code>函数取两个1维的数组，产生一个2维的矩阵，对应于所有两个数组中(x, y)的组合：</p>
+
+<pre><code class="language-python">import numpy as np
+</code></pre>
+
+<p>在进行书中的内容之前，先举个例子说明meshgrid的效果。meshgrid函数用两个坐标轴上的点在平面上画网格。用法：</p>
+
+<ul>
+<li><p><code>[X,Y]=meshgrid(x,y)</code></p></li>
+
+<li><p><code>[X,Y]=meshgrid(x)</code>与<code>[X,Y]=meshgrid(x,x)</code>是等同的</p></li>
+
+<li><p><code>[X,Y,Z]=meshgrid(x,y,z)</code>生成三维数组，可用来计算三变量的函数和绘制三维立体图</p></li>
+</ul>
+
+<p>这里，主要以<code>[X,Y]=meshgrid(x,y)</code>为例，来对该函数进行介绍。</p>
+
+<p><code>[X,Y] = meshgrid(x,y)</code> 将向量x和y定义的区域转换成矩阵X和Y,其中矩阵X的行向量是向量x的简单复制，而矩阵Y的列向量是向量y的简单复制(注：下面代码中X和Y均是数组，在文中统一称为矩阵了)。</p>
+
+<p>假设x是长度为m的向量，y是长度为n的向量，则最终生成的矩阵X和Y的维度都是 nm （注意不是mn）。</p>
+
+<pre><code class="language-python">m, n = (5, 3)
+x = np.linspace(0, 1, m)
+y = np.linspace(0, 1, n)
+X, Y = np.meshgrid(x, y)
+x
+</code></pre>
+
+<pre><code>array([ 0.  ,  0.25,  0.5 ,  0.75,  1.  ])
+</code></pre>
+
+<pre><code class="language-python">y
+</code></pre>
+
+<pre><code>array([ 0. ,  0.5,  1. ])
+</code></pre>
+
+<pre><code class="language-python">X
+</code></pre>
+
+<pre><code>array([[ 0.  ,  0.25,  0.5 ,  0.75,  1.  ],
+       [ 0.  ,  0.25,  0.5 ,  0.75,  1.  ],
+       [ 0.  ,  0.25,  0.5 ,  0.75,  1.  ]])
+</code></pre>
+
+<pre><code class="language-python">Y
+</code></pre>
+
+<pre><code>array([[ 0. ,  0. ,  0. ,  0. ,  0. ],
+       [ 0.5,  0.5,  0.5,  0.5,  0.5],
+       [ 1. ,  1. ,  1. ,  1. ,  1. ]])
+</code></pre>
+
+<p>可以看到X和Y的shape都是3x5，用图的话更好理解：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/aA00LKJcL1.jpg?imageslim" alt="mark" /></p>
+
+<p>把X和Y画出来后，就可以看到网格了：</p>
+
+<pre><code class="language-python">import matplotlib.pyplot as plt
+%matplotlib inline
+plt.style.use('ggplot')
+
+plt.plot(X, Y, marker='.', color='blue', linestyle='none')
+</code></pre>
+
+<pre><code>[&lt;matplotlib.lines.Line2D at 0x107cddd30&gt;,
+ &lt;matplotlib.lines.Line2D at 0x107cddeb8&gt;,
+ &lt;matplotlib.lines.Line2D at 0x107ce5198&gt;,
+ &lt;matplotlib.lines.Line2D at 0x107ce5358&gt;,
+ &lt;matplotlib.lines.Line2D at 0x107ce5518&gt;]
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/lBm7DC1FFJ.png?imageslim" alt="mark" /></p>
+
+<p>可以用zip得到网格平面上坐标点的数据：</p>
+
+<pre><code class="language-python">z = [i for i in zip(X.flat, Y.flat)]
+z
+</code></pre>
+
+<pre><code>[(0.0, 0.0),
+ (0.25, 0.0),
+ (0.5, 0.0),
+ (0.75, 0.0),
+ (1.0, 0.0),
+ (0.0, 0.5),
+ (0.25, 0.5),
+ (0.5, 0.5),
+ (0.75, 0.5),
+ (1.0, 0.5),
+ (0.0, 1.0),
+ (0.25, 1.0),
+ (0.5, 1.0),
+ (0.75, 1.0),
+ (1.0, 1.0)]
+</code></pre>
+
+<p>好了，下面继续进入书中的内容</p>
+
+<pre><code class="language-python">points = np.arange(-5, 5, 0.01) # 1000 equally spaced points
+xs, ys = np.meshgrid(points, points) # xs和ys是一样的
+ys
+</code></pre>
+
+<pre><code>array([[-5.  , -5.  , -5.  , ..., -5.  , -5.  , -5.  ],
+       [-4.99, -4.99, -4.99, ..., -4.99, -4.99, -4.99],
+       [-4.98, -4.98, -4.98, ..., -4.98, -4.98, -4.98],
+       ...,
+       [ 4.97,  4.97,  4.97, ...,  4.97,  4.97,  4.97],
+       [ 4.98,  4.98,  4.98, ...,  4.98,  4.98,  4.98],
+       [ 4.99,  4.99,  4.99, ...,  4.99,  4.99,  4.99]])
+</code></pre>
+
+<pre><code class="language-python">z = np.sqrt(xs ** 2 + ys ** 2)
+z
+</code></pre>
+
+<pre><code>array([[ 7.07106781,  7.06400028,  7.05693985, ...,  7.04988652,
+         7.05693985,  7.06400028],
+       [ 7.06400028,  7.05692568,  7.04985815, ...,  7.04279774,
+         7.04985815,  7.05692568],
+       [ 7.05693985,  7.04985815,  7.04278354, ...,  7.03571603,
+         7.04278354,  7.04985815],
+       ...,
+       [ 7.04988652,  7.04279774,  7.03571603, ...,  7.0286414 ,
+         7.03571603,  7.04279774],
+       [ 7.05693985,  7.04985815,  7.04278354, ...,  7.03571603,
+         7.04278354,  7.04985815],
+       [ 7.06400028,  7.05692568,  7.04985815, ...,  7.04279774,
+         7.04985815,  7.05692568]])
+</code></pre>
+
+<p>这里我们用matplotlib把图画出来：</p>
+
+<pre><code class="language-python">plt.imshow(z, cmap=plt.cm.gray); plt.colorbar()
+plt.title(&quot;Image plot of $\sqrt{x^2 + y^2}$ for a grid of values&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x10dca7c18&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/m08AgL5IKb.png?imageslim" alt="mark" /></p>
+
+<h1 id="1-expressing-conditional-logic-as-array-operations-像数组操作一样表示逻辑条件">1 Expressing Conditional Logic as Array Operations (像数组操作一样表示逻辑条件)</h1>
+
+<p><code>numpy.where</code>函数是一个向量版的三相表达式，<code>x if condition else y</code>。假设我们有一个布尔数组和两个数组：</p>
+
+<pre><code class="language-python">xarr = np.array([1.1, 1.2, 1.3, 1.4, 1.5])
+yarr = np.array([2.1, 2.2, 2.3, 2.4, 2.5])
+cond = np.array([True, False, True, True, False])
+</code></pre>
+
+<p>假设如果cond中为true，我们去xarr中对应的值，否则就取yarr中的值。列表表达式的话会这么写：</p>
+
+<pre><code class="language-python">result = [(x if c else y)
+          for x, y, c in zip(xarr, yarr, cond)]
+
+result
+</code></pre>
+
+<pre><code>[1.1000000000000001, 2.2000000000000002, 1.3, 1.3999999999999999, 2.5]
+</code></pre>
+
+<p>这么做的话会有很多问题。首先，对于很大的数组，会比较慢。第二，对于多维数组不起作用。但<code>np.where</code>能让我们写得更简洁：</p>
+
+<pre><code class="language-python">result = np.where(cond, xarr, yarr)
+result
+</code></pre>
+
+<pre><code>array([ 1.1,  2.2,  1.3,  1.4,  2.5])
+</code></pre>
+
+<p><code>np.where</code>中第二个和第三个参数不用必须是数组。where在数据分析中一个典型的用法是基于一个数组，产生一个新的数组值。假设我们有一个随机数字生成的矩阵，我们想要把所有的正数变为2，所有的负数变为-2。用where的话会非常简单：</p>
+
+<pre><code class="language-python">arr = np.random.randn(4, 4)
+arr
+</code></pre>
+
+<pre><code>array([[ 2.18194474,  0.15001978, -0.77191684,  0.18716397],
+       [ 1.2083149 , -0.22911585,  1.30880201,  0.14197253],
+       [ 0.65639111, -1.28394185,  0.65706167,  1.14277598],
+       [-0.32639966, -0.26880881, -0.10225964,  0.4739671 ]])
+</code></pre>
+
+<pre><code class="language-python">arr &gt; 0
+</code></pre>
+
+<pre><code>array([[ True,  True, False,  True],
+       [ True, False,  True,  True],
+       [ True, False,  True,  True],
+       [False, False, False,  True]], dtype=bool)
+</code></pre>
+
+<pre><code class="language-python">np.where(arr &gt; 0, 2, -2)
+</code></pre>
+
+<pre><code>array([[ 2,  2, -2,  2],
+       [ 2, -2,  2,  2],
+       [ 2, -2,  2,  2],
+       [-2, -2, -2,  2]])
+</code></pre>
+
+<p>我们可以结合标量和数组。比如只把整数变为2，其他仍未原来的数字：</p>
+
+<pre><code class="language-python">np.where(arr &gt; 0, 2, arr) # set only positive value to 2
+</code></pre>
+
+<pre><code>array([[ 2.        ,  2.        , -0.77191684,  2.        ],
+       [ 2.        , -0.22911585,  2.        ,  2.        ],
+       [ 2.        , -1.28394185,  2.        ,  2.        ],
+       [-0.32639966, -0.26880881, -0.10225964,  2.        ]])
+</code></pre>
+
+<h1 id="2-mathematical-and-statistical-methods-数学和统计方法">2 Mathematical and Statistical Methods (数学和统计方法)</h1>
+
+<p>一些能计算统计值的数学函数能基于整个数组，或者沿着一个axis（轴）。可以使用aggregations(often called reductions，汇总，或被叫做降维)，比如sum, mean, and std(标准差).</p>
+
+<p>下面是一些aggregate statistics（汇总统计）：</p>
+
+<pre><code class="language-python">arr = np.random.randn(5, 4)
+arr
+</code></pre>
+
+<pre><code>array([[-1.53575656, -1.39268394, -1.02284353, -1.03165049],
+       [ 0.53301867,  0.50258973, -0.49389656,  0.24610963],
+       [ 0.95377174, -1.57268184,  0.42969986,  1.22912566],
+       [ 0.73686692, -2.82328155,  0.48018497, -1.38046692],
+       [ 0.94164808,  0.19599722, -0.88779738, -0.87556277]])
+</code></pre>
+
+<pre><code class="language-python">arr.mean()
+</code></pre>
+
+<pre><code>-0.33838045197794597
+</code></pre>
+
+<pre><code class="language-python">np.mean(arr)
+</code></pre>
+
+<pre><code>-0.33838045197794597
+</code></pre>
+
+<pre><code class="language-python">arr.sum()
+</code></pre>
+
+<pre><code>-6.767609039558919
+</code></pre>
+
+<p>mean, sum这样的函数能接受axis作为参数来计算统计数字，返回的结果维度更少：</p>
+
+<pre><code class="language-python">arr.mean(axis=1)
+</code></pre>
+
+<pre><code>array([-1.24573363,  0.19695537,  0.25997886, -0.74667415, -0.15642871])
+</code></pre>
+
+<pre><code class="language-python">arr.sum(axis=0)
+</code></pre>
+
+<pre><code>array([ 1.62954886, -5.09006038, -1.49465263, -1.81244489])
+</code></pre>
+
+<p>这里<code>arr.mean(1)</code>表示，compute mean acros the columns(计算各列之间的平均值)。<code>arr.sum(0)</code>表示，compute sum down the rows(计算各行总和)。</p>
+
+<p>其他一些方法，像cumsum和cumprod不做汇总，而是产生一个中间结果的数组：</p>
+
+<pre><code class="language-python">arr = np.array([0, 1, 2, 3, 4, 5, 6, 7])
+arr.cumsum()
+</code></pre>
+
+<pre><code>array([ 0,  1,  3,  6, 10, 15, 21, 28])
+</code></pre>
+
+<p>上面的计算是一个累加的结果，<code>0+1=1，1+2=3，3+3=6</code>以此类推。</p>
+
+<pre><code class="language-python">np.cumsum?
+</code></pre>
+
+<p>对于多维数组，accumulation functions（累积函数）比如cumsum，返回的是同样大小的数组，但是部分聚合会沿着指示的轴向较低维度进行切片：</p>
+
+<pre><code class="language-python">arr = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+arr
+</code></pre>
+
+<pre><code>array([[0, 1, 2],
+       [3, 4, 5],
+       [6, 7, 8]])
+</code></pre>
+
+<pre><code class="language-python">arr.cumsum(axis=0) # 沿着行加法
+</code></pre>
+
+<pre><code>array([[ 0,  1,  2],
+       [ 3,  5,  7],
+       [ 9, 12, 15]])
+</code></pre>
+
+<pre><code class="language-python">arr.cumprod(axis=1) # 沿着列乘法
+</code></pre>
+
+<pre><code>array([[  0,   0,   0],
+       [  3,  12,  60],
+       [  6,  42, 336]])
+</code></pre>
+
+<p>这里有一些基本的统计计算方法：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/8le2A21624.png?imageslim" alt="mark" /></p>
+
+<h1 id="3-methods-for-boolean-arrays-布尔数组的方法">3 Methods for Boolean Arrays（布尔数组的方法）</h1>
+
+<p>sum是用来计算布尔数组中有多少个true的：</p>
+
+<pre><code class="language-python">arr = np.random.randn(100)
+(arr &gt; 0).sum() # Number of positive values
+</code></pre>
+
+<pre><code>46
+</code></pre>
+
+<p>有两个其他方法，any和all，对于布尔数组特别有用。any检测数组中只要有一个ture返回就是true，而all检测数组中都是true才会返回true。</p>
+
+<pre><code class="language-python">bools = np.array([False, False, True, False])
+</code></pre>
+
+<pre><code class="language-python">bools.any()
+</code></pre>
+
+<pre><code>True
+</code></pre>
+
+<pre><code class="language-python">bools.all()
+</code></pre>
+
+<pre><code>False
+</code></pre>
+
+<h1 id="4-sorting-排序">4 Sorting（排序）</h1>
+
+<p>numpy中也有sort方法：</p>
+
+<pre><code class="language-python">np.random.randn?
+# 返回符合正态分布的数值
+</code></pre>
+
+<pre><code class="language-python">arr = np.random.randn(6)
+arr
+</code></pre>
+
+<pre><code>array([ 1.93663555, -1.29810982,  0.83366006,  0.51674613,  2.32879117,
+        1.07342758])
+</code></pre>
+
+<pre><code class="language-python">arr.sort()
+</code></pre>
+
+<pre><code class="language-python">arr
+</code></pre>
+
+<pre><code>array([-1.29810982,  0.51674613,  0.83366006,  1.07342758,  1.93663555,
+        2.32879117])
+</code></pre>
+
+<p>如果是多维数组，还可以按axis来排序：</p>
+
+<pre><code class="language-python">arr = np.random.randn(5, 3)
+arr
+</code></pre>
+
+<pre><code>array([[-0.76658562, -1.00222899,  0.39039437],
+       [ 0.23100317, -1.0581081 ,  1.69177329],
+       [ 1.0239365 ,  0.84698669, -0.97911915],
+       [ 0.76255951,  0.27828523,  0.41807172],
+       [ 0.40792019, -1.19514714, -1.41666804]])
+</code></pre>
+
+<pre><code class="language-python">arr.sort(1)
+</code></pre>
+
+<pre><code class="language-python">arr
+</code></pre>
+
+<pre><code>array([[-1.00222899, -0.76658562,  0.39039437],
+       [-1.0581081 ,  0.23100317,  1.69177329],
+       [-0.97911915,  0.84698669,  1.0239365 ],
+       [ 0.27828523,  0.41807172,  0.76255951],
+       [-1.41666804, -1.19514714,  0.40792019]])
+</code></pre>
+
+<p>上面是直接调用数组的sort方法，会改变原有数组的顺序。但如果使用<code>np.sort()</code>函数的话，会生成一个新的排序后的结果。</p>
+
+<p>一个计算分位数的快捷方法是先给数组排序，然后选择某个排名的值：</p>
+
+<pre><code class="language-python">large_arr = np.random.randn(1000)
+large_arr.sort()
+</code></pre>
+
+<pre><code class="language-python">large_arr[int(0.05 * len(large_arr))] # 5% quantile
+</code></pre>
+
+<pre><code>-1.6908607973872243
+</code></pre>
+
+<h1 id="5-unique-and-other-set-logic-单一性和其他集合逻辑">5 Unique and Other Set Logic (单一性和其他集合逻辑)</h1>
+
+<p>Numpy也有一些基本的集合操作用于一维数组。<code>np.unique</code>，能返回排好序且不重复的值：</p>
+
+<pre><code class="language-python">names = np.array(['Bob', 'Joe', 'Will', 'Bob', 'Will', 'Joe', 'Joe'])
+np.unique(names)
+</code></pre>
+
+<pre><code>array(['Bob', 'Joe', 'Will'],
+      dtype='&lt;U4')
+</code></pre>
+
+<pre><code class="language-python">ints = np.array([3, 3, 3, 2, 2, 1, 1, 4, 4])
+</code></pre>
+
+<pre><code class="language-python">np.unique(ints)
+</code></pre>
+
+<pre><code>array([1, 2, 3, 4])
+</code></pre>
+
+<p>如果用纯python代码来实现的话，要这么写：</p>
+
+<pre><code class="language-python">sorted(set(names))
+</code></pre>
+
+<pre><code>['Bob', 'Joe', 'Will']
+</code></pre>
+
+<p><code>np.in1d</code>, 测试一个数组的值是否在另一个数组里，返回一个布尔数组：</p>
+
+<pre><code class="language-python">values = np.array([6, 0, 0, 3, 2, 5, 6])
+</code></pre>
+
+<pre><code class="language-python">np.in1d(values, [2, 3, 6])
+</code></pre>
+
+<pre><code>array([ True, False, False,  True,  True, False,  True], dtype=bool)
+</code></pre>
+
+<p>这里是一些数组的集合操作：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7LGKjbc1gh.png?imageslim" alt="mark" /></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/02-numpy/05-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 线性代数</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E5%90%91%E9%87%8F%E7%9A%84%E5%86%85%E7%A7%AF%E5%92%8C%E5%A4%96%E7%A7%AF/">
+            <span class="next-text nav-default">向量的内积和外积</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

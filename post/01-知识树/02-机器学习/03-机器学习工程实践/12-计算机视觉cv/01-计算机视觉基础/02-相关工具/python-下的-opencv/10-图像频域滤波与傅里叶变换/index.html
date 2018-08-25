@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>10 图像频域滤波与傅里叶变换 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="前面曾经介绍过空间域滤波，空间域滤波就是用各种模板直接与图像进行卷积运算，实现对图像的处理，这种方法直接对图像空间操作，操作简单，所以也是空" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/python-%E4%B8%8B%E7%9A%84-opencv/10-%E5%9B%BE%E5%83%8F%E9%A2%91%E5%9F%9F%E6%BB%A4%E6%B3%A2%E4%B8%8E%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="10 图像频域滤波与傅里叶变换" />
+<meta property="og:description" content="前面曾经介绍过空间域滤波，空间域滤波就是用各种模板直接与图像进行卷积运算，实现对图像的处理，这种方法直接对图像空间操作，操作简单，所以也是空" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/python-%E4%B8%8B%E7%9A%84-opencv/10-%E5%9B%BE%E5%83%8F%E9%A2%91%E5%9F%9F%E6%BB%A4%E6%B3%A2%E4%B8%8E%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/" /><meta property="article:published_time" content="2018-08-12T21:09:43&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T21:09:43&#43;00:00"/>
+<meta itemprop="name" content="10 图像频域滤波与傅里叶变换">
+<meta itemprop="description" content="前面曾经介绍过空间域滤波，空间域滤波就是用各种模板直接与图像进行卷积运算，实现对图像的处理，这种方法直接对图像空间操作，操作简单，所以也是空">
+
+
+<meta itemprop="datePublished" content="2018-08-12T21:09:43&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T21:09:43&#43;00:00" />
+<meta itemprop="wordCount" content="5381">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="10 图像频域滤波与傅里叶变换"/>
+<meta name="twitter:description" content="前面曾经介绍过空间域滤波，空间域滤波就是用各种模板直接与图像进行卷积运算，实现对图像的处理，这种方法直接对图像空间操作，操作简单，所以也是空"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">10 图像频域滤波与傅里叶变换</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 5381 words </span>
+        <span class="more-meta"> 11 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#傅里叶分析之掐死教程-完整版-http-zhuanlan-zhihu-com-wille-19763358"><strong>傅里叶分析之掐死教程（完整版）</strong><a href="http://zhuanlan.zhihu.com/wille/19763358">http://zhuanlan.zhihu.com/wille/19763358</a></a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>前面曾经介绍过空间域滤波，空间域滤波就是用各种模板直接与图像进行卷积运算，实现对图像的处理，这种方法直接对图像空间操作，操作简单，所以也是空间域滤波。</p>
+
+<p>频域滤波说到底最终可能是和空间域滤波实现相同的功能，比如实现图像的轮廓提取，在空间域滤波中我们使用一个拉普拉斯模板就可以提取，而在频域内，我们使用一个高通滤波模板（因为轮廓在频域内属于高频信号），可以实现轮廓的提取，后面也会把拉普拉斯模板频域化，会发现拉普拉斯其实在频域来讲就是一个高通滤波器。</p>
+
+<p>既然是频域滤波就涉及到把图像首先变到频域内，那么把图像变到频域内的方法就是傅里叶变换。关于傅里叶变换，感觉真是个伟大的发明，尤其是其在信号领域的应用，对于傅里叶变换的理解，要是刚接触这个东西，想要理解还真是非常的困难，除非你的数学功底特别好。这里推荐一个非常好的通俗易懂的博客<strong>(待会再去o-_-)</strong>：</p>
+
+<h2 id="傅里叶分析之掐死教程-完整版-http-zhuanlan-zhihu-com-wille-19763358"><strong>傅里叶分析之掐死教程（完整版）</strong><a href="http://zhuanlan.zhihu.com/wille/19763358">http://zhuanlan.zhihu.com/wille/19763358</a></h2>
+
+<p>傅里叶的原理表明，任何连续测量的时序或信号，都可以表示为不同频率的正弦波信号的无限叠加。利用傅立叶变换算法直接测量原始信号，以累加方式来计算该信号中不同正弦波信号的频率、振幅和相位就可以表示原始信号。这里借用上述博客的一个图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/eb5gGjF90d.png?imageslim" alt="mark" /></p>
+
+<p>这个图就是把时域图像（大概是方波）变成了一系列的正弦波的线性叠加，其等价关系可以表示为：</p>
+
+<p>$$f(原始信号)=A_1sin(w_1x+\phi_1)+A_2sin(w_2x+\phi_2)+&hellip;$$</p>
+
+<p>那么</p>
+
+<p>w_1,w_2,&hellip;</p>
+
+<p>可以看成是频率的变化（一般认为就是从1,2,…n定死了），所有的A就是对应频率下的振幅，所有的 $\phi$ 就是对应频率下的相位，那么对于任一个信号，如果都认为频率w是从1,2,3…一直增加的话，那么每个信号就只由一组振幅与一组 $\phi$ 来决定，他们的不同决定了最终信号的不同。</p>
+
+<p>再来理解下什么是振幅，振幅就是各个频率下的信号的决定程度有多大，如果某个频率的振幅越大，那么它对原始信号的的重要性越大，像上图，当然是w=1的时候振幅最大，说明它对总的信号影响最多（去掉w=1的信号，原始信号讲严重变形）。越往后面，也就是越高频，振幅逐渐减小，那么他们的作用就越小，而他们对于整体信号又有什么影响呢？既然越小，那就是影响小，所以其实去掉，原始信号也基本上不变，他们影响就在于对原始信号的细节上的表现，比如原始信号上的边边角角，偶尔有个小凸起凹槽什么的，这些小细节部分都是靠这些个影响不大的高频信号来表现出来的。深入推广一下，这就很好理解为什么图像的高频信号其实表现出来的就是图像的边缘轮廓、噪声等等这些细节的东西了，而低频信号，表现的却是图像上整块整块灰度大概一样的区域了（这些个区域又称为直流分量区域）。</p>
+
+<p>再来理解下什么是相位，相位表示其实表面对应频率下的正弦分量偏离原点的程度，再借用下上述博客中的一个图，把分量示意图放大了：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/JLBE274miG.png?imageslim" alt="mark" /></p>
+
+<p>上图看到，如果各个频率的分量相位都是0的话，那么每个正弦分量的最大值（在频率轴附近的那个最大值）都会落在频率轴为0上，然而上述图并不是这样。在说简单一点，比如原始信号上有个凹槽，正好是由某一频率的分量叠加出来的，那么如果这个频率的相位变大一点或者变小一点的话，带来的影响就会使得这个凹槽向左或者向右移动一下，也就是说，相位的作用就是精确定位到信号上一点的位置的。</p>
+
+<p>好了，有了上述的概念，再来看看图像的傅里叶变换，上述举得例子是一维信号的傅里叶变换，并且信号是连续的，我们知道图像是二维离散的，连续与离散都可以用傅里叶进行变换，那么二维信号无非就是在x方向与y方向都进行一次一维的傅里叶变换得到，这么看来，可以想象，它的频率构成就是一个网格矩阵了，横轴从w=1到n，纵轴也是这样。所有图像的频率构成都认为是这样的，那么不同的就是一幅图的振幅与相位了（振幅与相位此时同样是一个网格矩阵），也就是说你在opencv或者matlab下对图像进行傅里叶变换后其实是可以得到图像的振幅图与相位图的，而想把图像从频域空间恢复到时域空间，必须要同时有图像的振幅图与相位图才可以，缺少一个就恢复的不完整（后面会实验看看）。
+下面看看二维傅里叶变换，一个图像为M*N的图像f(x,y)进过离散傅里叶变换得到F(u,v)，那么一般的公式为：</p>
+
+<p>$$F(u,v)=\sum\limits<em>{x=0}^{M-1}\sum\limits</em>{y=0}^{N-1}f(x,y)e^{-j2\pi(ux/M+vy/N)}$$</p>
+
+<p>它的反变换就是</p>
+
+<p>$$f(x,y)=\dfrac{1}{MN}\sum\limits<em>{x=0}^{M-1}\sum\limits</em>{y=0}^{N-1}F(u,v)e^{j2\pi(ux/M+vy/N)}$$</p>
+
+<p>反变换就可以实现将频域图像恢复到时域图像。对正变换分析，当u=v=0时，那么：</p>
+
+<p>$$F(0,0)=\sum\limits<em>{x=0}^{M-1}\sum\limits</em>{y=0}^{N-1}f(x,y)=\overline f(x,y)$$</p>
+
+<p>看看这个式子发现它是什么？f(x,y)可是时域里面图像的灰度。很明显，这个东西其实是整个图像的灰度求平均了（这里说的都是灰度图像），当图像进行傅里叶变换以后，你去把F(0,0)与原始图像平均灰度去比较看看是不是一样的。那么F(0,0)在频域内称为直流分量，其他的所有F称为交流分量，直流分量可以看到是在0处获得的，所以很明显是存在于低频分量下的。</p>
+
+<p>说了这么多，来上个实验看看到底什么是傅里叶变换吧。在python+opencv下想实现图像傅里叶变换有两种途径，一种采用numpy包可以实现，还有opencv自带的可以实现，其中numpy带的使用方便，直观易懂。</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+f = np.fft.fft2(img)
+fshift = np.fft.fftshift(f)
+#取绝对值：将复数变化成实数
+#取对数的目的为了将数据变化到较小的范围（比如0-255）
+s1 = np.log(np.abs(f))
+s2 = np.log(np.abs(fshift))
+plt.subplot(121),plt.imshow(s1,'gray'),plt.title('original')
+plt.subplot(122),plt.imshow(s2,'gray'),plt.title('center')12345678910111213
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/LHHg4dc1f7.png?imageslim" alt="mark" /></p>
+
+<p>注意的是，上图其实并没有什么含义，显示出来的可以看成是频域后图像的振幅信息，并没有相位信息，图像的相位\phi=atan(\dfrac{实部}{虚部})，numpy包中自带一个angle函数可以直接根据复数的实部与虚部求出角度（默认出来的角度是弧度）。像上述程序出来的f与fshift都是复数，就可以直接angle函数一下，比如试试并把对应的相位图像显示出来：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+f = np.fft.fft2(img)
+fshift = np.fft.fftshift(f)
+#取绝对值：将复数变化成实数
+#取对数的目的为了将数据变化到较小的范围（比如0-255）
+ph_f = np.angle(f)
+ph_fshift = np.angle(fshift)
+
+plt.subplot(121),plt.imshow(ph_f,'gray'),plt.title('original')
+plt.subplot(122),plt.imshow(ph_fshift,'gray'),plt.title('center')1234567891011121314
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/CciLGfjkbE.png?imageslim" alt="mark" /></p>
+
+<p>这就是图像上每个像素点对应的相位图，其实是毫无规律的，理解就是偏移的角度。</p>
+
+<p>Ok再来说说程序中为什么要有一个np.fft.fftshift(f)中心化操作，整个图像是在傅里叶变换的一个周期内完成的，将其看成横纵两个方向的一维傅里叶变换，在每个方向上都会有高频信号和低频信号，那么傅里叶变换将低频信号放在了边缘，高频信号放在了中间，然而一副图像，很明显的低频信号多而明显，所以将低频信号采用一种方法移到中间，在时域上就是对f乘以（-1）^(M+N)，换到频域里面就是位置的移到了。</p>
+
+<p>图像变换到频域后就可以进行操作了，目前接触到的频域操作似乎也就是一些滤波操作，如同空域里面的滤波操作一样，不过原理不一样了，后面再说说一些频域滤波方法。好了一旦操作完，得到的数据还是频域数据，那么如何将其变换到时域呢？这里就是傅里叶反变换了，公式表示就如同前面那样。这个频域变换到时域的操作就是逆向傅里叶变换再走一遍（比如先反中心化，在逆变换）。一个实例如下：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+f = np.fft.fft2(img)
+fshift = np.fft.fftshift(f)
+#取绝对值：将复数变化成实数
+#取对数的目的为了将数据变化到0-255
+s1 = np.log(np.abs(fshift))
+plt.subplot(131),plt.imshow(img,'gray'),plt.title('original')
+plt.subplot(132),plt.imshow(s1,'gray'),plt.title('center')
+# 逆变换
+f1shift = np.fft.ifftshift(fshift)
+img_back = np.fft.ifft2(f1shift)
+#出来的是复数，无法显示
+img_back = np.abs(img_back)
+plt.subplot(133),plt.imshow(img_back,'gray'),plt.title('img back')123456789101112131415161718
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/69EFLmdLG6.png?imageslim" alt="mark" /></p>
+
+<p>可以看到恢复的一模一样。</p>
+
+<p>我们说，恢复一个频域图像需要图像的振幅以及相位，而一个复数也正好包含这些，振幅就是实部虚部的平方和开方，相位就是atan(\dfrac{实部}{虚部})，前面说过。那么现在假设我们只用一副图像的振幅或者相位来将频域内图像恢复到时域会怎么样呢？下面给出只用振幅、只用相位以及两者在联合起来来恢复的程序：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+f = np.fft.fft2(img)
+fshift = np.fft.fftshift(f)
+#取绝对值：将复数变化成实数
+#取对数的目的为了将数据变化到0-255
+s1 = np.log(np.abs(fshift))
+plt.subplot(221),plt.imshow(img,'gray'),plt.title('original')
+plt.xticks([]),plt.yticks([])
+#---------------------------------------------
+# 逆变换--取绝对值就是振幅
+f1shift = np.fft.ifftshift(np.abs(fshift))
+img_back = np.fft.ifft2(f1shift)
+#出来的是复数，无法显示
+img_back = np.abs(img_back)
+#调整大小范围便于显示
+img_back = (img_back-np.amin(img_back))/(np.amax(img_back)-np.amin(img_back))
+plt.subplot(222),plt.imshow(img_back,'gray'),plt.title('only Amplitude')
+plt.xticks([]),plt.yticks([])
+#---------------------------------------------
+# 逆变换--取相位
+f2shift = np.fft.ifftshift(np.angle(fshift))
+img_back = np.fft.ifft2(f2shift)
+#出来的是复数，无法显示
+img_back = np.abs(img_back)
+#调整大小范围便于显示
+img_back = (img_back-np.amin(img_back))/(np.amax(img_back)-np.amin(img_back))
+plt.subplot(223),plt.imshow(img_back,'gray'),plt.title('only phase')
+plt.xticks([]),plt.yticks([])
+#---------------------------------------------
+# 逆变换--将两者合成看看
+s1 = np.abs(fshift) #取振幅
+s1_angle = np.angle(fshift) #取相位
+s1_real = s1*np.cos(s1_angle) #取实部
+s1_imag = s1*np.sin(s1_angle) #取虚部
+s2 = np.zeros(img.shape,dtype=complex)
+s2.real = np.array(s1_real) #重新赋值给s2
+s2.imag = np.array(s1_imag)
+
+f2shift = np.fft.ifftshift(s2) #对新的进行逆变换
+img_back = np.fft.ifft2(f2shift)
+#出来的是复数，无法显示
+img_back = np.abs(img_back)
+#调整大小范围便于显示
+img_back = (img_back-np.amin(img_back))/(np.amax(img_back)-np.amin(img_back))
+plt.subplot(224),plt.imshow(img_back,'gray'),plt.title('another way')
+plt.xticks([]),plt.yticks([])1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/lJc0HmJljH.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，仅仅振幅的恢复图啥也不是，仅仅的相位图还有那么点意思，当然也是啥也不是。最后是把振幅与相位分别作为频域内复数的实部和虚部，得到的恢复图才与原来的一样。</p>
+
+<p>基于此，我们来做一个有趣的实验，假设有两幅图像，将这两幅图像进行傅里叶变换到频域，然后把用一个图像的振幅做为振幅，用另一幅图像的相位作为相位生成一副新的图像，那么，这个图像会怎么样呢？你觉得生成的图像会更像取振幅的那副还是取相位的那副呢？来看看吧：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img_flower = cv2.imread('flower.jpg',0) #直接读为灰度图像
+img_man = cv2.imread('woman.jpg',0) #直接读为灰度图像
+plt.subplot(221),plt.imshow(img_flower,'gray'),plt.title('origial1')
+plt.xticks([]),plt.yticks([])
+plt.subplot(222),plt.imshow(img_man,'gray'),plt.title('origial_2')
+plt.xticks([]),plt.yticks([])
+#--------------------------------
+f1 = np.fft.fft2(img_flower)
+f1shift = np.fft.fftshift(f1)
+f1_A = np.abs(f1shift) #取振幅
+f1_P = np.angle(f1shift) #取相位
+#--------------------------------
+f2 = np.fft.fft2(img_man)
+f2shift = np.fft.fftshift(f2)
+f2_A = np.abs(f2shift) #取振幅
+f2_P = np.angle(f2shift) #取相位
+#---图1的振幅--图2的相位--------------------
+img_new1_f = np.zeros(img_flower.shape,dtype=complex)
+img1_real = f1_A*np.cos(f2_P) #取实部
+img1_imag = f1_A*np.sin(f2_P) #取虚部
+img_new1_f.real = np.array(img1_real)
+img_new1_f.imag = np.array(img1_imag)
+f3shift = np.fft.ifftshift(img_new1_f) #对新的进行逆变换
+img_new1 = np.fft.ifft2(f3shift)
+#出来的是复数，无法显示
+img_new1 = np.abs(img_new1)
+#调整大小范围便于显示
+img_new1 = (img_new1-np.amin(img_new1))/(np.amax(img_new1)-np.amin(img_new1))
+plt.subplot(223),plt.imshow(img_new1,'gray'),plt.title('another way')
+plt.xticks([]),plt.yticks([])
+#---图2的振幅--图1的相位--------------------
+img_new2_f = np.zeros(img_flower.shape,dtype=complex)
+img2_real = f2_A*np.cos(f1_P) #取实部
+img2_imag = f2_A*np.sin(f1_P) #取虚部
+img_new2_f.real = np.array(img2_real)
+img_new2_f.imag = np.array(img2_imag)
+f4shift = np.fft.ifftshift(img_new2_f) #对新的进行逆变换
+img_new2 = np.fft.ifft2(f4shift)
+#出来的是复数，无法显示
+img_new2 = np.abs(img_new2)
+#调整大小范围便于显示
+img_new2 = (img_new2-np.amin(img_new2))/(np.amax(img_new2)-np.amin(img_new2))
+plt.subplot(224),plt.imshow(img_new2,'gray'),plt.title('another way')
+plt.xticks([]),plt.yticks([])123456789101112131415161718192021222324252627282930313233343536373839404142434445464748
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/AcdjkjEDhe.png?imageslim" alt="mark" /></p>
+
+<p>这就是合成的图像，是不是很有趣，图像3是图1的振幅加图2的相位，图像4是图1的相位加上图2的振幅。很明显的可以看到，新图像占用谁的相位就越像谁，为什么会这样？很简单，可以理解振幅不过描述图像灰度的亮度，占用谁的振幅不过使得结果哪些部分偏亮或者暗而已，而图像是个什么样子是由它的相位决定的。相位描述的是一个方向，方向正确了，那么最终的结果离你的目的就不远了。可想而知，方向对于一件事物是多么的重要，大自然的规律尚且如此，更别说做人做事了，找准并相信一个方向，慢慢的走下去吧，总有一天会看到成果的，哪怕你的振幅不对，走的慢一点，但是最终也能走的像模像样的，不会说到了人生的最后，回头一看，再来感叹哎呀这是什么玩意，那就很悲哀了。</p>
+
+<p>好了，扯回来我们的问题，关于傅里叶变换下的图像恢复基本上就是这了。但是我们发现，似乎我们只说了开头（怎么变换）和结尾（怎么变回去），那么中间我们要做的东西才是傅里叶变换的目的—频域下的各种变化操作。</p>
+
+<p>这里主要介绍频域下的滤波–低通滤波器，高通滤波器，带通带阻滤波器。</p>
+
+<p>我们知道，图像在变换加移动中心后，从中间到外面，频率上依次是从低频到高频的，那么我们如果把中间规定一小部分去掉，是不是相对于把低频信号去掉了呢？这也就是相当于进行了高通滤波。这个滤波模板画出来可能就是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/5h2DeGLkCJ.png?imageslim" alt="mark" /></p>
+
+<p>黑色为0，白色为1，把这个模板去和图像进过傅里叶变换的频域矩阵去与（相乘）一下就实现了高通滤波。比如下面：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img_man = cv2.imread('woman.jpg',0) #直接读为灰度图像
+plt.subplot(121),plt.imshow(img_man,'gray'),plt.title('origial')
+plt.xticks([]),plt.yticks([])
+#--------------------------------
+rows,cols = img_man.shape
+mask = np.ones(img_man.shape,np.uint8)
+mask[rows/2-30:rows/2+30,cols/2-30:cols/2+30] = 0
+#--------------------------------
+f1 = np.fft.fft2(img_man)
+f1shift = np.fft.fftshift(f1)
+f1shift = f1shift*mask
+f2shift = np.fft.ifftshift(f1shift) #对新的进行逆变换
+img_new = np.fft.ifft2(f2shift)
+#出来的是复数，无法显示
+img_new = np.abs(img_new)
+#调整大小范围便于显示
+img_new = (img_new-np.amin(img_new))/(np.amax(img_new)-np.amin(img_new))
+plt.subplot(122),plt.imshow(img_new,'gray'),plt.title('Highpass')
+plt.xticks([]),plt.yticks([])1234567891011121314151617181920212223
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/Jcg2CiL5CD.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，高通滤波器有利于提取图像的轮廓，这里我们从原理上分析一下为什么，图像的轮廓或者边缘或者一些噪声处，灰度变化剧烈，那么在把它们经过傅里叶变换后，就会变成高频信号（我们知道高频时捕捉细节的），所以在把图像低频信号滤掉以后剩下的自然就是轮廓了。</p>
+
+<p>反过来我们来看看空间域滤波中的拉普拉斯模板，我们知道这个模板是这样的</p>
+
+<p>$$ M=\left[ \begin{matrix}0&amp;-1&amp;0\ -1&amp;4&amp;-1\0&amp;-1&amp;0 \end{matrix} \right] $$</p>
+
+<p>现在我们把这个模板进行傅里叶变换到频域看看：</p>
+
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+laplacian = np.array([[0,1,0],[1,-4,1],[0,1,0]])
+f = np.fft.fft2(laplacian)
+f1shift = np.fft.fftshift(f)
+img = np.log(np.abs(f1shift))
+plt.imshow(img,'gray')12345678
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/lLiLbgm8hD.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，这个模板的频域变换下四周特别亮，也就是是个高通滤波器。其它空间域下的模板都可以转到频域下来看看。</p>
+
+<p>下面再来试试低通滤波器什么效果，构造个低通滤波器也很简单，把上述模板中的1变成0,0变成1，其实就是低通了：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img_man = cv2.imread('woman.jpg',0) #直接读为灰度图像
+plt.subplot(121),plt.imshow(img_man,'gray'),plt.title('origial')
+plt.xticks([]),plt.yticks([])
+#--------------------------------
+rows,cols = img_man.shape
+mask = np.zeros(img_man.shape,np.uint8)
+mask[rows/2-20:rows/2+20,cols/2-20:cols/2+20] = 1
+#--------------------------------
+f1 = np.fft.fft2(img_man)
+f1shift = np.fft.fftshift(f1)
+f1shift = f1shift*mask
+f2shift = np.fft.ifftshift(f1shift) #对新的进行逆变换
+img_new = np.fft.ifft2(f2shift)
+#出来的是复数，无法显示
+img_new = np.abs(img_new)
+#调整大小范围便于显示
+img_new = (img_new-np.amin(img_new))/(np.amax(img_new)-np.amin(img_new))
+plt.subplot(122),plt.imshow(img_new,'gray'),plt.title('Highpass')
+plt.xticks([]),plt.yticks([])1234567891011121314151617181920212223
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/dCJKD3IjL4.png?imageslim" alt="mark" /></p>
+
+<p>可以看到低通滤波后图像除了轮廓模糊了外，基本上没什么变化，图像的大部分信息基本上都保持了。从原理上来看，图像的主要信息都集中在低频上，所以低通滤波器的效果是这样也是可以理解的。上述的高通、低通滤波器的构造有0,1构成的理想滤波器，也是最简单的滤波器，还有一些其他的滤波器，比如说高斯滤波器，butterworth滤波器等等，下面是参考冈萨雷斯书上的图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/khEdf1Am19.png?imageslim" alt="mark" /></p>
+
+<p>还有就是把高通低通都结合一部分到一个模板上形成的带通滤波器，这在一些场合会很有用，还是以理想的带通滤波器实验下：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img_man = cv2.imread('woman.jpg',0) #直接读为灰度图像
+plt.subplot(121),plt.imshow(img_man,'gray'),plt.title('origial')
+plt.xticks([]),plt.yticks([])
+#--------------------------------
+rows,cols = img_man.shape
+mask1 = np.ones(img_man.shape,np.uint8)
+mask1[rows/2-8:rows/2+8,cols/2-8:cols/2+8] = 0
+mask2 = np.zeros(img_man.shape,np.uint8)
+mask2[rows/2-80:rows/2+80,cols/2-80:cols/2+80] = 1
+mask = mask1*mask2
+#--------------------------------
+f1 = np.fft.fft2(img_man)
+f1shift = np.fft.fftshift(f1)
+f1shift = f1shift*mask
+f2shift = np.fft.ifftshift(f1shift) #对新的进行逆变换
+img_new = np.fft.ifft2(f2shift)
+#出来的是复数，无法显示
+img_new = np.abs(img_new)
+#调整大小范围便于显示
+img_new = (img_new-np.amin(img_new))/(np.amax(img_new)-np.amin(img_new))
+plt.subplot(122),plt.imshow(img_new,'gray')
+plt.xticks([]),plt.yticks([])1234567891011121314151617181920212223242526
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/gEEG8J8Bk0.png?imageslim" alt="mark" /></p>
+
+<p>这就是带通的效果，既可以保留一部分低频，也可以保留一部分高频，至于保留多少，怎么保留就视问题的不同而不同了。</p>
+
+<p>当然频域滤波的应用绝不仅限于此，更多的应用还有待探索学习。</p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://blog.csdn.net/on2way/article/category/5630773">我i智能  opencv+python</a></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/python-%E4%B8%8B%E7%9A%84-opencv/11-%E8%AF%A6%E8%A7%A3-hough-%E5%8F%98%E6%8D%A2%E6%A3%80%E6%B5%8B%E7%9B%B4%E7%BA%BF%E4%B8%8E%E5%9C%86/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">11 详解 hough 变换检测直线与圆</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/python-%E4%B8%8B%E7%9A%84-opencv/09-%E5%9B%BE%E5%83%8F%E7%9B%B4%E6%96%B9%E5%9B%BE/">
+            <span class="next-text nav-default">09 图像直方图</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

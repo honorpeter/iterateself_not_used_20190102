@@ -1,0 +1,2031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 以文本格式读取和写入数据 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="input 和 output 大多可以分为几类： 读取文本文件或其他一些存储在磁盘上的格式， 从数据库加载数据， 利用 web API 来获取网络资源。 6.1 Reading and Writing Data in Text Format (以文本格式读取" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/01-%E4%BB%A5%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 以文本格式读取和写入数据" />
+<meta property="og:description" content="input 和 output 大多可以分为几类： 读取文本文件或其他一些存储在磁盘上的格式， 从数据库加载数据， 利用 web API 来获取网络资源。 6.1 Reading and Writing Data in Text Format (以文本格式读取" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/01-%E4%BB%A5%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="01 以文本格式读取和写入数据">
+<meta itemprop="description" content="input 和 output 大多可以分为几类： 读取文本文件或其他一些存储在磁盘上的格式， 从数据库加载数据， 利用 web API 来获取网络资源。 6.1 Reading and Writing Data in Text Format (以文本格式读取">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="4969">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 以文本格式读取和写入数据"/>
+<meta name="twitter:description" content="input 和 output 大多可以分为几类： 读取文本文件或其他一些存储在磁盘上的格式， 从数据库加载数据， 利用 web API 来获取网络资源。 6.1 Reading and Writing Data in Text Format (以文本格式读取"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 以文本格式读取和写入数据</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 4969 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#6-1-reading-and-writing-data-in-text-format-以文本格式读取和写入数据">6.1 Reading and Writing Data in Text Format (以文本格式读取和写入数据)</a></li>
+<li><a href="#1-reading-text-files-in-pieces-读取一部分文本">1 Reading Text Files in Pieces（读取一部分文本）</a></li>
+<li><a href="#2-writing-data-to-text-format-写入数据到文本格式">2 Writing Data to Text Format (写入数据到文本格式)</a></li>
+<li><a href="#3-working-with-delimited-formats">3 Working with Delimited Formats</a></li>
+<li><a href="#4-json-data">4 JSON Data</a></li>
+<li><a href="#5-xml-and-html-web-scraping-网络爬取">5 XML and HTML: Web Scraping (网络爬取)</a>
+<ul>
+<li><a href="#parsing-xml-with-lxml-objectify">Parsing XML with lxml.objectify</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>input 和 output 大多可以分为几类：</p>
+
+<ul>
+<li>读取文本文件或其他一些存储在磁盘上的格式，</li>
+<li>从数据库加载数据，</li>
+<li>利用 web API 来获取网络资源。</li>
+</ul>
+
+<h1 id="6-1-reading-and-writing-data-in-text-format-以文本格式读取和写入数据">6.1 Reading and Writing Data in Text Format (以文本格式读取和写入数据)</h1>
+
+<p>pandas 有很多用来读取表格式数据作为 dataframe 的函数，下面列出来一些。其中read_csv 和 read_tabel 是最经常用到的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/l3ag1fejgC.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/ebEKL3f3Fh.png?imageslim" alt="mark" /></p>
+
+<p>这里我们给出这些函数的大致功能，就是把 test data 变为 dataframe 。这些函数的一些可选参数有以下几类：</p>
+
+<ul>
+<li>Indexing（索引）</li>
+</ul>
+
+<p>能把返回的一列或多列作为一个dataframe。另外也可以选择从文件中获取列名或完全不获取列名</p>
+
+<ul>
+<li>Type inference and data conversion ( 类型推测和数据转换 )</li>
+</ul>
+
+<p>这个包括用户自己定义的转换类型和缺失值转换</p>
+
+<ul>
+<li>Datetime parsing（日期解析）</li>
+</ul>
+
+<p>包含整合能力，可以把多列中的时间信息整合为一列</p>
+
+<ul>
+<li>Iterating（迭代）</li>
+</ul>
+
+<p>支持对比较大的文件进行迭代 <span style="color:red;">什么意思？</span></p>
+
+<ul>
+<li>Unclean data issues（未清洗的数据问题）</li>
+</ul>
+
+<p>跳过行或柱脚，评论，或其他一些小东西，比如 csv 中的逗号</p>
+
+<p>因为现实中的数据非常messy（杂乱），所以有一些数据加载函数（特别是 read_csv ）的参数也变得越来越多。对于众多参数感觉不知所措是正常的（read_csv有超过50个参数 <span style="color:red;">这么多吗？</span>）。具体的可以去看pandas官网给出的例子。</p>
+
+<p>一些函数，比如 pandas.read_csv 实现 type inference，因为 column data type 不是数据类型的一种。这意味着我们没有必要指定哪些 columns 是数值，哪些是整数，哪些是字符串。其他一些数据格式，比如HDF5，数据类型是在格式里的。<span style="color:red;">HDF5 是什么？</span></p>
+
+<p>先来一个CSV文件热热身（CSV文件指的是用逗号隔开数据的文件）：</p>
+
+<pre><code class="language-python">!cat ../examples/ex1.csv
+</code></pre>
+
+<pre><code class="language-text">a,b,c,d,message
+1,2,3,4,hello
+5,6,7,8,world
+9,10,11,12,foo
+</code></pre>
+
+<p>cat 是 unix 下的一个 shell command。如果是用 windows，用 type 代替cat <span style="color:red;">可行吗？好像type不行？确认下。</span></p>
+
+<pre><code class="language-python">import pandas as pd
+</code></pre>
+
+<pre><code class="language-python">df = pd.read_csv('../examples/ex1.csv')
+df
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>我们也可以用 read_table 来指定分隔符：</p>
+
+<pre><code class="language-python">pd.read_table('../examples/ex1.csv', sep=',')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>一个文件不会总是有header row(页首行)，考虑下面的文件：</p>
+
+<pre><code class="language-python">!cat ../examples/ex2.csv
+</code></pre>
+
+<pre><code class="language-text"> 1,2,3,4,hello
+ 5,6,7,8,world
+ 9,10,11,12,foo
+</code></pre>
+
+<p>读取这样的文件，设定 column name:</p>
+
+<pre><code class="language-python">pd.read_csv('../examples/ex2.csv', header=None)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>也可以自己设定 headers ：</p>
+
+<pre><code class="language-python">pd.read_csv('../examples/ex2.csv', names=['a', 'b', 'c', 'd', 'message'])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果想要从多列从构建一个 hierarchical index (阶层型索引)，传入一个包含列名的list：<span style="color:red;">这种阶层型索引一般什么时候会用到？</span></p>
+
+<pre><code class="language-python">!cat ../examples/csv_mindex.csv
+</code></pre>
+
+<pre><code class="language-text">key1,key2,value1,value2
+one,a,1,2
+one,b,3,4
+one,c,5,6
+one,d,7,8
+two,a,9,10
+two,b,11,12
+two,c,13,14
+two,d,15,16
+</code></pre>
+
+<pre><code class="language-python">parsed = pd.read_csv('../examples/csv_mindex.csv',
+                     index_col=['key1', 'key2'])
+parsed
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>value1</th>
+      <th>value2</th>
+    </tr>
+    <tr>
+      <th>key1</th>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="4" valign="top">one</th>
+      <th>a</th>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>3</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">two</th>
+      <th>a</th>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>11</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>13</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>15</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>在一些情况下，一个table可能没有固定的分隔符，用空格或其他方式来分隔。比如下面这个文件：</p>
+
+<pre><code class="language-python">list(open('../examples/ex3.txt'))
+</code></pre>
+
+<pre><code>['            A         B         C\n',
+ 'aaa -0.264438 -1.026059 -0.619500\n',
+ 'bbb  0.927272  0.302904 -0.032399\n',
+ 'ccc -0.264273 -0.386314 -0.217601\n',
+ 'ddd -0.871858 -0.348382  1.100491\n']
+</code></pre>
+
+<p>可以看到区域是通过不同数量的空格来分隔的。这种情况下，可以传入一个正则表达式给read_table来代替分隔符。用正则表达式为<code>\s+</code>，我们得到：</p>
+
+<pre><code class="language-python">result = pd.read_table('../examples/ex3.txt', sep='\s+')
+result
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>aaa</th>
+      <td>-0.264438</td>
+      <td>-1.026059</td>
+      <td>-0.619500</td>
+    </tr>
+    <tr>
+      <th>bbb</th>
+      <td>0.927272</td>
+      <td>0.302904</td>
+      <td>-0.032399</td>
+    </tr>
+    <tr>
+      <th>ccc</th>
+      <td>-0.264273</td>
+      <td>-0.386314</td>
+      <td>-0.217601</td>
+    </tr>
+    <tr>
+      <th>ddd</th>
+      <td>-0.871858</td>
+      <td>-0.348382</td>
+      <td>1.100491</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>因为列名比行的数量少，所以 read_table 推测第一列应该是 dataframe 的 index。</p>
+
+<p>这个解析器功能有很多其他参数能帮你解决遇到文件格式异常的问题（可以见之后的表格）。比如，我们要跳过第一、三、四行，使用 <code>skiprows</code> :<span style="color:red;">这个还是很好用的</span></p>
+
+<pre><code class="language-python">!cat ../examples/ex4.csv
+</code></pre>
+
+<pre><code class="language-text"># hey!
+a,b,c,d,message
+# just wanted to make things more difficult for you
+# who reads CSV files with computers, anyway?
+1,2,3,4,hello
+5,6,7,8,world
+9,10,11,12,foo
+</code></pre>
+
+<pre><code class="language-python">pd.read_csv('../examples/ex4.csv', skiprows=[0, 2, 3])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>对于缺失值，pandas 使用一些 sentinel value(标记值)来代表，比如NA和NULL：</p>
+
+<pre><code class="language-python">!cat ../examples/ex5.csv
+</code></pre>
+
+<pre><code class="language-text">something,a,b,c,d,message
+one,1,2,3,4,NA
+two,5,6,,8,world
+three,9,10,11,12,foo
+</code></pre>
+
+<pre><code class="language-python">result = pd.read_csv('../examples/ex5.csv')
+result
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>something</th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>one</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>4</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>two</td>
+      <td>5</td>
+      <td>6</td>
+      <td>NaN</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>three</td>
+      <td>9</td>
+      <td>10</td>
+      <td>11.0</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.isnull(result)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>something</th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>True</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p><code>na_values</code> 选项能把我们传入的字符识别为 NA，导入必须是 list：</p>
+
+<pre><code class="language-python">result = pd.read_csv('../examples/ex5.csv', na_values=['NULL'])
+result
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>something</th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>one</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>4</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>two</td>
+      <td>5</td>
+      <td>6</td>
+      <td>NaN</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>three</td>
+      <td>9</td>
+      <td>10</td>
+      <td>11.0</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>我们还可以给不同的column设定不同的缺失值标记符，这样的话需要用到dict：</p>
+
+<pre><code class="language-python">sentinels = {'message': ['foo', 'NA'],
+             'something': ['two']}
+# 把message列中的foo和NA识别为NA，把something列中的two识别为NA
+
+pd.read_csv('../examples/ex5.csv', na_values=sentinels)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>something</th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>one</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>4</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>5</td>
+      <td>6</td>
+      <td>NaN</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>three</td>
+      <td>9</td>
+      <td>10</td>
+      <td>11.0</td>
+      <td>12</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>下面是pandas.read_csv和pandas.read_table中一些常用的选项：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1d5DJ1Em9i.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i9HHEAc3Hd.png?imageslim" alt="mark" /></p>
+
+<h1 id="1-reading-text-files-in-pieces-读取一部分文本">1 Reading Text Files in Pieces（读取一部分文本）</h1>
+
+<p>对于一些比较大的文件，我们想要一次读取一小部分，或者每次迭代一小部分。在我们看一个比较大的文件前，先设置一下pandas中显示的数量：</p>
+
+<pre><code class="language-python">pd.options.display.max_rows = 10
+</code></pre>
+
+<pre><code class="language-python">result = pd.read_csv('../examples/ex6.csv')
+result
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>one</th>
+      <th>two</th>
+      <th>three</th>
+      <th>four</th>
+      <th>key</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.467976</td>
+      <td>-0.038649</td>
+      <td>-0.295344</td>
+      <td>-1.824726</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.358893</td>
+      <td>1.404453</td>
+      <td>0.704965</td>
+      <td>-0.200638</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.501840</td>
+      <td>0.659254</td>
+      <td>-0.421691</td>
+      <td>-0.057688</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.204886</td>
+      <td>1.074134</td>
+      <td>1.388361</td>
+      <td>-0.982404</td>
+      <td>R</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.354628</td>
+      <td>-0.133116</td>
+      <td>0.283763</td>
+      <td>-0.837063</td>
+      <td>Q</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9995</th>
+      <td>2.311896</td>
+      <td>-0.417070</td>
+      <td>-1.409599</td>
+      <td>-0.515821</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <th>9996</th>
+      <td>-0.479893</td>
+      <td>-0.650419</td>
+      <td>0.745152</td>
+      <td>-0.646038</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <th>9997</th>
+      <td>0.523331</td>
+      <td>0.787112</td>
+      <td>0.486066</td>
+      <td>1.093156</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <th>9998</th>
+      <td>-0.362559</td>
+      <td>0.598894</td>
+      <td>-1.843201</td>
+      <td>0.887292</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <th>9999</th>
+      <td>-0.096376</td>
+      <td>-1.012999</td>
+      <td>-0.657431</td>
+      <td>-0.573315</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>10000 rows × 5 columns</p>
+</div>
+
+<p>如果只是想要读取前几行（不读取整个文件），指定一下nrows:</p>
+
+<pre><code class="language-python">pd.read_csv('../examples/ex6.csv', nrows=5)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>one</th>
+      <th>two</th>
+      <th>three</th>
+      <th>four</th>
+      <th>key</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.467976</td>
+      <td>-0.038649</td>
+      <td>-0.295344</td>
+      <td>-1.824726</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.358893</td>
+      <td>1.404453</td>
+      <td>0.704965</td>
+      <td>-0.200638</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.501840</td>
+      <td>0.659254</td>
+      <td>-0.421691</td>
+      <td>-0.057688</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.204886</td>
+      <td>1.074134</td>
+      <td>1.388361</td>
+      <td>-0.982404</td>
+      <td>R</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.354628</td>
+      <td>-0.133116</td>
+      <td>0.283763</td>
+      <td>-0.837063</td>
+      <td>Q</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>读取文件的一部分，可以指定<code>chunksize</code>:</p>
+
+<pre><code class="language-python">chunker = pd.read_csv('../examples/ex6.csv', chunksize=1000)
+chunker
+</code></pre>
+
+<pre><code class="language-text">&lt;pandas.io.parsers.TextFileReader at 0x1121558d0&gt;
+</code></pre>
+
+<p>pandas返回的 TextParser object 能让我们根据chunksize每次迭代文件的一部分。比如，我们想要迭代ex6.csv, 计算key列的值的综合：</p>
+
+<pre><code class="language-python">chunker = pd.read_csv('../examples/ex6.csv', chunksize=1000)
+
+tot = pd.Series([])
+for piece in chunker:
+    tot = tot.add(piece['key'].value_counts(), fill_value=0)
+
+tot = tot.sort_values(ascending=False)
+tot[:10]
+</code></pre>
+
+<pre><code>E    368.0
+X    364.0
+L    346.0
+O    343.0
+Q    340.0
+M    338.0
+J    337.0
+F    335.0
+K    334.0
+H    330.0
+dtype: float64
+</code></pre>
+
+<p>TextParser 有一个 get_chunk 方法，能返回任意大小的数据片段：</p>
+
+<pre><code class="language-python">chunker = pd.read_csv('../examples/ex6.csv', chunksize=1000)
+
+chunker.get_chunk(10)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>one</th>
+      <th>two</th>
+      <th>three</th>
+      <th>four</th>
+      <th>key</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.467976</td>
+      <td>-0.038649</td>
+      <td>-0.295344</td>
+      <td>-1.824726</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.358893</td>
+      <td>1.404453</td>
+      <td>0.704965</td>
+      <td>-0.200638</td>
+      <td>B</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.501840</td>
+      <td>0.659254</td>
+      <td>-0.421691</td>
+      <td>-0.057688</td>
+      <td>G</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.204886</td>
+      <td>1.074134</td>
+      <td>1.388361</td>
+      <td>-0.982404</td>
+      <td>R</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.354628</td>
+      <td>-0.133116</td>
+      <td>0.283763</td>
+      <td>-0.837063</td>
+      <td>Q</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>1.817480</td>
+      <td>0.742273</td>
+      <td>0.419395</td>
+      <td>-2.251035</td>
+      <td>Q</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-0.776764</td>
+      <td>0.935518</td>
+      <td>-0.332872</td>
+      <td>-1.875641</td>
+      <td>U</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-0.913135</td>
+      <td>1.530624</td>
+      <td>-0.572657</td>
+      <td>0.477252</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.358480</td>
+      <td>-0.497572</td>
+      <td>-0.367016</td>
+      <td>0.507702</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-1.740877</td>
+      <td>-1.160417</td>
+      <td>-1.637830</td>
+      <td>2.172201</td>
+      <td>G</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="2-writing-data-to-text-format-写入数据到文本格式">2 Writing Data to Text Format (写入数据到文本格式)</h1>
+
+<p>可以输出位csv格式：</p>
+
+<pre><code class="language-python">data = pd.read_csv('../examples/ex5.csv')
+data
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>something</th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>one</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3.0</td>
+      <td>4</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>two</td>
+      <td>5</td>
+      <td>6</td>
+      <td>NaN</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>three</td>
+      <td>9</td>
+      <td>10</td>
+      <td>11.0</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">data.to_csv('../examples/out.csv')
+</code></pre>
+
+<pre><code class="language-python">!cat ../examples/out.csv
+</code></pre>
+
+<pre><code class="language-text">,something,a,b,c,d,message
+0,one,1,2,3.0,4,
+1,two,5,6,,8,world
+2,three,9,10,11.0,12,foo
+</code></pre>
+
+<p>其他一些分隔符也可以使用（使用sys.stdout可以直接打印文本，方便查看效果）：</p>
+
+<pre><code class="language-python">import sys
+data.to_csv(sys.stdout, sep='|')
+</code></pre>
+
+<pre><code class="language-text">|something|a|b|c|d|message
+0|one|1|2|3.0|4|
+1|two|5|6||8|world
+2|three|9|10|11.0|12|foo
+</code></pre>
+
+<p>缺失值会以空字符串打印出来，我们可以自己设定缺失值的指定符：</p>
+
+<pre><code class="language-python">data.to_csv(sys.stdout, na_rep='NULL')
+</code></pre>
+
+<pre><code>,something,a,b,c,d,message
+0,one,1,2,3.0,4,NULL
+1,two,5,6,NULL,8,world
+2,three,9,10,11.0,12,foo
+</code></pre>
+
+<p>如果不指定，行和列会被自动写入。当然也可以设定为不写入：</p>
+
+<pre><code class="language-python">data.to_csv(sys.stdout, index=False, header=False)
+</code></pre>
+
+<pre><code>one,1,2,3.0,4,
+two,5,6,,8,world
+three,9,10,11.0,12,foo
+</code></pre>
+
+<p>你可以指定只读取一部分列，并按你选择的顺序读取：</p>
+
+<pre><code class="language-python">data.to_csv(sys.stdout, index=False, columns=['a', 'b', 'c'])
+</code></pre>
+
+<pre><code>a,b,c
+1,2,3.0
+5,6,
+9,10,11.0
+</code></pre>
+
+<p>series也有一个to_csv方法：</p>
+
+<pre><code class="language-python">import numpy as np
+</code></pre>
+
+<pre><code class="language-python">dates = pd.date_range('1/1/2000', periods=7)
+
+ts = pd.Series(np.arange(7), index=dates)
+
+ts.to_csv('../examples/tseries.csv')
+</code></pre>
+
+<pre><code class="language-python">!cat ../examples/tseries.csv
+</code></pre>
+
+<pre><code>2000-01-01,0
+
+2000-01-02,1
+
+2000-01-03,2
+
+2000-01-04,3
+
+2000-01-05,4
+
+2000-01-06,5
+
+2000-01-07,6
+</code></pre>
+
+<h1 id="3-working-with-delimited-formats">3 Working with Delimited Formats</h1>
+
+<p>对于大部分磁盘中的表格型数据，用pandas.read_table就能解决。不过，有时候一些人工的处理也是需要的。</p>
+
+<p>当然，有时候，一些格式不正确的行能会把read_table绊倒。为了展示一些基本用法，这里先考虑一个小的CSV文件：</p>
+
+<pre><code class="language-python">!cat ../examples/ex7.csv
+</code></pre>
+
+<pre><code>&quot;a&quot;,&quot;b&quot;,&quot;c&quot;
+
+&quot;1&quot;,&quot;2&quot;,&quot;3&quot;
+
+&quot;1&quot;,&quot;2&quot;,&quot;3&quot;
+</code></pre>
+
+<p>对于单个字符的分隔符，可以使用python内建的csv方法。只要给csv.reader一个打开的文件即可：</p>
+
+<pre><code class="language-python">import csv
+f = open('../examples/ex7.csv')
+reader = csv.reader(f)
+</code></pre>
+
+<p>迭代这个reader:</p>
+
+<pre><code class="language-python">for line in reader:
+    print(line)
+</code></pre>
+
+<pre><code>['a', 'b', 'c']
+['1', '2', '3']
+['1', '2', '3']
+</code></pre>
+
+<p>接下来，我们可以根据自己的需要来处理数据。一步步来，首先，把文件读取成一个list of lines:</p>
+
+<pre><code class="language-python">with open('../examples/ex7.csv') as f:
+    lines = list(csv.reader(f))
+</code></pre>
+
+<p>把lines分成header line和data lines：</p>
+
+<pre><code class="language-python">header, values = lines[0], lines[1:]
+</code></pre>
+
+<p>然后我们可以用一个字典表达式来构造一个有列的字典，以及用zip(*values)反转行为列：</p>
+
+<pre><code class="language-python">data_dict = {h: v for h, v in zip(header, zip(*values))}
+data_dict
+</code></pre>
+
+<pre><code>{'a': ('1', '1'), 'b': ('2', '2'), 'c': ('3', '3')}
+</code></pre>
+
+<pre><code class="language-python">header
+</code></pre>
+
+<pre><code>['a', 'b', 'c']
+</code></pre>
+
+<pre><code class="language-python">print([x for x in zip(*values)])
+</code></pre>
+
+<pre><code>[('1', '1'), ('2', '2'), ('3', '3')]
+</code></pre>
+
+<p>CSV有很多功能。我们可以定义一个新的分隔符格式，比如字符串的引号，行结束时的回车，这里我们利用csv.Dialect来构造一个子类：</p>
+
+<pre><code class="language-python">class my_dialect(csv.Dialect):
+    lineterminator = '\n'
+    delimiter = ';'
+    quotechar = '&quot;'
+    quoting = csv.QUOTE_MINIMAL
+
+f = open('../examples/ex7.csv')
+reader = csv.reader(f, dialect=my_dialect)
+</code></pre>
+
+<pre><code class="language-python">for line in reader:
+    print(line)
+</code></pre>
+
+<pre><code>['a,&quot;b&quot;,&quot;c&quot;']
+['1,&quot;2&quot;,&quot;3&quot;']
+['1,&quot;2&quot;,&quot;3&quot;']
+</code></pre>
+
+<p>当然，也可以设定一个分隔符参数给csv.reader，而不用单独定义一个子类：</p>
+
+<pre><code class="language-python">reader = csv.reader(f, delimiter='|')
+</code></pre>
+
+<pre><code class="language-python">for line in reader:
+    print(line)
+
+f.close()
+</code></pre>
+
+<p>下面是一些csv.Dialect的选项：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aidE0egACD.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ae822Fg6HI.png?imageslim" alt="mark" /></p>
+
+<p>对于一些更复杂的文件，比如用多种字符来做分隔符，就不能知网用csv模块来处理了。这种情况下，要先做string的split，或者用re.split</p>
+
+<p>写入的话，可以用csv.write。它可以写入与csv.reader中设定一样的文件：</p>
+
+<pre><code class="language-python">with open('../examples/mydata.csv', 'w') as f:
+    writer = csv.writer(f, dialect=my_dialect)
+    writer.writerow(('one', 'two', 'three'))
+    writer.writerow(('1', '2', '3'))
+    writer.writerow(('4', '5', '6'))
+    writer.writerow(('7', '8', '9'))
+</code></pre>
+
+<pre><code class="language-python">!cat ../examples/mydata.csv
+</code></pre>
+
+<pre><code>one;two;three
+
+1;2;3
+
+4;5;6
+
+7;8;9
+</code></pre>
+
+<h1 id="4-json-data">4 JSON Data</h1>
+
+<p>JSON (short for JavaScript Object Notation)已经是发送HTTP请求的标准数据格式了。这种格式比起表个性的CSV更自由一些：</p>
+
+<pre><code class="language-python">obj = &quot;&quot;&quot;
+{&quot;name&quot;: &quot;Wes&quot;,
+ &quot;places_lived&quot;: [&quot;United States&quot;, &quot;Spain&quot;, &quot;Germany&quot;],
+ &quot;pet&quot;: null, &quot;siblings&quot;: [{&quot;name&quot;: &quot;Scott&quot;, &quot;age&quot;: 30, &quot;pets&quot;: [&quot;Zeus&quot;, &quot;Zuko&quot;]},
+                           {&quot;name&quot;: &quot;Katie&quot;, &quot;age&quot;: 38,
+                            &quot;pets&quot;: [&quot;Sixes&quot;, &quot;Stache&quot;, &quot;Cisco&quot;]}]
+}
+&quot;&quot;&quot;
+</code></pre>
+
+<p>JSON是很接近python代码的，除了他的缺失值为null和一些其他的要求。基本的类型是object(dicts), array(lists), strings, numbers, booleans, and nulls. 所以的key必须是string。有很多读取JSON的库，这里用json，它也是python内建的库。把JSON string变为python格式，用json.loads:</p>
+
+<pre><code class="language-python">import json
+</code></pre>
+
+<pre><code class="language-python">result = json.loads(obj)
+result
+</code></pre>
+
+<pre><code>{'name': 'Wes',
+ 'pet': None,
+ 'places_lived': ['United States', 'Spain', 'Germany'],
+ 'siblings': [{'age': 30, 'name': 'Scott', 'pets': ['Zeus', 'Zuko']},
+  {'age': 38, 'name': 'Katie', 'pets': ['Sixes', 'Stache', 'Cisco']}]}
+</code></pre>
+
+<p>使用json.dumps，可以把python object转换为JSON：</p>
+
+<pre><code class="language-python">asjson = json.dumps(result)
+</code></pre>
+
+<p>如何把JSON转变为DataFrame或其他一些结构呢。可以把a list of dicts（JSON object）传给DataFrame constructor而且可以自己指定传入的部分：</p>
+
+<pre><code class="language-python">siblings = pd.DataFrame(result['siblings'], columns=['name', 'age'])
+siblings
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Scott</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Katie</td>
+      <td>38</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>pandas.read_json可以自动把JSON数据转变为series或DataFrame：</p>
+
+<pre><code class="language-python">!cat ../examples/example.json
+</code></pre>
+
+<pre><code>[{&quot;a&quot;: 1, &quot;b&quot;: 2, &quot;c&quot;: 3},
+
+ {&quot;a&quot;: 4, &quot;b&quot;: 5, &quot;c&quot;: 6},
+
+ {&quot;a&quot;: 7, &quot;b&quot;: 8, &quot;c&quot;: 9}]
+</code></pre>
+
+<p>pandas.read_json假设JSON数组中的每一个Object，是表格中的一行：</p>
+
+<pre><code class="language-python">data = pd.read_json('../examples/example.json')
+data
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果想要输出结果为JSON，用to_json方法：</p>
+
+<pre><code class="language-python">print(data.to_json())
+</code></pre>
+
+<pre><code>{&quot;a&quot;:{&quot;0&quot;:1,&quot;1&quot;:4,&quot;2&quot;:7},&quot;b&quot;:{&quot;0&quot;:2,&quot;1&quot;:5,&quot;2&quot;:8},&quot;c&quot;:{&quot;0&quot;:3,&quot;1&quot;:6,&quot;2&quot;:9} }
+</code></pre>
+
+<pre><code class="language-python">print(data.to_json(orient='records'))
+</code></pre>
+
+<pre><code>[{&quot;a&quot;:1,&quot;b&quot;:2,&quot;c&quot;:3},{&quot;a&quot;:4,&quot;b&quot;:5,&quot;c&quot;:6},{&quot;a&quot;:7,&quot;b&quot;:8,&quot;c&quot;:9}]
+</code></pre>
+
+<p><code>orient='records'</code>表示输出的数据结构是 列-&gt;值 的形式：</p>
+
+<p><code>records : list like [{column -&gt; value}, ... , {column -&gt; value}]</code></p>
+
+<h1 id="5-xml-and-html-web-scraping-网络爬取">5 XML and HTML: Web Scraping (网络爬取)</h1>
+
+<p>python有很多包用来读取和写入HTML和XML格式。比如:lxml, Beautiful Soup, html5lib。其中lxml比较快，其他一些包则能更好的处理一些复杂的HTML和XML文件。</p>
+
+<p>pandas有一个内建的函数，叫read_html, 这个函数利用lxml和Beautiful Soup这样的包来自动解析HTML，变为DataFrame。这里我们必须要先下载这些包才能使用read_html:</p>
+
+<pre><code class="language-python">conda install lxml
+pip install beautifulsoup4 html5lib
+</code></pre>
+
+<p>pandas.read_html函数有很多额外选项，但是默认会搜索并试图解析含有<code>&lt;tagble&gt;</code>tag的表格型数据。结果是a list of dataframe:</p>
+
+<pre><code class="language-python">tables = pd.read_html('../examples/fdic_failed_bank_list.html')
+</code></pre>
+
+<pre><code class="language-python">len(tables)
+</code></pre>
+
+<pre><code>1
+</code></pre>
+
+<pre><code class="language-python">tables
+</code></pre>
+
+<pre><code>[                             Bank Name             City  ST   CERT  \
+ 0                          Allied Bank         Mulberry  AR     91
+ 1         The Woodbury Banking Company         Woodbury  GA  11297
+ 2               First CornerStone Bank  King of Prussia  PA  35312
+ 3                   Trust Company Bank          Memphis  TN   9956
+ 4           North Milwaukee State Bank        Milwaukee  WI  20364
+ ..                                 ...              ...  ..    ...
+ 542                 Superior Bank, FSB         Hinsdale  IL  32646
+ 543                Malta National Bank            Malta  OH   6629
+ 544    First Alliance Bank &amp; Trust Co.       Manchester  NH  34264
+ 545  National State Bank of Metropolis       Metropolis  IL   3815
+ 546                   Bank of Honolulu         Honolulu  HI  21029
+
+                    Acquiring Institution        Closing Date  \
+ 0                           Today's Bank  September 23, 2016
+ 1                            United Bank     August 19, 2016
+ 2    First-Citizens Bank &amp; Trust Company         May 6, 2016
+ 3             The Bank of Fayette County      April 29, 2016
+ 4    First-Citizens Bank &amp; Trust Company      March 11, 2016
+ ..                                   ...                 ...
+ 542                Superior Federal, FSB       July 27, 2001
+ 543                    North Valley Bank         May 3, 2001
+ 544  Southern New Hampshire Bank &amp; Trust    February 2, 2001
+ 545              Banterra Bank of Marion   December 14, 2000
+ 546                   Bank of the Orient    October 13, 2000
+
+           Updated Date
+ 0    November 17, 2016
+ 1    November 17, 2016
+ 2    September 6, 2016
+ 3    September 6, 2016
+ 4        June 16, 2016
+ ..                 ...
+ 542    August 19, 2014
+ 543  November 18, 2002
+ 544  February 18, 2003
+ 545     March 17, 2005
+ 546     March 17, 2005
+
+ [547 rows x 7 columns]]
+</code></pre>
+
+<pre><code class="language-python">failures = tables[0]
+failures.head()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Bank Name</th>
+      <th>City</th>
+      <th>ST</th>
+      <th>CERT</th>
+      <th>Acquiring Institution</th>
+      <th>Closing Date</th>
+      <th>Updated Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Allied Bank</td>
+      <td>Mulberry</td>
+      <td>AR</td>
+      <td>91</td>
+      <td>Today's Bank</td>
+      <td>September 23, 2016</td>
+      <td>November 17, 2016</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>The Woodbury Banking Company</td>
+      <td>Woodbury</td>
+      <td>GA</td>
+      <td>11297</td>
+      <td>United Bank</td>
+      <td>August 19, 2016</td>
+      <td>November 17, 2016</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>First CornerStone Bank</td>
+      <td>King of Prussia</td>
+      <td>PA</td>
+      <td>35312</td>
+      <td>First-Citizens Bank &amp; Trust Company</td>
+      <td>May 6, 2016</td>
+      <td>September 6, 2016</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Trust Company Bank</td>
+      <td>Memphis</td>
+      <td>TN</td>
+      <td>9956</td>
+      <td>The Bank of Fayette County</td>
+      <td>April 29, 2016</td>
+      <td>September 6, 2016</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>North Milwaukee State Bank</td>
+      <td>Milwaukee</td>
+      <td>WI</td>
+      <td>20364</td>
+      <td>First-Citizens Bank &amp; Trust Company</td>
+      <td>March 11, 2016</td>
+      <td>June 16, 2016</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这里我们做一些数据清洗和分析，比如按年计算bank failure的数量：</p>
+
+<pre><code class="language-python">close_timestamps = pd.to_datetime(failures['Closing Date'])
+</code></pre>
+
+<pre><code class="language-python">close_timestamps.dt.year.value_counts()
+</code></pre>
+
+<pre><code>2010    157
+2009    140
+2011     92
+2012     51
+2008     25
+       ...
+2004      4
+2001      4
+2007      3
+2003      3
+2000      2
+Name: Closing Date, dtype: int64
+</code></pre>
+
+<h2 id="parsing-xml-with-lxml-objectify">Parsing XML with lxml.objectify</h2>
+
+<p>XML(eXtensible Markup Language)是另一种常见的数据格式，支持阶层型、嵌套的数据。这里我们演示如何用lxml来解析一个XML格式文件。</p>
+
+<p>纽约都会交通局发布了巴士和地铁的时间表。每一个地跌或巴士都有一个不同的文件（比如Performance_NNR.xml对应Metro-North Railroad）:</p>
+
+<pre><code>&lt;INDICATOR&gt;
+  &lt;INDICATOR_SEQ&gt;373889&lt;/INDICATOR_SEQ&gt;
+  &lt;PARENT_SEQ&gt;&lt;/PARENT_SEQ&gt;
+  &lt;AGENCY_NAME&gt;Metro-North Railroad&lt;/AGENCY_NAME&gt;
+  &lt;INDICATOR_NAME&gt;Escalator Availability&lt;/INDICATOR_NAME&gt;
+  &lt;DESCRIPTION&gt;Percent of the time that escalators are operational systemwide. The availability rate is based on physical observations performed the morning of regular business days only. This is a new indicator the agency began reporting in 2009.&lt;/DESCRIPTION&gt;
+  &lt;PERIOD_YEAR&gt;2011&lt;/PERIOD_YEAR&gt;
+  &lt;PERIOD_MONTH&gt;12&lt;/PERIOD_MONTH&gt;
+  &lt;CATEGORY&gt;Service Indicators&lt;/CATEGORY&gt;
+  &lt;FREQUENCY&gt;M&lt;/FREQUENCY&gt;
+  &lt;DESIRED_CHANGE&gt;U&lt;/DESIRED_CHANGE&gt;
+  &lt;INDICATOR_UNIT&gt;%&lt;/INDICATOR_UNIT&gt;
+  &lt;DECIMAL_PLACES&gt;1&lt;/DECIMAL_PLACES&gt;
+  &lt;YTD_TARGET&gt;97.00&lt;/YTD_TARGET&gt;
+  &lt;YTD_ACTUAL&gt;&lt;/YTD_ACTUAL&gt;
+  &lt;MONTHLY_TARGET&gt;97.00&lt;/MONTHLY_TARGET&gt;
+  &lt;MONTHLY_ACTUAL&gt;&lt;/MONTHLY_ACTUAL&gt;
+&lt;/INDICATOR&gt;
+</code></pre>
+
+<p>使用lxml.objectify,我们可以解析文件，通过getroot，得到一个指向XML文件中root node的指针：</p>
+
+<pre><code class="language-python">from lxml import objectify
+
+path = '../datasets/mta_perf/Performance_MNR.xml'
+parsed = objectify.parse(open(path))
+root = parsed.getroot()
+</code></pre>
+
+<p>root.INDICATOR 返回一个生成器，每次调用能生成一个<code>&lt;INDICATOR&gt;</code>XML元素。每一个记录，我们产生一个dict，tag name(比如YTD_ACTUAL)作为字典的key：</p>
+
+<pre><code class="language-python">data = []
+
+skip_fields = ['PARENT_SEQ', 'INDICATOR_SEQ',
+               'DESIRED_CHANGE', 'DECIMAL_PLACES']
+
+for elt in root.INDICATOR:
+    el_data = {}
+    for child in elt.getchildren():
+        if child.tag in skip_fields:
+            continue
+        el_data[child.tag] = child.pyval
+    data.append(el_data)
+</code></pre>
+
+<p>然后我们把这个dict变为DataFrame：</p>
+
+<pre><code class="language-python">perf = pd.DataFrame(data)
+perf.head()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AGENCY_NAME</th>
+      <th>CATEGORY</th>
+      <th>DESCRIPTION</th>
+      <th>FREQUENCY</th>
+      <th>INDICATOR_NAME</th>
+      <th>INDICATOR_UNIT</th>
+      <th>MONTHLY_ACTUAL</th>
+      <th>MONTHLY_TARGET</th>
+      <th>PERIOD_MONTH</th>
+      <th>PERIOD_YEAR</th>
+      <th>YTD_ACTUAL</th>
+      <th>YTD_TARGET</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Metro-North Railroad</td>
+      <td>Service Indicators</td>
+      <td>Percent of commuter trains that arrive at thei...</td>
+      <td>M</td>
+      <td>On-Time Performance (West of Hudson)</td>
+      <td>%</td>
+      <td>96.9</td>
+      <td>95</td>
+      <td>1</td>
+      <td>2008</td>
+      <td>96.9</td>
+      <td>95</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Metro-North Railroad</td>
+      <td>Service Indicators</td>
+      <td>Percent of commuter trains that arrive at thei...</td>
+      <td>M</td>
+      <td>On-Time Performance (West of Hudson)</td>
+      <td>%</td>
+      <td>95</td>
+      <td>95</td>
+      <td>2</td>
+      <td>2008</td>
+      <td>96</td>
+      <td>95</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Metro-North Railroad</td>
+      <td>Service Indicators</td>
+      <td>Percent of commuter trains that arrive at thei...</td>
+      <td>M</td>
+      <td>On-Time Performance (West of Hudson)</td>
+      <td>%</td>
+      <td>96.9</td>
+      <td>95</td>
+      <td>3</td>
+      <td>2008</td>
+      <td>96.3</td>
+      <td>95</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Metro-North Railroad</td>
+      <td>Service Indicators</td>
+      <td>Percent of commuter trains that arrive at thei...</td>
+      <td>M</td>
+      <td>On-Time Performance (West of Hudson)</td>
+      <td>%</td>
+      <td>98.3</td>
+      <td>95</td>
+      <td>4</td>
+      <td>2008</td>
+      <td>96.8</td>
+      <td>95</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Metro-North Railroad</td>
+      <td>Service Indicators</td>
+      <td>Percent of commuter trains that arrive at thei...</td>
+      <td>M</td>
+      <td>On-Time Performance (West of Hudson)</td>
+      <td>%</td>
+      <td>95.8</td>
+      <td>95</td>
+      <td>5</td>
+      <td>2008</td>
+      <td>96.6</td>
+      <td>95</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>XML数据能得到比这个例子更复杂的情况。每个tag都有数据。比如一个而HTML链接，也是一个有效的XML：</p>
+
+<pre><code class="language-python">from io import StringIO
+tag = '&lt;a href=&quot;http://www.google.com&quot;&gt;Google&lt;/a&gt;'
+root = objectify.parse(StringIO(tag)).getroot()
+</code></pre>
+
+<p>我们可以访问任何区域的tag(比如href)：</p>
+
+<pre><code class="language-python">root
+</code></pre>
+
+<pre><code>&lt;Element a at 0x114860948&gt;
+</code></pre>
+
+<pre><code class="language-python">root.get('href')
+</code></pre>
+
+<pre><code>'http://www.google.com'
+</code></pre>
+
+<pre><code class="language-python">root.text
+</code></pre>
+
+<pre><code>'Google'
+</code></pre>
+
+<pre><code class="language-python">
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/03-%E8%BF%87%E6%BB%A4%E5%99%A8%E5%92%8C%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B/01-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/03-pandas/01-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+            <span class="next-text nav-default">01 数据结构</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

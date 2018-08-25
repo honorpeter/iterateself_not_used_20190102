@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>C&#43;&#43; 字符串与数字的转换 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-30 01:40:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2/ slug: c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2 title: C&#43;&#43; 字符串与数字的转换 wordpress_id: 7013 categories: - 基础程序设计 tags: - C&#43;&#43; [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E6%95%B0%E5%AD%97%E7%9A%84%E8%BD%AC%E6%8D%A2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="C&#43;&#43; 字符串与数字的转换" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-30 01:40:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2/ slug: c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2 title: C&#43;&#43; 字符串与数字的转换 wordpress_id: 7013 categories: - 基础程序设计 tags: - C&#43;&#43; [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%8E%E6%95%B0%E5%AD%97%E7%9A%84%E8%BD%AC%E6%8D%A2/" /><meta property="article:published_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta itemprop="name" content="C&#43;&#43; 字符串与数字的转换">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-30 01:40:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2/ slug: c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2 title: C&#43;&#43; 字符串与数字的转换 wordpress_id: 7013 categories: - 基础程序设计 tags: - C&#43;&#43; [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="wordCount" content="776">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="C&#43;&#43; 字符串与数字的转换"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-30 01:40:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2/ slug: c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2 title: C&#43;&#43; 字符串与数字的转换 wordpress_id: 7013 categories: - 基础程序设计 tags: - C&#43;&#43; [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">C&#43;&#43; 字符串与数字的转换</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 776 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#c">- C++</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#缘由">缘由</a></li>
+<li><a href="#整数转换为字符串">整数转换为字符串</a></li>
+<li><a href="#字符串转换为整数">字符串转换为整数</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-30 01:40:19+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/30/c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2/">http://106.15.37.116/2018/05/30/c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2/</a>
+slug: c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2
+title: C++ 字符串与数字的转换
+wordpress_id: 7013
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="c">- C++</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><a href="https://github.com/gatieme/CodingInterviews/tree/master/062-%E5%BA%8F%E5%88%97%E5%8C%96%E4%BA%8C%E5%8F%89%E6%A0%91">序列化二叉树</a></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="缘由">缘由</h1>
+
+<p>今天在看到一个算法题：序列化与反序列化二叉树 的时候，题中总结了 字符串与数字之间的转换，因此这里也总结下：</p>
+
+<h1 id="整数转换为字符串">整数转换为字符串</h1>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+
+
+using namespace std;
+
+
+//itoa不是标准C语言函数所以不能在所有的编译器中使用(比如gcc)
+//itoa并不是一个标准的C函数，它是Windows特有的，如果要写跨平台的程序，请用sprintf。
+string IntToStringByitoa(int num) {
+    char pstr[81];
+    _itoa_s(num, pstr, 10);//10 是进制
+    string str(pstr);
+    cout &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return str;
+}
+
+
+//  使用sprintf将任意的格式化信息输出到char *中
+string IntToStringBysprintf(int num) {
+    char pstr[81];
+    sprintf_s(pstr, &quot;%d&quot;, num);//%d 是十进制数，%x 是16进制 
+    string str(pstr);
+    cout &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return str;
+}
+
+
+//  使用stringstream进行字符串的格式化
+string IntToStringBystringstream(int num) {
+    string str;
+    stringstream ss;
+    ss &lt;&lt; num;
+    ss &gt;&gt; str;
+    cout &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return str;
+}
+
+//  使用ostringstream将任意格式的信息转换为字符串(输出)
+string IntToStringByostringstream(int num) {
+    string str;
+    ostringstream ss;
+
+    ss &lt;&lt; num;
+    str = ss.str();
+    cout &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return str;
+}
+
+int main() {
+    IntToStringByitoa(25);
+    IntToStringBysprintf(25);
+    IntToStringBystringstream(25);
+    IntToStringByostringstream(25);
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>int(25) to str(25)
+int(25) to str(25)
+int(25) to str(25)
+int(25) to str(25)
+</code></pre>
+
+<h1 id="字符串转换为整数">字符串转换为整数</h1>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;sstream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+
+//  使用atoi将char*转换为整数
+int StringToIntByatoi(string str) {
+    int num = atoi(str.c_str());
+    cout &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return num;
+}
+
+//  使用sscanf将字符串转换为任意格式的信息
+int StringToIntBysscanf(string str) {
+    int num;
+    sscanf_s(str.c_str(), &quot;%d&quot;, &amp;num);
+    cout &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return num;
+}
+
+//  使用stringstream进行字符串的格式化(输入)
+int StringToIntBystringstream(string str) {
+    int num;
+    stringstream ss;
+    ss &lt;&lt; str;
+    ss &gt;&gt; num;
+    cout &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return num;
+}
+
+//  使用istringstream将字符串转换为整数
+int StringToIntByistringstream(string str) {
+    int num;
+    istringstream ss;
+    ss.str(str);
+    ss &gt;&gt; num;
+    cout &lt;&lt; &quot;str(&quot; &lt;&lt; str &lt;&lt; &quot;) to &quot; &lt;&lt; &quot;int(&quot; &lt;&lt; num &lt;&lt; &quot;)&quot; &lt;&lt; endl;
+    return num;
+}
+
+int main() {
+    StringToIntByatoi(&quot;25&quot;);
+    StringToIntBysscanf(&quot;25&quot;);
+    StringToIntBystringstream(&quot;25&quot;);
+    StringToIntByistringstream(&quot;25&quot;);
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>str(25) to int(25)
+str(25) to int(25)
+str(25) to int(25)
+str(25) to int(25)
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A1%8C%E4%B8%BA%E5%9E%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 行为型</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E7%AC%ACk%E4%B8%AA%E7%BB%93%E7%82%B9/">
+            <span class="next-text nav-default">算法：二叉搜索树的第K个结点</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

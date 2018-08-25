@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 误差逆传播算法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="误差逆传播算法 亦称“反向传播算法”. 多层网络的学习能力比单层感知机强得多。欲训练多层网络，式(5.1)的 简单感知机学习规则显然不够了，需要更" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/03-%E8%AF%AF%E5%B7%AE%E9%80%86%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 误差逆传播算法" />
+<meta property="og:description" content="误差逆传播算法 亦称“反向传播算法”. 多层网络的学习能力比单层感知机强得多。欲训练多层网络，式(5.1)的 简单感知机学习规则显然不够了，需要更" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/03-%E8%AF%AF%E5%B7%AE%E9%80%86%E4%BC%A0%E6%92%AD%E7%AE%97%E6%B3%95/" /><meta property="article:published_time" content="2018-06-27T08:44:44&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-27T08:44:44&#43;00:00"/>
+<meta itemprop="name" content="03 误差逆传播算法">
+<meta itemprop="description" content="误差逆传播算法 亦称“反向传播算法”. 多层网络的学习能力比单层感知机强得多。欲训练多层网络，式(5.1)的 简单感知机学习规则显然不够了，需要更">
+
+
+<meta itemprop="datePublished" content="2018-06-27T08:44:44&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-27T08:44:44&#43;00:00" />
+<meta itemprop="wordCount" content="2202">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 误差逆传播算法"/>
+<meta name="twitter:description" content="误差逆传播算法 亦称“反向传播算法”. 多层网络的学习能力比单层感知机强得多。欲训练多层网络，式(5.1)的 简单感知机学习规则显然不够了，需要更"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 误差逆传播算法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-27 </span>
+        
+        <span class="more-meta"> 2202 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>误差逆传播算法 亦称“反向传播算法”.</p>
+
+<p>多层网络的学习能力比单层感知机强得多。欲训练多层网络，式(5.1)的 简单感知机学习规则显然不够了，需要更强大的学习算法。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/HiAD3khi7m.png?imageslim" alt="mark" /></p>
+
+<p>误差逆传播(error BackPropagation,简称BP) 算法就是其中最杰出的代表，它是迄今最成功的神经网络学习算法.现实任务中使用神经网络时，大多是在使用 BP 算法进行训练.值得指出的是，BP算法不仅可用于多层前馈神经网络，还可用于其他类型的神经网络，例如训练递归神经网络[Pineda, 1987].但通常说“BP网络”时, 一般是指用BP算法训练的多层前馈神经网络。</p>
+
+<p>下面我们来看看BP算法究竟是什么样。给定训练集 $D={(x_1,y_1),(x_2,y_2),\cdots (x_m,y_m)}$，$x_i\in  \mathbb{R}^d$ ，$y_i\in \mathbb{R}^l$ ，即输入示例由 d 个属性描述，输出 l 维实值向量.为便于讨论，图 5.7 给出了一个拥有 d 个输入神经元、l 个输出神经元、q 个隐层神经元的多层前馈网络结构，其中输出层第 j 个神经元的阈值 用 $\theta_j$ 表示，隐层第 h 个神经元的阈值用 $\gamma<em>h$  表示.输入层第 i 个神经元与隐层第 h 个神经元之间的连接权为 $v</em>{ih}$ 。隐层第 h 个神经元与输出层第 j 个神经元之间的连接权为 $w_{hj}$ 。记隐层第 h 个神经元接收到的输入为 $\alpha<em>h=\sum</em>{i=1}^{d}v_{ih}x_i$ ，输出层第 j 个神经元接收到的输入为 $\beta<em>j=\sum</em>{h=1}^{q}w_{hj}b_h$ ，其中 $b_h$ 为隐层第 h 个神经
+元的输出。假设隐层和输出层神经元都使用图 5.2(b) 中的 Sigmoid函数。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/giFDElh243.png?imageslim" alt="mark" /></p>
+
+<p>对训练例 $(x_k,y_k)$ ，假定神经网络的输山为 $\hat{y}_k=(\hat{y}_1^k,\hat{y}_2^k,\cdots ,\hat{y}_l^k)，即</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/63EdGL9EgF.png?imageslim" alt="mark" /></p>
+
+<p>则网络在 $(x_k,y_k)$ 上的均方误差为:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/lEiid194Fd.png?imageslim" alt="mark" /></p>
+
+<p>图5.7的网络中有 $(d + l + 1)q + l$ 个参数需确定：输入层到隐层的 $d\times q$ 个权值、隐层到输出层的 $q\times l$ 个权值、q 个隐层神经元的阈值、l 个输出层神经元的阈值。BP是一个迭代学习算法，在迭代的每一轮中采用广义的感知机学习规则对参数进行更新估计，即与式(5.1)类似，任意参数 v 的更新估计式为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/DfeFCBl5H6.png?imageslim" alt="mark" /></p>
+
+<p>下面我们以图5.7中隐层到输出层的连接权 $w_{hj}$ 为例来进行推导.</p>
+
+<p>BP算法基于梯度下降(gradient descent)策略，以目标的负梯度方向对参数进行调整.对式(5.4)的误差 $E_k$，给定学习率 $\eta$ ，有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/CiF5gfFkG8.png?imageslim" alt="mark" /></p>
+
+<p>注意到 $w_{hj}$ 先影响到第 j 个输出层神经元的输入值 $\beta_j$ ，再影响到其输出值 $\hat{y}_j^k$ ， 然后影响到 $E_k$，有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/khhHkkIa5j.png?imageslim" alt="mark" /></p>
+
+<p>根据 $\beta_j$ 的定义，显然有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/4i7G72J9BI.png?imageslim" alt="mark" /></p>
+
+<p>图5.2中的Sigmoid函数有一个很好的性质：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/6j7CFkbHBm.png?imageslim" alt="mark" /></p>
+
+<p>于是根据式(5.4)和(5.3)，有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/E5lljg8fig.png?imageslim" alt="mark" /></p>
+
+<p>将式(5.10)和(5.8)代入式(5.7),再代入式(5.6)，就得到了BP算法中关于$w_{hj}$ 的更新公式</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/a9JflCbk08.png?imageslim" alt="mark" /></p>
+
+<p>类似可得</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/bhB3BmH7jJ.png?imageslim" alt="mark" /></p>
+
+<p>式(5.13)和(5.14)中</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/KBg2D52CH7.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/ghDC7De80E.png?imageslim" alt="mark" /></p>
+
+<p>学习率 $\eta\in (0,1)$ 控制着算法每一轮迭代中的更新步长，若太大则容易振荡，太小则收敛速度又会过慢.有时为了做精细调节，可令式(5.11)与(5.12)使用 $\eta_1$ ,式(5.13)与(5.14)使用 $\eta_2$,两者未必相等.</p>
+
+<p>图5.8给出了 BP算法的工作流程.对每个训练样例，BP算法执行以下操 作：先将输入示例提供给输入层神经元，然后逐层将信号前传，直到产生输出 层的结果；然后计算输出层的误差(第4-5行)，再将误差逆向传播至隐层神经元(第6行),最后根据隐层神经元的误差来对连接权和阈值进行调整(第7行). 该迭代过程循环进行，直到达到某些停止条件为止，例如训练误差已达到一个很小的值。图5.9给出了在2个属性、5个样本的西瓜数据上，随着训练轮数的增加，网络参数和分类边界的变化情况.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/ED5kmckjme.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/Ffb1jifACi.png?imageslim" alt="mark" /></p>
+
+<p>需注意的是，BP算法的目标是要最小化训练集D上的累积误差</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/2h77blCAf2.png?imageslim" alt="mark" /></p>
+
+<p>但我们上面介绍的“标准BP算法”每次仅针对一个训练样例更新连接权和阈值，也就是说，图5.8中算法的更新规则是基于单个的 $E_k$ 推导而得.如果类似地推导出基于累积误差最小化的更新规则，就得到了累积误差逆传播(accumulated error backpropagation)算法.累积BP算法与标准BP算法都很常用.一般来说，标准BP算法每次更新只针对单个样例，参数更新得非常频繁，而且对不同样例进行更新的效果可能出现“抵消”现象因此，为了达到同样的累积误差极小点，标准BP算法往往需进行更多次数的迭代.累积BP算法直接针对累积误差最小化，它在读取整个训练集 D 一遍后才对参数进行更新, 其参数更新的频率低得多.但在很多任务中，累积误差下降到一定程度之后，进一步下降会非常缓慢，这时标准 BP 往往会更快获得较好的解，尤其是在训练集D非常大时更明显.</p>
+
+<p>[Hornik et al., 1989]证明，只需一个包含足够多神经元的隐层，多层前馈网络就能以任意精度逼近任意复杂度的连续函数。然而，如何设置隐层神经元的个数仍是个未决问题，实际应用中通常靠 “试错法”(trial-by-error) 调整。<span style="color:red;">现在还是未解决的吗？</span></p>
+
+<p>正是由于其强大的表示能力，BP 神经网络经常遭遇过拟合，其训练误差持续降低，但测试误差却可能上升。有两种策略常用来缓解 BP 网络的过拟合。
+<span style="color:red;">这两种方法在实践中是怎么运用的？</span></p>
+
+<ul>
+<li>第一种策略是 “早停” (early stopping):将数据分成训练集和验证集，训练集用 来计算梯度、更新连接权和阈值，验证集用来估计误差，若训练集误差降低但 验证集误差升高，则停止训练，同时返回具有最小验证集误差的连接权和阈值.</li>
+<li>第二种策略是“正则化” (regularization) [Barron, 1991; Girosi et al., 1&rdquo;S] 其 基本思想是在误差目标函数中增加一个用于描述网络复杂度的部分，例如连接权与阈值的平方和.仍令 $E_k$ 表示第 k 个训练样例上的误差，$w_i$ 表示连接权和阈值，则误差目标函数(5.16)改变为</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/ag3mLdiDG6.png?imageslim" alt="mark" /></p>
+
+<p>其中 $\lambda \in(0,1)$ 用于对经验误差与网络复杂度这两项进行折中，常通过交叉验证法来估计。<span style="color:red;">没明白？</span></p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/04-%E5%85%A8%E5%B1%80%E6%9C%80%E5%B0%8F%E4%B8%8E%E5%B1%80%E9%83%A8%E6%9E%81%E5%B0%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 全局最小与局部极小</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E5%85%A5%E9%97%A8%E7%BB%8F%E5%85%B8/13-%E5%85%B6%E4%BB%96/">
+            <span class="next-text nav-default">13 其他</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

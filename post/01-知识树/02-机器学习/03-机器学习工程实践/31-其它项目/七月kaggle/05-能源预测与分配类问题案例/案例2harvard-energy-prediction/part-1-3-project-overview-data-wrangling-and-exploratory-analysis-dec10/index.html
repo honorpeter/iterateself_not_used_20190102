@@ -1,0 +1,3980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Part 1-3 Project Overview, Data Wrangling and Exploratory Analysis-DEC10 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Improving University Energy Efficiency: Building Energy Demand Prediction Bin Yan, Constant Wette and Wen Xie Content: 1. Project Overview 2. Data Wrangling 数据处理 3. Exploratory Analysis 数据分析 4. Prediction using Different Machine Learning Methods 使用各种ML方法 5. Summary 小结 6. Conclusion 总结 7. Discussion 讨论 Data access: https://www.dropbox.com/s/ik42ibiyeqftkpo/Data.zip?dl=0 #1. Project Overview Background and Motivation The" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-1-3-project-overview-data-wrangling-and-exploratory-analysis-dec10/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Part 1-3 Project Overview, Data Wrangling and Exploratory Analysis-DEC10" />
+<meta property="og:description" content="Improving University Energy Efficiency: Building Energy Demand Prediction Bin Yan, Constant Wette and Wen Xie Content: 1. Project Overview 2. Data Wrangling 数据处理 3. Exploratory Analysis 数据分析 4. Prediction using Different Machine Learning Methods 使用各种ML方法 5. Summary 小结 6. Conclusion 总结 7. Discussion 讨论 Data access: https://www.dropbox.com/s/ik42ibiyeqftkpo/Data.zip?dl=0 #1. Project Overview Background and Motivation The" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-1-3-project-overview-data-wrangling-and-exploratory-analysis-dec10/" /><meta property="article:published_time" content="2018-07-25T18:09:10&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-25T18:09:10&#43;00:00"/>
+<meta itemprop="name" content="Part 1-3 Project Overview, Data Wrangling and Exploratory Analysis-DEC10">
+<meta itemprop="description" content="Improving University Energy Efficiency: Building Energy Demand Prediction Bin Yan, Constant Wette and Wen Xie Content: 1. Project Overview 2. Data Wrangling 数据处理 3. Exploratory Analysis 数据分析 4. Prediction using Different Machine Learning Methods 使用各种ML方法 5. Summary 小结 6. Conclusion 总结 7. Discussion 讨论 Data access: https://www.dropbox.com/s/ik42ibiyeqftkpo/Data.zip?dl=0 #1. Project Overview Background and Motivation The">
+
+
+<meta itemprop="datePublished" content="2018-07-25T18:09:10&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-25T18:09:10&#43;00:00" />
+<meta itemprop="wordCount" content="11073">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Part 1-3 Project Overview, Data Wrangling and Exploratory Analysis-DEC10"/>
+<meta name="twitter:description" content="Improving University Energy Efficiency: Building Energy Demand Prediction Bin Yan, Constant Wette and Wen Xie Content: 1. Project Overview 2. Data Wrangling 数据处理 3. Exploratory Analysis 数据分析 4. Prediction using Different Machine Learning Methods 使用各种ML方法 5. Summary 小结 6. Conclusion 总结 7. Discussion 讨论 Data access: https://www.dropbox.com/s/ik42ibiyeqftkpo/Data.zip?dl=0 #1. Project Overview Background and Motivation The"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Part 1-3 Project Overview, Data Wrangling and Exploratory Analysis-DEC10</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-25 </span>
+        
+        <span class="more-meta"> 11073 words </span>
+        <span class="more-meta"> 23 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#improving-university-energy-efficiency">Improving University Energy Efficiency:</a></li>
+</ul></li>
+<li><a href="#building-energy-demand-prediction">Building Energy Demand Prediction</a>
+<ul>
+<li><a href="#background-and-motivation">Background and Motivation</a></li>
+<li><a href="#related-work">Related Work</a></li>
+<li><a href="#project-objective-initial-questions">Project Objective / Initial Questions</a></li>
+<li><a href="#original-energy-consumption-data">Original Energy Consumption Data</a></li>
+<li><a href="#electricity">Electricity</a>
+<ul>
+<li><a href="#validate-our-data-processing-method-by-checking-monthly-energy-consumption">Validate our data processing method by checking monthly energy consumption</a></li>
+<li><a href="#derive-hourly-consumption">Derive hourly consumption</a></li>
+<li><a href="#derive-daily-consumption">Derive daily consumption</a></li>
+</ul></li>
+<li><a href="#chilled-water">Chilled Water</a></li>
+<li><a href="#steam">Steam</a></li>
+<li><a href="#weather-data">Weather data</a>
+<ul>
+<li><a href="#original-data">Original data</a></li>
+<li><a href="#hourly-weather-data">Hourly weather data</a></li>
+<li><a href="#daily-weather-data">Daily weather data</a></li>
+</ul></li>
+<li><a href="#features-related-to-occupancy">Features related to occupancy</a></li>
+<li><a href="#merge-energy-consumption-data-with-weather-and-occupancy-features">Merge energy consumption data with weather and occupancy features</a></li>
+<li><a href="#a-note-for-features">A note for features</a>
+<ul>
+<li><a href="#nomenclature-alphabetically">Nomenclature (Alphabetically)</a></li>
+<li><a href="#humidity">Humidity</a></li>
+</ul></li>
+<li><a href="#monthly-energy-consumption">Monthly energy consumption</a></li>
+<li><a href="#electricity-energy-consumption-pattern">Electricity energy consumption pattern</a>
+<ul>
+<li><a href="#findings">Findings</a></li>
+</ul></li>
+<li><a href="#relationship-between-energy-consumption-and-features">Relationship between energy consumption and features</a>
+<ul>
+<li><a href="#main-features-we-considered">Main features we considered</a></li>
+<li><a href="#energy-consumption-versus-features">Energy Consumption versus Features</a></li>
+<li><a href="#findings-1">Findings</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="improving-university-energy-efficiency">Improving University Energy Efficiency:</h2>
+
+<h1 id="building-energy-demand-prediction">Building Energy Demand Prediction</h1>
+
+<hr />
+
+<p>Bin Yan, Constant Wette and Wen Xie</p>
+
+<p>Content:
+1. Project Overview
+  2. Data Wrangling  数据处理
+3. Exploratory Analysis 数据分析
+4. Prediction using Different Machine Learning Methods 使用各种ML方法
+5. Summary  小结
+6. Conclusion 总结
+7. Discussion 讨论</p>
+
+<p>Data access:</p>
+
+<p><a href="https://www.dropbox.com/s/ik42ibiyeqftkpo/Data.zip?dl=0">https://www.dropbox.com/s/ik42ibiyeqftkpo/Data.zip?dl=0</a></p>
+
+<p>#1. Project Overview</p>
+
+<h2 id="background-and-motivation">Background and Motivation</h2>
+
+<p>The issue of energy performance of buildings is of great concern to building owners nowadays as it translates to cost. According to the U.S. Department of Energy, buildings consume about 40% of all energy used in the United States. Some states and municipalities have adopted energy savings targets for buildings in an effort to reduce air pollution and climate change in urban areas as well as regionally and globally.</p>
+
+<p>In this project, we will apply machine learning methods to predict energy demand of buildings based on time, weather and historical data. This type of modeling is frequently applied to energy demand prediction for smart grid technologies and energy saving verification for building commissioning. In the past, Neural Networks were most commonly used for these tasks. We would like to apply more machine learning methods to such prediction.</p>
+
+<h2 id="related-work">Related Work</h2>
+
+<p>We are not the first ones to conduct such studies. There are many papers out there regarding this topic. For example,</p>
+
+<p>Wu, Leon, et al. &ldquo;Improving efficiency and reliability of building systems using machine learning and automated online evaluation.&rdquo; Systems, Applications and Technology Conference (LISAT), 2012 IEEE Long Island. IEEE, 2012.</p>
+
+<p>We want to try different machine learning methods and implement the methods on an Harvard building.</p>
+
+<h2 id="project-objective-initial-questions">Project Objective / Initial Questions</h2>
+
+<p>供暖和供冷两方面预测。</p>
+
+<p><b>The main goal of this project is to use time and weather to predict energy demand of buildings based on historical data.</b> We are seeking easy-to-implement models with minimal input requirement and high accuracy. Such models will benefit managers of facilities, smart grid and building commissioning projects. <b>For university facilities, if they can predict the energy use of all campus buildings, they can make plans in advance to optimize the operations of chillers, boilers and energy storage systems.</b> The model will produce accurate energy demand forecasts that utility companies can use to decide the optimal amount of electricity to produce in the future and minimize cost. In building commissioning, engineers need to verify the energy savings after energy-saving measures have been implemented. However, it is difficult to have enough data points with the same conditions before and after the changes. Therefore, engineers need to interpolate and/or extrapolate the data. This is also an important application of this research.</p>
+
+<p>We stick to this question through the entire project course. In our project proposal, we were thinking about testing our method on more buildings and doing some fault detection using the data. But the data cleaning part took longer than we thought. Therefore, we decided to focus on the prediction task on one building.</p>
+
+<p>#2. Data Wrangling</p>
+
+<p>有三种能源的消耗：电能，冷凝水，热蒸汽。</p>
+
+<p>For some large scale buildings in Harvard, <b>there are three types energy consumption, electricity, chilled water and steam. Chilled water is for cooling and steam is for heating</b>. The following figure shows the buildings with chilled water and steam supply from Harvard plants.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/6bDiAGb7Bd.png?imageslim" alt="mark" /></p>
+
+<p align="center">Fig. Harvard chilled water and steam supply. (Left: chilled water, highlighted in blue. Right: Steam, highlighted in yellow.)</p>
+
+<p>We picked one building and got energy consumption data from 2011/07/01 to 2014/10/31. There are several months data missing due to meter malfunction. The data resolution is hourly. In original data, the hourly data is meter readings. So in order to get hourly consumption, we need to offset the data and do the minus. We have hourly data from January 2012 to October 2014 for both weather and energy (2.75 years). The weather data is from weather stations in Cambridge.</p>
+
+<hr />
+
+<p>In this section, we are going to finish the following tasks.</p>
+
+<ol>
+<li><p>Get hourly electricity, chilled water and steam from the original data downloaded from Harvard Energy Witness website manually. 要拿到每个小时的电能，冷凝水，供暖的蒸汽</p></li>
+
+<li><p>Clean weather data, add more features including cooling degrees, heating degress and humidity ratio.对天气数据做清洗，添加一些特征比如：冷却层级，热的等级和湿度</p></li>
+
+<li><p>Estimate daily occupancy based on holidays, school year and weekends.预估学校里面在节日、和一般日子的时候的使用程度</p></li>
+
+<li><p>Create features reletate to hour, which is cos(hourOfDay * 2 * pi / 24). 构建一些与小时相关的特征</p></li>
+
+<li><p>Merge electricity, chilled water and steam dataframe with weather and time and occupancy features. 把我们刚才构造的特征拼接在一起。</p></li>
+</ol>
+
+<pre><code class="language-python">%matplotlib inline
+
+import requests
+from StringIO import StringIO
+import numpy as np
+import pandas as pd # pandas
+import matplotlib.pyplot as plt # module for plotting
+import datetime as dt # module for manipulating dates and times
+import numpy.linalg as lin # module for performing linear algebra operations
+from __future__ import division
+from math import log10,exp
+
+pd.options.display.mpl_style = 'default'
+</code></pre>
+
+<h2 id="original-energy-consumption-data">Original Energy Consumption Data</h2>
+
+<p>Original data are downloaded from <b>Harvard Energy Witness Website</b></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/f96a11H2E8.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/FHJB3KAJD3.png?imageslim" alt="mark" /></p>
+
+<p>Then we use Pandas to put them together into one dataframe.</p>
+
+<pre><code class="language-python">file = 'Data/Org/0701-0930-2011.xls'
+df = pd.read_excel(file, header = 0, skiprows = np.arange(0,6))
+
+files = ['Data/Org/1101-1130-2011.xls', 'Data/Org/1201-2011-0131-2012.xls',
+         'Data/Org/0201-0331-2012.xls','Data/Org/0401-0531-2012.xls','Data/Org/0601-0630-2012.xls',
+         'Data/Org/0701-0831-2012.xls','Data/Org/0901-1031-2012.xls','Data/Org/1101-1231-2012.xls',
+         'Data/Org/0101-0228-2013.xls',
+         'Data/Org/0301-0430-2013.xls','Data/Org/0501-0630-2013.xls','Data/Org/0701-0831-2013.xls',
+         'Data/Org/0901-1031-2013.xls','Data/Org/1101-1231-2013.xls','Data/Org/0101-0228-2014.xls',
+         'Data/Org/0301-0430-2014.xls', 'Data/Org/0501-0630-2014.xls', 'Data/Org/0701-0831-2014.xls',
+         'Data/Org/0901-1031-2014.xls']
+
+for file in files:
+    data = pd.read_excel(file, header = 0, skiprows = np.arange(0,6))
+    df = df.append(data)
+
+df.head()
+</code></pre>
+
+<pre><code>WARNING *** file size (2481102) not 512 + multiple of sector size (512)
+WARNING *** file size (848833) not 512 + multiple of sector size (512)
+WARNING *** file size (1694257) not 512 + multiple of sector size (512)
+WARNING *** file size (1640459) not 512 + multiple of sector size (512)
+WARNING *** file size (1667907) not 512 + multiple of sector size (512)
+WARNING *** file size (847258) not 512 + multiple of sector size (512)
+WARNING *** file size (1691449) not 512 + multiple of sector size (512)
+WARNING *** file size (1666647) not 512 + multiple of sector size (512)
+WARNING *** file size (1665736) not 512 + multiple of sector size (512)
+WARNING *** file size (1614814) not 512 + multiple of sector size (512)
+WARNING *** file size (1665980) not 512 + multiple of sector size (512)
+WARNING *** file size (1667276) not 512 + multiple of sector size (512)
+WARNING *** file size (1691736) not 512 + multiple of sector size (512)
+WARNING *** file size (1666704) not 512 + multiple of sector size (512)
+WARNING *** file size (1665920) not 512 + multiple of sector size (512)
+WARNING *** file size (1614900) not 512 + multiple of sector size (512)
+WARNING *** file size (1666228) not 512 + multiple of sector size (512)
+WARNING *** file size (1666191) not 512 + multiple of sector size (512)
+WARNING *** file size (1691845) not 512 + multiple of sector size (512)
+WARNING *** file size (1663846) not 512 + multiple of sector size (512)
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Unnamed: 0</th>
+<th>Unnamed: 1</th>
+<th>Gund Bus-A 15 Min Block Demand - kW</th>
+<th>Gund Bus-A CurrentA - Amps</th>
+<th>Unnamed: 4</th>
+<th>Unnamed: 5</th>
+<th>Gund Bus-A CurrentB - Amps</th>
+<th>Unnamed: 7</th>
+<th>Gund Bus-A CurrentC - Amps</th>
+<th>Unnamed: 9</th>
+<th>&hellip;</th>
+<th>Gund Main Demand - Tons</th>
+<th>Gund Main Energy - Ton-Days</th>
+<th>Gund Main FlowRate - gpm</th>
+<th>Gund Main FlowTotal - kgal(1000)</th>
+<th>Gund Main SignalAeration - Count</th>
+<th>Gund Main SignalStrength - Count</th>
+<th>Gund Main SonicVelocity - Ft/Sec</th>
+<th>Gund Main TempDelta - Deg F</th>
+<th>Gund Main TempReturn - Deg F</th>
+<th>Gund Main TempSupply - Deg F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>2011-07-01 01:00:00</td>
+<td>White</td>
+<td>48.458733</td>
+<td>65.977882</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>52.631417</td>
+<td>NaN</td>
+<td>55.603840</td>
+<td>NaN</td>
+<td>&hellip;</td>
+<td>4.677294</td>
+<td>17912.537804</td>
+<td>6.916454</td>
+<td>48168.083414</td>
+<td>0.693405</td>
+<td>57.208127</td>
+<td>1437.640543</td>
+<td>16.238684</td>
+<td>59.757447</td>
+<td>43.516103</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>2011-07-01 02:00:00</td>
+<td>White</td>
+<td>40.472697</td>
+<td>57.230223</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>42.483092</td>
+<td>NaN</td>
+<td>50.243230</td>
+<td>NaN</td>
+<td>&hellip;</td>
+<td>4.586403</td>
+<td>17912.853518</td>
+<td>6.739337</td>
+<td>48168.645429</td>
+<td>0.567355</td>
+<td>57.082909</td>
+<td>1438.030719</td>
+<td>16.263573</td>
+<td>59.710199</td>
+<td>43.495128</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>2011-07-01 03:00:00</td>
+<td>#d2e4b0</td>
+<td>39.472809</td>
+<td>55.487443</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>41.911784</td>
+<td>NaN</td>
+<td>48.482163</td>
+<td>NaN</td>
+<td>&hellip;</td>
+<td>4.462877</td>
+<td>17913.169232</td>
+<td>6.725142</td>
+<td>48169.207444</td>
+<td>0.441304</td>
+<td>57.001646</td>
+<td>1439.111130</td>
+<td>15.797043</td>
+<td>59.248158</td>
+<td>43.457344</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>2011-07-01 04:00:00</td>
+<td>White</td>
+<td>39.198879</td>
+<td>55.849806</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>41.525529</td>
+<td>NaN</td>
+<td>48.987457</td>
+<td>NaN</td>
+<td>&hellip;</td>
+<td>4.696993</td>
+<td>17913.484946</td>
+<td>7.041330</td>
+<td>48169.769458</td>
+<td>0.315254</td>
+<td>57.000000</td>
+<td>1440.768604</td>
+<td>15.947392</td>
+<td>59.207097</td>
+<td>43.267682</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>2011-07-01 05:00:00</td>
+<td>White</td>
+<td>39.297522</td>
+<td>55.736219</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>41.299381</td>
+<td>NaN</td>
+<td>48.710408</td>
+<td>NaN</td>
+<td>&hellip;</td>
+<td>4.550372</td>
+<td>17913.800660</td>
+<td>6.863004</td>
+<td>48170.331473</td>
+<td>0.189204</td>
+<td>57.000000</td>
+<td>1442.426077</td>
+<td>15.903679</td>
+<td>59.282707</td>
+<td>43.372615</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 55 columns</p>
+
+<blockquote>
+<p>Above is the original hourly data.</p>
+</blockquote>
+
+<p>As you can see, it is quite messy. The first thing to remove meaningless columns. 把无意义的列去掉</p>
+
+<pre><code class="language-python">df.rename(columns={'Unnamed: 0':'Datetime'}, inplace=True)
+
+nonBlankColumns = ['Unnamed' not in s for s in df.columns]
+columns = df.columns[nonBlankColumns]
+df = df[columns]
+df = df.set_index(['Datetime'])
+df.index.name = None
+df.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gund Bus-A 15 Min Block Demand - kW</th>
+<th>Gund Bus-A CurrentA - Amps</th>
+<th>Gund Bus-A CurrentB - Amps</th>
+<th>Gund Bus-A CurrentC - Amps</th>
+<th>Gund Bus-A CurrentN - Amps</th>
+<th>Gund Bus-A EnergyReal - kWhr</th>
+<th>Gund Bus-A Freq - Hertz</th>
+<th>Gund Bus-A Max Monthly Demand - kW</th>
+<th>Gund Bus-A PowerApp - kVA</th>
+<th>Gund Bus-A PowerReac - kVAR</th>
+<th>&hellip;</th>
+<th>Gund Main Demand - Tons</th>
+<th>Gund Main Energy - Ton-Days</th>
+<th>Gund Main FlowRate - gpm</th>
+<th>Gund Main FlowTotal - kgal(1000)</th>
+<th>Gund Main SignalAeration - Count</th>
+<th>Gund Main SignalStrength - Count</th>
+<th>Gund Main SonicVelocity - Ft/Sec</th>
+<th>Gund Main TempDelta - Deg F</th>
+<th>Gund Main TempReturn - Deg F</th>
+<th>Gund Main TempSupply - Deg F</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>48.458733</td>
+<td>65.977882</td>
+<td>52.631417</td>
+<td>55.603840</td>
+<td>15.982278</td>
+<td>1796757.502803</td>
+<td>59.837524</td>
+<td>96.117915</td>
+<td>48.757073</td>
+<td>12.344712</td>
+<td>&hellip;</td>
+<td>4.677294</td>
+<td>17912.537804</td>
+<td>6.916454</td>
+<td>48168.083414</td>
+<td>0.693405</td>
+<td>57.208127</td>
+<td>1437.640543</td>
+<td>16.238684</td>
+<td>59.757447</td>
+<td>43.516103</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>40.472697</td>
+<td>57.230223</td>
+<td>42.483092</td>
+<td>50.243230</td>
+<td>13.423762</td>
+<td>1796800.145991</td>
+<td>60.005569</td>
+<td>96.117915</td>
+<td>42.238685</td>
+<td>12.967984</td>
+<td>&hellip;</td>
+<td>4.586403</td>
+<td>17912.853518</td>
+<td>6.739337</td>
+<td>48168.645429</td>
+<td>0.567355</td>
+<td>57.082909</td>
+<td>1438.030719</td>
+<td>16.263573</td>
+<td>59.710199</td>
+<td>43.495128</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>39.472809</td>
+<td>55.487443</td>
+<td>41.911784</td>
+<td>48.482163</td>
+<td>13.478933</td>
+<td>1796840.146023</td>
+<td>59.833880</td>
+<td>96.117915</td>
+<td>41.278573</td>
+<td>12.732046</td>
+<td>&hellip;</td>
+<td>4.462877</td>
+<td>17913.169232</td>
+<td>6.725142</td>
+<td>48169.207444</td>
+<td>0.441304</td>
+<td>57.001646</td>
+<td>1439.111130</td>
+<td>15.797043</td>
+<td>59.248158</td>
+<td>43.457344</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>39.198879</td>
+<td>55.849806</td>
+<td>41.525529</td>
+<td>48.987457</td>
+<td>13.603309</td>
+<td>1796879.023607</td>
+<td>59.673044</td>
+<td>96.117915</td>
+<td>41.345776</td>
+<td>12.687845</td>
+<td>&hellip;</td>
+<td>4.696993</td>
+<td>17913.484946</td>
+<td>7.041330</td>
+<td>48169.769458</td>
+<td>0.315254</td>
+<td>57.000000</td>
+<td>1440.768604</td>
+<td>15.947392</td>
+<td>59.207097</td>
+<td>43.267682</td>
+</tr>
+
+<tr>
+<td>2011-07-01 05:00:00</td>
+<td>39.297522</td>
+<td>55.736219</td>
+<td>41.299381</td>
+<td>48.710408</td>
+<td>13.797331</td>
+<td>1796918.273558</td>
+<td>59.986672</td>
+<td>96.117915</td>
+<td>41.166736</td>
+<td>12.437842</td>
+<td>&hellip;</td>
+<td>4.550372</td>
+<td>17913.800660</td>
+<td>6.863004</td>
+<td>48170.331473</td>
+<td>0.189204</td>
+<td>57.000000</td>
+<td>1442.426077</td>
+<td>15.903679</td>
+<td>59.282707</td>
+<td>43.372615</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 48 columns</p>
+
+<p>Then we print out all the column names. Only a few columns are useful to get the hourly electricity, chilled water and steam.</p>
+
+<pre><code class="language-python">for item in df.columns:
+    print item
+</code></pre>
+
+<pre><code>Gund Bus-A 15 Min Block Demand - kW
+Gund Bus-A CurrentA - Amps
+Gund Bus-A CurrentB - Amps
+Gund Bus-A CurrentC - Amps
+Gund Bus-A CurrentN - Amps
+Gund Bus-A EnergyReal - kWhr
+Gund Bus-A Freq - Hertz
+Gund Bus-A Max Monthly Demand - kW
+Gund Bus-A PowerApp - kVA
+Gund Bus-A PowerReac - kVAR
+Gund Bus-A PowerReal - kW
+Gund Bus-A TruePF - PF
+Gund Bus-A VoltageAB - Volts
+Gund Bus-A VoltageAN - Volts
+Gund Bus-A VoltageBC - Volts
+Gund Bus-A VoltageBN - Volts
+Gund Bus-A VoltageCA - Volts
+Gund Bus-A VoltageCN - Volts
+Gund Bus-B 15 Min Block Demand - kW
+Gund Bus-B CurrentA - Amps
+Gund Bus-B CurrentB - Amps
+Gund Bus-B CurrentC - Amps
+Gund Bus-B CurrentN - Amps
+Gund Bus-B EnergyReal - kWhr
+Gund Bus-B Freq - Hertz
+Gund Bus-B Max Monthly Demand - kW
+Gund Bus-B PowerApp - kVA
+Gund Bus-B PowerReac - kVAR
+Gund Bus-B PowerReal - kW
+Gund Bus-B TruePF - PF
+Gund Bus-B VoltageAB - Volts
+Gund Bus-B VoltageAN - Volts
+Gund Bus-B VoltageBC - Volts
+Gund Bus-B VoltageBN - Volts
+Gund Bus-B VoltageCA - Volts
+Gund Bus-B VoltageCN - Volts
+Gund Condensate Counter - count
+Gund Condensate FlowTotal - LBS
+Gund Main Demand - Tons
+Gund Main Energy - Ton-Days
+Gund Main FlowRate - gpm
+Gund Main FlowTotal - kgal(1000)
+Gund Main SignalAeration - Count
+Gund Main SignalStrength - Count
+Gund Main SonicVelocity - Ft/Sec
+Gund Main TempDelta - Deg F
+Gund Main TempReturn - Deg F
+Gund Main TempSupply - Deg F
+</code></pre>
+
+<h2 id="electricity">Electricity</h2>
+
+<p>Use electricity as an example, there are two meters, &ldquo;Gund Bus A&rdquo; and &ldquo;Gund Bus B&rdquo;. The &ldquo;EnergyReal - kWhr&rdquo; records accumulative consumption. We are not sure exactly what is &ldquo;PowerReal&rdquo;. Just in case, we put it into the electricity dateframe as well.</p>
+
+<p>电表的读书是一个累计的值，要做一个差值才是实际的使用的情况。</p>
+
+<pre><code class="language-python">electricity=df[['Gund Bus-A EnergyReal - kWhr','Gund Bus-B EnergyReal - kWhr',
+                'Gund Bus-A PowerReal - kW','Gund Bus-B PowerReal - kW',]]
+electricity.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gund Bus-A EnergyReal - kWhr</th>
+<th>Gund Bus-B EnergyReal - kWhr</th>
+<th>Gund Bus-A PowerReal - kW</th>
+<th>Gund Bus-B PowerReal - kW</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>1796757.502803</td>
+<td>3657811.582122</td>
+<td>47.184015</td>
+<td>63.486186</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>1796800.145991</td>
+<td>3657873.464938</td>
+<td>40.208796</td>
+<td>61.270542</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>1796840.146023</td>
+<td>3657934.837505</td>
+<td>39.209866</td>
+<td>61.464394</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>1796879.023607</td>
+<td>3657995.470348</td>
+<td>39.378507</td>
+<td>59.396581</td>
+</tr>
+
+<tr>
+<td>2011-07-01 05:00:00</td>
+<td>1796918.273558</td>
+<td>3658054.470285</td>
+<td>39.240837</td>
+<td>58.911729</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="validate-our-data-processing-method-by-checking-monthly-energy-consumption">Validate our data processing method by checking monthly energy consumption</h3>
+
+<p>In order to check whether our understanding of the data is correct, we want to calculate monthly electricity consumption from the hourly data, and then compare the results with the monthly data provided by facalities, which is available on Energy Witness as well. <span style="color:red;">厉害，严禁，是的。</span></p>
+
+<blockquote>
+<p>Here is the monthly data provided by facalities, &ldquo;Bus A &amp; B&rdquo; are called &ldquo;CE603B kWh&rdquo; and &ldquo;CE604B kWh&rdquo; in ths monthly form. They are simply two meters. Please note, the meter reading cycle is NOT calendar month.</p>
+</blockquote>
+
+<pre><code class="language-python">file = 'Data/monthly electricity.csv'
+monthlyElectricityFromFacility = pd.read_csv(file, header=0)
+monthlyElectricityFromFacility
+monthlyElectricityFromFacility = monthlyElectricityFromFacility.set_index(['month'])
+monthlyElectricityFromFacility.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>startDate</th>
+<th>endDate</th>
+<th>CE603B kWh</th>
+<th>CE604B kWh</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>month</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Jul 11</td>
+<td>6/16/11</td>
+<td>7/18/11</td>
+<td>43968.1</td>
+<td>106307.1</td>
+</tr>
+
+<tr>
+<td>Aug 11</td>
+<td>7/18/11</td>
+<td>8/17/11</td>
+<td>41270.1</td>
+<td>83121.1</td>
+</tr>
+
+<tr>
+<td>Sep 11</td>
+<td>8/17/11</td>
+<td>9/16/11</td>
+<td>51514.1</td>
+<td>107083.1</td>
+</tr>
+
+<tr>
+<td>Oct 11</td>
+<td>9/16/11</td>
+<td>10/18/11</td>
+<td>65338.1</td>
+<td>114350.1</td>
+</tr>
+
+<tr>
+<td>Nov 11</td>
+<td>10/18/11</td>
+<td>11/17/11</td>
+<td>65453.1</td>
+<td>115318.1</td>
+</tr>
+</tbody>
+</table>
+
+<p>We use the column &ldquo;EnergyReal - kWhr&rdquo; for two meters. We found the numbers of the begin and end date of the meter reading cycle, and use the number of the end date minus the number of the begin date, then we get our monthly electiricty consumption.</p>
+
+<p>把每个小时的电量做累加，由于抄电表的时候，有可能会延迟两天，因此每个月不是自然月，因此这里面要使用它抄电表的时候的日期来看。</p>
+
+<p><span style="color:red;">这一段要仔细研究，感觉这种处理情况还是很常见的。</span></p>
+
+<pre><code class="language-python">monthlyElectricityFromFacility['startDate'] = pd.to_datetime(monthlyElectricityFromFacility['startDate'], format=&quot;%m/%d/%y&quot;)
+values = monthlyElectricityFromFacility.index.values
+
+keys = np.array(monthlyElectricityFromFacility['startDate'])
+
+dates = {}
+for key, value in zip(keys, values):
+    dates[key] = value
+
+sortedDates =  np.sort(dates.keys())
+sortedDates = sortedDates[sortedDates &gt; np.datetime64('2011-11-01')]
+
+months = []
+monthlyElectricityOrg = np.zeros((len(sortedDates) - 1, 2))
+for i in range(len(sortedDates) - 1):
+    begin = sortedDates[i]
+    end = sortedDates[i+1]
+    months.append(dates[sortedDates[i]])
+    monthlyElectricityOrg[i, 0] = (np.round(electricity.loc[end,'Gund Bus-A EnergyReal - kWhr']
+                           -  electricity.loc[begin,'Gund Bus-A EnergyReal - kWhr'], 1))
+    monthlyElectricityOrg[i, 1] = (np.round(electricity.loc[end,'Gund Bus-B EnergyReal - kWhr']
+                           -  electricity.loc[begin,'Gund Bus-B EnergyReal - kWhr'], 1))
+
+monthlyElectricity = pd.DataFrame(data = monthlyElectricityOrg, index = months, columns = ['CE603B kWh', 'CE604B kWh'])
+
+
+plt.figure()
+fig, ax = plt.subplots()
+fig = monthlyElectricity.plot(marker = 'o', figsize=(15,6), rot = 40, fontsize = 13, ax = ax, linestyle='')
+fig.set_axis_bgcolor('w')
+plt.xlabel('Billing month', fontsize = 15)
+plt.ylabel('kWh', fontsize = 15)
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+plt.xticks(np.arange(0,len(months)),months)
+plt.title('Original monthly consumption from hourly data',fontsize = 17)
+
+text = 'Meter malfunction'
+ax.annotate(text, xy = (9, 4500000),
+            xytext = (5, 2), fontsize = 15,
+            textcoords = 'offset points', ha = 'center', va = 'top')
+
+ax.annotate(text, xy = (8, -4500000),
+            xytext = (5, 2), fontsize = 15,
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+
+ax.annotate(text, xy = (14, -2500000),
+            xytext = (5, 2), fontsize = 15,
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+
+ax.annotate(text, xy = (15, 2500000),
+            xytext = (5, 2), fontsize = 15,
+            textcoords = 'offset points', ha = 'center', va = 'top')
+
+plt.show()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x1044639d0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/AHhc1Ib9cA.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Above is a plot of monthly electricity consumption using our data processing method. Obviously, the two meters malfunctioned for several months. There are two sets of dots &ldquo;CE603B&rdquo; and &ldquo;CE604B&rdquo;, which come from two meters. There are two electricity meters. The sum of them is the total electricity consumption of the building.</p>
+</blockquote>
+
+<p>有几个小段的时间读表的设备出问题了，其他的时候都是重合的</p>
+
+<p>然后他画了柱状图：</p>
+
+<p><span style="color:red;">代码很漂亮</span></p>
+
+<pre><code class="language-python">monthlyElectricity.loc['Aug 12','CE604B kWh'] = np.nan
+monthlyElectricity.loc['Sep 12','CE604B kWh'] = np.nan
+monthlyElectricity.loc['Feb 13','CE603B kWh'] = np.nan
+monthlyElectricity.loc['Mar 13','CE603B kWh'] = np.nan
+
+
+fig,ax = plt.subplots(1, 1,figsize=(15,8))
+#ax.set_axis_bgcolor('w')
+plt.bar(np.arange(0, len(monthlyElectricity))-0.5,monthlyElectricity['CE603B kWh'], label='Our data processing from hourly data')
+plt.plot(monthlyElectricityFromFacility.loc[months,'CE603B kWh'],'or', label='Facility data')
+plt.xticks(np.arange(0,len(months)),months)
+plt.xlabel('Month',fontsize=15)
+plt.ylabel('kWh',fontsize=15)
+plt.xlim([0, len(monthlyElectricity)])
+plt.legend()
+ax.set_xticklabels(months, rotation=40, fontsize=13)
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+plt.title('Comparison between our data processing and facilities, Meter CE603B',fontsize=20)
+
+text = 'Meter malfunction \n estimated by facility'
+ax.annotate(text, xy = (14, monthlyElectricityFromFacility.loc['Feb 13','CE603B kWh']),
+            xytext = (5, 50), fontsize = 15,
+            arrowprops=dict(facecolor='black', shrink=0.15),
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+
+ax.annotate(text, xy = (15, monthlyElectricityFromFacility.loc['Mar 13','CE603B kWh']),
+            xytext = (5, 50), fontsize = 15,
+            arrowprops=dict(facecolor='black', shrink=0.15),
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+plt.show()
+
+fig,ax = plt.subplots(1, 1,figsize=(15,8))
+#ax.set_axis_bgcolor('w')
+plt.bar(np.arange(0, len(monthlyElectricity))-0.5, monthlyElectricity['CE604B kWh'], label='Our data processing from hourly data')
+plt.plot(monthlyElectricityFromFacility.loc[months,'CE604B kWh'],'or', label='Facility data')
+plt.xticks(np.arange(0,len(months)),months)
+plt.xlabel('Month',fontsize=15)
+plt.ylabel('kWh',fontsize=15)
+plt.xlim([0, len(monthlyElectricity)])
+plt.legend()
+ax.set_xticklabels(months, rotation=40, fontsize=13)
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+plt.title('Comparison between our data processing and facilities, Meter CE604B',fontsize=20)
+
+
+ax.annotate(text, xy = (9, monthlyElectricityFromFacility.loc['Sep 12','CE604B kWh']),
+            xytext = (5, 50), fontsize = 15,
+            arrowprops=dict(facecolor='black', shrink=0.15),
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+
+ax.annotate(text, xy = (8, monthlyElectricityFromFacility.loc['Aug 12','CE604B kWh']),
+            xytext = (5, 50), fontsize = 15,
+            arrowprops=dict(facecolor='black', shrink=0.15),
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+plt.show()
+
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/cDDc1JIag4.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/3LD5eCaBKb.png?imageslim" alt="mark" /></p>
+
+<p>红色的是机构提供的，蓝色的是累加得到的。大部分情况是一致的。</p>
+
+<p>这部分主要是做数据的校验，来保证数据的严谨性，跟整体的项目实际上关系不是特别大。</p>
+
+<p>The dots in the picture are monthly data provided by facility. They are the numbers on a bill. When meters were malfunctioning, the facility just estimated the energy use for billin purpose. The data points we excluded are not in the plot. They are simply way higher than normal (30 times more than other normal consumption). &ldquo;Meter malfunction, estimated by facility&rdquo; means in this month, the meter was malfunctioning and this dot is what facilities estimated.</p>
+
+<p>Meter &ldquo;CE603B&rdquo; malfunctioned on February and March 2013. Meter &ldquo;CE604B&rdquo; malfunctioned on August and September 2012. We set the nubmers of these months to np.nan and simply exclude them from regression. Plot them againa and compare with the facility monthly data. <b>They match!</b> Of course, excep when the meters were malfunctioning. In thoses months, the facilities estimated the energy consumption for billing purpose. For us, we just excluded hourly and daily data points during thoese months in regression.</p>
+
+<p>The total building electricity consumption is the sum of these two meters. Just in case, we keep the &ldquo;power&rdquo; and compare them with &ldquo;energy&rdquo;</p>
+
+<pre><code class="language-python">electricity['energy'] = electricity['Gund Bus-A EnergyReal - kWhr'] + electricity['Gund Bus-B EnergyReal - kWhr']
+electricity['power'] = electricity['Gund Bus-A PowerReal - kW'] + electricity['Gund Bus-B PowerReal - kW']
+electricity.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gund Bus-A EnergyReal - kWhr</th>
+<th>Gund Bus-B EnergyReal - kWhr</th>
+<th>Gund Bus-A PowerReal - kW</th>
+<th>Gund Bus-B PowerReal - kW</th>
+<th>energy</th>
+<th>power</th>
+<th>startTime</th>
+<th>endTime</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 00:00:00</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>2011-07-01 00:00:00</td>
+<td>2011-07-01 01:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>1796757.502803</td>
+<td>3657811.582122</td>
+<td>47.184015</td>
+<td>63.486186</td>
+<td>5454569.084925</td>
+<td>110.670201</td>
+<td>2011-07-01 01:00:00</td>
+<td>2011-07-01 02:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>1796800.145991</td>
+<td>3657873.464938</td>
+<td>40.208796</td>
+<td>61.270542</td>
+<td>5454673.610929</td>
+<td>101.479338</td>
+<td>2011-07-01 02:00:00</td>
+<td>2011-07-01 03:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>1796840.146023</td>
+<td>3657934.837505</td>
+<td>39.209866</td>
+<td>61.464394</td>
+<td>5454774.983528</td>
+<td>100.674260</td>
+<td>2011-07-01 03:00:00</td>
+<td>2011-07-01 04:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>1796879.023607</td>
+<td>3657995.470348</td>
+<td>39.378507</td>
+<td>59.396581</td>
+<td>5454874.493955</td>
+<td>98.775088</td>
+<td>2011-07-01 04:00:00</td>
+<td>2011-07-01 05:00:00</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="derive-hourly-consumption">Derive hourly consumption</h3>
+
+<p>相邻的行的差来得到这个小时的用电量。</p>
+
+<p>The hourly energy consumption between this hour and next hour is the meter kWh reading (&ldquo;energy&rdquo; in the dataframe) of the next hour minus this hour. We assume the meter reading is recorded at the end of hour. In order to avoid confusion, we also mark the startTime and endTime of the meter reading in the dataframe. We compared hourly power of next hour with the derived hourly electricity, most of the time, power is close to hourly electricity. Sometimes, there is quite a difference.</p>
+
+<p>The meters record accumulative energy consumption. Say at the beginning of today, the number is 10. After an hour, the energy use is 1, then the meter number adds one and become 11, etc. So the meter number should keep increasing. However, we found that sometimes, the meter reading suddenly drops to 0, and after quite a while, get a high positive number again. This will create negative hourly consumption, and then an absurdly high postive number. We get hourly/daily energy consumption by &ldquo;meter reading at time t + 1 - at time t&rdquo;. If the result is negative, or absurdly high, we consider the meter was malfunctioning. We set these data points to np.nan now. We figured out the exact dates when the meters were malfunctioning by looking at the raw data in excel files and from monthly plots.</p>
+
+<p>In addition to that, occasionaly, there are more non-sense data points, which are thousand times higher than normal values. The normal hourly consumption range is between 100 and 400. We created a filter: &ldquo;index = abs(hourlyEnergy) &lt; 200000&rdquo;, which means only values lower than 200000 are kept.</p>
+
+<pre><code class="language-python"># In case there are any missing hours, reindex to get the entire time span. Fill in nan data.
+hourlyTimestamp = pd.date_range(start = '2011/7/1', end = '2014/10/31', freq = 'H')
+
+# Somehow, reindex does not work well. October 2011 and several other hours are missing.
+# Basically it is just the length of original length.
+#electricity.reindex(hourlyTimestamp, inplace = True, fill_value = np.nan)
+
+startTime = hourlyTimestamp
+endTime = hourlyTimestamp + np.timedelta64(1,'h')
+hourlyTime = pd.DataFrame(data = np.transpose([startTime, endTime]), index = hourlyTimestamp, columns = ['startTime', 'endTime'])
+
+electricity = electricity.join(hourlyTime, how = 'outer')
+
+# Just in case, in order to use diff method, timestamp has to be in asending order.
+electricity.sort_index(inplace = True)
+hourlyEnergy = electricity.diff(periods=1)['energy']
+
+hourlyElectricity = pd.DataFrame(data = hourlyEnergy.values, index = hourlyEnergy.index, columns = ['electricity-kWh'])
+hourlyElectricity = hourlyElectricity.join(hourlyTime, how = 'inner')
+
+print &quot;Data length: &quot;, len(hourlyElectricity)/24, &quot; days&quot;
+hourlyElectricity.head()
+
+</code></pre>
+
+<p><code>electricity.diff(periods=1)['energy']</code> 表示吧这个数列往前挪一位再做差。这个就是用电量。<span style="color:red;">厉害的使用，这个是个很有用的函数</span></p>
+
+<pre><code>Data length:  1218.04166667  days
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>electricity-kWh</th>
+<th>startTime</th>
+<th>endTime</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 00:00:00</td>
+<td>NaN</td>
+<td>2011-07-01 00:00:00</td>
+<td>2011-07-01 01:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>NaN</td>
+<td>2011-07-01 01:00:00</td>
+<td>2011-07-01 02:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>104.526004</td>
+<td>2011-07-01 02:00:00</td>
+<td>2011-07-01 03:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>101.372599</td>
+<td>2011-07-01 03:00:00</td>
+<td>2011-07-01 04:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>99.510428</td>
+<td>2011-07-01 04:00:00</td>
+<td>2011-07-01 05:00:00</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Above is the hourly electricity consumption. The data is exported to an excel file. We assume the meter reading is recorded at the end of hour.</p>
+</blockquote>
+
+<pre><code class="language-python"># Filter the data, keep the NaN and generate two excels, with and without Nan
+
+hourlyElectricity.loc[abs(hourlyElectricity['electricity-kWh']) &gt; 100000,'electricity-kWh'] = np.nan
+
+time = hourlyElectricity.index
+index = ((time &gt; np.datetime64('2012-07-26')) &amp; (time &lt; np.datetime64('2012-08-18'))) \
+        | ((time &gt; np.datetime64('2013-01-21')) &amp; (time &lt; np.datetime64('2013-03-08')))
+
+hourlyElectricity.loc[index,'electricity-kWh'] = np.nan
+hourlyElectricityWithoutNaN = hourlyElectricity.dropna(axis=0, how='any')
+
+hourlyElectricity.to_excel('Data/hourlyElectricity.xlsx')
+hourlyElectricityWithoutNaN.to_excel('Data/hourlyElectricityWithoutNaN.xlsx')
+</code></pre>
+
+<p>把取出来的数据放到了一个 Excel 里面</p>
+
+<pre><code class="language-python">plt.figure()
+fig = hourlyElectricity.plot(fontsize = 15, figsize = (15, 6))
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+fig.set_axis_bgcolor('w')
+plt.title('All the hourly electricity data', fontsize = 16)
+plt.ylabel('kWh')
+plt.show()
+
+plt.figure()
+fig = hourlyElectricity.iloc[26200:27400,:].plot(marker = 'o',label='hourly electricity', fontsize = 15, figsize = (15, 6))
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+fig.set_axis_bgcolor('w')
+plt.title('Hourly electricity data of selected days', fontsize = 16)
+plt.ylabel('kWh')
+plt.legend()
+plt.show()
+</code></pre>
+
+<p>对数据的理解还是很重要的，有时候可以直接看到数据有哪些模式。</p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x1096bca90&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/7hLGIE26FF.png?imageslim" alt="mark" /></p>
+
+<p>之所以是断裂的，是因为官方说计量的仪表坏了，数据没有记录到。</p>
+
+<p>我们在完成任务的时候，不是为了酷才去做的，比如说为了耍酷就上神经网络。我们最终的目的是为了完成某个任务，如果你了解像taobao 这样的公司，你就会发现，有很多的任务在完成的时候并没有用很复杂的模型，他只是做了数据分析，总结除了一些很高频度的一些规则规律，然后用这些来构建了一些 rule 来做，而且就这样就已经做得很完美了。</p>
+
+<p>所以，<strong>我们在建模之前，先不要想着把最复杂的模型用上，先想的是我要充分了解我的数据，有没有一些潜在的规律在，最简单的就是把用电量画一条曲线出来看一看，有没有明显的模式。</strong></p>
+
+<p>比如画图也是这样，不是为了酷，而是为了真正理解数据。</p>
+
+<p>上面这个图实际上看不出什么模式，因为太密集了。所以它单单拿出了 2014 年的 7~8 月的数据</p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x1096a1750&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Gl44JBeCI6.png?imageslim" alt="mark" /></p>
+
+<p>可以明显看到白天和晚上是有差别的，而且周末与工作日也是差别很大的。也可以看出，时间是一个很重要的特征。</p>
+
+<blockquote>
+<p>Above are the hourly data plots. In the first graph, the blank part is due to missing data when the meters were malfunctioning. In the second graph, you can see difference between day and night, weekday and weekends.</p>
+</blockquote>
+
+<h3 id="derive-daily-consumption">Derive daily consumption</h3>
+
+<p>We manage to get the daily electricity consumption through &ldquo;reindex&rdquo;.</p>
+
+<p>获得每天的用电量</p>
+
+<pre><code class="language-python">dailyTimestamp = pd.date_range(start = '2011/7/1', end = '2014/10/31', freq = 'D')
+electricityReindexed = electricity.reindex(dailyTimestamp, inplace = False)
+
+# Just in case, in order to use diff method, timestamp has to be in asending order.
+electricityReindexed.sort_index(inplace = True)
+dailyEnergy = electricityReindexed.diff(periods=1)['energy']
+
+dailyElectricity = pd.DataFrame(data = dailyEnergy.values, index = electricityReindexed.index - np.timedelta64(1,'D'), columns = ['electricity-kWh'])
+dailyElectricity['startDay'] = dailyElectricity.index
+dailyElectricity['endDay'] = dailyElectricity.index + np.timedelta64(1,'D')
+
+# Filter the data, keep the NaN and generate two excels, with and without Nan
+
+dailyElectricity.loc[abs(dailyElectricity['electricity-kWh']) &gt; 2000000,'electricity-kWh'] = np.nan
+
+time = dailyElectricity.index
+index = ((time &gt; np.datetime64('2012-07-26')) &amp; (time &lt; np.datetime64('2012-08-18'))) | ((time &gt; np.datetime64('2013-01-21')) &amp; (time &lt; np.datetime64('2013-03-08')))
+
+dailyElectricity.loc[index,'electricity-kWh'] = np.nan
+dailyElectricityWithoutNaN = dailyElectricity.dropna(axis=0, how='any')
+
+dailyElectricity.to_excel('Data/dailyElectricity.xlsx')
+dailyElectricityWithoutNaN.to_excel('Data/dailyElectricityWithoutNaN.xlsx')
+
+dailyElectricity.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>electricity-kWh</th>
+<th>startDay</th>
+<th>endDay</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-06-30</td>
+<td>NaN</td>
+<td>2011-06-30</td>
+<td>2011-07-01</td>
+</tr>
+
+<tr>
+<td>2011-07-01</td>
+<td>NaN</td>
+<td>2011-07-01</td>
+<td>2011-07-02</td>
+</tr>
+
+<tr>
+<td>2011-07-02</td>
+<td>3630.398480</td>
+<td>2011-07-02</td>
+<td>2011-07-03</td>
+</tr>
+
+<tr>
+<td>2011-07-03</td>
+<td>3750.648885</td>
+<td>2011-07-03</td>
+<td>2011-07-04</td>
+</tr>
+
+<tr>
+<td>2011-07-04</td>
+<td>4568.724044</td>
+<td>2011-07-04</td>
+<td>2011-07-05</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Above is the daily electricity consumption.</p>
+</blockquote>
+
+<pre><code class="language-python">plt.figure()
+fig = dailyElectricity.plot(figsize = (15, 6))
+fig.set_axis_bgcolor('w')
+plt.title('All the daily electricity data', fontsize = 16)
+plt.ylabel('kWh')
+plt.show()
+
+plt.figure()
+fig = dailyElectricity.iloc[1000:1130,:].plot(marker = 'o', figsize = (15, 6))
+fig.set_axis_bgcolor('w')
+plt.title('Daily electricity data of selected days', fontsize = 16)
+plt.ylabel('kWh')
+plt.show()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10a556a90&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/H441BG1fC6.png?imageslim" alt="mark" /></p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x109b48150&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/mLkgk5HJb0.png?imageslim" alt="mark" /></p>
+
+<p>可以看到每个学期期末考试之后用电就往下降了。</p>
+
+<p>这些曲线能帮助我们更了解数据，能了解到数据中有没有什么明显的模式。同时也提醒我们，节日和特殊的日期是很重要的。即提醒我们说，好像什么东西与这个是关联的，可以作为特征来使用。</p>
+
+<p>到目前为止，所有的工作都在电能上。</p>
+
+<blockquote>
+<p>Above is the daily electricity plot.</p>
+</blockquote>
+
+<p>The super low electricity consumption happens after semesters end, including Christmas vacations. In addition, as you can see in the second figure, the summer energy consumption is lower when school starts.</p>
+
+<h2 id="chilled-water">Chilled Water</h2>
+
+<p>We clean the chilled water data in the same way as electricity.</p>
+
+<pre><code class="language-python">chilledWater = df[['Gund Main Energy - Ton-Days']]
+chilledWater.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gund Main Energy - Ton-Days</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>17912.537804</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>17912.853518</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>17913.169232</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>17913.484946</td>
+</tr>
+
+<tr>
+<td>2011-07-01 05:00:00</td>
+<td>17913.800660</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">file = 'Data/monthly chilled water.csv'
+monthlyChilledWaterFromFacility = pd.read_csv(file, header=0)
+monthlyChilledWaterFromFacility.set_index(['month'], inplace = True)
+monthlyChilledWaterFromFacility.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>startDate</th>
+<th>endDate</th>
+<th>chilledWater</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>month</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>11-Jul</td>
+<td>6/12/11</td>
+<td>7/12/11</td>
+<td>2258</td>
+</tr>
+
+<tr>
+<td>11-Aug</td>
+<td>7/12/11</td>
+<td>8/12/11</td>
+<td>2095</td>
+</tr>
+
+<tr>
+<td>11-Sep</td>
+<td>8/12/11</td>
+<td>9/12/11</td>
+<td>2200</td>
+</tr>
+
+<tr>
+<td>11-Oct</td>
+<td>9/12/11</td>
+<td>10/12/11</td>
+<td>1664</td>
+</tr>
+
+<tr>
+<td>11-Nov</td>
+<td>10/12/11</td>
+<td>11/12/11</td>
+<td>447</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">monthlyChilledWaterFromFacility['startDate'] = pd.to_datetime(monthlyChilledWaterFromFacility['startDate'], format=&quot;%m/%d/%y&quot;)
+values = monthlyChilledWaterFromFacility.index.values
+
+keys = np.array(monthlyChilledWaterFromFacility['startDate'])
+
+dates = {}
+for key, value in zip(keys, values):
+    dates[key] = value
+
+sortedDates =  np.sort(dates.keys())
+sortedDates = sortedDates[sortedDates &gt; np.datetime64('2011-11-01')]
+
+months = []
+monthlyChilledWaterOrg = np.zeros((len(sortedDates) - 1))
+for i in range(len(sortedDates) - 1):
+    begin = sortedDates[i]
+    end = sortedDates[i+1]
+    months.append(dates[sortedDates[i]])
+    monthlyChilledWaterOrg[i] = (np.round(chilledWater.loc[end,:] -  chilledWater.loc[begin,:], 1))
+
+
+monthlyChilledWater = pd.DataFrame(data = monthlyChilledWaterOrg, index = months, columns = ['chilledWater-TonDays'])
+
+fig,ax = plt.subplots(1, 1,figsize=(15,8))
+#ax.set_axis_bgcolor('w')
+#plt.plot(monthlyChilledWater, label='Our data processing from hourly data', marker = 'x', markersize = 15, linestyle = '')
+plt.bar(np.arange(len(monthlyChilledWater))-0.5, monthlyChilledWater.values, label='Our data processing from hourly data')
+plt.plot(monthlyChilledWaterFromFacility[5:-1]['chilledWater'],'or', label='Facility data')
+plt.xticks(np.arange(0,len(months)),months)
+plt.xlabel('Month',fontsize=15)
+plt.ylabel('kWh',fontsize=15)
+plt.xlim([0,len(months)])
+plt.legend()
+ax.set_xticklabels(months, rotation=40, fontsize=13)
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+plt.title('Data Validation: comparison between our data processing and facilities',fontsize=20)
+
+text = 'Match! Our processing method is valid.'
+ax.annotate(text, xy = (15, 2000),
+            xytext = (5, 50), fontsize = 15,
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/8i2k3mLaLm.png?imageslim" alt="mark" /></p>
+
+<p>需要做的很严谨。</p>
+
+<pre><code class="language-python">hourlyTimestamp = pd.date_range(start = '2011/7/1', end = '2014/10/31', freq = 'H')
+chilledWater.reindex(hourlyTimestamp, inplace = True)
+
+# Just in case, in order to use diff method, timestamp has to be in asending order.
+chilledWater.sort_index(inplace = True)
+hourlyEnergy = chilledWater.diff(periods=1)
+
+hourlyChilledWater = pd.DataFrame(data = hourlyEnergy.values, index = hourlyEnergy.index, columns = ['chilledWater-TonDays'])
+hourlyChilledWater['startTime'] = hourlyChilledWater.index
+hourlyChilledWater['endTime'] = hourlyChilledWater.index + np.timedelta64(1,'h')
+
+hourlyChilledWater.loc[abs(hourlyChilledWater['chilledWater-TonDays']) &gt; 50,'chilledWater-TonDays'] = np.nan
+
+hourlyChilledWaterWithoutNaN = hourlyChilledWater.dropna(axis=0, how='any')
+
+hourlyChilledWater.to_excel('Data/hourlyChilledWater.xlsx')
+hourlyChilledWaterWithoutNaN.to_excel('Data/hourlyChilledWaterWithoutNaN.xlsx')
+
+plt.figure()
+fig = hourlyChilledWater.plot(fontsize = 15, figsize = (15, 6))
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+fig.set_axis_bgcolor('w')
+plt.title('All the hourly chilled water data', fontsize = 16)
+plt.ylabel('Ton-Days')
+plt.show()
+
+hourlyChilledWater.head()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10f0df950&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/E0h7m7Egdi.png?imageslim" alt="mark" /></p>
+
+<p>不要着急，就从绘制简单的折线图开始，最简单的曲线图。而且这个代码大家都可以看得懂。你可以做得不像他这么漂亮，但是一定要做，最起码画个 plot.</p>
+
+<p>从上图可以看出模式还是很明显的，从6月份开始到10月份，冷凝水的需求的就比较大，大家上课的地方都需要降温。</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>chilledWater-TonDays</th>
+<th>startTime</th>
+<th>endTime</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>NaN</td>
+<td>2011-07-01 01:00:00</td>
+<td>2011-07-01 02:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>0.315714</td>
+<td>2011-07-01 02:00:00</td>
+<td>2011-07-01 03:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>0.315714</td>
+<td>2011-07-01 03:00:00</td>
+<td>2011-07-01 04:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>0.315714</td>
+<td>2011-07-01 04:00:00</td>
+<td>2011-07-01 05:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 05:00:00</td>
+<td>0.315714</td>
+<td>2011-07-01 05:00:00</td>
+<td>2011-07-01 06:00:00</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">dailyTimestamp = pd.date_range(start = '2011/7/1', end = '2014/10/31', freq = 'D')
+chilledWaterReindexed = chilledWater.reindex(dailyTimestamp, inplace = False)
+
+chilledWaterReindexed.sort_index(inplace = True)
+dailyEnergy = chilledWaterReindexed.diff(periods=1)['Gund Main Energy - Ton-Days']
+
+dailyChilledWater = pd.DataFrame(data = dailyEnergy.values, index = chilledWaterReindexed.index - np.timedelta64(1,'D'), columns = ['chilledWater-TonDays'])
+dailyChilledWater['startDay'] = dailyChilledWater.index
+dailyChilledWater['endDay'] = dailyChilledWater.index + np.timedelta64(1,'D')
+
+dailyChilledWaterWithoutNaN = dailyChilledWater.dropna(axis=0, how='any')
+
+dailyChilledWater.to_excel('Data/dailyChilledWater.xlsx')
+dailyChilledWaterWithoutNaN.to_excel('Data/dailyChilledWaterWithoutNaN.xlsx')
+
+plt.figure()
+fig = dailyChilledWater.plot(fontsize = 15, figsize = (15, 6))
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+fig.set_axis_bgcolor('w')
+plt.title('All the daily chilled water data', fontsize = 16)
+plt.ylabel('Ton-Days')
+plt.show()
+
+
+dailyChilledWater.head()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10a022050&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/b80HAiFa7e.png?imageslim" alt="mark" /></p>
+
+<p>冬天的时候就不用这个冷凝水了。</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>chilledWater-TonDays</th>
+<th>startDay</th>
+<th>endDay</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-06-30</td>
+<td>NaN</td>
+<td>2011-06-30</td>
+<td>2011-07-01</td>
+</tr>
+
+<tr>
+<td>2011-07-01</td>
+<td>NaN</td>
+<td>2011-07-01</td>
+<td>2011-07-02</td>
+</tr>
+
+<tr>
+<td>2011-07-02</td>
+<td>54.741028</td>
+<td>2011-07-02</td>
+<td>2011-07-03</td>
+</tr>
+
+<tr>
+<td>2011-07-03</td>
+<td>55.649728</td>
+<td>2011-07-03</td>
+<td>2011-07-04</td>
+</tr>
+
+<tr>
+<td>2011-07-04</td>
+<td>109.049077</td>
+<td>2011-07-04</td>
+<td>2011-07-05</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="steam">Steam</h2>
+
+<pre><code class="language-python">steam = df[['Gund Condensate FlowTotal - LBS']]
+steam.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Gund Condensate FlowTotal - LBS</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>15443350.388455</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>15443459.322917</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>15443574.687500</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>15443701.953125</td>
+</tr>
+
+<tr>
+<td>2011-07-01 05:00:00</td>
+<td>15443818.359375</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">file = 'Data/monthly steam.csv'
+monthlySteamFromFacility = pd.read_csv(file, header=0)
+monthlySteamFromFacility.set_index(['month'], inplace = True)
+monthlySteamFromFacility.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>startDate</th>
+<th>endDate</th>
+<th>steam</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>month</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Jul 11</td>
+<td>6/17/2011</td>
+<td>7/21/2011</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>Aug 11</td>
+<td>7/21/2011</td>
+<td>8/20/2011</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>Sep 11</td>
+<td>8/20/2011</td>
+<td>9/17/2011</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>Oct 11</td>
+<td>9/17/2011</td>
+<td>10/20/2011</td>
+<td>246.5</td>
+</tr>
+
+<tr>
+<td>Nov 11</td>
+<td>10/20/2011</td>
+<td>11/20/2011</td>
+<td>786.1</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">monthlySteamFromFacility['startDate'] = pd.to_datetime(monthlySteamFromFacility['startDate'], format=&quot;%m/%d/%Y&quot;)
+values = monthlySteamFromFacility.index.values
+
+keys = np.array(monthlySteamFromFacility['startDate'])
+
+dates = {}
+for key, value in zip(keys, values):
+    dates[key] = value
+
+sortedDates =  np.sort(dates.keys())
+sortedDates = sortedDates[sortedDates &gt; np.datetime64('2011-11-01')]
+
+months = []
+monthlySteamOrg = np.zeros((len(sortedDates) - 1))
+for i in range(len(sortedDates) - 1):
+    begin = sortedDates[i]
+    end = sortedDates[i+1]
+    months.append(dates[sortedDates[i]])
+    monthlySteamOrg[i] = (np.round(steam.loc[end,:] -  steam.loc[begin,:], 1))
+
+
+monthlySteam = pd.DataFrame(data = monthlySteamOrg, index = months, columns = ['steam-LBS'])
+
+# 867 LBS ~= 1MMBTU steam
+
+fig,ax = plt.subplots(1, 1,figsize=(15,8))
+#ax.set_axis_bgcolor('w')
+#plt.plot(monthlySteam/867, label='Our data processing from hourly data')
+plt.bar(np.arange(len(monthlySteam))-0.5, monthlySteam.values/867, label='Our data processing from hourly data')
+plt.plot(monthlySteamFromFacility.loc[months,'steam'],'or', label='Facility data')
+plt.xticks(np.arange(0,len(months)),months)
+plt.xlabel('Month',fontsize=15)
+plt.ylabel('Steam (MMBTU)',fontsize=15)
+plt.xlim([0,len(months)])
+plt.legend()
+ax.set_xticklabels(months, rotation=40, fontsize=13)
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+plt.title('Comparison between our data processing and facilities - Steam',fontsize=20)
+
+text = 'Match! Our processing method is valid.'
+ax.annotate(text, xy = (9, 1500),
+            xytext = (5, 50), fontsize = 15,
+            textcoords = 'offset points', ha = 'center', va = 'bottom')
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Gh130KB8f4.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">hourlyTimestamp = pd.date_range(start = '2011/7/1', end = '2014/10/31', freq = 'H')
+steam.reindex(hourlyTimestamp, inplace = True)
+
+# Just in case, in order to use diff method, timestamp has to be in asending order.
+steam.sort_index(inplace = True)
+hourlyEnergy = steam.diff(periods=1)
+
+hourlySteam = pd.DataFrame(data = hourlyEnergy.values, index = hourlyEnergy.index, columns = ['steam-LBS'])
+hourlySteam['startTime'] = hourlySteam.index
+hourlySteam['endTime'] = hourlySteam.index + np.timedelta64(1,'h')
+
+hourlySteam.loc[abs(hourlySteam['steam-LBS']) &gt; 100000,'steam-LBS'] = np.nan
+
+plt.figure()
+fig = hourlySteam.plot(fontsize = 15, figsize = (15, 6))
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 17)
+fig.set_axis_bgcolor('w')
+plt.title('All the hourly steam data', fontsize = 16)
+plt.ylabel('LBS')
+plt.show()
+
+hourlySteamWithoutNaN = hourlySteam.dropna(axis=0, how='any')
+
+hourlySteam.to_excel('Data/hourlySteam.xlsx')
+hourlySteamWithoutNaN.to_excel('Data/hourlySteamWithoutNaN.xlsx')
+
+hourlySteam.head()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10a53ecd0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/b7l58e9fl8.png?imageslim" alt="mark" /></p>
+
+<p>可见，1,2 月份的时候要供暖。</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>steam-LBS</th>
+<th>startTime</th>
+<th>endTime</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-07-01 01:00:00</td>
+<td>NaN</td>
+<td>2011-07-01 01:00:00</td>
+<td>2011-07-01 02:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 02:00:00</td>
+<td>108.934462</td>
+<td>2011-07-01 02:00:00</td>
+<td>2011-07-01 03:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 03:00:00</td>
+<td>115.364583</td>
+<td>2011-07-01 03:00:00</td>
+<td>2011-07-01 04:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 04:00:00</td>
+<td>127.265625</td>
+<td>2011-07-01 04:00:00</td>
+<td>2011-07-01 05:00:00</td>
+</tr>
+
+<tr>
+<td>2011-07-01 05:00:00</td>
+<td>116.406250</td>
+<td>2011-07-01 05:00:00</td>
+<td>2011-07-01 06:00:00</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">dailyTimestamp = pd.date_range(start = '2011/7/1', end = '2014/10/31', freq = 'D')
+steamReindexed = steam.reindex(dailyTimestamp, inplace = False)
+
+steamReindexed.sort_index(inplace = True)
+dailyEnergy = steamReindexed.diff(periods=1)['Gund Condensate FlowTotal - LBS']
+
+dailySteam = pd.DataFrame(data = dailyEnergy.values, index = steamReindexed.index - np.timedelta64(1,'D'), columns = ['steam-LBS'])
+dailySteam['startDay'] = dailySteam.index
+dailySteam['endDay'] = dailySteam.index + np.timedelta64(1,'D')
+
+plt.figure()
+fig = dailySteam.plot(fontsize = 15, figsize = (15, 6))
+plt.tick_params(which=u'major', reset=False, axis = 'y', labelsize = 15)
+fig.set_axis_bgcolor('w')
+plt.title('All the daily steam data', fontsize = 16)
+plt.ylabel('LBS')
+plt.show()
+
+dailySteamWithoutNaN = dailyChilledWater.dropna(axis=0, how='any')
+
+dailySteam.to_excel('Data/dailySteam.xlsx')
+dailySteamWithoutNaN.to_excel('Data/dailySteamWithoutNaN.xlsx')
+
+dailySteam.head()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x107e2d150&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h2efBk4jE9.png?imageslim" alt="mark" /></p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>steam-LBS</th>
+<th>startDay</th>
+<th>endDay</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2011-06-30</td>
+<td>NaN</td>
+<td>2011-06-30</td>
+<td>2011-07-01</td>
+</tr>
+
+<tr>
+<td>2011-07-01</td>
+<td>NaN</td>
+<td>2011-07-01</td>
+<td>2011-07-02</td>
+</tr>
+
+<tr>
+<td>2011-07-02</td>
+<td>3250.651042</td>
+<td>2011-07-02</td>
+<td>2011-07-03</td>
+</tr>
+
+<tr>
+<td>2011-07-03</td>
+<td>3271.276042</td>
+<td>2011-07-03</td>
+<td>2011-07-04</td>
+</tr>
+
+<tr>
+<td>2011-07-04</td>
+<td>3236.718750</td>
+<td>2011-07-04</td>
+<td>2011-07-05</td>
+</tr>
+</tbody>
+</table>
+
+<p>我们看到了时间的一些模式，下面我们看看天气</p>
+
+<h2 id="weather-data">Weather data</h2>
+
+<h3 id="original-data">Original data</h3>
+
+<p>中国的一些数据，可以通过爬虫，也可以有一些 app 是有历史的天气数据的，滴滴的天气数据是买的。</p>
+
+<p>There are <b>two</b> sources for weather data.</p>
+
+<ul>
+<li>Year 2014: From local weather on the roof of GSD (Graduate School of Design) building Gund.</li>
+<li>Year 2012 &amp; 2013: purchased weather data from weather stations located in Cambridge, MA. Please note that year 2012 and 2013 data were from different weather stations.</li>
+</ul>
+
+<blockquote>
+<p>Here is the orginal weather data after a little cleaning including unit conversion. AS you can see, the interval is 5-minute.</p>
+</blockquote>
+
+<pre><code class="language-python">weather2014 = pd.read_excel('Data/weather-2014.xlsx')
+weather2014.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Datetime</th>
+<th>T-C</th>
+<th>RH-%</th>
+<th>Tdew-C</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>2014-01-01 00:00:00</td>
+<td>-5.02</td>
+<td>53.2</td>
+<td>-13.07</td>
+<td>256</td>
+<td>4.5</td>
+<td>1020.8</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>2014-01-01 00:05:00</td>
+<td>-5.14</td>
+<td>54.3</td>
+<td>-12.93</td>
+<td>257</td>
+<td>4.0</td>
+<td>1020.7</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>2014-01-01 00:10:00</td>
+<td>-5.08</td>
+<td>53.4</td>
+<td>-13.08</td>
+<td>258</td>
+<td>3.5</td>
+<td>1021.1</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>2014-01-01 00:15:00</td>
+<td>-5.17</td>
+<td>52.6</td>
+<td>-13.35</td>
+<td>257</td>
+<td>2.8</td>
+<td>1021.0</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>2014-01-01 00:20:00</td>
+<td>-5.23</td>
+<td>52.9</td>
+<td>-13.33</td>
+<td>248</td>
+<td>2.5</td>
+<td>1021.2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+<p><span style="color:red;">文章后面有对这些天气字段的说明。</span></p>
+
+<p>可以看到天气的数据是每5分钟就有一个，我们实际上是对每个小时的预测，因此做一个采样：</p>
+
+<p>Convert to hourly by resampling method.</p>
+
+<blockquote>
+<p>Here is the clean hourly weather data of year 2014.</p>
+</blockquote>
+
+<pre><code class="language-python">weather2014 = weather2014.set_index('Datetime')
+weather2014 = weather2014.resample('H')
+weather2014.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>T-C</th>
+<th>RH-%</th>
+<th>Tdew-C</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Datetime</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>2014-01-01 00:00:00</td>
+<td>-5.281667</td>
+<td>52.858333</td>
+<td>-13.393333</td>
+<td>253.500000</td>
+<td>2.775000</td>
+<td>1021.158333</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>2014-01-01 01:00:00</td>
+<td>-5.725000</td>
+<td>51.650000</td>
+<td>-14.090833</td>
+<td>253.000000</td>
+<td>2.350000</td>
+<td>1021.700000</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>2014-01-01 02:00:00</td>
+<td>-6.002500</td>
+<td>50.766667</td>
+<td>-14.555833</td>
+<td>239.250000</td>
+<td>1.133333</td>
+<td>1022.708333</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>2014-01-01 03:00:00</td>
+<td>-6.320833</td>
+<td>49.675000</td>
+<td>-15.114167</td>
+<td>234.333333</td>
+<td>1.191667</td>
+<td>1023.233333</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>2014-01-01 04:00:00</td>
+<td>-6.535833</td>
+<td>49.708333</td>
+<td>-15.305833</td>
+<td>227.333333</td>
+<td>1.633333</td>
+<td>1023.925000</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+<p><span style="color:red;">种种的写法真的是厉害。</span></p>
+
+<blockquote>
+<p>Here is the orginal weather data of the year 2013 and 2014 after a little cleaning including unit conversion. As you can see, the Datetime format is not correct.</p>
+</blockquote>
+
+<pre><code class="language-python">weather2012and2013 = pd.read_excel('Data/weather-2012-2013.xlsx')
+weather2012and2013.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Datetime</th>
+<th>RH-%</th>
+<th>windDirection</th>
+<th>solarRadiation-W/m2</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>windSpeed-m/s</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>2012-01-01-01</td>
+<td>87</td>
+<td>310</td>
+<td>0</td>
+<td>4</td>
+<td>1.9</td>
+<td>1004</td>
+<td>4.166670</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>2012-01-01-02</td>
+<td>87</td>
+<td>280</td>
+<td>0</td>
+<td>4</td>
+<td>1.9</td>
+<td>1005</td>
+<td>4.166670</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>2012-01-01-03</td>
+<td>81</td>
+<td>270</td>
+<td>0</td>
+<td>5</td>
+<td>1.9</td>
+<td>1006</td>
+<td>4.166670</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>2012-01-01-04</td>
+<td>76</td>
+<td>290</td>
+<td>0</td>
+<td>6</td>
+<td>1.9</td>
+<td>1007</td>
+<td>4.722226</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>2012-01-01-05</td>
+<td>87</td>
+<td>280</td>
+<td>0</td>
+<td>4</td>
+<td>1.9</td>
+<td>1007</td>
+<td>3.055558</td>
+</tr>
+</tbody>
+</table>
+
+<p>Correct the timestep.</p>
+
+<blockquote>
+<p>Here is the hourly data after cleaning.</p>
+</blockquote>
+
+<pre><code class="language-python">weather2012and2013['Datetime'] = pd.to_datetime(weather2012and2013['Datetime'], format='%Y-%m-%d-%H')
+weather2012and2013 = weather2012and2013.set_index('Datetime')
+weather2012and2013.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>RH-%</th>
+<th>windDirection</th>
+<th>solarRadiation-W/m2</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>windSpeed-m/s</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Datetime</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>2012-01-01 01:00:00</td>
+<td>87</td>
+<td>310</td>
+<td>0</td>
+<td>4</td>
+<td>1.9</td>
+<td>1004</td>
+<td>4.166670</td>
+</tr>
+
+<tr>
+<td>2012-01-01 02:00:00</td>
+<td>87</td>
+<td>280</td>
+<td>0</td>
+<td>4</td>
+<td>1.9</td>
+<td>1005</td>
+<td>4.166670</td>
+</tr>
+
+<tr>
+<td>2012-01-01 03:00:00</td>
+<td>81</td>
+<td>270</td>
+<td>0</td>
+<td>5</td>
+<td>1.9</td>
+<td>1006</td>
+<td>4.166670</td>
+</tr>
+
+<tr>
+<td>2012-01-01 04:00:00</td>
+<td>76</td>
+<td>290</td>
+<td>0</td>
+<td>6</td>
+<td>1.9</td>
+<td>1007</td>
+<td>4.722226</td>
+</tr>
+
+<tr>
+<td>2012-01-01 05:00:00</td>
+<td>87</td>
+<td>280</td>
+<td>0</td>
+<td>4</td>
+<td>1.9</td>
+<td>1007</td>
+<td>3.055558</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="hourly-weather-data">Hourly weather data</h3>
+
+<p>Combine two files and add more features including cooling degrees, heating degrees, humidity ratio and dehumidification.</p>
+
+<blockquote>
+<p>Here is <b>all</b> the hourly weather data.</p>
+</blockquote>
+
+<p>他们对这些天气数据做了一些处理，<span style="color:red;">以后，我们遇到类似天气的数据的时候也可以仿照进行使用。</span></p>
+
+<p><span style="color:red;">代码写的非常的清晰，向他学习</span></p>
+
+<pre><code class="language-python"># Combine two weather files
+hourlyWeather = weather2014.append(weather2012and2013)
+hourlyWeather.index.name = None
+hourlyWeather.sort_index(inplace = True)
+
+# Add more features
+
+# Convert relative humidity to specific humidity
+
+Mw=18.0160 # molecular weight of water
+Md=28.9660 # molecular weight of dry air
+R =  8.31432E3 # gas constant
+Rd = R/Md # specific gas constant for dry air
+Rv = R/Mw # specific gas constant for vapour
+Lv = 2.5e6 # heat release for condensation of water vapour [J kg-1]
+eps = Mw/Md
+
+#saturation pressure
+def esat(T):
+    ''' get sateration pressure (units [Pa]) for a given air temperature (units [K])'''
+    from numpy import log10
+    TK = 273.15
+    e1 = 101325.0
+    logTTK = log10(T/TK)
+    esat =  e1*10**(10.79586*(1-TK/T)-5.02808*logTTK+ 1.50474*1e-4*(1.-10**(-8.29692*(T/TK-1)))+ 0.42873*1e-3*(10**(4.76955*(1-TK/T))-1)-2.2195983)
+    return esat
+
+def rh2sh(RH,p,T):
+    '''purpose: conversion relative humidity (unitless) to specific humidity (humidity ratio) [kg/kg]'''
+    es = esat(T)
+    W = Mw/Md*RH*es/(p-RH*es)
+
+    return W/(1.+W)
+
+
+p = hourlyWeather['pressure-mbar'] * 100
+RH = hourlyWeather['RH-%'] / 100
+T = hourlyWeather['T-C'] + 273.15
+w = rh2sh(RH,p,T)
+
+hourlyWeather['humidityRatio-kg/kg'] = w
+hourlyWeather['coolingDegrees'] = hourlyWeather['T-C'] - 12
+hourlyWeather.loc[hourlyWeather['coolingDegrees'] &lt; 0, 'coolingDegrees'] = 0
+
+hourlyWeather['heatingDegrees'] = 15 - hourlyWeather['T-C']
+hourlyWeather.loc[hourlyWeather['heatingDegrees'] &lt; 0, 'heatingDegrees'] = 0
+
+hourlyWeather['dehumidification'] = hourlyWeather['humidityRatio-kg/kg'] - 0.00886
+hourlyWeather.loc[hourlyWeather['dehumidification'] &lt; 0, 'dehumidification'] = 0
+
+#hourlyWeather.to_excel('Data/hourlyWeather.xlsx')
+hourlyWeather.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01 01:00:00</td>
+<td>87</td>
+<td>4</td>
+<td>1.9</td>
+<td>1004</td>
+<td>0</td>
+<td>310</td>
+<td>4.166670</td>
+<td>0.004396</td>
+<td>0</td>
+<td>11</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-01 02:00:00</td>
+<td>87</td>
+<td>4</td>
+<td>1.9</td>
+<td>1005</td>
+<td>0</td>
+<td>280</td>
+<td>4.166670</td>
+<td>0.004391</td>
+<td>0</td>
+<td>11</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-01 03:00:00</td>
+<td>81</td>
+<td>5</td>
+<td>1.9</td>
+<td>1006</td>
+<td>0</td>
+<td>270</td>
+<td>4.166670</td>
+<td>0.004380</td>
+<td>0</td>
+<td>10</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-01 04:00:00</td>
+<td>76</td>
+<td>6</td>
+<td>1.9</td>
+<td>1007</td>
+<td>0</td>
+<td>290</td>
+<td>4.722226</td>
+<td>0.004401</td>
+<td>0</td>
+<td>9</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-01 05:00:00</td>
+<td>87</td>
+<td>4</td>
+<td>1.9</td>
+<td>1007</td>
+<td>0</td>
+<td>280</td>
+<td>3.055558</td>
+<td>0.004382</td>
+<td>0</td>
+<td>11</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<p>了解我们处理之后的数据，进行绘图：</p>
+
+<p>对数据进行批量整理之后，大的变动之后，一定要进行绘图来再次了解我们的数据。</p>
+
+<pre><code class="language-python">plt.figure()
+fig = hourlyWeather.plot(y = 'T-C', figsize = (15, 6))
+fig.set_axis_bgcolor('w')
+plt.title('All hourly temperture', fontsize = 16)
+plt.ylabel(r'Temperature ($\circ$C)')
+plt.show()
+
+plt.figure()
+fig = hourlyWeather.plot(y = 'solarRadiation-W/m2', figsize = (15, 6))
+fig.set_axis_bgcolor('w')
+plt.title('All hourly solar radiation', fontsize = 16)
+plt.ylabel(r'$W/m^2$', fontsize = 13)
+plt.show()
+
+plt.figure()
+fig = hourlyWeather['2014-10'].plot(y = 'T-C', figsize = (15, 6), marker = 'o')
+fig.set_axis_bgcolor('w')
+plt.title('Selected hourly temperture',fontsize = 16)
+plt.ylabel(r'Temperature ($\circ$C)',fontsize = 13)
+plt.show()
+
+plt.figure()
+fig = hourlyWeather['2014-10'].plot(y = 'solarRadiation-W/m2', figsize = (15, 6), marker ='o')
+fig.set_axis_bgcolor('w')
+plt.title('Selected hourly solar radiation', fontsize = 16)
+plt.ylabel(r'$W/m^2$', fontsize = 13)
+plt.show()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10c8d2c10&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/A6DglgKjEI.png?imageslim" alt="mark" /></p>
+
+<p>可以看出，哈佛所在的地区的气温没有太受工业的影响，还是比较符合预期的。</p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x107d9a690&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Ig13i84LBl.png?imageslim" alt="mark" /></p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10cab2f10&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/c14B26kF1A.png?imageslim" alt="mark" /></p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x1123f1bd0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Fdm6Gjf6H5.png?imageslim" alt="mark" /></p>
+
+<h3 id="daily-weather-data">Daily weather data</h3>
+
+<p>按照天进行采样：</p>
+
+<pre><code class="language-python">dailyWeather = hourlyWeather.resample('D')
+#dailyWeather.to_excel('Data/dailyWeather.xlsx')
+dailyWeather.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>76.652174</td>
+<td>7.173913</td>
+<td>3.073913</td>
+<td>1004.956522</td>
+<td>95.260870</td>
+<td>236.086957</td>
+<td>4.118361</td>
+<td>0.004796</td>
+<td>0</td>
+<td>7.826087</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>55.958333</td>
+<td>5.833333</td>
+<td>-2.937500</td>
+<td>994.625000</td>
+<td>87.333333</td>
+<td>253.750000</td>
+<td>5.914357</td>
+<td>0.003415</td>
+<td>0</td>
+<td>9.166667</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>42.500000</td>
+<td>-3.208333</td>
+<td>-12.975000</td>
+<td>1002.125000</td>
+<td>95.708333</td>
+<td>302.916667</td>
+<td>6.250005</td>
+<td>0.001327</td>
+<td>0</td>
+<td>18.208333</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>41.541667</td>
+<td>-7.083333</td>
+<td>-16.958333</td>
+<td>1008.250000</td>
+<td>98.750000</td>
+<td>286.666667</td>
+<td>5.127319</td>
+<td>0.000890</td>
+<td>0</td>
+<td>22.083333</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>46.916667</td>
+<td>-0.583333</td>
+<td>-9.866667</td>
+<td>1002.041667</td>
+<td>90.750000</td>
+<td>258.333333</td>
+<td>5.162041</td>
+<td>0.001746</td>
+<td>0</td>
+<td>15.583333</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">plt.figure()
+fig = dailyWeather.plot(y = 'T-C', figsize = (15, 6), marker ='o')
+fig.set_axis_bgcolor('w')
+plt.title('All daily temperture', fontsize = 16)
+plt.ylabel(r'Temperature ($\circ$C)', fontsize = 13)
+plt.show()
+
+plt.figure()
+fig = dailyWeather['2014'].plot(y = 'T-C', figsize = (15, 6), marker ='o')
+fig.set_axis_bgcolor('w')
+plt.title('Selected daily temperture', fontsize = 16)
+plt.ylabel(r'Temperature ($\circ$C)', fontsize = 13)
+plt.show()
+
+plt.figure()
+fig = dailyWeather['2014'].plot(y = 'solarRadiation-W/m2', figsize = (15, 6), marker ='o')
+fig.set_axis_bgcolor('w')
+plt.title('Selected daily solar radiation', fontsize = 16)
+plt.ylabel(r'$W/m^2$', fontsize = 14)
+plt.show()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x109fd1bd0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/EdDIlgeic8.png?imageslim" alt="mark" /></p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x105eb1950&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/BCbDb3jcaC.png?imageslim" alt="mark" /></p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10b8d4b50&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/0iJ89HkBcj.png?imageslim" alt="mark" /></p>
+
+<p>到目前为止，我们已经处理了时间的特征，天气的特征。下面我们想看看教学楼的学生使用程度。</p>
+
+<h2 id="features-related-to-occupancy">Features related to occupancy</h2>
+
+<p>This is a number between 0 and 1. 0 indicated no occupants, 1 indicates normal occupancy. This is an estimate based on holidays, weekends and school academic calendar.</p>
+
+<pre><code class="language-python">holidays = pd.read_excel('Data/holidays.xlsx')
+holidays.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>startDate</th>
+<th>endDate</th>
+<th>value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>2011-07-01</td>
+<td>2011-09-06</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>2011-10-10</td>
+<td>2011-10-11</td>
+<td>0.6</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>2011-11-24</td>
+<td>2011-11-28</td>
+<td>0.2</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>2011-12-22</td>
+<td>2011-12-24</td>
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>2011-12-24</td>
+<td>2012-01-02</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>可见，12-24 的时候，平安夜，教学楼关掉了，value 为 0 。</p>
+
+<pre><code class="language-python">hourlyTimestamp = pd.date_range(start = '2011/7/1', end = '2014/10/31', freq = 'H')
+occupancy = np.ones(len(hourlyTimestamp))
+
+hourlyOccupancy = pd.DataFrame(data = occupancy, index = hourlyTimestamp, columns = ['occupancy'])
+
+
+Saturdays = hourlyOccupancy.index.weekday == 5
+Sundays = hourlyOccupancy.index.weekday == 6
+hourlyOccupancy.loc[Saturdays, 'occupancy'] = 0.5
+hourlyOccupancy.loc[Sundays, 'occupancy'] = 0.5
+
+
+for i in range(len(holidays)):
+    timestamp = pd.date_range(start = holidays.loc[i, 'startDate'], end = holidays.loc[i, 'endDate'], freq = 'H')
+    hourlyOccupancy.loc[timestamp, 'occupancy'] = holidays.loc[i, 'value']
+
+#hourlyHolidays['Datetime'] = pd.to_datetime(hourlyHolidays['Datetime'], format=&quot;%Y-%m-%d %H:%M:%S&quot;)
+hourlyOccupancy['cosHour'] = np.cos((hourlyOccupancy.index.hour - 3) * 2 * np.pi / 24)
+
+dailyOccupancy = hourlyOccupancy.resample('D')
+dailyOccupancy.drop('cosHour', axis = 1, inplace = True)
+</code></pre>
+
+<h2 id="merge-energy-consumption-data-with-weather-and-occupancy-features">Merge energy consumption data with weather and occupancy features</h2>
+
+<p>开始把前面整理好的特征 merge 起来。</p>
+
+<pre><code class="language-python">hourlyElectricityWithFeatures = hourlyElectricity.join(hourlyWeather, how = 'inner')
+hourlyElectricityWithFeatures = hourlyElectricityWithFeatures.join(hourlyOccupancy, how = 'inner')
+hourlyElectricityWithFeatures.dropna(axis=0, how='any', inplace = True)
+hourlyElectricityWithFeatures.to_excel('Data/hourlyElectricityWithFeatures.xlsx')
+hourlyElectricityWithFeatures.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>electricity-kWh</th>
+<th>startTime</th>
+<th>endTime</th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+<th>occupancy</th>
+<th>cosHour</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01 01:00:00</td>
+<td>111.479277</td>
+<td>2012-01-01 01:00:00</td>
+<td>2012-01-01 02:00:00</td>
+<td>87</td>
+<td>4</td>
+<td>1.9</td>
+<td>1004</td>
+<td>0</td>
+<td>310</td>
+<td>4.166670</td>
+<td>0.004396</td>
+<td>0</td>
+<td>11</td>
+<td>0</td>
+<td>0</td>
+<td>0.866025</td>
+</tr>
+
+<tr>
+<td>2012-01-01 02:00:00</td>
+<td>117.989395</td>
+<td>2012-01-01 02:00:00</td>
+<td>2012-01-01 03:00:00</td>
+<td>87</td>
+<td>4</td>
+<td>1.9</td>
+<td>1005</td>
+<td>0</td>
+<td>280</td>
+<td>4.166670</td>
+<td>0.004391</td>
+<td>0</td>
+<td>11</td>
+<td>0</td>
+<td>0</td>
+<td>0.965926</td>
+</tr>
+
+<tr>
+<td>2012-01-01 03:00:00</td>
+<td>119.010131</td>
+<td>2012-01-01 03:00:00</td>
+<td>2012-01-01 04:00:00</td>
+<td>81</td>
+<td>5</td>
+<td>1.9</td>
+<td>1006</td>
+<td>0</td>
+<td>270</td>
+<td>4.166670</td>
+<td>0.004380</td>
+<td>0</td>
+<td>10</td>
+<td>0</td>
+<td>0</td>
+<td>1.000000</td>
+</tr>
+
+<tr>
+<td>2012-01-01 04:00:00</td>
+<td>116.005587</td>
+<td>2012-01-01 04:00:00</td>
+<td>2012-01-01 05:00:00</td>
+<td>76</td>
+<td>6</td>
+<td>1.9</td>
+<td>1007</td>
+<td>0</td>
+<td>290</td>
+<td>4.722226</td>
+<td>0.004401</td>
+<td>0</td>
+<td>9</td>
+<td>0</td>
+<td>0</td>
+<td>0.965926</td>
+</tr>
+
+<tr>
+<td>2012-01-01 05:00:00</td>
+<td>111.132977</td>
+<td>2012-01-01 05:00:00</td>
+<td>2012-01-01 06:00:00</td>
+<td>87</td>
+<td>4</td>
+<td>1.9</td>
+<td>1007</td>
+<td>0</td>
+<td>280</td>
+<td>3.055558</td>
+<td>0.004382</td>
+<td>0</td>
+<td>11</td>
+<td>0</td>
+<td>0</td>
+<td>0.866025</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">hourlyChilledWaterWithFeatures = hourlyChilledWater.join(hourlyWeather, how = 'inner')
+hourlyChilledWaterWithFeatures = hourlyChilledWaterWithFeatures.join(hourlyOccupancy, how = 'inner')
+hourlyChilledWaterWithFeatures.dropna(axis=0, how='any', inplace = True)
+hourlyChilledWaterWithFeatures.to_excel('Data/hourlyChilledWaterWithFeatures.xlsx')
+
+hourlySteamWithFeatures = hourlySteam.join(hourlyWeather, how = 'inner')
+hourlySteamWithFeatures = hourlySteamWithFeatures.join(hourlyOccupancy, how = 'inner')
+hourlySteamWithFeatures.dropna(axis=0, how='any', inplace = True)
+hourlySteamWithFeatures.to_excel('Data/hourlySteamWithFeatures.xlsx')
+
+dailyElectricityWithFeatures = dailyElectricity.join(dailyWeather, how = 'inner')
+dailyElectricityWithFeatures = dailyElectricityWithFeatures.join(dailyOccupancy, how = 'inner')
+dailyElectricityWithFeatures.dropna(axis=0, how='any', inplace = True)
+dailyElectricityWithFeatures.to_excel('Data/dailyElectricityWithFeatures.xlsx')
+
+dailyChilledWaterWithFeatures = dailyChilledWater.join(dailyWeather, how = 'inner')
+dailyChilledWaterWithFeatures = dailyChilledWaterWithFeatures.join(dailyOccupancy, how = 'inner')
+dailyChilledWaterWithFeatures.dropna(axis=0, how='any', inplace = True)
+dailyChilledWaterWithFeatures.to_excel('Data/dailyChilledWaterWithFeatures.xlsx')
+
+dailySteamWithFeatures = dailySteam.join(dailyWeather, how = 'inner')
+dailySteamWithFeatures = dailySteamWithFeatures.join(dailyOccupancy, how = 'inner')
+dailySteamWithFeatures.dropna(axis=0, how='any', inplace = True)
+dailySteamWithFeatures.to_excel('Data/dailySteamWithFeatures.xlsx')
+</code></pre>
+
+<h2 id="a-note-for-features">A note for features</h2>
+
+<p><span style="color:red;">他们做的东西非常的细致，给了一对各种 feature 的说明。</span></p>
+
+<h3 id="nomenclature-alphabetically">Nomenclature (Alphabetically)</h3>
+
+<p><b> coolingDegrees</b>: if T-C - 12 > 0, then = T-C - 12, else = 0. Assume that when outdoor temperature is below 12C, no cooling is needed, which is true for many buildings. This will be useful for daily prediction, because the average of hourly cooling degrees is better than average of hourly temperature.</p>可见，他们也是了解了一下什么样的特征能标识现在的气候情况，可以从书本上了解，也可以咨询相关专业的人。
+
+<p><b> cosHour</b>: $\text{cos}(\text{hourOfDay} \cdot \frac{2\pi}{24})$ </p><span style="color:red;">这个是时针与12点的张角的 cos 值。很有意思的 feature 。不知道使用的时候是不是有一些效果。不过还是不错的。</span>
+
+
+
+<p><b> dehumidification</b>: if humidityRatio - 0.00886 > 0, then = humidityRatio - 0.00886, else = 0. This will be useful for chilled water prediction, especially daily chilled water prediction.</p>
+<p><b> heatingDegrees</b>: if 15 - T-C > 0, then = 15 - T-C, else = 0. Assume that when outdoor temperature is above 15C, no heating is needed. This will be useful for daily prediction, because the average of hourly heating degrees is better than average of hourly temperature.</p>
+<p><b> occupancy</b>: A number between 0 and 1. 0 indicated no occupants, 1 indicates normal occupancy. This is an estimate based on holidays, weekends and school academic calendar.</p>
+<p><b> pressure-mbar</b>: atmospheric pressure</p>
+<p><b> RH-% </b>: Relative humidity</p> 相对的湿度
+<p><b> T-C </b>: Dry-bulb temperature</p>
+<p><b> Tdew-C </b>: Dew-point temperature</p>
+
+<p><span style="color:red;">厉害，整个项目做得非常细致，非常严谨。这篇报告非常的详尽。</span></p>
+
+<h3 id="humidity">Humidity</h3>
+
+<p>Humidity ratio is important for chilled water prediction as chilled water is also used to dry the air discharged to rooms. Using humidity ratio will be more efficient and effective than using RH and dew point temperature.</p>
+
+<p>#3. Exploratory Analysis</p>
+
+<pre><code class="language-python">%matplotlib inline
+
+import requests
+from StringIO import StringIO
+import numpy as np
+import pandas as pd # pandas
+import matplotlib.pyplot as plt # module for plotting
+import datetime as dt # module for manipulating dates and times
+import numpy.linalg as lin # module for performing linear algebra operations
+from __future__ import division
+import matplotlib
+
+pd.options.display.mpl_style = 'default'
+</code></pre>
+
+<h2 id="monthly-energy-consumption">Monthly energy consumption</h2>
+
+<p>然后，就是对于能量的分析，三种能源消耗的情况：</p>
+
+<pre><code class="language-python">pd.options.display.mpl_style = 'default'
+consumption = pd.read_csv('Data/Monthly_Energy_Gund.csv')
+for i in range(len(consumption)):
+    consumption['CW-kBtu'][i] = float(consumption['CW-kBtu'].values[i].replace(',', ''))
+    consumption['EL-kBtu'][i] = float(consumption['EL-kBtu'].values[i].replace(',', ''))
+    consumption['ST-kBtu'][i] = float(consumption['ST-kBtu'].values[i].replace(',', ''))
+
+time_index = np.arange(len(consumption))
+plt.figure(figsize=(15,7))
+b1 = plt.bar(time_index, consumption['EL-kBtu'], width = 0.6, color='g')
+b2 = plt.bar(time_index, consumption['ST-kBtu'], bottom=consumption['EL-kBtu'], width = 0.6, color='r')
+b3 = plt.bar(time_index, consumption['CW-kBtu'], bottom=consumption['EL-kBtu']+consumption['ST-kBtu'], width = 0.6, color='b')
+
+plt.xticks(time_index+0.5, consumption['Time'], rotation=90)
+plt.title('Monthly Energy consumption')
+plt.xlabel('Month')
+plt.ylabel('Consumption (kBtu)')
+plt.legend( (b1, b2, b3), ('Electricity', 'Steam', 'Chilled Water') )
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x118250910&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/hF4e68LLI0.png?imageslim" alt="mark" /></p>
+
+<p>图非常的漂亮，可以明显的看出，电能是一直要使用的，供暖是冬天用，冷凝水是夏天用。</p>
+
+<p><span style="color:red;">图非常的漂亮，非常的专业。可以直观得出想要的信息。</span></p>
+
+<h2 id="electricity-energy-consumption-pattern">Electricity energy consumption pattern</h2>
+
+<p>开始探索能源消耗的一些模式。</p>
+
+<p>First, let&rsquo;s see what we can find in hourly and daily electricity energy consumption.</p>
+
+<pre><code class="language-python">hourlyElectricity = pd.read_excel('Data/hourlyElectricity.xlsx')
+
+index = (hourlyElectricity['startTime'] &gt;= np.datetime64('2011-07-03')) &amp; (hourlyElectricity['startTime'] &lt; np.datetime64('2014-10-26'))
+hourlyElectricityForVisualization = hourlyElectricity.loc[index,'electricity-kWh']
+
+print &quot;Data length: &quot;, len(hourlyElectricityForVisualization)/24/7, &quot; weeks&quot;
+</code></pre>
+
+<pre><code>Data length:  173.0  weeks
+</code></pre>
+
+<pre><code class="language-python">data = hourlyElectricityForVisualization.values
+data = data.reshape((len(data)/24/7,24*7))
+
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+yTickLabels = pd.DataFrame(data = pd.date_range(start = '2011-07-03', end = '2014-10-25', freq = '4W'), columns=['datetime'])
+yTickLabels['date'] = yTickLabels['datetime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+
+s1 = ['Sun ', 'Mon ', 'Tue ', 'Wed ', 'Thu ', 'Fri ', 'Sat ']
+s2 = ['12AM ', '6 AM', '12PM', '6 PM']
+s1 = np.repeat(s1, 4)
+s2 = np.tile(s2, 7)
+xTickLabels = np.char.add(s1, s2)
+
+fig = plt.figure(figsize=(20,30))
+ax = plt.gca()
+im = ax.imshow(data, vmin =0, vmax = 500, interpolation='nearest', origin='upper')
+# create an axes on the right side of ax. The width of cax will be 5%
+# of ax and the padding between cax and ax will be fixed at 0.05 inch.
+divider = make_axes_locatable(ax)
+cax = divider.append_axes(&quot;right&quot;, size=&quot;3%&quot;, pad=0.2)
+ax.set_yticks(range(0,173,4))
+ax.set_yticklabels(labels = yTickLabels['date'], fontsize = 14)
+
+ax.set_xticks(range(0,168,6))
+ax.set_xticklabels(labels = xTickLabels, fontsize = 14, rotation = 90)
+
+plt.colorbar(im, cax=cax)
+</code></pre>
+
+<pre><code>&lt;matplotlib.colorbar.Colorbar instance at 0x10a90db00&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/10f3463b1i.png?imageslim" alt="mark" /></p>
+
+<p>他使用的是 <code>from mpl_toolkits.axes_grid1 import make_axes_locatable</code> 这个库，没有听说过。</p>
+
+<p>这是一个按照小时的热力图，画的是电能的使用情况，可以明显看到中间有三段是没有数据的，与之前的相符。而且，红色的时候用电量很大，可以清楚的看到他是有一定模式的。</p>
+
+<blockquote>
+<p>Above is a heapmap of hourly electricity use over three years. The banlk part indicates missing data.</p>
+</blockquote>
+
+<pre><code class="language-python">dailyElectricity = pd.read_excel('Data/dailyElectricity.xlsx')
+
+index = (dailyElectricity['startDay'] &gt;= np.datetime64('2011-07-03')) &amp; (dailyElectricity['startDay'] &lt; np.datetime64('2014-10-19'))
+dailyElectricityForVisualization = dailyElectricity.loc[index,'electricity-kWh']
+
+print &quot;Data length: &quot;, len(dailyElectricityForVisualization)/7, &quot; weeks&quot;
+
+data = dailyElectricityForVisualization.values
+data = data.reshape((len(data)/7/4,7*4))
+
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+yTickLabels = pd.DataFrame(data = pd.date_range(start = '2011-07-03', end = '2014-10-25', freq = '4W'), columns=['datetime'])
+yTickLabels['date'] = yTickLabels['datetime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+
+s = ['Sun ', 'Mon ', 'Tue ', 'Wed ', 'Thu ', 'Fri ', 'Sat ']
+xTickLabels = np.tile(s, 4)
+
+fig = plt.figure(figsize=(14,15))
+ax = plt.gca()
+im = ax.imshow(data, interpolation='nearest', origin='upper')
+# create an axes on the right side of ax. The width of cax will be 5%
+# of ax and the padding between cax and ax will be fixed at 0.05 inch.
+divider = make_axes_locatable(ax)
+cax = divider.append_axes(&quot;right&quot;, size=&quot;3%&quot;, pad=0.2)
+ax.set_yticks(range(43))
+ax.set_yticklabels(labels = yTickLabels['date'], fontsize = 14)
+
+ax.set_xticks(range(28))
+ax.set_xticklabels(labels = xTickLabels, fontsize = 14, rotation = 90)
+
+plt.colorbar(im, cax=cax)
+plt.show()
+
+plt.figure()
+fig = dailyElectricity.plot(figsize = (15, 6))
+fig.set_axis_bgcolor('w')
+plt.title('All the daily electricity data', fontsize = 16)
+plt.ylabel('kWh')
+plt.show()
+
+</code></pre>
+
+<pre><code>Data length:  172.0  weeks
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/DAF07408Ld.png?imageslim" alt="mark" /></p>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10a2c9dd0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ikb23IhJB8.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Above are a heatmap and a plot of daily electricity use. Blank part indicates missing data.</p>
+</blockquote>
+
+<pre><code class="language-python">dailyElectricity = pd.read_excel('Data/dailyElectricity.xlsx')
+weeklyElectricity = dailyElectricity.asfreq('W', how='sume', normalize=False)
+
+plt.figure()
+fig = weeklyElectricity['2012-01':'2014-01'].plot(figsize = (15, 6), fontsize = 15, marker = 'o', linestyle='--')
+fig.set_axis_bgcolor('w')
+plt.title('Weekly electricity data', fontsize = 16)
+plt.ylabel('kWh')
+ax = plt.gca()
+plt.show()
+</code></pre>
+
+<pre><code>&lt;matplotlib.figure.Figure at 0x10a1e2e50&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/lKd3ibi1hg.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Above is a plot of <b>weekly</b> consumption. Broken line part indicates missing data.</p>
+</blockquote>
+
+<p>It is so obvious the peak consumption is during the finals. And then it suddenly drops. The repeated pattern is very noticeable.</p>
+
+<h3 id="findings">Findings</h3>
+
+<ul>
+<li><p>Electricity shows a strong periodical pattern. You can clearly see the difference between day and night, weekdays and weekends.</p></li>
+
+<li><p>It looks like during each semester, electricity use ramps up toward a peak at finals, perhaps representative of studying patterns. The students are working harder and harder toward finals. Then there is a dip after semesters end, inlcuding Christmas vacation. The electricity consumption is relatively low during January and summer terms, and spring break, when campus can be relatively empty. (Text partially contributed by Steven)</p></li>
+</ul>
+
+<h2 id="relationship-between-energy-consumption-and-features">Relationship between energy consumption and features</h2>
+
+<p>探寻一下能源的小号和特征之间的关系。</p>
+
+<h3 id="main-features-we-considered">Main features we considered</h3>
+
+<p>In this section, we plot electricity, chilled water and steam consumption (both hourly and daily) against all kinds of features.</p>
+
+<pre><code class="language-python"># Read in data from Preprocessing results
+
+hourlyElectricityWithFeatures = pd.read_excel('Data/hourlyElectricityWithFeatures.xlsx')
+hourlyChilledWaterWithFeatures = pd.read_excel('Data/hourlyChilledWaterWithFeatures.xlsx')
+hourlySteamWithFeatures = pd.read_excel('Data/hourlySteamWithFeatures.xlsx')
+
+dailyElectricityWithFeatures = pd.read_excel('Data/dailyElectricityWithFeatures.xlsx')
+dailyChilledWaterWithFeatures = pd.read_excel('Data/dailyChilledWaterWithFeatures.xlsx')
+dailySteamWithFeatures = pd.read_excel('Data/dailySteamWithFeatures.xlsx')
+
+# An example of Dataframe
+dailyChilledWaterWithFeatures.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>chilledWater-TonDays</th>
+<th>startDay</th>
+<th>endDay</th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+<th>occupancy</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>0.961857</td>
+<td>2012-01-01</td>
+<td>2012-01-02</td>
+<td>76.652174</td>
+<td>7.173913</td>
+<td>3.073913</td>
+<td>1004.956522</td>
+<td>95.260870</td>
+<td>236.086957</td>
+<td>4.118361</td>
+<td>0.004796</td>
+<td>0</td>
+<td>7.826087</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>0.981725</td>
+<td>2012-01-02</td>
+<td>2012-01-03</td>
+<td>55.958333</td>
+<td>5.833333</td>
+<td>-2.937500</td>
+<td>994.625000</td>
+<td>87.333333</td>
+<td>253.750000</td>
+<td>5.914357</td>
+<td>0.003415</td>
+<td>0</td>
+<td>9.166667</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>1.003672</td>
+<td>2012-01-03</td>
+<td>2012-01-04</td>
+<td>42.500000</td>
+<td>-3.208333</td>
+<td>-12.975000</td>
+<td>1002.125000</td>
+<td>95.708333</td>
+<td>302.916667</td>
+<td>6.250005</td>
+<td>0.001327</td>
+<td>0</td>
+<td>18.208333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>1.483192</td>
+<td>2012-01-04</td>
+<td>2012-01-05</td>
+<td>41.541667</td>
+<td>-7.083333</td>
+<td>-16.958333</td>
+<td>1008.250000</td>
+<td>98.750000</td>
+<td>286.666667</td>
+<td>5.127319</td>
+<td>0.000890</td>
+<td>0</td>
+<td>22.083333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>3.465091</td>
+<td>2012-01-05</td>
+<td>2012-01-06</td>
+<td>46.916667</td>
+<td>-0.583333</td>
+<td>-9.866667</td>
+<td>1002.041667</td>
+<td>90.750000</td>
+<td>258.333333</td>
+<td>5.162041</td>
+<td>0.001746</td>
+<td>0</td>
+<td>15.583333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Above we print out all the features.</p>
+</blockquote>
+
+<p><b> coolingDegrees</b>: if T-C - 12 > 0, then = T-C - 12, else = 0. Assume that when outdoor temperature is below 12C, no cooling is needed, which is true for many buildings. This will be useful for daily prediction, because the average of hourly cooling degrees is better than average of hourly temperature.</p>
+<p><b> cosHour</b>: $\text{cos}(\text{hourOfDay} \cdot \frac{2\pi}{24})$</p>
+<p><b> dehumidification</b>: if humidityRatio - 0.00886 > 0, then = humidityRatio - 0.00886, else = 0. This will be useful for chilled water prediction, especially daily chilled water prediction.</p>
+<p><b> heatingDegrees</b>: if 15 - T-C > 0, then = 15 - T-C, else = 0. Assume that when outdoor temperature is above 15C, no heating is needed. This will be useful for daily prediction, because the average of hourly heating degrees is better than average of hourly temperature.</p>
+<p><b> occupancy</b>: A number between 0 and 1. 0 indicated no occupants, 1 indicates normal occupancy. This is an estimate based on holidays, weekends and school academic calendar.</p>
+<p><b> pressure-mbar</b>: atmospheric pressure</p>
+<p><b> RH-% </b>: Relative humidity</p>
+<p><b> T-C </b>: Dry-bulb temperature</p>
+<p><b> Tdew-C </b>: Dew-point temperature</p>
+
+<p><b>Humidity ratio</b>: Humidity ratio is calcluated based on T-C, RH and pressure. Humidity ratio is important for chilled water prediction as chilled water is also used to dry the air discharged to rooms. Using humidity ratio will be more efficient and effective than using RH and dew point temperature.</p>
+
+<pre><code class="language-python">holidays = pd.read_excel('Data/holidays.xlsx')
+holidays
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>startDate</th>
+<th>endDate</th>
+<th>value</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>2011-07-01</td>
+<td>2011-09-06</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>2011-10-10</td>
+<td>2011-10-11</td>
+<td>0.6</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>2011-11-24</td>
+<td>2011-11-28</td>
+<td>0.2</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>2011-12-22</td>
+<td>2011-12-24</td>
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>2011-12-24</td>
+<td>2012-01-02</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>2012-01-02</td>
+<td>2012-01-23</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>2012-03-10</td>
+<td>2012-03-19</td>
+<td>0.4</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>2012-05-17</td>
+<td>2012-09-04</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>2012-05-28</td>
+<td>2012-05-29</td>
+<td>0.2</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>2012-10-08</td>
+<td>2012-10-09</td>
+<td>0.6</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>2012-11-22</td>
+<td>2012-11-26</td>
+<td>0.2</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>2012-12-22</td>
+<td>2012-12-24</td>
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>2012-12-24</td>
+<td>2013-01-02</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>13</td>
+<td>2013-01-02</td>
+<td>2013-01-27</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>14</td>
+<td>2013-01-20</td>
+<td>2013-01-21</td>
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>15</td>
+<td>2013-03-16</td>
+<td>2013-03-25</td>
+<td>0.4</td>
+</tr>
+
+<tr>
+<td>16</td>
+<td>2013-05-18</td>
+<td>2013-09-03</td>
+<td>0.5</td>
+</tr>
+
+<tr>
+<td>17</td>
+<td>2013-10-14</td>
+<td>2013-10-15</td>
+<td>0.6</td>
+</tr>
+
+<tr>
+<td>18</td>
+<td>2013-11-28</td>
+<td>2013-12-02</td>
+<td>0.2</td>
+</tr>
+
+<tr>
+<td>19</td>
+<td>2013-12-20</td>
+<td>2013-12-24</td>
+<td>0.1</td>
+</tr>
+
+<tr>
+<td>20</td>
+<td>2013-12-24</td>
+<td>2014-01-02</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>21</td>
+<td>2014-01-02</td>
+<td>2014-01-26</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>22</td>
+<td>2014-03-16</td>
+<td>2014-03-24</td>
+<td>0.4</td>
+</tr>
+
+<tr>
+<td>23</td>
+<td>2014-05-17</td>
+<td>2014-09-02</td>
+<td>0.5</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Above is the setting for &ldquo;occupancy&rdquo;. Full occupancy is assigned a value of 1.</p>
+</blockquote>
+
+<h3 id="energy-consumption-versus-features">Energy Consumption versus Features</h3>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 2, sharey='row', figsize = (15, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.1)
+
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'T-C', y = 'electricity-kWh', ax = ax[0,0])
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'coolingDegrees', y = 'electricity-kWh', ax = ax[0,1])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'T-C', y = 'chilledWater-TonDays', ax = ax[1,0])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'coolingDegrees', y = 'chilledWater-TonDays', ax = ax[1,1])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'T-C', y = 'steam-LBS', ax = ax[2,0])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'heatingDegrees', y = 'steam-LBS', ax = ax[2,1])
+
+for i in range(3):
+    ax[i,0].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+for i in range(2):
+    ax[2,i].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2,0].set_xlabel(r'Temperature ($^\circ$C)', fontsize = 13)
+ax[2,0].set_xlim([-20,40])
+ax[0,0].set_title('Hourly energy use versus ourdoor temperature', fontsize = 15)
+
+ax[2,1].set_xlabel(r'Cooling/Heating degrees ($^\circ$C)', fontsize = 13)
+#ax[2,1].set_xlim([0,30])
+ax[0,1].set_title('Hourly energy use versus cooling/heating degrees', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/mKk3H8HG5J.png?imageslim" alt="mark" /></p>
+
+<p>横坐标是 temperture 温度，纵坐标是各种能源的消耗。我们可以看到，随着温度的升高，电能的使用并没有明显的变化。中间是冷凝水随着温度的上升迅速的升高，热蒸汽也是。</p>
+
+<p><span style="color:red;">绘图画的非常好。能帮助我们了解特征</span></p>
+
+<blockquote>
+<p>Chilled water and steam are strongly co-related with temperature. However, using only outdoor temperature or cooling/heating degrees to predict hourly chilled water and steam is not suffient.</p>
+</blockquote>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 2, sharey='row', figsize = (15, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.1)
+
+dailyElectricityWithFeatures.plot(kind = 'scatter', x = 'T-C', y = 'electricity-kWh', ax = ax[0,0])
+dailyElectricityWithFeatures.plot(kind = 'scatter', x = 'coolingDegrees', y = 'electricity-kWh', ax = ax[0,1])
+dailyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'T-C', y = 'chilledWater-TonDays', ax = ax[1,0])
+dailyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'coolingDegrees', y = 'chilledWater-TonDays', ax = ax[1,1])
+dailySteamWithFeatures.plot(kind = 'scatter', x = 'T-C', y = 'steam-LBS', ax = ax[2,0])
+dailySteamWithFeatures.plot(kind = 'scatter', x = 'heatingDegrees', y = 'steam-LBS', ax = ax[2,1])
+
+for i in range(3):
+    ax[i,0].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+for i in range(2):
+    ax[2,i].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2,0].set_xlabel(r'Temperature ($^\circ$C)', fontsize = 13)
+ax[2,0].set_xlim([-20,40])
+ax[0,0].set_title('Daily energy use versus ourdoor temperature', fontsize = 15)
+
+ax[2,1].set_xlabel(r'Cooling/Heating degrees ($^\circ$C)', fontsize = 13)
+#ax[2,1].set_xlim([0,30])
+ax[0,1].set_title('Daily energy use versus cooling/heating degrees', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h8k98lEc34.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Daily chilled water and steam has a strong linear relationship with outdoor temperature. If using cooling/heating degrees instead of T-C, one mihgt avoid stepwise linear regression.</p>
+</blockquote>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 2, sharex = 'col', sharey='row', figsize = (15, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.1)
+
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'humidityRatio-kg/kg', y = 'electricity-kWh', ax = ax[0,0])
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'dehumidification', y = 'electricity-kWh', ax = ax[0,1])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'humidityRatio-kg/kg', y = 'chilledWater-TonDays', ax = ax[1,0])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'dehumidification', y = 'chilledWater-TonDays', ax = ax[1,1])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'humidityRatio-kg/kg', y = 'steam-LBS', ax = ax[2,0])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'dehumidification', y = 'steam-LBS', ax = ax[2,1])
+
+for i in range(3):
+    ax[i,0].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+for i in range(2):
+    ax[2,i].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2,0].set_xlabel(r'Humidity ratio (kg/kg)', fontsize = 13)
+ax[2,0].set_xlim([0,0.02])
+ax[0,0].set_title('Hourly energy use versus humidity ratio', fontsize = 15)
+
+ax[2,1].set_xlabel(r'Dehumidification', fontsize = 13)
+ax[2,1].set_xlim([0,0.01])
+ax[0,1].set_title('Hourly energy use versus dehumidification', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/GGb9i3jd6I.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Humidity ratio definitely will help predict chilled water consumption and it is better than RH and Tdrew.</p>
+</blockquote>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 2, sharex = 'col', sharey='row', figsize = (15, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.1)
+
+dailyElectricityWithFeatures.plot(kind = 'scatter', x = 'humidityRatio-kg/kg', y = 'electricity-kWh', ax = ax[0,0])
+dailyElectricityWithFeatures.plot(kind = 'scatter', x = 'dehumidification', y = 'electricity-kWh', ax = ax[0,1])
+dailyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'humidityRatio-kg/kg', y = 'chilledWater-TonDays', ax = ax[1,0])
+dailyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'dehumidification', y = 'chilledWater-TonDays', ax = ax[1,1])
+dailySteamWithFeatures.plot(kind = 'scatter', x = 'humidityRatio-kg/kg', y = 'steam-LBS', ax = ax[2,0])
+dailySteamWithFeatures.plot(kind = 'scatter', x = 'dehumidification', y = 'steam-LBS', ax = ax[2,1])
+
+for i in range(3):
+    ax[i,0].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+for i in range(2):
+    ax[2,i].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2,0].set_xlabel(r'Humidity ratio (kg/kg)', fontsize = 13)
+ax[2,0].set_xlim([0,0.02])
+ax[0,0].set_title('Daily energy use versus humidity ratio', fontsize = 15)
+
+ax[2,1].set_xlabel(r'Dehumidification', fontsize = 13)
+ax[2,1].set_xlim([0,0.01])
+ax[0,1].set_title('Daily energy use versus dehumidification', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/dGldfBLlHF.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Dehumidification is designed for chilled water prediction, not steam.</p>
+</blockquote>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 2, sharex = 'col', figsize = (15, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.15)
+
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'occupancy', y = 'electricity-kWh', ax = ax[0,0])
+dailyElectricityWithFeatures.plot(kind = 'scatter', x = 'occupancy', y = 'electricity-kWh', ax = ax[0,1])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'occupancy', y = 'chilledWater-TonDays', ax = ax[1,0])
+dailyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'occupancy', y = 'chilledWater-TonDays', ax = ax[1,1])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'occupancy', y = 'steam-LBS', ax = ax[2,0])
+dailySteamWithFeatures.plot(kind = 'scatter', x = 'occupancy', y = 'steam-LBS', ax = ax[2,1])
+
+for i in range(3):
+    ax[i,0].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+for i in range(2):
+    ax[2,i].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2,0].set_xlabel(r'Occupancy', fontsize = 13)
+#ax[2,0].set_xlim([0,0.02])
+ax[0,0].set_title('Hourly energy use versus occupancy', fontsize = 15)
+
+ax[2,1].set_xlabel(r'Occupancy', fontsize = 13)
+
+#ax[2,1].set_xlim([0,0.01])
+ax[0,1].set_title('Daily energy use versus occupancy', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/0JAIDcKjBl.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Occupancy is derived from academic calendar, holidays and weekends. Basiaclly, we just assign a lower value to holidays, weekends and summer. cosHour, occupancy might help, might not, since they are just estimation of occupancy.</p>
+</blockquote>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 1, sharex = 'col', figsize = (8, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.15)
+
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'cosHour', y = 'electricity-kWh', ax = ax[0])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'cosHour', y = 'chilledWater-TonDays', ax = ax[1])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'cosHour', y = 'steam-LBS', ax = ax[2])
+
+for i in range(3):
+    ax[i].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+ax[2].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2].set_xlabel(r'cosHour', fontsize = 13)
+#ax[2,0].set_xlim([0,0.02])
+ax[0].set_title('Hourly energy use versus cosHourOfDay', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/17ai0101kj.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>There is some strend between energy use and cosHour.</p>
+</blockquote>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 2, sharex = 'col', sharey = 'row', figsize = (15, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.15)
+
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'solarRadiation-W/m2', y = 'electricity-kWh', ax = ax[0,0])
+hourlyElectricityWithFeatures.plot(kind = 'scatter', x = 'windSpeed-m/s', y = 'electricity-kWh', ax = ax[0,1])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'solarRadiation-W/m2', y = 'chilledWater-TonDays', ax = ax[1,0])
+hourlyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'windSpeed-m/s', y = 'chilledWater-TonDays', ax = ax[1,1])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'solarRadiation-W/m2', y = 'steam-LBS', ax = ax[2,0])
+hourlySteamWithFeatures.plot(kind = 'scatter', x = 'windSpeed-m/s', y = 'steam-LBS', ax = ax[2,1])
+
+for i in range(3):
+    ax[i,0].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+for i in range(2):
+    ax[2,i].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2,0].set_xlabel(r'Solar radiation (W/m2)', fontsize = 13)
+#ax[2,0].set_xlim([0,0.02])
+ax[0,0].set_title('Hourly energy use versus solar radiation', fontsize = 15)
+
+ax[2,1].set_xlabel(r'Wind speed (m/s)', fontsize = 13)
+
+#ax[2,1].set_xlim([0,0.01])
+ax[0,1].set_title('Hourly energy use versus wind speed', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/k35A6a0216.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">fig, ax = plt.subplots(3, 2, sharex = 'col', sharey = 'row', figsize = (15, 12))
+fig.subplots_adjust(hspace = 0.1, wspace = 0.15)
+
+dailyElectricityWithFeatures.plot(kind = 'scatter', x = 'solarRadiation-W/m2', y = 'electricity-kWh', ax = ax[0,0])
+dailyElectricityWithFeatures.plot(kind = 'scatter', x = 'windSpeed-m/s', y = 'electricity-kWh', ax = ax[0,1])
+dailyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'solarRadiation-W/m2', y = 'chilledWater-TonDays', ax = ax[1,0])
+dailyChilledWaterWithFeatures.plot(kind = 'scatter', x = 'windSpeed-m/s', y = 'chilledWater-TonDays', ax = ax[1,1])
+dailySteamWithFeatures.plot(kind = 'scatter', x = 'solarRadiation-W/m2', y = 'steam-LBS', ax = ax[2,0])
+dailySteamWithFeatures.plot(kind = 'scatter', x = 'windSpeed-m/s', y = 'steam-LBS', ax = ax[2,1])
+
+for i in range(3):
+    ax[i,0].tick_params(which=u'major', reset=False, axis = 'y', labelsize = 13)
+    #ax[i,0].set_axis_bgcolor('w')
+
+for i in range(2):
+    ax[2,i].tick_params(which=u'major', reset=False, axis = 'x', labelsize = 13)
+
+ax[2,0].set_xlabel(r'Solar radiation (W/m2)', fontsize = 13)
+#ax[2,0].set_xlim([0,0.02])
+ax[0,0].set_title('Daily energy use versus solar radiation', fontsize = 15)
+
+ax[2,1].set_xlabel(r'Wind speed (m/s)', fontsize = 13)
+
+#ax[2,1].set_xlim([0,0.01])
+ax[0,1].set_title('DAily energy use versus wind speed', fontsize = 15)
+
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/bLBeiIIDDC.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Solar radiation and wind speed are not that important and it is correlated with temperature.</p>
+</blockquote>
+
+<h3 id="findings-1">Findings</h3>
+
+<p>做得很精细，他们把从这些特征中分析得到的规律总结了一下：</p>
+
+<ul>
+<li><p>Electricity is not co-related with weather data (temperature). The idea of using weather information to predict electricity will NOT work. I think it mostly depends on time/occupancy. But we can still do some pattern exploration to figure out day/night, weekday/weekend, school day/holiday electricity consumption pattern. Actually, we should have noticed that from monthly data.</p></li>
+
+<li><p>Chilled water and steam are strongly correlated with temperature and humidity. Daily chilled water and steam consumption have a good linear relationship with cooling and heating degrees. Therefore, simple linear regression might already be accurate enough.</p></li>
+
+<li><p>Although chilled water and steam consumption are strongly correlated with weather, using with weather information to predict hourly chilled water and steam is not suffient according to the plots above. This is because operation schedule affects hourly energy consumption. Occupancy and operation schedule must be included in hourly chilled water and steam prediction.</p></li>
+
+<li><p>Humidity ratio definitely will help predict chilled water consumption and it is better than RH and Tdrew.</p></li>
+
+<li><p>Cooling and heating degrees will help predict daily chilled water and steam. If using cooling/heating degrees instead of T-C, one mihgt avoid stepwise linear regression.</p></li>
+
+<li><p>Occupancy is derived from academic calendar, holidays and weekends. Basiaclly, we just assign a lower value to holidays, weekends and summer. cosHour, occupancy might help, might not, since they are just estimation of occupancy.</p></li>
+</ul>
+
+<p>非常的好，要吃透，融入到自己的框架里面。并扩展出新的东西。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-25</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-4.44.5-prediction-random-forests-and-k-nearest-neighbours-dec10/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Part 4.4&amp;4.5 Prediction-Random Forests and K-Nearest Neighbours-DEC10</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/06_compare_results/">
+            <span class="next-text nav-default">06_compare_results</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

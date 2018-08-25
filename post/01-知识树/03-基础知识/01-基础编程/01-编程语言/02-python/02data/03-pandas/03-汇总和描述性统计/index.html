@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 汇总和描述性统计 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="5.3 Summarizing and Computing Descriptive Statistics（汇总和描述性统计） pandas 有很多数学和统计方法。大部分可以归类为降维或汇总统计，这些方法是用来从 series 中提取单个值（比" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/03-pandas/03-%E6%B1%87%E6%80%BB%E5%92%8C%E6%8F%8F%E8%BF%B0%E6%80%A7%E7%BB%9F%E8%AE%A1/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 汇总和描述性统计" />
+<meta property="og:description" content="5.3 Summarizing and Computing Descriptive Statistics（汇总和描述性统计） pandas 有很多数学和统计方法。大部分可以归类为降维或汇总统计，这些方法是用来从 series 中提取单个值（比" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/03-pandas/03-%E6%B1%87%E6%80%BB%E5%92%8C%E6%8F%8F%E8%BF%B0%E6%80%A7%E7%BB%9F%E8%AE%A1/" /><meta property="article:published_time" content="2018-06-24T08:25:58&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-24T08:25:58&#43;00:00"/>
+<meta itemprop="name" content="03 汇总和描述性统计">
+<meta itemprop="description" content="5.3 Summarizing and Computing Descriptive Statistics（汇总和描述性统计） pandas 有很多数学和统计方法。大部分可以归类为降维或汇总统计，这些方法是用来从 series 中提取单个值（比">
+
+
+<meta itemprop="datePublished" content="2018-06-24T08:25:58&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-24T08:25:58&#43;00:00" />
+<meta itemprop="wordCount" content="2170">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 汇总和描述性统计"/>
+<meta name="twitter:description" content="5.3 Summarizing and Computing Descriptive Statistics（汇总和描述性统计） pandas 有很多数学和统计方法。大部分可以归类为降维或汇总统计，这些方法是用来从 series 中提取单个值（比"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 汇总和描述性统计</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-24 </span>
+        
+        <span class="more-meta"> 2170 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#5-3-summarizing-and-computing-descriptive-statistics-汇总和描述性统计">5.3 Summarizing and Computing Descriptive Statistics（汇总和描述性统计）</a></li>
+<li><a href="#1-correlation-and-covariance-相关性和协方差">1 Correlation and Covariance (相关性和协方差)</a></li>
+<li><a href="#2-unique-values-value-counts-and-membership-唯一值-值计数-会员">2 Unique Values, Value Counts, and Membership（唯一值，值计数，会员）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="5-3-summarizing-and-computing-descriptive-statistics-汇总和描述性统计">5.3 Summarizing and Computing Descriptive Statistics（汇总和描述性统计）</h1>
+
+<p>pandas 有很多数学和统计方法。大部分可以归类为降维或汇总统计，这些方法是用来从 series 中提取单个值（比如 sum 或 mean ）。还有一些方法来处理缺失值：</p>
+
+<p><font color=red>嗯，这种初始化 DataFrame 的方式</font></p>
+
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+df = pd.DataFrame([[1.4, np.nan], [7.1, -4.5],
+                   [np.nan, np.nan], [0.75, -1.3]],
+                  index=['a', 'b', 'c', 'd'],
+                  columns=['one', 'two'])
+df
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>one</th>
+<th>two</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>a</td>
+<td>1.40</td>
+<td>NaN</td>
+</tr>
+
+<tr>
+<td>b</td>
+<td>7.10</td>
+<td>-4.5</td>
+</tr>
+
+<tr>
+<td>c</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+
+<tr>
+<td>d</td>
+<td>0.75</td>
+<td>-1.3</td>
+</tr>
+</tbody>
+</table>
+
+<p>使用sum 的话，会返回一个series:</p>
+
+<pre><code class="language-python">df.sum()
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">one    9.25
+two   -5.80
+dtype: float64
+</code></pre>
+
+<p>使用 <code>axis='columns'</code> or <code>axis=1</code> ，计算列之间的和：</p>
+
+<pre><code class="language-python">df.sum(axis='columns')
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">a    1.40
+b    2.60
+c    0.00
+d   -0.55
+dtype: float64
+</code></pre>
+
+<p>计算的时候，NA（即缺失值）会被除外，除非整个切片全是NA。我们可以用 skipna 来跳过计算NA：<font color=red>这种跳过 NA 有什么用处吗？</font></p>
+
+<p><font color=red>skipna 默认是True</font></p>
+
+<pre><code class="language-python">df.mean(axis='columns', skipna=False)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">a      NaN
+b    1.300
+c      NaN
+d   -0.275
+dtype: float64
+</code></pre>
+
+<p>一些 reduction 方法：<font color=red>什么是reduction 方法？</font>
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180624/9mm3maKC5l.png?imageslim" alt="mark" /></p>
+
+<p>一些方法，比如 idxmin 和 idxmax ，能返回间接的统计值，比如 index value：</p>
+
+<pre><code class="language-python">df
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>one</th>
+<th>two</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>a</td>
+<td>1.40</td>
+<td>NaN</td>
+</tr>
+
+<tr>
+<td>b</td>
+<td>7.10</td>
+<td>-4.5</td>
+</tr>
+
+<tr>
+<td>c</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+
+<tr>
+<td>d</td>
+<td>0.75</td>
+<td>-1.3</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">df.idxmax()
+</code></pre>
+
+<p>输出：<font color=red>嗯，计算的是每一列的最大值的index</font></p>
+
+<pre><code class="language-text">one    b
+two    d
+dtype: object
+</code></pre>
+
+<p>还能计算累加值：<font color=red>一直想知道累加会在什么时候用到？</font></p>
+
+<pre><code class="language-python">df.cumsum()
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>one</th>
+<th>two</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>a</td>
+<td>1.40</td>
+<td>NaN</td>
+</tr>
+
+<tr>
+<td>b</td>
+<td>8.50</td>
+<td>-4.5</td>
+</tr>
+
+<tr>
+<td>c</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+
+<tr>
+<td>d</td>
+<td>9.25</td>
+<td>-5.8</td>
+</tr>
+</tbody>
+</table>
+
+<p>另一种类型既不是降维，也不是累加。describe能一下子产生多维汇总数据：</p>
+
+<pre><code class="language-python">df.describe()
+</code></pre>
+
+<p>输出：<font color=red>一般我们什么时候用这个 describe 呢？为什么要使用呢？</font></p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>one</th>
+<th>two</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>count</td>
+<td>3.000000</td>
+<td>2.000000</td>
+</tr>
+
+<tr>
+<td>mean</td>
+<td>3.083333</td>
+<td>-2.900000</td>
+</tr>
+
+<tr>
+<td>std</td>
+<td>3.493685</td>
+<td>2.262742</td>
+</tr>
+
+<tr>
+<td>min</td>
+<td>0.750000</td>
+<td>-4.500000</td>
+</tr>
+
+<tr>
+<td>25%</td>
+<td>1.075000</td>
+<td>-3.700000</td>
+</tr>
+
+<tr>
+<td>50%</td>
+<td>1.400000</td>
+<td>-2.900000</td>
+</tr>
+
+<tr>
+<td>75%</td>
+<td>4.250000</td>
+<td>-2.100000</td>
+</tr>
+
+<tr>
+<td>max</td>
+<td>7.100000</td>
+<td>-1.300000</td>
+</tr>
+</tbody>
+</table>
+
+<p>对于非数值性的数据，describe能产生另一种汇总统计：</p>
+
+<pre><code class="language-python">obj = pd.Series(['a', 'a', 'b', 'c'] * 4)
+obj
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">0     a
+1     a
+2     b
+3     c
+4     a
+5     a
+6     b
+7     c
+8     a
+9     a
+10    b
+11    c
+12    a
+13    a
+14    b
+15    c
+dtype: object
+</code></pre>
+
+<pre><code class="language-python">obj.describe()
+</code></pre>
+
+<p>输出：<font color=red>嗯，非数值型的 describe 结果还是有很大不同的</font></p>
+
+<pre><code class="language-text">count     16
+unique     3
+top        a
+freq       8
+dtype: object
+</code></pre>
+
+<p>下表是一些描述和汇总统计数据：<font color=red>都要总结一下，因为最起码要知道都是用来做什么的。</font>
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180624/1HAGc8AH7j.png?imageslim" alt="mark" /></p>
+
+<h1 id="1-correlation-and-covariance-相关性和协方差">1 Correlation and Covariance (相关性和协方差)</h1>
+
+<p>假设 DataFrame 是股价和股票数量。这些数据取自yahoo finace，用padas-datareader包能加载。如果没有的话，用conda或pip来下载这个包：</p>
+
+<pre><code class="language-cmd">conda install pandas-datareader
+</code></pre>
+
+<pre><code class="language-python">import pandas_datareader.data as web
+all_data = {ticker: web.get_data_yahoo(ticker)
+            for ticker in ['AAPL', 'IBM', 'MSFT', 'GOOG']}
+price = pd.DataFrame({ticker: data['Adj Close']
+                      for ticker, data in all_data.items()})
+volumn = pd.DataFrame({ticker: data['Volumn']
+                       for ticker, data in all_data.items()})
+</code></pre>
+
+<p>上面的代码无法直接从 yahoo 上爬取数据，因为 yahoo 被 verizon 收购后，好像是不能用了。于是这里我们直接从下好的数据包里加载。</p>
+
+<pre><code class="language-python">price = pd.read_pickle('../examples/yahoo_price.pkl')
+volume = pd.read_pickle('../examples/yahoo_volume.pkl')
+price.head()
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AAPL</th>
+<th>GOOG</th>
+<th>IBM</th>
+<th>MSFT</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Date</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>2010-01-04</td>
+<td>27.990226</td>
+<td>313.062468</td>
+<td>113.304536</td>
+<td>25.884104</td>
+</tr>
+
+<tr>
+<td>2010-01-05</td>
+<td>28.038618</td>
+<td>311.683844</td>
+<td>111.935822</td>
+<td>25.892466</td>
+</tr>
+
+<tr>
+<td>2010-01-06</td>
+<td>27.592626</td>
+<td>303.826685</td>
+<td>111.208683</td>
+<td>25.733566</td>
+</tr>
+
+<tr>
+<td>2010-01-07</td>
+<td>27.541619</td>
+<td>296.753749</td>
+<td>110.823732</td>
+<td>25.465944</td>
+</tr>
+
+<tr>
+<td>2010-01-08</td>
+<td>27.724725</td>
+<td>300.709808</td>
+<td>111.935822</td>
+<td>25.641571</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">volume.head()
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AAPL</th>
+<th>GOOG</th>
+<th>IBM</th>
+<th>MSFT</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Date</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>2010-01-04</td>
+<td>123432400</td>
+<td>3927000</td>
+<td>6155300</td>
+<td>38409100</td>
+</tr>
+
+<tr>
+<td>2010-01-05</td>
+<td>150476200</td>
+<td>6031900</td>
+<td>6841400</td>
+<td>49749600</td>
+</tr>
+
+<tr>
+<td>2010-01-06</td>
+<td>138040000</td>
+<td>7987100</td>
+<td>5605300</td>
+<td>58182400</td>
+</tr>
+
+<tr>
+<td>2010-01-07</td>
+<td>119282800</td>
+<td>12876600</td>
+<td>5840600</td>
+<td>50559700</td>
+</tr>
+
+<tr>
+<td>2010-01-08</td>
+<td>111902700</td>
+<td>9483900</td>
+<td>4197200</td>
+<td>51197400</td>
+</tr>
+</tbody>
+</table>
+
+<p>现在我们计算一下价格百分比的变化：pct_change(): 这个函数用来计算同 colnums 两个相邻的数字之间的变化率<font color=red>还有这个函数！确认下。</font></p>
+
+<pre><code class="language-python">returns = price.pct_change()
+returns.tail()
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AAPL</th>
+<th>GOOG</th>
+<th>IBM</th>
+<th>MSFT</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Date</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>2016-10-17</td>
+<td>-0.000680</td>
+<td>0.001837</td>
+<td>0.002072</td>
+<td>-0.003483</td>
+</tr>
+
+<tr>
+<td>2016-10-18</td>
+<td>-0.000681</td>
+<td>0.019616</td>
+<td>-0.026168</td>
+<td>0.007690</td>
+</tr>
+
+<tr>
+<td>2016-10-19</td>
+<td>-0.002979</td>
+<td>0.007846</td>
+<td>0.003583</td>
+<td>-0.002255</td>
+</tr>
+
+<tr>
+<td>2016-10-20</td>
+<td>-0.000512</td>
+<td>-0.005652</td>
+<td>0.001719</td>
+<td>-0.004867</td>
+</tr>
+
+<tr>
+<td>2016-10-21</td>
+<td>-0.003930</td>
+<td>0.003011</td>
+<td>-0.012474</td>
+<td>0.042096</td>
+</tr>
+</tbody>
+</table>
+
+<p>series 的 corr 方法计算两个，重合的，非 NA 的，通过 index 排列好的 series 。cov 计算方差：</p>
+
+<pre><code class="language-python">print(returns['MSFT'].corr(returns['IBM']))
+print(returns['MSFT'].cov(returns['IBM']))
+
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">0.4997636114415116
+8.8706554797035489e-05
+</code></pre>
+
+<p>因为 MSFT 是一个有效的python属性，我们可以通过更简洁的方式来选中 columns：<font color=red>为什么是一个有效的python属性？</font></p>
+
+<pre><code class="language-python">returns.MSFT.corr(returns.IBM)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">0.4997636114415116
+</code></pre>
+
+<p>dataframe 的 corr 和 cov 方法，能返回一个完整的相似性或方差矩阵：<font color=red>不知道这样的矩阵有什么作用？</font></p>
+
+<pre><code class="language-python">returns.corr()
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AAPL</th>
+<th>GOOG</th>
+<th>IBM</th>
+<th>MSFT</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>AAPL</td>
+<td>1.000000</td>
+<td>0.407919</td>
+<td>0.386817</td>
+<td>0.389695</td>
+</tr>
+
+<tr>
+<td>GOOG</td>
+<td>0.407919</td>
+<td>1.000000</td>
+<td>0.405099</td>
+<td>0.465919</td>
+</tr>
+
+<tr>
+<td>IBM</td>
+<td>0.386817</td>
+<td>0.405099</td>
+<td>1.000000</td>
+<td>0.499764</td>
+</tr>
+
+<tr>
+<td>MSFT</td>
+<td>0.389695</td>
+<td>0.465919</td>
+<td>0.499764</td>
+<td>1.000000</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">returns.cov()
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AAPL</th>
+<th>GOOG</th>
+<th>IBM</th>
+<th>MSFT</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>AAPL</td>
+<td>0.000277</td>
+<td>0.000107</td>
+<td>0.000078</td>
+<td>0.000095</td>
+</tr>
+
+<tr>
+<td>GOOG</td>
+<td>0.000107</td>
+<td>0.000251</td>
+<td>0.000078</td>
+<td>0.000108</td>
+</tr>
+
+<tr>
+<td>IBM</td>
+<td>0.000078</td>
+<td>0.000078</td>
+<td>0.000146</td>
+<td>0.000089</td>
+</tr>
+
+<tr>
+<td>MSFT</td>
+<td>0.000095</td>
+<td>0.000108</td>
+<td>0.000089</td>
+<td>0.000215</td>
+</tr>
+</tbody>
+</table>
+
+<p>用 Dataframe 的 corrwith 方法，我们可以计算 dataframe 中不同 columns 之间，或 row 之间的相似性。传递一个 series：</p>
+
+<pre><code class="language-python">returns.corrwith(returns.IBM)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">AAPL    0.386817
+GOOG    0.405099
+IBM     1.000000
+MSFT    0.499764
+dtype: float64
+</code></pre>
+
+<p>传入一个 dataframe 能计算匹配的 column names 质监局的相似性。这里我计算 vooumn 中百分比变化的相似性：<font color=red>为什么可以与 volume 相计算？</font></p>
+
+<pre><code class="language-python">returns.corrwith(volume)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">AAPL   -0.075565
+GOOG   -0.007067
+IBM    -0.204849
+MSFT   -0.092950
+dtype: float64
+</code></pre>
+
+<p>传入 axis=&lsquo;columns&rsquo; 能做到 row-by-row 计算。在 correlation 被计算之前，所有的数据会根据 label 先对齐。</p>
+
+<h1 id="2-unique-values-value-counts-and-membership-唯一值-值计数-会员">2 Unique Values, Value Counts, and Membership（唯一值，值计数，会员）</h1>
+
+<p>这里介绍另一种从一维 series 中提取信息的方法：</p>
+
+<pre><code class="language-python">obj = pd.Series(['c', 'a', 'd', 'a', 'a', 'b', 'b', 'c', 'c'])
+</code></pre>
+
+<p>第一个函数时unique，能告诉我们 series 里 unique values 有哪些：</p>
+
+<pre><code class="language-python">uniques = obj.unique()
+uniques
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">array(['c', 'a', 'd', 'b'], dtype=object)
+</code></pre>
+
+<p>返回的 unique values 不是有序的，但我们可以排序，uniques.sort()。相对的，value_counts 能计算 series 中值出现的频率：</p>
+
+<pre><code class="language-python">obj.value_counts()
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">a    3
+c    3
+b    2
+d    1
+dtype: int64
+</code></pre>
+
+<p>返回的结果是按降序处理的。vaule_counts 也是 pandas 中的方法，能用在任何 array 或 sequence 上：<font color=red>sequence 是什么？</font></p>
+
+<pre><code class="language-python">pd.value_counts(obj.values, sort=False)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">d    1
+c    3
+b    2
+a    3
+dtype: int64
+</code></pre>
+
+<p>isin 能实现一个向量化的集合成员关系检查，能用于过滤数据集，检查一个子集，是否在 series 的 values 中，或在 dataframe 的 column 中：</p>
+
+<pre><code class="language-python">obj
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">0    c
+1    a
+2    d
+3    a
+4    a
+5    b
+6    b
+7    c
+8    c
+dtype: object
+</code></pre>
+
+<pre><code class="language-python">mask = obj.isin(['b', 'c'])
+mask
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">0     True
+1    False
+2    False
+3    False
+4    False
+5     True
+6     True
+7     True
+8     True
+dtype: bool
+</code></pre>
+
+<pre><code class="language-python">obj[mask]
+</code></pre>
+
+<p>输出：<font color=red>这样的过滤一般在什么时候使用？</font></p>
+
+<pre><code class="language-text">0    c
+5    b
+6    b
+7    c
+8    c
+dtype: object
+</code></pre>
+
+<p>与 isin 相对的另一个方法是 Index.get_indexer，能返回一个index array，告诉我们有重复值的 values(to_match)，在非重复的 values(unique_vals) 中对应的索引值：<font color=red>这也可以！这个什么时候用到？</font></p>
+
+<pre><code class="language-python">to_match = pd.Series(['c', 'a', 'b', 'b', 'c', 'a'])
+unique_vals = pd.Series(['c', 'b', 'a'])
+pd.Index(unique_vals).get_indexer(to_match)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code class="language-text">array([0, 2, 1, 1, 0, 2])
+</code></pre>
+
+<p>Unique, value counts, and set membership methods：
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180624/dIdD4JE2GD.png?imageslim" alt="mark" /></p>
+
+<p>在某些情况下，你可能想要计算一下 dataframe 中多个 column 的柱状图：<font color=red>什么意思？</font></p>
+
+<pre><code class="language-python">data = pd.DataFrame({'Qu1': [1, 3, 4, 3, 4],
+                     'Qu2': [2, 3, 1, 2, 3],
+                     'Qu3': [1, 5, 2, 4, 4]})
+data
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Qu1</th>
+<th>Qu2</th>
+<th>Qu3</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>3</td>
+<td>3</td>
+<td>5</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+
+<p>把 padas.value_counts 传递给 dataframe 的 apply 函数：<font color=red>这种用法什么时候用到呢？</font></p>
+
+<pre><code class="language-python">result = data.apply(pd.value_counts)
+result
+</code></pre>
+
+<p>输出：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Qu1</th>
+<th>Qu2</th>
+<th>Qu3</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>NaN</td>
+<td>2.0</td>
+<td>1.0</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>NaN</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>2.0</td>
+<td>NaN</td>
+<td>2.0</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>每一行的 laebls(即1，2，3，4，5) 其实就是整个data里出现过的值，从 1 到 5 。而对应的每个方框里的值，则是表示该值在当前列中出现的次数。比如：
+- (2, Qu1) 的值是Nan，说明 2 这个数字没有在Qu1这一列出现过。
+- (2, Qu2)的值是2，说明2这个数字在Qu2这一列出现过2次。
+- (2, Qu3)的值是1，说明2这个数字在Qu3这一列出现过1次。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-24</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/03-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/html/html-01-%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">HTML 01 基础教程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/python-cpython-ironpython-jython-pypy/">
+            <span class="next-text nav-default">Python CPython IronPython Jython PyPy</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

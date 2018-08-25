@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 USDA食品数据库 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="14.4 USDA Food Database（美国农业部食品数据库） 这个数据是关于食物营养成分的。存储格式是JSON，看起来像这样： { &amp;quot;id&amp;quot;: 21441, &amp;quot;description&amp;quot;: &amp;quot;KENTUCKY FRIED CHICKEN, Fried Chicken, EXTRA CRISPY, Wing, meat and skin" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/11-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90/04-usda%E9%A3%9F%E5%93%81%E6%95%B0%E6%8D%AE%E5%BA%93/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 USDA食品数据库" />
+<meta property="og:description" content="14.4 USDA Food Database（美国农业部食品数据库） 这个数据是关于食物营养成分的。存储格式是JSON，看起来像这样： { &quot;id&quot;: 21441, &quot;description&quot;: &quot;KENTUCKY FRIED CHICKEN, Fried Chicken, EXTRA CRISPY, Wing, meat and skin" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/11-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90/04-usda%E9%A3%9F%E5%93%81%E6%95%B0%E6%8D%AE%E5%BA%93/" /><meta property="article:published_time" content="2018-07-08T15:06:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-08T15:06:00&#43;00:00"/>
+<meta itemprop="name" content="04 USDA食品数据库">
+<meta itemprop="description" content="14.4 USDA Food Database（美国农业部食品数据库） 这个数据是关于食物营养成分的。存储格式是JSON，看起来像这样： { &quot;id&quot;: 21441, &quot;description&quot;: &quot;KENTUCKY FRIED CHICKEN, Fried Chicken, EXTRA CRISPY, Wing, meat and skin">
+
+
+<meta itemprop="datePublished" content="2018-07-08T15:06:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-08T15:06:00&#43;00:00" />
+<meta itemprop="wordCount" content="1769">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 USDA食品数据库"/>
+<meta name="twitter:description" content="14.4 USDA Food Database（美国农业部食品数据库） 这个数据是关于食物营养成分的。存储格式是JSON，看起来像这样： { &quot;id&quot;: 21441, &quot;description&quot;: &quot;KENTUCKY FRIED CHICKEN, Fried Chicken, EXTRA CRISPY, Wing, meat and skin"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 USDA食品数据库</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-08 </span>
+        
+        <span class="more-meta"> 1769 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#14-4-usda-food-database-美国农业部食品数据库">14.4 USDA Food Database（美国农业部食品数据库）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="14-4-usda-food-database-美国农业部食品数据库">14.4 USDA Food Database（美国农业部食品数据库）</h1>
+
+<p>这个数据是关于食物营养成分的。存储格式是JSON，看起来像这样：</p>
+
+<pre><code>{
+    &quot;id&quot;: 21441,
+    &quot;description&quot;: &quot;KENTUCKY FRIED CHICKEN, Fried Chicken, EXTRA CRISPY, Wing, meat and skin with breading&quot;,
+    &quot;tags&quot;: [&quot;KFC&quot;],
+    &quot;manufacturer&quot;: &quot;Kentucky Fried Chicken&quot;,
+    &quot;group&quot;: &quot;Fast Foods&quot;,
+    &quot;portions&quot;: [
+        { &quot;amount&quot;: 1,
+          &quot;unit&quot;: &quot;wing, with skin&quot;,
+          &quot;grams&quot;: 68.0
+        }
+        ...
+      ],
+    &quot;nutrients&quot;: [
+      { &quot;value&quot;: 20.8,
+        &quot;units&quot;: &quot;g&quot;,
+        &quot;description&quot;: &quot;Protein&quot;,
+        &quot;group&quot;: &quot;Composition&quot;
+      },
+      ...
+     ]
+}
+</code></pre>
+
+<p>每种食物都有一系列特征，其中有两个list，protions和nutrients。我们必须把这样的数据进行处理，方便之后的分析。</p>
+
+<p>这里使用python内建的json模块：</p>
+
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+import json
+</code></pre>
+
+<pre><code class="language-python">pd.options.display.max_rows = 10
+</code></pre>
+
+<pre><code class="language-python">db = json.load(open('../datasets/usda_food/database.json'))
+len(db)
+</code></pre>
+
+<pre><code>6636
+</code></pre>
+
+<pre><code class="language-python">db[0].keys()
+</code></pre>
+
+<pre><code>dict_keys(['manufacturer', 'description', 'group', 'id', 'tags', 'nutrients', 'portions'])
+</code></pre>
+
+<pre><code class="language-python">db[0]['nutrients'][0]
+</code></pre>
+
+<pre><code>{'description': 'Protein',
+ 'group': 'Composition',
+ 'units': 'g',
+ 'value': 25.18}
+</code></pre>
+
+<pre><code class="language-python">nutrients = pd.DataFrame(db[0]['nutrients'])
+nutrients
+</code></pre>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>description</th>
+      <th>group</th>
+      <th>units</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Protein</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>25.180</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Total lipid (fat)</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>29.200</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Carbohydrate, by difference</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>3.060</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Ash</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>3.280</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Energy</td>
+      <td>Energy</td>
+      <td>kcal</td>
+      <td>376.000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>157</th>
+      <td>Serine</td>
+      <td>Amino Acids</td>
+      <td>g</td>
+      <td>1.472</td>
+    </tr>
+    <tr>
+      <th>158</th>
+      <td>Cholesterol</td>
+      <td>Other</td>
+      <td>mg</td>
+      <td>93.000</td>
+    </tr>
+    <tr>
+      <th>159</th>
+      <td>Fatty acids, total saturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>18.584</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>Fatty acids, total monounsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>8.275</td>
+    </tr>
+    <tr>
+      <th>161</th>
+      <td>Fatty acids, total polyunsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.830</td>
+    </tr>
+  </tbody>
+</table>
+<p>162 rows × 4 columns</p>
+</div>
+
+<p>当把由字典组成的list转换为DataFrame的时候，我们可以吹创业提取的list部分。这里我们提取食品名，群（group），ID，制造商：</p>
+
+<pre><code class="language-python">info_keys = ['description', 'group', 'id', 'manufacturer']
+info = pd.DataFrame(db, columns=info_keys)
+info[:5]
+</code></pre>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>description</th>
+      <th>group</th>
+      <th>id</th>
+      <th>manufacturer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Cheese, caraway</td>
+      <td>Dairy and Egg Products</td>
+      <td>1008</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Cheese, cheddar</td>
+      <td>Dairy and Egg Products</td>
+      <td>1009</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Cheese, edam</td>
+      <td>Dairy and Egg Products</td>
+      <td>1018</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Cheese, feta</td>
+      <td>Dairy and Egg Products</td>
+      <td>1019</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Cheese, mozzarella, part skim milk</td>
+      <td>Dairy and Egg Products</td>
+      <td>1028</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">info.info()
+</code></pre>
+
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 6636 entries, 0 to 6635
+Data columns (total 4 columns):
+description     6636 non-null object
+group           6636 non-null object
+id              6636 non-null int64
+manufacturer    5195 non-null object
+dtypes: int64(1), object(3)
+memory usage: 207.5+ KB
+</code></pre>
+
+<p>我们可以看到食物群的分布，使用value_counts:</p>
+
+<pre><code class="language-python">pd.value_counts(info.group)[:10]
+</code></pre>
+
+<pre><code>Vegetables and Vegetable Products    812
+Beef Products                        618
+Baked Products                       496
+Breakfast Cereals                    403
+Legumes and Legume Products          365
+Fast Foods                           365
+Lamb, Veal, and Game Products        345
+Sweets                               341
+Pork Products                        328
+Fruits and Fruit Juices              328
+Name: group, dtype: int64
+</code></pre>
+
+<p>这里我们对所有的nutrient数据做一些分析，把每种食物的nutrient部分组合成一个大表格。首先，把每个食物的nutrient列表变为DataFrame，添加一列为id，然后把id添加到DataFrame中，接着使用concat联结到一起：</p>
+
+<pre><code class="language-python"># 先创建一个空DataFrame用来保存最后的结果
+# 这部分代码运行时间较长，请耐心等待
+nutrients_all = pd.DataFrame()
+
+for food in db:
+    nutrients = pd.DataFrame(food['nutrients'])
+    nutrients['id'] = food['id']
+    nutrients_all = nutrients_all.append(nutrients, ignore_index=True)
+</code></pre>
+
+<blockquote>
+<p>译者：虽然作者在书中说了用concat联结在一起，但我实际测试后，这个concat的方法非常耗时，用时几乎是append方法的两倍，所以上面的代码中使用了append方法。</p>
+</blockquote>
+
+<p>一切正常的话出来的效果是这样的：</p>
+
+<pre><code class="language-python">nutrients_all
+</code></pre>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>description</th>
+      <th>group</th>
+      <th>units</th>
+      <th>value</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Protein</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>25.180</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Total lipid (fat)</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>29.200</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Carbohydrate, by difference</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>3.060</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Ash</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>3.280</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Energy</td>
+      <td>Energy</td>
+      <td>kcal</td>
+      <td>376.000</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>389350</th>
+      <td>Vitamin B-12, added</td>
+      <td>Vitamins</td>
+      <td>mcg</td>
+      <td>0.000</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389351</th>
+      <td>Cholesterol</td>
+      <td>Other</td>
+      <td>mg</td>
+      <td>0.000</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389352</th>
+      <td>Fatty acids, total saturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.072</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389353</th>
+      <td>Fatty acids, total monounsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.028</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389354</th>
+      <td>Fatty acids, total polyunsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.041</td>
+      <td>43546</td>
+    </tr>
+  </tbody>
+</table>
+<p>389355 rows × 5 columns</p>
+</div>
+
+<p>这个DataFrame中有一些重复的部分，看一下有多少重复的行：</p>
+
+<pre><code class="language-python">nutrients_all.duplicated().sum() # number of duplicates
+</code></pre>
+
+<pre><code>14179
+</code></pre>
+
+<p>把重复的部分去掉：</p>
+
+<pre><code class="language-python">nutrients_all = nutrients_all.drop_duplicates()
+nutrients_all
+</code></pre>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>description</th>
+      <th>group</th>
+      <th>units</th>
+      <th>value</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Protein</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>25.180</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Total lipid (fat)</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>29.200</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Carbohydrate, by difference</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>3.060</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Ash</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>3.280</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Energy</td>
+      <td>Energy</td>
+      <td>kcal</td>
+      <td>376.000</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>389350</th>
+      <td>Vitamin B-12, added</td>
+      <td>Vitamins</td>
+      <td>mcg</td>
+      <td>0.000</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389351</th>
+      <td>Cholesterol</td>
+      <td>Other</td>
+      <td>mg</td>
+      <td>0.000</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389352</th>
+      <td>Fatty acids, total saturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.072</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389353</th>
+      <td>Fatty acids, total monounsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.028</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389354</th>
+      <td>Fatty acids, total polyunsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.041</td>
+      <td>43546</td>
+    </tr>
+  </tbody>
+</table>
+<p>375176 rows × 5 columns</p>
+</div>
+
+<p>为了与info_keys中的group和descripton区别开，我们把列名更改一下：</p>
+
+<pre><code class="language-python">col_mapping = {'description': 'food',
+               'group': 'fgroup'}
+</code></pre>
+
+<pre><code class="language-python">info = info.rename(columns=col_mapping, copy=False)
+info.info()
+</code></pre>
+
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 6636 entries, 0 to 6635
+Data columns (total 4 columns):
+food            6636 non-null object
+fgroup          6636 non-null object
+id              6636 non-null int64
+manufacturer    5195 non-null object
+dtypes: int64(1), object(3)
+memory usage: 207.5+ KB
+</code></pre>
+
+<pre><code class="language-python">col_mapping = {'description' : 'nutrient',
+               'group': 'nutgroup'}
+</code></pre>
+
+<pre><code class="language-python">nutrients_all = nutrients_all.rename(columns=col_mapping, copy=False)
+nutrients_all
+</code></pre>
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>nutrient</th>
+      <th>nutgroup</th>
+      <th>units</th>
+      <th>value</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Protein</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>25.180</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Total lipid (fat)</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>29.200</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Carbohydrate, by difference</td>
+      <td>Composition</td>
+      <td>g</td>
+      <td>3.060</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Ash</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>3.280</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Energy</td>
+      <td>Energy</td>
+      <td>kcal</td>
+      <td>376.000</td>
+      <td>1008</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>389350</th>
+      <td>Vitamin B-12, added</td>
+      <td>Vitamins</td>
+      <td>mcg</td>
+      <td>0.000</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389351</th>
+      <td>Cholesterol</td>
+      <td>Other</td>
+      <td>mg</td>
+      <td>0.000</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389352</th>
+      <td>Fatty acids, total saturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.072</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389353</th>
+      <td>Fatty acids, total monounsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.028</td>
+      <td>43546</td>
+    </tr>
+    <tr>
+      <th>389354</th>
+      <td>Fatty acids, total polyunsaturated</td>
+      <td>Other</td>
+      <td>g</td>
+      <td>0.041</td>
+      <td>43546</td>
+    </tr>
+  </tbody>
+</table>
+<p>375176 rows × 5 columns</p>
+</div>
+
+<p>上面所有步骤结束后，我们可以把info和nutrients_all合并（merge）：</p>
+
+<pre><code class="language-python">ndata = pd.merge(nutrients_all, info, on='id', how='outer')
+ndata.info()
+</code></pre>
+
+<pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 375176 entries, 0 to 375175
+Data columns (total 8 columns):
+nutrient        375176 non-null object
+nutgroup        375176 non-null object
+units           375176 non-null object
+value           375176 non-null float64
+id              375176 non-null int64
+food            375176 non-null object
+fgroup          375176 non-null object
+manufacturer    293054 non-null object
+dtypes: float64(1), int64(1), object(6)
+memory usage: 25.8+ MB
+</code></pre>
+
+<pre><code class="language-python">ndata.iloc[30000]
+</code></pre>
+
+<pre><code>nutrient                                       Glycine
+nutgroup                                   Amino Acids
+units                                                g
+value                                             0.04
+id                                                6158
+food            Soup, tomato bisque, canned, condensed
+fgroup                      Soups, Sauces, and Gravies
+manufacturer
+Name: 30000, dtype: object
+</code></pre>
+
+<p>我们可以对食物群（food group）和营养类型（nutrient type）分组后，对中位数进行绘图：</p>
+
+<pre><code class="language-python">result = ndata.groupby(['nutrient', 'fgroup'])['value'].quantile(0.5)
+</code></pre>
+
+<pre><code class="language-python">%matplotlib inline
+</code></pre>
+
+<pre><code class="language-python">result['Zinc, Zn'].sort_values().plot(kind='barh', figsize=(10, 8))
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x109c80d68&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/kI15iIhCjG.png?imageslim" alt="mark" /></p>
+
+<p>我们还可以找到每一种营养成分含量最多的食物是什么：</p>
+
+<pre><code class="language-python">by_nutrient = ndata.groupby(['nutgroup', 'nutrient'])
+
+get_maximum = lambda x: x.loc[x.value.idxmax()]
+get_minimum = lambda x: x.loc[x.value.idxmin()]
+
+max_foods = by_nutrient.apply(get_maximum)[['value', 'food']]
+
+# make the food a little smaller
+max_foods.food = max_foods.food.str[:50]
+</code></pre>
+
+<p>因为得到的DataFrame太大，这里只输出&rsquo;Amino Acids&rsquo;(氨基酸)的营养群（nutrient group）:</p>
+
+<pre><code class="language-python">max_foods.loc['Amino Acids']['food']
+</code></pre>
+
+<pre><code>nutrient
+Alanine                          Gelatins, dry powder, unsweetened
+Arginine                              Seeds, sesame flour, low-fat
+Aspartic acid                                  Soy protein isolate
+Cystine               Seeds, cottonseed flour, low fat (glandless)
+Glutamic acid                                  Soy protein isolate
+                                       ...
+Serine           Soy protein isolate, PROTEIN TECHNOLOGIES INTE...
+Threonine        Soy protein isolate, PROTEIN TECHNOLOGIES INTE...
+Tryptophan        Sea lion, Steller, meat with fat (Alaska Native)
+Tyrosine         Soy protein isolate, PROTEIN TECHNOLOGIES INTE...
+Valine           Soy protein isolate, PROTEIN TECHNOLOGIES INTE...
+Name: food, Length: 19, dtype: object
+</code></pre>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-08</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/python-000--3-%E7%9A%84%E9%97%AE%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python [[0,0,0]]  3 的问题</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/07-%E7%A7%BB%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/">
+            <span class="next-text nav-default">07 移动窗口函数</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

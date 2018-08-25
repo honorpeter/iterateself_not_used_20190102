@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>变分 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="变分 TODO 泛函要不要单独拿出来讲？ 变分 没讲 另一个思路 变分的提法 变分目标函数分析 新目标函数的可行性 变分和EM的联系 思考：目标函数的物理含义 思考：似" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E5%8F%98%E5%88%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="变分" />
+<meta property="og:description" content="变分 TODO 泛函要不要单独拿出来讲？ 变分 没讲 另一个思路 变分的提法 变分目标函数分析 新目标函数的可行性 变分和EM的联系 思考：目标函数的物理含义 思考：似" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E5%8F%98%E5%88%86/" /><meta property="article:published_time" content="2018-08-01T18:15:40&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T18:15:40&#43;00:00"/>
+<meta itemprop="name" content="变分">
+<meta itemprop="description" content="变分 TODO 泛函要不要单独拿出来讲？ 变分 没讲 另一个思路 变分的提法 变分目标函数分析 新目标函数的可行性 变分和EM的联系 思考：目标函数的物理含义 思考：似">
+
+
+<meta itemprop="datePublished" content="2018-08-01T18:15:40&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T18:15:40&#43;00:00" />
+<meta itemprop="wordCount" content="815">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="变分"/>
+<meta name="twitter:description" content="变分 TODO 泛函要不要单独拿出来讲？ 变分 没讲 另一个思路 变分的提法 变分目标函数分析 新目标函数的可行性 变分和EM的联系 思考：目标函数的物理含义 思考：似"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">变分</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 815 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#变分">变分</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#变分-没讲">变分 没讲</a>
+<ul>
+<li>
+<ul>
+<li><a href="#两个kl散度的区别">两个KL散度的区别</a></li>
+<li><a href="#两个kl散度之间的联系">两个KL散度之间的联系</a></li>
+<li><a href="#平均场方法-mean-field-method">平均场方法(Mean field method)</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="变分">变分</h1>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>泛函要不要单独拿出来讲？</li>
+</ul>
+
+<h1 id="变分-没讲">变分 没讲</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fEdl1AdLHJ.png?imageslim" alt="mark" /></p>
+
+<p>另一个思路</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2fdJAhD60h.png?imageslim" alt="mark" /></p>
+
+<p>变分的提法</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mghj5kL31k.png?imageslim" alt="mark" /></p>
+
+<p>变分目标函数分析</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DB44ABBf5D.png?imageslim" alt="mark" /></p>
+
+<p>新目标函数的可行性</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1j4838AC3H.png?imageslim" alt="mark" /></p>
+
+<p>变分和EM的联系</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DiAK936dJA.png?imageslim" alt="mark" /></p>
+
+<p>思考：目标函数的物理含义</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j3idhlhD4J.png?imageslim" alt="mark" /></p>
+
+<p>思考：似然函数期望与目标函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9eK6b54Bik.png?imageslim" alt="mark" /></p>
+
+<p>两个KL散度的区别</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/gFgiHd6jbC.png?imageslim" alt="mark" /></p>
+
+<h3 id="两个kl散度的区别">两个KL散度的区别</h3>
+
+<p>绿色曲线是真实分布p的等高线；红色曲线
+是使用近似(p(z_1,z_2)=p(z_1)p(z_2))得到的等高线</p>
+
+<ul>
+<li><p>左：KL(p||q)：zero avoiding</p></li>
+
+<li><p>右：KL(q||p)：zero forcing</p></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5231c12A37.png?imageslim" alt="mark" /></p>
+
+<p>两个KL散度的区别</p>
+
+<p>色曲线是真实分布p的等高线；红色曲线是单模型近似分布q的等高线。</p>
+
+<ul>
+<li><p>左：KL(p||q)：q趋向于覆盖p</p></li>
+
+<li><p>中、右：KL(q||p)：q能够锁定某一个峰值</p></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5B9D5b4gE4.png?imageslim" alt="mark" /></p>
+
+<h3 id="两个kl散度之间的联系">两个KL散度之间的联系</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5a3Jl7DlEC.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LB4m7A0eih.png?imageslim" alt="mark" /></p>
+
+<p>Hellinger distance</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0JcbiDdLA9.png?imageslim" alt="mark" /></p>
+
+<p>该距离满足三角不等式，是对称、非负距离</p>
+
+<h3 id="平均场方法-mean-field-method">平均场方法(Mean field method)</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/K2d9dgCF3a.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bHgaI2dKAe.png?imageslim" alt="mark" /></p>
+
+<p>变分推导/似然下界L</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/78bi0I0025.png?imageslim" alt="mark" /></p>
+
+<p>变分推导最终结论</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/86JjckgCac.png?imageslim" alt="mark" /></p>
+
+<p>Ising model</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/F2Kh6L221d.png?imageslim" alt="mark" /></p>
+
+<p>势函数的系数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KDIm1I4m10.png?imageslim" alt="mark" /></p>
+
+<p>使用变分做图像去噪</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bLBfD85khd.png?imageslim" alt="mark" /></p>
+
+<p>后验概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3H22197bl4.png?imageslim" alt="mark" /></p>
+
+<p>近似概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/D1B109GkFB.png?imageslim" alt="mark" /></p>
+
+<p>根据公式：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c43abgc09g.png?imageslim" alt="mark" /></p>
+
+<p>更新方程：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c2d8FG9G4f.png?imageslim" alt="mark" /></p>
+
+<p>迭代方程：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Lj5iC4f2kB.png?imageslim" alt="mark" /></p>
+
+<p>实际效果：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4dc2DmFKfD.png?imageslim" alt="mark" /></p>
+
+<p>变分贝叶斯(Variational Bayes,VB)</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/48JHgcD5G5.png?imageslim" alt="mark" /></p>
+
+<p>高斯分布的变分贝叶斯 Variational Bayes</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bjAgk2H18H.png?imageslim" alt="mark" /></p>
+
+<p>未正则化的对数后验</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LDAc98Hi21.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/IC6mHe4hfj.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DhFcagEeH6.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1b8j432EfD.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/JlAlaLK40b.png?imageslim" alt="mark" /></p>
+
+<p>变分参数估计实例</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/61i2Aa5BLC.png?imageslim" alt="mark" /></p>
+
+<p>变分总结</p>
+
+<ul>
+<li><p>变分既能够推断隐变量的分布，也能推断未知参数的分布，是非常有力的参数学习工具。其难点在于公式演算略显复杂，和采样相对：一个容易计算但速度慢，一个不容易计算但运行效率高</p></li>
+
+<li><p>平均场方法的变分推导，对离散和连续的隐变量都适用。在平均场方法的框架下，变分推导一次更新一个分布，其本质为坐标上升。可以使用模式搜索(pattern search)、基于参数的扩展(parameter expansion)等方案加速。</p></li>
+
+<li><p>有时候，假定所有变量都是独立是不符合实际的，可以使用结构化平均场(structured mean field)，将变量分成若干组，每组之间是独立的。</p></li>
+
+<li><p>变分除了能够和贝叶斯理论相配合得到VB，还能进一步与EM算法结合，得到VBEM，用于带隐变量和未知参数的推断。</p>
+
+<ul>
+<li>如GMM、LDA</li>
+</ul></li>
+</ul>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li><a href="https://www.zhihu.com/question/26527625">该怎么理解泛函以及变分？</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%8F%98%E5%88%86%E6%B3%95">变分法 wiki</a></li>
+<li><a href="https://blog.csdn.net/u012771351/article/details/53095658">变分算法</a></li>
+<li><a href="https://blog.csdn.net/AiTODD1/article/details/41088131">变分推断(variational inference)学习笔记(1)——概念介绍</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/resnet/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ResNet</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E5%8D%95%E4%BD%8D%E7%9F%A9%E9%98%B5%E5%92%8C%E9%80%86%E7%9F%A9%E9%98%B5/">
+            <span class="next-text nav-default">单位矩阵和逆矩阵</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

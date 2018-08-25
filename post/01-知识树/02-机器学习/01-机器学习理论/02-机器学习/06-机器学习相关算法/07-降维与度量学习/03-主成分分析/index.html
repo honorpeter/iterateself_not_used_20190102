@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 主成分分析 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="主成分分析 主成分分析(Principal Component Analysis，简称PCA)是最常用的一种降维方法.在介绍PCA之前，不妨先考虑这样一个问题: 对" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/03-%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 主成分分析" />
+<meta property="og:description" content="主成分分析 主成分分析(Principal Component Analysis，简称PCA)是最常用的一种降维方法.在介绍PCA之前，不妨先考虑这样一个问题: 对" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/03-%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" /><meta property="article:published_time" content="2018-06-29T11:42:04&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-29T11:42:04&#43;00:00"/>
+<meta itemprop="name" content="03 主成分分析">
+<meta itemprop="description" content="主成分分析 主成分分析(Principal Component Analysis，简称PCA)是最常用的一种降维方法.在介绍PCA之前，不妨先考虑这样一个问题: 对">
+
+
+<meta itemprop="datePublished" content="2018-06-29T11:42:04&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-29T11:42:04&#43;00:00" />
+<meta itemprop="wordCount" content="1053">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 主成分分析"/>
+<meta name="twitter:description" content="主成分分析 主成分分析(Principal Component Analysis，简称PCA)是最常用的一种降维方法.在介绍PCA之前，不妨先考虑这样一个问题: 对"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 主成分分析</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-29 </span>
+        
+        <span class="more-meta"> 1053 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>主成分分析</p>
+
+<p>主成分分析(Principal Component Analysis，简称PCA)是最常用的一种降维方法.在介绍PCA之前，不妨先考虑这样一个问题:</p>
+
+<p>对于正交属性空间中的样本点，如何用一个超平面(直线的高维推广)对所有样本进行恰当的表达? 容易想到，若存在这样的超平面，那么它大概应具有这样的性质：</p>
+
+<ul>
+<li>最近重构性：样本点到这个超平面的距离都足够近；</li>
+<li>最大可分性：样本点在这个超平面上的投影能尽可能分开.</li>
+</ul>
+
+<p>有趣的是，基于最近重构性和最大可分性，能分别得到主成分分析的两种等价推导.我们先从最近重构性来推导.</p>
+
+<p>假定数据样本进行了中心化，即 $\sum_i x_i=0$ ；再假定投影变换后得到的新坐标系为 ${w_1,w_2,\cdots ,w_d}$ ,其中 $w_i$ 是标准正交基向量，$||w_i||_2=1$ ,$w_i^Tw_j=0$ $(i\neq j)$ 。若丢弃新坐标系中的部分坐标，即将维度降低到 $d&rsquo;&lt;d$ ，则样本点 $x_i$ 在低维坐标系中的投影是 $z<em>i=(z</em>{i1};z<em>{i2};\cdots ;z</em>{id&rsquo;})$ ，其中 $z_{ij}=w_j^Tx_i$ 是 $x_i$ 在低维坐标系下第 j 维的坐标.若基于 $z_i$ 来重构 $x_i$ ，则会得到 $\hat{x}<em>i=\sum</em>{j=1}^{d&rsquo;}z_{ij}w_j$ 。</p>
+
+<p>考虑整个训练集，原样本点 $x_i$ 与基于投影重构的样本点 $\hat{x}_i$ 之间的距离为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/EdhKmGmLKK.png?imageslim" alt="mark" /></p>
+
+<p>根据最近重构性，式(10.14)应被最小化，考虑到 $w_j$ 是标准正交基， $\sum_i x_ix_i^T$ 是协方差矩阵，有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/j19cLld8Lh.png?imageslim" alt="mark" /></p>
+
+<p>这就是主成分分析的优化目标.</p>
+
+<p>从最大可分性出发，能得到主成分分析的另一种解释.我们知道，样本点 $x_i$ 在新空间中超平面上的投影是 $W^Tx_i$ ，若所有样本点的投影能尽可能分开, 则应该使投影后样本点的方差最大化，如图10.4所示.</p>
+
+<p>投影后样本点的方差是 $\sum_i W^Tx_ix_i^TW$ ，于是优化目标可写为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/mID21Cbbce.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/H0k9kHi53E.png?imageslim" alt="mark" /></p>
+
+<p>显然，式(10.16)与(10.15)等价。</p>
+
+<p>对式(10.15)或(10.16)使用拉格朗日乘子法可得</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/gD9BK2B9ha.png?imageslim" alt="mark" /></p>
+
+<p>于是，只需对协方差矩阵 $XX^T$ 进行特征值分解，将求得的特征值排序: $\lambda_1\geq \lambda_2\geq \cdots \geq \lambda_d$ ,再取前 $d&rsquo;$ ^个特征值对应的特征向量构成 $W=(w_1,w<em>2,\cdots ,\w</em>{d&rsquo;})$ 。这就是主成分分析的解.PCA算法描述如图10.5所示.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/1J55LA54b7.png?imageslim" alt="mark" /></p>
+
+<p>降维后低维空间的维数 $d&rsquo;$ 通常是由用户事先指定，或通过在 $d&rsquo;$ 值不同的 低维空间中对 k 近邻分类器(或其他开销较小的学习器)进行交叉验证来选取 较好的 $d&rsquo;$ 值。对PCA,还可从重构的角度设置一个重构阈值,例如 $t=95%$,然 后选取使下式成立的最小，值：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/7gGb3JEf5e.png?imageslim" alt="mark" /></p>
+
+<p>PCA 仅需保留 W 与样本的均值向量即可通过简单的向量减法和矩阵-向量乘法将新样本投影至低维空间中.显然，低维空间与原始高维空间必有不同, 因为对应于最小的 $d-d&rsquo;$ 个特征值的特征向量被舍弃了，这是降维导致的结果。但舍弃这部分信息往往是必要的：
+- 一方面，舍弃这部分信息之后能使样本的采样密度增大，这正是降维的重要动机；
+- 另一方面，当数据受到噪声影响时，最小的特征值所对应的特征向量往往与噪声有关，将它们舍弃能在一定程度上起到去噪的效果.</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-29</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/06-%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 度量学习</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/06-%E8%81%9A%E7%B1%BB/06-%E5%B1%82%E6%AC%A1%E8%81%9A%E7%B1%BB/">
+            <span class="next-text nav-default">06 层次聚类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

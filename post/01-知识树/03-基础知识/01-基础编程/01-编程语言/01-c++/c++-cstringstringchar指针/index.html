@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>C&#43;&#43; cstring、string、char指针 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="C&#43;&#43; cstring、string、char* 缘由 今天在看程序的时候，发现有：#include &amp;lt;cstring&amp;gt; 的。因此相知道，cstring 和 string 有什么区别？以" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-cstringstringchar%E6%8C%87%E9%92%88/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="C&#43;&#43; cstring、string、char指针" />
+<meta property="og:description" content="C&#43;&#43; cstring、string、char* 缘由 今天在看程序的时候，发现有：#include &lt;cstring&gt; 的。因此相知道，cstring 和 string 有什么区别？以" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-cstringstringchar%E6%8C%87%E9%92%88/" /><meta property="article:published_time" content="2018-08-03T17:41:52&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T17:41:52&#43;00:00"/>
+<meta itemprop="name" content="C&#43;&#43; cstring、string、char指针">
+<meta itemprop="description" content="C&#43;&#43; cstring、string、char* 缘由 今天在看程序的时候，发现有：#include &lt;cstring&gt; 的。因此相知道，cstring 和 string 有什么区别？以">
+
+
+<meta itemprop="datePublished" content="2018-08-03T17:41:52&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T17:41:52&#43;00:00" />
+<meta itemprop="wordCount" content="912">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="C&#43;&#43; cstring、string、char指针"/>
+<meta name="twitter:description" content="C&#43;&#43; cstring、string、char* 缘由 今天在看程序的时候，发现有：#include &lt;cstring&gt; 的。因此相知道，cstring 和 string 有什么区别？以"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">C&#43;&#43; cstring、string、char指针</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 912 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#c-cstring-string-char">C++ cstring、string、char*</a>
+<ul>
+<li><a href="#缘由">缘由</a></li>
+<li><a href="#include-的时候的区别"><code>include</code> 的时候的区别</a></li>
+</ul></li>
+<li><a href="#详细说一下-cstring-和-string-h">详细说一下 <code>&lt;cstring&gt;</code> 和 <code>string.h</code></a></li>
+<li><a href="#那么-cstring-和-string-呢">那么 <code>&lt;cstring&gt;</code> 和 <code>&lt;string&gt;</code> 呢？</a></li>
+<li><a href="#那么-为什么-g-使用-string-的时候不用-include-string-呢-而且-vs好像在对应一些-c-字符串的处理的时候也不用-include-cstring-这是为什么呢">那么，为什么 g++ 使用 string 的时候不用 <code>include &lt;string&gt;</code> 呢？而且 VS好像在对应一些 C 字符串的处理的时候也不用 <code>include &lt;cstring&gt;</code>，这是为什么呢？</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="c-cstring-string-char">C++ cstring、string、char*</h1>
+
+<h2 id="缘由">缘由</h2>
+
+<p>今天在看程序的时候，发现有：<code>#include &lt;cstring&gt;</code> 的。因此相知道，<code>cstring</code> 和 <code>string</code> 有什么区别？以前有遇到过，没有详细的总结，或者总结了，也忘记了，这里总结一下。注意，这里不讨论 MFC 的 <code>CString</code>。</p>
+
+<h2 id="include-的时候的区别"><code>include</code> 的时候的区别</h2>
+
+<pre><code class="language-cpp">#include &lt;cstring&gt; //不可以定义string s；可以用到strcpy等函数
+using  namespace  std;
+
+#include &lt;string&gt; //可以定义string s；可以用到strcpy等函数
+using  namespace  std;
+
+#include &lt;string.h&gt; //不可以定义string s；可以用到strcpy等函数
+</code></pre>
+
+<ol>
+<li>文件 cstring，和 string.h 对应，C++ 版本的头文件，包含比如 strcpy 之类的字符串处理函数</li>
+<li>文件 string.h，和 cstring 对应，C 版本的头文件，包含比如 strcpy 之类的字符串处理函数</li>
+<li>文件 string，包含 std::string 的定义，属于 STL 范畴 。</li>
+</ol>
+
+<p><strong>想知道，这第三个与上面的两个有关系吗？有区别吗？而且上面的两个，什么叫 C++ 版本？什么叫 C 版本？</strong></p>
+
+<h1 id="详细说一下-cstring-和-string-h">详细说一下 <code>&lt;cstring&gt;</code> 和 <code>string.h</code></h1>
+
+<p><code>&lt;cstring&gt;</code> 提供的是一些对应 C 风格的字符串的函数，C 风格的字符串就是没有终止符的字符数组，这些函数包括 <code>strlen</code> 、<code>strcpy</code> 等，它是 C 时候的 <code>string.h</code> 的 C++ 版本。</p>
+
+<p>某些实现中 <code>&lt;cstring&gt;</code> 的内容就是:</p>
+
+<pre><code class="language-cpp">namespace std
+{
+    #include &lt;string.h&gt;
+}
+</code></pre>
+
+<p>可见他们实际上是一回事，都是用来处理 C 风格的字符串的，不过 cstring 是在 C++ 中使用的，而 string.h 是在 C 中使用的。</p>
+
+<p>OK，那么 <code>&lt;cstring&gt;</code> 和 <code>&lt;string&gt;</code> 呢？</p>
+
+<h1 id="那么-cstring-和-string-呢">那么 <code>&lt;cstring&gt;</code> 和 <code>&lt;string&gt;</code> 呢？</h1>
+
+<p><code>&lt;string&gt;</code> 提供的是 <code>std::string</code> 类和一些相关的函数和操作，<code>&lt;string&gt;</code> 和 <code>&lt;cstring&gt;</code> 虽然有类似的名字，但是他们除了名字类似之外一点也不一样。完全是不同的。</p>
+
+<p>这个地方需要注意下：<code>&lt;cstring&gt;</code> 也是在 std:: 命名空间下面的。</p>
+
+<p>OK，我们大概知道了 <code>&lt;string&gt;</code> 与 <code>&lt;cstring&gt;</code> 完全不同。</p>
+
+<h1 id="那么-为什么-g-使用-string-的时候不用-include-string-呢-而且-vs好像在对应一些-c-字符串的处理的时候也不用-include-cstring-这是为什么呢">那么，为什么 g++ 使用 string 的时候不用 <code>include &lt;string&gt;</code> 呢？而且 VS好像在对应一些 C 字符串的处理的时候也不用 <code>include &lt;cstring&gt;</code>，这是为什么呢？</h1>
+
+<p>C++ 标准允许标准的 headers include 别的标准 headers，因此，你虽然没有手动 <code>include &lt;string&gt;</code> 但是你也许在 include 别的 headers 的时候已经 <code>include &lt;string&gt;</code> 了，比如 <code>include &lt;iostream&gt;</code> 。</p>
+
+<p>类似的，对于 <code>&lt;cstring&gt;</code> 来说也是一样，总是会包含一些你需要的 headers 的。</p>
+
+<p>因此不要依靠你的特殊的环境来隐式的include 它们，因为这样你会在使你的代码可移植的时候会遇到问题，或者当你相变更 编译器版本的时候，没准这个新版本的编译器会对于这些headers的隐式依赖有不同的实现。</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li><a href="https://stackoverflow.com/questions/12824595/difference-between-cstring-and-string">Difference between <cstring> and <string></a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/02-%E5%88%9D%E8%AF%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 初识输入输出</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/06-%E5%9F%BA%E7%A1%80%E7%A1%AC%E4%BB%B6%E5%BC%80%E5%8F%91/%E7%A1%AC%E4%BB%B6%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/arduino-%E6%9D%BF%E7%9A%84%E8%AF%B4%E6%98%8E/">
+            <span class="next-text nav-default">Arduino 板的说明</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

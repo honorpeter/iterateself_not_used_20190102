@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 学习曲线 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Chapter 28、Diagnosing bias and variance: Learning curves 诊断偏差和方差：学习曲线 我们已经看过一些方法去估计有多少错误可归因于可避免的偏差和方差。我们是通过估计" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/04-%E5%AD%A6%E4%B9%A0%E6%9B%B2%E7%BA%BF/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 学习曲线" />
+<meta property="og:description" content="Chapter 28、Diagnosing bias and variance: Learning curves 诊断偏差和方差：学习曲线 我们已经看过一些方法去估计有多少错误可归因于可避免的偏差和方差。我们是通过估计" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/04-%E5%AD%A6%E4%B9%A0%E6%9B%B2%E7%BA%BF/" /><meta property="article:published_time" content="2018-08-12T19:23:39&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T19:23:39&#43;00:00"/>
+<meta itemprop="name" content="04 学习曲线">
+<meta itemprop="description" content="Chapter 28、Diagnosing bias and variance: Learning curves 诊断偏差和方差：学习曲线 我们已经看过一些方法去估计有多少错误可归因于可避免的偏差和方差。我们是通过估计">
+
+
+<meta itemprop="datePublished" content="2018-08-12T19:23:39&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T19:23:39&#43;00:00" />
+<meta itemprop="wordCount" content="3345">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 学习曲线"/>
+<meta name="twitter:description" content="Chapter 28、Diagnosing bias and variance: Learning curves 诊断偏差和方差：学习曲线 我们已经看过一些方法去估计有多少错误可归因于可避免的偏差和方差。我们是通过估计"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 学习曲线</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 3345 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#chapter-28-diagnosing-bias-and-variance-learning-curves">Chapter 28、Diagnosing bias and variance: Learning curves</a></li>
+<li><a href="#chapter-29-plotting-training-error">Chapter 29、Plotting training error</a></li>
+<li><a href="#chapter-30-interpreting-learning-curves-high-bias">Chapter 30、Interpreting learning curves: High bias</a></li>
+<li><a href="#chapter-31-interpreting-learning-curves-other-cases">Chapter 31、Interpreting learning curves: Other cases</a></li>
+<li><a href="#chapter-32-plotting-learning-curves">Chapter 32、Plotting learning curves</a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="chapter-28-diagnosing-bias-and-variance-learning-curves">Chapter 28、Diagnosing bias and variance: Learning curves</h2>
+
+<p><strong>诊断偏差和方差：学习曲线</strong></p>
+
+<p>我们已经看过一些方法去估计有多少错误可归因于可避免的偏差和方差。我们是通过估计最优错误率，并计算算法的训练集和开发集错误来进行估计的。让我们讨论一个更具信息性的方法：绘制学习曲线。</p>
+
+<p>学习曲线会根据训练样本的数量来绘制开发集错误。为了绘制它，你可以使用不同大小的训练集去运行算法。例如，如果你有1000个样本，你可以在100,200,300,…,1000个样本上单独训练算法副本。然后你就能画出开发集错误如何随着训练集大小而变化的曲线了。如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/HH8GLf0098.png?imageslim" alt="mark" /></p>
+
+<p>随着训练集大小的增加，开发集错误应该减少。</p>
+
+<p>我们经常会有一些我们希望学习算法最终能达到的“期望错误率”。例如：</p>
+
+<ul>
+<li>如果我们希望达到人类水平的表现，那么人类错误率可能就是“期望错误率”。</li>
+<li>如果我们的学习算法为某些产品提供服务（如提供猫图），我们可能会直观的了解需什么样的水平才能给用户提供出色的体验。</li>
+<li>如果你长期从事于一个重要应用，那么你可能会有直觉认为在下一个季度/年内能合理取得多大进展。</li>
+</ul>
+
+<p>将期望的表现水平添加到你的学习曲线中：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/lag0fLkgbf.png?imageslim" alt="mark" /></p>
+
+<p>你可以直观的看到外推红色的“开发错误”曲线，以此来猜测通过添加更多的数据你能够多接近期望的性能水平。在上面的例子中，通过加倍训练集大小来达到期望的水平看似合理的。</p>
+
+<p>但如果开发错误曲线趋于“稳定”（即变平），那么你可以立刻知道添加更多数据并不能达到你的目标：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/69Dj9lIGF6.png?imageslim" alt="mark" /></p>
+
+<p>查看学习曲线可能会帮助你避免花费数月时间来收集两倍多的训练数据，只有意识到这并不管用。</p>
+
+<p>这个过程的一个缺点是，如果你只关注开发错误曲线，如果有更多的数据，你很难推断和准确预测红色的曲线的走向。这里有一个附加的曲线能够帮助你去评估添加更多数据的影响：训练错误。</p>
+
+<h2 id="chapter-29-plotting-training-error">Chapter 29、Plotting training error</h2>
+
+<p><strong>绘制训练错误曲线</strong></p>
+
+<p>你的开发集（和测试集）错误应该随着训练集大小的增长而减少。但随着训练集大小的增加，训练集错误通常会增加。</p>
+
+<p>让我们举例说明这个效果。假设你的训练集有只有两个样本：一张猫图和一张非猫图。学习算法很容易“记住”训练集中这两个样本，并且训练集错误率为0%。即使有一张或两张样本图片都被错误标注，算法仍然很容易记住这两个标签。</p>
+
+<p>现在假设你的训练集有100个样本。可能有一些样本是被错误标记或模棱两可的——一些图非常模糊，甚至人都不能区分是否有猫。或许学习算法仍能“记住”大部分或所有的训练集，但现在很难获得100%的准确率。通过将训练集样本数从2增加到100，你将发现训练集准确率将略有下降。</p>
+
+<p>最后，假设你的训练集有10000个样本。这种情况下算法更难以完全适应10000个样本，特别是有一些样本是模棱两可或错误标注的。因此，你的学习算法在该训练集上将做的更糟。</p>
+
+<p>让我们为之前的曲线（开发错误曲线）添加训练错误曲线：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/dI95EDl4cc.png?imageslim" alt="mark" /></p>
+
+<p>你可以看到蓝色的“训练错误”曲线随着训练集大小的增长而增长。而且，算法通常在训练集上表现比在开发集上要好。因此，红色的开发错误曲线通常严格地在蓝色训练错误曲线上方。</p>
+
+<p>下一步我们将讨论如何解释这些曲线。</p>
+
+<h2 id="chapter-30-interpreting-learning-curves-high-bias">Chapter 30、Interpreting learning curves: High bias</h2>
+
+<p><strong>解读学习曲线：高偏差</strong></p>
+
+<p>假设你的开发错误曲线如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/186hiI4hge.png?imageslim" alt="mark" /></p>
+
+<p>我们之前说过，如果你的开发错误曲线平稳，仅仅通过添加数据你不可能达到期望的性能。</p>
+
+<p>但是很难确切的知道红色开发错误曲线的外推是什么样的。如果开发集很小，可能会更不确定，因为曲线可能很嘈杂。</p>
+
+<p>假设我们在图片中添加训练错误曲线，如下所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/2L9kKiGjmC.png?imageslim" alt="mark" /></p>
+
+<p>现在，你可以绝对肯定的说，添加更多的数据本身并不足够。这是为什么？记住我们的两个观察结果：</p>
+
+<ul>
+<li>随着我们添加更多的训练数据，训练错误只会变得更差。因此，蓝色的训练错误曲线只会保持不动或变得更高，所以它只会远离期望的性能水平（绿色的线）。</li>
+<li>红色的开发错误曲线通常要高于蓝色的训练错误曲线。因此，即使训练错误高于期望性能水平，通过添加更多数据来让红色开发错误曲线下降到期望性能水平之下也基本没有可能。</li>
+</ul>
+
+<p>在相同的图中检查开发错误曲线和训练错误曲线可以让我们更加自信地推断开发错误曲线。</p>
+
+<p>为了讨论，假设期望性能是我们对最优错误率的估计。那上面的图片就是一个标准的“教科书”式的例子（具有高可避免偏差的学习曲线是什么样的）：在训练集大小的最大处（大概对应我们的所有训练数据），在训练错误和期望性能之间有大的间隙，表明大的可避免偏差。此外，训练和开发曲线之间的间隙小，表明方差小。</p>
+
+<p>之前，我们只在曲线最右端的点去衡量训练集错误和开发集错误，这对应使用所有的可训练数据。绘制完整的学习曲线给我们提供了更全面图片，绘制了算法在不同训练集大小上的表现。</p>
+
+<h2 id="chapter-31-interpreting-learning-curves-other-cases">Chapter 31、Interpreting learning curves: Other cases</h2>
+
+<p><strong>解释学习曲线：其他情况</strong></p>
+
+<p>考虑如下学习曲线：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/gDACDhIlA9.png?imageslim" alt="mark" /></p>
+
+<p>该曲线表明高偏差、高方差，还是二者？</p>
+
+<p>蓝色的训练错误曲线相对低，红色开发错误曲线远高于蓝色训练错误。因此，偏差较小，但是方差较大。添加更多训练数据可能有助于缩小开发错误和训练错误之间的差距。</p>
+
+<p>现在，考虑如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/jL7lg6hFab.png?imageslim" alt="mark" /></p>
+
+<p>这次，训练错误较大，远高于期望性能水平。开发错误也比训练错误大很多。因此，具有显著的偏差和方差。你将不得不在算法中去寻找同时减少偏差和方差的方法。</p>
+
+<h2 id="chapter-32-plotting-learning-curves">Chapter 32、Plotting learning curves</h2>
+
+<p><strong>绘制学习曲线</strong></p>
+
+<p>假设你有一个非常小的训练集，只有100个样本。随机选择10个样本的子集来训练你的算法，然后是20个样本，然后30，直到100，以10个为间隔增加样本数。然后使用这10个数据点绘制学习曲线。你可能会发现曲线在较小的训练集大小下看起来有些嘈杂（意思是这些值比期望的要高/低）。</p>
+
+<p>当只在10个随机选择的样本上训练时，你可能不幸选到了特别“bad”的训练集，例如有很多模棱两可/错误标注的样本。或者，你可能幸运的选到了特别“good”的训练集。小的训练集意味着开发和训练错误可能会随机波动。</p>
+
+<p>如果你的机器学习应用严重偏倚一个类别（如负样本远比正样本多的猫分类任务），或者类别数比较大（如识别100种不同动物类别），那么选择尤其是“不具代表性”或坏的训练集的几率更大。例如，如果80%的样本是负样本（y=0），只有20%是正样本（y=1），那么有可能10个样本的训练集只包含负样本，因此很难让算法学习到有意义的东西。</p>
+
+<p>如果训练曲线里的噪声使得很难看见真实的趋势，这里有两种解决方法：</p>
+
+<ul>
+<li>不是仅对10个样本的一个模型进行训练，而是通过从原始100个样本的数据集中通过替换的抽样方法【1】选择几个（如3-10）不同的随机选择的10个样本的训练集。在这些数据集上训练不同的模型，并对每个结果模型计算训练集和开发集错误。计算并绘制平均训练错误和平均开发集错误。</li>
+<li>如果你的训练集比较倾向一种类别，或有很多类别，从100个训练样本中选择一个“平衡的”子集而不是随机选择的10个训练样本。例如，你可以确保2/10的样本是正样本，8/10为负样本。更为一般的说，你可以确保每个类别的样本部分尽可能的接近原始训练集的整体部分。</li>
+</ul>
+
+<p>我不会为这些技术而烦恼，除非你已经尝试过绘制学习曲线，并且认为曲线太嘈杂以至于看不到潜在的趋势。如果你的训练集较大（比如说超过1000个样本），并且你的类别分布不是很偏，你可能不需要这些技巧。</p>
+
+<p>最后，绘制学习曲线可能花费很高的计算成本：例如，你可能需要训练10个模型，其中分别有1000个样本，然后是2000个，直到10000个。使用小的数据集训练模型比使用大数据集来训练模型要快的多。因此，不像上面那样均匀地将训练集大小按线性范围划分出来，你可以在1000、2000、4000、6000和10000个样本上训练模型。这样应该仍然可以让你清晰的了解学习曲线的趋势。当然，只有在训练所有附加模型的计算成本显著时，该方法才有意义。</p>
+
+<p>————————————</p>
+
+<p>【1】以下是采用替换的抽样方法（sampling with replacement）：你可以从100个里面随机选择10个不同的样本作为第一个训练集。然后你会再选10个样本，形成第二个训练集，不考虑第一个训练集中选了哪些样本。因此，一个特定的样本可能出现在第一和第二个训练集中。相反，如果你的样本没有被替换，第二个训练集将仅在第一次未被选择的90个样本中进行选择。在实践中，有或没有替换的抽样不应该产生很大的差异，但前者是常见的做法。</p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://github.com/xiaqunfeng/machine-learning-yearning/">machine-learning-yearning</a></li>
+<li>《Machine Learning Yearning》 by Andrew NG</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/05-%E5%B0%86%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E4%B8%8E%E4%BA%BA%E7%B1%BB%E6%B0%B4%E5%B9%B3%E7%9A%84%E8%A1%A8%E7%8E%B0%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 将学习算法与人类水平的表现进行比较</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/03-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%81%8F%E5%B7%AE%E5%92%8C%E6%96%B9%E5%B7%AE%E6%9D%A5%E5%86%B3%E5%AE%9A%E8%AF%A5%E5%81%9A%E4%BB%80%E4%B9%88/">
+            <span class="next-text nav-default">03 如何使用偏差和方差来决定该做什么</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

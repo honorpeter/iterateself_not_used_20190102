@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>RL 强化学习介绍 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-16 16:23:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d/ slug: rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d title: RL 强化学习介绍 wordpress_id: 5870 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%8B%E7%BB%8D/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="RL 强化学习介绍" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-16 16:23:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d/ slug: rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d title: RL 强化学习介绍 wordpress_id: 5870 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%BB%8B%E7%BB%8D/" /><meta property="article:published_time" content="2018-07-28T23:16:12&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-28T23:16:12&#43;00:00"/>
+<meta itemprop="name" content="RL 强化学习介绍">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-16 16:23:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d/ slug: rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d title: RL 强化学习介绍 wordpress_id: 5870 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列">
+
+
+<meta itemprop="datePublished" content="2018-07-28T23:16:12&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-28T23:16:12&#43;00:00" />
+<meta itemprop="wordCount" content="3887">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RL 强化学习介绍"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-16 16:23:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d/ slug: rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d title: RL 强化学习介绍 wordpress_id: 5870 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">RL 强化学习介绍</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-28 </span>
+        
+        <span class="more-meta"> 3887 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#reinforcement-learning">- Reinforcement Learning</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#强化学习方法介绍">强化学习方法介绍</a>
+<ul>
+<li><a href="#强化学习在机器学习理论中的位置">强化学习在机器学习理论中的位置</a></li>
+<li><a href="#强化学习的灵感来源">强化学习的灵感来源</a></li>
+<li><a href="#到底什么是强化学习">到底什么是强化学习？</a></li>
+<li><a href="#强化学习有哪些特点">强化学习有哪些特点？</a></li>
+<li><a href="#强化学习的速度怎么样">强化学习的速度怎么样？</a></li>
+<li><a href="#强化学习与其它的机器学习方法的区别">强化学习与其它的机器学习方法的区别</a></li>
+</ul></li>
+<li><a href="#关于强化学习的一些信息">关于强化学习的一些信息</a>
+<ul>
+<li><a href="#强化学习的发展历史">强化学习的发展历史</a></li>
+<li><a href="#强化学习方法在各个领域的情况">强化学习方法在各个领域的情况</a></li>
+</ul></li>
+<li><a href="#看一下强化学习模型">看一下强化学习模型</a>
+<ul>
+<li><a href="#强化学习的四元素">强化学习的四元素</a></li>
+<li><a href="#基本的强化学习模型包括哪些东西">基本的强化学习模型包括哪些东西？</a></li>
+<li><a href="#强化学习的过程">强化学习的过程</a></li>
+<li><a href="#强化学习为什么再长期反馈问题上表现比较好">强化学习为什么再长期反馈问题上表现比较好？</a></li>
+<li><a href="#强化学习可以使用的场景">强化学习可以使用的场景</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-16 16:23:25+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/17/rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d/">http://106.15.37.116/2018/05/17/rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d/</a>
+slug: rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d
+title: RL 强化学习介绍
+wordpress_id: 5870
+categories:
+- 人工智能学习
+tags:
+- NOT_ADD</p>
+
+<h2 id="reinforcement-learning">- Reinforcement Learning</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><p><a href="http://www.cnblogs.com/steven-yang/p/6440755.html">强化学习读书笔记 - 01 - 强化学习的问题</a></p></li>
+
+<li><p><a href="https://zh.wikipedia.org/wiki/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0">强化学习 wiki</a></p></li>
+
+<li><p><a href="https://www.zhihu.com/question/31140846">强化学习是什么？</a></p></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="强化学习方法介绍">强化学习方法介绍</h1>
+
+<h2 id="强化学习在机器学习理论中的位置">强化学习在机器学习理论中的位置</h2>
+
+<p>强化学习实际上是机器学习中的一个领域，它强调的是如何基于环境而行动，以取得最大化的预期利益。</p>
+
+<h2 id="强化学习的灵感来源">强化学习的灵感来源</h2>
+
+<p>其灵感来源于心理学中的行为主义理论，即有机体如何在环境给予的奖励或惩罚的刺激下，逐步形成对刺激的预期，产生能获得最大利益的习惯性行为。</p>
+
+<p>两条主线：<strong>是这样吗？好像是强化学系导论里面的内容。确认下。</strong></p>
+
+<ul>
+<li><p>起源于动物学习心理学的试错法(trial-and-error)。</p></li>
+
+<li><p>优化控制 (optimal control) - 评估方法(value function)，动态编程(dynamic programming)，差分计算(temporal difference)。</p></li>
+</ul>
+
+<p>OK，介绍了强化学习相对于机器学习是在什么位置和强化学习的由来，那么到底什么是强化学习？</p>
+
+<h2 id="到底什么是强化学习">到底什么是强化学习？</h2>
+
+<p><strong>这里要重新写一下，太冗长。而且有些重复。看一下权威的解释。</strong></p>
+
+<p>我们先看个例子：</p>
+
+<p>比如你负责在淘宝主页推送广告，那么如何知道用户的偏好并且推送正确类别的广告呢？</p>
+
+<p>之前我们学过一些监督学习和非监督学习的方法，先看下他们怎么做：</p>
+
+<p>那么如果用监督学习方法，就是：</p>
+
+<ul>
+<li>给用户发一个调查问卷，列举几十种（事实上会需要非常非常多种&hellip;）广告，要求客户填写选择有兴趣/没兴趣，也即打标。然后根据每个客户标示的这一组数据，学习不同用户的偏好，根据这些偏好推送广告。</li>
+</ul>
+
+<p>如果用无监督学习的方法，就是：</p>
+
+<ul>
+<li>收集了很多用户的点击信息，得出了用户喜欢和不喜欢的广告类型（或更严格的说，类型分布），然后对于一个人，想判断她是不是喜欢某种广告，先看他属于那种用户类型就行。</li>
+</ul>
+
+<p>那么，强化学习方法怎么做呢？</p>
+
+<ul>
+<li>一开始的时候，我随便给这个用户推送广告，然后，就观察他的点击情况，如果这个人点击了，那么我就相当于在这个广告上得到一个奖励，下次我更有可能推这个类型的广告，如果没有点击，就没有奖励，这样，慢慢的，我推荐的广告他点积的几率就会变大。相当于我知道了他的喜好。也达到了我的效果。</li>
+</ul>
+
+<p>可见，强化学习方法与之前学过的一些方法，从思路上来看还是有些不同的。</p>
+
+<p>OK，我们再看下这个强化学习例子中涉及到的一些东西：</p>
+
+<ul>
+<li><p>你的最终目的是得到一个策略（Policy）以最大化你的预期收益。</p></li>
+
+<li><p>用户本身目前的状态可以当做你面临的状态（State）</p></li>
+
+<li><p>你所推送的广告是你的行为（Action）</p></li>
+
+<li><p>用户点击与否是你的奖励（Reward=1 若点击，Reward=0若未点击）</p></li>
+</ul>
+
+<p><strong>而强化学习，就是根据这些 State、Action、Reward，来迭代得到你的 Policy 使目标收益最大。</strong></p>
+
+<p>OK，我们看下面这张图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kcD9BEbECm.png?imageslim" alt="mark" /></p>
+
+<p>它解释了强化学习的基本原理：</p>
+
+<ul>
+<li><p>智能体在完成某项任务时，首先通过动作 A 与周围环境进行交互，在动作 A 和环境的作用下，智能体会产生新的状态，同时环境会给出一个立即回报，即交互产生的数据。</p></li>
+
+<li><p>然后，强化学习算法就利用产生的数据调整自身的动作策略，然后再与环境交互，产生新的数据。</p></li>
+</ul>
+
+<p>这样，经过数次迭代学习后，智能体能最终地学到完成相应任务的最优动作（最优策略）。</p>
+
+<p>可见，强化学习过程很像是人的学习过程，人类通过与周围环境交互，学会了走路，奔跑，劳动。人类与大自然，与宇宙的交互创造了现代文明。</p>
+
+<p>OK，强化学习已经大概知道了具体是个什么过程，那么它与之前的机器学习方法有什么区别呢？</p>
+
+<h2 id="强化学习有哪些特点">强化学习有哪些特点？</h2>
+
+<p>从上面的例子我们可以大概感觉到：</p>
+
+<ul>
+<li><p>强化学习方式符合行为心理学。</p></li>
+
+<li><p>是一种探索(exploration)和采用(exploitation)的权衡，一面要采用(exploitation)已经发现的有效行动，另一方面也要探索(exploration)那些没有被认可的行动，已找到更好的解决方案。</p></li>
+
+<li><p>它考虑的是整个问题而不是子问题</p></li>
+
+<li><p>这种方式很通用，<strong>可能会是通用 AI 的一部分</strong>。</p></li>
+</ul>
+
+<h2 id="强化学习的速度怎么样">强化学习的速度怎么样？</h2>
+
+<p>强化学习学习得非常快，因为每一个新的反馈（例如执行一个行动并获得奖励）都被立即发送到影响随后的决定。<strong>是这样吗？确认下。</strong></p>
+
+<h2 id="强化学习与其它的机器学习方法的区别">强化学习与其它的机器学习方法的区别</h2>
+
+<p>从上面的推送广告的例子，我们大概可以看出：</p>
+
+<ul>
+<li><p>监督学习是通过已标签的数据，学习分类的逻辑。</p></li>
+
+<li><p>非监督学习是通过未标签的数据，找到其中的隐藏模式。</p></li>
+
+<li><p>强化学习是一种通过与环境进行交互，以交互数据为基础，优化策略来达成目标的方法。<strong>自己写的，找一下权威的定义。</strong></p></li>
+</ul>
+
+<p>实际上，除了这些，他们之间还是有很多区别的：<strong>这一段重新整理下，要看一些权威的说法。</strong></p>
+
+<ul>
+<li><p>在监督学习和非监督学习中，数据是静态的不需要与环境进行交互，比如图像识别，只要给足够的差异样本，将数据输入到深度网络中进行训练即可。然而，强化学习的学习过程是个动态的，不断交互的过程，所需要的数据也是通过与环境不断地交互产生的。所以，与监督学习和非监督学习相比，强化学习涉及到的对象更多，比如动作，环境，状态转移概率和回报函数等。</p></li>
+
+<li><p>深度学习如图像识别和语音识别解决的是感知的问题，强化学习解决的是决策的问题。</p></li>
+
+<li><p>强化学习并不需要出现正确的输入/输出对，也不需要精确校正次优化的行为。这个与标准的监督式学习之间有所区别。</p></li>
+
+<li><p>强化学习更加专注于在线规划，需要在探索（在未知的领域）和遵从（现有知识）之间找到平衡。强化学习中的 “探索-遵从” 的交换，在多臂老虎机问题和有限MDP中研究得最多。<strong>这个也是区别吗？确认下。</strong></p></li>
+</ul>
+
+<p>在机器学习问题中，环境通常被规范为马可夫决策过程（MDP），所以许多强化学习算法在这种情况下使用动态规划技巧。传统的技术和强化学习算法的主要区别是，后者不需要关于MDP的知识，而且针对无法找到确切方法的大规模MDP。<strong>这段是什么意思？</strong></p>
+
+<p><strong>还有别的学习方法吗？也对比下。</strong></p>
+
+<p>OK，基本上对强化学习方法本身已经介绍差不多了，现在看看其他的：</p>
+
+<h1 id="关于强化学习的一些信息">关于强化学习的一些信息</h1>
+
+<h2 id="强化学习的发展历史">强化学习的发展历史</h2>
+
+<p>强化学习算法理论的形成大概是上个世纪七八十年代，然后一直在默默地进步，最近被大家所广泛关注。</p>
+
+<p>代表性的事件：</p>
+
+<ul>
+<li><p>2013年12月，DeepMind 团队于首次展示了机器利用强化学习算法在雅达利游戏中打败人类专业玩家，其成果在2015年发布于《自然》上。</p></li>
+
+<li><p>2016年3月，DeepMind 开发的 AlphaGo 程序利用强化学习算法以4:1击败世界围棋高手李世石。</p></li>
+</ul>
+
+<h2 id="强化学习方法在各个领域的情况">强化学习方法在各个领域的情况</h2>
+
+<p>由于强化学习方法具有普适性，因此在其他许多领域都有研究，例如博弈论、控制论、运筹学、信息论、仿真优化、多主体系统学习、群体智能、统计学以及遗传算法。</p>
+
+<ul>
+<li><p>在运筹学和控制理论研究的语境下，强化学习被称作 “近似动态规划” （approximate dynamic programming，ADP）。在最优控制理论中也有研究这个问题，虽然大部分的研究是关于最优解的存在和特性，并非是学习或者近似方面。** 什么是近似动态规划？**</p></li>
+
+<li><p>在经济学和博弈论中，强化学习被用来解释在有限理性的条件下如何出现平衡。<strong>什么意思？</strong></p></li>
+</ul>
+
+<p>OK，强化学习的来龙去脉基本是OK了，下面我们就开始仔细看一下这个强化学习的模型。</p>
+
+<h1 id="看一下强化学习模型">看一下强化学习模型</h1>
+
+<p><strong>需要重新整理下，有些不是很明白，而且也没有什么条理。</strong></p>
+
+<h2 id="强化学习的四元素">强化学习的四元素</h2>
+
+<ul>
+<li><p>政策 (policy)
+环境的感知状态到行动的映射方式。</p></li>
+
+<li><p>奖赏信号 (reward signal)
+定义强化学习问题的目标。</p></li>
+
+<li><p>评估方法 (value function)
+一个状态的价值就是从这个状态开始，期望在未来获得的奖赏。是指一种长期目标。</p></li>
+
+<li><p>环境模型 (optional a model of environment)
+模拟环境的行为。</p></li>
+</ul>
+
+<h2 id="基本的强化学习模型包括哪些东西">基本的强化学习模型包括哪些东西？</h2>
+
+<ol>
+<li><p>环境状态的集合 (S)</p></li>
+
+<li><p>动作的集合 (A)</p></li>
+
+<li><p>在状态之间转换的规则</p></li>
+
+<li><p>规定转换后 “即时奖励” 的规则</p></li>
+
+<li><p>描述主体能够观察到什么的规则</p></li>
+</ol>
+
+<p>OK，对上面的元素进行说明：</p>
+
+<ul>
+<li><p>规则通常是随机的。</p></li>
+
+<li><p>主体通常可以观察即时奖励和最后一次转换。在许多模型中，主体被假设为可以观察现有的环境状态，这种情况称为“完全可观测”（full observability），反之则称为“部分可观测”（partial observability）。</p></li>
+
+<li><p>有时，主体被允许的动作是有限的（例如，你使用的钱不能多于你所拥有的）。</p></li>
+</ul>
+
+<h2 id="强化学习的过程">强化学习的过程</h2>
+
+<p>强化学习的主体与环境基于离散的时间步长相作用。</p>
+
+<p>在每一个时间 ( t)  ，主体接收到一个观测 ( o<em>{t})  ，通常其中包含奖励 ( r</em>{t}) 。然后，它从允许的集合中选择一个动作 ( a<em>{t})  ，然后送出到环境中去。环境则变化到一个新的状态 (s</em>{t+1}) ，然后决定了和这个变化 ( (s<em>{t},a</em>{t},s<em>{t+1}))  相关联的奖励 ( r</em>{t+1})  。</p>
+
+<p>强化学习主体的目标，是得到尽可能多的奖励。主体选择的动作是其历史的函数，它也可以选择随机的动作。</p>
+
+<h2 id="强化学习为什么再长期反馈问题上表现比较好">强化学习为什么再长期反馈问题上表现比较好？</h2>
+
+<p>将这个主体的表现和自始自终以最优方式行动的主体相比较，它们之间的行动差异产生了 “悔过” 的概念。如果要接近最优的方案来行动，主体必须根据它的长时间行动序列进行推理：例如，要最大化我的未来收入，我最好现在去上学，虽然这样行动的即时货币奖励为负值。</p>
+
+<p>因此，强化学习对于包含长期反馈的问题比短期反馈的表现更好。它在许多问题上得到应用，包括机器人控制、电梯调度、电信通讯、双陆棋和西洋跳棋。[1]</p>
+
+<h2 id="强化学习可以使用的场景">强化学习可以使用的场景</h2>
+
+<p>强化学习的强大来源于两个方面：使用样本来优化行为，使用函数近似来描述复杂的环境。</p>
+
+<p>它们使得强化学习可以使用在以下的复杂环境中：</p>
+
+<ul>
+<li><p>模型的环境已知，且解析解不存在。<strong>什么叫解析解不存在？</strong></p></li>
+
+<li><p>仅仅给出环境的模拟模型（模拟优化方法的问题） <strong>什么意思？wiki上的，确认下。</strong></p></li>
+
+<li><p>从环境中获取信息的唯一办法是和它互动</p></li>
+</ul>
+
+<p>前两个问题可以被考虑为规划问题，而最后一个问题可以被认为是genuine learning问题。使用强化学习的方法，这两种规划问题都可以被转化为机器学习问题。<strong>什么是genuine learning？wiki中的，确认下。</strong></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-28</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/python-virtualenv/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Python virtualenv</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/00-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D/dl-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AF%B9%E6%AF%94/">
+            <span class="next-text nav-default">DL 深度学习的框架介绍与对比</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

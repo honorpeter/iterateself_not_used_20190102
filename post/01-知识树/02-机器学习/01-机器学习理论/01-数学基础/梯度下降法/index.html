@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>梯度下降法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="梯度下降法 REF 《机器学习》周志华 TODO aaa MOTIVE 对梯度下降进行总结 COMMENT 下面这个是从别的网站上复制过来的，不是书上的： 代码如下： import matplotlib import numpy as np import matplotlib.cm as cm import matplotlib.mlab as mlab" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="梯度下降法" />
+<meta property="og:description" content="梯度下降法 REF 《机器学习》周志华 TODO aaa MOTIVE 对梯度下降进行总结 COMMENT 下面这个是从别的网站上复制过来的，不是书上的： 代码如下： import matplotlib import numpy as np import matplotlib.cm as cm import matplotlib.mlab as mlab" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95/" /><meta property="article:published_time" content="2018-08-01T18:30:54&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T18:30:54&#43;00:00"/>
+<meta itemprop="name" content="梯度下降法">
+<meta itemprop="description" content="梯度下降法 REF 《机器学习》周志华 TODO aaa MOTIVE 对梯度下降进行总结 COMMENT 下面这个是从别的网站上复制过来的，不是书上的： 代码如下： import matplotlib import numpy as np import matplotlib.cm as cm import matplotlib.mlab as mlab">
+
+
+<meta itemprop="datePublished" content="2018-08-01T18:30:54&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T18:30:54&#43;00:00" />
+<meta itemprop="wordCount" content="628">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="梯度下降法"/>
+<meta name="twitter:description" content="梯度下降法 REF 《机器学习》周志华 TODO aaa MOTIVE 对梯度下降进行总结 COMMENT 下面这个是从别的网站上复制过来的，不是书上的： 代码如下： import matplotlib import numpy as np import matplotlib.cm as cm import matplotlib.mlab as mlab"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">梯度下降法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 628 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#梯度下降法">梯度下降法</a></li>
+<li><a href="#ref">REF</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="梯度下降法">梯度下降法</h1>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>对梯度下降进行总结</li>
+</ul>
+
+<hr />
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+<p>下面这个是从别的网站上复制过来的，不是书上的：</p>
+
+<p>代码如下：</p>
+
+<pre><code>import matplotlib
+import numpy as np
+import matplotlib.cm as cm
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+
+leafNode = dict(boxstyle=&quot;round4&quot;, fc=&quot;0.8&quot;)
+arrow_args = dict(arrowstyle=&quot;&lt;-&quot;)
+
+matplotlib.rcParams['xtick.direction'] = 'out'
+matplotlib.rcParams['ytick.direction'] = 'out'
+
+delta = 0.025
+x = np.arange(-2.0, 2.0, delta)
+y = np.arange(-2.0, 2.0, delta)
+X, Y = np.meshgrid(x, y)
+Z1 = -((X-1)**2)
+Z2 = -(Y**2)
+#Z1 = mlab.bivariate_normal(X, Y, 1.0, 1.0, 0.0, 0.0)
+#Z2 = mlab.bivariate_normal(X, Y, 1.5, 0.5, 1, 1)
+# difference of Gaussians
+Z = 1.0 * (Z2 + Z1)+5.0
+
+# Create a simple contour plot with labels using default colors.  The
+# inline argument to clabel will control whether the labels are draw
+# over the line segments of the contour, removing the lines beneath
+# the label
+plt.figure()
+CS = plt.contour(X, Y, Z)
+plt.annotate('', xy=(0.05, 0.05),  xycoords='axes fraction',
+             xytext=(0.2,0.2), textcoords='axes fraction',
+             va=&quot;center&quot;, ha=&quot;center&quot;, bbox=leafNode, arrowprops=arrow_args )
+plt.text(-1.9, -1.8, 'P0')
+plt.annotate('', xy=(0.2,0.2),  xycoords='axes fraction',
+             xytext=(0.35,0.3), textcoords='axes fraction',
+             va=&quot;center&quot;, ha=&quot;center&quot;, bbox=leafNode, arrowprops=arrow_args )
+plt.text(-1.35, -1.23, 'P1')
+plt.annotate('', xy=(0.35,0.3),  xycoords='axes fraction',
+             xytext=(0.45,0.35), textcoords='axes fraction',
+             va=&quot;center&quot;, ha=&quot;center&quot;, bbox=leafNode, arrowprops=arrow_args )
+plt.text(-0.7, -0.8, 'P2')
+plt.text(-0.3, -0.6, 'P3')
+plt.clabel(CS, inline=1, fontsize=10)
+plt.title('Gradient Ascent')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.show()
+</code></pre>
+
+<p>输出图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i44BCaJjhC.png?imageslim" alt="mark" /></p>
+
+<p>上图展示的，梯度上升算法到达每个点后都会重新估计移动的方向。从 P0 开始，计算完该点的梯度，函数就根据梯度移动到下一点 P1。在 P1 点，梯度再次被重新计算，并沿着新的梯度方向移动到 P2 。如此循环迭代，直到满足停止条件。迭代过程中，梯度算子总是保证我们能选取到最佳的移动方向。</p>
+
+<p>上图中的梯度上升算法沿梯度方向移动了一步。可以看到，梯度算子总是指向函数值增长最快的方向。这里所说的是移动方向，而未提到移动量的大小。该量值称为步长，记作 α 。用向量来表示的话，梯度上升算法的迭代公式如下:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0kbdH3b3GI.png?imageslim" alt="mark" /></p>
+
+<p>该公式将一直被迭代执行，直至达到某个停止条件为止，比如迭代次数达到某个指定值或者算法达到某个可以允许的误差范围。</p>
+
+<p><strong>Note:</strong> 我们常听到的是梯度下降算法，它与这里的梯度上升算法是一样的，只是公式中的加法需要变成减法。因此，对应的公式可以写成</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4cIIbl7HIj.png?imageslim" alt="mark" /></p>
+
+<p>梯度上升算法用来求函数的最大值，而梯度下降算法用来求函数的最小值。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%A8%A1%E5%9E%8B%E8%81%9A%E7%B1%BB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">模型聚类</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E5%92%8C%E6%8B%9F%E7%89%9B%E9%A1%BF/">
+            <span class="next-text nav-default">梯度下降和拟牛顿</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

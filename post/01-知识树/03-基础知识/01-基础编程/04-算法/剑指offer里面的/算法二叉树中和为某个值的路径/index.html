@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：二叉树中和为某个值的路径 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-18 09:07:36&#43;00:00 layout: post link: http://106.15.37.116/2018/05/18/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84&amp;rsquo; title: 算法：二叉树中和为某个值的路径 wordpress_id: 5994 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%AA%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：二叉树中和为某个值的路径" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-18 09:07:36&#43;00:00 layout: post link: http://106.15.37.116/2018/05/18/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84&rsquo; title: 算法：二叉树中和为某个值的路径 wordpress_id: 5994 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%AA%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84/" /><meta property="article:published_time" content="2018-06-11T08:14:54&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:54&#43;00:00"/>
+<meta itemprop="name" content="算法：二叉树中和为某个值的路径">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-18 09:07:36&#43;00:00 layout: post link: http://106.15.37.116/2018/05/18/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84&rsquo; title: 算法：二叉树中和为某个值的路径 wordpress_id: 5994 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:54&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:54&#43;00:00" />
+<meta itemprop="wordCount" content="1900">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：二叉树中和为某个值的路径"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-18 09:07:36&#43;00:00 layout: post link: http://106.15.37.116/2018/05/18/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84&rsquo; title: 算法：二叉树中和为某个值的路径 wordpress_id: 5994 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：二叉树中和为某个值的路径</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 1900 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ordinary-algorithm">- ordinary algorithm</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#暴力的直接遍历-求遍历到的结点的和">暴力的直接遍历，求遍历到的结点的和</a></li>
+<li><a href="#上面是用求和的时候遍历的-那么我们也可以用递减的方式遍历">上面是用求和的时候遍历的，那么我们也可以用递减的方式遍历</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-18 09:07:36+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/18/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84/">http://106.15.37.116/2018/05/18/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e4%b8%ad%e5%92%8c%e4%b8%ba%e6%9f%90%e4%b8%aa%e5%80%bc%e7%9a%84%e8%b7%af%e5%be%84&rsquo;
+title: 算法：二叉树中和为某个值的路径
+wordpress_id: 5994
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="ordinary-algorithm">- ordinary algorithm</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li></li>
+</ol>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。</p>
+
+<p>路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。<strong>路径一定是到从根结点到叶节点的吗？</strong></p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="暴力的直接遍历-求遍历到的结点的和">暴力的直接遍历，求遍历到的结点的和</h2>
+
+<p>直接进行遍历，找到path就存放起来。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+
+class Solution {
+public:
+    vector&lt; vector&lt;int&gt; &gt; m_res;
+
+public:
+    vector&lt;vector&lt;int&gt; &gt; FindPath(TreeNode* root, int expectNumber) {
+        if (root == NULL) {
+            return m_res;
+        }
+        vector&lt;int&gt; path;
+        FindPath(root, expectNumber, path, 0);
+
+        return m_res;
+    }
+
+    void FindPath(TreeNode* root, int expectNumber, vector&lt;int&gt; path, int currentSum) {
+        currentSum += root-&gt;val;
+        path.push_back(root-&gt;val);
+
+        //找到一条路径
+        if (currentSum == expectNumber&amp;&amp; ((root-&gt;left == NULL &amp;&amp; root-&gt;right == NULL))) {
+            cout &lt;&lt; &quot;find a path&quot; &lt;&lt; endl;
+            for (int i = 0; i &lt; path.size(); i++) {
+                cout &lt;&lt; path[i] &lt;&lt; &quot; &quot;;
+            }
+            cout &lt;&lt; endl;
+            m_res.push_back(path);
+        }
+        //左边不是NULL，向左找
+        if (root-&gt;left != NULL) {
+            FindPath(root-&gt;left, expectNumber, path, currentSum);
+        }
+        //右边不是NULL，向右找
+        if (root-&gt;right != NULL) {
+            FindPath(root-&gt;right, expectNumber, path, currentSum);
+        }
+
+
+        //这里注意一下，因为我们使用的是传值，因此currentSum和path不用恢复
+        //因为currentSum作为参数在函数递归调用返回时会自动恢复                 
+        //但是如果作为静态局部变量存储则需要进行恢复                             
+        //currentSum -= root-&gt;val;                                               
+        //path.pop_back( );      
+    }
+};
+
+int main() {
+    //10
+    //5   12
+    //4  7  N  N
+    TreeNode tree[5];
+    tree[0].val = 10;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+
+    tree[1].val = 5;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+
+    tree[2].val = 12;
+    tree[2].left = NULL;
+    tree[2].right = NULL;
+
+    tree[3].val = 4;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+
+    Solution solu;
+    vector&lt; vector&lt;int&gt; &gt; res = solu.FindPath(&amp;tree[0], 22);
+    cout &lt;&lt; &quot;路径数量为：&quot; &lt;&lt; res.size() &lt;&lt; endl;
+    for (int i = 0; i &lt; res.size(); i++) {
+        for (int j = 0; j &lt; res[i].size(); j++) {
+            cout &lt;&lt; res[i][j] &lt;&lt; &quot; &quot;;
+        }
+        cout &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>find a path
+10 5 7
+find a path
+10 12
+路径数量为：2
+10 5 7
+10 12
+</code></pre>
+
+<p>上面的代码中的 currentSum 和 path 都是保存在递归栈中的，因此递归推出的时候会恢复。如果这两个是静态常量的话，代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+
+
+
+
+class Solution {
+public:
+    vector&lt; vector&lt;int&gt; &gt; m_res;
+public:
+    vector&lt; vector&lt;int&gt; &gt; FindPath(TreeNode* root, int expectNumber) {
+        if (root == NULL) {
+            return m_res;
+        }
+        vector&lt;int&gt; path;
+        FindPathRecursion(root, expectNumber);
+        return m_res;
+    }
+
+    void FindPathRecursion(TreeNode* root, int expectNumber) {
+        static int currentSum = 0;//静态常量
+        static vector&lt;int&gt; path;
+
+        currentSum += root-&gt;val;
+        path.push_back(root-&gt;val);
+        cout &lt;&lt; &quot;currentSum = &quot; &lt;&lt; currentSum - root-&gt;val 
+            &lt;&lt; &quot;, now get &quot; &lt;&lt; root-&gt;val 
+            &lt;&lt; &quot;, currentSum = &quot; &lt;&lt; currentSum &lt;&lt; endl;
+
+        if (currentSum == expectNumber
+            &amp;&amp; ((root-&gt;left == NULL &amp;&amp; root-&gt;right == NULL))) {
+            cout &lt;&lt; &quot;find a path&quot; &lt;&lt; endl;
+            for (int i = 0; i &lt; path.size(); i++) {
+                cout &lt;&lt; path[i] &lt;&lt; &quot; &quot;;
+            }
+            cout &lt;&lt; endl;
+            m_res.push_back(path);
+        }
+
+        if (root-&gt;left != NULL) {
+            FindPathRecursion(root-&gt;left, expectNumber);
+        }
+        if (root-&gt;right != NULL) {
+            FindPathRecursion(root-&gt;right, expectNumber);
+        }
+
+        cout &lt;&lt; &quot;currentSum = &quot; &lt;&lt; currentSum 
+            &lt;&lt; &quot;, now pop &quot; &lt;&lt; *(path.end() - 1) 
+            &lt;&lt; &quot;, currentSum = &quot; &lt;&lt; currentSum - root-&gt;val &lt;&lt; endl;
+
+        //  作为静态变量存储需要恢复现场
+        currentSum -= root-&gt;val;
+        path.pop_back();
+    }
+
+};
+int main() {
+    //10
+    //5   12
+    //4  7  N  N
+    TreeNode tree[5];
+    tree[0].val = 10;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+
+    tree[1].val = 5;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+
+    tree[2].val = 12;
+    tree[2].left = NULL;
+    tree[2].right = NULL;
+
+    tree[3].val = 4;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+
+    Solution solu;
+    vector&lt; vector&lt;int&gt; &gt; res = solu.FindPath(&amp;tree[0], 22);
+    cout &lt;&lt; &quot;路径数量为：&quot; &lt;&lt; res.size() &lt;&lt; endl;
+    for (int i = 0; i &lt; res.size(); i++) {
+        for (int j = 0; j &lt; res[i].size(); j++) {
+            cout &lt;&lt; res[i][j] &lt;&lt; &quot; &quot;;
+        }
+        cout &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>currentSum = 0, now get 10, currentSum = 10
+currentSum = 10, now get 5, currentSum = 15
+currentSum = 15, now get 4, currentSum = 19
+currentSum = 19, now pop 4, currentSum = 15
+currentSum = 15, now get 7, currentSum = 22
+find a path
+10 5 7
+currentSum = 22, now pop 7, currentSum = 15
+currentSum = 15, now pop 5, currentSum = 10
+currentSum = 10, now get 12, currentSum = 22
+find a path
+10 12
+currentSum = 22, now pop 12, currentSum = 10
+currentSum = 10, now pop 10, currentSum = 0
+路径数量为：2
+10 5 7
+10 12
+</code></pre>
+
+<h2 id="上面是用求和的时候遍历的-那么我们也可以用递减的方式遍历">上面是用求和的时候遍历的，那么我们也可以用递减的方式遍历</h2>
+
+<p>上面是用求和的时候遍历的，那么我们也可以用递减的方式遍历。而且上面的结果我们是保存在数据成员里面，我们这次使用传参的方式实现。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+};
+
+
+
+class Solution {
+public:
+
+    vector&lt; vector&lt;int&gt; &gt; FindPath(TreeNode* root, int expectNumber) {
+        vector&lt; vector&lt;int&gt; &gt; res;
+        if (root == NULL) {
+            return res;
+        }
+        FindPath(root, expectNumber, res);
+        return res;
+    }
+
+protected:
+    void FindPath(TreeNode* root, int leftSum, vector&lt; vector&lt;int&gt; &gt; &amp;res) {
+        if (root == NULL) {
+            return;
+        }
+        //用一个静态的变量来存储路径
+        static vector&lt;int&gt; path;
+
+        leftSum -= root-&gt;val;
+        path.push_back(root-&gt;val);
+
+        if (leftSum == 0&amp;&amp; ((root-&gt;left == NULL &amp;&amp; root-&gt;right == NULL))) {
+            cout &lt;&lt; &quot;find a path&quot; &lt;&lt; endl;
+            for (int i = 0; i &lt; path.size(); i++) {
+                cout &lt;&lt; path[i] &lt;&lt; &quot; &quot;;
+            }
+            cout &lt;&lt; endl;
+            res.push_back(path);//很想知道，res.push_back(path)之后，path修改的话 res里面会变吗？
+            cout &lt;&lt; &quot;size = &quot; &lt;&lt; res.size() &lt;&lt; endl;
+        }
+        else {
+            if (root-&gt;left != NULL) {
+                FindPath(root-&gt;left, leftSum, res);
+            }
+            if (root-&gt;right != NULL) {
+                FindPath(root-&gt;right, leftSum, res);
+            }
+        }
+        path.pop_back();//是static 因此还要还原回来
+    }
+};
+
+int main() {
+    //10
+    //5   12
+    //4  7  N  N
+    TreeNode tree[5];
+    tree[0].val = 10;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+
+    tree[1].val = 5;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+
+    tree[2].val = 12;
+    tree[2].left = NULL;
+    tree[2].right = NULL;
+
+    tree[3].val = 4;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+
+    Solution solu;
+    vector&lt; vector&lt;int&gt; &gt; res = solu.FindPath(&amp;tree[0], 22);
+    cout &lt;&lt; &quot;路径数量为：&quot; &lt;&lt; res.size() &lt;&lt; endl;
+    for (int i = 0; i &lt; res.size(); i++) {
+        for (int j = 0; j &lt; res[i].size(); j++) {
+            cout &lt;&lt; res[i][j] &lt;&lt; &quot; &quot;;
+        }
+        cout &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>find a path
+10 5 7
+size = 1
+find a path
+10 12
+size = 2
+路径数量为：2
+10 5 7
+10 12
+</code></pre>
+
+<p>在上面的递归的过程中，我们用 static 变量来保存 path 参数的信息，因为这个变量在函数的静态生存周期内部，因此这种方法有个致命的缺点：</p>
+
+<ul>
+<li><p>所有的对象共享这个函数，当多个对象同时操作的时候，path变量只有一个副本，因此线程不安全。<strong>是的，多个对象同时操作的时候，肯定是线程不安全的。一个的话还是安全的。对于 static 还是要总结下。</strong></p></li>
+
+<li><p>如果在函数结束的时候，path变量没有被清空，那么即使不是多线程共享访问，两个对象顺序的访问这个对象，依然会造成根共享访问同样的问题。<strong>是的。</strong></p></li>
+</ul>
+
+<p><strong>所以，多线程的时候，尽量不要使用static。确认下，看看是怎么解决的。</strong></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%AE%9A%E4%B9%89/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">TL 迁移学习的概念与定义</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%80%E5%A4%A7%E7%9A%84-k-%E4%B8%AA%E6%95%B0/">
+            <span class="next-text nav-default">算法：寻找最大的 K 个数</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

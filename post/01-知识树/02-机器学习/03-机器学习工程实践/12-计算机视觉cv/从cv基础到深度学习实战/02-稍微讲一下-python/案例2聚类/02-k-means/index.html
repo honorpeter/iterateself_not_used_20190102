@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 K-means - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="这个是国外的一个教程： 有三个使用例子，包括了图像的 Color Compression 还是很好的，要整理进来。 Clustering: K-Means In-Depth Here we&amp;rsquo;ll explore K Means Clustering, which is an unsupervised clustering technique. We&amp;rsquo;ll start with our standard set of initial imports %matplotlib inline import numpy as np import" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/02-%E7%A8%8D%E5%BE%AE%E8%AE%B2%E4%B8%80%E4%B8%8B-python/%E6%A1%88%E4%BE%8B2%E8%81%9A%E7%B1%BB/02-k-means/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 K-means" />
+<meta property="og:description" content="这个是国外的一个教程： 有三个使用例子，包括了图像的 Color Compression 还是很好的，要整理进来。 Clustering: K-Means In-Depth Here we&rsquo;ll explore K Means Clustering, which is an unsupervised clustering technique. We&rsquo;ll start with our standard set of initial imports %matplotlib inline import numpy as np import" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/02-%E7%A8%8D%E5%BE%AE%E8%AE%B2%E4%B8%80%E4%B8%8B-python/%E6%A1%88%E4%BE%8B2%E8%81%9A%E7%B1%BB/02-k-means/" /><meta property="article:published_time" content="2018-08-18T16:36:26&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-18T16:36:26&#43;00:00"/>
+<meta itemprop="name" content="02 K-means">
+<meta itemprop="description" content="这个是国外的一个教程： 有三个使用例子，包括了图像的 Color Compression 还是很好的，要整理进来。 Clustering: K-Means In-Depth Here we&rsquo;ll explore K Means Clustering, which is an unsupervised clustering technique. We&rsquo;ll start with our standard set of initial imports %matplotlib inline import numpy as np import">
+
+
+<meta itemprop="datePublished" content="2018-08-18T16:36:26&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-18T16:36:26&#43;00:00" />
+<meta itemprop="wordCount" content="834">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 K-means"/>
+<meta name="twitter:description" content="这个是国外的一个教程： 有三个使用例子，包括了图像的 Color Compression 还是很好的，要整理进来。 Clustering: K-Means In-Depth Here we&rsquo;ll explore K Means Clustering, which is an unsupervised clustering technique. We&rsquo;ll start with our standard set of initial imports %matplotlib inline import numpy as np import"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 K-means</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-18 </span>
+        
+        <span class="more-meta"> 834 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#clustering-k-means-in-depth">Clustering: K-Means In-Depth</a>
+<ul>
+<li><a href="#introducing-k-means">Introducing K-Means</a></li>
+<li><a href="#the-k-means-algorithm-expectation-maximization">The K-Means Algorithm: Expectation Maximization</a>
+<ul>
+<li><a href="#kmeans-caveats">KMeans Caveats</a></li>
+</ul></li>
+<li><a href="#application-of-kmeans-to-digits">Application of KMeans to Digits</a></li>
+<li><a href="#example-kmeans-for-color-compression">Example: KMeans for Color Compression</a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>这个是国外的一个教程：</p>
+
+<p>有三个使用例子，包括了图像的 Color Compression 还是很好的，要整理进来。</p>
+
+<h1 id="clustering-k-means-in-depth">Clustering: K-Means In-Depth</h1>
+
+<p>Here we&rsquo;ll explore <strong>K Means Clustering</strong>, which is an unsupervised clustering technique.</p>
+
+<p>We&rsquo;ll start with our standard set of initial imports</p>
+
+<pre><code class="language-python">%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# use seaborn plotting defaults
+import seaborn as sns; sns.set()
+</code></pre>
+
+<h2 id="introducing-k-means">Introducing K-Means</h2>
+
+<p>K Means is an algorithm for <strong>unsupervised clustering</strong>: that is, finding clusters in data based on the data attributes alone (not the labels).</p>
+
+<p>K Means is a relatively easy-to-understand algorithm.  It searches for cluster centers which are the mean of the points within them, such that every point is closest to the cluster center it is assigned to.</p>
+
+<p>Let&rsquo;s look at how KMeans operates on the simple clusters we looked at previously. To emphasize that this is unsupervised, we&rsquo;ll not plot the colors of the clusters:</p>
+
+<pre><code class="language-python">from sklearn.datasets.samples_generator import make_blobs
+X, y = make_blobs(n_samples=300, centers=4,
+                  random_state=0, cluster_std=0.60)
+plt.scatter(X[:, 0], X[:, 1], s=50);
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/F25lJh5ak9.png?imageslim" alt="mark" /></p>
+
+<p>By eye, it is relatively easy to pick out the four clusters. If you were to perform an exhaustive search for the different segmentations of the data, however, the search space would be exponential in the number of points. Fortunately, there is a well-known <em>Expectation Maximization (EM)</em> procedure which scikit-learn implements, so that KMeans can be solved relatively quickly.</p>
+
+<pre><code class="language-python">from sklearn.cluster import KMeans
+est = KMeans(4)  # 4 clusters
+est.fit(X)
+y_kmeans = est.predict(X)
+plt.scatter(X[:, 0], X[:, 1], c=y_kmeans, s=50, cmap='rainbow');
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/eF4AKdj6Jl.png?imageslim" alt="mark" /></p>
+
+<p>The algorithm identifies the four clusters of points in a manner very similar to what we would do by eye!</p>
+
+<h2 id="the-k-means-algorithm-expectation-maximization">The K-Means Algorithm: Expectation Maximization</h2>
+
+<p>K-Means is an example of an algorithm which uses an <em>Expectation-Maximization</em> approach to arrive at the solution.
+<em>Expectation-Maximization</em> is a two-step approach which works as follows:</p>
+
+<ol>
+<li>Guess some cluster centers</li>
+<li>Repeat until converged
+A. Assign points to the nearest cluster center
+B. Set the cluster centers to the mean</li>
+</ol>
+
+<p>Let&rsquo;s quickly visualize this process:</p>
+
+<pre><code class="language-python">from fig_code import plot_kmeans_interactive
+plot_kmeans_interactive();
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/2DjaLjFJkA.png?imageslim" alt="mark" /></p>
+
+<p>This algorithm will (often) converge to the optimal cluster centers.</p>
+
+<h3 id="kmeans-caveats">KMeans Caveats</h3>
+
+<p>The convergence of this algorithm is not guaranteed; for that reason, scikit-learn by default uses a large number of random initializations and finds the best results.</p>
+
+<p>Also, the number of clusters must be set beforehand&hellip; there are other clustering algorithms for which this requirement may be lifted.</p>
+
+<h2 id="application-of-kmeans-to-digits">Application of KMeans to Digits</h2>
+
+<p>For a closer-to-real-world example, let&rsquo;s again take a look at the digits data. Here we&rsquo;ll use KMeans to automatically cluster the data in 64 dimensions, and then look at the cluster centers to see what the algorithm has found.</p>
+
+<pre><code class="language-python">from sklearn.datasets import load_digits
+digits = load_digits()
+</code></pre>
+
+<pre><code class="language-python">est = KMeans(n_clusters=10)
+clusters = est.fit_predict(digits.data)
+est.cluster_centers_.shape
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>(10, 64)
+</code></pre>
+
+<p>We see ten clusters in 64 dimensions. Let&rsquo;s visualize each of these cluster centers to see what they represent:</p>
+
+<pre><code class="language-python">fig = plt.figure(figsize=(8, 3))
+for i in range(10):
+    ax = fig.add_subplot(2, 5, 1 + i, xticks=[], yticks=[])
+    ax.imshow(est.cluster_centers_[i].reshape((8, 8)), cmap=plt.cm.binary)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/hH8EIhliem.png?imageslim" alt="mark" /></p>
+
+<p>We see that <em>even without the labels</em>, KMeans is able to find clusters whose means are recognizable digits (with apologies to the number 8)!</p>
+
+<h2 id="example-kmeans-for-color-compression">Example: KMeans for Color Compression</h2>
+
+<p>One interesting application of clustering is in color image compression. For example, imagine you have an image with millions of colors. In most images, a large number of the colors will be unused, and conversely a large number of pixels will have similar or identical colors.</p>
+
+<p>Scikit-learn has a number of images that you can play with, accessed through the datasets module. For example:</p>
+
+<pre><code class="language-python">from sklearn.datasets import load_sample_image
+china = load_sample_image(&quot;china.jpg&quot;)
+plt.imshow(china)
+plt.grid(False);
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/FJB3Bkg09E.png?imageslim" alt="mark" /></p>
+
+<p>The image itself is stored in a 3-dimensional array, of size <code>(height, width, RGB)</code>:</p>
+
+<pre><code class="language-python">china.shape
+</code></pre>
+
+<pre><code>(427, 640, 3)
+</code></pre>
+
+<p>We can envision this image as a cloud of points in a 3-dimensional color space. We&rsquo;ll rescale the colors so they lie between 0 and 1, then reshape the array to be a typical scikit-learn input:</p>
+
+<pre><code class="language-python">X = (china / 255.0).reshape(-1, 3)
+print(X.shape)
+</code></pre>
+
+<pre><code>(273280, 3)
+</code></pre>
+
+<p>We now have 273,280 points in 3 dimensions.</p>
+
+<p>Our task is to use KMeans to compress the $256^3$ colors into a smaller number (say, 64 colors). Basically, we want to find $N_{color}$ clusters in the data, and create a new image where the true input color is replaced by the color of the closest cluster.</p>
+
+<pre><code class="language-python"># reduce the size of the image for speed
+image = china[::3, ::3]
+n_colors = 64
+
+X = (image / 255.0).reshape(-1, 3)
+
+model = KMeans(n_colors)
+labels = model.fit_predict(X)
+colors = model.cluster_centers_
+new_image = colors[labels].reshape(image.shape)
+new_image = (255 * new_image).astype(np.uint8)
+
+# create and plot the new image
+with sns.axes_style('white'):
+    plt.figure()
+    plt.imshow(image)
+    plt.title('input')
+
+    plt.figure()
+    plt.imshow(new_image)
+    plt.title('{0} colors'.format(n_colors))
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/hH990fdmbK.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/Fl4iAbFid4.png?imageslim" alt="mark" /></p>
+
+<p>Compare the input and output image: we&rsquo;ve reduced the $256^3$ colors to just 64.</p>
+
+<p><span style="color:red;">这种图像压缩还是很震撼的。</span></p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-18</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/02-%E7%A8%8D%E5%BE%AE%E8%AE%B2%E4%B8%80%E4%B8%8B-python/01-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/02-%E7%A8%8D%E5%BE%AE%E8%AE%B2%E4%B8%80%E4%B8%8B-python/%E6%A1%88%E4%BE%8B2%E8%81%9A%E7%B1%BB/01-%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default">01 介绍</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,3624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>17 标准库特殊设施 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第IV部分 &amp;lt;as] 高级主 内容 第IV部分将介绍C&#43;&#43;和标准库的一些附加特性，虽然这些特性在特定的情况下很有 用，但并非每个C&#43;&#43;程序员都需要它们。这些" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/17-%E6%A0%87%E5%87%86%E5%BA%93%E7%89%B9%E6%AE%8A%E8%AE%BE%E6%96%BD/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="17 标准库特殊设施" />
+<meta property="og:description" content="第IV部分 &lt;as] 高级主 内容 第IV部分将介绍C&#43;&#43;和标准库的一些附加特性，虽然这些特性在特定的情况下很有 用，但并非每个C&#43;&#43;程序员都需要它们。这些" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/17-%E6%A0%87%E5%87%86%E5%BA%93%E7%89%B9%E6%AE%8A%E8%AE%BE%E6%96%BD/" /><meta property="article:published_time" content="2018-06-26T20:19:34&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T20:19:34&#43;00:00"/>
+<meta itemprop="name" content="17 标准库特殊设施">
+<meta itemprop="description" content="第IV部分 &lt;as] 高级主 内容 第IV部分将介绍C&#43;&#43;和标准库的一些附加特性，虽然这些特性在特定的情况下很有 用，但并非每个C&#43;&#43;程序员都需要它们。这些">
+
+
+<meta itemprop="datePublished" content="2018-06-26T20:19:34&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T20:19:34&#43;00:00" />
+<meta itemprop="wordCount" content="43625">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="17 标准库特殊设施"/>
+<meta name="twitter:description" content="第IV部分 &lt;as] 高级主 内容 第IV部分将介绍C&#43;&#43;和标准库的一些附加特性，虽然这些特性在特定的情况下很有 用，但并非每个C&#43;&#43;程序员都需要它们。这些"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">17 标准库特殊设施</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 43625 words </span>
+        <span class="more-meta"> 88 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#第iv部分">第IV部分</a></li>
+</ul></li>
+<li><a href="#高级主">高级主</a></li>
+<li><a href="#标准库特殊设施">标准库特殊设施</a>
+<ul>
+<li>
+<ul>
+<li><a href="#17-1-tuple-类型">17.1 tuple 类型</a>
+<ul>
+<li><a href="#17-1-1定义和初始化tuple">17.1.1定义和初始化tuple</a></li>
+<li><a href="#17-1-1节练习">17.1.1节练习</a></li>
+<li><a href="#17-1-2节练习">17.1.2节练习</a></li>
+</ul></li>
+<li><a href="#17-2-bitset-类型">17.2 bitset 类型</a>
+<ul>
+<li><a href="#17-2-1定义和初始化bitset">17.2.1定义和初始化bitset</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#t-1">t 1</a></li>
+<li><a href="#t">t</a></li>
+<li><a href="#t-1-1">t</a>
+<ul>
+<li>
+<ul>
+<li><a href="#17-2-1节练习">17.2.1节练习</a></li>
+<li><a href="#17-2-2-bitset-操作">17.2.2 bitset 操作</a></li>
+<li><a href="#17-2-2节练习">17.2.2节练习</a></li>
+</ul></li>
+<li><a href="#17-3正则表达式">17.3正则表达式</a>
+<ul>
+<li><a href="#17-3-1使用正则表达式库">17.3.1使用正则表达式库</a></li>
+<li><a href="#17-3-1节练习">17.3.1节练习</a></li>
+<li><a href="#17-3-2匹配与regex迭代器类型">17.3.2匹配与Regex迭代器类型</a></li>
+<li><a href="#17-3-2节练习">17.3.2节练习_</a></li>
+<li><a href="#17-3-3使用子表达式">17.3.3使用子表达式</a></li>
+<li><a href="#17-3-3节练习">17.3.3节练习</a></li>
+<li><a href="#17-3-4-使用-regex-replace">17.3.4 使用 regex_replace</a></li>
+<li><a href="#17-3-4节练习">17.3.4节练习</a></li>
+</ul></li>
+<li><a href="#17-4随机数-745">17.4随机数    &lt;745~|</a>
+<ul>
+<li><a href="#17-4-1随机数引擎和分布">17.4.1随机数引擎和分布</a></li>
+<li><a href="#17-4-1节练习">17.4.1节练习</a></li>
+<li><a href="#17-4-2其他随机数分布">17.4.2其他随机数分布</a></li>
+<li><a href="#17-4-2节练习">17.4.2节练习</a></li>
+</ul></li>
+<li><a href="#17-5-io库再探">17.5 IO库再探</a></li>
+</ul></li>
+<li><a href="#g53-17-5-1格式化输入与输出">G53&gt; 17.5.1格式化输入与输出</a>
+<ul>
+<li>
+<ul>
+<li><a href="#17-5-1节练习">17.5.1节练习</a></li>
+<li><a href="#17-5-2未格式化的输人-输出操作">17.5.2未格式化的输人/输出操作</a></li>
+<li><a href="#17-5-2节练习">17.5.2节练习</a></li>
+<li><a href="#17-5-3流随机访问">17.5.3流随机访问</a></li>
+<li><a href="#17-5-3节练习">17.5.3节练习</a></li>
+</ul></li>
+<li><a href="#术语农">术语农</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h4 id="第iv部分">第IV部分</h4>
+
+<p>&lt;as]</p>
+
+<h3 id="高级主">高级主</h3>
+
+<p>内容</p>
+
+<p>第IV部分将介绍C++和标准库的一些附加特性，虽然这些特性在特定的情况下很有 用，但并非每个C++程序员都需要它们。这些特性分为两类：一类对于求解大规模的问题 很有用；另一类适用于特殊问题而非通用问题。针对特殊问题的特性既有属于C++语言的 （将在第19章介绍），也有属于标准库的（将在第17章进行介绍）。</p>
+
+<p>在第17章中我们介绍叫个具有特殊目的的标准库设施：bitset类和三个新标准库 设施（tuple、正则表达式和随机数）。我们还将介绍1O库中某些不常用的部分。</p>
+
+<p>第18章介绍异常处理、命名空间和多重继承。这®特性在没计大型程序时是最有用的。</p>
+
+<p>即使是一个程序员就能编写的足够简单的程序，也能从异常处理机制受益，这也是为 什么我们在第5章介绍了异常处理的基本知识的原因。但是，对于需要大型团队才能完成 的程序设计问题，运行时错误处理才显得更为重要也更难于管理。在第18章中，我们会 额外介绍一些有用的异常处理设施。我们还将详细讨论异常是如何处理的，并展示如何定 义和使用自己的异常类。这一章还会介绍新标准中异常处理方面的改进——如何指出一个 特定函数不会抛出异常。</p>
+
+<p>大型应用程序通常会使用来自多个提供商的代码。如果提供商不得不将他们定义的名oa 字放置在单一的命名空间中，那么将多个独立开发的库组合起来是很困难的（如果能组合 的话）。独立开发的库几乎必然会使用与其他库相同的名字；对于某个库中定义的名字，</p>
+
+<p>如果另一个库中使用了相同的名字，就会引起冲突。为了避免名字冲突，我们可以在一个 namespace中定义名字-</p>
+
+<p>无论何时我们使用一个来自标准库的名字，实际上都足在使用名为std的命名空间 中的名字。第18章将会展水如何定义我们自己的命名空间。</p>
+
+<p>第18章最后介绍一个很重要但不太常用的语言特性：多重继承。多®继承对非常复 杂的继承层次很有用。</p>
+
+<p>第19荦介绍几种用丁&rsquo;特定类别问题的特殊工具和技术，包括如何重定义内存分配机</p>
+
+<p>制：C++对运行时类型识别(run-time type identification, RTTI)的支持-允许我们在运</p>
+
+<p>行时才确定一个表达式的实际类型；以及如何定义和使用指向类成员的指针。类成员指针 不同丁&rsquo;普通数据或函数指针。普通指针仅根据对象或函数的类型而变化，而类成员指针述 必须反映成员所属的类。我们还将介绍三种附加的聚合类型：联合、嵌套类和局部类。这 -V最后将简要介绍一组本质上不町移植的语言特性：volatile修饰符、位域以及链接</p>
+
+<p>指令。</p>
+
+<p>第17章</p>
+
+<h3 id="标准库特殊设施">标准库特殊设施</h3>
+
+<p>内容</p>
+
+<p>最新的C++标准极大地扩充了标准库的规模和范围。实际上，从1998年的第一版标 准到2011年的最新标准，标准厍部分的篇幅增加了两倍以上。因此，介绢所有C++标准 库类的知识大大超出了本书范围。但是，有4个标准库没施，虽然它们比我们已经介绍的 其他标准库设施更特殊，侶也足够通用，应该放在一本入门书籍中进行介绍a这4个标准 库设施是：tuple、bitset、随机数生成及正则表达式，此外，我们还将介绍IO阵中… 陛具有特殊目的的部分。</p>
+
+<p>E5i8&gt;    标准库占据了新标准文本将近三分之二的篇幅。虽然我们不能详细介绍所有标准库设</p>
+
+<p>施，但仍有一些标准库设施在很多应用中都是有用的：tuple、bitset、正则表达式以 及随机数。我们还将介绍一些附加的10库功能：格式控制、未格式化10和随机访问。</p>
+
+<h5 id="17-1-tuple-类型">17.1 tuple 类型</h5>
+
+<p>fcTq tuple是类似pair （参见11.2.3节，第379页）的模板。每个pair的成员类型都 不相同，但每个pair都恰好有两个成员。不同tuple类型的成员类型也不相同，但一 个tuple可以有任意数量的成员。每个确定的tuple类型的成员数目是固定的，但一个 tuple类型的成员数目可以与另一个tuple类型不同。</p>
+
+<p>当我们希望将一些数据组合成单一对象，但又不想麻烦地定义一个新数据结构来表示 这些数据时，tuple是非常有用的。表17.1列出了 tuple支持的操作。tuple类型及其 伴随类型和函数都定义在tuple头文件中。</p>
+
+<table>
+<thead>
+<tr>
+<th>表17.1: tuple支持的操作</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>tuple<Tl, T2,    Tn> t;</td>
+<td>t是一个tuple,成员数为n,第i个成员的类型为Ti。 所有成员都进行值初始化（参见3.3.1节，第88页）</td>
+</tr>
+
+<tr>
+<td>tuple<Tl, T2,    Tn> t (vl,v2, &hellip;, vn);</td>
+<td>t是一个tuple,成员类型为Tl&hellip;Tn，每个成员用对应的 初始值Vi进行初始化。此构造函数是explicit的（参 见7.5.4节，第265页）</td>
+</tr>
+
+<tr>
+<td>make tuple (vl, v2,    vn)</td>
+<td>返回一个用给定初始值初始化的tuple。tuple的类型 从初始值的类型推断</td>
+</tr>
+
+<tr>
+<td>tl == t2tl != t2</td>
+<td>当两个tuple具有相同数量的成员且成员对应相等时， 两个tuple相等。这两个操作使用成员的==运算符来完 成。一旦发现某对成员不等，接下来的成员就不用比较了</td>
+</tr>
+
+<tr>
+<td>tl relop t2</td>
+<td>tuple的关系运算使用字典序（参见9.2.7节，第304页）。 两个tuple必须具有相同数量的成员。使用&lt;运算符比较 tl的成员和t2中的对应成员</td>
+</tr>
+
+<tr>
+<td>get<i> (t)</td>
+<td>返回t的第i个数据成员的引用；如果t是•个左值，结 果是一个左值引用；否则，结果是一个右值引用。tuple 的所有成员都是public的</td>
+</tr>
+
+<tr>
+<td>tuple si.ze<tupleType>: : value</td>
+<td>一个类模板，可以通过一个tuple类型来初始化。它有 —个名为 value 的 public constexpr static 数据 成员，类型为size_t，表示给定tuple类型中成员的数 量</td>
+</tr>
+
+<tr>
+<td>tuple element&lt;i, tupleType〉：:type</td>
+<td>一个类模板，可以通过一个整型常量和一个tuple类型 来初始化。它有一个名为type的public成员，表示给 定tuple类型中指定成员的类型</td>
+</tr>
+</tbody>
+</table>
+
+<p>我们可以将tuple看作一个“快速而随意”的数据结构：</p>
+
+<h6 id="17-1-1定义和初始化tuple">17.1.1定义和初始化tuple</h6>
+
+<p>当我们定义一个tuple时，需要指出每个成员的类型：</p>
+
+<p>tuple<size_t, size_t, size_t> threeD; // 三个成员都设置为 0 tuple<string, vector<double>, int, list&lt;int»</p>
+
+<p>someVal（&rdquo;constants&rdquo;, {3.14, 2.718}, 42, {0,1,2,3,4,5}）</p>
+
+<p>当我们创建一个tuple对象时，可以使用tuple的默认构造函数.它会对每个成员进行 值初始化（参见3.3.1节，第88页）；也可以像本例中初始化someVal—样，为每个成员 提供一个初始值。tuple的这个构造函数是explicit的（参见7.5.4节，第265页）， 因此我们必须使用直接初始化语法：</p>
+
+<p>tuple<size_t, size_t, size_t> threeD = {1,2,3）; II 错误 tuple<size_t, size_t, size_t> threeDf1,2,3};    // 正确</p>
+
+<p>类似make_pair函数（参见11.2.3节，第381页），标准库定义了 make_tuple函 数，我们还可以&rdquo;用它来生成tuple对象：</p>
+
+<p>//表承书店交易记录的tuple,包含：ISBN、数量和每册书的价格 auto item = make_tuple（&rdquo;0-999-78345-X&rdquo;, 3, 20.00）;</p>
+
+<p>类似make_pair, make_tuple函数使用初始值的类型來推断tuple的类型。在本例 中，item 是一个 tuple，类型为 tuple&lt;const char*, int, double〉。</p>
+
+<p>访问tuple的成员</p>
+
+<p>一个pair总是有两个成员，这样，标准库就可以为它们命名（如，first和second）。 但这种命名方式对tuple是不可能的，因为一个tuple类型的成员数目是没有限制的。 因此，tuple的成员都是未命名的。要访问一个tuple的成员，就要使用一个名为get 的标准库函数模板。为了使用get,我们必须指定一个显式模板实参（参见16.2.2节，第</p>
+
+<p>603页)，它指出我们想要访问第几个成员。 定成员的引用：</p>
+
+<p>我们传递给get —个tuple对象，它返回指</p>
+
+<p>//返回item的第一个成员 //返回item的第二个成员 //返回item的最后一个成员 //打折20%</p>
+
+<p>auto book = get<0>(item); auto cnt = get<l>(item); auto price = get<2>(item)/cnt; get<2>(item) *= 0.8;</p>
+
+<p>尖括号中的值必须是一个整型常量表达式（参见2.4.4节，第58页）。与往常一样，我们 从0开始计数，意味着get&lt;0〉是第一个成员。</p>
+
+<p>如果不知道一个tuple准确的类型细节信息，可以用两个辅助类模板来查询tuple 成员的数量和类型：</p>
+
+<p>typedef decltype （item） trans; // trans 是 item 的类型 //返回trans类型对象中成员的数量</p>
+
+<p>size_t sz = tuple_size<trans>: : value; // 返回 3 // cnt的类型与item中第二个成员相同</p>
+
+<p>tuple_element<l, trans>: : type cnt = get<l> （item） ; // cnt 是一个 int</p>
+
+<p>为了使用tuple_size或tuple_element，我们需要知道一个tuple对象的类型。与 往常一样，确定一个对象的类型的最简单方法就是使用decltype （参见2.5.3节，第62 页）。在本例中，我们使用decltype来为item类型定义一个类型别名，用它来实例化</p>
+
+<p>两个模板。</p>
+
+<p>tuple_size有一个名为value的public static数据成员，它表示给定tuple 中成员的数量。tuple_element模板除了一个tuple类型外，还接受一个索引值。它 有一个名为type的public类型成员，表示给定tuple类型中指定成员的类型。类似 get, tuple_element所使用的索引也是从0开始计数的。</p>
+
+<p>关系和相等运算符</p>
+
+<p>tuple的关系和相等运算符的行为类似容器的对应操作（参见9.2.7节，第304页〉。 这些运算符逐对比较左侧tuple和右侧tuple的成员。只有两个tuple具有相闻数量 的成员时，我们才可以比较它们。而且，为了使用tuple的相等或不等运算符，对每对 成员使用==运算符必须都是合法的；为了使用关系运算符，对每对成员使用&lt;必须都是合 法的。例如：</p>
+
+<p>tuple&lt;string, string〉 duo(&ldquo;l&rdquo;, &ldquo;2&rdquo;〉；</p>
+
+<p>tuple<size_t, size_t> twoD(1, 2);</p>
+
+<p>bool b = (duo == twoD) ;    // 错误：不能比较 size_t 和 string</p>
+
+<p>tuple<size_t, size_t, size_t> threeD(1, 2, 3); b = (twoD &lt; threeD) ;    //错误：成员数量不同</p>
+
+<p>tuple<size_t, size_t> origin(0, 0); b = (origin &lt; twoD) ;    // 正确：b 为 true</p>
+
+<p><img src="C++  Primer 5-167.jpg" alt="img" /></p>
+
+<p>由于tuple定义了〈和==运算符，我们可以将tuple序列传递给算法，并且 可以在无序容器中将tuple作为关键字类型。</p>
+
+<h6 id="17-1-1节练习">17.1.1节练习</h6>
+
+<p>练习17.1：定义一个保存三个int值的tuple,并将其成员分别初始化为10、20和 30o</p>
+
+<p>练习 17.2:定义—tuple,保存一个 string、一个 vector<string>和— pair&lt;string, int〉o</p>
+
+<p>练习17.3:重写12.3节（第430页）中的TextQuery程序，使用tuple代替 QueryResult类。你认为哪种设计更好？为什么？</p>
+
+<p>□K&gt; 17.1.2使用tuple返回多个值</p>
+
+<p>tuple的一个常见用途是从一个函数返回多个值。例如，我们的书店可能是多家连锁 书店中的一家。每家书店都有一个销售记录文件，保存每本书近期的销售数据。我们可能 希望在所有书店中查询某本书的销售情况。</p>
+
+<p>假定每家书店都有一个销售记录文件。每个文件都将每本书的所有销售记录存放在一 起。进一步假定已有一个函数可以读取这些销售记录文件，为每个书店创建一个 vector<Sales_data>,并将这些 vector 保存在 vector 的 vector 中：</p>
+
+<p>// files中的每个元素保存一家书店的销售记录 vector&lt;vector&lt;Sales_data» files;</p>
+
+<p>我们将编写一个函数，对于一本给定的书，在files中搜索出售过这本书的书店。对每 家有匹配销售记录的书店，我们将创建一个tuple来保存这家书店的索引和两个迭代器。</p>
+
+<p>索引指出了书店在files中的位置，而两个迭代器则标记了给定书籍在此书店的 vector<Sales_data>中第一条销售记录和最后一条销售记录之后的位置。</p>
+
+<p>返回tuple的函数</p>
+
+<p>我们首先编写查找给定书籍的函数。此函数的参数是刚刚提到的vector的vector 以及一个表示书籍工SBN的string。我们的函数将返回一个tuple的vector,凡是销 售了给定书籍的书店，都在vector中有对应的一项：</p>
+
+<p>// matches有三个成员：一家书店的索引和两个指向书店vector中元素的迭代器 typedef tuple<vector<Sales_data>::size_type,</p>
+
+<p>vector<Sales_data>::const_iterator, vector<Sales_data>::const_iterator&gt; matches;</p>
+
+<p>// files保存每家书店的销售记f</p>
+
+<p>// findBook返回一^vector，每家销售了给定书籍的书店在其中都有一项 vector<matches></p>
+
+<p>findBook(const vector<vector<Sales_data>&gt; &amp;files, const string &amp;book)</p>
+
+<p>{</p>
+
+<p>vector<matches> ret; // 初始化为空 vector</p>
+
+<p>//对每家书店，查找与给定书籍匹配的记录范围(如果存在的话)</p>
+
+<p>for (auto it = files.cbegin(); it != files.cend(); ++it)    {</p>
+
+<p>//查找具有相同ISBN的Sales_data范围</p>
+
+<p>auto found = equal_range(it-&gt;cbegin(), it-&gt;cend(), book, compareIsbn);</p>
+
+<p>if (found, first ! = found, second) // 此书店销售 了给定书籍 //记住此书店的索引及匹配的范围</p>
+
+<p>ret.push_back(make一tuple(it - files.cbegin(),</p>
+
+<p>found.first, found.second));</p>
+
+<p>}</p>
+
+<p>return ret; //如果未找到匹配记录的话，ret为空</p>
+
+<p>}</p>
+
+<p>for循环遍历files中的元素，每个元素都是一个vector。在for循环内，我们调用〈722 I 了一个名为eqUal_range的标准库算法，它的功能与关联容器的同名成员类似(参见 11.3.5节，第390页)。equal_range的前两个实参是表示输入序列的迭代器(参见10.1 节，第336页)，第三个参数是一个值。默认情况下，eqUal_range使用&lt;运算符来比较 元素。由丁-Sales_data没有&lt;运算符，因此我们传递给它一个指向comparelsbn函数 的指针(参见11.2.2节，第379页)。</p>
+
+<p>equal_range算法返回一个迭代器pair,表示元素的范围。如果未找到book,则 两个迭代器&amp;等，表示空范围。否则，返回的pair的first成员将表示第一条匹配的 记录，second则表示匹配的尾后位置。</p>
+
+<p>使用函数返回的tuple</p>
+
+<p>一旦我们创建了 vector保存包含匹配的销售记录的书店，就需要处理这些记录了。 在此程序中，对每家包含匹配销售记录的书店，我们将打印其汇总销售信息：</p>
+
+<p>void reportResults(istream &amp;in, ostream &amp;os,</p>
+
+<p>const vector&lt;vector&lt;Sales_data» &amp;files)</p>
+
+<p>string s; //要查找的书</p>
+
+<p>while (in &gt;&gt; s) {</p>
+
+<p>auto trans = findBook (files, s) ; // 销售了 这本书的书店 if (trans.empty())    {</p>
+
+<p>cout &lt;&lt; s &lt;&lt; ’’ not found in any stcfres&rdquo; « endl; continue; //获得下一^要查找的书</p>
+
+<p>}</p>
+
+<p>for (const auto Sstore : trans) //对每家销售了给定书籍的书店 // get<n〉返回store中tuple的指定的成员 os « "store " << get<0> (store) « *&rsquo; sales: *&rsquo;</p>
+
+<p>« accumulate(get<l>(store) , get<2>(store),</p>
+
+<p>Sales_data(s))</p>
+
+<p>« endl;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>while循环反复读取名为in的istream来获得下一本要处理的书。我们调用f indBook 来检查s是否存在，并将结果赋予trans。我们使用auto来简化trans类型的代码编 写，它是一个tuple的vector。</p>
+
+<p>如果trans为空，表示没有关于s的销售记录。在此情况下，我们打印一条信息并 返回，执行下一步while循环来获取下一本要查找的书。</p>
+
+<p>for循环将store绑定到trans中的每个元素。由于不希望改变trans中的元素， 我们将store声明为const的引用。我们使用get来打印相关数据：get&lt;0〉表示对应 书店的索引、get&lt;l〉表示第一条交易记录的迭代器、get&lt;2〉表示尾后位置的迭代器。</p>
+
+<p>由于Sales_data定义了加法运算符(参见14.3节，第497页)，因此我们可以用标 准库的accumulate算法(参见10.2.1节，第338页)来累加销售记录。我们用</p>
+
+<p>G23&gt; Sales_data的接受一个string参数的构造函数(参见7.1.4节，第236页)来初始化 一个Sales_data对象，将此对象传递给accumulate作为求和的起点。此构造函数用 给定的string初始化bookNo,并将units_sold和revenue成员置为0。</p>
+
+<h6 id="17-1-2节练习">17.1.2节练习</h6>
+
+<p>练习17.4:编写并测试你自己版本的f indBook函数。</p>
+
+<p>练习17.5:重写f indBook，令其返回一个pair，包含一个索引和一个迭代器pair。 练习17.6:重写f indBook，不使用tuple或pair。</p>
+
+<p>练习17.7:解释你更倾向于哪个版本的findBook,为什么。</p>
+
+<p>练习17.8:在本节最后一段代码中，如果我们将SaleS_data()作为第三个参数传递 给accumulate，会发生什么？</p>
+
+<h5 id="17-2-bitset-类型">17.2 bitset 类型</h5>
+
+<p>在4.8节(第135页)中我们介绍了将整型运算对象当作二进制位集合处理的一些内 置运算符。标准库还定义了 bitset类，使得位运算的使用更为容易，并且能够处理超过 最长整型类型大小的位集合。bitset类定义在头文件bitset中。</p>
+
+<h6 id="17-2-1定义和初始化bitset">17.2.1定义和初始化bitset</h6>
+
+<p>表17.2列出了 bitset的构造函数。bitset类是一个类模板，它类似array类， 具有固定的大小（参见9.2.4节，第301页）。当我们定义一个bitset时，需要声明它包 含多少个二进制位：</p>
+
+<p>bitset<32> bitvec （1U） ; // 32 位；低位为 1，其他位为 0</p>
+
+<p>大小必须是一个常量表达式（参见2.4.4节，第58页）。这条语句定义bitvec为一个包 含32位的bitset。就像vector包含未命名的元素一样，bitset中的二进制位也是 未命名的，我们通过位置来访问它们。二进制位的位置是从0开始编号的。因此，bitvec 包含编号从0到31的32个二进制位。编号从0开始的二进制位被称为低位（low-order）， 编号到31结束的二进制位被称为高位（high-order）。</p>
+
+<p>表17.2:初始化bitset的方法</p>
+
+<p>bitset<n> b;    I□有n位；每一位均为0。此构造函数是一个constexpr （参</p>
+
+<p>见7.5.6节，第267页）</p>
+
+<p>bitset<n> b（u）;    b 是 unsigned long long 值 u 的低 n 位的拷贝。如果 n 大</p>
+
+<p>于 unsigned long long 的大小，贝lj b 中超出 unsigned long long的高位被置为0。此构造函数是一•个constexpr （参见</p>
+
+<p>7.5.6 节，第 267 页）</p>
+
+<p>bitset<n> b（sz pos, b是string s从位置pos开始m个字符的拷贝。s只能包含 mz zero, one）;    字符zero或one;如果s包含任何其他字符，构造函数会抛出</p>
+
+<p>invalid_argument异常。字符在b中分别保存为zero和 one。pos 默认为 0，m 默认为 string: : npos» zero 默认 为，0, , one默认为，1&rsquo;</p>
+
+<p>bitset<n> b（cp, pos,    与上一个构造函数相同，但从cp指向的字符数组中拷贝字符。</p>
+
+<p>mr zero, one）;    如果未提供m,则cp必须指向一个C风格字符串。如果提供了</p>
+
+<p>m，则从cp开始必须至少有m个zero或one字符 接受一个string或一个字符指针的构造函数是explicit的（参见7.5.4节，第265页），在新 标准中增加了为0和1指定其他字符的功能，</p>
+
+<p>用unsigned值初始化bitset</p>
+
+<p>当我们使用一个整型值来初始化bitset时，此值将被转换为unsigned long long 类型并被当作位模式来处理。bitset中的二进制位将是此模式的一个副本。如果bitset 的大小大于一个unsigned long long中的二进制位数，则剩余的高位被置为0。如果&lt;224 I bitset的大小小于一个unsigned long long中的二进制位数，则只使用给定值中的 低位，超出bitset大小的高位被丢弃：</p>
+
+<p>// bitvecl比初始值小；初始值中的高位被丢弃</p>
+
+<p>bitset<13> bitvecl （Oxbeef） ;    // 二进制位序列为 1111011101111</p>
+
+<p>// bitvec2比初始值大；它的高位被置为0</p>
+
+<p>bitset<20> bitvec2 （Oxbeef） ;    // 二进制位序列为 00001011111011101111</p>
+
+<p>//在64位机器中，long long 0ULL是64个0比特，因此-0ULL是64个1 bitset<128> bitvec3 卜0ULL） ;    // 0〜63 位为 1; 63〜127 位为 0</p>
+
+<p>从一个string初始化bitset</p>
+
+<p>我们可以从一个string或一个字符数组指针来初始化bitset。两种情况下，字符 都直接表示位模式。与往常一样，当我们使用字符串表示数时，字符串中下标最小的字符 对应高位，反之亦然：</p>
+
+<p>bitset<32> bitvec4 (&ldquo;1100&rdquo;) ; // 2、3 两位为 1，剩余两位为 0 如果string包含的字符数比bitset少，则bitset的高位被置为0。</p>
+
+<p><img src="C++  Primer 5-168.jpg" alt="img" /></p>
+
+<p>string的下标编号习惯与bitset恰好相反：string中下标最大的字符(最 右字符)用来初始化bitset中的低位(下标为◦的二进制位)。当你用一个 string初始化一个bitset时，要记住这个差别。</p>
+
+<p>LZ25&gt;    我们不必使用整个string来作为bitset的初始值，可以只用一个子串作为初始值：</p>
+
+<p>string str (&rsquo;* 1111111000000011001101&rdquo;);</p>
+
+<p>bitset<32> bitvec5{str, 5, 4); // 从 str [5]开始的四个二进制位，1100 bitset<32> bitvec6(str, str. size ()-4) ; // 使用最后四个字符</p>
+
+<p>此处，bitvec5用str中从str [5]开始的长度为4的子串进行初始化。与往常一样， 子串的最右字符表示最低位。因此，bitvec5中第3位到第0位被设置为1100,剩余 位被设置为0。传递给bitvec6的初始值是一个string和一个开始位置，因此bitvec6 用str中倒数第四个字符开始的子串进行初始化。bitvec6中剩余二进制位被初始化为 0。下图说明了这两个初始化过程</p>
+
+<p>从str拷贝的元素 str    八 、</p>
+
+<p>iii]i]iiiiiiiiioi(〕ioioioi</p>
+
+<p>用str初始化</p>
+
+<p>bitvec5</p>
+
+<p>| …|0|0|0|0|0|0|0|1|1|0|0|</p>
+
+<h4 id="t-1">t 1</h4>
+
+<p>str[5]    str[5+4]</p>
+
+<p>(首元素)    (尾后位置)</p>
+
+<p>bitvec5[4]</p>
+
+<p>bitvec5[0]</p>
+
+<p>从str拷贝的元素 str    ，人 &lsquo;</p>
+
+<p>I    |1|0|0|1|1|0|1|</p>
+
+<h4 id="t">t</h4>
+
+<p>str.size ()-4</p>
+
+<p>用str初始化</p>
+
+<p>b i t ve c 6    人</p>
+
+<p>| …|0|0|0|0|0|0|0|]|l|0|l|</p>
+
+<h4 id="t-1-1">t</h4>
+
+<p>bitvec6 [4]</p>
+
+<p>bitvec6[0]</p>
+
+<h6 id="17-2-1节练习">17.2.1节练习</h6>
+
+<p>练习17.9:解释下列每个bitset对象所包含的位模式：</p>
+
+<p>(a)    bitset<64> bitvec (32);</p>
+
+<p>(b)    bitset<32> bv(1010101);</p>
+
+<p>&copy;    string bstr; cin » bstr; bitset<8>bv(bstr);</p>
+
+<h6 id="17-2-2-bitset-操作">17.2.2 bitset 操作</h6>
+
+<p>bitset操作（参见表17.3）定义了多种检测或设置一个或多个二进制位的方法。 bitset类还支持我们在4.8节（第136页）中介绍过的位运算符。这些运算符用于bitset 对象的含义与内置运算符用于unsigned运算对象相同。</p>
+
+<table>
+<thead>
+<tr>
+<th>表 17.3: bitset 操作</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>b.any ()</td>
+<td>b中是否存在置位的二进制位</td>
+</tr>
+
+<tr>
+<td>b.all ()</td>
+<td>b中所有位都置位了吗</td>
+</tr>
+
+<tr>
+<td>b.none ()</td>
+<td>b中不存在置位的二进制位吗</td>
+</tr>
+
+<tr>
+<td>b.count()</td>
+<td>b中置位的位数</td>
+</tr>
+
+<tr>
+<td>b.size()</td>
+<td>—个constexpr函数（参见2.44节，第58页），返回b中 的位数</td>
+</tr>
+
+<tr>
+<td>b.test(pos)</td>
+<td>若pos位置的位是置位的，则返回true，否则返回false</td>
+</tr>
+
+<tr>
+<td>b.set(pos,v)</td>
+<td>将位置pos处的位设置为bool值v。v默认为true。如果</td>
+</tr>
+
+<tr>
+<td>b.set ()</td>
+<td>未传递实参，则将b中所有位置位</td>
+</tr>
+
+<tr>
+<td>b.reset(pos) b.reset ()</td>
+<td>将位置pos处的位复位或将b中所有位复位</td>
+</tr>
+
+<tr>
+<td>b.flip(pos) b.flipO</td>
+<td>改变位置pos处的位的状态或改变b中每一位的状态</td>
+</tr>
+
+<tr>
+<td>b[pos]</td>
+<td>访问b中位置pos处的位；如果b是const的，则当该位置 位时b [pos]返回一个bool值true，否则返回false</td>
+</tr>
+
+<tr>
+<td>b.to ulong()</td>
+<td>返回一个 unsigned long 或一个 unsigned long long 值，</td>
+</tr>
+
+<tr>
+<td>b.to ullong()</td>
+<td>其位模式与b相同。如果b中位模式不能放入指定的结果类型， 则抛出一个overflow error异常</td>
+</tr>
+
+<tr>
+<td>b.to_string(zero,</td>
+<td>返回一个string，表示b中的位模式。zero和one的默认</td>
+</tr>
+
+<tr>
+<td>one)</td>
+<td>值分别为0和1，用来表示b中的0和1</td>
+</tr>
+
+<tr>
+<td>os « b</td>
+<td>将b中二进制位打印为字符1或0,打印到流os</td>
+</tr>
+
+<tr>
+<td>is » b</td>
+<td>从is读取字符存入b。当下一个字符不是1或0时，或是已 经读入b. size （＞个位吋，读取过程停止</td>
+</tr>
+</tbody>
+</table>
+
+<p>count、size、all、any和none等几个操作都不接受参数，返回整个bitset</p>
+
+<p>的状态。其他操作-set、reset和flip则改变bitset的状态。改变bitset状态</p>
+
+<p>的成员函数都是重载的。对每个函数，不接受参数的版本对整个集合执行给定的操作；接 受一个位置参数的版本则对指定位执行操作：</p>
+
+<table>
+<thead>
+<tr>
+<th>bitset<32> bitvec(1U);</th>
+<th>//</th>
+<th>32位；低位为1，剩余位为0</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>bool is_set = bitvec.any();</td>
+<td>//</td>
+<td>true,因为有1位置位</td>
+</tr>
+
+<tr>
+<td>bool is_not_set = bitvec.none();</td>
+<td>//</td>
+<td>false,因为有丨位置位了</td>
+</tr>
+
+<tr>
+<td>bool all set = bitvec.all();</td>
+<td>//</td>
+<td>false，因为只有1位置位</td>
+</tr>
+
+<tr>
+<td>size_t onBits = bitvec.count();</td>
+<td>//</td>
+<td>返回1</td>
+</tr>
+
+<tr>
+<td>size_t sz = bitvec.size();</td>
+<td>//</td>
+<td>返回32</td>
+</tr>
+
+<tr>
+<td>bitvec. flip () ;    // 翻转 bitvec 中的所有位bitvec. reset () ;    //将所有位复位bitvec. set () ;    //将所有位置位</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>当bitset对象的一个或多个位置位（即，等于1）时，操作any返回true。相反，当（^71 所有位复位时，none返回true。新标准引入了 all操作，当所有位置位时返回true。</p>
+
+<p>-2ZC&gt;操作count和size返回size_t类型的值(参见3.5.2节，第103页)，分别表不对象 中置位的位数或总位数。函数size是一个constexpr函数，因此可以用在要求常量表 达式的地方(参见2.4.4节，第58页)。</p>
+
+<p>成员flip、set、reset及test允许我们读写指定位置的位：</p>
+
+<p>bitvec. flip (0) ;    // 翻转第一位</p>
+
+<p>bitvec. set (bitvec. size () - 1) ; // 置位最后一位</p>
+
+<p>bitvec. set &lt;0, 0) ;    // 复位第一位</p>
+
+<p>bitvec. reset (i) ;    // 复位第 i 位</p>
+
+<p>bitvec. test (0) ;    //返回false,因为第一位是复位的</p>
+
+<p>下标运算符对const属性进行了重载。const版本的下标运算符在指定位置位时返 回true，否则返回false。非const版本返回bitset定义的一个特殊类型，它允许 我们操纵指定位的值：</p>
+
+<p>bitvec[0] = 0;</p>
+
+<p>bitvec[31] = bitvec[0]; bitvec[0] .flip ();</p>
+
+<p>〜bitvec[0];</p>
+
+<p>bool b = bitvec[0];</p>
+
+<p>//将第一■位复位</p>
+
+<p>//将最后一位设置为与第一位一样 //翻转第一位</p>
+
+<p>//等价操作，也是翻转第一位</p>
+
+<p>//将bitvec [0]的值转换为bool类型</p>
+
+<p>提取bitset的值</p>
+
+<p>to_ulong和to_ullong操作都返回一个值，保存了与bitset对象相同的位模式。 只有当bitset的大小小于等于对应的大小(to_ulong为unsigned long, to_ullong 为unsigned long long)时，我们才能使用这两个操作：</p>
+
+<p>unsigned long ulong = bitvec3.to_ulong(); cout « &ldquo;ulong = &rdquo; « ulong &lt;&lt; endl;</p>
+
+<p><img src="C++  Primer 5-169.jpg" alt="img" /></p>
+
+<p>如果bitset中的值不能放入给定类型中，则这两个操作会抛出一个 overf low_error 异常(参见 5.6 节，第 173 页〉。</p>
+
+<p>bitset的10运算符</p>
+
+<p>输入运算符从一个输入流读取字符，保存到一个临时的string对象中。直到读取的 字符数达到对应bitset的大小时，或是遇到不是丨或0的字符时，或是遇到文件尾或输 入错误时，读取过程才停止。随即用临时string对象来初始化bitset (参见17.2.1节， 第642页)。如果读取的字符数小于bitset的大小，则与往常一样，高位将被置为0。</p>
+
+<p>输出运算符打印一&rdquo;h bitset对象中的位模式：</p>
+
+<p>bitset<16> bits;</p>
+
+<p>cin » bits; //从cin读取最多16个0或1</p>
+
+<p>cout &lt;&lt; &ldquo;bits: &ldquo; « bits &lt;&lt; endl; //打彡卩冈1J冈1J读耳又的内容</p>
+
+<p>L??8&gt; 使用 bitset</p>
+
+<p>为了说明如何使用bitset,我们重新实现4.8节(第137页)中的评分程序，用bitset 代替unsigned long表示30个学生的测验结果一“通过/失败”：</p>
+
+<p>bool status;</p>
+
+<p>//使用位运算符的版本 unsigned long quizA = 0;</p>
+
+<p>//此值被当作位集合使用</p>
+
+<p>quizA |= 1UL « 27;    //指出第27个学生通过了测验</p>
+
+<p>status = quizA &amp; (1UL « 27);    //检查第27个学生是否通过了测验</p>
+
+<p>quizA &amp;=〜(1UL &lt;&lt; 27) ;    //第27个学生未通过测验</p>
+
+<p>//使用标准库类bitset完成等价的工作</p>
+
+<p>bitset<30> quizB;    //每个学生分配一位，所有位都被初始化为0</p>
+
+<p>quizB.set (27) ;    //指出第27个学生通过了测验</p>
+
+<p>status = quizB [27] ;    //检查第27个学生是否通过了测验</p>
+
+<p>quizB. reset (27) ;    //第27个学生未通过测验</p>
+
+<h6 id="17-2-2节练习">17.2.2节练习</h6>
+
+<p>练习17.10：使用序列1、2、3、5、8、13、21初始化一个bitset,将这些位置置位。 对另一个bitset进行默认初始化，并编写一小段程序将其恰当的位置位。</p>
+
+<p>练习17.11:定义一个数据结构，包含一个整型对象，记录一个包含10个问题的真/假 测验的解答。如果测验包含100道题，你需要对数据结构做出什么改变(如果需要的话)？</p>
+
+<p>练习17.12:使用前一题中的数据结构，编写一个函数，它接受一个问题编号和一个表 示真/假解答的值，函数根据这两个参数更新测验的解答。</p>
+
+<p>练习17.13:编写一个整型对象.包含真/假测验的正确答案。使用它来为前两题中的数 据结构生成测验成绩。</p>
+
+<h5 id="17-3正则表达式">17.3正则表达式</h5>
+
+<p>正则表达式(regular expression)是一种描述字符序列的方法，是一种极其强大的计 算工具，但是，用于定义正则表达式的描述语言已经大大超出了本书的范围。因此，我们rc^ 重点介绍如何使用C++正则表达式库(RE库)，它是新标准库的一部分。RE库定义在头 文件regex中，它包含多个组件，列于表17.4中。</p>
+
+<p>表17.4:正则表达式库组件</p>
+
+<p>regex</p>
+
+<p>regex—match</p>
+
+<p>regex—search</p>
+
+<p>regex_replace</p>
+
+<p>sregex_iterator</p>
+
+<p>smatch</p>
+
+<p>ssub_match</p>
+
+<p>表示有一个正则表达式的类 将一个字符序列与一个正则表达式匹配 寻找第一个与正则表达式匹配的子序列 使用给定格式替换一个正则表达式</p>
+
+<p>迭代器适配器，调用regex_search来遍历一个string中所有匹 配的子串</p>
+
+<p>容器类，保存在string中搜索的结果 string中匹配的子表达式的结果</p>
+
+<p><img src="C++  Primer 5-170.jpg" alt="img" /></p>
+
+<p>如果你还不熟悉正则表达式的使用，你应该浏览这一节，以获得正则表达式可 以做什么的一些概念。</p>
+
+<p>regex类表示一个正则表达式。除了初始化和赋值之外，regex还支持其他一些操&lt;7291 作。表17.6 (第647页)列出了 regex支持的操作。</p>
+
+<p>函数regex_matph和regex_search确定一个给定字符序列与一个给定regex</p>
+
+<p>是否匹配。如果整个输入序列与表达式匹配，则regex_match函数返回true;如果输 入序列中一个子串与表达式匹配，则regex_search函数返回true。还有一个 regex_replace函数，我们将在17.3.4节(第657页)中介绍。</p>
+
+<p>表17.5列出了 regex的函数的参数。这些函数都返回bool值，且都被重载了：其 中一个版本接受一个类型为smatch的附加参数。如果匹配成功，这些函数将成功匹配的 相关信息保存在给定的smatch对象中。</p>
+
+<p>表 17.5: regex__search 和 regex_match 的参数</p>
+
+<p>注意：这些操作返回bool值，指出是否找到匹配,」</p>
+
+<p>(seq, m, r, mft)    在字符序列中查找regex对象r中的正则表达式。•seg可以是一</p>
+
+<p>⑽山mft)    个string、表示范围的一•对迭代器以及一•个指向空字符结尾的字符</p>
+
+<p>数组的指针</p>
+
+<p>m是一个wflZcA对象，用来保存匹配结果的相关细节。m和必须 具有兼容的类型(参见17.3.1节，第649页) mft 是一个可选的 regex_constants : : match_f lag_type 值。 表17.13 (第659页)描了这些值，它们会影匹配过 程</p>
+
+<h6 id="17-3-1使用正则表达式库">17.3.1使用正则表达式库</h6>
+
+<p>我们从一个非常简单的例子开始——查找违反众所周知的拼写规则“i除非在c之后， 否则必须在e之前”的单词：</p>
+
+<p>II查找不在字符C之后的字符串ei string pattern(&rdquo;[Ac]ei&rdquo;);</p>
+
+<p>//我们需要包含pattern的整个单词</p>
+
+<p>pattern = ”[[:alpha:]]*&rdquo; + pattern + &ldquo;[[:alpha:; regex r (pattern) ;    //构造一个用于查找模式的regex</p>
+
+<p>smatch results;    //定义一个对象保存搜索结果</p>
+
+<p>//定义一个string保存与模式匹配和不匹配的文本 string test_str = &ldquo;receipt freind theif receive&rdquo;;</p>
+
+<p>//用r在test_str中查找与pattern匹配的子串</p>
+
+<p>if (regex_search (test_str, results, r) )    // 士口果有匹S己子串</p>
+
+<p>cout « results . str () &lt;&lt; endl;    //    匹酉己的单词</p>
+
+<p>我们首先定义了一个string来保存希望查找的正则表达式。正则表达式[&ldquo;c]表明我们 希望匹配任意不是&rsquo;c，的字符，而[Ac]ei指出我们想要匹配这种字符后接ei的字符串。 此模式描述的字符串恰好包含三个字符，我们想要包含此模式的单词的完整内容。为了与 整个单词匹配，我们还需要一个正则表达式与这个三字母模式之前和之后的字母匹配。</p>
+
+<p>C?30&gt;    这个正则表达式包含零个或多个字母后接我们的三字母的模式，然后再接零个或多个</p>
+
+<p>额外的字母。默认情况下，regex使用的正则表达式语言是ECMAScript。在ECMAScript 中，模式[[::alpha:]]匹配任意字母，符号+和*分别表示我们希望“一个或多个”或 “零个或多个”匹配。因此[[::alpha:]]*将匹配零个或多个字母。</p>
+
+<p>将正则表达式存入pattern后，我们用它来初始化一个名为r的regex对象。接 下来我们定义了一个string,用来测试正则表达式。我们将test_str初始化为与模式 匹配的单词(如&rdquo;f reind&rdquo;和&rdquo;thief&rdquo;)和不匹配的单词(如&rdquo;recepit&rdquo;和&rdquo;receive&rdquo;)。 我们还定义了一个名为results的smatch对象，它将被传递给regex_search。如果 找到匹配子串，results将会保存匹配位置的细节信息。</p>
+
+<p>接下来我们调用了 regex_search«如果它找到匹配于串，就返回true。我们用 results的str成员来打印test_str中与模式匹配的部分。函数regex_search在 输入序列中只要找到一个匹配子串,i会停止查找=因此，程序的输出将是</p>
+
+<p>freind</p>
+
+<p>17.3.2节（第650页）将会介绍如何查找输入序列中所有的匹配子串。</p>
+
+<p>指定regex对象的选项</p>
+
+<p>当我们定义一个regex或是对一个regex调用assign为其赋予新值时，可以指定 一些标志来影响regex如何操作。这些标志控制regex对象的处理过程。表17.6列出的 最后6个标志指出编写正则表达式所用的语言。对这6个标志，我们必须设置其中之一， 且只能没置一个。默认情况下，ECMAScript标志被设置，从而regex会使用ECMA-262 规范，这也是很多Web浏览器所使用的正则表达式语言。</p>
+
+<table>
+<thead>
+<tr>
+<th>表 17.6: regex (和 wregex)选项</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>regex r (re)</td>
+<td>re表示一个正则表达式，它可以是一个string、一个表示字符</td>
+</tr>
+
+<tr>
+<td>regex r (re, f)</td>
+<td>范围的迭代器对、一个指向空字符结尾的字符数组的指针、一个 字符指针和一个计数器或是一个花括号包围的字符列表。f是指 出对象如何处理的标志。f通过下面列出的值来设置。如果米指 定f,其默认值为ECMAScript</td>
+</tr>
+
+<tr>
+<td>rl = re</td>
+<td>将rl中的正则表达式替换为re。re表示一•个正则表达式，它可 以是另-•个regex对象、一个string, 一个指向空字符结尾的 字符数组的指针或是-•个花括号包围的字符列表</td>
+</tr>
+
+<tr>
+<td>rl.assign (re, f)</td>
+<td>与使用赋值运算符（=）效果相同：可选的标志f也与regex的 构造函数中对应的参数含义相同</td>
+</tr>
+
+<tr>
+<td>r.mark_count()</td>
+<td>r中子表达式的数目（我们将在17.3.3节（第654页）中介绍）</td>
+</tr>
+
+<tr>
+<td>r.flags ()</td>
+<td>返回r的标志集</td>
+</tr>
+
+<tr>
+<td>注：构造函数和赋值操作可能抛出类型为regex_error的异常定义regex时指定的标志</td>
+<td></td>
+</tr>
+
+<tr>
+<td>定义在regex</td>
+<td>和 regex_constants::syntax_option type 中</td>
+</tr>
+
+<tr>
+<td>icase</td>
+<td>在匹配过程中忽略大小写</td>
+</tr>
+
+<tr>
+<td>nosubs</td>
+<td>不保存匹配的子表达式</td>
+</tr>
+
+<tr>
+<td>optimize</td>
+<td>执行速度优先于构造速度</td>
+</tr>
+
+<tr>
+<td>ECMAScript</td>
+<td>使用ECMA-262指定的语法</td>
+</tr>
+
+<tr>
+<td>basic</td>
+<td>使用POSIX基本的正则表达式语法</td>
+</tr>
+
+<tr>
+<td>extended</td>
+<td>使用POSIX扩展的正则表达式语法</td>
+</tr>
+
+<tr>
+<td>awk</td>
+<td>使用POSIX版本的avwl语言的语法</td>
+</tr>
+
+<tr>
+<td>grep</td>
+<td>使用POSIX版本的grep的语法</td>
+</tr>
+
+<tr>
+<td>egrep</td>
+<td>使用POSIX版本的egrep的语法</td>
+</tr>
+</tbody>
+</table>
+
+<p>其他3个标志允许我们指定正则表达式处理过程中与语言无关的方面。例如，我们可 以指出希望正则表达式以大小写无关的方式进行匹配。</p>
+
+<p>作为一个例子，我们可以用icase标志查找具有特定扩展名的文件名。大多数操作 系统都是按大小写无关的方式来识别扩展名的——可以将一个C++程序保存在.cc结尾的 文件中，也可以保存在.Cc、.cC或是.CC结尾的文件中，效果是一样的。如下所示，我</p>
+
+<p>&lt;73T|</p>
+
+<p>们可以编写一个正则表达式来识别上述任何一种扩展名以及其他普通文件扩展名：</p>
+
+<p>// 一个或多个字母或数字字符后接一个&rsquo;&ldquo;再接&rdquo;cpp&rdquo;或&rdquo;CXX&rdquo;或&rdquo;CC&rdquo; regex r (’’[[: alnum: ] ]+\. (cpp I cxx | cc) $&ldquo;, regex : : icase); smatch results;</p>
+
+<p>string filename; while (cin » filename)</p>
+
+<p>if (regex—search(filename, results, r))</p>
+
+<p>cout &lt;&lt; results . str () « endl; // 打印匹配结果</p>
+
+<p>此表达式将匹配这样的字符串：一个或多个字母或数字后接一个句点再接三个文件扩展名 之一。这样，此正则表达式将会匹配指定的文件扩展名而不理会大小写。</p>
+
+<p>就像C杆语言中有特殊字符一样(参见2.1.3节，第36页)，正则表达式语言通常也 有特殊字符。例如，字符点(.)通常匹配任意字符。与C++—样，我们可以在字符之前放 置一个反斜线来去掉其特殊含义。由于反斜线也是C++中的一个特殊字符，我们在字符串 字面常量中必须连续使用两个反斜线来告诉C++我们想要一个普通反斜线字符。因此，为 了表示与句点字符匹配的正则表达式，必须写成W.(第一个反斜线去掉C++语言中反斜线 的特殊含义，B卩，正则表达式字符串为.,第二个反斜线则表示在正则表达式中去掉.的特 殊含义)。</p>
+
+<p>□32&gt;指定或使用正则表达式时的错误</p>
+
+<p>我们可以将正则表达式本身看作用一种简单程序设计语言编写的“程序”。这种语言 不是由C++编译器解释的。正则表达式是在运行时，当一个regex对象被初始化或被赋 予一个新模式时，才被&rdquo;编译”的。与任何其他程序设计语言一样，我们用这种语言编写 的正则表达式也可能有错误。</p>
+
+<p><img src="C++  Primer 5-171.jpg" alt="img" /></p>
+
+<p>需要意识到的非常重要的一点是，一个正则表达式的语法是否正确是在运行时 解析的i&rdquo;:</p>
+
+<p>如果我们编写的正则表达式存在错误，则在运行时标准库会抛出一个类型为 regex_error的异常(参见5.6节，第173页)。类似标准异常类型，regex_error有 一个what操作来描述发生了什么错误(参见5.6.2节，第175页)。regex_e^rOr还有 一个名为code的成员，用来返回某个错误类型对应的数值编码。code返i的值是由具 体实现定义的。RE库能抛出的标准错误如表17.7所示。</p>
+
+<p>例如，我们可能在模式中意外遇到一个方括号： try {</p>
+
+<p>//错误：alnum漏掉了右括号，构造函数会抛出异常</p>
+
+<p>regex r(n[[:alnum:]+\.(cpp|cxx|cc)$&ldquo;, regex::icase);</p>
+
+<p>} catch (regex_error e)</p>
+
+<p>{ cout &lt;&lt; e.what() « &ldquo;\ncode: &ldquo; « e.code() « endl; }</p>
+
+<p>当这段程序在我们的系统上运行时，程序会生成：</p>
+
+<p>regex—error(error_brack):</p>
+
+<p>The expression contained mismatched [ and ]. code: 4</p>
+
+<table>
+<thead>
+<tr>
+<th>表 17.7:</th>
+<th>正则表达式错误类型</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>定义在 regex 和 regex constants : : error_type 中</td>
+<td></td>
+</tr>
+
+<tr>
+<td>error collate</td>
+<td>无效的元素校对请求</td>
+</tr>
+
+<tr>
+<td>error ctype</td>
+<td>无效的字符类</td>
+</tr>
+
+<tr>
+<td>error escape</td>
+<td>无效的转义字符或无效的尾置转义</td>
+</tr>
+
+<tr>
+<td>error backref</td>
+<td>无效的向后引用</td>
+</tr>
+
+<tr>
+<td>error brack</td>
+<td>不匹配的方括号（［或］）</td>
+</tr>
+
+<tr>
+<td>error paren</td>
+<td>不匹配的小括号（（或））</td>
+</tr>
+
+<tr>
+<td>error brace</td>
+<td>不匹配的花括号（｛或｝）</td>
+</tr>
+
+<tr>
+<td>error badbrace</td>
+<td>U中无效的范围</td>
+</tr>
+
+<tr>
+<td>error range</td>
+<td>无效的字符范围（如［z-a］）</td>
+</tr>
+
+<tr>
+<td>error_space</td>
+<td>内存不足，无法处理此正则表达式</td>
+</tr>
+
+<tr>
+<td>error badrepeat</td>
+<td>重复字符（*、？、+或｛）之前没有有效的正则表 达式</td>
+</tr>
+
+<tr>
+<td>error complexity</td>
+<td>要求的匹配过于复杂</td>
+</tr>
+
+<tr>
+<td>error_stack</td>
+<td>栈空间不足，无法处理匹配</td>
+</tr>
+
+<tr>
+<td>我们的编译器定义了 code成员，</td>
+<td>返回表17.7列出的错误类型的编号，与往常一样，</td>
+</tr>
+
+<tr>
+<td>编号从0开始。</td>
+<td></td>
+</tr>
+
+<tr>
+<td>建议：避免创建不必耍的正则农达式</td>
+<td></td>
+</tr>
+
+<tr>
+<td>如我们所见，一个正则表达式所表示的“程序’’是在运行时而非编译时编译的。正 则表达式的编译是一个非常慢的操作，特别是在你使用了扩展的正则表达式语法或是复</td>
+<td></td>
+</tr>
+
+<tr>
+<td>杂的正则表达式时。因此，构造一个</td>
+<td>regex对象以及向一个已存在的regex賦予一个</td>
+</tr>
+
+<tr>
+<td>新的正则表达式可能是非常耗时的。</td>
+<td>为了最小化这种开销，你应该努力避免创建很多不</td>
+</tr>
+
+<tr>
+<td>必要的regex。特别是，如果你在一个循环中使用正则表达式，应该在循环外创建它，</td>
+<td></td>
+</tr>
+
+<tr>
+<td>而不是在每步迭代时都编译它&rsquo;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>&lt;733]</p>
+
+<p>正则表达式类和输入序列类型</p>
+
+<p>我们可以搜索多种类型的输入序列。输入可以是普通char数据或wchar_t数据， 字符可以保存在标准库string中或是char数组中（或是宽字符版本，wstring或 wchar_t数组中）。RE为这些不同的输入序列类型都定义了对应的类型。</p>
+
+<p>例如，regex类保存类型char的正则表达式。标准库还定义了一个wregex类保存 类型wachar_t，其操作与regex完全相同。两者唯一的差别是wregex的初始值必须 使用wchar_t而不是char。</p>
+
+<p>匹配和迭代器类型（我们将在下面小节中介绍）更为特殊。这些类型的差异不仅在于 字符类型，还在于序列是在标准库string中还是在数组中：smatch表示string类型 的输入序列；cmatch表示字符数组序列；wsmatch表示宽字符串（wstring）输入； 而wcmatch表示宽字符数组。</p>
+
+<p>重点在于我们使用的RE库类型必须与输入序列类型匹配。表17.8指出了 RE库类型 与输入序列类型的对应关系。例如：</p>
+
+<p>regex r(&rdquo;[[:alnum:]]+\.(cpp丨cxxIcc)$&ldquo;, regex::icase); smatch results; //将匹配string输入序列，而不是char* if (regex_search (&ldquo;myfile.cc&rdquo;, results, r) ) // 错误：愉入为 char*</p>
+
+<p>cout &lt;&lt; results.str() « endl;</p>
+
+<p>P734&gt;这段代码会编译失败，因为match参数的类型与输入序列的类型不匹配。如果我们希望 搜索一个字符数组，就必须使用cmatch对象：</p>
+
+<p>cmatch results; //将匹配字符数组输入序列 if (regex_search(&ldquo;myfile.cc&rdquo;, results, r))</p>
+
+<p>cout « results . str () &lt;&lt; endl; // 4丁印当前匹S己 本书程序一般会使用string输入序列和对应的string版本的RE库组件。</p>
+
+<table>
+<thead>
+<tr>
+<th>表17.8:正则表达式库类</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>如果输入序列类型</td>
+<td>则使用正则表达式类</td>
+</tr>
+
+<tr>
+<td>string</td>
+<td>regex、smatch、ssub match 和 sregex iterator</td>
+</tr>
+
+<tr>
+<td>const char*</td>
+<td>regex、cmatch&gt; csub_match 和 cregex_iterator</td>
+</tr>
+
+<tr>
+<td>wstring</td>
+<td>wregex、wsmatch、wssub match 和 wsregex iterator</td>
+</tr>
+
+<tr>
+<td>const wchar t*</td>
+<td>wregex、wcmatch、wcsub match 和 wcregex iterator</td>
+</tr>
+</tbody>
+</table>
+
+<h6 id="17-3-1节练习">17.3.1节练习</h6>
+
+<p>练习17.14:编写几个正则表达式，分别触发不同错误。运行你的程序，观察编译器对 每个错误的输出。</p>
+
+<p>练习17.15:编写程序，使用模式查找违反“i在e之前，除非在c之后”规则的单词。 你的程序应该提示用户输入一个单词，然后指出此单词是否符合要求。用一些违反和未 违反规则的单词测试你的程序。</p>
+
+<p>练习17.16:如果前一题程序中的regex对象用&rdquo;[、c] ei’•进行初始化，将会发生什么？ 用此模式测试你的程序，检查你的答案是否正确。</p>
+
+<h6 id="17-3-2匹配与regex迭代器类型">17.3.2匹配与Regex迭代器类型</h6>
+
+<p>第646页中的程序查找违反“i在e之前，除非在c之后”规则的单词，它只打印输 入序列中第一个匹配的单词。我们可以使用sregex_iterator来获得所有匹配。regex 迭代器是一种迭代器适配器(参见9.6节，第329页)，绑定到一个输入序列和一个regex 对象上。如表17.8所述，每种不同输入序列类型都有对应的特殊regex迭代器类型。迭 代器操作如表17.9所述。</p>
+
+<p>表 17.9: sregexjterator 操作</p>
+
+<p>这些操作也适用于 cregex—iterator、wsregex_iterator 和 wcregex_iteratoro sregex_iterator    一个 sregex_iterator,遍历迭代器 b 和 e 表示的 string。</p>
+
+<p>it (b, e, r);    它调用sregex_search (b, e，r)将it定位到输入中第一个匹</p>
+
+<p>配的位置</p>
+
+<p>续表</p>
+
+<table>
+<thead>
+<tr>
+<th>sregex_</th>
+<th>—iterator</th>
+<th>sregex_iterator的尾后迭代器</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>end;</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>*it</td>
+<td></td>
+<td>根据最后一个调用regex_search的结果，返回一个smatch对</td>
+</tr>
+
+<tr>
+<td>it-〉</td>
+<td></td>
+<td>象的引用或一个指向smatch对象的指针</td>
+</tr>
+
+<tr>
+<td>++it</td>
+<td></td>
+<td>从输入序列当前匹配位置开始调用regex search.前置版本返</td>
+</tr>
+
+<tr>
+<td>it++</td>
+<td></td>
+<td>回递增后迭代器；后置版本返回旧值</td>
+</tr>
+
+<tr>
+<td>itl ==</td>
+<td>it2</td>
+<td>如果两个sregex_iterator都是尾后选代器，则它们相等两个</td>
+</tr>
+
+<tr>
+<td>itl !=</td>
+<td>it2</td>
+<td>非尾后迭代器是从i同的输入序列和regex对象构造，则它们相等</td>
+</tr>
+</tbody>
+</table>
+
+<p>当我们将一个sregex_iterator绑定到一个string和一个regex对象时，迭代 器自动定位到给定string中第一^匹配位置。即，sregex_iterator构造函数对给 定string和regex调用regex_search。当我们解引用迭代器时，会得到一个对应最 近一次搜索结果的smatch对象。当我们递增迭代器时，它调用regexjearch在输入 string中查找下一个匹配。</p>
+
+<p>1吏用 sregex_iterator</p>
+
+<p>作为一个例子，我们将扩展之前的程序，在一个文本文件中查找所有违反“i在e之 前，除非在c之后”规则的单词。我们假定名为file的string保存了我们要搜索的输 入文件的全部内容。这个版本的程序将使用与前一■个版本一样的pattern,但会使用一 个sregex_iterator来进行搜索：</p>
+
+<p>//查找前一个字符不是c的字符串ei string pattern (&rsquo;* [ Ac] ein);</p>
+
+<p>//我们想要包含pattern的单词的全部内容</p>
+
+<p>pattern = &ldquo; [[: alpha: ] ] *&rdquo; + pattern + &ldquo; [ [:alpha: ]]**&lsquo;; regex r (pattern, regex: : icase) ; // 在进行匹酉己时4夺，&amp;、略大&rsquo;J、写 //它将反复调用regex_search来寻找文件中的所有匹配 for (sregex_iterator it(file.begin(), file.end(), r), end_it;</p>
+
+<p>it != end_it; ++it}</p>
+
+<p>cout &lt;&lt; it-〉str() &lt;&lt; endl; // 匹酋己的单词</p>
+
+<p>for循环遍历file中每个与r匹配的子串。for语句中的初始值定义了 it和end_it。 当我们定义it时，sregex_iterator的构造函数调用regex_search将it定位到 file中第~•个与r匹配的位置。而end_it是一■个空sregex_iterator,起到尾后迭 代器的作用。for语句中的递增运算通j£regex_search来“推进”迭代器。当我们解 引用迭代器时，会得到一个表示当前匹配结果的；match对象。我们调用它的str成员 来打印匹配的单词。</p>
+
+<p>我们可以将此循环想象为不断从一个匹配位置跳到下一个匹配位置，如图17.1所示。</p>
+
+<p>sregex_iterator it(file.begin(), file.end()z r) 将it初始化为第一个匹配位置    最后一个匹Sd</p>
+
+<table>
+<thead>
+<tr>
+<th>rnoteh</th>
+<th></th>
+<th>match.2</th>
+<th></th>
+<th>matchi</th>
+<th></th>
+<th>matchn</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>t</p>
+
+<p>file.begin()    file.end()</p>
+
+<p>图 1*7.1:使用 sregex iterator</p>
+
+<p>使用匹配数据</p>
+
+<p>如果我们对最初版本程序中的test_str运行此循环，则输出将是</p>
+
+<p>freind</p>
+
+<p>theif</p>
+
+<p>但是，仅获得与我们的正则表达式匹配的单词还不是那么有用=如果我们在一个更大的输 入序列——例如，在本章英文版的文本上运行此程序——可能希望看到匹配单词出现的上 下文，如</p>
+
+<p>hey read or write according to the type »&gt; being «&lt;</p>
+
+<p>handled. The input operators ignore whi</p>
+
+<p>除了允许打印输入字符串中匹配的部分之外，匹配结果类还提供了有关匹配结果的更多细 节信息。表17.10和表17.11列出了这些类型支持的操作。</p>
+
+<p>□36&gt;    我们将在下一节中介绍更多有关smatch和SSub_match类型的内容。目前，我们</p>
+
+<p>只需知道它们允许我们获得匹配的上下文即可。匹配类&amp;有两个名为prefix和suffix 的成员，分别返回表不输入序列中当前匹配之前和之后部分的ssub_match对象。一个 ssub_match对象有两个名为str和length的成员，分别返回匹配的string和该 string的大小。我们可以用这些操作重写语法程序的循环。</p>
+
+<p>//循环头与之前一样</p>
+
+<p>for (sregex_iterator it(file.begin(), file.end(), r), end_it; it != end_it; ++it)    {</p>
+
+<p>auto pos = it-&gt;prefix () . length () ;    // 前缀的大小</p>
+
+<p>pos = pos &gt; 40 ? pos - 40 : 0;    //我们想要最多40个字符</p>
+
+<p>cout &lt;&lt; it-&gt;pref ix () . str () • substr (pos)    // 前缀的最后一部分</p>
+
+<p>« &ldquo;\n\t\t&gt;» &ldquo; « it-&gt;str () « &rdquo; &lt;&lt;&lt;\n&rdquo; // 匹配的单词 « it-&gt;suff ix () . str () .substr (0, 40)    // 后缀的第一部分</p>
+
+<p>« endl;</p>
+
+<p>}</p>
+
+<p>循环本身的工作方式与前一个程序相同。改变的是循环内部，如图17.2所示。</p>
+
+<p>()</p>
+
+<p>当it指向第i个smatch对象时    |</p>
+
+<table>
+<thead>
+<tr>
+<th>it-&gt;prefix().str()</th>
+<th>xxxei.vx.r</th>
+<th>it-&gt;suffix().str()</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>图17.2: smatch对象表示一个特定匹配</p>
+
+<p>我们调用prefix,返回一个ssub match对象，表示file中当前匹配之前的部分。</p>
+
+<p>我们对此ssub_match对象调用length，获得前缀部分的字符数目。接F来调整pos，</p>
+
+<p>使之指向前缀部分末尾向前40个字符的位置。如果前缀部分的长度小于40个字符，我 们将pos置为0,表示要打印整个前缀部分。我们用substr （参见9.5.1节，第321页）</p>
+
+<p>来打印指定位置到前缀部分末尾的内容。</p>
+
+<p>打印了当前匹配之前的字符之后，我们接下来用特殊格式打印匹配的单词本身，使得03 它在输出中能突出显示出来。打印匹配单词之后，我们打印file中匹配部分之后的前（最 多）4 0个字符。</p>
+
+<table>
+<thead>
+<tr>
+<th>表 17.10: smatch 操作</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>这些操作也适用于cmatch、</td>
+<td>wsmatchx wcmatch 和对应的 csub match、wssub match</td>
+</tr>
+
+<tr>
+<td>和 wcsub match。</td>
+<td></td>
+</tr>
+
+<tr>
+<td>m.ready()</td>
+<td>如果已经通过调用regex serach或regex match设置了 m，贝1J返回true;否贝lj返回false。如果ready返回false，贝lj 对m进行操作是未定义的</td>
+</tr>
+
+<tr>
+<td>m.size ()</td>
+<td>如果匹配失败，则返回0;否则返回最近一次匹配的正则表达式 中子表达式的数目</td>
+</tr>
+
+<tr>
+<td>m.empty()</td>
+<td>若m.size（）为0，则返回true</td>
+</tr>
+
+<tr>
+<td>m.prefix()</td>
+<td>一个ssub_match对象，表示当前匹配之前的序列</td>
+</tr>
+
+<tr>
+<td>m.suffix ()</td>
+<td>—个ssub_match对象，表示当前匹配之后的部分</td>
+</tr>
+
+<tr>
+<td>m. format (&hellip;)</td>
+<td>见表17.12 (第657页)</td>
+</tr>
+
+<tr>
+<td>在接受一个索引的操作中，n</td>
+<td>的默认值为（＞ 且必须小于m. size （） o</td>
+</tr>
+
+<tr>
+<td>第一个子匹配（索引为0）表示整个匹配。</td>
+<td></td>
+</tr>
+
+<tr>
+<td>m. length(n)</td>
+<td>第n个匹配的子表达式的大小</td>
+</tr>
+
+<tr>
+<td>m.position(n)</td>
+<td>第n个子表达式距序列开始的距离</td>
+</tr>
+
+<tr>
+<td>m. str(n)</td>
+<td>第n个子表达式匹配的string</td>
+</tr>
+
+<tr>
+<td>m[n]</td>
+<td>对应第n个子表达式的ssub match对象</td>
+</tr>
+
+<tr>
+<td>m.begin(),m.end()</td>
+<td>表示m中sub_match元素范围的迭代器。与往常一样，cbegin</td>
+</tr>
+
+<tr>
+<td>m.cbegin(),m.cend()</td>
+<td>和 cend 返回 const iterator</td>
+</tr>
+</tbody>
+</table>
+
+<h6 id="17-3-2节练习">17.3.2节练习_</h6>
+
+<p>练习17.17:更新你的程序，令它查找输入序列中所有违反“ei”语法规则的单词。</p>
+
+<p>练习17.18：修改你的程序，忽略包含“ei”但并非拼写错误的单词，如“albeit&rdquo;和 “neighbor”。</p>
+
+<h6 id="17-3-3使用子表达式">17.3.3使用子表达式</h6>
+
+<p>正则表达式中的模式通常包含一个或多个子表达式（subexpression）。一个子表达式是 模式的一部分，本身也具有意义。正则表达式语法通常用括号表示子表达式。</p>
+
+<p>例如，我们用来匹配C++文件的模式（参见17.3.1节，第646页）就是用括号来分组 可能的文件扩展名。每当我们用括号分组多个可行选项时，同时也就声明了这些选项形成 子表达式。我们可以重写扩展名表达式，以使得模式中点之前表示文件名的部分也形成子 表达式，如下所示：</p>
+
+<p>// r有两个子表达式：第一个是点之前表示文件名的部分，第二个表示文件扩展名 regex r(&ldquo;([[:alnum:]]+)\.(cppIcxxIcc), regex::icase);</p>
+
+<p>现在我们的模式包含两个括号括起來的子表达式：</p>
+
+<p>•    ([[:alnum:]]+),匹配一个或多个字符的序列</p>
+
+<p>•    (cpp | cxx | cc),匹配文件扩展名</p>
+
+<p>我们还可以重写17.3.1节(第646贞)中的程序，通过修改输出语句使之只打印文件名。</p>
+
+<p>if (regex_search(filename, results, r))</p>
+
+<p>cout « results.str⑴« endl; //打印第一个子表达式</p>
+
+<p>与最初的程序一样，我们还是调用regex_search在名为filename的string中查找 模式r，并且传递smatch对象result!来保存匹配结果。如果调用成功，我们打印结 果。但是，在此版本中，我们打印的是str&lt;l)，即，与第一个子表达式匹配的部分。</p>
+
+<p>匹配对象除了提供匹配整体的相关信息外，还提供访W模式中每个子表达式的能力。 子匹配是按位置来访问的。第一个子匹配位置为0,表示整个模式对应的匹配，随后是每 个子表达式对应的匹配。因此，本例模式中第一个子表达式，即表示文件名的子表达式， 其位置为1,而文件扩展名对应的子表达式位置为2。</p>
+
+<p>例如，如果文件名为foo.cpp，则results. str (0)将保存foo.cpp; results . str (1&gt;将保存foo;而results . str <2)将保存cpp。在此程序中，我们想 要点之前的那部分名字，即第一个子表达式，因此我们打印results . str (1 >。</p>
+
+<p>子表达式用于数据验证</p>
+
+<p>+表达式的一个常见用途是验证必须匹配特定格式的数据。例如，美国的电话号码有 十位数字，包含一个区号和一个七位的本地号码。区号通常放在括号里，但这并不是必需 的。剩余七位数字可以用一个短横线、一个点或是一个空格分隔，但也可以完全不用分隔 符。我们可能希望接受任何这种格式的数据而拒绝任何其他格式的数。我们将分两步来实 现这一目标：首先，我们将用一个正则表达式找到可能是电话号码的序列，然后再调用一 个函数来完成数据验证。</p>
+
+<p>在编写电话号码模式之前，我们需要介绍一下ECMAScript正则表达式语言的一些特 性：</p>
+
+<p>•    {d}表示单个数字而{(1} {«}则表示一个？I个数字的序列。(如，Md}{3}匹配 三个数字的序列。)</p>
+
+<p>•在方括号中的字符集合表示匹配这些字符中任意一个。(如，[-.]匹配一个短横 线或一个点或一个空格。注意，点在括号中没有特殊含义。)</p>
+
+<p>•后接&rsquo;？&rsquo;的组件是可选的。(如，{d} {3} [-. ]?{d}{4}匹配这样的序列：开 始是三个数字，后接一个可选的短横线或点或空格，然后是四个数字。此模式可以 匹配 555-0132 或 555.0132 或 555 0132 或 5550132。)</p>
+
+<p>•类似C++, ECMAScript使用反斜线表示一个字符本身而不是其特殊含义。由于我 们的模式包含括号，而括号是ECMAScript中的特殊字符，因此我们必须用(和) 来表示括号是我们的模式的一部分而不是特殊字符。</p>
+
+<p>由于反斜线是C++中的特殊字符，在模式中每次出现\的地方，我们都必须用一个额外的 反斜线来告知C++我们需要一个反斜线字符而不是一个特殊符号。因此，我们用\{d}{3} 来表示正则表达式</p>
+
+<p>为了验证电话号码，我们需要访问模式的组成部分。例如，我们希望验证区号部分的 数字如果用了左括号，那么它是否也在区号后面用了右括号。即，我们不希望出现 (908.555.1800这样的号码。</p>
+
+<p>为了获得匹配的组成部分，我们需要在定义正则表达式时使用子表达式。每个子表达 式用一对括号包围：</p>
+
+<p>//整个正则表达式包含七个子表达式：(ddd )分隔符ddd分隔符dddd</p>
+
+<p>//子表达式1、3、4和6是可选的；2、5和7保存号码</p>
+
+<p>&rdquo;(\ () ? (\d{3}) (\) )?([-. ] ) ? (\d{3}) (    ] ?) (\d{4})</p>
+
+<p>由于我们的模式使用了括号，而且必须去除反斜线的特殊含义，因此这个模式很难读(也 很难写！)。理解此模式的最简单的方法是逐个剥离(括号包围的)子表达式：</p>
+
+<p>\1.    (\() ?表示区号部分可选的左括号</p>
+
+<p>\2.    (\d{3})表示区号</p>
+
+<p>\3.    (\) )?表示区号部分可选的右括号</p>
+
+<p>\4.    ([-. ]&gt;?表示区号部分可选的分隔符 &lsquo;5. (\d{3})表示号码的下三位数字</p>
+
+<p>\6.    ([-. ])?表示可选的分隔符</p>
+
+<p>\7.    (\d{ 4 })表不号码的最后四位数字</p>
+
+<p>下面的代码读取一个文件，并用此模式查找与完整的电话号码模式匹配的数据。它会&lt;740] 调用一个名为valid的函数来检查号码格式是否合法：</p>
+
+<p>string phone =</p>
+
+<p>&rdquo;(\()?(\d{3}) (\))?([-. ])?(\d{3}) ([-. ]?) (\d{4})»; regex r (phone); // regex对象，用于查找我们的模式 smatch m;</p>
+
+<p>string s;</p>
+
+<p>//从输入文件中读取每条记录 while (getline(cin, s))    {</p>
+
+<p>//对每个匹配的电话号码</p>
+
+<p>for (sregex_iterator it(s.begin(), s.end(), r), end_it; it != end_it; ++it)</p>
+
+<p>//检查号码的格式是&rdquo;否合法 if (valid(*it))</p>
+
+<p>cout « &ldquo;valid: &ldquo; « it-〉str() « endl;</p>
+
+<p>else</p>
+
+<p>cout « &ldquo;not valid: n « it-〉str() « endl;</p>
+
+<p>}</p>
+
+<p>使用子匹配操作</p>
+
+<p>我们将使用表17.11中描述的子匹配操作来编写valid函数。需要记住的重要一点是，</p>
+
+<p>我们的pattern有七个子表达式。与往常一样，每个smatch对象会包含八个 ssub_match元素。位置[0 ]的元素表示整个匹配；元素[1 ]&hellip; [ 7 ]表示每个对应的子表达式。</p>
+
+<p>当调用valid时，我们知道已经有一个完整的匹配，但不知道每个可选的子表达式 是否是匹配的〜部分。如果一个子表达式是完整匹配的一部分，则其对应的ssub_match 对象的matched成员为true。</p>
+
+<table>
+<thead>
+<tr>
+<th>表17.11:子匹配操作</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>注意：这些操作适用于 ssub一match、csub_match、wssub_match、wcsub_matcho</td>
+<td></td>
+</tr>
+
+<tr>
+<td>matched</td>
+<td>一个public bool数据成员，指出此ssub_match是否匹配了</td>
+</tr>
+
+<tr>
+<td>first</td>
+<td>public数据成员，指向匹配序列首元素和尾后位置的迭代器。如果</td>
+</tr>
+
+<tr>
+<td>second</td>
+<td>未匹配，则first和second是相等的</td>
+</tr>
+
+<tr>
+<td>length ()</td>
+<td>匹配的大小。如果matched为false，则返回0</td>
+</tr>
+
+<tr>
+<td>str()</td>
+<td>返回一个包含输入中匹配部分的string。如果matched为false,则返回空string</td>
+</tr>
+
+<tr>
+<td>s = ssub</td>
+<td>将ssub match对象ssub转化为string对象s。等价于 s=ssub. str ()。转换运算符不是explicit的(参见14.9.1节，第515页)</td>
+</tr>
+</tbody>
+</table>
+
+<p>在一个合法的电话号码中，区号要么是完整括号包围的，要么完全没有括号。因此， valid要做什么工作依赖于号码是否以一个括号开始：</p>
+
+<p>bool valid(const smatch&amp; m)</p>
+
+<p>{</p>
+
+<p>//如果区号前有一个左括号 if(m[1].matched)</p>
+
+<p>//则区号后必须有一个右括号，之后紧跟剩余号码或一个空格 return m[3].matched</p>
+
+<p>&amp;&amp; (m[4].matched == 0 I I m[4].str()==&ldquo;&rdquo;);</p>
+
+<p>else</p>
+
+<p>//否则，区号后不能有右括号</p>
+
+<p>//另两个组成部分间的分隔符必须匹配</p>
+
+<p>return !m[3].matched</p>
+
+<p>&amp;&amp; m[4].str() == ra[6].str();</p>
+
+<p>}</p>
+
+<p>我们首先检查第一个子表达式(即，左括号)是否匹配了。这个子表达式在m[l]中。 如果匹配了，则号码是以左括号开始的。在此情况下，如果区号后的子表达式也匹配了(意 味着区号后有右括号)则整个号码是合法的。而且，如果号码正确使用了括号，则下一个 字符必须是一个空格或下一部分的第一个数字。</p>
+
+<p>如果m[l]未匹配，(即，没有左括号)，则区号后的子表达式也不应该匹配。如果它 为空，则整个号码是合法的。</p>
+
+<h6 id="17-3-3节练习">17.3.3节练习</h6>
+
+<p>练习17.19：为什么可以不先检查m[4]是否匹配了就直接调用m[4] .str()?</p>
+
+<p>练习17.20：编写你自己版本的验证电话号码的程序。</p>
+
+<p>练习17.21：使用本节中定义的valid函数重写8.3.2节(第289页)中的电话号码程序。</p>
+
+<p>练习17.22:重写你的电话号码程序，使之允许在号码的三个部分之间放置任意多个空 白符。</p>
+
+<p>练习17.23:编写查找邮政编码的正则表达式。一个美国邮政编码可以由五位或九位数 字组成。前五位数字和后四位数字之间可以用一个短横线分隔。</p>
+
+<h6 id="17-3-4-使用-regex-replace">17.3.4 使用 regex_replace</h6>
+
+<p>正则表达式不仅用在我们希望查找一个给定序列的时候，还用在当我们想将找到的序 列替换为另一个序列的时候。例如，我们可能希望将美国的电话号码转换为“ddd.ddd.dddd”</p>
+
+<p>的形式，B卩，区号和后面三位数字用一个点分隔。</p>
+
+<p>当我们希望在输入序列中查找并替换一个正则表达式时，可以调用＜M] regex_replace。表17.12描述了 regex replace,类似搜索函数，它接受一个输入字符 序列和1个regex对象，不同的是，它还接受一个描述我们想要的输出形式的字符串。</p>
+
+<p>表17.12:正则表达式替换操作</p>
+
+<p>m. format(dest, fmt, mft) m. format (fmtr mft)</p>
+
+<p>regex—replace (dest,r, fmt, mft)</p>
+
+<p>regex—replace (seq, r,加</p>
+
+<p>使用格式字符串/z咐生成格式化输出，匹配在m中，可选的 match_flag_type标志在mft中。第一■个版本写入迭代 器desl指向&amp;目的位置(参见10.5.1节，第365页)并接 受参数，可以是一个string，也可以是表示字符数组 中范围的一对指针。第二个版本返回一个string,保存输 出，并接受参数，可以是一个string，也可以是一个 指向空字符结尾的字符数组的指针。mft的默认值为 format_default</p>
+
+<p>遍历seg，用regex_search查找与regex对象r匹配的 子串。使用格式字符串.加/和可选的match_flag_type 标志来生成输出。第一个版本将输出写入到迭器指 定的位置，并接受一对迭代器表示范围。第二个版本返 回一个string，保存输出，且记＜7既可以是一个string 也可以是一个指向空字符结尾的字符数组的指针。在所有情 况下，/时既可以是一个string也可以是一个指向空字符 结尾的字符数组的指针，且mft的默认值为 match—default</p>
+
+<p>替换字符串由我们想要的字符组合与匹配的子串对应的子表达式而组成。在本例中， 我们希望在替换字符串中使用第二个、第五个和第七个子表达式。而忽略第一个、第三个、 第四个和第六个子表达式，因为这些子表达式用来形成号码的原格式而非新格式中的一部 分。我们用一个符号$后跟子表达式的索引号来表示一个特定的子表达式：</p>
+
+<p>string fmt = &ldquo;$2.$5.$7&rdquo;; // 将号码格式改为 ddd.ddd.dddd</p>
+
+<p>可以像下面这样使用我们的正则表达式模式和替换字符串：</p>
+
+<p>regex r (phone); //用来寻找模式的regex对象</p>
+
+<p>string number = &ldquo;(908) 555-1800**;</p>
+
+<p>cout « regex_replace(number, r, fmt) « endl;</p>
+
+<p>此程序的输出为:</p>
+
+<p>908.555.1800</p>
+
+<p>只替换输入序列的一部分</p>
+
+<p>正则表达式更有意思的一个用处是替换一个大文件中的电话号码。例如，我们有一个 保存人名及其电话号码的文件：</p>
+
+<p>I 743〉    morgan (201) 555-2368 862-555-0123</p>
+
+<p>drew (973)555.0130</p>
+
+<p>lee (609) 555-0132 2015550175 800.555-0000</p>
+
+<p>我们希望将数据转换为下面这样：</p>
+
+<p>morgan 201.555.2368 862.555.0123 drew 973.555.0130</p>
+
+<p>lee 609.555.0132 201.555.0175 800.555.0000</p>
+
+<p>可以用下面的程序完成这种转换：</p>
+
+<p>int main()</p>
+
+<p>{</p>
+
+<p>string phone =</p>
+
+<p>n(\()?(\d{3}) (\))?([-. ])?(\d{3}) ([-. ])?(\d{4})，，； regex r (phone) ; //寻找模式所用的regex对象 smatch m;</p>
+
+<p>string s;</p>
+
+<p>string fmt = &ldquo;$2 . $5 . $7&rdquo; ; // 将号码格式改为 ddd.ddd.dddd //从输入文件中读取每条记录 while (getline(cin, s))</p>
+
+<p>cout « regex_replace(s, r, fmt) &lt;&lt; endl; return 0;</p>
+
+<p>}</p>
+
+<p>我们读取每条记录，保存到s中，并将其传递给regex_replace。此函数在输入序列中 查找并转换所有匹配子串。</p>
+
+<p>用来控制匹配和格式的标志</p>
+
+<p>就像标准库定义标志来指导如何处理正则表达式一样，标准库还定义了用来在替换过 程中控制匹配或格式的标志。表17.13列出了这些值。这些标志可以传递给函数 regex_search 或 regex_match 或是类 smatch 的 format 成员。</p>
+
+<p>匹配和格式化标志的类型为match_flag_type o这些值都定义在名为 regex_constants的命名空间中。类似用于bind的placeholders (参见10.3.4节， 第355页)，regex_constants也是定义在命名空间std中的命名空间。为了使用 regex_constants中的名字，我们必须在名字前同时加上两个命名空间的限定符：</p>
+
+<p>using std::regex—constants::format_no_copy;</p>
+
+<p>此声明指出，如果代码中使用了 format_no_copy,则表示我们想要使用命名空间 std: : constants中的这个名字。如下所示，我们也可以用另一种形式的using来代特 上面的代码，我们将在18.2.2节(第702页)中介绍这种形式：</p>
+
+<p>using namespace std::regex constants;</p>
+
+<p>表17.13:匹配标志    &lt;M]</p>
+
+<table>
+<thead>
+<tr>
+<th>定义在 regex constants:</th>
+<th>:match_flag_type 中</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>match default</td>
+<td>等价于 format_default</td>
+</tr>
+
+<tr>
+<td>match not_bol</td>
+<td>不将首字符作为行首处理</td>
+</tr>
+
+<tr>
+<td>match not eol</td>
+<td>不将尾字符作为行尾处理</td>
+</tr>
+
+<tr>
+<td>match_not_bow</td>
+<td>不将首字符作为单词首处理</td>
+</tr>
+
+<tr>
+<td>match not eow</td>
+<td>不将尾字符作为单词尾处理</td>
+</tr>
+
+<tr>
+<td>match any</td>
+<td>如果存在多于一个匹配，则可返回任意一个匹配</td>
+</tr>
+
+<tr>
+<td>match not null</td>
+<td>不匹配任何空序列</td>
+</tr>
+
+<tr>
+<td>match continuous</td>
+<td>匹配必须从输入的首字符开始</td>
+</tr>
+
+<tr>
+<td>match prev avail</td>
+<td>输入序列包含第一个匹配之前的内容</td>
+</tr>
+
+<tr>
+<td>format default</td>
+<td>用ECMAScript规则替换字符串</td>
+</tr>
+
+<tr>
+<td>format sed</td>
+<td>用POSIX sed规则替换字符串</td>
+</tr>
+
+<tr>
+<td>forma t_n o_c op y</td>
+<td>不输出输入序列中未匹配的部分</td>
+</tr>
+
+<tr>
+<td>format first only</td>
+<td>只替换子表达式的第一次出现</td>
+</tr>
+</tbody>
+</table>
+
+<p>使用格式标志</p>
+
+<p>默认情况下，regex_replace输出整个输入序列。未与正则表达式匹配的部分会原 样输出；匹配的部分按格式字符串指定的格式输出。我们可以通过在regex_replace 调用中指定format_no_copy来改变这种默认行为：</p>
+
+<p>//只生成电话号码：使用新的格式字符串</p>
+
+<p>string fmt2 = &ldquo;$2 . $5 . $7 &ldquo;; //在最后一部分号码后放置空格作为分隔符</p>
+
+<p>//通知regex_replace只拷贝它替换的文本</p>
+
+<p>cout « regex_replace(s, r, fmt2, format_no_copy) « endl;</p>
+
+<p>给定相同的输入，此版本的程序生成</p>
+
+<p>201.555.2368 862.555.0123</p>
+
+<p>973.555.0130</p>
+
+<p>609.555.0132 201.555.0175 800.555.0000</p>
+
+<h6 id="17-3-4节练习">17.3.4节练习</h6>
+
+<p>练习17.24:编写你自己版本的重排电话号码格式的程序。</p>
+
+<p>练习17.25:重写你的电话号码程序，使之只输出每个人的第一个电话号码。</p>
+
+<p>练习17.26:重写你的电话号码程序，使之对多于一个电话号码的人只输出第二个和后 续电话号码。</p>
+
+<p>练习17.27:编写程序，将九位数字邮政编码的格式转换为ddddd-dddd。</p>
+
+<h5 id="17-4随机数-745">17.4随机数    &lt;745~|</h5>
+
+<p>程序通常需要一个随机数源。在新标准出现之前，C和C++都依赖于一个简单的C库M 函数rand來生成随机数。此函数生成均匀分布的伪随机整数，每个随机数的范围在0和 一个系统相关的最大值(至少为32767)之间。</p>
+
+<p>rand函数有一些问题：即使不是大多数，也有很多程序需要不同范围的随机数。一 些应用需耍随机浮点数。一些程序需要非均匀分布的数。而程序员为了解决这些问题而试 图转换rand生成的随机数的范围、类型或分布时，常常会引入非随机性。</p>
+
+<p>定义在头文件random中的随机数库通过一组协作的类来解决这些问题：随机数引擎 类(random-number engines)和随机数分布类(random-number distribution)。表 17.14 描</p>
+
+<p>述了这些类。一个引擎类可以生成unsigned随机数序列，一个分布类使用一个引擎类 生成指定类型的、在给定范围内的、服从特定概率分布的随机数，</p>
+
+<p>表17.14:随机数库的组成</p>
+
+<p>类型f生成随机unsigned整数序列&rdquo;</p>
+
+<p>分布    类型，使用引擎返回服从特定概率分布的随机数</p>
+
+<p>Beet    C++程序不应该使用库函数rand,而应使用default_random_engine类</p>
+
+<p>和恰当的分布类对象。</p>
+
+<h6 id="17-4-1随机数引擎和分布">17.4.1随机数引擎和分布</h6>
+
+<p>随机数引擎是函数对象类(参见14.8节，第506页)，它们定义了一个调用运算符， 该运算符不接受参数并返回一个随机unsigned整数。我们可以通过调用一个随机数引 擎对象来生成原始随机数，</p>
+
+<p>default_random_engine e; // 生成随机无符号数 for (size_t i = 0; i &lt; 10; ++i)</p>
+
+<p>II e(7 “调用”对象来生成下一个随机数 cout « e () &lt;&lt; •’ ’•；</p>
+
+<p>在我们的系统中，此程序生成：</p>
+
+<p>16807 282475249 1622650073 984943658 1144108930 470211272 …</p>
+
+<p>在本例中，我们定义了一个名为e的default__random_engine对象。在for循环内， 我们调用对象e来获得下一个随机数。    _</p>
+
+<p>□46&gt;    标准库定义了多个随机数引擎类，区别在于性能和随机性质量不同。每个编译器都会</p>
+
+<p>指定其中一个作为default_random_engine类型。此类型一般具有最常用的特性。表 17.15列出了随机数引擎操作，标准库&amp;义的引擎类型列在附录A.3.2 (第783页)中。</p>
+
+<table>
+<thead>
+<tr>
+<th>表17.15:随机数引擎操作</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Engine e;</td>
+<td>默认构造函数；使用该引擎类型默认的种子</td>
+</tr>
+
+<tr>
+<td>Engine e(s);</td>
+<td>使用整型值s作为种子</td>
+</tr>
+
+<tr>
+<td>e.seed(s)</td>
+<td>使用种子s重置引擎的状态</td>
+</tr>
+
+<tr>
+<td>e.min()</td>
+<td>此引擎可生成的最小值和最大值</td>
+</tr>
+
+<tr>
+<td>e.max()</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Engine::result type</td>
+<td>此引擎生成的unsigned整型类型</td>
+</tr>
+
+<tr>
+<td>e.discard(u)</td>
+<td>将引擎推进u步：u的类型为unsigned long long</td>
+</tr>
+</tbody>
+</table>
+
+<p>对于大多数场合，随机数引擎的输出是不能直接使用的，这也是为什么早先我们称之 为原始随机数。问题出在生成的随机数的值范围通常与我们需要的不符，而正确转换随机 数的范围是极其困难的。</p>
+
+<p>分布类型和引擎</p>
+
+<p>为了得到在一个指定范围内的数，我们使用一个分布类型的对象，</p>
+
+<p>//生成0到9之间(包含)均匀分布的随机数 uniform_int_distribution<unsigned> u (0,9); default_random_engine e; //生成无符号随机整数 for (size_t i = 0; i &lt; 10; ++i)</p>
+
+<p>//将：作为随机数源</p>
+
+<p>//每个调用返回在指定范围内并服从均匀分布的值 cout « u(e) « ’’，，；</p>
+
+<p>此代码生成下面这样的输出</p>
+
+<p>0174520669</p>
+
+<p>此处我们将u定义为uniform_int_distribution<unsigned>。此类型生成均匀分 布的unsigned值。当我们定义一个这种类型的对象时，可以提供想要的最小值和最大 值。在此程序中，u(0,9&gt;表示我们希望得到0到9之间(包含)的数。随机数分布类会 使用包含的范围，从而我们可以得到给定整型类型的每个可能值。</p>
+
+<p>类似引擎类型，分布类型也是函数对象类。分布类型定义了一个调用运算符，它接受 一个随机数引擎作为参数。分布对象使用它的引擎参数生成随机数，并将其映射到指定的 分布。</p>
+
+<p>注意，我们传递给分布对象的是引擎对象本身，即u(e) o如果我们将调用写成 u (e ())，含义就变为将e生成的下一个值传递给u，会导致一个编译错误。我们传递的 是引擎本身，而不是它生成的下一个值，原因是某些分布可能需要调用引擎多次才能得到 一个值。</p>
+
+<p><img src="C++  Primer 5-172.jpg" alt="img" /></p>
+
+<p>当我们说随机数发生器时，是指分布对象和引擎对象的组合&amp;,^/</p>
+
+<p>比较随机数引擎和rand函数</p>
+
+<p>对熟悉C库函数rand的读者，值得注意的是:调用一■个def ault_random_engine 对象的输出类似rand的输出。随机数引擎生成的unsigned整数在j个系统定的范围 内，而rand生成的数的范围在0到RAND_MAX之间。一个引擎类型的范围可以通过调&lt;~747~| 用该类型对象的min和max成员来获得：</p>
+
+<p>cout « &ldquo;min: &ldquo; « e.min() « &rdquo; max: &ldquo; « e.max() « endl;</p>
+
+<p>在我们的系统中，此程序生成下面的输出：</p>
+
+<p>min: 1 max: 2147483646</p>
+
+<p>引擎生成一个数值序列</p>
+
+<p>随机数发生器有一个特性经常会使新手迷惑：即使生成的数看起来是随机的，但对一 个给定的发生器，每次运行程序它都会返回相同的数值序列。序列不变这一事实在调试时 非常有用。但另一方面，使用随机数发生器的程序也必须考虑这一特性。</p>
+
+<p>作为一个例子，假定我们需要一个函数生成一个vector,包含100个均匀分布在0 到9之间的随机数。我们可能认为应该这样编写此函数：</p>
+
+<p>//几乎肯定是生成随机整数vector的错误方法 //每次调用这个函数都会生成相同的100个数！ vector<unsigned> bad_randVec()</p>
+
+<p>{</p>
+
+<p>default_random_engine e;</p>
+
+<p>uniform_int_distribution<unsigned> u(0,9);</p>
+
+<p>vector<unsigned> ret;</p>
+
+<p>for (size_t i = 0; i &lt; 100; ++i)</p>
+
+<p>ret.push_back(u(e)); return ret;</p>
+
+<p>}</p>
+
+<p>但是，每次调用这个函数都会返回相同的vector:</p>
+
+<p>vector<unsigned> vl(bad_randVec()); vector<unsigned> v2(bad_randVec());</p>
+
+<p>//将打印&rdquo;equal&rdquo;</p>
+
+<p>cout « ((vl == v2) ? &ldquo;equal&rdquo; : &ldquo;not equal&rdquo;) « endl;</p>
+
+<p>I 740&gt;此代码会打印equal，因为vector vl和v2具有相同的值。</p>
+
+<p>编写此函数的正确方法是将引擎和关联的分布对象定义为static的(参见6.1.1节， 第185页)：</p>
+
+<p>//返回一个vector，包含100个均匀分布的随机数 vector<unsigned> good_randVec()</p>
+
+<p>{</p>
+
+<p>//由于我们希望引擎和分布对象保持状态，因此应该将它们 //定义为static的，从而每次调用都生成新的数 static default_random_engine e;</p>
+
+<p>static uniform_int_distribution<unsigned> u (0,9);</p>
+
+<p>vector<unsigned> ret;</p>
+
+<p>for (size_t i = 0; i &lt; 100; ++i)</p>
+
+<p>ret.push_back(u(e)); return ret;</p>
+
+<p>}</p>
+
+<p>由于e和u是static的，因此它们在函数调用之间会保持住状态。第一次调用会使用 u(e&gt;生成的序列中的前100个随机数，第二次调用会获得接下来100个，依此类推。</p>
+
+<p>WARNING</p>
+
+<p>一个给定的随机数发生器一直会生成相同的随机数序列。一个函数如果定义了 局部的随机数发生器，应该将其(包括引擎和分布对象)定义为static的。 否则，每次调用函数都会生成相同的序列。</p>
+
+<p>设置随机数发生器种子</p>
+
+<p>随机数发生器会生成相同的随机数序列这一特性在调试中很有用。但是，一旦我们的 程序调试完毕，我们通常希望每次运行程序都会生成不同的随机结果，可以通过提供一个 种子(seed)来达到这一目的。种子就是一个数值，引擎可以利用它从序列中一个新位置 重新开始生成随机数。</p>
+
+<p>为引擎设置种子有两种方式：在创建引擎对象时提供种子，或者调用引擎的seed成</p>
+
+<p>员:</p>
+
+<p>default_random_engine el;    // 使用默认种子</p>
+
+<p>default_random_engine e2 (2147483646) ;    // 使用给定的种子值</p>
+
+<p>// e3和^4将生£相同的序列，因为它们使用了相同的种子</p>
+
+<p>default_random_engine e3;    // 使用默认种子值</p>
+
+<p>e3.seed(32767) ;    //调用seed设置一个新种子值</p>
+
+<p>default_random_engine e4 (32767);    // 将种子值设置为 32767</p>
+
+<p>for (size_t i = 0; i != 100; ++i) {</p>
+
+<p>if (el () == e2 ())</p>
+
+<p>cout &lt;&lt; &ldquo;unseeded match at iteration: ’’ &lt;&lt; i &lt;&lt; endl; if (e3()    != e4 ())</p>
+
+<p>cout « &ldquo;seeded differs at iteration: &ldquo; « i « endl;</p>
+
+<p>}</p>
+
+<p>本例中我们定义了四个引擎。前两个引擎el和e2的种子不同，因此应该生成不同的序 列。后两个引擎e3和e4有相同的种子，它们将生成相同的序列。</p>
+
+<p>&lt;249]</p>
+
+<p>选择一个好的种子，与生成好的随机数所涉及的其他大多数事情相同，是极其困难的。 可能最常用的方法是调用系统函数time。这个函数定义在头文件ctime中，它返回从一 个特定时刻到当前经过了多少秒。函数time接受单个指针参数，它指向用于写入时间的 数据结构。如果此指针为空，则函数简单地返回时间：</p>
+
+<p>default_random_engine el (time (0) ) ; // 稍微随机些的种子 由于time返冋以秒计的时间，因此这种方式只适用于生成种子的间隔为秒级或更长的应用。</p>
+
+<p>如果程序作为一个自动过程的一部分反复运行，将time的返回值作为种子的 方式就无效了；它可能多次使用的都是相同的种子。</p>
+
+<h6 id="17-4-1节练习">17.4.1节练习</h6>
+
+<p>练习17.28:编写函数，每次调用生成并返回一个均匀分布的随机unsigned into</p>
+
+<p>练习17.29：修改上一题中编写的函数，允许用户提供一个种子作为可选参</p>
+
+<p>练习17.30：再次修改你的程序，此次再增加两个参数，表示函数允许返回的最小值和 最大值。</p>
+
+<h6 id="17-4-2其他随机数分布">17.4.2其他随机数分布</h6>
+
+<p>随机数引擎生成unsigned数，范围内的每个数被生成的概率都是相同的。而应用 程序常常需要不同类型或不同分布的随机数。标准库通过定义不同随机数分布对象来满足 这两方面的要求，分布对象和引擎对象协同工作，生成要求的结果。表17.16列出了分布 类型所支持的操作。</p>
+
+<p>生成随机实数</p>
+
+<p>程序常需要一个随机浮点数的源。特别是，程序经常需要0到1之间的随机数。</p>
+
+<p>最常用但不正确的从rand获得一个随机浮点数的方法是用randO的结果除以 RAND_MAX, BP,系统定义的rand可以生成的最大随机数的上界。这种方法不正确的原 因是i机整数的精度通常低于随机浮点数，这样，有一些浮点值就永远不会被生成了。</p>
+
+<p>使用新标准库设施，可以很容易地获得随机浮点数。我们可以定义一个</p>
+
+<p>&lt;750~|</p>
+
+<p>uniform_real_distribution类型的对象，并让标准库来处理从随机整数到随机浮点 数的映射。与处理uniform_int_distribution —样，在定义对象时，我们指定最小 值和最大值：</p>
+
+<p>default_random_engine e; //生成无符号随机整数 // 0到1 （包含）的均匀分布</p>
+
+<p>uniform_real_distribution<double> u （0,1）; for （size_t i = 0; i &lt; 10; ++i）</p>
+
+<p>cout « u （e） « n .，；</p>
+
+<p>这段代码与之前生成unsigned值的程序几乎相同。但是，由于我们使用了一个不同的 分布类型，此版本会生成不同的结果：</p>
+
+<p>0.131538 0.45865 0.218959 0.678865 0.934693 0.519416 &hellip;</p>
+
+<table>
+<thead>
+<tr>
+<th>表17.16:分布类型的操作</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Dist d;</td>
+<td>默认构造函数：使d准备好被使用。其他构造函数依赖于£&gt;⑻的类型：参见附录A.3节（第781页）。分布类型的构造函数是explicit的（参见7.5.4节，第265页）</td>
+</tr>
+
+<tr>
+<td>d (e)</td>
+<td>用相同的e连续调用d的话，会根据d的分布式类型生成一个随机数序 列；e是一个随机数引擎对象</td>
+</tr>
+
+<tr>
+<td>d.min()d.max()</td>
+<td>返回d （e）能生成的最小值和最大值</td>
+</tr>
+
+<tr>
+<td>d.reset ()</td>
+<td>重建d的状态，使得随后对d的使用不依赖于d己经生成的值</td>
+</tr>
+</tbody>
+</table>
+
+<p>使用分布的默认结果类型</p>
+
+<p>分布类型都是模板，具有单一的模板类型参数，表示分布生成的随机数的类型，对此 有一个例外，我们将在17.4.2节（第665页）中进行介绍。这些分布类型要么生成浮点类 型，要么生成整数类型。</p>
+
+<p>每个分布模板都有一个默认模板实参（参见16.1.3节，第594页）。生成浮点值的分 布类型默认生成double值，而生成整型值的分布默认生成int值。由于分布类型只有 一个模板参数，因此当我们希望使用默认随机数类型时要记得在模板名之后使用空尖括号 （参见16.1.3节，第594页）：</p>
+
+<p>//空&lt;&gt;表示我们希望使用默认结果类型</p>
+
+<p>uniform_real_distribution&lt;&gt; u （0,1）; // 默认生成 double 值</p>
+
+<p>EM&gt;生成非均匀分布的随机数</p>
+
+<p>除了正确生成在指定范围内的数之外，新标准库的另一个优势是可以生成非均匀分布 的随机数。实际上，新标准库定义了 20种分布类型，这些类型列在附录A.3 （第781）中。</p>
+
+<p>作为一个例子，我们将生成一个正态分布的值的序列，并画出值的分布。由于 normal_distribution生成浮点值，我们的程序使用头文件cmath中的lround函数 将每个€机数舍入到最接近的整数。我们将生成200个数，它们以均值4为中心，标准差 为1.5。由于使用的是正态分布，我们期望生成的数中大约99%都在0到8之间（包含）。 我们的程序会对这个范围内的每个整数统计有多少个生成的数映射到它：</p>
+
+<p>default_random_engine e;    // 生成随机整数</p>
+
+<p>normal distributiono n （4,1.5） ;    // 均值 4，标准差 1.5</p>
+
+<p>vector<unsigned> vals(9);</p>
+
+<p>for (size_t i = 0; i != 200; ++i) unsigned v = lround(n(e)); if (v &lt; vals.size())</p>
+
+<p>// 9个元素均为0</p>
+
+<p>//舍入到最接近的整数 //如果结果在范围内 //统计每个数出现了多少次</p>
+
+<p>++vals[v];</p>
+
+<p>for (size_t j =0; j != vals.size(); ++j) cout « j &lt;&lt; &ldquo;: &ldquo; &lt;&lt; string(vals[j],</p>
+
+<p>我们首先定义了随机数发生器对象和一个名为vals的vector。我们用vals来统计范 围0&hellip;8中的每个数出现了多少次。与我们使用vector的大多数程序不同，此程序按需 求大小为vals分配空间，每个元素都被初始化为0。</p>
+
+<p>在for循环中，我们调用lround (n(e))来将n (e)返回的值舍入到最接近的整数。 获得浮点随机数对应的整数后，我们将它作为计数器vector的下标。由于n (e)可能生 成范围0到8之外的数,所以我们首先检查生成的数是否在范围内，然后再将其作为vals 的下标。如果结果确实在范围内，我们递增对应的计数器。</p>
+
+<p>当循环结束时，我们打印vals的内容，可能会打印出像下面这样的结果：</p>
+
+<p>0: ***</p>
+
+<p>1;</p>
+
+<p>2: ********************</p>
+
+<p>3: ★<strong>★★★★*★★*★★★★</strong>*<strong>★*★*★</strong>***********</p>
+
+<p>4:    **********************************************************</p>
+
+<p>5:    *★★*★★★★★*★★★*<strong>★*★*★★★*★★★</strong>★★★★★**<strong>★♦</strong></p>
+
+<p>7: *******</p>
+
+<p>8: *</p>
+
+<p>本例中我们打印一个由星号组成的string,有多少随机数等于此下标我们就打印多少个 星号。注意，此图并不是完美对称的。如果打印出的图是完美对称的，我们反倒有理由怀＜752] 疑随机数发生器的质量了。</p>
+
+<p>bernoulli_dist「ibution 类</p>
+
+<p>我们注意到有一个分布不接受模板参数，即bernoulli_distribution.因为它 是一个普通类，而非模板。此分布总是返回一个bool值。它i回true的概率是一个常 数，此概率的默认值是0.5。</p>
+
+<p>作为一个这种分布的例子，我们可以编写一个程序，这个程序与用户玩一个游戏。为 了进行这个游戏，其中一个游戏者——用户或是程序——必须先行。我们可以用一个值范 围是0到1的uniform_int_distribution来选择先行的游戏者，但也可以用伯努利 分布来完成这个选择。假定已一个名为play的函数来进行游戏，我们可以编写像下面 这样的循环来与用户交互：</p>
+
+<p>string resp;</p>
+
+<p>default_random_engine e; // e应保持状态，所以必须在循环外完义！ bernoulli_distribution b; // 默认是 <sup>50</sup>&frasl;<sub>50</sub> 的机会 do {</p>
+
+<p>bool first = b(e) ;    //如果为true,则程序先行</p>
+
+<p>cout « (first ? &ldquo;We go first&rdquo;</p>
+
+<p>You get to go first”&gt; « endl;</p>
+
+<p>//传递谁先行的指示，进行游戏</p>
+
+<dl>
+<dt>cout « ((play(first)) ? &ldquo;sorry, you lost&rdquo;</dt>
+</dl>
+
+<p>:&ldquo;congrats, you won&rdquo;) « endl;</p>
+
+<p>cout « &ldquo;play again? Enter &lsquo;yes&rsquo; or &lsquo;no&rsquo;&rdquo; « endl;</p>
+
+<p>} while (cin » resp &amp;&amp; resp[0] == r );</p>
+
+<p>我们用一个do while循环(参见5.4.4节，第169页)来反复提示用户进行游戏。</p>
+
+<p>A</p>
+
+<p>WARNING</p>
+
+<p>由于引擎返回相同的随机数序列（参见17.4.1节，第661页），所以我们必须 在循环外声明引擎对象。否则，每步循环都会创建一个新引擎，从而每步循环 都会生成相同的值。类似的，分布对象也要保持状态，因此也应该在循环外 定义y</p>
+
+<p>在此程序中使用bernoulli_distribution的一个原因是它允许我们调整选择先 行一方的概率：</p>
+
+<p>bernoulli_distribution b （. 55） ; // 给程序一个微小的优势 如果b定义如上，则程序有55/45的机会先行。</p>
+
+<h6 id="17-4-2节练习">17.4.2节练习</h6>
+
+<p>练习17.31:对于本节中的游戏程序，如果在do循环内定义b和e，会发生什么？</p>
+
+<p>练习17.32:如果我们在循环内定义resp,会发生什么？</p>
+
+<p>练习17.33：修改11.3.6节（第392页）中的单词转换程序，允许对一个给定单词有多 种转换方式，每次随机选择一种进行实际转换。</p>
+
+<h5 id="17-5-io库再探">17.5 IO库再探</h5>
+
+<p>在第8章中我们介绍了 1O库的基本结构及其最常用的部分。在本节中，我们将介绍 三个更特殊的IO库特性：格式控制、未格式化10和随机访问。</p>
+
+<h4 id="g53-17-5-1格式化输入与输出">G53&gt; 17.5.1格式化输入与输出</h4>
+
+<p>除了条件状态外（参见8.1.2节，第279页），每个iostream对象还维护一个格式 状态来控制IO如何格式化的细节。格式状态控制格式化的某些方面，如整型值是几进制、 浮点值的精度、一个输出元素的宽度等。</p>
+
+<p>标准库定义了一组操纵符（manipulator）（参见1.2节，第6页）来修改流的格式状态， 如表17.7和表17.8所示。一个操纵符是一个函数或是一个对象，会影响流的状态，并能 用作输入或输出运算符的运算对象。类似输入和输出运算符，操纵符也返回它所处理的流 对象，因此我们可以在一条语句中组合操纵符和数据。</p>
+
+<p>我们已经在程序中使用过一个操纵符——endl,我们将它“写”到输出流，就像它是 一个值一样。但endl不是一个普通值，而是一个操作：它输出一个换行符并刷新缓冲区。</p>
+
+<p>很多操纵符改变格式状态</p>
+
+<p>操纵符用于两大类输出控制：控制数值的输出形式以及控制补白的数量和位置。大多 数改变格式状态的操纵符都是设置/复原成对的;一个操纵符用来将格式状态设置为一个新 值，而另一个用来将其复原，恢复为正常的默认格式。</p>
+
+<p>WARNING</p>
+
+<p>当操纵符改变流的格式状态时，通常改变后的状态对所有后续1O都生效</p>
+
+<p>当我们有一组IO操作希望使用相同的格式时，操纵符对格式状态的改变是持久的这 一特性很有用。实际上，一些程序会利用操纵符的这一特性对其所有输入或输出重置一个 或多个格式规则的行为。在这种情况下，操纵符会改变流这一特性就是满足要求的了。</p>
+
+<p>但是，很多程序(而且更重要的是，很多程序员)期望流的状态符合标准库正常的默 认设置。在这些情况下，将流的状态置于一个非标准状态可能会导致错误。因此，通常最 好在不再需要特殊格式时尽快将流恢复到默认状态。</p>
+
+<p>控制布尔值的格式</p>
+
+<p>&lt;754~|</p>
+
+<p>操纵符改变对象的格式状态的一个例子是boolalpha操纵符。默认情况下，bool 值打印为1或0。一个true值输出为整数1,而false输出为0。我们可以通过对流使 用boolalpha操纵符来覆盖这种格式：</p>
+
+<p>cout « *&lsquo;default bool values: ’• « true « &ldquo; &rdquo; « false « &ldquo;\nalpha bool values: &ldquo; « boolalpha « true « &rdquo; &ldquo; « false « endl;</p>
+
+<p>执行这段程序会得到下面的结果：</p>
+
+<p>default bool values: 1 0 alpha bool values: true false</p>
+
+<p>一旦向cout “写入”了 boolalpha,我们就改变了 cout打印bool值的方式。后渎打 印bool值的操作都会打印true或false而非1或0。</p>
+
+<p>为了取消cout格式状态的改变，我们使用noboolalpha：</p>
+
+<p>bool bool_val = get_status();</p>
+
+<p>cout &lt;&lt; boolalpha    //设置cout的内部状态</p>
+
+<p>« bool_val</p>
+
+<p>« noboolalpha;    //将内部状态恢复为默认格式</p>
+
+<p>本例中我们改变了 bool值的格式,但只对bool_val的输出有效。一旦完成此值的打印， 我们立即将流恢复到初始状态。</p>
+
+<p>指定整型值的进制</p>
+
+<p>默认情况下，整型值的输入输出使用十进制。我们可以使用操纵符hex、oct和dec 将其改为十六进制、八进制或是改回十进制：</p>
+
+<p>cout « &ldquo;default: &ldquo; « 20 &lt;&lt; *• *&rsquo; « cout « &ldquo;octal: ’’ « oct &lt;&lt; 20 « &ldquo; cout « ’’hex: ’• « hex « 20 « &ldquo;&rdquo; cout « &lsquo;*decimal: &ldquo; &lt;&lt; dec « 20 «</p>
+
+<p>1024 « endl;</p>
+
+<p>&ldquo;« 1024 « endl;</p>
+
+<p>« 1024 « endl;</p>
+
+<p>&ldquo;•’ « 1024 « endl;</p>
+
+<p>当编译并执行这段程序时，会得到如下输出:</p>
+
+<p>default: 20 1024 octal: 24 2000 hex: 14 400 decimal: 20 1024</p>
+
+<p>注意，类似boolalpha,这些操纵符也会改变格式状态。它们会影响下一个和随后 所有的整型输出，直至另一个操纵符又改变了格式为止。</p>
+
+<p><img src="C++  Primer 5-175.jpg" alt="img" /></p>
+
+<p>操纵符hex、oct和dec只影响整型运算对象，浮点值的表示形式不受影响。</p>
+
+<p>□55＞在输出中指出进制</p>
+
+<p>默认情况下，当我们打印出数值时，没有可见的线索指出使用的是几进制，例如，20 是十进制的20还是16的八进制表示？当我们按十进制打印数值时，打印结果会符合我们 的期望。如果需要打印八进制值或十六进制值，应该使用showbase操纵符。当对流应 用showbase操纵符时，会在输出结果中显示进制，它遵循与整型常量中指定进制相同 的规范：</p>
+
+<p>•前导Ox表示十六进制。</p>
+
+<p>•前导0表示八进制。</p>
+
+<p>•无前导字符串表示十进制。</p>
+
+<p>我们可以使用showbase修改前一个程序：</p>
+
+<table>
+<thead>
+<tr>
+<th>cout</th>
+<th>«</th>
+<th>showbase; /</th>
+<th>/当打印整型值时显示进制</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>cout</td>
+<td>«</td>
+<td>ndefault: *&rsquo;</td>
+<td>« 20 «，• n « 1024</td>
+<td>« endl;</td>
+</tr>
+
+<tr>
+<td>cout</td>
+<td>«</td>
+<td>&ldquo;in octal:</td>
+<td>&lsquo;，« oct « 20 « &ldquo; n</td>
+<td>« 1024 « endl;</td>
+</tr>
+
+<tr>
+<td>cout</td>
+<td>«</td>
+<td>&ldquo;in hex:&rdquo;</td>
+<td>« hex « 20 « &ldquo;，&rsquo; «</td>
+<td>1024 « endl;</td>
+</tr>
+
+<tr>
+<td>cout</td>
+<td>«</td>
+<td>&ldquo;in decimal</td>
+<td>:’，« dec « 20 « ’，</td>
+<td>&ldquo;« 1024 « endl</td>
+</tr>
+
+<tr>
+<td>cout</td>
+<td>«</td>
+<td>noshowbase;</td>
+<td>//恢复流状态</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>修改后的程序的输出会更清楚地表明底层值到底是什么：</p>
+
+<p>default: 20 1024 in octal: 024 02000 in hex: 0x14 0x400 in decimal: 20 1024</p>
+
+<p>操纵符noshowbase恢复cout的状态，从而不再显示整型值的进制。</p>
+
+<p>默认情况下，十六进制值会以小写打印，前导字符也是小写的X。我们可以通过使用 uppercase操纵符来输出大写的X并将十六进制数字a-f以大写输出：</p>
+
+<p>cout « uppercase « showbase « hex</p>
+
+<p>« &ldquo;printed in hexadecimal: ’’ &lt;&lt; 20 « &ldquo; &rdquo; « 1024 &lt;&lt; nouppercase &lt;&lt; noshowbase « dec « endl;</p>
+
+<p>这条语句生成如下输出：</p>
+
+<p>printed in hexadecimal: 0X14 0X400</p>
+
+<p>我们使用了操纵符nouppercase、noshowbase和dec来重置流的状态。</p>
+
+<p>控制浮点数格式</p>
+
+<p>我们可以控制浮点数输出三个种格式:</p>
+
+<p>•以多髙精度（多少个数字）打印浮点值</p>
+
+<p>•数值是打印为十六进制、定点十进制还是科学记数法形式</p>
+
+<p>•对于没有小数部分的浮点值是否打印小数点</p>
+
+<p>默认情况下，浮点值按六位数字精度打印；如果浮点值没有小数部分，则不打印小数点： 根据浮点数的值选择打印成定点十进制或科学记数法形式。标准库会选择一种可读性更好 的格式：非常大和非常小的值打印为科学记数法形式，其他值打印为定点十进制形式。</p>
+
+<p>指定打印精度</p>
+
+<p>默认情况下，精度会控制打印的数字的总数。当打印时，浮点值按当前精度舍入而非 截断。因此，如果当前精度为四位数字，则3.14159将打印为3.142;如果精度为三位 数字，则打印为3.14。</p>
+
+<p>我们可以通过调用1O对象的precision成员或使用setprecision操纵符来改变 精度。precision成员是重载的（参见6.4节，第206页）＜■ 一个版本接受一个int值， 将精度设置为此值，并返回旧精度值。另一个版本不接受参数，返回当前精度值。 setprecision操纵符接受一个参数，用来设置精度。</p>
+
+<p>操纵符setprecision和其他接受参数的操纵符都定义在头文件iomanip</p>
+
+<p>下面的程序展示了控制浮点值打印精度的不同方法：</p>
+
+<p>// cout .precision返回当前精度值</p>
+
+<p>cout &lt;&lt; &ldquo;Precision: &ldquo; « cout.precision()</p>
+
+<p>« &ldquo;, Value: &ldquo;    « sqrt(2.0) « endl;</p>
+
+<p>// cout .precision (12)将打印精度设置为12位数字 cout.precision (12);</p>
+
+<p>cout &lt;&lt; &ldquo;Precision: ’’ « cout .precision ()</p>
+
+<p>« &ldquo;, Value: &ldquo;    &lt;&lt; sqrt(2.0) « endl;</p>
+
+<p>//另一种设置精度的方法是使用setprecision操纵符 cout &lt;&lt; setprecision (3);</p>
+
+<p>cout « &ldquo;Precision: &ldquo; « cout.precision()</p>
+
+<p>&lt;&lt; &ldquo;, Value: n « sqrt(2.0) « endl;</p>
+
+<p>编译并执行这段程序，会得到如下输出:</p>
+
+<p>Precision: 6, Value: 1.41421 Precision: 12, Value: 1.41421356237 Precision: 3, Value: 1.41</p>
+
+<p>此程序调用标准库sqrt函数，它定义在头文件cmath中。sqrt函数是重载的，不同版＜5^1 本分别接受一个float、double或long double参数，返回实参的平方根。</p>
+
+<table>
+<thead>
+<tr>
+<th>表17.17:定义在iostream中的操纵符</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>boolalpha</td>
+<td>将true和false输出为字符串</td>
+</tr>
+
+<tr>
+<td>* noboolalpha</td>
+<td>将true和false输出为1，0</td>
+</tr>
+
+<tr>
+<td>showbase</td>
+<td>对整型值输出表示进制的前缀</td>
+</tr>
+
+<tr>
+<td>* noshowbase</td>
+<td>不生成表示进制的前缀</td>
+</tr>
+
+<tr>
+<td>showpoint</td>
+<td>对浮点值总是显示小数点</td>
+</tr>
+</tbody>
+</table>
+
+<p>续表</p>
+
+<table>
+<thead>
+<tr>
+<th>★</th>
+<th>noshowpoint</th>
+<th>只有当浮点值包含小数部分时才显示小数点</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td></td>
+<td>showpos</td>
+<td>对非负数显示+</td>
+</tr>
+
+<tr>
+<td>★</td>
+<td>noshowpos</td>
+<td>对非负数不显示+</td>
+</tr>
+
+<tr>
+<td></td>
+<td>uppercase</td>
+<td>在十六进制值中打印0X,在科学记数法中打印E</td>
+</tr>
+
+<tr>
+<td>★</td>
+<td>nouppercase</td>
+<td>在十六进制值中打印Ox,在科学记数法中打印e</td>
+</tr>
+
+<tr>
+<td>★</td>
+<td>dec</td>
+<td>整型值显示为十进制</td>
+</tr>
+
+<tr>
+<td></td>
+<td>hex</td>
+<td>整型值显示为十六进制</td>
+</tr>
+
+<tr>
+<td></td>
+<td>oct</td>
+<td>整型值显示为八进制</td>
+</tr>
+
+<tr>
+<td></td>
+<td>left</td>
+<td>在值的右侧添加填充字符</td>
+</tr>
+
+<tr>
+<td></td>
+<td>right</td>
+<td>在值的左侧添加填充字符</td>
+</tr>
+
+<tr>
+<td></td>
+<td>internal</td>
+<td>在符号和值之间添加填充字符</td>
+</tr>
+
+<tr>
+<td></td>
+<td>fixed</td>
+<td>浮点值显示为定点十进制</td>
+</tr>
+
+<tr>
+<td></td>
+<td>scientific</td>
+<td>浮点值显示为科学记数法</td>
+</tr>
+
+<tr>
+<td></td>
+<td>hexfloat</td>
+<td>浮点值显示为十六进制(C++11新特性)</td>
+</tr>
+
+<tr>
+<td></td>
+<td>defaultfloat</td>
+<td>重置浮点数格式为十进制(CH^l新特性)</td>
+</tr>
+
+<tr>
+<td></td>
+<td>unitbuf</td>
+<td>每次输出操作后都刷新缓冲区</td>
+</tr>
+
+<tr>
+<td>*</td>
+<td>nounitbuf</td>
+<td>恢复正常的缓冲区刷新方式</td>
+</tr>
+
+<tr>
+<td>*</td>
+<td>skipws</td>
+<td>输入运算符跳过空白符</td>
+</tr>
+
+<tr>
+<td></td>
+<td>noskipws</td>
+<td>输入运算符不跳过空白符</td>
+</tr>
+
+<tr>
+<td></td>
+<td>flush</td>
+<td>刷新ostream缓冲区</td>
+</tr>
+
+<tr>
+<td></td>
+<td>ends</td>
+<td>插入空字符，然后刷新ostream缓冲区</td>
+</tr>
+
+<tr>
+<td></td>
+<td>endl</td>
+<td>插入换行，然后刷新ostream缓冲区</td>
+</tr>
+
+<tr>
+<td>*表示默认流状态</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>指定浮点数记数法</p>
+
+<p>Bert 除非你需要控制浮点数的表示形式(如，按列打印数据或打印表示金额或百分 roetiftes</p>
+
+<p>比的数据)，否则由标准库选择记教法是最好的方式。</p>
+
+<p>通过使用恰当的操纵符，我们可以强制一个流使用科学记数法、定点十进制或是十六 进制记数法。操纵符scientific改变流的状态来使用科学记数法。操纵符fixed改变 流的状态来使用定点十进制。</p>
+
+<p>在新标准库中，通过使用hexfloat也可以强制浮点数使用十六进制格式。新标准 库还提供另一个名为defaultfloat的操纵符，它将流恢复到默认状态一根据要打印 的值选择记数法。</p>
+
+<p>这些操纵符也会改变流的精度的默认含义。在执行scientific、fixed或 hexfloat后，精度值控制的是小数点后面的数字位数，而默认情况下精度值指定的是数 字的总位数一既包括小数点之后的数字也包括小数点之前的数字。使用fixed或 scientific令我们可以按列打印数值，因为小数点距小数部分的距离是固定的：</p>
+
+<p>cout « &ldquo;default format: &ldquo; « 100 * sqrt(2.0) « *\n&rsquo;</p>
+
+<p>« &ldquo;scientific: &ldquo; « scientific &lt;&lt; 100 * sqrt(2.0) « &lsquo;\n&rsquo;</p>
+
+<p>« &ldquo;fixed decimal: &ldquo; « fixed « 100 * sqrt(2.0) « &lsquo;\n&rsquo;</p>
+
+<p>« &ldquo;hexadecimal: &ldquo; « hexfloat « 100 * sqrt(2.0) « &lsquo;\n&rsquo;</p>
+
+<p>« &ldquo;use defaults: &ldquo; « defaultfloat « 100 * sqrt(2.0)</p>
+
+<p>« &ldquo;\n\n&rdquo;;</p>
+
+<p>此程序会生成下面的输出：</p>
+
+<p>default format: 141.421 scientific: 1.414214e+002 fixed decimal: 141.421356 hexadecimal: 0x1.lad7bcp+7 use defaults: 141.421</p>
+
+<p>默认情况下，十六进制数字和科学记数法中的e都打印成小写形式。我们可以用uppercase 操纵符打印这些字母的大写形式。</p>
+
+<p>打印小数点</p>
+
+<p>默认情况下，当一个浮点值的小数部分为0时，不显示小数点。showpoint操纵符 强制打印小数点：</p>
+
+<p>cout « 10.0 « endl;    // 打印 10</p>
+
+<p>cout « showpoint &lt;&lt; 10.0    // 打印 10.0000</p>
+
+<p>« noshowpoint « endl; //恢复小数点的默认格式</p>
+
+<p>操纵符noshowpoint恢复默认行为。下一个输出表达式将有默认行为，即，当浮点值的 小数部分为0吋不输出小数点。</p>
+
+<p>输出补白</p>
+
+<p>当按列打印数据时，我们常常需要非常精细地控制数据格式。标准库提供了一些操纵 符帮助我们完成所需的控制：</p>
+
+<p>•    setw指定下一个数字或字符串值的最小空间。</p>
+
+<p>•    left表示左对齐输出。</p>
+
+<p>•    right表示右对齐输出，右对齐是默认格式。</p>
+
+<p>•    internal控制负数的符号的位置，它左对齐符号，右对齐值，用空格填满所有中&lt;759~| 间空间。</p>
+
+<p>•    setfill允许指定一个字符代替默认的空格来补白输出。</p>
+
+<p><img src="C++  Primer 5-176.jpg" alt="img" /></p>
+
+<p>setw类似endl,不改变输出流的内部状态。它只决定下一个输出的大小，</p>
+
+<p>下面程序展示了如何使用这些操纵符：</p>
+
+<p>int i = -16; double d = 3.14159;</p>
+
+<p>//补白第一列，使用输出中最小12个位置</p>
+
+<table>
+<thead>
+<tr>
+<th>cout</th>
+<th>««</th>
+<th>&ldquo;i:&lsquo;&ldquo;d:，</th>
+<th>1 «1 «</th>
+<th>setw(12)setw(12)</th>
+<th>««</th>
+<th>d</th>
+<th>««</th>
+<th>&ldquo;next&rdquo;next</th>
+<th>colncol&rdquo;</th>
+<th>««</th>
+<th>&lsquo;\n&rsquo;r \n&rsquo;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>/ /补白第一列，</td>
+<td>左对齐所有列</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>cout</td>
+<td>&lt;&lt;</td>
+<td>left</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>«</td>
+<td>’，i:&rsquo;</td>
+<td>&ldquo;«</td>
+<td>setw(12)</td>
+<td>«</td>
+<td>i</td>
+<td>«</td>
+<td>&ldquo;next</td>
+<td>col&rdquo;</td>
+<td>«</td>
+<td>&lsquo;\n，</td>
+</tr>
+
+<tr>
+<td></td>
+<td>«</td>
+<td>&ldquo;d:&rsquo;</td>
+<td>* «</td>
+<td>setw(12)</td>
+<td>«</td>
+<td>d</td>
+<td>«</td>
+<td>&ldquo;next</td>
+<td>col&rdquo;</td>
+<td>«</td>
+<td>r \nr</td>
+</tr>
+</tbody>
+</table>
+
+<p>« right; //恢复正常对齐 //补白第一列，右对齐所有列</p>
+
+<p>cout « right</p>
+
+<p>« &ldquo;i： &rdquo; « setw(12) « i « &ldquo;next col&rdquo; « ，\n，</p>
+
+<table>
+<thead>
+<tr>
+<th>«</th>
+<th>nd:&rsquo;</th>
+<th>&lsquo;* &lt;&lt; setw (12) &lt;&lt; d</th>
+<th>«</th>
+<th>&ldquo;next col&rdquo;</th>
+<th>«</th>
+<th>&lsquo;\n&rsquo;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>//补白第一列，</td>
+<td>但补在域的内部</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>cout «</td>
+<td>internal</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>«</td>
+<td>&ldquo;i:&rsquo;</td>
+<td>&ldquo;« setw(12) « i</td>
+<td>«</td>
+<td>’’next col”</td>
+<td>«</td>
+<td>*\n&rsquo;</td>
+</tr>
+
+<tr>
+<td>«</td>
+<td>&ldquo;d:&rsquo;</td>
+<td>&lsquo;* « setw (12) « d</td>
+<td>«</td>
+<td>&ldquo;next col”</td>
+<td>«</td>
+<td>• \nr</td>
+</tr>
+
+<tr>
+<td>//补白第一列，</td>
+<td>用#作为补白字符</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>cout «</td>
+<td>setfill(z #z)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>«</td>
+<td>&ldquo;i:</td>
+<td>&ldquo;« setw(12) « i</td>
+<td>«</td>
+<td>’’next col•’</td>
+<td>«</td>
+<td>r \n&rsquo;</td>
+</tr>
+
+<tr>
+<td>«</td>
+<td>&ldquo;d:</td>
+<td>&ldquo;« setw(12) &lt;&lt; d</td>
+<td>«</td>
+<td>•’next col&rdquo;</td>
+<td>«</td>
+<td>r \n&rsquo;</td>
+</tr>
+</tbody>
+</table>
+
+<p>« setfill(&rsquo; &lsquo;); //恢复正常的补白字符 执行这段程序，会得到下面的输出：</p>
+
+<p>r?6o&gt;</p>
+
+<p>i:</p>
+
+<p>d</p>
+
+<p>d</p>
+
+<p>d</p>
+
+<p>d</p>
+
+<p>d</p>
+
+<p>-16next col 3.14159next col</p>
+
+<p>-16    next col</p>
+
+<p>3.14159    next col</p>
+
+<p>-16next col 3.14159next col</p>
+
+<p>-    16next col</p>
+
+<p>3.14159next col</p>
+
+<p>-#########16next col #####3.14159next col</p>
+
+<p>表17.18:定义在iomanip中的操纵符</p>
+
+<p>setfill (ch)    用ch填充空白</p>
+
+<p>setprecision (n)    将浮点精度设置为n</p>
+
+<p>setw(w)    读或写值的宽度为w个字符</p>
+
+<p>setbase (b)    将整数输出为b进制</p>
+
+<p>控制输入格式</p>
+
+<p>默认情况下，输入运算符会忽略空白符(空格符、制表符、换行符、换纸符和回车符)。 下面的循环</p>
+
+<p>char ch;</p>
+
+<p>while (cin » ch) cout &lt;&lt; ch;</p>
+
+<p>当给定下面输入序列时</p>
+
+<p>a b    c</p>
+
+<p>d</p>
+
+<p>循环会执行4次，读取字符3到山跳过中间的空格以及可能的制表符和换行符。此程序 的输出是</p>
+
+<p>abed</p>
+
+<p>操纵符noskipws会令输入运算符读取空白符，而不是跳过它们。为了恢复默认行 为，我们可以使用skipws操纵符：</p>
+
+<p>cin &gt;&gt; noskipws; //设置cin读取空白符 while (cin » ch)</p>
+
+<p>cout « ch;</p>
+
+<p>cin » skipws; //将cin恢复到默认状态，从而丢弃窒白符</p>
+
+<p>给定与前一个程序相同的输入，此循环会执行7次，从输入中既读取普通字符又读取空白 符。此循环的输出为</p>
+
+<p>a b    c</p>
+
+<p>d</p>
+
+<h6 id="17-5-1节练习">17.5.1节练习</h6>
+
+<p>练习17.34:编写一个程序，展示如何使用表17.17和表17.18中的每个操纵符。</p>
+
+<p>练习17.35:修改第670页中的程序，打印2的平方根，但这次打印十六进制数字的大 写形式。</p>
+
+<p>练习17.36：修改上一题中的程序，打印不同的浮点数，使它们排成一列。</p>
+
+<h6 id="17-5-2未格式化的输人-输出操作">17.5.2未格式化的输人/输出操作</h6>
+
+<p>&lt;76?1</p>
+
+<p>到目前为止，我们的程序只使用过格式化IO (formatted IO)操作。输入和输出运算 符(&lt;&lt;和&gt;&gt;)根据读取或写入的数据类型来格式化它们。输入运算符忽略空白符，输出 运算符应用补白、精度等规则。</p>
+
+<p>标准库还提供了一组低层操作，支持未格式化IO (unformatted 10)。这些操作允许我 们将一个流当作一个无解释的字节序列来处理。</p>
+
+<p>单字节操作</p>
+
+<p>有几个未格式化操作每次一个字节地处理流。这些操作列在表17.19中，它们会读取而 不是忽略空白符。例如，我们可以使用未格式化10操作get和put来读取和写入一个字符:</p>
+
+<p>char ch;</p>
+
+<p>while (cin.get(ch))</p>
+
+<p>cout.put(ch);</p>
+
+<p>此程序保留输入中的空白符，其输出与输入完全相同。它的执行过程与前一个使用 noskipws的程序完全相同。</p>
+
+<table>
+<thead>
+<tr>
+<th>表17.19:单字节低层I0操作</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>is.get(ch)</td>
+<td>从istream is读取下一个字节存入字符ch中。返回is</td>
+</tr>
+
+<tr>
+<td>os.put(ch)</td>
+<td>将字符ch输出到ostream os。返回os</td>
+</tr>
+
+<tr>
+<td>is.get ()</td>
+<td>将is的下一个字节作为int返回</td>
+</tr>
+
+<tr>
+<td>is.putback(ch)</td>
+<td>将字符ch放回is。返回is</td>
+</tr>
+
+<tr>
+<td>is.unget()</td>
+<td>将is向后移动一个字节。返回is</td>
+</tr>
+
+<tr>
+<td>is.peek()</td>
+<td>将下一个字节作为int返回，但不从流中删除它</td>
+</tr>
+</tbody>
+</table>
+
+<p>将字符放回输入流</p>
+
+<p>有时我们需要读取一个字符才能知道还未准备好处理它，在这种情况下，我们希望将 字符放回流中。标准库提供了三种方法退回字符，它们有着细微的差别，</p>
+
+<p>• peek返回输入流中下一个字符的副本，但不会将它从流中删除，peek返回的值 仍然留在流中。</p>
+
+<p>•    unget使得输入流向后移动，从而最后读取的值又回到流中。即使我们不知道最 后从流中读取什么值，仍然可以调用unget。</p>
+
+<p>•    putback是更特殊版本的unget:它退回从流中读取的最后一个值，但它接受一 个参数，此参数必须与最后读取的值相同。</p>
+
+<p>[262&gt; 一般情况下，在读取下一个值之前，标准库保证我们可以退回最多一个值。即，标准库不 保证在中间不进行读取操作的情况下能连续凋用putback或ungeto</p>
+
+<p>从输入操作返回的int值</p>
+
+<p>函数peek和无参的get版本都以int类型从输入流返回一个字符。这有些令人吃 惊，可能这些函数返回一个char看起来会更自然。</p>
+
+<p>这些函数返冋一个int的原因是：可以返回文件尾标记。我们使用char范围中的每 个值来表示一个真实字符，因此，取值范围中没有额外的值可以用来表示文件尾。</p>
+
+<p>返回int的函数将它们要返回的字符先转换为unsigned char,然后再将结果提升 到int。因此，即使字符集中有字符映射到负值，这些操作返回的int也是正值(参见 2.1.2节，第32页)。而标准库使用负值表示文件尾，这样就可以保证与任何合法字符的值 都不同。头文件cstdio定义了一个名为EOF的const,我们可以用它来检测从get返 回的值是否是文件尾，而不必记忆表示文件尾的实际数值。对我们来说重要的是，用一个 int来保存从这些函数返回的值：</p>
+
+<p>int ch; //使用一个int,而不是一个char来保存get (〉的返回值</p>
+
+<p>//循环读取并输出输入中的所有数据 while ( (ch = cin.get())    != EOF)</p>
+
+<p>cout.put (ch);</p>
+
+<p>此程序与第673页中的程序完成相同的工作，唯一的不同是用来读取输入的get版本不同。</p>
+
+<p>多字节操作</p>
+
+<p>一些未格式化IO操作一次处理大块数据。如果速度是要考虑的重点问题的话，这些 操作是很重要的，但类似其他低层操作，这些操作也容易出错。特别是，这些操作要求我 们自己分配并管理用来保存和提取数据的字符数组(参见12.2节，第423页)。表17.20 列出了多字节操作。</p>
+
+<p>表17.20:多字节低层I0操作</p>
+
+<p>is.get(sink, size, delim)</p>
+
+<p>从is中读取最多size个字节，并保存在字符数组中，字符数组的起始地址由sink给 出，读取过程直至遇到字符delim或读取了 size个字节或遇到文件尾时停止。如果遇 到了 delim,则将其留在输入流中，不读取出来存入sink</p>
+
+<p>is.getline(sink, size, delim)</p>
+
+<p>与接受三个参数的get版本类似，但会读取并丢弃delim</p>
+
+<p>is.read(sink, size)</p>
+
+<p>读取最多size个字节，存入字符数组sink中。返回is is.gcount()</p>
+
+<p>返回上一个未格式化读取操作从is读取的字节数 os.write(source, size)</p>
+
+<p>将字符数组source中的size个字节写入os。返回os</p>
+
+<p>续表</p>
+
+<p>is.ignore(size, delim)</p>
+
+<p>读取并忽略最多size个字符，包括delim。与其他未格式化函数不同，ignore有默认 参数：size的默认值为1，delim的默认值为文件尾</p>
+
+<p>get和getline函数接受相同的参数，它们的行为类似但不相同。在两个函数中，sink 都是一个char数组，用来保存数据。两个函数都一直读取数据，直至下面条件之一发生：</p>
+
+<p>•已读取了 size-1个字符 •遇到了文件尾 •遇到了分隔符</p>
+
+<p>两个函数的差别是处理分隔符的方式：get将分隔符留作istream中的下一个字符，而 getline则读取并丢弃分隔符。无论哪个函数都不会将分隔符保存在sink中。</p>
+
+<p>WARNING</p>
+
+<p>一|个常见的错误是本想从流中删除分隔符，但却忘了做,，</p>
+
+<p>&lt;763~1</p>
+
+<p>确定读取了多少个字符</p>
+
+<p>某些操作从输入读取未知个数的字节。我们可以调用gcount来确定最后一个未格式 化输入操作读取了多少个字符。应该在任何后续未格式化输入操作之前调用gcount。特 别是，将字符退回流的单字符操作也属于未格式化输入操作。如果在调用gcount之前调 用了 peek、unget 或 putback，则 gcount 的返回值为 0。</p>
+
+<p>小心：低毡函数容易出错</p>
+
+<p>一般情况下，我们主张使用标准库提供的高层抽象。返回int的IO操作很好地解 释了原因。:</p>
+
+<p>—个常见的编程错误是将get或peek的返回值赋予一个.char而不是一个 这样做是错误的，俚编译器却不能发现这个错误。最终会发生什么依赖于程序运行于哪 台机器以及输入数据是什么。■例如，在一台char被实现为unsigned char的机器上， 下面的循环永远不会停止：</p>
+
+<p>char ch; // .此处使用c&rsquo;har就是引入灾难！</p>
+
+<p>.11从.cin.get返回的值被梓换为char,然后与一个int比较 while ((ch = cin .get 0) != EOF)</p>
+
+<p>cout.put (ch);</p>
+
+<p>问题出在当get返回EOF时，此值会被转换为一个unsigned chari:.:转换得到的值 与EOF的int值不再相等，因此循环永远也不会停止。这种错误很可能在调试时发现‘:</p>
+
+<p>在一台char被寒现为signed char的机器上，我•们不能确定循环的行为:6:当一 个越界的值被赋予一•个signed变量时会发生什么完全取决于编译器。在很多机器上， 这个循环可以正常工作，除非输入序列中有一个字符与EOF值匹配。虽然在普通数据 中这种字待不太可能出现，但低层1O通常用于读取二进制值的场合，而这些二进制值 不能直接映射到普通字符和数值。例如，在我们的机器上，如果输入中包含有一个值 为&rsquo;\37?的字符，则循环会提前终止。因为在我们的机器上，将_1转换为一个signed char,就会得到、377%如果输入中有这个值，则它会被(过早)当作文件尾指示符。</p>
+
+<p>当我们读写有类型的值时，这种错误就不会发生。如果你可以使用标准库提供的类 型更加安全、更高层的操作，•就应该使用•它们。’U:.么：:</p>
+
+<h6 id="17-5-2节练习">17.5.2节练习</h6>
+
+<p>练习17.37：用未格式化版本的getline逐行读取一个文件。测试你的程序，给它一 个文件，既包含空行又包含长度超过你传递给getline的字符数组大小的行。</p>
+
+<p>练习17.38：扩展上一题中你的程序，将读入的每个单词打印到它所在的行。</p>
+
+<h6 id="17-5-3流随机访问">17.5.3流随机访问</h6>
+
+<p>各种流类型通常都支持对流中数据的随机访问。我们可以重定位流，使之跳过一些数 据，首先读取最后一行，然后读取第一行，依此类推。标准库提供了一对函数，来定位（seek） 到流中给定的位置，以及告诉（tell）我们当前位置。</p>
+
+<p>!    随机ra本质上是依赖于系统的.为了理解如何使用这些特性，你必须查询系</p>
+
+<p>统文档，</p>
+
+<p>虽然标准库为所有流类型都定义了 seek和tell函数，但它们是否会做有意义的事 情依赖于流绑定到哪个设备。在大多数系统中，绑定到cin、cout、cerr和clog的流 不支持随机访问——毕竟，当我们向cout直接输出数据时，类似向回跳十个位置这种操 作是没有意义的。对这些流我们可以调用seek和tell函数，但在运行时会出错，将流 置于一个无效状态。</p>
+
+<p>由于istream和ostream类型通常不支持随机访问，所以本节剩余内容只 warning 适用于 f stream 和 sstream 类型0</p>
+
+<p>I 765〉seek 和 tell 函数</p>
+
+<p>为了支持随机访问，IO类型维护一个标记来确定下一个读写操作要在哪里进行。它 们还提供了两个函数：一个函数通过将标记seek到一个给定位置来重定位它；另一个函数 tell我们标记的当前位置。标准库实际上定义了两对seek和tell函数，如表17.21所示。 一对用于输入流，另一对用于输出流。输入和输出版本的差别在于名字的后缀是g还是p。 g版本表示我们正在“获得”（读取）数据，而p版本表示我们正在“放置”（写入）数据。</p>
+
+<table>
+<thead>
+<tr>
+<th>表 17.21: seek 和 tell 函数</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>tellgO</td>
+<td>返回一个输入流中（tellg）或输出流中（tellp）标记的当前</td>
+</tr>
+
+<tr>
+<td>tellp()</td>
+<td>位置</td>
+</tr>
+
+<tr>
+<td>seekg(pos)</td>
+<td>在一个输入流或输出流中将标记重定位到给定的绝对地址。pos</td>
+</tr>
+
+<tr>
+<td>seekp(pos)</td>
+<td>通常是前一个tellg或tellp返回的值</td>
+</tr>
+
+<tr>
+<td>seekp(off, from)</td>
+<td>在一个输入流或输出流中将标记定位到from之前或之后off个</td>
+</tr>
+
+<tr>
+<td>seekg(off, from)</td>
+<td>字符，from可以是下列值之一•    beg,偏移量相对于流开始位置•    cur,偏移量相对于流当前位置•    end,偏移量相对于流结尾位置</td>
+</tr>
+</tbody>
+</table>
+
+<p>从逻辑上讲，我们只能对istream和派生自istream的类型ifstream和 istringstream （参见8.1节，第278页）使用g版本，同样只能对ostream和派生 自 ostream 的类型 ofstream 和 ostringstream 使用 p 版本。一个 iostream、</p>
+
+<p>f stream或stringstream既能读又能写关联的流，因此对这些类型的对象既能使用g 版本又能使用P版本。</p>
+
+<p>只有一个标记</p>
+
+<p>标准库区分seek和tell函数的“放置&rdquo;和“获得”版本这一特性可能会导致误解。 即使标准库进行了区分，但它在一个流中只维护单一的标记——并不存在独立的读标记和 写标记。</p>
+
+<p>当我们处理一个只读或只写的流时，两种版本的区别甚至是不明显的。我们可以对这 些流只使用g或只使用P版本。如果我们试图对一个ifstream流调用tellp,编译器 会报告错误。类似的，编译器也不允许我们对一个ostringstream调用seekg»</p>
+
+<p>fstream和stringstream类型可以读写同一■个流。在这些类型中，有单一的缓冲 区用于保存读写的数据，同样，标记也只有一个，表示缓冲区中的当前位置。标准库将g 和P版本的读写位置都映射到这个单一的标记。</p>
+
+<p><img src="C++  Primer 5-178.jpg" alt="img" /></p>
+
+<p>由于只有单一的标记，因此只要我们在读写操作间切换，就必须进行seek操 作来重定位标记</p>
+
+<p>&lt;766]</p>
+
+<p>重定位标记</p>
+
+<p>seek函数有两个版本：一个移动到文件中的&rdquo;绝对”地址；另一个移动到一个给定 位置的指定偏移量：</p>
+
+<p>//将标记移动到一个固定位置</p>
+
+<p>seekg (new_position) ; //将读标记移动到指定的pos_type类型的位置 seekp (new_position) ; //将写标记移动到指定的pos_type类型的位置 //移动到给定起始点之前或之后指定的偏移位置</p>
+
+<p>seekg (offset, from) ; //将读标记移动到距from偏移量为offset的位置 seekp (offset, from) ; //将写标记移动到距from偏移量为offset的位置</p>
+
+<p>from的可能值如表17.21所示。</p>
+
+<p>参数new_position和offset的类型分别是pos_type和off_type,这两个类 型都是机器相关的，它们定义在头文件istream和ostream中。pos type表示一个 文件位置，而off_type表示距当前位置的一个偏移量。一个off<em>type类型的值可以 是正的也可以是负Sb即，我们可以在文件中向前移动或向后移动。</em></p>
+
+<p>访问标记</p>
+
+<p>函数tellg和tellp返回一个pos_type值，表示流的当前位置。tell函数通常 用来记住一个位置，以便稍后再定位回来：</p>
+
+<p>//记住当前写位置</p>
+
+<p>ostringstream writeStr; // 输出 stringstream ostringstream::pos_type mark = writeStr.tellp();</p>
+
+<p>// &hellip;</p>
+
+<p>if (cancelEntry)</p>
+
+<p>//回到刚才记住的位置 writeStr.seekp(mark);</p>
+
+<p>读写同一个文件</p>
+
+<p>我们来考察一个编程实例。假定已经给定了一个要读取的文件，我们要在此文件的末 尾写入新的一行，这一行包含文件中每行的相对起始位置。例如，给定下面文件：</p>
+
+<p>abed</p>
+
+<p>efg</p>
+
+<p>hi</p>
+
+<p>程序应该生成如下修改过的文件：</p>
+
+<p>I 767〉    abed</p>
+
+<p>efg hi</p>
+
+<p>4</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>1</p>
+
+<p>9</p>
+
+<p>•TJ 5</p>
+
+<p>注意，我们的程序不必输出第一行的偏移——它总是从位置0开始。还要注意，统计偏移 量时必须包含每行末尾不可见的换行符。最后，注意输出的最后一个数是我们的输出开始 那行的偏移量。在输出中包含了这些偏移量后，我们的输出就与文件的原始内容区分开来 了。我们可以读取结果文件中最后一个数，定位到对应偏移量，即可得到我们的输出的起 始地址。</p>
+
+<p>我们的程序将逐行读取文件。对每一行，我们将递增计数器，将刚刚读取的一行的长 度加到计数器上，则此计数器即为下一行的起始地址：</p>
+
+<p>int main()</p>
+
+<p>{</p>
+
+<p>//以读写方式打开文件，并定位到文件尾 //文件模式参数参见8.2.2节(第286页) fstream inOut(&ldquo;copyOut&rdquo;,</p>
+
+<p>fstream::ate | fstream::in | fstream::out);</p>
+
+<p>if (!inOut) {</p>
+
+<p>cerr « &ldquo;Unable to open file!&rdquo; « endl;</p>
+
+<p>return EXIT_FAILURE; // EXIT_FAILURE 参见 6.3.2 节(第 204 页)</p>
+
+<p>}</p>
+
+<p>// inOut以ate模式打开，因此一开始就定义到其文件尾 auto end_mark = inOut. tellg () ;    // 记住原文件尾位置</p>
+
+<p>inOut. seekg (0, fstream: :beg) ;    // 重定位到文件开始</p>
+
+<p>size_t ent = 0;    //字节数累加器</p>
+
+<p>string line;    //保存输入中的每行</p>
+
+<p>//继续读取的条件：还未遇到错误且还在读取原数据</p>
+
+<p>end一mark</p>
+
+<p>~//且还可获取一行输入 //加1表示换行符 //记住读取位置 //将写标记移动到文件尾</p>
+
+<p>while (inOut &amp;&amp; inOut.tellg()    !=</p>
+
+<p>&amp;&amp; getline(inOut, line)) { ent += line.size() + 1; auto mark = inOut.tellg(); inOut.seekp(0, fstream::end);</p>
+
+<p>inOut &lt;&lt; ent;</p>
+
+<p>//输出累计的长度</p>
+
+<p>//如果不是最后一行，打印&rsquo;一个分隔符</p>
+
+<p>if (mark ! = end_mark) inOut « inOut.seekg(mark);</p>
+
+<p>//恢复读位置</p>
+
+<p>}</p>
+
+<p>inOut.seekp(0, fstream::end);</p>
+
+<p>//定位到文件尾</p>
+
+<p>inOut « &ldquo;\n&rdquo;;    //在文件尾输出一个换行符</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>我们的程序用in、out和ate模式（参见8.2.2节，第286页）打开fstream。前两个 模式指出我们想读写同一个文件。指定ate会将读写标记定位到文件尾。与往常一样， 我们检查文件是否成功打开，如果失败就退出（参见6.3.2节，第203页k</p>
+
+<p>&lt;M]</p>
+
+<p>由于我们的程序向输入文件写入数据，因此不能通过文件尾来判断是否停止读取，而 是应该在达到原数据的末尾时停止。因此，我们必须首先记住原文件尾的位置。由于我们 是以ate模式打开文件的，因此inOut已经定位到文件尾了。我们将当前位置（即，原 文件尾）保存在end_mark中。记住文件尾位置之后，我们seek到距文件起始位置偏移 量为0的地方，即，&amp;读标记重定位到文件起始位置。</p>
+
+<p>while循环的条件由三部分组成：首先检查流是否合法；如果合法，通过比较当前读 位置（由tellg返回）和记录在end_mark中的位置来检查是否读完了原数据：最后， 假定前两个检查都已成功，我们调用getline读取输入的下一行，如果getline成功， 则执行while循环体。</p>
+
+<p>循环体首先将当前位置记录在mark中。我们保存当前位置是为了在输出下一个偏移 量后再退回来。接下来调用seekp将写标记重定位到文件尾。我们输出计数器的值，然 后调用seekg回到记录在mark中的位置。回退到原位置后，我们就准备好继续检查循 环条件了。</p>
+
+<p>每步循环都会输出下一行的偏移量。因此，最后一步循环负责输出最后一行的偏移量。 但是，我们还需要在文件尾输出一个换行符。与其他写操作一样，在输出换行符之前我们 调用seekp来定位到文件尾。</p>
+
+<h6 id="17-5-3节练习">17.5.3节练习</h6>
+
+<p>练习17.39:对本节给出的seek程序，编写你自己的版本。</p>
+
+<p>本章介绍了 _些特殊IO操作和四个标准库类型：tuple、bitset、正则表达式和随 机数。</p>
+
+<p>tuple是一个模板，允许我们将多个不同类型的成员捆绑成单一对象。每个tuple 包含指定数fl的成员，但对一个给定的tuple类型，标准库并未限制我们可以定义的成 员数量上限。</p>
+
+<p>bitset允许我们定义指定大小的二进制位集合。标准库不限制一个bitset的大小 必须与整型类型的大小匹配，bitset的大小可以更大。除了支持普通的位运算符(参见 4.8节，第136页)外，bitset还定义了一些命名的操作，允许我们操纵bitset中特 定位的状态。</p>
+
+<p>正则表达式库提供了一组类和函数：regex类管理用某种正则表达式语言编写的正则 表达式。匹配类保存了某个特定匹配的相关信息。这些类被函数regex_SearCh和 regex_match所用。这两个函数接受一个regex对象和一个字符序列，检査regex中 的正则达式是否匹配给定的字符序列。regex迭代器类型是迭代器适配器，它们使用 regex_search遍历输入序列，返回每个匹配的子序列。标准库还定义了一个 regex_replace函数，允许我们用指定内容替换输入序列中与正则表达式匹配的部分。</p>
+
+<p>随机数库由一组随机数引擎类和分布类组成。随机数引擎返回一个均匀分布的整型值 序列。标准库定义了多个引擎，它们具有不同的性能特点。default_random_engine 是适合于大多数普通情况的引擎。标准库还定义了 20个分布类型。if些分布类使用一 个引笮來生成指定类型的随机数，这些随机数的值都在给定范围内，且分布满足指定的概 率分布。</p>
+
+<h5 id="术语农">术语农</h5>
+
+<p>bitset标准库类，保存二进制位集合，大 小在编译吋已知，并提供检测和设置集合 中二进制位的操作。</p>
+
+<p>cmatch csub_match对象的容器，保猝 -个regex与■一个const char*输入序</p>
+
+<p>列匹配的相关信息。容器首元素描述了整 个匹配结果。后续元素描述了子表达式的 匹配结果。</p>
+
+<p>cregex—iterator 类｛以 sregex_iterator， 唯&ndash;的差别是此选代器遍历一+ char数组。</p>
+
+<p>csub_match保存•-•个正则表达式与一个 const char*匹配结果的类型。可以表示 整个匹配或子表达式的四配。</p>
+
+<p>默认随机数引擎(default random engine)</p>
+
+<p>用于普通用途的随机数引擎的类型别名。</p>
+
+<p>格式化10 (formatted 10)读写操作，利</p>
+
+<p>用要读写的对象的类型来定义操作的行 为。格式化输入操作执行适合要读取的类 型的转换操作，如将ASCII码字符串转换 为算术类型以及(默汄地)忽略空白符。 格式化输出操作将类型转换为可打印的字 符表示形式、补白输出，还可能执行其他 与输出类型相关的转换。</p>
+
+<p>get模板函数，返回给定tuple的指定成 员。例如，get<0> (t&gt;返回tuplet的第 一个成员。</p>
+
+<p>高位(highorder) bitset中下标最大的 那些位。</p>
+
+<p>低位(low-order) bitset中下标最小的 那些位。</p>
+
+<p>操纵符(manipulator) “操纵”流的类函数</p>
+
+<p>对象。操纵符可用作重载的1O运算符&lt;&lt; 和&gt;&gt;的右侧运算对象。大多数操纵符会改 变流对象的内部状态。这种操纵符通常是</p>
+
+<p>成对的&rsquo;&ndash;个改变状态，另一个恢复到</p>
+
+<p>流的默认状态。</p>
+
+<p>随机数分布(random-number distribution)</p>
+
+<p>标准库类型，根据其名字所指出的概率分 布转换随机数引繁的输出值。例如， uniform_int_distribution<T> 生成 类型为T的均匀分布的整数，而 normal_distribution<T> 生成正态分 布的值，依此类推。</p>
+
+<p>随机数引擎(random-number engine)标</p>
+
+<p>准厍类型，生成随机的无符号数。引擎的 设计意图是只用作随机数分布的输入。</p>
+
+<p>随机数发生器(random-number generator) 个随机数引擎类型和一个 分布类型的组合。</p>
+
+<p>regex管理正则表达式的类。</p>
+
+<p>regex_error异常类型，当正则表达式中存 在语法错误时抛出此异常。</p>
+
+<p>regex_match确定整个输入序列是否与</p>
+
+<p>给定regex对象匹配的函数》</p>
+
+<p>regex_replace使用-一个regex对象来匹 配输入序列并用给定格式替换匹配的子表 达式的函数。</p>
+
+<p>regex_search使用一个regex对象在给 定输入序列中查找匹配的子序列的函数。</p>
+
+<p>正则表达式(regular expression)…-种描</p>
+
+<p>述字符序列的方式。</p>
+
+<p>种子(seed)提供给随机数引擎的值，使 引擎移动到生成的随机数序列中一个新的 点。</p>
+
+<p>smatch ssub_match对象的容器，提供 一个regex与:十个string输入序列匹配 的相关信息。容器首元素描述了整个匹配 结果。后续元素描述了子表达式的匹配结 果。</p>
+
+<p>sregexjterator迭代器，使用给定的</p>
+
+<p>regex对象遍历一个string来查找匹配 子串。其构造函数通过调用 regex_search将迭代器定位到第&ndash;个 匹配。递増迭代器的操作会调用 regex_search,从给定 string 中当前 匹配之的位置开始查找匹配。解引用迭 代器返回一个描述当前匹配的smatch对 象。</p>
+
+<p>ssub_match保存正则表达式与string 匹配结果的类型。可以描述整个匹配或子 表达式的匹配。</p>
+
+<p>子表达式(subexpression)正则表达式</p>
+
+<p>模式中用括号包围的组成部分。</p>
+
+<p>tuple模板，生成的类型保存指定类型的未 命名成员。标准库没有限制一个tuple最 多可以包含多少个成员，</p>
+
+<p>未格式化10 (unformatted 10)将流逍作</p>
+
+<p>无差别的字节流来处理的操作。未格式化 操作给用户増加了很多管理10的负担。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/16-%E6%A8%A1%E6%9D%BF%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">16 模板与泛型编程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/15-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
+            <span class="next-text nav-default">15 面向对象程序设计</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

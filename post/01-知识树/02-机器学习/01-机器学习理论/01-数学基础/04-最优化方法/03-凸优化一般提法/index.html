@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 凸优化一般提法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-31 07:34:57&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-dual-problem-and-kkt-condition/ slug: ai-convex-optimization-dual-problem-and-kkt-condition title: wordpress_id: 2176 categories: - 随想与反思 tags: - &amp;lsquo;@todo&amp;rsquo; - &amp;lsquo;@want_to_know&amp;rsquo; [mathjax] REF： 七月在线 机器学习 缘由： 对对偶问题和KKT条件进行总结。 共轭函数 基本没怎么讲" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/04-%E6%9C%80%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/03-%E5%87%B8%E4%BC%98%E5%8C%96%E4%B8%80%E8%88%AC%E6%8F%90%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 凸优化一般提法" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-31 07:34:57&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-dual-problem-and-kkt-condition/ slug: ai-convex-optimization-dual-problem-and-kkt-condition title: wordpress_id: 2176 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 机器学习 缘由： 对对偶问题和KKT条件进行总结。 共轭函数 基本没怎么讲" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/04-%E6%9C%80%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/03-%E5%87%B8%E4%BC%98%E5%8C%96%E4%B8%80%E8%88%AC%E6%8F%90%E6%B3%95/" /><meta property="article:published_time" content="2018-07-27T13:32:25&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T13:32:25&#43;00:00"/>
+<meta itemprop="name" content="03 凸优化一般提法">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-31 07:34:57&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-dual-problem-and-kkt-condition/ slug: ai-convex-optimization-dual-problem-and-kkt-condition title: wordpress_id: 2176 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 机器学习 缘由： 对对偶问题和KKT条件进行总结。 共轭函数 基本没怎么讲">
+
+
+<meta itemprop="datePublished" content="2018-07-27T13:32:25&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T13:32:25&#43;00:00" />
+<meta itemprop="wordCount" content="4800">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 凸优化一般提法"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-31 07:34:57&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-dual-problem-and-kkt-condition/ slug: ai-convex-optimization-dual-problem-and-kkt-condition title: wordpress_id: 2176 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 机器学习 缘由： 对对偶问题和KKT条件进行总结。 共轭函数 基本没怎么讲"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 凸优化一般提法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 4800 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#want-to-know">- &lsquo;@want_to_know&rsquo;</a></li>
+</ul></li>
+<li><a href="#ref">REF：</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#共轭函数-基本没怎么讲">共轭函数 基本没怎么讲</a>
+<ul>
+<li><a href="#定义">定义：</a></li>
+<li><a href="#对共轭函数的理解">对共轭函数的理解</a></li>
+</ul></li>
+<li><a href="#凸优化">凸优化</a>
+<ul>
+<li><a href="#优化问题的基本形式">优化问题的基本形式：</a></li>
+<li><a href="#局部最优问题">局部最优问题</a></li>
+<li><a href="#凸优化问题的基本形式">凸优化问题的基本形式</a></li>
+</ul></li>
+<li><a href="#对偶问题">对偶问题</a>
+<ul>
+<li><a href="#一般优化问题的lagrange乘子法">一般优化问题的Lagrange乘子法：</a>
+<ul>
+<li><a href="#优化问题">优化问题：</a></li>
+</ul></li>
+<li><a href="#lagrange对偶函数-dual-function">Lagrange对偶函数(dual function)</a></li>
+<li><a href="#lagrange对偶函数极大值小于原函数极小值">Lagrange对偶函数极大值小于原函数极小值</a></li>
+<li><a href="#对偶问题一般形式"> 对偶问题一般形式：</a></li>
+<li><a href="#对偶函数与原函数的关系-对偶性">对偶函数与原函数的关系：对偶性：</a></li>
+</ul></li>
+<li><a href="#强对偶条件">强对偶条件</a></li>
+<li><a href="#凸优化问题求解-kkt-条件">凸优化问题求解  (KKT) 条件</a>
+<ul>
+<li><a href="#如果强对偶性满足的话-这些最优化点应该满足何种条件">如果强对偶性满足的话，这些最优化点应该满足何种条件？</a></li>
+<li><a href="#那么我们可以总结出这些条件">那么我们可以总结出这些条件：</a></li>
+</ul></li>
+<li><a href="#怎么使用这些条件使用">怎么使用这些条件使用：</a></li>
+<li><a href="#附-线性方程的最小二乘问题-这个是重点-没讲">附：线性方程的最小二乘问题  这个是重点 没讲</a>
+<ul>
+<li>
+<ul>
+<li><a href="#求l的对偶函数">求L的对偶函数</a></li>
+<li><a href="#求对偶函数的极大值">求对偶函数的极大值</a></li>
+<li><a href="#极小值点">极小值点</a></li>
+</ul></li>
+<li><a href="#对偶问题-拉格朗日对偶函数">对偶问题：拉格朗日对偶函数</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-31 07:34:57+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/31/ai-convex-optimization-dual-problem-and-kkt-condition/">http://106.15.37.116/2018/03/31/ai-convex-optimization-dual-problem-and-kkt-condition/</a>
+slug: ai-convex-optimization-dual-problem-and-kkt-condition
+title:
+wordpress_id: 2176
+categories:
+- 随想与反思
+tags:
+- &lsquo;@todo&rsquo;</p>
+
+<h2 id="want-to-know">- &lsquo;@want_to_know&rsquo;</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+<hr />
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对对偶问题和KKT条件进行总结。</p>
+
+<h1 id="共轭函数-基本没怎么讲">共轭函数 基本没怎么讲</h1>
+
+<p>这个概念不是这么的重要，主要跟对偶函数有点关联，因此提了下。</p>
+
+<h2 id="定义">定义：</h2>
+
+<p>原函数：(f:R^n\rightarrow R)共轭函数定义：<strong>为什么是从(R^n\rightarrow R)？而且(y^T)是什么意思？怎么计算的？</strong></p>
+
+<p>[f^*(y)=\underset{x\in dom \,f }{sup}(y^Tx-f(x)]</p>
+
+<p>如果把定义式的右端看作是关于y的函数，那么就是一个关于y的仿射函数Ax+b，它们逐点求上确界，得到的函数(f^*(y))一定是凸函数。也就是说不管原来的f(x)是什么函数，它的共轭函数一定是一个凸函数。</p>
+
+<p>之所以叫共轭函数的原因：凸函数的共轭函数的共轭函数是其本身。</p>
+
+<h2 id="对共轭函数的理解">对共轭函数的理解</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/H1c3kE4cGa.png?imageslim" alt="mark" /></p>
+
+<p>例：求共轭函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Dik94DAG6G.png?imageslim" alt="mark" /></p>
+
+<p>Fenchel不等式</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GFEBhmb590.png?imageslim" alt="mark" /></p>
+
+<p>Fenchel不等式的应用</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/76GhcB84hH.png?imageslim" alt="mark" /></p>
+
+<h1 id="凸优化">凸优化</h1>
+
+<h2 id="优化问题的基本形式">优化问题的基本形式：</h2>
+
+<p>[\begin{align<em>}minimize\;&amp;f_0(x),x\in R^n\subject\, to \;&amp;f_i(x)\leq 0,i=1,\cdots ,m\&amp;h_i(x)=0,j=1,\cdots ,p\end{align</em>}]</p>
+
+<p>其中：</p>
+
+<ul>
+<li><p>优化变量：(x\in R^n)</p></li>
+
+<li><p>不等式约束：(f_i(x)\leq 0)</p></li>
+
+<li><p>等式约束：\h_j(x)=0</p></li>
+
+<li><p>无约束优化：m=p=0</p></li>
+
+<li><p>优化问题的域：(D=\bigcap_{i=0}^m dom \,f<em>i \cap \bigcap</em>{j=1}^{p} dom\,h_i) 答案不会出这个问题域。</p></li>
+
+<li><p>可行点（解）feasible：(x\in D) 且满足约束条件。可行的，不一定是最优的</p></li>
+
+<li><p>可行域（可行解）:所有可行点的集合</p></li>
+
+<li><p>最优化值：(p^*=inf{f_0(x)\mid f_i(x)\leq 0,i=1,\cdots ,m,h_j(x)=0,j=1,\cdots p}) 可行域里面肯定有一个最优的。<strong>inf 指的是下确界，sup 指的是上确界。比如(y=x^2)的下确界是0。</strong></p></li>
+
+<li><p>最优化解：(p^<em>=f_0(x^</em>))</p></li>
+</ul>
+
+<h2 id="局部最优问题">局部最优问题</h2>
+
+<p>实践中中往往限定一个局部，来求局部最优问题。范数可以理解为一个范围。</p>
+
+<p>[\begin{align<em>}minimize\;&amp;f_0(x),x\in R^n\subject\, to \;&amp;f_i(x)\leq 0,i=1,\cdots ,m\&amp;h_i(x)=0,j=1,\cdots ,p\ &amp;\left |x-z\right|_2\leq R,R&gt;0\end{align</em>}]</p>
+
+<h2 id="凸优化问题的基本形式">凸优化问题的基本形式</h2>
+
+<p>[\begin{align<em>}minimize\;&amp;f_0(x),x\in R^n\subject\, to \;&amp;f_i(x)\leq 0,i=1,\cdots ,m\&amp;h_i(x)=0,j=1,\cdots ,p\end{align</em>}]</p>
+
+<p>如果其中的 (f_i(x)) 为凸函数，(h_j(x))为仿射函数。那么我们把这样的优化问题叫做凸优化问题。比如后面会遇到一个SVM的优化问题，可能就能化成这种凸优化的问题。<strong>遇到之后补充一下。</strong></p>
+
+<p>凸优化问题的重要性质：</p>
+
+<ul>
+<li><p>凸优化问题的可行域为凸集。</p></li>
+
+<li><p>凸优化问题的局部最优解记为全局最优解。<strong>为什么？</strong></p></li>
+</ul>
+
+<p>非凸优化问题的变形</p>
+
+<p>[\begin{align<em>}minimize\;&amp;f_0(x)=x_1^2+x_2^2\subject\, to \;&amp;f_1(x)=\frac{x_1}{1+x_2^2}\leq 0\&amp;h_1(x)=(x_1+x_2)^2=0\end{align</em>}]</p>
+
+<p>等价于凸优化问题：</p>
+
+<p>[\begin{align<em>}minimize\;&amp;f_0(x)=x_1^2+x_2^2\subject\, to \;&amp;\widetilde{f_1(x)}=x_1\leq 0\&amp;\widetilde{h_1(x)}=x_1+x_2=0\end{align</em>}]</p>
+
+<h1 id="对偶问题">对偶问题</h1>
+
+<p>可以用对偶问题的凸性，对原问题进行估计</p>
+
+<h2 id="一般优化问题的lagrange乘子法">一般优化问题的Lagrange乘子法：</h2>
+
+<p>考虑(\mathbb{R}^n)上的优化问题：</p>
+
+<h3 id="优化问题">优化问题：</h3>
+
+<p>[\begin{align<em>}最小化&amp;:f_0(x)\不等式条件&amp;:f_i(x)\leq 0,i=1,\cdots ,m\等式条件&amp;:h<em>i(x)=0,i=1,\cdots ,p\定义域&amp;:D=\bigcap</em>{i=0}^{m}domf<em>i\cap \bigcap</em>{i=1}^{p}domh_i\end{align</em>}]</p>
+
+<p>请注意定义域(D)指的是使得所有函数(f_i,h_i)有定义的区域，而可行域值得是定义域中满足不等条件与等式条件的那些点，本课中把这个优化问题称为原问题，优化点称为(x^<em>)，最优值为(p^</em>)。</p>
+
+<p><strong>这个定义域是什么意思？里面的符号是什么意思？还有(h_i(x))是什么？</strong></p>
+
+<p>根据原函数与限制条件我们定义拉格朗日函数(L(x,\lambda ,v):\mathbb{R}^{n+m+p}\rightarrow \mathbb{R})</p>
+
+<p>可以写成这样的Lagrange函数：</p>
+
+<p>[L(x,\lambda,v)=f<em>0(x)=\sum</em>{i=1}{m}\lambda_if<em>i(x)+\sum</em>{j=1}{p}v_jh_j(x)]</p>
+
+<p>其中：(\lambda\geq 0)，(v\in R)。对固定的(x)，不管 (f) 和 (h) 是什么，Lagrange函数 (L(x,\lambda,v)) 可以看作为关于 (\lambda) 和 (v) 的仿射函数。</p>
+
+<p>因为(\lambda) 和 (v) 叫做乘子，因此这样的方法叫做 Lagrange 乘子法。</p>
+
+<p>由于(\lambda\geq 0)，(v\in R)，而且(f\leq 0)，(g=0)，因此(L(x,\lambda,v)&lt;f_0(x))。</p>
+
+<h2 id="lagrange对偶函数-dual-function">Lagrange对偶函数(dual function)</h2>
+
+<p>那么对于这个Lagrange函数，我们可以对x在D域上的所有的值取下界。那么这个时候的x就被消掉了。这个时候我们就得到了对偶函数 (g(\lambda,v))：</p>
+
+<p>[g(\lambda,v)=\underset{x\in D}{inf} L(x,\lambda,v)=\underset{x\in D}{inf}(f<em>0(x)+\sum</em>{i=1}^{m}\lambda_if<em>i(x)+\sum</em>{i=1}^{p}v_ih_i(x))]</p>
+
+<p>如果没有下确界，定义：(g(\lambda,v)=-\infty)。</p>
+
+<p>注意，之前的原函数可行域比较复杂，而现在的这个地方的(x)的定义域虽然还是D了，但是可行域没有了限制了，所以，这就是我们可以求出拉格朗日函数的下确界却无法直接求出原来的函数的最小值的原因。</p>
+
+<p>那么，由于(L(x,\lambda,v)<f_0(x)\)，而 \(g(\lambda,v)\) 又是下确界，因此下确界的值一定比\(f(x)\)要小，所以，对\(\forall \lambda>0,\forall v)，若原优化问题有最优值(p^<em>)，则：(g(\lambda,v)\leq p^</em>)。所以Lagrange对偶函数的函数值是小于等于我们函数的最优值的。</p>
+
+<p>而且，由于求得是下确界，而 (\lambda) ， (v) 是一些线，因此这些线的下确界就是一个凹函数，因此，Lagrange对偶函数为凹函数。</p>
+
+<p>左侧为原函数，右侧为对偶函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/hJgHDJ7d1g.png?imageslim" alt="mark" /></p>
+
+<p>上面这个左图种，(f_0(x))就是这个黑色的函数，最下面的这个虚线就是一个约束函数(f_1(x)&lt;0)，然后这里没有仿射函数，也就是说m=1，p=0。</p>
+
+<p>此时的Lagrange函数为：(g(\lambda,v)=f_0(x)+\lambda_1f_1(x))，左侧图的上面的几条曲线就是这个g取不同的 (\lambda)的时候对应的曲线。其中黑色的那个就是(\lambda=0) 的时候即f_0。</p>
+
+<p>根据(f_1(x))的约束函数，也就是(f_1(x)&lt;0)，得到x的范围为 -0.46~0.46</p>
+
+<p>那么当(\lambda=0.1)的时候，就得到了最贴近黑色线的那个棕色线。对于这个曲线来说，我总可以求它的最小值，那么(\lambda)取不同的值就对应了上面的不同的线，我们都进行各个线的最小值，这些最小值就是(\lambda)取不同的值的时候的下确界。<strong>为什么这个最小值不是限定在-0.46~0.46 范围内的？不是要满足(f_1(x))的限制条件吗？</strong></p>
+
+<p>这样我们就可以画出右边的图，即不同的(\lambda)的时候的Lagrange函数的下确界的值，也即Lagrange对偶函数的值。右边的图上面的虚线是：在-0.46~0.46的范围内的f_0的最小值1.53，<strong>？为什么这个时候把边界对应的黑点的值作为原优化问题的最优值？如果是这样的话，那么前面也应该考虑x的范围吧？</strong></p>
+
+<p>对于有些时候，是可以取等号的，即原函数的最小值等于对偶函数的极大值。如果有这样的好的条件的话，你会发现虽然f_0也不是凸的也不是凹的，f_i 和g_i也都是数学性质比较差的，但是我们求完对偶函数的时候，我们研究\lambda和v对应的g函数的时候，这个函数是一个凹函数，也就是说，负的-g(x)是一个凸函数，对于这个凸函数来说，它的极大值我们就可以把它一定意义上表示原函数的极小值，因为我们想求原函数的极小值，但是求不出来。我们就可以求对偶函数的极大值。而这个对偶函数的极大值，有些时候就是原函数的极小值，有些时候不是，但是也不错，起码是它的一个下界，这个下界往往跟原值相差不大。这个是我们研究凸优化的一个重要的思路。</p>
+
+<p>即原函数求极小值，转化为Lagrange函数，再转化为Lagrange函数的对偶函数，再求对偶函数的极大值。</p>
+
+<p>往往不直接用原函数求极小值，因为它是带约束的，<strong>但是Lagrange对偶函数其实是一个无约束的函数。住要求(\lambda&gt;0)，这个约束条件其实是很弱的。因此可以求对偶函数的极大值。由于对偶函数是一个凹函数，可以给他加一个负号变成凸函数，然后就可以求它的极小值。</strong></p>
+
+<p>高等数学中一般忽略不等式约束，只讲等式约束，那个时候对偶函数的极值正好能对上原函数的极值。</p>
+
+<h2 id="lagrange对偶函数极大值小于原函数极小值">Lagrange对偶函数极大值小于原函数极小值</h2>
+
+<p>鞍点解释：</p>
+
+<p>为表达方便，假设没有等式约束，只考虑不等式约束，结论可方便的扩展到等式约束。</p>
+
+<ul>
+<li><p>假设x_0不可行，即存在某些i，使得(f_i(x)&gt;0)，则选择(\lambda_i\rightarrow \infty)，对于其他乘子，(\lambda_j=0,j\neq i)</p></li>
+
+<li><p>假设(x_0)可行，则有(f_i(x)\leq 0,(i=1,2,\cdots, m))，选择(\lambda_i=0,i=1,2,\cdots ,m)</p></li>
+</ul>
+
+<p>因此有：</p>
+
+<p>[\underset{\lambda\geq 0}{sup}L(x,\lambda)=\underset{\lambda\geq 0}{sup}(f<em>0(x)+\sum</em>{i=1}^{m}\lambda_if_i(x))={\begin{matrix}f_0(x)&amp;f_i(x)\leq 0,i=1,2,\cdots ,m\ \infty &amp; otherwise\end{matrix}]</p>
+
+<p>而原问题是：(\underset{x}{inf}\,f_0(x))</p>
+
+<p>从而，原问题的本质为：(\underset{x}{inf}\,\underset{\lambda\geq 0}{sup}L(x,\lambda))</p>
+
+<p>而对偶问题，是求对偶函数的最大值，即：(\underset{\lambda\geq 0}{sup}\,\underset{x}{inf}L(x,\lambda))</p>
+
+<p>而：</p>
+
+<p>[\underset{\lambda\geq 0}{sup} \,\underset{x}{inf}L(x,\lambda)\leq \underset{x}{inf}\,\underset{\lambda\geq 0}{sup}L(x,\lambda)]</p>
+
+<p>接下来，证明：(\underset{x}{max}\,\underset{y}{min}f(x,y)\leq \underset{y}{min}\,\underset{x}{max}f(x,y))</p>
+
+<p>对于任意的 ((x,y)\in dom\, f)：</p>
+
+<p>[\begin{align<em>}f(x,y)\leq \underset{x}{max}f(x,y)&amp;\Rightarrow \underset{y}{min}f(x,y)\leq \underset{y}{min}\,\underset{x}{max}f(x,y)\ &amp;\Rightarrow  \underset{x}{max}\,\underset{y}{min}f(x,y)\leq \underset{y}{min}\,\underset{x}{max}f(x,y)\end{align</em>}]</p>
+
+<p>上面的第二步推理之所以成立，是因为右边是一个定值，而左边是一个关于x的函数，而函数始终是小于定值的，那么这个函数的极大值也是小于定值的。</p>
+
+<h2 id="对偶问题一般形式"> 对偶问题一般形式：</h2>
+
+<p>根据对偶函数，定义对偶问题的一般形式：</p>
+
+<p>[\begin{align<em>}最大化&amp;:g(\lambda,v)\不等条件&amp;:\lambda_i\geq 0,i=1,\cdots ,m\end{align</em>}]</p>
+
+<p>我们把对偶问题的最大值称为：((\lambda^<em>,v^</em>))，相应的最大值称为(d^*)，这里面的对偶函数(g)定义域为(domg={(\lambda,v):g(\lambda,v)&gt;-\infty })。在(g)的定义域总满足(\lambda_i\geq 0)的那些((\lambda ,v))全体，叫做对偶可行域，也就是对偶问题的可行域。</p>
+
+<h2 id="对偶函数与原函数的关系-对偶性">对偶函数与原函数的关系：对偶性：</h2>
+
+<p>根据对偶函数的性质我们已经知道在对偶可行域中，(g(\lambda,v))总是不大于(p^*)，所以有：</p>
+
+<p>弱对偶性：</p>
+
+<p>[d^<em>\leq p^</em>]</p>
+
+<p>若对偶性总是对的，相对而言的强对偶性是指一部分优化问题来说，有更好的结论</p>
+
+<p>强对偶性：</p>
+
+<p>[d^<em>=p^</em>]</p>
+
+<p>强对偶性不总成立。</p>
+
+<h1 id="强对偶条件">强对偶条件</h1>
+
+<p>第一个强对偶性的条件, 几乎所有的凸优化问题都满足强对偶性.</p>
+
+<p>Slater 条件</p>
+
+<p>对于一个凸优化问题：</p>
+
+<p>[\begin{align<em>}最小化&amp;:f_0(x)\不等式条件&amp;:f_i(x)\leq 0,i=1,\cdots ,m\等式条件&amp;:h_i(x)=0,i=1,\cdots ,p\end{align</em>}]</p>
+
+<p>如果存在一个可行域中的点(x)使得(f_i(x)&lt;0,i=1,\cdots ,m)。那么这个凸优化问题就满足强对偶条件。<strong>为什么？</strong></p>
+
+<p>若要对偶函数的最大值即为原问题的最小值，考察需要满足的条件：</p>
+
+<p>这个求法就是根据定义求Lagrange函数的下确界。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DdciAhJicB.png?imageslim" alt="mark" /></p>
+
+<p>##</p>
+
+<p>##</p>
+
+<p>##</p>
+
+<h1 id="凸优化问题求解-kkt-条件">凸优化问题求解  (KKT) 条件</h1>
+
+<p>Karush-Kuhn-Tucker</p>
+
+<h2 id="如果强对偶性满足的话-这些最优化点应该满足何种条件">如果强对偶性满足的话，这些最优化点应该满足何种条件？</h2>
+
+<p>我们来看一下，如果强对偶性满足的话，这些最优化点应该满足何种条件？这一部分中我们假定所有的函数都是可微函数。</p>
+
+<p>如果 (x^<em>,(\lambda^</em>,v^*))分别是原问题与对偶问题的最优解，那么首先这些点应该满足可行域条件：</p>
+
+<ul>
+<li><p>(f_i(x^*)\leq 0)</p></li>
+
+<li><p>(h_i(x^*)=0)</p></li>
+
+<li><p>(\lambda_i^*\geq 0)</p></li>
+</ul>
+
+<p>而且我们已经知道</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LILHBj3Dkj.png?imageslim" alt="mark" /></p>
+
+<p>对于上面这个式子的解释：</p>
+
+<ul>
+<li><p>第一个小于等于号的解释：随便取一个 x ，肯定是大于等于 g 的，因为 g 是下确界。</p></li>
+
+<li><p>第二个小于等于号的解释：由于 (\lambda) 大于等于 0，(f(x)) 是小于等于 0 的，因此成立。</p></li>
+</ul>
+
+<p>所以，根据这个式子，无论(\lambda) 和(v)取什么值都小于等于(p^*)</p>
+
+<p>于是(d^<em>=p^</em>)意味着上述不等式全部是等式。</p>
+
+<h2 id="那么我们可以总结出这些条件">那么我们可以总结出这些条件：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8fKgL30jFl.png?imageslim" alt="mark" /></p>
+
+<p>我们总结出KKT条件如下：</p>
+
+<ul>
+<li><p>前三个比较简单，就是可行域的那些不等式</p></li>
+
+<li><p>第四个条件是从上面的第二个小于等于 得出的。</p></li>
+
+<li><p>第五个条件是从上面的第一个小于等于得出的，因为小于等于变成等于，所以相当于(x^*)是那个拉格朗日函数的极值点，所以对x求偏导是0。</p></li>
+</ul>
+
+<p>这五个条件加在一起就是KKT条件。</p>
+
+<h1 id="怎么使用这些条件使用">怎么使用这些条件使用：</h1>
+
+<p>对于凸优化问题，KKT条件是(x^<em>,(\lambda^</em>,v^*))分别作为原问题和对偶问题的最优解的充分必要条件。</p>
+
+<p>对于非凸优化问题，KKT条件仅仅只必要而非充分。</p>
+
+<p>应用举例：</p>
+
+<p>支持向量机最简单形式：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FlfaL32GmJ.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Cjg49I9AF5.png?imageslim" alt="mark" /></p>
+
+<p><strong>看来这个对偶问题与SVM的关系还是很密切的，要深挖一下。</strong></p>
+
+<h1 id="附-线性方程的最小二乘问题-这个是重点-没讲">附：线性方程的最小二乘问题  这个是重点 没讲</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2Ka8mh56b7.png?imageslim" alt="mark" /></p>
+
+<h3 id="求l的对偶函数">求L的对偶函数</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FhA5cF64bm.png?imageslim" alt="mark" /></p>
+
+<h3 id="求对偶函数的极大值">求对偶函数的极大值</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Bg44EgAe3d.png?imageslim" alt="mark" /></p>
+
+<h3 id="极小值点">极小值点</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FkBLaA8EKl.png?imageslim" alt="mark" /></p>
+
+<h2 id="对偶问题-拉格朗日对偶函数">对偶问题：拉格朗日对偶函数</h2>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>要重新整理一下，笔记还是有些乱的</strong></p>
+
+<p>参考资料</p>
+
+<p>非常清晰完整的经典教材：凸优化，Stephen Boyd, Lieven Vandenberghe 各章节之间比较独立的，所以从那一章开始看都行。</p>
+
+<p>作业  教材：凸优化 (英文版页码与题号)</p>
+
+<ul>
+<li><p>p60:2.32.10,2.12,2.16,2.23,2.26;</p></li>
+
+<li><p>p113:3.1,3.2,3.12,3.21,3.36,3.39;</p></li>
+
+<li><p>p189:4.2,4.8,4.10,4.21</p></li>
+
+<li><p>p273:5.1,5.4,5.11,5.225.24</p></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/01-%E5%BE%AE%E7%A7%AF%E5%88%86/%E5%BE%AE%E5%88%86%E4%B8%8E%E6%B3%B0%E5%8B%92%E7%BA%A7%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">微分与泰勒级数</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF-%E4%BE%8B%E5%AD%903%E6%A0%B9%E6%8D%AErss%E4%BF%A1%E6%81%AF%E5%88%86%E6%9E%90%E5%85%B3%E6%B3%A8%E7%9A%84%E9%87%8D%E7%82%B9/">
+            <span class="next-text nav-default">朴素贝叶斯 例子3：根据rss信息分析关注的重点</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

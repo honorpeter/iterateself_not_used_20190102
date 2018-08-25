@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>SQL NULL Values（空值） - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-04 14:13:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89/ slug: sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89 title: SQL NULL Values（空值） wordpress_id: 5219 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa 什么是SQL N" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/04-sql/sql-null-values%E7%A9%BA%E5%80%BC/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="SQL NULL Values（空值）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-04 14:13:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89/ slug: sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89 title: SQL NULL Values（空值） wordpress_id: 5219 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa 什么是SQL N" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/04-sql/sql-null-values%E7%A9%BA%E5%80%BC/" /><meta property="article:published_time" content="2018-06-11T08:14:46&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:46&#43;00:00"/>
+<meta itemprop="name" content="SQL NULL Values（空值）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-04 14:13:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89/ slug: sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89 title: SQL NULL Values（空值） wordpress_id: 5219 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa 什么是SQL N">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:46&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:46&#43;00:00" />
+<meta itemprop="wordCount" content="1172">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SQL NULL Values（空值）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-04 14:13:00&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89/ slug: sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89 title: SQL NULL Values（空值） wordpress_id: 5219 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa 什么是SQL N"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">SQL NULL Values（空值）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 1172 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#sql">- SQL</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#motive">MOTIVE</a>
+<ul>
+<li><a href="#什么是sql-null值">什么是SQL NULL值？</a></li>
+<li><a href="#如何测试null值">如何测试NULL值？</a>
+<ul>
+<li><a href="#is-null语法">IS NULL语法</a></li>
+<li><a href="#is-not-null语法">IS NOT NULL语法</a></li>
+</ul></li>
+<li><a href="#演示数据库">演示数据库</a></li>
+<li><a href="#is-null运算符">IS NULL运算符</a></li>
+<li><a href="#is-not-null运算符">IS NOT NULL运算符</a></li>
+<li><a href="#语法">语法：</a></li>
+<li><a href="#示例">示例：</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-04 14:13:00+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/04/sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89/">http://106.15.37.116/2018/05/04/sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89/</a>
+slug: sql-null-values%ef%bc%88%e7%a9%ba%e5%80%bc%ef%bc%89
+title: SQL NULL Values（空值）
+wordpress_id: 5219
+categories:
+- 基础工具使用
+tags:</p>
+
+<h2 id="sql">- SQL</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，推荐直接看原文</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><a href="https://www.w3cschool.cn/sql/">SQL教程</a></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h2 id="什么是sql-null值">什么是SQL NULL值？</h2>
+
+<p>SQL 中，<strong>NULL</strong> 用于表示缺失的值。数据表中的 NULL 值表示该值所处的字段为空。</p>
+
+<p>具有NULL值的字段是没有值的字段。</p>
+
+<p>如果表中的字段是可选的，则可以插入新记录或更新记录而不向该字段添加值。然后，该字段将被保存为NULL值。</p>
+
+<p>值为 NULL 的字段没有值。尤其要明白的是，NULL 值与 0 或者包含空白（spaces）的字段是不同的。</p>
+
+<blockquote>**注意**：理解NULL值与零值或包含空格的字段不同是非常重要的。具有NULL值的字段是在记录创建期间留空的字段！</blockquote>
+
+<h2 id="如何测试null值">如何测试NULL值？</h2>
+
+<p>使用比较运算符（例如=，&lt;或&lt;&gt;）来测试NULL值是不可行的。</p>
+
+<p>我们将不得不使用IS NULL和IS NOT NULL运算符。</p>
+
+<h3 id="is-null语法">IS NULL语法</h3>
+
+<pre><code>SELECT column_names
+FROM table_name
+WHERE column_name IS NULL;
+</code></pre>
+
+<h3 id="is-not-null语法">IS NOT NULL语法</h3>
+
+<pre><code>SELECT column_names
+FROM table_name
+WHERE column_name IS NOT NULL;
+</code></pre>
+
+<h2 id="演示数据库">演示数据库</h2>
+
+<p>假设我们有以下的“人员”表：
+<table >
+<tbody >
+<tr >
+ID
+LastName
+FirstName
+Address
+City
+</tr>
+<tr ></p>
+
+<p><td >1
+</td></p>
+
+<p><td >Doe
+</td></p>
+
+<p><td >John
+</td></p>
+
+<p><td >542 W. 27th Street
+</td></p>
+
+<p><td >New York
+</td>
+</tr>
+<tr ></p>
+
+<p><td >2
+</td></p>
+
+<p><td >Bloggs
+</td></p>
+
+<p><td >Joe
+</td></p>
+
+<p><td >
+</td></p>
+
+<p><td >London
+</td>
+</tr>
+<tr ></p>
+
+<p><td >3
+</td></p>
+
+<p><td >Roe
+</td></p>
+
+<p><td >Jane
+</td></p>
+
+<p><td >
+</td></p>
+
+<p><td >New York
+</td>
+</tr>
+<tr ></p>
+
+<p><td >4
+</td></p>
+
+<p><td >Smith
+</td></p>
+
+<p><td >John
+</td></p>
+
+<p><td >110 Bishopsgate
+</td></p>
+
+<p><td >London
+</td>
+</tr>
+</tbody>
+</table>
+假设“人员”表中的“Address”列是可选的。如果插入的记录没有“Address”值，则“Address”列将以空值保存。</p>
+
+<h2 id="is-null运算符">IS NULL运算符</h2>
+
+<p>以下SQL语句使用IS NULL运算符来列出所有没有地址的人员：</p>
+
+<pre><code>SELECT LastName, FirstName, Address FROM Persons
+WHERE Address IS NULL;
+</code></pre>
+
+<p>结果集将如下所示：
+<table >
+<tbody >
+<tr >
+LastName
+FirstName
+Address
+</tr>
+<tr ></p>
+
+<p><td >Bloggs
+</td></p>
+
+<p><td >Joe
+</td></p>
+
+<p><td >
+</td>
+</tr>
+<tr ></p>
+
+<p><td >Roe
+</td></p>
+
+<p><td >Jane
+</td></p>
+
+<p><td >
+</td>
+</tr>
+</tbody>
+</table></p>
+
+<blockquote>**提示**：始终使用IS NULL来查找空值。</blockquote>
+
+<h2 id="is-not-null运算符">IS NOT NULL运算符</h2>
+
+<p>以下SQL语句使用IS NOT NULL运算符来列出所有具有地址的人员：</p>
+
+<pre><code>SELECT LastName, FirstName, Address FROM Persons
+WHERE Address IS NOT NULL;
+</code></pre>
+
+<p>结果集将如下所示：
+<table >
+<tbody >
+<tr >
+LastName
+FirstName
+Address
+</tr>
+<tr ></p>
+
+<p><td >Doe
+</td></p>
+
+<p><td >John
+</td></p>
+
+<p><td >542 W. 27th Street
+</td>
+</tr>
+<tr ></p>
+
+<p><td >Smith
+</td></p>
+
+<p><td >John
+</td></p>
+
+<p><td >110 Bishopsgate
+</td>
+</tr>
+</tbody>
+</table></p>
+
+<h2 id="语法">语法：</h2>
+
+<p>创建表的时候，NULL 的基本语法如下：</p>
+
+<pre><code>SQL&gt; CREATE TABLE CUSTOMERS(
+   ID   INT              NOT NULL,
+   NAME VARCHAR (20)     NOT NULL,
+   AGE  INT              NOT NULL,
+   ADDRESS  CHAR (25) ,
+   SALARY   DECIMAL (18, 2),       
+   PRIMARY KEY (ID)
+);
+</code></pre>
+
+<p>这里，<strong>NOT NULL</strong>表示对于给定列，必须按照其数据类型明确赋值。有两列并没有使用 NOT NULL 来限定，也就是说这些列可以为 NULL。</p>
+
+<p>值为 NULL 的字段是在记录创建的过程中留空的字段。</p>
+
+<h2 id="示例">示例：</h2>
+
+<p>NULL 值会给选取数据带来麻烦。不过，因为 NULL 和其他任何值作比较，其结果总是未知的，所以含有 NULL 的记录不会包含在最终结果里面。</p>
+
+<p>必须使用 <strong>IS NULL</strong> 或者 <strong>IS NOT NULL</strong> 来检测某个字段是否为 NULL。</p>
+
+<p>考虑下面的 CUSTOMERS 数据表，里面包含的记录如下所示：</p>
+
+<pre><code>+----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  2 | Khilan   |  25 | Delhi     |  1500.00 |
+|  3 | kaushik  |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
+|  6 | Komal    |  22 | MP        |          |
+|  7 | Muffy    |  24 | Indore    |          |
++----+----------+-----+-----------+----------+
+</code></pre>
+
+<p>下面是 <strong>IS NOT NULL</strong> 运算符的用法：</p>
+
+<pre><code>SELECT  ID, NAME, AGE, ADDRESS, SALARY
+FROM CUSTOMERS
+WHERE SALARY IS NOT NULL;
+</code></pre>
+
+<p>上面语句的运行结果如下：</p>
+
+<pre><code>+----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  1 | Ramesh   |  32 | Ahmedabad |  2000.00 |
+|  2 | Khilan   |  25 | Delhi     |  1500.00 |
+|  3 | kaushik  |  23 | Kota      |  2000.00 |
+|  4 | Chaitali |  25 | Mumbai    |  6500.00 |
+|  5 | Hardik   |  27 | Bhopal    |  8500.00 |
++----+----------+-----+-----------+----------+
+</code></pre>
+
+<p>下面是 <strong>IS NULL</strong> 运算符的用法：</p>
+
+<pre><code>SQL&gt; SELECT  ID, NAME, AGE, ADDRESS, SALARY
+     FROM CUSTOMERS
+     WHERE SALARY IS NULL;
+</code></pre>
+
+<p>其运行结果如下：</p>
+
+<pre><code>+----+----------+-----+-----------+----------+
+| ID | NAME     | AGE | ADDRESS   | SALARY   |
++----+----------+-----+-----------+----------+
+|  6 | Komal    |  22 | MP        |          |
+|  7 | Muffy    |  24 | Indore    |          |
++----+----------+-----+-----------+----------+
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/docker/docker-%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Docker 相关概念</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/04-sql/sql-order-by-keyword%E6%8C%89%E5%85%B3%E9%94%AE%E5%AD%97%E6%8E%92%E5%BA%8F/">
+            <span class="next-text nav-default">SQL ORDER BY Keyword（按关键字排序）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

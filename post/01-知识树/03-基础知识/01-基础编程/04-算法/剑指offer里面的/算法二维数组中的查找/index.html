@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：二维数组中的查找 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="算法：二维数组中的查找 REF CodingInterviews 题目描述 在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：二维数组中的查找" />
+<meta property="og:description" content="算法：二维数组中的查找 REF CodingInterviews 题目描述 在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/" /><meta property="article:published_time" content="2018-08-03T14:13:47&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T14:13:47&#43;00:00"/>
+<meta itemprop="name" content="算法：二维数组中的查找">
+<meta itemprop="description" content="算法：二维数组中的查找 REF CodingInterviews 题目描述 在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，">
+
+
+<meta itemprop="datePublished" content="2018-08-03T14:13:47&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T14:13:47&#43;00:00" />
+<meta itemprop="wordCount" content="1301">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：二维数组中的查找"/>
+<meta name="twitter:description" content="算法：二维数组中的查找 REF CodingInterviews 题目描述 在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：二维数组中的查找</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 1301 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#算法-二维数组中的查找">算法：二维数组中的查找</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+<li><a href="#题目描述">题目描述</a>
+<ul>
+<li><a href="#输入描述">输入描述</a></li>
+<li><a href="#输出描述">输出描述</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#问题解决">问题解决</a>
+<ul>
+<li><a href="#暴力解法">暴力解法</a></li>
+<li><a href="#分治解法">分治解法</a>
+<ul>
+<li><a href="#从右上角的元素出发-这时候">从右上角的元素出发，这时候</a></li>
+<li><a href="#从左下角的元素出发-这时候">从左下角的元素出发，这时候</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="算法-二维数组中的查找">算法：二维数组中的查找</h1>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ol>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。</p>
+
+<h3 id="输入描述">输入描述</h3>
+
+<p>array： 待查找的二维数组 target：查找的数字</p>
+
+<h3 id="输出描述">输出描述</h3>
+
+<p>查找到返回true，查找不到返回false</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/c5465m28H1.png?imageslim" alt="mark" /></p>
+
+<h1 id="问题解决">问题解决</h1>
+
+<h2 id="暴力解法">暴力解法</h2>
+
+<p>暴力的解法，肯定是用两层大循环来查找，不多说直接上代码</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;&lt;span data-mce-type=&quot;bookmark&quot; style=&quot;display: inline-block; width: 0px; overflow: hidden; line-height: 0;&quot; class=&quot;mce_SELRES_start&quot;&gt;&lt;/span&gt;
+
+using namespace std;
+
+
+class Solution
+{
+public:
+    bool Find(vector&lt;vector&lt;int&gt; &gt; array,int target)
+    {
+        int row = 0, col = 0, t = 0;
+        bool isFound = false;
+
+        for(int i = 0; i &lt; array.size( ) ; ++i)
+        {
+            for(int j = 0; j &lt; array[i].size( ); ++j)
+            {
+                //边输入边验证
+                if(false == isFound &amp;&amp; target == array[i][j])
+                {
+                    //已经找到后就没必要再找了
+                    isFound = true;
+                }
+            }
+        }
+
+        return isFound;
+
+    }
+};
+</code></pre>
+
+<h2 id="分治解法">分治解法</h2>
+
+<p>从数组中选取数字，和目标数字的关系有三种情况：=，&lt; 或 &gt; 。</p>
+
+<ul>
+<li><p>如果是等于则查找成功；</p></li>
+
+<li><p>如果是数组中元素小于要查找的数字，说明要查找的数字应该在当前位置的右边或下边。</p></li>
+
+<li><p>如果是数组中元素大于要查找的数字，说明要查找的数字应该在当前位置的左边或上边。</p></li>
+</ul>
+
+<p>即 对于数组中的任何一个元素, 比它小的元素都在它的左方或者上方, 比它大的元素都在它的右边或者下方。</p>
+
+<p>但是这两个区域还有可能有重叠，比如右边或下边会在右下角有重叠。</p>
+
+<p>为了不重复的处理重叠的数据, 我们可以找几个特殊的起点, 比如：</p>
+
+<table>
+<thead>
+<tr>
+<th>起点</th>
+<th>性质</th>
+<th>可否作为起点</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>左上角</td>
+<td>没有上方元素(小)和左方元素(小) 只有下方元素(大)和右方元素(大)</td>
+<td>否</td>
+</tr>
+
+<tr>
+<td>右上角</td>
+<td>没有上方元素(小), 和右方元素(大) 只有下方元素(大)和左方元素(小)</td>
+<td>是</td>
+</tr>
+
+<tr>
+<td>左下角</td>
+<td>没有下方元素(大), 和左方元素(小) 只有上方元素(小)和右方元素(大)</td>
+<td>是</td>
+</tr>
+
+<tr>
+<td>右下角</td>
+<td>没有下方元素(大), 和右方元素(大) 只有上方元素(小)和左方元素(小)</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+
+<p>因此重叠问题的解决方法：</p>
+
+<ul>
+<li>如果查找从右上角开始，如果要查找的数字不在右上角，则每次可以剔除一列或一行。</li>
+<li>也可以从左下角开始</li>
+<li>但是不能从左上角或者右下角开始。</li>
+</ul>
+
+<p>因为如果选择右上角的元素，则如图，即是我们在二维数组中查找7的轨迹：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/2KGDcei5ik.png?imageslim" alt="mark" /></p>
+
+<p>因此：</p>
+
+<h3 id="从右上角的元素出发-这时候">从右上角的元素出发，这时候</h3>
+
+<ul>
+<li>比他小的数必定在它的左侧，就往左找</li>
+<li>比他大的数必定在它的下侧，就往下找</li>
+</ul>
+
+<p>代码如下：</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+
+
+#define __main main
+
+class Solution
+{
+public:
+    bool Find(vector&lt;vector&lt;int&gt; &gt; array,int target)
+    {
+        bool res = false;
+        int row = array.size( );
+        int col = array[0].size( );
+
+        //  我们从右上角的元素找起来
+        //  如果查找的元素比当前位置元素小, 就向左走
+        //  如果查找的元素比当前位置元素大, 就向下走
+        for(int i = 0, j = col -1;
+            (i &gt;=0 &amp;&amp; i &lt; row) &amp;&amp; (j &gt;= 0 &amp;&amp; j &lt; col);)
+        {
+            if(target == array[i][j])
+            {
+                res = true;
+                break;
+            }
+            else if(target &lt; array[i][j])     // 小的元素在当前位置左侧
+            {
+                cout &lt;&lt;target &lt;&lt;&quot; &lt; &quot; &lt;&lt;array[i][j] &lt;&lt;&quot; turn left&quot; &lt;&lt;endl;
+                j--;
+            }
+            else
+            {
+                cout &lt;&lt;target &lt;&lt;&quot; &gt; &quot; &lt;&lt;array[i][j] &lt;&lt;&quot; turn down&quot; &lt;&lt;endl;
+                i++;
+            }
+        }
+        return res;
+    }
+};
+
+int __main()
+{
+    int a1[] = { 1, 2, 8, 9, };
+    int a2[] = { 2, 4, 9, 12, };
+    int a3[] = { 4, 7, 10, 13, };
+    int a4[] = { 6, 8, 11, 15, };
+    vector&lt;vector&lt;int&gt;&gt; array;
+    array.push_back(vector&lt;int&gt;(a1, a1 + 4));
+    array.push_back(vector&lt;int&gt;(a2, a2 + 4));
+    array.push_back(vector&lt;int&gt;(a3, a3 + 4));
+    array.push_back(vector&lt;int&gt;(a4, a4 + 4));
+
+    Solution solu;
+    cout &lt;&lt;solu.Find(array, 7) &lt;&lt;endl;
+    return 0;
+}
+</code></pre>
+
+<h3 id="从左下角的元素出发-这时候">从左下角的元素出发，这时候</h3>
+
+<ul>
+<li><p>比他小的数必定在它的上侧，就往上找</p></li>
+
+<li><p>比他大的数必定在它的右侧，就往右找</p></li>
+</ul>
+
+<p>代码为：</p>
+
+<pre><code>class Solution
+{
+public:
+    bool Find(vector&lt;vector&lt;int&gt; &gt; array,int target)
+    {
+        bool res = false;
+        int row = array.size( );
+        int col = array[0].size( );
+
+        //  我们从右上角的元素找起
+        //  如果查找的元素比当前位置元素小, 就向上走
+        //  如果查找的元素比当前位置元素大, 就向右走
+        for(int i = row - 1, j = 0;
+            (i &gt;=0 &amp;&amp; i &lt; row) &amp;&amp; (j &gt;= 0 &amp;&amp; j &lt; col);)
+        {
+            if(target == array[i][j])
+            {
+                res = true;
+                break;
+            }
+            else if(target &lt; array[i][j])     // 小的元素在当前位置上侧
+            {
+                cout &lt;&lt;target &lt;&lt;&quot; &lt; &quot; &lt;&lt;array[i][j] &lt;&lt;&quot; turn up&quot; &lt;&lt;endl;
+
+                i--;
+            }
+            else
+            {
+                cout &lt;&lt;target &lt;&lt;&quot; &gt; &quot; &lt;&lt;array[i][j] &lt;&lt;&quot; turn rigt&quot; &lt;&lt;endl;
+                j++;
+            }
+        }
+        return res;
+    }
+};
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%AE%97%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">海量数据算法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/">
+            <span class="next-text nav-default">算法：二叉树的镜像</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

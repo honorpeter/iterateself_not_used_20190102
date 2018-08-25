@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 有模型学习 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="有模型学习 考虑多步强化学习任务，暂且先假定任务对应的马尔可夫决策过程四元组 $E=\langle X,A,P,R\rangle $ 均为已知，这样的情形称为 “模型已知” ，即机器已对环境进行了建" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/03-%E6%9C%89%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 有模型学习" />
+<meta property="og:description" content="有模型学习 考虑多步强化学习任务，暂且先假定任务对应的马尔可夫决策过程四元组 $E=\langle X,A,P,R\rangle $ 均为已知，这样的情形称为 “模型已知” ，即机器已对环境进行了建" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/03-%E6%9C%89%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0/" /><meta property="article:published_time" content="2018-07-02T16:31:35&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-02T16:31:35&#43;00:00"/>
+<meta itemprop="name" content="03 有模型学习">
+<meta itemprop="description" content="有模型学习 考虑多步强化学习任务，暂且先假定任务对应的马尔可夫决策过程四元组 $E=\langle X,A,P,R\rangle $ 均为已知，这样的情形称为 “模型已知” ，即机器已对环境进行了建">
+
+
+<meta itemprop="datePublished" content="2018-07-02T16:31:35&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-02T16:31:35&#43;00:00" />
+<meta itemprop="wordCount" content="2415">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 有模型学习"/>
+<meta name="twitter:description" content="有模型学习 考虑多步强化学习任务，暂且先假定任务对应的马尔可夫决策过程四元组 $E=\langle X,A,P,R\rangle $ 均为已知，这样的情形称为 “模型已知” ，即机器已对环境进行了建"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 有模型学习</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-02 </span>
+        
+        <span class="more-meta"> 2415 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-策略评估">1 策略评估</a></li>
+<li><a href="#2-策略改进">2 策略改进</a></li>
+<li><a href="#3策略迭代与值迭代">3策略迭代与值迭代</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>有模型学习</p>
+
+<p>考虑多步强化学习任务，暂且先假定任务对应的马尔可夫决策过程四元组 $E=\langle X,A,P,R\rangle $ 均为已知，这样的情形称为 “模型已知” ，即机器已对环境进行了建模，能在机器内部模拟出与环境相同或近似的状况.在已知模型的环境中学习称为“有模型学习” (model-based learning)。此时，对于任意状态 $x$,$x&rsquo;$ 和动作 $a$ ，在 $x$ 状态下执行动作 $a$ 转移到状态 $x&rsquo;$ 的概率 $P<em>{x\rightarrow x&rsquo;}^a$ 是已知的，该转移所带来的奖赏 $R</em>{x\rightarrow x&rsquo;}^a$ 也是已知的。为便于讨论，不妨假设状态空间 X 和动作空间 A 均为有限。</p>
+
+<h2 id="1-策略评估">1 策略评估</h2>
+
+<p>在模型已知时，对任意策略 $\pi$ 能估计出该策略带来的期望累积奖赏.令函数 $V^\pi(x)$ 表示从状态 $x$ 出发，使用策略 $\pi$ 所带来的累积奖赏；函数$Q^\pi(x,a)$  表示从状态 $x$ 出发，执行动作 $a$ 后再使用策略 $\pi$ 带来的累积奖赏。这里的 $V(\cdot)$ 称为 “状态值函数”(state value function), $Q(\cdot)$ 称为 “状态-动作值函数” (state-action value function),分别表示指定 “状态” 上以及指定 “状态-动作” 上的累积奖赏.</p>
+
+<p>由累积奖赏的定义，有状态值函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/ca4AAki8GG.png?imageslim" alt="mark" /></p>
+
+<p>为叙述简洁,后面在涉及上述两种累积奖赏时,就不再说明奖赏类别，读者从上下文应能容易地判知。令 $x_0$ 表示起始状态, $a_0$ 表示起始状态上采取的第一个动作；对于 $T$ 步累积奖赏，用下标 $t$ 表示后续执行的步数。我们有状态-动作值函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/KBJ04dlKmH.png?imageslim" alt="mark" /></p>
+
+<p>由于 MDP 具有马尔可夫性质，即系统下一时刻的状态仅由当前时刻的状态决定，不依赖于以往任何状态，于是值函数有很简单的递归形式.对于 $T$ 步累积奖赏有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/Eaf7E2c8jJ.png?imageslim" alt="mark" /></p>
+
+<p>类似的，对于 $\gamma$ 折扣累积奖赏有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/5ejbF6G1CL.png?imageslim" alt="mark" /></p>
+
+<p>需注意的是，正是由于 $P$ 和 $R$ 已知，才可以进行全概率展开.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/kG53JKbj7b.png?imageslim" alt="mark" /></p>
+
+<p>读者可能已发现，用上面的递归等式来计算值函数，实际上就是一种动态规划算法。对于 $V_T^\pi$ ,可设想递归一直进行下去，直到最初的起点；换言之，从值函数的初始值 $V_0^\pi$ 出发，通过一次迭代能计算出每个状态的单步奖赏 $V_1^\pi$ ，进而从单步奖赏出发，通过一次迭代计算出两步累积奖赏 $V_2^\pi$ ,……图 16.7 中算法遵 循了上述流程，对于 $T$ 步累积奖赏，只需迭代 $T$ 轮就能精确地求出值函数.</p>
+
+<p>对于 $V_\gamma^\pi$ ,由于 $\gamma^t$ 在 t 很大时趋于0,因此也能使用类似的算法，只需将图 16.7算法的第3行根据式(16.8)进行替换。此外，由于算法可能会迭代很多次， 因此需设置一个停止准则.常见的是设置一个阈值 $\theta$ ,若在执行一次迭代后值函数的改变小于 $\theta$ 则算法停止；相应的，图16.7算法第4行中的 $t=T+1$ 需替换为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/aed7c3hmle.png?imageslim" alt="mark" /></p>
+
+<p>有了状态值函数 V,就能直接计算出状态-动作值函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/jI5KK3FJ6k.png?imageslim" alt="mark" /></p>
+
+<h2 id="2-策略改进">2 策略改进</h2>
+
+<p>对某个策略的累积奖赏进行评估后，若发现它并非最优策略，则当然希望 对其进行改进.理想的策略应能最大化累积奖赏</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/8f6AJJ5FC3.png?imageslim" alt="mark" /></p>
+
+<p>一个强化学习任务可能有多个最优策略，最优策略所对应的值函数 $V^*$ 称 为最优值函数，即</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/Fe7Bi9e6i1.png?imageslim" alt="mark" /></p>
+
+<p>注意，当策略空间无约束时式(16.12)的 $V^*$ 才是最优策略对应的值函数,例如对 离散状态空间和离散动作空间，策略空间是所有状态上所有动作的组合，共有 |A|IXI种不同的策略.若策略空间有约束，则违背约束的策略是“不合法”的， 即便其值函数所取得的累积奖赏值最大，也不能作为最优值函数.</p>
+
+<p>由于最优值函数的累积奖赏值已达最大，因此可对前面的Bellman等 式(16.7)和(16.8)做一个改动，即将对动作的求和改为取最优：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/JHlFgCgCH1.png?imageslim" alt="mark" /></p>
+
+<p>换言之，</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/CC7G3h2hI0.png?imageslim" alt="mark" /></p>
+
+<p>代入式(16.10)可得最优状态-动作值函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/DaLH8BHFme.png?imageslim" alt="mark" /></p>
+
+<p>上述关于最优值函数的等式，称为最优 Bellman 等式,其唯一解是最优值函数.</p>
+
+<p>最优 Bellman 等式揭示了非最优策略的改进方式：将策略选择的动作改变 为当前最优的动作.显然，这样的改变能使策略更好。不妨令动作改变后对应的 策略为 $\pi&rsquo;$ ,改变动作的条件为 $Q^{\pi}(x,\pi&rsquo;Ix))\geq V^\pi (x)$ ,以 $\gamma$ 折扣累积奖赏为例，由式(16.10)可计算出递推不等式</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/deDA285EB2.png?imageslim" alt="mark" /></p>
+
+<p>值函数对于策略的每一点改进都是单调递增的，因此对于当前策略 $\pi$ ,可放心地将其改进为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/h59IjCIdJd.png?imageslim" alt="mark" /></p>
+
+<p>直到 $pi&rsquo;$ 与 $pi$ 一致、不再发生变化，此时就满足了最优 Bellman 等式，即找到了最优策略.</p>
+
+<h2 id="3策略迭代与值迭代">3策略迭代与值迭代</h2>
+
+<p>由前两小节我们知道了如何评估一个策略的值函数，以及在策略评估后如 何改进至获得最优策略.显然，将这两者结合起来即可得到求解最优解的方法: 从一个初始策略(通常是随机策略)出发，先进行策略评估，然后改进策略，评估 改进的策略，再进一步改进策略，……不断迭代进行策略评估和改进,直到策略 收敛、不再改变为止.这样的做法称为“策略迭代” (policy iteration).</p>
+
+<p>图16.8给出的算法描述,就是在基于r步累积奖赏策略评估相基础上，加</p>
+
+<p>输入：MDP四元组五=〈X，A&rdquo;〉；</p>
+
+<p>累积奖赏参数</p>
+
+<p>过程：</p>
+
+<p>|A(rc)|是a;状态下所有 可选动作数.</p>
+
+<p>式(16.7)更新值函数.</p>
+
+<p>式(16.10)计算Q值.</p>
+
+<p>1： Va? G X : V(x) = 0, 7r(x,(1)— 1^x)1;</p>
+
+<p>2: loop</p>
+
+<p>3:    for t = 1,2,&hellip; do</p>
+
+<p>4:    Vrre X: Vf(x) = Z；aeA 冗(尤，a)    + ^^))；</p>
+
+<p>5： if t = T + 1 then 6：    break</p>
+
+<p>7：    else</p>
+
+<p>8:    V =    W</p>
+
+<p>9：    end if</p>
+
+<p>10： end for</p>
+
+<p>11：    \/x E X : 7vf(x) = argmaxn(=4 Q(x,aY,</p>
+
+<p>12： if Vrr:    = tt(3；) then</p>
+
+<p>13： break</p>
+
+<p>14： else</p>
+
+<p>15:    tv = TVf</p>
+
+<p>16：    end if</p>
+
+<p>17: end loop</p>
+
+<p>输出：最优策略tt</p>
+
+<p>图16.8基于r步累积奖赏的策略迭代算法</p>
+
+<p>参见习题16.3.</p>
+
+<p>入策略改进而形成的策略迭代算法.类似的，可得到基于7折扣累积奖赏的策 略迭代算法.策略迭代算法在每次改进策略后都需重新进行策略评估，这通常 比较耗时.</p>
+
+<p>由式(16.16)可知，策略改进与值函数的改进是一致的，因此可将策略改进 视为值函数的改善，即由式(16.13)可得</p>
+
+<p>吟0) = maxaGA    Px^xf+    ⑽ 18)
+P^x,⑻七，+ 外M).</p>
+
+<p>于是可得到值迭代(value iteration)算法，如图16.9所示.
+输入：MDP四元组五二〈XM,P,E);</p>
+
+<p>累积奖赏参数T;</p>
+
+<p>收敛阈值&lt;9 .</p>
+
+<p>过程：</p>
+
+<p>1： Vrc G X : V{x) = 0;</p>
+
+<p>式(16.18)更新值函数.</p>
+
+<p>2： for t = 1,2,&hellip; do</p>
+
+<p>3:    Vrc e.X : V\x) - maxaeA    + ^^))；</p>
+
+<p>4： if max^ex |V(a;) — Vf(x)\ &lt; 0 then 5： break</p>
+
+<p>6： else 7： V = Vf 8：    end if</p>
+
+<p>9： end for</p>
+
+<p>式(16.10)计算Q值.</p>
+
+<p>输出：策略冗⑷=argmaxaeAQ(a;,a)</p>
+
+<p>图16.9基于r步累积奖赏的值迭代算法</p>
+
+<p>若采用7折扣累积奖赏，只需将图16.9算法中第3行替换为</p>
+
+<p>y^)=max    + 7V(Y)) •    (16.19)
+a xfeX</p>
+
+<p>从上面的算法可看出，在模型已知时强化学习任务能归结为基于动态规划 的寻优问题.与监督学习不同，这里并未涉及到泛化能力，而是为每一个状态找 到最好的动作.</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-02</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/10-%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/06-%E8%AF%9D%E9%A2%98%E6%A8%A1%E5%9E%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 话题模型</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/02-k-%E6%91%87%E8%87%82%E8%B5%8C%E5%8D%9A%E6%9C%BA/">
+            <span class="next-text nav-default">02 K-摇臂赌博机</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

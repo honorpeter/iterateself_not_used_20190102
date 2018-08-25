@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 多变量决策树 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="多变量决策树 若我们把每个属性视为坐标空间中的一个坐标轴，则 d 个属性描述的样本就对应了 d 维空间中的一个数据点，对样本分类则意味着在这个坐标空间" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/05-%E5%A4%9A%E5%8F%98%E9%87%8F%E5%86%B3%E7%AD%96%E6%A0%91/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 多变量决策树" />
+<meta property="og:description" content="多变量决策树 若我们把每个属性视为坐标空间中的一个坐标轴，则 d 个属性描述的样本就对应了 d 维空间中的一个数据点，对样本分类则意味着在这个坐标空间" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/05-%E5%A4%9A%E5%8F%98%E9%87%8F%E5%86%B3%E7%AD%96%E6%A0%91/" /><meta property="article:published_time" content="2018-06-26T13:49:54&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T13:49:54&#43;00:00"/>
+<meta itemprop="name" content="05 多变量决策树">
+<meta itemprop="description" content="多变量决策树 若我们把每个属性视为坐标空间中的一个坐标轴，则 d 个属性描述的样本就对应了 d 维空间中的一个数据点，对样本分类则意味着在这个坐标空间">
+
+
+<meta itemprop="datePublished" content="2018-06-26T13:49:54&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T13:49:54&#43;00:00" />
+<meta itemprop="wordCount" content="1637">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 多变量决策树"/>
+<meta name="twitter:description" content="多变量决策树 若我们把每个属性视为坐标空间中的一个坐标轴，则 d 个属性描述的样本就对应了 d 维空间中的一个数据点，对样本分类则意味着在这个坐标空间"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 多变量决策树</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 1637 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#comment">COMMENT</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>多变量决策树</p>
+
+<p>若我们把每个属性视为坐标空间中的一个坐标轴，则 d 个属性描述的样本就对应了 d 维空间中的一个数据点，对样本分类则意味着在这个坐标空间中寻找不同类样本之间的分类边界。</p>
+
+<p>决策树所形成的分类边界有一个明显的特点: 轴平行 (axis-parallel) ，即它的分类边界由若干个与坐标轴平行的分段组成.</p>
+
+<p>以表4.5中的西瓜数据 3.0a为例，将它作为训练集可学得图 4.10 所示的决策树，这棵树所对应的分类边界如图 4.11 所示.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/i3K079JdCK.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/9e1K4FLaDl.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/F1KD67GAd3.png?imageslim" alt="mark" /></p>
+
+<p>显然，分类边界的每一段都是与坐标轴平行的，这样的分类边界使得学习结果有较好的可解释性，因为每一段划分都直接对应了某个属性取值.但在学习任务的真实分类边界比较复杂时，必须使用很多段划分才能获得较好的近似：<span style="color:red;">是的。</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/c63llmg2kJ.png?imageslim" alt="mark" /></p>
+
+<p>如图 4.12 所示；此时的决策树会相当复杂，由于要进行大量的属性测试，预测 时间开销会很大.</p>
+
+<p>若能使用斜的划分边界，如图4.12中红色线段所示，则决策树模型将大为简化。“多变量决策树” (multivariate decision tree) 就是能实现这样的 “斜划分” 甚至更复杂划分的决策树。以实现斜划分的多变量决策树为例，在此类决策树中，非叶结点不再是仅对某个属性,而是对属性的线性组合进行测试。换言之，每个非叶结点是一个形如 $\sum_{i=1}^{d}w_ia_i=t$ 的线性分类器，其中 $w_i$ 是属性 $a_i$  的权重, $w_i$ 和 $t$ 可在该结点所含的样本集和属性集上学得.于是，与传统的“单变量决策树”(univariate decision tree)不同，在多变量决策树的学习过程中， 不是为每个非叶结点寻找一个最优划分属性，而是试图建立一个合适的线性分类器。</p>
+
+<p>类器.例如对西瓜数据3.0a,我们可学得图 4.13 这样的多变量决策树，其分类边界如图4.14所示.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/mJfb1l2ajk.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/AdHFkdBb3f.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">这个到底是真么做到的？好像没有怎么详细讲，还是很厉害的，而且，这样岂不是很多东西都可以作为节点？</span></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+<p>这下面是补充阅读。</p>
+
+<p>决策树学习算法最著名的代表是江)3 [Quinlan, 1979, 1986]、C4.5 [Quinlan, I&rdquo;3]和 CART [Breiman et al., 1984]. [Murthy, 1998]提供了一个关于决 策树文献的阅读指南.C4.5Rule是一个将C4.5决策树转化为符号规则的算法 [Quinlan, 1993],决策树的每个分支可以容易地重写为一条规则，但C4.5Rule 算法在转化过程中会进行规则前件合并、删减等操作，因此最终规则集的泛化 性能甚至可能优于原决策树.</p>
+
+<p>本质上，各种特征选择 方法均可用于决策树的划 分属性选择.特征选择参 见第11章.</p>
+
+<p>在信息增益、增益率、基尼指数之外，人们还设计了许多其他的准则用 于决策树划分选择，然而有实验研究表明[Mingers, 1989b],这些准则虽然对 决策树的尺寸有较大影响，但对泛化性能的影响很有限.[Raileanu and Stoffel, 2004]对信息增益和基尼指数进行的理论分析也显示出，它们仅在2%的情况下 会有所不同.4.3节介绍了决策树剪枝的基本策略;剪枝方法和程度对决策树泛 化性能的影响相当显著，有实验研究表明[Mingers, 1989a],在数据帝有噪声时 通过剪枝甚至可将决策树的泛化性能提髙25%.</p>
+
+<p>关于感知机和神经网络, 参见第5章.</p>
+
+<p>多变量决策树算法主要有0C1 [Murthy et al., 1994]和[Brodley and Ut-goff, 1995]提出的一系列算法.0C1先贪心地寻找每个属性的最优权值，在局 部优化的基础上再对分类边界进行随机扰动以试图找到更好的边界[Brodley and Utgoff, 1995]则直接引入了线性分类器学习的最小二乘法、还有一些算法 试图在决策树的叶结点上嵌入神经网络，以结合这两种学习机制的优势，例如 “感知机树” (Perceptron tree) [Utgoff, 1989b]在决策树的每个叶结点上训练 一个感知机，而[Guo and Gelfand，1992]则直接在叶结点上嵌入多层神经网络.</p>
+
+<p>有一些决策树学习算法可进行“增量学习”(incremental learning),即在 接收到新样本后可对已学得的模型进行调整，而不用完全重新学习.主要机 制是通过调整分支路径上的划分属性次序来对树进行部分重构，代表性算法 有 ID4 [Schlimmer and Fisher, 1986]、ID5R [Utgoff, 1989a] &gt; ITI [Utgoff et al., 1997]等.增量学习可有效地降低每次接收到新样本后的训练时间开销，但多步 增量学习后的模型会与基于全部数据训练而得的模型有较大差别.</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/01-%E7%A5%9E%E7%BB%8F%E5%85%83%E6%A8%A1%E5%9E%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 神经元模型</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/06-%E7%B1%BB%E5%88%AB%E4%B8%8D%E5%B9%B3%E8%A1%A1%E9%97%AE%E9%A2%98/">
+            <span class="next-text nav-default">06 类别不平衡问题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

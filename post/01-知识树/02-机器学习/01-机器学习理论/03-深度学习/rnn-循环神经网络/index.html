@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>rnn 循环神经网络 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="RNN 循环神经网络 TODO 双向RNN没有听明白，要再查找下相关的资料看下。最好有个例子能实现一下。 实际上老师讲的还是很清楚的，但是还是有几个问题，要解" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/rnn-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="rnn 循环神经网络" />
+<meta property="og:description" content="RNN 循环神经网络 TODO 双向RNN没有听明白，要再查找下相关的资料看下。最好有个例子能实现一下。 实际上老师讲的还是很清楚的，但是还是有几个问题，要解" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/rnn-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" /><meta property="article:published_time" content="2018-08-12T13:02:54&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T13:02:54&#43;00:00"/>
+<meta itemprop="name" content="rnn 循环神经网络">
+<meta itemprop="description" content="RNN 循环神经网络 TODO 双向RNN没有听明白，要再查找下相关的资料看下。最好有个例子能实现一下。 实际上老师讲的还是很清楚的，但是还是有几个问题，要解">
+
+
+<meta itemprop="datePublished" content="2018-08-12T13:02:54&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T13:02:54&#43;00:00" />
+<meta itemprop="wordCount" content="3463">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="rnn 循环神经网络"/>
+<meta name="twitter:description" content="RNN 循环神经网络 TODO 双向RNN没有听明白，要再查找下相关的资料看下。最好有个例子能实现一下。 实际上老师讲的还是很清楚的，但是还是有几个问题，要解"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">rnn 循环神经网络</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 3463 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#rnn-循环神经网络">RNN 循环神经网络</a>
+<ul>
+<li><a href="#从神经网络到循环神经网络">从神经网络到循环神经网络</a></li>
+<li><a href="#循环神经网络的应用">循环神经网络的应用</a>
+<ul>
+<li><a href="#文本的模仿">文本的模仿</a></li>
+<li><a href="#机器翻译">机器翻译</a></li>
+<li><a href="#看图说话">看图说话：</a></li>
+</ul></li>
+<li><a href="#循环神经网络的结构">循环神经网络的结构</a></li>
+<li><a href="#结构细节">结构细节：</a></li>
+<li><a href="#一个例子">一个例子：</a></li>
+</ul></li>
+<li><a href="#不同类型的rnn">不同类型的RNN</a>
+<ul>
+<li><a href="#双向rnn">双向RNN</a></li>
+<li><a href="#深层双向rnn">深层双向RNN</a></li>
+</ul></li>
+<li><a href="#rnn和bptt算法-重要">RNN和BPTT算法 （重要）</a>
+<ul>
+<li><a href="#举个例子">举个例子：</a></li>
+<li><a href="#损失函数">损失函数</a></li>
+<li><a href="#那么这个时候怎么求偏导呢">那么这个时候怎么求偏导呢？</a></li>
+</ul></li>
+<li><a href="#rnn与图片描述">RNN与图片描述</a>
+<ul>
+<li><a href="#怎么去做呢">怎么去做呢？</a></li>
+<li><a href="#数据集">数据集</a></li>
+</ul></li>
+<li><a href="#ref">REF：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="rnn-循环神经网络">RNN 循环神经网络</h1>
+
+<p>TODO</p>
+
+<ul>
+<li><strong>双向RNN没有听明白，要再查找下相关的资料看下。最好有个例子能实现一下。</strong></li>
+<li><strong>实际上老师讲的还是很清楚的，但是还是有几个问题，要解决。而且，中间的演示代码好像没有找到。</strong></li>
+<li><strong>而且，每个算法，我都想实际实现下，不然总是感觉空落落的。</strong></li>
+</ul>
+
+<h2 id="从神经网络到循环神经网络">从神经网络到循环神经网络</h2>
+
+<p>为什么会有 RNN？</p>
+
+<p>因为传统的神经网络（包括CNN），输入和输出都是互相独立的。比如图像上的猫和狗是分开的，但有些任务，后续的输出和之前的内容是相关的。比如：我是中国人，我的母语是____。</p>
+
+<p>而 RNN 引入了 &ldquo;记忆&rdquo;的概念，循环指的是每个元素都执行相同的任务。但是输出不仅依赖于输入还依赖于之前的 “记忆”。</p>
+
+<h2 id="循环神经网络的应用">循环神经网络的应用</h2>
+
+<p>RNN 一般在自然语言处理中用的比较多。其实只要是序列到序列的都可以用 RNN 来学习，比如</p>
+
+<ul>
+<li>在通过搜索引擎查询的时候，可以把网页内容作为一个文本序列，查询的字段看作为一个文本序列，这时就可以用 RNN 来学习这两个文本序列的对应关系。这样搜索的时候，就可以按照对应关系展示出来。<span style="color:red;">老师说百度可能使用这个的，不知道是不是，感觉不大可能</span></li>
+</ul>
+
+<p>下面我们看下 RNN 的一些应用场景：</p>
+
+<h3 id="文本的模仿">文本的模仿</h3>
+
+<p>可以模仿论文（连公式都格式很正确）</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1hE8H1BeCG.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">对于现在自动写新闻的还是要了解下。想知道具体是怎么实现的。</span></p>
+
+<p>可以模仿linux内核代码 “写程序”，它不能学到逻辑，但是能学到排布：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fj7bL3iH4D.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">不知道现在的自动程序开发到什么程度了。要了解下。</span></p>
+
+<p>模仿郭敬明的小说：可以模仿出小说的语言风格。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5Ef85F8h4F.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">语言风格到底是什么呢？</span></p>
+
+<h3 id="机器翻译">机器翻译</h3>
+
+<p>以前的翻译模型是基于统计的 SMT（统计机器翻译），SMT相对而言复杂一些，需要存大量的映射关系在本地，比如英文的 china，对应中文的中国。</p>
+
+<p>而 NMT （neural machine translation）就不用把映射关系存放下来。<span style="color:red;">关于 NMT 的介绍还是要补充下的，在工程实践中把 NMT 添加进去。</span></p>
+
+<p>SMT 不是说完全作废了，实际上 SMT 囊括了 NLP 中大量的问题，做 NLP 遇到的大量问题都会在 SMT 中出现，其实它是一个很好的学习领域。</p>
+
+<p>bing 用的就是 SMT，google 用的就是 NMT。<span style="color:red;">不知道现在是什么情况了。</span></p>
+
+<p>NMT 就是 RNN 最擅长的事情：序列到序列的学习。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GJDgb05A3B.png?imageslim" alt="mark" /></p>
+
+<h3 id="看图说话">看图说话：</h3>
+
+<p>会根据图片的内容来用文字进行描述。也可以对一个图片进行提问，然后会给出答案。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HdlhIleF67.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">不知道现在的进展是什么样了？对图片进行提问真的可以吗？是什么原理？这样的网络是怎么训练出来的？图像和问题同时作为输入？答案作为label？涉及图片的时候也用RNN吗？</span></p>
+
+<p>OK，下面我们详细讲一下循环神经网络的结构：</p>
+
+<h2 id="循环神经网络的结构">循环神经网络的结构</h2>
+
+<p>language model 指的是，有一个序列，我们知道了前n-1个element是什么之后推断下面一个element是什么。</p>
+
+<p>简单来看，把序列按照时间展开</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/K56eAIjEG6.png?imageslim" alt="mark" /></p>
+
+<p>解释如下：<strong>还是很清楚的</strong></p>
+
+<ul>
+<li>(X_t) 是时间t处的输入。</li>
+<li>(S_t) 是时间t处的记忆， (S_t=f(UX<em>t+WS</em>{t-1})) ，f 可以是 (tanh) 等。</li>
+<li>(O_T) 是时间t处的出书，比如是预测下一个词的话，可能是 softmax 输出的属于每个候选词的概率， (O_t=softmax(VS_t))。</li>
+</ul>
+
+<h2 id="结构细节">结构细节：</h2>
+
+<p>可以把隐状态 (S_t) 视作记忆体，捕捉了之前时间点上的信息。而输出 (O_t) 由当前时间以及之前所有的记忆共同计算得到。即只关于(S_t)。</p>
+
+<p>理论上来说，我们的 (S_t) 能保留之前的所有的信息的，但是我的矩阵的维度是有限的，也就是说我能存储的信息量是有限的，因此 实际的时候，(S_t)并不能捕捉和保留之前的所有信息（记忆有限？）</p>
+
+<p>不同于CNN，这里的RNN其实整个神经网络都共享一组参数（U，V，W），极大减小了需要训练和预估的参数量。<strong>嗯</strong></p>
+
+<p>图中的 (O_t) 在有些任务下是不存在的，比如文本情感分析，判断一篇文章的情感，因为在读一篇文章的时候，读到每一个位置我都可以输出一个结果，当然，这个结果不一定是准确的，所以，我可以等文章读完之后，得到的最终的结果作为文本的情感结果就可以。也就是说，对于文本情感分析这个任务来说，我只需要最后的那个 (O_t) ，中间的都不需要。<strong>那这样的话，这个文本情感分析怎么训练？只把最后这个位置的损失球出来就可以，然后用BPTT去反向传播就行。</strong></p>
+
+<h2 id="一个例子">一个例子：</h2>
+
+<p>举一个经典的例子：序列到序列的学习，一个language model 。</p>
+
+<p>有一个经典的例子是char-rnn，上面的文本的模仿的三个例子都是这个模型生成的。<strong>这个就是char-rnn 吗？想看一下char-rnn。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/f7Kkib6199.png?imageslim" alt="mark" /></p>
+
+<p>RNN生成模型模仿语言风格例子：</p>
+
+<ul>
+<li><p>(s_t=tanh(Ux<em>t+Ws</em>{t-1}))</p></li>
+
+<li><p>(o_t=softmax(Vs_t))</p></li>
+
+<li><p>(x_t\in \mathbb{R}^8000)</p></li>
+
+<li><p>(o_t\in \mathbb{R}^8000)</p></li>
+
+<li><p>(s_t\in \mathbb{R}^100)</p></li>
+
+<li><p>(U\in \mathbb{R}^{100\times 8000})</p></li>
+
+<li><p>(V\in \mathbb{R}^{8000\times 100})</p></li>
+
+<li><p>(W\in \mathbb{R}^{100\times 100})</p></li>
+</ul>
+
+<p>对照代码看下。</p>
+
+<p><strong>注意：这个地方的代码没有找到，实际上视频中对照代码讲了一些，再找找，应该是有的，找到之后补充进来。而且对应的视频也没有看要参照看下。 这个还是值得找一下的，因为里面是他自己手写的RNN代码，而不是调用的库。</strong></p>
+
+<p>现在一般不用Caffe做RNN，因为它的输入比较麻烦。</p>
+
+<h1 id="不同类型的rnn">不同类型的RNN</h1>
+
+<p>这部分很重要，因为实际中单向的LSTM用的还真不太多，大部分用的都是双向的深层的RNN</p>
+
+<h2 id="双向rnn">双向RNN</h2>
+
+<p>在有些情况下，当前的输入不只依赖于之前的序列元素，还可能依赖于之后的序列元素，比如说从一段话踢掉部分词，让你补全。那么这个时候，只用之前的RNN感觉就有点不足了，那么怎么办呢？可以用双向的RNN。当然，单向的RNN可以做的事情也可以用双向来做，可能会捕捉到更多的信息</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/L77Bf8IllF.png?imageslim" alt="mark" /></p>
+
+<p>上面的h是hidden的意思，对应于之前的RNN中的S。</p>
+
+<p>一个是从左往右做迭代的，一个是从右往左做迭代的，然后对h做一个拼接。前向和后向的W和V是不一样的。因为一个是从前往后的，一个是从后往前的。<strong>实际上这个地方有些不明白，是怎么在从前往后训练的时候而且从后往前训练的？而且这个时候的输出的 y 是什么？这个时候的损失函数是什么？实际的代码是怎么实现的呢？还是说，先前向训练一遍，再反向训练一遍这样循环？</strong></p>
+
+<p>Tensorflow中是有双向的RNN的。 MxNet里面也是有的。</p>
+
+<h2 id="深层双向rnn">深层双向RNN</h2>
+
+<p>和双向RNN的区别是每一步/每个时间点我们设定多层结构</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J1A76D0k80.png?imageslim" alt="mark" /></p>
+
+<p><strong>说实话这个没听明白。为什么有这些隐层？训练的时候是什么样的？看一下相关的资料。</strong></p>
+
+<p>##</p>
+
+<h1 id="rnn和bptt算法-重要">RNN和BPTT算法 （重要）</h1>
+
+<p>在CNN中，我们用BP+SGD，在RNN中我们使用BPTT ，back propagation through time 。</p>
+
+<p>MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。<strong>MLP（DNN）是什么？</strong></p>
+
+<h2 id="举个例子">举个例子：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6GbL3BGHj3.png?imageslim" alt="mark" /></p>
+
+<p>比如说，我依次输入的是：&rdquo;我&rdquo;，“爱”，“北京“，”天安门“，”广场“，然后想要的输出是：“爱”，“北京“，”天安门“，”广场“。假设我的词典中有4万个词。即，每个输出都是一个4万*1的一个概率向量。</p>
+
+<h2 id="损失函数">损失函数</h2>
+
+<p>我们到每个时间点的时候都又一个输出，都会计算一个loss， 交叉熵损失 softmax ，<strong>交叉熵损失函数是这样的吗？</strong>：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fm92AGjEfh.png?imageslim" alt="mark" /></p>
+
+<p>现在我要计算所有的loss，因此，沿着时间轴把所有的loss加在一起：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KmdJ02FH4B.png?imageslim" alt="mark" /></p>
+
+<h2 id="那么这个时候怎么求偏导呢">那么这个时候怎么求偏导呢？</h2>
+
+<p>我的loss有了，我们想找到 W 使 loss function 最小，我们有随机梯度下降的方法。随机梯度下降要求我们求loss function对于W的偏导，求偏导的这个过程就是我们这个地方的核心，在RNN中，求偏导不能使用BP，而要使用BPTT。为什么这么说呢？</p>
+
+<p>首先我们知道要求这么一个偏导：<strong>为什么是针对W的？U和V不用管吗？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1LA4IAFG4F.png?imageslim" alt="mark" /></p>
+
+<p>我们单独看一个位置的：<strong>是的</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8BCcD76JBJ.png?imageslim" alt="mark" /></p>
+
+<p>但是呢：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mlcJkI58L8.png?imageslim" alt="mark" /></p>
+
+<p>我们发现，s3与s2还有关系，即，s3对于W的偏导我们没有办法直接求出，因此我们只能沿着时间轴把s2往前展开：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2DDiKkIImJ.png?imageslim" alt="mark" /></p>
+
+<p>如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CG1Hi0BHKL.png?imageslim" alt="mark" /></p>
+
+<p>即可以写成：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hAKA7LmhkL.png?imageslim" alt="mark" /></p>
+
+<p>那么这个就是BPTT，可见，与BP还是有本质的区别的，就是要涉及之前的各个状态的偏导。</p>
+
+<h1 id="rnn与图片描述">RNN与图片描述</h1>
+
+<h2 id="怎么去做呢">怎么去做呢？</h2>
+
+<p>有一张图片，我希望我用文本对它进行描述。那么怎么做呢？</p>
+
+<p>我们找了一个Alexnet，输进去一张图片之后，会得到一个4096*1的向量。这个向量含有图片的很多的信息，相当于对这个图片抽取了特征信息。然后，我把这个向量也添加到我们的RNN中。如下图所示：即把我的4096*1的向量以一个新的权重(W_{ih})叠加到我的RNN的公式中。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J6b3CA9ECH.png?imageslim" alt="mark" /></p>
+
+<p>实际上，上面这个公式写的有些不清楚，后面把图修一下，公式实际上就是：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Kl2dCihjih.png?imageslim" alt="mark" /></p>
+
+<p>现在在括号中添加了 (W_{ih}*v) 这一项。</p>
+
+<p>这个地方要强调下，<strong>这个添加 (W_{ih}*v) 这一项只在第一步做</strong>，后面每一次的更新再也没有这一项了，也就是说后面的部分还是老样子，如下图：</p>
+
+<p><strong>但是我没有很明白，为什么这样直接的添加是有用的？为什么只在第一步的时候添加这一项？而且，起头的东西是什么？也就是说这个时候的(x_0)是什么？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lh6B56BIgK.png?imageslim" alt="mark" /></p>
+
+<p>这个是简单的一种image caption ，有更厉害的attention model，这个后面会讲到。<strong>讲到之后我这个地方提一下。对比一下。</strong></p>
+
+<h2 id="数据集">数据集</h2>
+
+<p>有图片描述数据集 <a href="http://mscoco.org ">http://mscoco.org </a>  里面有12w张图片，5句话描述每张图片。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l1maJh0LGd.png?imageslim" alt="mark" /></p>
+
+<p>下面是一些attention model 产生的结果：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fAhc8CA7l2.png?imageslim" alt="mark" /></p>
+
+<p><strong>最好自己试一下，最起码要找一个已经实现的代码看一遍。</strong></p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 深度学习</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/github-%E4%B8%8B-fork-%E5%90%8E%E5%A6%82%E4%BD%95%E5%90%8C%E6%AD%A5%E6%BA%90%E7%9A%84%E6%96%B0%E6%9B%B4%E6%96%B0%E5%86%85%E5%AE%B9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">github 下 fork 后如何同步源的新更新内容？</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/cv%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/">
+            <span class="next-text nav-default">CV开源项目</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

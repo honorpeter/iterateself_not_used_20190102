@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 Linux网络配置 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="九 Linux网络酉己置 Linux系统在服务器占用较大份额，使用计算机首先要了解网络配置，本节主要介绍Linux 系统的网络配置。 3.3.1 Linux网" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/03-linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 Linux网络配置" />
+<meta property="og:description" content="九 Linux网络酉己置 Linux系统在服务器占用较大份额，使用计算机首先要了解网络配置，本节主要介绍Linux 系统的网络配置。 3.3.1 Linux网" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/03-linux%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" /><meta property="article:published_time" content="2018-07-12T16:07:58&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-12T16:07:58&#43;00:00"/>
+<meta itemprop="name" content="03 Linux网络配置">
+<meta itemprop="description" content="九 Linux网络酉己置 Linux系统在服务器占用较大份额，使用计算机首先要了解网络配置，本节主要介绍Linux 系统的网络配置。 3.3.1 Linux网">
+
+
+<meta itemprop="datePublished" content="2018-07-12T16:07:58&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-12T16:07:58&#43;00:00" />
+<meta itemprop="wordCount" content="1840">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 Linux网络配置"/>
+<meta name="twitter:description" content="九 Linux网络酉己置 Linux系统在服务器占用较大份额，使用计算机首先要了解网络配置，本节主要介绍Linux 系统的网络配置。 3.3.1 Linux网"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 Linux网络配置</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-12 </span>
+        
+        <span class="more-meta"> 1840 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>九 Linux网络酉己置</p>
+
+<p>Linux系统在服务器占用较大份额，使用计算机首先要了解网络配置，本节主要介绍Linux 系统的网络配置。</p>
+
+<p>3.3.1 Linux网络相关配置文件</p>
+
+<p>Linux网络配置相关的文件根据不同的发行版目录名称有所不同，但大同小异，主要有以 下目录或文件。</p>
+
+<p>(1)    /etc/hostname：主要功能在于修改主机名称。</p>
+
+<p>(2)    /etc/sysconfig/network-scrips/ifcfg-enoN：是设置网卡参数的文件，比如 IP 地址、子 网掩码、广播地址、网关等，N为一串数字。</p>
+
+<p>(3)    /etc/resolv.conf：此文件设置了 DNS相关的信息，用于将域名解析到IP。</p>
+
+<p>(4)    /etc/hosts：计算机的IP对应的主机名称或域名对应的IP地址，通过设置 /etc/nsswitch.conf中的选项可以选择是DNS解析优先还是本地设置优先。</p>
+
+<p>(5)    /etc/nsswitch.conf (name service switch configuration,名字服务切换配置)：规定通过 哪些途径，以及按照什么顺序通过这些途径来查找特定类型的信息。</p>
+
+<p>3.3.2配置Linux系统的IP地址</p>
+
+<p>要设置主机的ip地址，可以直接通过终端命令设置，如想设置在系统重启后依然生效, 可以通过设置对应的网络接口文件，如【示例3-11】所示。•</p>
+
+<p>【示例3-11】</p>
+
+<p>主要字段的含义如表3.7所示。</p>
+
+<p>表3.7网卡设置参数说明</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>TYPE</td>
+<td>设备连接类型，此处为以太网</td>
+</tr>
+
+<tr>
+<td>BOOTPROTO</td>
+<td>使用动态IP还是静态IP</td>
+</tr>
+
+<tr>
+<td>IPADDRO</td>
+<td>第一 IP地址</td>
+</tr>
+
+<tr>
+<td>PREFIXO</td>
+<td>第一 IP地址对应的子网掩码长度</td>
+</tr>
+
+<tr>
+<td>GATEWAYO</td>
+<td>第一 IP地址对应的网关</td>
+</tr>
+
+<tr>
+<td>DNSl 和 DNS2</td>
+<td>DNS服务器地址</td>
+</tr>
+
+<tr>
+<td>DEFROUTE</td>
+<td>是否为默认路由</td>
+</tr>
+
+<tr>
+<td>ONBOOT</td>
+<td>系统启动时是否设置此网络接口</td>
+</tr>
+
+<tr>
+<td>NAME</td>
+<td>设备名，此处对应网络接口为eno33554984</td>
+</tr>
+</tbody>
+</table>
+
+<p>设置完ifcfg-ethO文件后，需要重启网络服务才能生效，重启后使用ifconfig查看设置是 否生效：</p>
+
+<p>[root@CentOS network-scripts]# service network restart</p>
+
+<p>同一个网络接口可以使用子接口的方式设置多个IP地址，如【示例3-12】所示。</p>
+
+<p>【示例3-12]</p>
+
+<p>up</p>
+
+<p>[root@CentOS -]# ifconfig eno33554984:2 192.168.146.152 netmask 255.255.255.0</p>
+
+<p>[root@CentOS network-scripts]# ifconfig</p>
+
+<p>eno33554984: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST〉 mtu 1500</p>
+
+<p>inet 192.168.146.150 netmask 255.255.255.0 broadcast 192.168.146.255 inet6 fe80::20c:29ff:fe0b:780 prefixlen 64 scopeid 0x20<link> ether 00:0c:29:0b:07:80 txqueuelen 1000 (Ethernet)</p>
+
+<p>RX packets 6453 bytes 6525511 (6.2 MiB)</p>
+
+<p>RX errors 0 dropped 0 overruns 0 frame 0 TX packets 2023 bytes 167541 (163.6 KiB)</p>
+
+<p>TX errors 0</p>
+
+<p>dropped 0</p>
+
+<p>overruns 0</p>
+
+<p>carrier 0</p>
+
+<p>collisions 0</p>
+
+<p>eno33554984:2: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST〉 mtu 1500</p>
+
+<p>inet 192.168.146.152 netmask 255.255.255.0 broadcast 192.168.146.255 ether 00:0c:29:0b:07:80 txqueuelen 1000 (Ethernet)</p>
+
+<p>当服务器重启或网络服务重启后，子接口配置将消失，如需重启后依然生效，可以将配置 子接口命令加入/etc/rc.local文件中。</p>
+
+<p>3.3.3设置主机名</p>
+
+<p>主机名是识别某个计算机在网络中的标识，设置主机名可以使用hostname命令即可。在 单机情况下主机名可任意设置，如以下命令，重新登录后发现主机名已经改变。</p>
+
+<p>[root@CentOS network-scripts]# hostname <a href="http://www.example.com">www.example.com</a></p>
+
+<p>如要修改重启后依然生效，可以将主机名写入文件/etc/hostname中。如【示例3-13】所示。</p>
+
+<p>【示例3-13]</p>
+
+<p>[root@www 〜]# hostname <a href="http://www.example.com">www.example.com</a></p>
+
+<p>3.3.4设置默认网关</p>
+
+<p>设置好IP地址以后，如果要访问其他的子网或Internet,用户还需要设置路由，在此不做 介绍，这里采用设置默认网关的方法。在Linux中，设置默汄网关有两种方法：</p>
+
+<p>(1)第1种方法就是直接使用route命令，在设置默认网关之前，先用route - n命令查 看路由表。执行如下命令设置网关。</p>
+
+<p>[root@CenOS /]# route add default gw 192.168.1.254</p>
+
+<p>如果不想每次开机都执行route命令，则应该把要执行的命令写入/etc/rc.d/rc.local文件中。</p>
+
+<p>(2)第2种方法是在/etc/sysconfig/network-scripts/ifcfg-接口文件中添加如下字段:</p>
+
+<p>GATEWAY=192.168.10.254</p>
+
+<p>同样，只要是更改了脚本文件，必须重启网络服务来使设置生效，可执行下面的命令:</p>
+
+<p>[root@CentOS /]# service network restart</p>
+
+<p>■ ■</p>
+
+<p>使用service命令时需要注意，由于CentOS 7中使用的是systemd，因此开启和停止服务 通常使用systemctl代替，但也可以使用service。</p>
+
+<p>使用命令方式配置默认路由通常适用于临时测试。</p>
+
+<p>3.3.5设置DNS服务器</p>
+
+<p>设置DNS服务器需修改/etc/resolv.conf文件即可。下面是一个resolv.conf文件的示例。</p>
+
+<p>【示例3-14】</p>
+
+<p>[root@CentOS -]# cat /etc/resolv.conf nameserver 192.168.3.1 nameserver 192.168.3.2 options rotate</p>
+
+<p>options timeout:1 attempts:2</p>
+
+<p>其中192.168.3.1为第一名字服务器，192.168.3.2为第二名字服务器，option rotate选项指 在这2个dns server之间轮询，option timeout: 1表示解析超时时间Is （默认为5s），attempts 表示解析域名尝试的次数。如需添加DNS服务器，可直接修改此文件，需要注意的是使用 nameserver指定的DNS服务器只有前三条生效。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/06-%E5%8A%A8%E6%80%81%E4%B8%BB%E6%9C%BA%E9%85%8D%E7%BD%AE%E5%8D%8F%E8%AE%AEdhcp/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 动态主机配置协议（DHCP）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/04-linux%E9%98%B2%E7%81%AB%E5%A2%99-iptables/">
+            <span class="next-text nav-default">04 Linux防火墙 iptables</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

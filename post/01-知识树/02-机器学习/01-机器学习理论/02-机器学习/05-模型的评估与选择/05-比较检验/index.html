@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 比较检验 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="比较检验 TODO 还没有整理完，对应 pdf 进行整理。 为什么这几种假设检验方法之前从来没听说过？ 比较检验 有了实验评估方法和性能度量，看起来就能对学习器的性" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/05-%E6%AF%94%E8%BE%83%E6%A3%80%E9%AA%8C/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 比较检验" />
+<meta property="og:description" content="比较检验 TODO 还没有整理完，对应 pdf 进行整理。 为什么这几种假设检验方法之前从来没听说过？ 比较检验 有了实验评估方法和性能度量，看起来就能对学习器的性" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/05-%E6%AF%94%E8%BE%83%E6%A3%80%E9%AA%8C/" /><meta property="article:published_time" content="2018-07-30T16:05:55&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-30T16:05:55&#43;00:00"/>
+<meta itemprop="name" content="05 比较检验">
+<meta itemprop="description" content="比较检验 TODO 还没有整理完，对应 pdf 进行整理。 为什么这几种假设检验方法之前从来没听说过？ 比较检验 有了实验评估方法和性能度量，看起来就能对学习器的性">
+
+
+<meta itemprop="datePublished" content="2018-07-30T16:05:55&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-30T16:05:55&#43;00:00" />
+<meta itemprop="wordCount" content="4966">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 比较检验"/>
+<meta name="twitter:description" content="比较检验 TODO 还没有整理完，对应 pdf 进行整理。 为什么这几种假设检验方法之前从来没听说过？ 比较检验 有了实验评估方法和性能度量，看起来就能对学习器的性"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 比较检验</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-30 </span>
+        
+        <span class="more-meta"> 4966 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#比较检验">比较检验</a>
+<ul>
+<li><a href="#比较检验-1">比较检验</a></li>
+</ul></li>
+<li><a href="#对单个学习器泛化性能的假设进行检验">对单个学习器泛化性能的假设进行检验</a>
+<ul>
+<li><a href="#假设检验">假设检验</a></li>
+</ul></li>
+<li><a href="#对不同学习器的性能进行比较">对不同学习器的性能进行比较</a>
+<ul>
+<li><a href="#交叉验证-t-检验">交叉验证 t 检验</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="比较检验">比较检验</h1>
+
+<p>TODO</p>
+
+<ul>
+<li>还没有整理完，对应 pdf 进行整理。</li>
+<li><strong>为什么这几种假设检验方法之前从来没听说过？</strong></li>
+</ul>
+
+<h2 id="比较检验-1">比较检验</h2>
+
+<p>有了实验评估方法和性能度量，看起来就能对学习器的性能进行评估比较了：</p>
+
+<ul>
+<li>先使用某种实验评估方法测得学习器的某个性能度量结果，</li>
+<li>然后对这些结果进行比较</li>
+</ul>
+
+<p>但怎么来做这个“比较”呢？是直接取得性能度量的值后 “比大小” 吗？实际上，机器学习中性能比较这件事要比大家想象的复杂得多。这里面涉及几个重要因素：</p>
+
+<ul>
+<li><p>首先，我们希望比较的是泛化性能，然而通过实验评估 方法我们获得的是测试集上的性能，两者的对比结果可能未必相同；</p></li>
+
+<li><p>第二，测试集上的性能与测试集本身的选择有很大关系，且不论使用不同大小的测试集会得到不同的结果，即便用相同大小的测试集若包含的测试样例不同，测试结果 也会有不同；</p></li>
+
+<li><p>第三，很多机器学习算法本身有一定的随机性，即便用相同的参数设置在同一个测试集上多次运行，其结果也会有不同。</p></li>
+</ul>
+
+<p>那么，有没有适当的方法对学习器的性能进行比较呢？</p>
+
+<p>统计假设检验 (hypothesis test) 为我们进行学习器性能比较提供了重要依据，基于假设检验结果我们可推断出，若在测试集上观察到学习器 A 比 B 好， 则 A 的泛化性能是否在统计意义上优于B，以及这个结论的把握有多大。<span style="color:red;">是这样吗？要看看。</span></p>
+
+<p>下面我们先介绍两种最基本的假设检验，然后介绍几种常用的机器学习性能比较方法。为了便于讨论，这里默认以错误率为性能度量，用 $\epsilon$ 来表示。</p>
+
+<h1 id="对单个学习器泛化性能的假设进行检验">对单个学习器泛化性能的假设进行检验</h1>
+
+<h2 id="假设检验">假设检验</h2>
+
+<p>假设检验中的 “假设” 是对学习器泛化错误率分布的某种判断或猜想，例如 “ $\epsilon=\epsilon_0$ ”。现实任务中我们并不知道学习器的泛化错误率，只能获知其测试错误率 (\cap{\epsilon})  ，泛化错误率与测试错误率未必相同，但直观上，二者接近的可能性应比较大，相差很远的可能性比较小。因此，我们可以根据测试错误率估推出泛化错误率的分布.</p>
+
+<p>泛化错误率为 (\epsilon) 的学习器在一个样本上犯错的概率是 (\epsilon) ；测试错误率 (\cap{\epsilon})  意味着在m个测试样本中恰有 (\cap{\epsilon}* m) 个被误分类.假定测试样本是从样本总体分布中独立采样而得，那么泛化错误率为 (\epsilon) 的学习器将其中 m&rsquo; 个样本误分类、其 余样本全都分类正确的概率是 (\epsilon^{m&rsquo;}(1-\epsilon)^{m-m&rsquo;}) ；由此可估算出其恰将 (\cap{\epsilon}* m) 个样本误分类的概率如下式所示，这也表达了在包含 m 个样本的测试集上，泛化错误率为 (\epsilon) 的学习器被测得测试错误率为 (\cap{\epsilon})  的概率：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mhJEha49d8.png?imageslim" alt="mark" />给定测试错误率，则解 (\partial P(\cap{\epsilon};\epsilon)/\partial \epsilon=0) 可知，(P(\cap{\epsilon};\epsilon)) 在 (\epsilon=\cap{\epsilon}) 时最大，(|\epsilon-\cap{\epsilon}|) 增大时(P(\cap{\epsilon};\epsilon)) 减小。这符合二项(binomial)分布，如下图所示，若(\epsilon =0.3) ，则 10 个样本中测得 3 个被误分类的概率最大。</p>
+
+<p>二项分布示意图（m=10,(\epsilon) =0.3）：（(\alpha) 的常用取值有 0.05、0.1 ，图中(\alpha) 较大是为了绘图方便）</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aaliELa3ae.png?imageslim" alt="mark" /></p>
+
+<p>我们可使用 “二项检验” (binomial test) 来对 (\epsilon \leq 0.3)  （即“泛化错误率是否不大于0.3” ) 这样的假设进行检验。更一般的，考虑假设 (\epsilon \leq \epsilon_0) ，则在 (1-\alpha) 的概率内所能观测到的最大错误率如下式计算。这里 (1-\alpha) 反映了结论的 “置信度” (confidence)，直观地来看，相应于上图中非阴影部分的范围：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1gib7IJ0ih.png?imageslim" alt="mark" /></p>
+
+<p>注：s.t. 是 “subject to” 的简写，使左边式子在右边条件满足时成立。</p>
+
+<p>此时若测试错误率 (\cap{\epsilon})  小于临界值 (\overline{\epsilon})  ，则根据二项检验可得出结论：在 (\alpha) 的显著度 下，假设 (\epsilon \leq \epsilon_0) 不能被拒绝，即能以 (1-\alpha) 的置信度认为，学习器的泛化错误率不大于 (\epsilon_0)；否则该假设可被拒绝，即在 (\alpha) 的显著度下可认为学习器的泛化错误率大于 (\epsilon_0)。</p>
+
+<p>在很多时候我们并非仅做一次留出法估计，而是通过多次重复留出法或是交叉验证法等进行多次训练/测试，这样会得到多个测试错误率，此时可使用 “t检验”（t-test）。假定我们得到了 k 个测试错误率，(\cap{\epsilon_1},\cap{\epsilon_2},\cdots ,\cap{\epsilon_k})，则平均测试错误率 (\mu) 和方差 (\sigma^2) 为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/9LbChGmbBm.png?imageslim" alt="mark" /></p>
+
+<p>考虑到这 k 个测试错误率可看作泛化错误率 (\epsilon_0) 的独立采样，则变量：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LLf84elmDk.png?imageslim" alt="mark" /></p>
+
+<p>服从自由度为 t-1 的 t 分布，如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/f5Ac9fIA53.png?imageslim" alt="mark" /></p>
+
+<p>对假设 (\mu=\epsilon_0) 和显著度 (\alpha) ，我们可计算出当测试错误率均值为 (\epsilon<em>0) 时，在  (1-\alpha) 概率内能观测到的最大错误率，即临界值。这里考虑双边（two-tailed）假设，如上图所示，两边阴影部分各有 (\alpha/2) 的面积；假定阴影部分范围分别为 ([-\infty,t</em>{-\alpha/2}]) 和 ([t_{\alpha/2},\infty]) 。若平均错误率 (mu) 与 (\epsilon_0) 之差(|\mu-\epsilon<em>0|) 位于临界值范围([t</em>{-\alpha/2},t_{\alpha/2}]) 内，则不能拒绝假设 “ (\mu=\epsilon_0) ”，即可认为泛化错误率为 (\epsilon_0) ，置信度为(1-\alpha) ，否则可拒绝该假设，即在该显著度下可认为泛化错误率与 (\epsilon_0) 有显著不同。(\alpha) 常用取值有 0.05 和0.1 。下表给出了一些常用临界值：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/iHfl8Hcela.png?imageslim" alt="mark" /></p>
+
+<p>上面介绍的两种方法都是对关于单个学习器泛化性能的假设进行检验，而在现实任务中，更多时候我们需对不同学习器的性能进行比较，下面将介绍适用于此类情况的假设检验方法.</p>
+
+<h1 id="对不同学习器的性能进行比较">对不同学习器的性能进行比较</h1>
+
+<h2 id="交叉验证-t-检验">交叉验证 t 检验</h2>
+
+<p>对两个学习器 A 和 B ，若我们使用 k 折交叉验证法得到的测试错误率分 别为也必…，蜡和ef，崾，…，＜，其中ef和ef是在相同的第i折训练/测 试集上得到的结果，则可用fc折交叉验证“成对f检验” (paired f-teste)来进行 比较检验.这里的基本思想是若两个学习器的性能相同，则它们使用相同的训 练/测试集得到的测试错误率应相同，即4 = ef.</p>
+
+<p>具体来说，对折交叉验证产生的对测试错误率：先对每对结果求差， 若两个学习器性能相同，则差值均值应为零.因此，可根据差值</p>
+
+<p>Al5A2, 来对“学习器A与B性能相同”这个假设做f检验，计算出差值</p>
+
+<p>的均值M和方差a2,在显著度a下，若变量</p>
+
+<p>小于临界值L/m，则假设不能被拒绝，即认为两个学习器的性能没有显著差 别；否则可认为两个学习器的性能有显著差别，且平均错误率较小的那个学习 器性能较优.这里tQ/2, fey是自由度为A - 1的t分布上尾部累积分布为a/2 的临界值.</p>
+
+<p>欲进行有效的假设检验，一个重要前提是测试错误率均为泛化错误率的独 立采样.然而，通常情况下由于样本有限，在使用交叉验证等实验估计方法时， 不同轮次的训练集会有一定程度的重叠，这就使禧测试错误率实际上并不独立， 会导致过高估计假设成立的概率.为缓解这一问题,可采用“5 x 2交叉验证”</p>
+
+<p>法[Dietterich，1998].
+5x2交叉验证是做5次2折交叉验证，在每次2折交叉验证之前随机将数 据打乱，使得5次交叉验证中的数据划分不重复.对两个学习器A和B,第 &lt; 次 2折交叉验证将产生两对测试错误率，我们对它们分别求差，得到第1折上的差 值和第2折上的差值△$.为缓解测试错误率的非独立性，我们仅计算第1 次2折交叉验证的两个结果的平均值m = 0.5(Al + A?),但对每次2折实验的 结果都计算出其方差^±^)2+(Ax2 - 变量</p>
+
+<p>n = ~r=== (2.32)</p>
+
+<p>V i=l</p>
+
+<p>服从自由度为5的f分布，其双边检验的临界值5当a = 0.05时为2.5706, a = 0.1 时为 2.0150.
+2.4.3 McNemar 检验</p>
+
+<p>对二分类问题，使用留出法不仅可估计出学习器A和B的测试错误率，还 可获得两学习器分类结果的差别，即两者都正确、都错误、一个正确另一个错 误的样本数，如“列联表” (contingency table) 2.4所示.</p>
+
+<p>表2.4两学习器分类差别列联表</p>
+
+<p>算法B</p>
+
+<p>算法A</p>
+
+<p>正确</p>
+
+<p>错误</p>
+
+<p>正确</p>
+
+<p>600</p>
+
+<p>601</p>
+
+<p>错误</p>
+
+<p>610</p>
+
+<p>en</p>
+
+<p>若我们做的假设是两学习器性能相同，则应有e()1 = ew，那么变量 |eol-eio|应当服从正态分布，且均值为1，方差为e01 + e10.因此变量</p>
+
+<p>(|e01 - eio| — l)2
+2.4比較检验</p>
+
+<p>41</p>
+
+<p>(2.33)</p>
+
+<p>eoi + eio
+中文称为“卡方分布.</p>
+
+<p>临界值必在R语 言中可通过qchisq(l — a, fc—1)计算，在 Matlab 中 是 icdf (z Chi square7,1 — a,k — 1).这里的 k = 2 是进行比较的算法个数.</p>
+
+<p>服从自由度为1的X2分布，即标准正态分布变量的平方.给定显著度a，当以 上变量值小于临界值pd时，不能拒绝假设，即认为两学习器的性能没有显著差 别；否则拒绝假设，即认为两者性能有显著差别，且平均错误率较小的那个学习 器性能较优.自由度为1的X2检验的临界值当a = 0.05时为3.8415, a = 0.1 时为 2.7055.</p>
+
+<p>2.4.4 Friedman检验与Nemenyi后续检验</p>
+
+<p>交叉验证f检验和McNemar检验都是在一个数据集上比较两个算法的 性能，而在很多时候，我们会在一组数据集上对多+算法进行比较.当有多个 算法参与比较时，一种做法是在每个数据集上分别列出两两比较的结果，而在 两两比较时可使用前述方法；另一种方法更为直接，即使用基于算法排序的 Friedman 检验.</p>
+
+<p>假定我们用A、A、D3和D4四个数据集对算法A、B、C进行比较. 首先，使用留出法或交叉验证法得到每个算法在每个数据集上的测试结果，然 后在每个数据集上根据测试性能由好到坏排序，并赋予序值1，2,若算法的 测试性能相同，则平分序值.例如，在巩和仍上，A最好、B其次、C最差， 而在1?2上，A最好、B与C性能相同，……，则可列出表2.5,其中最后一行通 过对每一列的序值求平均，得到平均序值.</p>
+
+<p>表2.5算法比较序值表</p>
+
+<p>数据集</p>
+
+<p>算法A</p>
+
+<p>算法B</p>
+
+<p>算法C</p>
+
+<p>Di</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>d2</p>
+
+<p>1</p>
+
+<p>2.5</p>
+
+<p>2.5</p>
+
+<p>d3</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>d4</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>平均序值</p>
+
+<p>1</p>
+
+<p>2.125</p>
+
+<p>2.875</p>
+
+<p>然后，使用FHedman检验来判断这些算法是否性能都相同.若相同，则它 们的平均序值应当相同.假定我们在2V个数据集上比较fe个算法，令n表示第 i个算法的平均序值，为简化讨论，暂不考虑平分序值的情况，则n服从正态分 布,其均值和方差分别为（fc + 1）/2和（妒-1）/12.变量</p>
+
+<p>在fc和7V都较大时，服从自由度为fc - 1的x2分布.</p>
+
+<p>然而，上述这样的“原始FViedman检验”过于保守，现在通常使用变量</p>
+
+<p>(2.35)</p>
+
+<p>N(k - 1) - rx2
+其中tx2由式(2.34)得到.tf服从自由度为A: - 1和(fc - 1)(# - 1)的F分布5 表2.6给出了一些常用临界值.</p>
+
+<p>表2.6 F检验的常用临界值</p>
+
+<p>P检驗的临界值在R语 言中可通过qf(l —a，fe-l,(fc —1)(JV—1))计算，在 Matlab 中是 icdf(zF，，l-</p>
+
+<p>a = 0.05</p>
+
+<p>数据集 个数TV</p>
+
+<p>算法个数</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>4</p>
+
+<p>5</p>
+
+<p>6</p>
+
+<p>7</p>
+
+<p>8</p>
+
+<p>9</p>
+
+<p>10</p>
+
+<p>4</p>
+
+<p>10.128</p>
+
+<p>5.143</p>
+
+<p>3.863</p>
+
+<p>3.259</p>
+
+<p>2.901</p>
+
+<p>2.661</p>
+
+<p>2.488</p>
+
+<p>2.355</p>
+
+<p>2.250</p>
+
+<p>5</p>
+
+<p>7.709</p>
+
+<p>4.459</p>
+
+<p>3.490</p>
+
+<p>3.007</p>
+
+<p>2.711</p>
+
+<p>2.508</p>
+
+<p>2.359</p>
+
+<p>2.244</p>
+
+<p>2.153</p>
+
+<p>8</p>
+
+<p>5.591</p>
+
+<p>3.739</p>
+
+<p>3.072</p>
+
+<p>2.714</p>
+
+<p>2.485</p>
+
+<p>2.324</p>
+
+<p>2.203</p>
+
+<p>2.109</p>
+
+<p>2.032</p>
+
+<p>10</p>
+
+<p>5.117</p>
+
+<p>3.555</p>
+
+<p>2.960</p>
+
+<p>2.634</p>
+
+<p>2.422</p>
+
+<p>2.272</p>
+
+<p>2.159</p>
+
+<p>2.070</p>
+
+<p>1.998</p>
+
+<p>15</p>
+
+<p>4.600</p>
+
+<p>3.340</p>
+
+<p>2.827</p>
+
+<p>2.537</p>
+
+<p>2.346</p>
+
+<p>2.209</p>
+
+<p>2.104</p>
+
+<p>2.022</p>
+
+<p>1.955</p>
+
+<p>20</p>
+
+<p>4.381</p>
+
+<p>3.245</p>
+
+<p>2.766</p>
+
+<p>2.492</p>
+
+<p>2.310</p>
+
+<p>2.179</p>
+
+<p>2.079</p>
+
+<p>2.000</p>
+
+<p>1.935</p>
+
+<p>a = 0.1</p>
+
+<p>数据集</p>
+
+<p>算法个数念</p>
+
+<p>个数TV</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>4</p>
+
+<p>5</p>
+
+<p>6</p>
+
+<p>7</p>
+
+<p>8</p>
+
+<p>9</p>
+
+<p>10</p>
+
+<p>4</p>
+
+<p>5.538</p>
+
+<p>3.463</p>
+
+<p>2.813</p>
+
+<p>2.480</p>
+
+<p>2.273</p>
+
+<p>2.130</p>
+
+<p>2.023</p>
+
+<p>1.940</p>
+
+<p>1.874</p>
+
+<p>5</p>
+
+<p>4.545</p>
+
+<p>3.113</p>
+
+<p>2.606</p>
+
+<p>2.333</p>
+
+<p>2.158</p>
+
+<p>2.035</p>
+
+<p>1.943</p>
+
+<p>1.870</p>
+
+<p>1.811</p>
+
+<p>8</p>
+
+<p>3.589</p>
+
+<p>2.726</p>
+
+<p>2.365</p>
+
+<p>2.157</p>
+
+<p>2.019</p>
+
+<p>1.919</p>
+
+<p>1.843</p>
+
+<p>1.782</p>
+
+<p>1.733</p>
+
+<p>10</p>
+
+<p>3.360</p>
+
+<p>2.624</p>
+
+<p>2.299</p>
+
+<p>2.108</p>
+
+<p>1.980</p>
+
+<p>1.886</p>
+
+<p>1.814</p>
+
+<p>1.757</p>
+
+<p>1.710</p>
+
+<p>15</p>
+
+<p>3.102</p>
+
+<p>2.503</p>
+
+<p>2.219</p>
+
+<p>2.048</p>
+
+<p>1.931</p>
+
+<p>1.845</p>
+
+<p>1.779</p>
+
+<p>1.726</p>
+
+<p>1.682</p>
+
+<p>20</p>
+
+<p>2.990</p>
+
+<p>2.448</p>
+
+<p>2.182</p>
+
+<p>2.020</p>
+
+<p>1.909</p>
+
+<p>1.826</p>
+
+<p>1.762</p>
+
+<p>1.711</p>
+
+<p>1.668</p>
+
+<p>若“所有算法的性能相同”这个假设被拒绝5则说明算法的性能显著不 同.这时需进行“后续检验”(post-hoc test)来进一步区分各算法.常用的有 Nemenyi后续检验.</p>
+
+<p>Nemenyi检验计算出平均序值差别的临界值域</p>
+
+<p>GD = &hellip;&hellip;5 (2.36)</p>
+
+<p>是Tukey分布的临 界值，在R语言中可通 过 qtukey(l —a, fe, Inf) / sqrt(2)计算.</p>
+
+<p>表2.7给出了 a = 0.05和0.1时常用的值.若两个算法的平均序值之差超出 了临界值域CD,则以相应的置信度拒绝“两个算法性能相同”这一假设.</p>
+
+<p>表2.7 Nemenyi检验中常用的值</p>
+
+<p>算法个数fc</p>
+
+<p>以表2.5中的数据为例，先根据式(2.34)和(2.35)计算出= 24.429,由表 2.6可知，它大于ce = 0.05时的F检验临界值5.143,因此拒绝“所有算法性 能相同”这个假设.然后使用Nemenyi后续检验，在表2.7中找到A: = 3时 Qo.05 = 2.344,根据式(2.36)计算出临界值域= 1.657,由表2.5中的平均序 值可知，算法A与B的差距，以及算法B与C的差距均未超过临界值域，而算 法A与C的差距超过临界值域，因此检验结果认为算法A与C的性能显著不 同，而算法A与B、以及算法B与C的性能没有显著差别.</p>
+
+<p>上述检验比较可以直观地用FYiedman检验图显示.例如根据表2.5的序 值结果可绘制出图2.8,图中纵轴显示各个算法，横轴是平均序值.对每个算法， 用一个圆点显示其平均序值，以圆点为中心的横线段表示临界值域的大小.然 后就可从图中观察，若两个算法的横线段有交叠，则说明这两个算法没有显著 差别，否则即说明有显著差别.从图2.8中可容易地看出，算法A与B没有显著 差别，因为它们的横线段有交叠区域，而算法A显著优于算法C，因为它们的 横线段没有交叠区域.</p>
+
+<p>算法A 算法B 算法C</p>
+
+<p>临界值域</p>
+
+<p>&lsquo;1&rdquo;&ldquo;^■圓■?川&rdquo;&ldquo;&ldquo;議圓圓■■■■■</p>
+
+<p>平均＞值一一</p>
+
+<p>1</p>
+
+<p>1 1</p>
+
+<p>1.0 2.0 3.0</p>
+
+<p>图2.8 Friedman检验图</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-30</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%95%B0%E6%8D%AE%E7%B2%97%E7%95%A5%E5%A4%84%E7%90%86/06-%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 偏差与方差</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/04-%E6%80%A7%E8%83%BD%E5%BA%A6%E9%87%8F/">
+            <span class="next-text nav-default">04 性能度量</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 工厂方法模式（Factory Method） - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 10:08:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89&amp;rsquo; title: 设计模式 工厂方法模式（Factory Method） wordpress_id: 7140 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8Ffactory-method/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 工厂方法模式（Factory Method）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 10:08:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89&rsquo; title: 设计模式 工厂方法模式（Factory Method） wordpress_id: 7140 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8Ffactory-method/" /><meta property="article:published_time" content="2018-07-27T17:56:28&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T17:56:28&#43;00:00"/>
+<meta itemprop="name" content="设计模式 工厂方法模式（Factory Method）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 10:08:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89&rsquo; title: 设计模式 工厂方法模式（Factory Method） wordpress_id: 7140 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，">
+
+
+<meta itemprop="datePublished" content="2018-07-27T17:56:28&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T17:56:28&#43;00:00" />
+<meta itemprop="wordCount" content="2390">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 工厂方法模式（Factory Method）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 10:08:19&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89&rsquo; title: 设计模式 工厂方法模式（Factory Method） wordpress_id: 7140 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 工厂方法模式（Factory Method）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 2390 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#工厂方法模式是用来解决什么问题的">工厂方法模式是用来解决什么问题的？</a>
+<ul>
+<li><a href="#把类的公共接口抽象成基类和接口的时候出现的问题">把类的公共接口抽象成基类和接口的时候出现的问题</a></li>
+<li><a href="#父类中并不知道具体要实例化哪一个具体的子类">父类中并不知道具体要实例化哪一个具体的子类</a></li>
+</ul></li>
+<li><a href="#工厂方法模式的功能">工厂方法模式的功能</a></li>
+<li><a href="#到底怎么解决的">到底怎么解决的？</a>
+<ul>
+<li><a href="#对于第一个问题">对于第一个问题</a></li>
+<li><a href="#对于第二个问题">对于第二个问题</a></li>
+</ul></li>
+<li><a href="#完整代码">完整代码</a>
+<ul>
+<li><a href="#代码如下">代码如下</a></li>
+<li><a href="#代码说明">代码说明</a></li>
+</ul></li>
+<li><a href="#factory-模式的优劣">Factory 模式的优劣</a>
+<ul>
+<li><a href="#factory-模式的优点">Factory 模式的优点</a></li>
+<li><a href="#factory-模式存在的问题">Factory 模式存在的问题</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 10:08:19+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89/">http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%b7%a5%e5%8e%82%e6%96%b9%e6%b3%95%e6%a8%a1%e5%bc%8f%ef%bc%88factory-method%ef%bc%89&rsquo;
+title: 设计模式 工厂方法模式（Factory Method）
+wordpress_id: 7140
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><p><strong>很多地方都没明白，话需要一些例子，</strong></p></li>
+
+<li><p><strong>而且，到底具体是在什么样的场景下使用？还是没有很清楚。</strong></p></li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p>1.</p>
+
+<h1 id="工厂方法模式是用来解决什么问题的">工厂方法模式是用来解决什么问题的？</h1>
+
+<p>主要是用来解决下面这两种问题的：</p>
+
+<h2 id="把类的公共接口抽象成基类和接口的时候出现的问题">把类的公共接口抽象成基类和接口的时候出现的问题</h2>
+
+<p>为了提高程序的内聚（Cohesion）性，和降低程序的耦合（Coupling）的程度，我们经常会抽象出一些类的公共接口以形成抽象基类或者接口。<strong>一般</strong><strong>到底用的是抽象基类还是接口比较好？</strong> 这样我们就可以通过声明一个指向基类的指针来指向实际的子类实现，也就是所谓的多态。</p>
+
+<p>这个本身还是很有用的，比如做一些界面程序的时候，从一个通用界面继承出几个界面。</p>
+
+<p>但是，这里很容易出现一个问题：</p>
+
+<p>由于很多的子类继承自抽象基类，我们不得不在每次要用到某个子类的时候就编写如 new XXX; 这样的代码。这实际上带来了两个问题：</p>
+
+<ol>
+<li><p>别人使用你的程序的接口的时候，它必须知道实际的子类的名称，而当系统复杂后，这些子类的命名是比较麻烦的，有时候为了处理可能的名字冲突，命名可能是很奇怪的。<strong>难道使用工厂模式就不用知道实际的子类的名字了吗？</strong></p></li>
+
+<li><p>程序的扩展性和维护变得越来越困难。<strong>为什么这么说？好像是这么回事，不过也要确认下，把普通的写出来与工厂模式对比下，工厂模式扩展和维护很方便吗？</strong></p></li>
+</ol>
+
+<p><strong>嗯，这个的确是编程中经常遇到的问题，所以对基类和接口的时候还是很抵触的。到底有什么好的方法吗？感觉 Effect C++ 要好好总结下。</strong></p>
+
+<h2 id="父类中并不知道具体要实例化哪一个具体的子类">父类中并不知道具体要实例化哪一个具体的子类</h2>
+
+<p>还有一种情况就是在父类中并不知道具体要实例化哪一个具体的子类。</p>
+
+<p>这里的意思是：</p>
+
+<p>假设我们在类 A 中要使用到类 B，B 是一个抽象基类，在 A 中并不知道具体要实例化 B 的那一个子类，但是在类 A 的子类 D 中是可以知道的。在 A 中我们没有办法直接使用类似于 new XXX 的语句，因为根本就不知道 XXX 是什么。</p>
+
+<p><strong>什么意思？没有很明白，要写一下。</strong></p>
+
+<p>我们通常使用 Factory 模式来解决上面给出的两个问题。</p>
+
+<h1 id="工厂方法模式的功能">工厂方法模式的功能</h1>
+
+<p>上面的两个问题就引出了 Factory 模式的两个最重要的功能：</p>
+
+<ol>
+<li><p>定义创建对象的接口，封装了对象的创建。<strong>什么叫封装了对象的创建？</strong></p></li>
+
+<li><p>使得具体化类的工作延迟到了子类中。<strong>为什么？怎么做到的？</strong></p></li>
+</ol>
+
+<h1 id="到底怎么解决的">到底怎么解决的？</h1>
+
+<h2 id="对于第一个问题">对于第一个问题</h2>
+
+<p>我们经常就是声明一个创建对象的接口，并封装了对象的创建过程。Factory 在这里就类似于一个真正意义上的工厂（生产对象）。<strong>封装了对象的创建过程？什么意思？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/22dmKLFJ59.png?imageslim" alt="mark" /></p>
+
+<p>上图所示的 Factory 模式经常在系统开发中用到，但是这个</p>
+
+<p>上面这个并不是 Factory 模式的最大威力所在（因为这可以通过其他方式解决这个问题）。它更重要的是延迟了子类的实例化（第二个问题）：</p>
+
+<h2 id="对于第二个问题">对于第二个问题</h2>
+
+<p>我们不仅提供了一个对象创建对象的接口，还在子类中提供其具体实现（因为只有在子类中可以决定到底实例化哪一个类）。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3aKKICLm1h.png?imageslim" alt="mark" /></p>
+
+<p>如上图，Factory 中只是提供了对象创建的接口，对象创建的实现被放在 Factory 的子类  ConcreteFactory 中进行。这个与之前的图是不同的。</p>
+
+<h1 id="完整代码">完整代码</h1>
+
+<h2 id="代码如下">代码如下</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/G8K11d6fiK.png?imageslim" alt="mark" /></p>
+
+<p>factory_method.h：</p>
+
+<pre><code>#ifndef DESIGN_PATTERNS_FACTORY_METHOD_H
+#define DESIGN_PATTERNS_FACTORY_METHOD_H
+
+//基类
+class Worker {
+public:
+  virtual void Wash();
+  virtual void Sweep();
+  virtual void BuyRice();
+};
+
+
+//两个子类
+class TemporaryWorker: public Worker {
+
+};
+class FormalWorker: public Worker {
+
+};
+
+
+
+//工厂 为什么工厂的命名要以 I 为开头？
+class IFactory {
+public:
+  IFactory() {
+  };
+  virtual ~IFactory() {//虚析构函数的原因是什么？确认下
+  };
+
+  virtual Worker* CreateWorker() = 0;//这个是什么意思？忘记了
+};
+
+
+
+//两个继承的工厂，实现了对上面两个Product 子类的实例化
+class TemporaryWorkerFactory: public IFactory {
+public:
+  Worker* CreateWorker();
+};
+class FormalWorkerFactory: public IFactory {
+public:
+  Worker* CreateWorker();
+};
+
+#endif //DESIGN_PATTERNS_FACTORY_METHOD_H
+</code></pre>
+
+<p>factory_method.cc：</p>
+
+<pre><code>#include &quot;factory_method.h&quot;
+#include &lt;iostream&gt;
+
+void Worker::Wash() {
+  std::cout &lt;&lt; &quot;Wash&quot; &lt;&lt; std::endl;
+}
+void Worker::Sweep() {
+  std::cout &lt;&lt; &quot;Sweep&quot; &lt;&lt; std::endl;
+}
+void Worker::BuyRice() {
+  std::cout &lt;&lt; &quot;BuyRice&quot; &lt;&lt; std::endl;
+}
+
+
+
+Worker* TemporaryWorkerFactory::CreateWorker() {
+  Worker* worker = new TemporaryWorker();
+  return worker;
+}
+Worker* FormalWorkerFactory::CreateWorker() {
+  Worker* worker = new FormalWorker();
+  return worker;
+}
+</code></pre>
+
+<p>main.cpp：</p>
+
+<pre><code>#include &quot;factory_method.h&quot;
+
+
+int main() {
+
+    IFactory* pIFactory;
+    Worker* pWorker;
+
+    //产生一个临时工来做事情
+    pIFactory = new TemporaryWorkerFactory();
+    pWorker = pIFactory-&gt;CreateWorker();
+    pWorker-&gt;Wash();
+
+    // 产生一个正式工来做事情
+    pIFactory = new FormalWorkerFactory();
+    pWorker = pIFactory-&gt;CreateWorker();
+    pWorker-&gt;Wash();
+
+    delete pIFactory;
+    delete pWorker;
+
+    return 0;
+}
+</code></pre>
+
+<p><strong>还是没明白为什么要这么做？</strong></p>
+
+<h2 id="代码说明">代码说明</h2>
+
+<p>示例代码中给出的是 Factory 模式解决父类中并不知道具体要实例化哪一个具体的子类 的问题，至于为创建对象提供接口问题，可以由 Factory 中附加相应的创建操作例如 Create***Product()  即可。</p>
+
+<h1 id="factory-模式的优劣">Factory 模式的优劣</h1>
+
+<h2 id="factory-模式的优点">Factory 模式的优点</h2>
+
+<p>Factory 模式在实际开发中应用非常广泛。</p>
+
+<p>面向对象的系统经常面临着对象创建问题: 要创建的类实在是太多了。而 Factory 提供的创建对象的接口封装（第一个功能），以及其将类的实例化推迟到子类（第二个功能）都部分地解决了实际问题。<strong>还是没明白？</strong></p>
+
+<p>一个简单的例子就是语义分析过程中，由于要为文法中的每个非终结符构造一个类处理，因此这个过程中对象的创建非常多，采用 Factory 模式后系统可读性性和维护都变得优雅了许多。</p>
+
+<h2 id="factory-模式存在的问题">Factory 模式存在的问题</h2>
+
+<p>Factory模式也带来至少以下两个问题：</p>
+
+<ol>
+<li><p>如果为每一个具体的 ConcreteProduct 类的实例化提供一个函数体，那么我们可能不得不在系统中添加了一个方法来处理这个新建的 ConcreteProduct ，这样 Factory 的接口永远就不可能封闭（Close）。当然我们可以通过创建一个 Factory 的子类来通过多态实现这一点， 但是这也是以新建一个类作为代价的。<strong>没明白</strong></p></li>
+
+<li><p>在实现中我们可以通过参数化工厂方法，即给 FactoryMethod() 传递一个参数用以决定是创建具体哪一个具体的Product 。当然也可以通过模板化避免 1 中的子类创建子类，其方法就是将具体Product 类作为模板参数，实现起来也很简单。<strong>没明白</strong></p></li>
+</ol>
+
+<p>可以看出，Factory模式对于对象的创建给予开发人员提供了很好的实现策略，但是 Factory 模式仅仅局限于一类类（就是说 Product 是一类，有一个共同的基类），如果我们要为不同类的类提供一个对象创建的接口，那就要用 AbstractFactory 了。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+<ol>
+<li><p>工厂方法模式：定义一个用于创建对象的接口，让子类决定实例化哪个类。</p></li>
+
+<li><p>工厂方法把简单工厂的内部判断逻辑移到了客户端代码，本来需要修改工厂类，现在是修改客户端。</p></li>
+
+<li><p>简单工厂模式违背了开放-封闭原则，工厂方法模式借助多态，克服了该缺点，却保持了封装对象创建过程的优点。</p></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8Fbuilder/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 建造者模式（Builder）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E9%98%9F%E5%88%97/">
+            <span class="next-text nav-default">算法：队列</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

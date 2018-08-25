@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 感知机与多层网络 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="感知机与多层网络 感知机 (Perceptron) 由两层神经元组成，如图 5.3 所示，输入层接收外界输入信号后传递给输出层，输出层是 M-P神经元，亦称 “阈值逻辑单元” (threshold logic u" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/02-%E6%84%9F%E7%9F%A5%E6%9C%BA%E4%B8%8E%E5%A4%9A%E5%B1%82%E7%BD%91%E7%BB%9C/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 感知机与多层网络" />
+<meta property="og:description" content="感知机与多层网络 感知机 (Perceptron) 由两层神经元组成，如图 5.3 所示，输入层接收外界输入信号后传递给输出层，输出层是 M-P神经元，亦称 “阈值逻辑单元” (threshold logic u" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/02-%E6%84%9F%E7%9F%A5%E6%9C%BA%E4%B8%8E%E5%A4%9A%E5%B1%82%E7%BD%91%E7%BB%9C/" /><meta property="article:published_time" content="2018-06-26T16:01:33&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T16:01:33&#43;00:00"/>
+<meta itemprop="name" content="02 感知机与多层网络">
+<meta itemprop="description" content="感知机与多层网络 感知机 (Perceptron) 由两层神经元组成，如图 5.3 所示，输入层接收外界输入信号后传递给输出层，输出层是 M-P神经元，亦称 “阈值逻辑单元” (threshold logic u">
+
+
+<meta itemprop="datePublished" content="2018-06-26T16:01:33&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T16:01:33&#43;00:00" />
+<meta itemprop="wordCount" content="1351">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 感知机与多层网络"/>
+<meta name="twitter:description" content="感知机与多层网络 感知机 (Perceptron) 由两层神经元组成，如图 5.3 所示，输入层接收外界输入信号后传递给输出层，输出层是 M-P神经元，亦称 “阈值逻辑单元” (threshold logic u"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 感知机与多层网络</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 1351 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>感知机与多层网络</p>
+
+<p>感知机 (Perceptron) 由两层神经元组成，如图 5.3 所示，输入层接收外界输入信号后传递给输出层，输出层是 M-P神经元，亦称 “阈值逻辑单元” (threshold logic unit)。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/HH2jbcD06F.png?imageslim" alt="mark" /></p>
+
+<p>感知机能容易地实现逻辑与、或、非运算.注意到 $y=f(\sum_i w_ix_i-\theta)$ ，假定 f 是图5.2中的阶跃函数，有</p>
+
+<ul>
+<li>“与”($x_1\wedge x_2$): 令 $w_1=w_2=1$，$\theta=2$ ，则 $y=f(1\cdot x_1+1\cdot x_2 -2)$ ,仅在 $x_1=x_2=1$ 时，$y=1$ 。</li>
+<li>“或”($x_1\vee x_2$): 令 $w_1=w_2=1$，$\theta=0.5$ ，则 $y=f(1\cdot x_1+1\cdot x_2 -0.5)$ ,当 $x_1=1$ 或 $x_2=1$ 时，$y=1$ 。</li>
+<li>“非”($\neg x_1$): 令 $w_1=-0.6$，$w_2=0$，$\theta=-0.5$ ，则 $y=f(-0.6\cdot x_1+0\cdot x_2 +0.5)$ ,当 $x_1=1$ 时，y=0；当 x_1=0 时，$y=1$ 。</li>
+</ul>
+
+<p>更一般地，给定训练数据集，权重购 $w<em>i(i=1,2,\cdots ,n)$ 以及阈值 $\theta$  可通过学习得到.阈值 $\theta$ 可看作一个固定输入为-1.0的 “哑结点”(dummy node)，所对应的连接权重 $w</em>{n+1}$ 这样，权重和阈值的学习就可统一为权重的学习。感知机学习规则非常简单，对训练样例 (x,y)，若当前感知机的输出为 $\hat{y}$ 则感知机权重将这样调整：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/fBBA41Fe96.png?imageslim" alt="mark" /></p>
+
+<p>其中 $\eta$ 称为学习率(learning rate)。从式(5.1)可看出，若感知机对训练 样例(x,y)预测正确，即 $\hat{y}=y$，则感知机不发生变化，否则将根据错误的程度进行权重调整。</p>
+
+<p>需注意的是，感知机只有输出层神经元进行激活函数处理，即只拥有一层功能神经元(functional neuron)，其学习能力非常有限。事实上，上述与、或、 非问题都是线性可分(linearly separable)的问题.可以证明[Minsky and Papert, 1969],若两类模式是线性可分的，即存在一个线性超平面能将它们分开，如图 5.4(a)-&copy;所示，则感知机的学习过程一定会收敛(converge)而求得适当的权向量 $\mathbb{w} = (w_1;w<em>2;\cdots;w</em>{n+1})$；否则感知机学习过程将会发生振荡(fluctuation)，$\mathbb{w}$ 难以稳定下来，不能求得合适解，例如感知机甚至不能解决如图5.4(d)所示的异或这样简单的非线性可分问题。<span style="color:red;">嗯</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/EdKdbB6djE.png?imageslim" alt="mark" /></p>
+
+<p>要解决非线性可分问题，需考虑使用多层功能神经元.例如图5.5中这个简单的两层感知机就能解决异或问题.在图5.5(a)中，输出层与输入层之间的一 层神经元，被称为隐层或隐含层(hidden layer),隐含层和输出层神经元都是拥有激活函数的功能神经元.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/11b2382672.png?imageslim" alt="mark" /></p>
+
+<p>更一般的，常见的神经网络是形如图5.6所示的层级结构，每层神经元与下一层神经元全互连，神经元之间不存在同层连接，也不存在跨层连接。<span style="color:red;">为什么要不存在跨层连接？</span>这样的神经网络结构通常称为“多层前馈神经网络”(multi-layer feedforward neural networks),其中输入层神经元接收外界输入，隐层与输出层神经元对信号进行 加工，最终结果由输出层神经元输出；换言之，输入层神经元仅是接受输入，不进行函数处理，隐层与输出层包含功能神经元.因此，图5.6(a)通常被称为“两层网络”.为避免歧义，本书称其为“单隐层网络”。只需包含隐层，即可称为多层网络。神经网络的学习过程，就是根据训练数据来调整神经元之间的 “连接权”(connection weight)以及每个功能神经元的阈值；换言之，神经网络“学”到的东西，蕴涵在连接权与阈值中。<span style="color:red;">嗯</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/4GG4c1ibLE.png?imageslim" alt="mark" /></p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/00-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">00 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/01-%E7%A5%9E%E7%BB%8F%E5%85%83%E6%A8%A1%E5%9E%8B/">
+            <span class="next-text nav-default">01 神经元模型</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

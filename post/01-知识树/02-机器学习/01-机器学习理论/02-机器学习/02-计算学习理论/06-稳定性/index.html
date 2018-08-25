@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 稳定性 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="稳定性 TODO 这一章也没有整理 12.6稳定性 无论是基于VC维还是Rademacher复杂度来推导泛化误差界，所得到的 结果均与具体学习算法无关，对所" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E8%AE%A1%E7%AE%97%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E7%A8%B3%E5%AE%9A%E6%80%A7/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 稳定性" />
+<meta property="og:description" content="稳定性 TODO 这一章也没有整理 12.6稳定性 无论是基于VC维还是Rademacher复杂度来推导泛化误差界，所得到的 结果均与具体学习算法无关，对所" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E8%AE%A1%E7%AE%97%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E7%A8%B3%E5%AE%9A%E6%80%A7/" /><meta property="article:published_time" content="2018-07-30T11:04:41&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-30T11:04:41&#43;00:00"/>
+<meta itemprop="name" content="06 稳定性">
+<meta itemprop="description" content="稳定性 TODO 这一章也没有整理 12.6稳定性 无论是基于VC维还是Rademacher复杂度来推导泛化误差界，所得到的 结果均与具体学习算法无关，对所">
+
+
+<meta itemprop="datePublished" content="2018-07-30T11:04:41&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-30T11:04:41&#43;00:00" />
+<meta itemprop="wordCount" content="2665">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 稳定性"/>
+<meta name="twitter:description" content="稳定性 TODO 这一章也没有整理 12.6稳定性 无论是基于VC维还是Rademacher复杂度来推导泛化误差界，所得到的 结果均与具体学习算法无关，对所"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 稳定性</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-30 </span>
+        
+        <span class="more-meta"> 2665 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#稳定性">稳定性</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="稳定性">稳定性</h1>
+
+<p>TODO</p>
+
+<ul>
+<li>这一章也没有整理</li>
+</ul>
+
+<p>12.6稳定性
+无论是基于VC维还是Rademacher复杂度来推导泛化误差界，所得到的 结果均与具体学习算法无关，对所有学习算法都适用.这使得人们能够脱离具 体学习算法的设计来考虑学习问题本身的性质，但在另一方面，若希望获得与 算法有关的分析结果，则需另辟蹊径.稳定性舛ability?&lsquo;分析是这方面一个值 得关注的方向.</p>
+
+<p>顾名思义，算法的“稳定性”考察的是算法在输入发生变化时，输出是否 会随之发生较大的变化.学习算法的输入是训练集，因此下面我们先定义训练 集的两种变化.</p>
+
+<p>给定 1? = {勿=(3?1，yi)jZ2 — (®2,<sup>1</sup>&frasl;<sub>2</sub>)3 • • • 3 = (®m，Vrri} }，是来 自分布P的独立同分布示例，讲={-1，+1}.对假设空间H.. X 4 {-1，+1} 和学习算法私令e W表示基于训练集D从假设空间丸中学得的假设.考 虑P的以下变化：</p>
+
+<p>•    表示移除2?中第S个样例得到的集合</p>
+
+<p>= ｛zlj 之2, • • •，之i—1，^i+1? • . •，zm｝，
+•    表示替换D中第i个样例得到的集合</p>
+
+<p>= ｛之1，之2，• • •，之i—1，：i，么i+1，• • •，之饥｝，
+其中= (x^y^x,服从分布P并独立于</p>
+
+<p>损失函数奴Ao(a:)，2/) : J x    R+刻画了假设Up的预测标记£d(x)与
+真实标记2/之间的差别，简记为^D,z).下面定义关于假设£d的几种损失.</p>
+
+<p>•泛化损失</p>
+
+<p>= ^,Z=(X,y)    .    (12.54)</p>
+
+<p>•经验损失</p>
+
+<p>1 m</p>
+
+<p>?(£, D)=丄 V €(£p,zn .    (12.55)
+m i=l</p>
+
+<p>•留一 (leave-one - out)损失
+-m
+^ioo(^)D) = : —〉:    Zi) .    (12.56)</p>
+
+<p>m i=i</p>
+
+<p>下面定义算法的均匀稳定性(uniform stability):
+定义12.10对任何《 G z =    若学习算法£满足</p>
+
+<p>|€(£n,z)-€(£nV,z)| i =    (12.57)
+则称£关于损失函数€满足糸均匀稳定性.</p>
+
+<p>显然，若算法H关于损失函数€满足失均匀稳定性，则有</p>
+
+<p>5 z) I
+|^(Ad，z) — ^(^dV)| +    —</p>
+
+<p>d
+也就是说,移除示例的稳定性包含替换示例的稳定性.</p>
+
+<p>若损失函数€有界，即对所有D和z = (% 2/)有0彡则有 [Bousquet and Elisseeff, 2002]:
+证明过程参阅[Bous-quet and Elisseeff, 2002].</p>
+
+<p>定理12.8给定从分布P上独立同分布采样得到的大小为m的示例集 D,若学习算法I!满足关于损失函数彳的/3-均匀稳定性，且损失函数彳的上界 为M，0 &lt; 5 &lt; 1,则对任意m &gt; 1，以至少1 一 J的概率有</p>
+
+<p>P) + 2&rdquo; + (4m々 + M)    ,</p>
+
+<p>€(£,!?)&lt; ^oo(£, P)+/3+. (4m/3 + M)    .</p>
+
+<p>(12.58)</p>
+
+<p>(12.59)
+定理12.8给出了基于稳定性分析推导出的学习算法£学得假设的泛化误 差界.从式(12.58)可看出，经验损失与泛化损失之间差别的收敛率为若 13 = 0(^),则可保证收敛率为0(+).与定理12.3和定理12.6比较可知，这 与基于VC维和Rademacher复杂度得到的收敛率一致.</p>
+
+<p>需注意，学习算法的稳定性分析所关注的是而假设空 间复杂度分析所关注的是supkw |宏㈨-五(叫；也就是说,稳定性分析不必考 虑假设空间中所有可能的假设，只需根据算法自身的特性(稳定性)来讨论输出 假设2d的泛化误差界.那么，稳定性与可学习性之间有什么关系呢？</p>
+
+<p>首先，必须假设口扣4 0,这样才能保证稳定的学习算法£具有一定的泛 化能力，即经验损失收敛于泛化损失，否则可学习性无从谈起.为便于计算，我 们假定冷=去，代入式(12.58)可得</p>
+
+<p>，(二 P) &lt; P) + $ + (4 + M)    .    (12.60)
+最小化经验&rsquo;误差和最小 化经验损失有时并不相同, 这是由于存在某些病态的 损失函数€使得最小化经 驗损失并不是最小化经验 误差.为简化讨论,本章假 定最小化经验损失的同时 会最小化经骚误差.</p>
+
+<p>对损失函数若学习算法公所输出的假设满足经验损失最小化,则称算法 £满足经验风险最小化(Empirical Risk Minimization)原贝U，简称算法是ERM 的.关于学习算法的稳定性和可学习性,有如下定理：</p>
+
+<p>定理12.9若学习算法公是ERM且稳定的，则假设空间并可学习.</p>
+
+<p>证明令g表示并中具有最小泛化损失的假设，即</p>
+
+<p>€(仏 P) = min£(/i，P).</p>
+
+<p>再令</p>
+
+<p>t e e = 2 5</p>
+
+<p>丢= 2exp(-2爪(e’)2),</p>
+
+<p>由Hoe迁ding不等式(I2.6)可知，当m &gt; . In誉时，</p>
+
+<p>以至少1 ~ 5/2的概率成立.令式(12.60)中</p>
+
+<p>| +(4 + M)^M2/5)-e</p>
+
+<p>2m</p>
+
+<p>解得饥=(9(去In!)使</p>
+
+<p>€(£5P)^€(£,D) + |</p>
+
+<p>以至少1 - d/2的概率成立.从而可得</p>
+
+<p>£(£, P) — £(g, T&gt;)    €(£, B) + - — (€(仏 D)—-</p>
+
+<p>£(£, D) — €(^, I?) + e 彡e</p>
+
+<p>以至少1 - d的概率成立.定理12.9得证.</p>
+
+<p>对上面这个定理读者也许会纳闷，为什么学习算法的稳定性能导出假设空 间的可学习性？学习算法和假设空间是两码事呀.事实上，要注意到稳定性与 假设空间并非无关，由稳定性的定义可知两者通过损失函数彳联系起来.</p>
+
+<hr />
+
+<p>下面都是补充阅读</p>
+
+<p>[Valiant, 1984]提出PAC学习，由此产生了 “计算学习理论”这个机器学 习的分支领域.[Kearns and Vazirani, 1994]是一本很好的入门教材.该领域最</p>
+
+<p>重要的学术会议是国际计算学习理论会议(COLT).</p>
+
+<p>VC维的名字就来自两 位作者的姓氏缩写.</p>
+
+<p>VC维由［Vapnik and Chervonenkis, 1971］提出，它的出现使研究无限假 设空间的复杂度成为可能.Sauer引理由于［Sauer, 1972］而命名，但［Vapnik and Chervonenkis, 1971］和［Shelah, 1972］也分别独立地推导出了该结果.本 章主要讨论了二分类问题，对多分类问题，可将VC维扩展为Natamjan维 ［Natarajan, 1989; Ben-David et al., 1995］.</p>
+
+<p>Rademacher 复杂度最早被［Koltchinskii and Panchenko, 2000］引入机器 学习，由［Bartlett and Mendelson，2003］而受至!j重视.［Bartlett et al., 2002］提 出了局部Rademacher复杂度,对噪声数据可推导出更紧的泛化误差界.</p>
+
+<p>机器学习算法稳定性分析方面的研究始于［Bousquet and Elissee迁，2002］ 的工作，此后很多学者对稳定性与可学习性之间的关系进行了讨论，［Mukherjee et al.，2006］和［Shalev-Shwartz et al.? 2010］证明了 ERM 稳定性与 ERM 可学 习性之间的等价关系;但并非所有学习算法都是ERM的，因此［Shalev-Shwartz et al., 2010］进一步研究了 AERM (Asymptotical Empirical Risk Minimization) 稳定性与可学习性之间的关系.</p>
+
+<p>本章介绍的内容都是关于确定性(deterministic)学习问题，即对于每个示 例®都有一个确定的标记y与之对应;大多数监督学习都属于确定性学习问题. 但还有一种随机性(stochastic)学习问题，其中示例的标记可认为是属性的后 验概率函数，而不再是简单确定地属于某一类.随机性学习问题的泛化误差界 分析可参见［Devroye et al., 1996］.</p>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-30</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%A6%82%E5%BF%B5%E4%B8%8E%E6%9C%AF%E8%AF%AD/05-%E8%BF%87%E6%8B%9F%E5%90%88%E4%B8%8E%E6%AC%A0%E6%8B%9F%E5%90%88/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 过拟合与欠拟合</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E8%AE%A1%E7%AE%97%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/05-rademacher%E5%A4%8D%E6%9D%82%E5%BA%A6/">
+            <span class="next-text nav-default">05 Rademacher复杂度</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

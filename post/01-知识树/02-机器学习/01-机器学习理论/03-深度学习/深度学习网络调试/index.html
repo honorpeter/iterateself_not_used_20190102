@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>深度学习网络调试 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="深度学习网络调试 TODO 还没有总结完 这个的确是要总结下的，是经验，要好好总结 都说深度学习调参像炼丹一样，没怎么调过，先总结一些看到的。后续实践之后" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%B0%83%E8%AF%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="深度学习网络调试" />
+<meta property="og:description" content="深度学习网络调试 TODO 还没有总结完 这个的确是要总结下的，是经验，要好好总结 都说深度学习调参像炼丹一样，没怎么调过，先总结一些看到的。后续实践之后" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%B0%83%E8%AF%95/" /><meta property="article:published_time" content="2018-08-12T20:28:02&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:28:02&#43;00:00"/>
+<meta itemprop="name" content="深度学习网络调试">
+<meta itemprop="description" content="深度学习网络调试 TODO 还没有总结完 这个的确是要总结下的，是经验，要好好总结 都说深度学习调参像炼丹一样，没怎么调过，先总结一些看到的。后续实践之后">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:28:02&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:28:02&#43;00:00" />
+<meta itemprop="wordCount" content="1428">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="深度学习网络调试"/>
+<meta name="twitter:description" content="深度学习网络调试 TODO 还没有总结完 这个的确是要总结下的，是经验，要好好总结 都说深度学习调参像炼丹一样，没怎么调过，先总结一些看到的。后续实践之后"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">深度学习网络调试</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1428 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#深度学习网络调试">深度学习网络调试</a></li>
+<li><a href="#为什么神经网络的代码难调">为什么神经网络的代码难调？</a></li>
+<li><a href="#遇到-nan-怎么办">遇到 Nan 怎么办？</a></li>
+<li><a href="#神经网络学不出东西怎么办">神经网络学不出东西怎么办？</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="深度学习网络调试">深度学习网络调试</h1>
+
+<p>TODO</p>
+
+<ul>
+<li><strong>还没有总结完 这个的确是要总结下的，是经验，要好好总结</strong></li>
+</ul>
+
+<p>都说深度学习调参像炼丹一样，没怎么调过，先总结一些看到的。后续实践之后进行迭代更新。</p>
+
+<h1 id="为什么神经网络的代码难调">为什么神经网络的代码难调？</h1>
+
+<p>神经网络的代码，比一般的代码要难调试不少，和编译错误以及运行时程序崩溃相比，神经网络比较棘手的地方，往往在于程序运行正常，但是结果无法收敛，这个检查起来可要麻烦多了。</p>
+
+<p>下面是一些通用的调试技巧，而不同的框架也有不同的技巧。<strong>也要总结下。如Tensorflow和Caffe等。</strong></p>
+
+<h1 id="遇到-nan-怎么办">遇到 Nan 怎么办？</h1>
+
+<p>Nan问题，我相信大部分人都遇到过，一般可能是下面几个原因造成的：</p>
+
+<ol>
+<li>除0问题。这里实际上有两种可能，一种是被除数的值是无穷大，即Nan，另一种就是除数的值是0。之前产生的Nan或者0，有可能会被传递下去，造成后面都是Nan。请先检查一下神经网络中有可能会有除法的地方，例如softmax层，再认真的检查一下数据。我有一次帮别人调试代码，甚至还遇到过，训练数据文件中，有些值就是Nan。。。这样读进来以后，开始训练，只要遇到Nan的数据，后面也就Nan了。可以尝试加一些日志，把神经网络的中间结果输出出来，看看哪一步开始出现Nan。<strong>被除数的值是无穷大，也会是Nan吗？</strong></li>
+<li>梯度过大，造成更新后的值为Nan。特别是RNN，在序列比较长的时候，很容易出现梯度爆炸的问题。一般有以下几个解决办法。
+
+<ol>
+<li>对梯度做clip(梯度裁剪），限制最大梯度,其实是 value = sqrt(w1^2+w2^2….),如果value超过了阈值,就算一个衰减系系数,让value的值等于阈值: 5,10,15。</li>
+<li>减少学习率。初始学习率过大，也有可能造成这个问题。需要注意的是，即使使用adam之类的自适应学习率算法进行训练，也有可能遇到学习率过大问题，而这类算法，一般也有一个学习率的超参，可以把这个参数改的小一些。</li>
+</ol></li>
+</ol>
+
+<p>初始参数值过大，也有可能出现Nan问题。输入和输出的值，最好也做一下归一化。具体方法可以参考我之前的一篇文章：<a href="http://zhuanlan.zhihu.com/p/20767428">深度学习个人炼丹心得 - 炼丹实验室 - 知乎专栏</a></p>
+
+<h1 id="神经网络学不出东西怎么办">神经网络学不出东西怎么办？</h1>
+
+<p>可能我们并没有遇到，或者解决了Nan等问题，网络一直在正常的训练，但是cost降不下来，预测的时候，结果不正常。</p>
+
+<ol>
+<li><p>请打印出训练集的cost值和测试集上cost值的变化趋势，正常情况应该是训练集的cost值不断下降，最后趋于平缓，或者小范围震荡，测试集的cost值先下降，然后开始震荡或者慢慢上升。如果训练集cost值不下降，有可能是代码有bug，有可能是数据有问题（本身有问题，数据处理有问题等等），有可能是超参（网络大小，层数，学习率等）设置的不合理。</p></li>
+
+<li><p>请人工构造10条数据，用神经网络反复训练，看看cost是否下降，如果还不下降，那么可能网络的代码有bug，需要认真检查了。如果cost值下降，在这10条数据上做预测，看看结果是不是符合预期。那么很大可能网络本身是正常的。那么可以试着检查一下超参和数据是不是有问题。</p></li>
+
+<li><p>如果神经网络代码，全部是自己实现的，那么强烈建议做梯度检查。确保梯度计算没有错误。</p></li>
+
+<li><p>先从最简单的网络开始实验，不要仅仅看cost值，还要看一看神经网络的预测输出是什么样子，确保能跑出预期结果。例如做语言模型实验的时候，先用一层RNN，如果一层RNN正常，再尝试LSTM，再进一步尝试多层LSTM。</p></li>
+
+<li><p>如果可能的话，可以输入一条指定数据，然后自己计算出每一步正确的输出结果，再检查一下神经网络每一步的结果，是不是一样的。</p></li>
+</ol>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/20792837">深度学习网络调试技巧</a></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83%E6%97%B6%E5%80%99%E7%9A%84%E6%BA%A2%E5%87%BA%E9%97%AE%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">网络训练时候的溢出问题</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%B0%83%E5%8F%82/">
+            <span class="next-text nav-default">深度学习网络调参</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

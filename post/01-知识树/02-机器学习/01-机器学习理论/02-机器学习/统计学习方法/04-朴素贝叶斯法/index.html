@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 朴素贝叶斯法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第4章朴素贝叶斯法 朴素贝叶斯(naiveBayes)法是基于贝叶斯定理与特征条件独立假设的分类 方法®.对于给定的训练数据集，首先基于特征条件" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/04-%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 朴素贝叶斯法" />
+<meta property="og:description" content="第4章朴素贝叶斯法 朴素贝叶斯(naiveBayes)法是基于贝叶斯定理与特征条件独立假设的分类 方法®.对于给定的训练数据集，首先基于特征条件" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/04-%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E6%B3%95/" /><meta property="article:published_time" content="2018-08-21T17:48:45&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T17:48:45&#43;00:00"/>
+<meta itemprop="name" content="04 朴素贝叶斯法">
+<meta itemprop="description" content="第4章朴素贝叶斯法 朴素贝叶斯(naiveBayes)法是基于贝叶斯定理与特征条件独立假设的分类 方法®.对于给定的训练数据集，首先基于特征条件">
+
+
+<meta itemprop="datePublished" content="2018-08-21T17:48:45&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T17:48:45&#43;00:00" />
+<meta itemprop="wordCount" content="3269">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 朴素贝叶斯法"/>
+<meta name="twitter:description" content="第4章朴素贝叶斯法 朴素贝叶斯(naiveBayes)法是基于贝叶斯定理与特征条件独立假设的分类 方法®.对于给定的训练数据集，首先基于特征条件"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 朴素贝叶斯法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 3269 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#第4章朴素贝叶斯法">第4章朴素贝叶斯法</a>
+<ul>
+<li><a href="#4-1朴素贝叶斯法的学习与分类">4.1朴素贝叶斯法的学习与分类</a></li>
+<li><a href="#4-2朴素贝叶斯法的参数估计-4-2-1极大似然估计">4.2朴素贝叶斯法的参数估计 4.2.1极大似然估计</a></li>
+<li><a href="#本章概要">本章概要</a></li>
+<li><a href="#继续阅读">继续阅读</a></li>
+<li><a href="#习-题">习 题</a></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h5 id="第4章朴素贝叶斯法">第4章朴素贝叶斯法</h5>
+
+<p>朴素贝叶斯(naiveBayes)法是基于贝叶斯定理与特征条件独立假设的分类 方法®.对于给定的训练数据集，首先基于特征条件独立假设学习输入/输出的联合 概率分布；然后基于此模型，对给定的输入;c,利用贝叶斯定理求出后验概率最大 的输出y .朴素贝叶斯法实现简单，学习与预测的效率都很髙，是一种常用的方法.</p>
+
+<p>本章叙述朴素贝叶斯法，包括朴素贝叶斯法的学习与分类、朴素贝叶斯法的 参数估计算法.</p>
+
+<h6 id="4-1朴素贝叶斯法的学习与分类">4.1朴素贝叶斯法的学习与分类</h6>
+
+<p>4.1.1基本方法</p>
+
+<p>设输入空间YeR”为n维向量的集合，输出空间为类标记集合3? = {Cl， c2&gt;&lsquo;&ldquo;&gt;ck}-输入为特征向量工e/V，输出为类标记(class label) ye y. X是定义 在输入空间;v上的随机向量，r是定义在输出空间;y上的随机变量.pcr，y)是 z和r的联合概率分布.训练数据集</p>
+
+<p>T =xx,yl),(x2,y1},&ndash;i{xN,yN)}</p>
+
+<p>由独立同分布产生.</p>
+
+<p>朴素贝叶斯法通过训练数据集学习联合概率分布p(A\y).具体地，学习以 下先验概率分布及条件概率分布.先验概率分布</p>
+
+<p>p(r = CJ，k = \,2,-,K    (4.1)</p>
+
+<p>条件概率分布</p>
+
+<p>P(X = x\Y = ct) = P(XW = xm，&ndash;,Xw =    \Y = ck), Jfc = l，2,…，尤(4.2)</p>
+
+<p>于是学习到联合概率分布P(X,Y).</p>
+
+<p>条件概率分布= = 有指数级数量的参数，其估计实际是不可行 的.事实上，假设xw)可取值有久个，J = l，2,7可取值有尺个，那么参数 个数为尺</p>
+
+<p>&gt;=&gt;</p>
+
+<p>朴素贝叶斯法对条件概率分布作了条件独立性的假设.由于这是一个较强的 假设，朴素贝叶斯法也由此得名.具体地，条件独立性假设是</p>
+
+<p>P(X = XI y = cj = P(Xm = xm，- &ndash;,Xw=xw\Y = ck)</p>
+
+<p>==xw |y = cj    (4.3)</p>
+
+<p>朴素贝叶斯法实际上学习到生成数据的机制，所以属于生成模型.条件独立 假设等于是说用于分类的特征在类确定的条件下都是条件独立的.这一假设使朴 素贝叶斯法变得简单，但有时会牺牲~定的分类准确率.</p>
+
+<p>朴素贝叶斯法分类时，对给定的输入a通过学习到的模型计算后验概率分 布P(r = c*|X = ;c)，将后验概率最大的类作为的类输出.后验概率计算根据贝 叶斯定理进行：</p>
+
+<p>P(Y — ck\X = x) =</p>
+
+<p>/&gt;Cv=xiy=c*)p(y=4)</p>
+
+<p>(4.4)</p>
+
+<p>^kP(X=x\Y = ck}P{Y = Ck)</p>
+
+<p>将式(4.3)代入式(4.4)有</p>
+
+<p>尸(F = Q)n P(Xw=xw) \Y = ck)</p>
+
+<p>P(r = q | 义=x) =    = c，)n，(於＞ =沪,r = cJ，k = l,2,-,K (4.5)</p>
+
+<p>这是朴素贝叶斯法分类的基本公式.于是，朴素贝叶斯分类器可表示为 &ldquo;、    P(Y = ^Y[.P(X^ =xw)|K = Ci)</p>
+
+<p>(4.6)</p>
+
+<p>注意到，在式(4.6)中分母对所有q都是相同的，所以，</p>
+
+<p>y = argnuxP(r = ct)JJyP(X(7) =x0) |K = c*)    (4.7)</p>
+
+<p>4.1.2后验概率最大化的含义</p>
+
+<p>朴素贝叶斯法将实例分到后验概率最大的类中.这等价于期望风险最小化.假 设选择0-1损失函数：</p>
+
+<p>z(y,/W)=</p>
+
+<p>1，</p>
+
+<p>0，Y = f(X)</p>
+
+<p>式中/(AT)是分类决策函数.这时，期望风险函数为</p>
+
+<p>期望是对联合分布p(;r，y)取的.由此取条件期望</p>
+
+<p>^cxp(/)= ^E[i(Ct,/(X))]P(Ci|X)</p>
+
+<p>*«=1</p>
+
+<p>为了使期望风险最小化，只需对AT = 逐个极小化，由此得到:</p>
+
+<p>/(x) = aisro3n^L(ct,y)P(_ct\X = x)</p>
+
+<p>K</p>
+
+<p>=argmingP^ ^ck\X = x)</p>
+
+<p>=argmin(l-P(j = ct]X=x)) =argm^tP(j = ck\X = x)</p>
+
+<p>这样一来，根据期望风险最小化准则就得到了后验概率最大化准则:</p>
+
+<p>/(x) = arg max P(ck \ X = x)</p>
+
+<p>«*</p>
+
+<p>即朴素贝叶斯法所采用的原理.</p>
+
+<h6 id="4-2朴素贝叶斯法的参数估计-4-2-1极大似然估计">4.2朴素贝叶斯法的参数估计 4.2.1极大似然估计</h6>
+
+<p>在朴素贝叶斯法中，学习意味着估计p(r=c<em>)和p(jv(/)=xw|r=c</em>).可以 应用极大似然估计法估计相应的概率.先验概率p(r=cj的极大似然估计是</p>
+
+<p>N</p>
+
+<p>£/(&gt;,= C*)</p>
+
+<p>P(Y = ck) = ^—^—, k = l,2,-,K    (4.8)</p>
+
+<p>设第J个特征x(力可能取值的集合为｛a/1，cr&rsquo;2,…，％ ｝，条件概率P(义⑺=a7；|y = ct) 的极大似然估计是</p>
+
+<p>N</p>
+
+<p>P(妙)=^(y=Ci)=-</p>
+
+<p>X/(V/=c*)</p>
+
+<p>j=i</p>
+
+<p>_/ = 1，2,/ = 1，2,…，Sy k = l,2,&ndash;,K    (4.9)</p>
+
+<p>式中，是第f个样本的第/个特征；心是第/个特征可能取的第/个值：/为 指示函数.</p>
+
+<p>4.2.2学习与分类算法</p>
+
+<p>下面给出朴素贝叶斯法的学习与分类算法.</p>
+
+<p>算法4.1 (朴素贝叶斯算法(naive Bayes algorithm))</p>
+
+<p>输入：训练数据7&rsquo; = {(巧，乃)，(々，八)，一，(〜必)}，其中*«&gt;，栌，一，垆)了， xf是第f个样本的第j•个特征，，％,••■，％}，士是第/•个特征可能取 的第/个值，/• = 1，2/..，《，1 = 1，2,…，Sj，yte {cltc2,&mdash;,cK}；实例x:</p>
+
+<p>输出：实例;c的分类.</p>
+
+<p>(1)    计算先验概率及条件概率</p>
+
+<p>N</p>
+
+<p>£/(y,=ct)</p>
+
+<p>p(y=Ct)=J=i———,走=1，2，.•，尺 N</p>
+
+<p>N</p>
+
+<p>£/(x(&lt;y)=oy„yj=c*)</p>
+
+<p>*=i</p>
+
+<p>7 = 1,2,l = l,2,&mdash;,Sj； k = l,2,&mdash;,K</p>
+
+<p>(2)    对于给定的实例计算</p>
+
+<p>P(r = cti[[P{X^ =^\Y = ct), k = 1,2,…，K</p>
+
+<p>7=1</p>
+
+<p>(3)    确定实例x的类</p>
+
+<p>y = argmax尸(K = cjt)JJP(X(y) =xw) |y = ct)    ■</p>
+
+<p>c,    j=i</p>
+
+<p>例4.1试由表4.1的训练数据学习一个朴素贝叶斯分类器并确定jc = (2,5)t 的类标记jv.表中Xm, Xm为特征，取值的集合分别为岣={1,2,3}.^= {S,M,L}, :T 为类标记，Ke C = {1,-1}.</p>
+
+<p>表4.1训练败据</p>
+
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>2</th>
+<th>3    4    5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td></td>
+<td>1</td>
+<td>1</td>
+<td>1 1 1</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>xm</td>
+<td>s</td>
+<td>M</td>
+<td>MSS</td>
+<td>S</td>
+<td>M</td>
+<td>M</td>
+<td>L</td>
+<td>L</td>
+<td>L</td>
+<td>M</td>
+<td>M</td>
+<td>L</td>
+<td>L</td>
+</tr>
+
+<tr>
+<td>Y</td>
+<td>-1</td>
+<td>-1</td>
+<td>1 1 -1</td>
+<td>-1</td>
+<td>-1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-1</td>
+</tr>
+</tbody>
+</table>
+
+<p>解根据算法4.1，由表4.1，容易计算下列概率:</p>
+
+<p>p(y=i)=^, p(r=-i)=^</p>
+
+<p>p(x(1)=i|y=i)=^, p(x(1)=2|y=i)=^, p(x0)=3|y=i)=^</p>
+
+<p>P{Xm =S\Y = )=^, P(Xm =M\Y = l) = ^, P(X(2)=£|y = l) = |</p>
+
+<p>091</p>
+
+<p>4.2.3贝叶斯估计</p>
+
+<p>用极大似然估计可能会出现所要估计的概率值为0的情况.这时会影响到后 验概率的计算结果，使分类产生偏差.解决这一问题的方法是采用贝叶斯估计.具 体地，条件概率的贝叶斯估计是</p>
+
+<p>N</p>
+
+<p>£/(jcy)=u,=c*)+A</p>
+
+<p>p人於、=a, |r=cj=-«=Hj- (4.io)</p>
+
+<p>1=1</p>
+
+<p>式中A彡0 .等价于在随机变量各个取值的频数上赋予一个正数A&gt;0 .当A = 0时 就是极大似然估计.常取2 = 1，这时称为拉普拉斯平滑(Laplace smoothing).显 然，对任何/ = 1，2,…，Sy, * = 1,2,…，尺，有</p>
+
+<p>Px(Xw=ay;|K = ct)&gt;0</p>
+
+<p>^P^=aj,\Y = ck) = l z=i</p>
+
+<p>表明式(4.10)确为一种概率分布.同样，先验概率的贝叶斯估计是 乂</p>
+
+<p>P^Y = c,) = ^-</p>
+
+<p>(4.11)</p>
+
+<p>例4.2问题同例4.1，按照拉普拉斯平滑估计概率，即取2 = 1.</p>
+
+<p>解 4 =0»2,3}» 為= {S，A/，Z}，C = {1,-1}.按照式(4.10)和式(4.11)计算下</p>
+
+<p>列概率：</p>
+
+<p>p(r=i)=畀，p(r=-i)=^</p>
+
+<p>p(zr(1)=i|7=i)=^,    p(jt(1)=2|k=i)=^,尸(jr(1)=3|y=i)=^|</p>
+
+<p>P{XW =S\Y = Y) = ~^, ,P(Xm =M\Y = X) = ^ , P(X(2)=£|K = 1) = ^ p(a■⑴=i|y=_i)=吾，p(x(1)=2|y=-i)=|, p(^(1)=3|y=-i)=| p(x(2)=s,|r=-i)=^, p(x(2) = a/|k=-i)=|, p(j：(2)=L|r=-i)=|</p>
+
+<p>对于给定的* = (2, S)T计算：</p>
+
+<p>p(y=i)p(x(l) =2|y=l)尸    =sir=i)=—=0.0327</p>
+
+<p>v    1    17 12 12 153</p>
+
+<p>P(Y = -1)P(X(1) =2|K = -1)P(X(2) =S|y = -l) = -^-.|.^ = -^ = 0.0610 *T= 21 y=-i)p(&gt;r(2) = 5( y=-1)所以    ■</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>0    0</p>
+
+<p><a href="#footnote2">2</a></p>
+
+<p>3x(1,+3x&lt;J)+l</p>
+
+<p>0    2x(n+2xm</p>
+
+<p>-1    xm+xm-l</p>
+
+<p>-2    -2</p>
+
+<p>-1    3x(,)+3xw-l</p>
+
+<p>-2    2xin + 2xm~2</p>
+
+<p>-3    x^+xm-3</p>
+
+<p>-3    W&gt;-3</p>
+
+<h6 id="本章概要">本章概要</h6>
+
+<p>\1.    朴素贝叶斯法是典型的生成学习方法.生成方法由训练数据学习联合概 率分布/&gt;cv，y),然后求得后验概率分布p(r|jr).具体来说，利用训练数据学习</p>
+
+<p>I /)和p(y)的估计，得到联合概率分布：</p>
+
+<p>p(^,y)=p(y)p(x|r)</p>
+
+<p>概率估计方法可以是极大似然估计或贝叶斯估计：</p>
+
+<p>\2.    朴素贝叶斯法的基本假设是条件独立性，</p>
+
+<p>P{X = x\Y = ck} = P{Xm =xm，■-,XW =xw\Y = ck)</p>
+
+<p>= nP(X0)=xw)|7 = ct)</p>
+
+<p>&lsquo;•=1</p>
+
+<p>这是一个较强的假设.由于这&ndash;假设，模型包含的条件概率的数量大为减少，朴 素贝叶斯法的学习与预测大为简化.因而朴素贝叶斯法髙效，且易于实现.其缺</p>
+
+<p>点是分类的性能不一定很髙.</p>
+
+<p>3.朴素贝叶斯法利用贝叶斯定理与学到的联合概率模型进行分类预测.</p>
+
+<p>P(y|X)=wn= wwji.</p>
+
+<p>p(x)</p>
+
+<p>r</p>
+
+<p>将输入分到后验概率最大的类y.</p>
+
+<p>y = argmaxP(y = c*)p[P(Ar/ =    | Y = ct)</p>
+
+<p>Ck »</p>
+
+<p>后验概率最大等价于0-1损失函数时的期望风险最小化.</p>
+
+<h6 id="继续阅读">继续阅读</h6>
+
+<p>朴素贝叶斯法的介绍可见文献[1，2].朴素贝叶斯法中假设输入变量都是条件 独立的，如果假设它们之间存在概率依存关系，模型就变成了贝叶斯网络，参见 文献[3].</p>
+
+<h6 id="习-题">习 题</h6>
+
+<p>4.1用极大似然估计法推出朴素贝叶斯法中的概率估计公式(4.8)及公式(4.9). 4.2用贝叶斯估计法推出朴素贝叶斯法中的概率估计公式(4.10)及公式(4.11).</p>
+
+<h6 id="参考文献">参考文献</h6>
+
+<p>[1]    Mitchell TM. Chapter 1: Generative and discriminative classifiers: Naive Bayes and logistic regression.</p>
+
+<p>In: Machine Learning. Draft, 2005. <a href="http://www.cs.cmu.edu/~tom/mlbook/NBayeslogReg.pdf">http://www.cs.cmu.edu/~tom/mlbook/NBayeslogReg.pdf</a></p>
+
+<p>[2]    Hastie T, Tibshirani R, Friedman X The Elements of Statistical Learning. Data Mining, Inference, and Prediction. Springer-Verlag, 2001(中译本:统计学习基础——数据挖掘、推理与预测.范 明，柴玉梅，昝红英等译.北京：电子工业出版社，2004)</p>
+
+<p>[3】Bishop C. Pattern Recognition and Machine Learning, Springer, 2006</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/01-unix%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 Unix基础知识</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/01-%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%E6%A6%82%E8%AE%BA/">
+            <span class="next-text nav-default">01 统计学习方法概论</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

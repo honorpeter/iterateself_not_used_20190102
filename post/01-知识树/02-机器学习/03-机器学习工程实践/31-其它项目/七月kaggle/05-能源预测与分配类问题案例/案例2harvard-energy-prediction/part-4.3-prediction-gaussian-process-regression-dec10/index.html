@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Part 4.3 Prediction-Gaussian Process Regression-DEC10 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="TODO 箱线图到底是怎么看的？ #4 Prediction Using Different Machine Learning Methods 这种方法在 sklearn 中是有的，之前好像没见过。 4.3 Gaussian Process Regression Although Gaussian Process Regression is not introduced in the class, it has received increased attention in the machine-learning community over the past decade. Rasmussen (1996) explores the idea" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-4.3-prediction-gaussian-process-regression-dec10/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Part 4.3 Prediction-Gaussian Process Regression-DEC10" />
+<meta property="og:description" content="TODO 箱线图到底是怎么看的？ #4 Prediction Using Different Machine Learning Methods 这种方法在 sklearn 中是有的，之前好像没见过。 4.3 Gaussian Process Regression Although Gaussian Process Regression is not introduced in the class, it has received increased attention in the machine-learning community over the past decade. Rasmussen (1996) explores the idea" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-4.3-prediction-gaussian-process-regression-dec10/" /><meta property="article:published_time" content="2018-07-26T08:18:50&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-26T08:18:50&#43;00:00"/>
+<meta itemprop="name" content="Part 4.3 Prediction-Gaussian Process Regression-DEC10">
+<meta itemprop="description" content="TODO 箱线图到底是怎么看的？ #4 Prediction Using Different Machine Learning Methods 这种方法在 sklearn 中是有的，之前好像没见过。 4.3 Gaussian Process Regression Although Gaussian Process Regression is not introduced in the class, it has received increased attention in the machine-learning community over the past decade. Rasmussen (1996) explores the idea">
+
+
+<meta itemprop="datePublished" content="2018-07-26T08:18:50&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-26T08:18:50&#43;00:00" />
+<meta itemprop="wordCount" content="3433">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Part 4.3 Prediction-Gaussian Process Regression-DEC10"/>
+<meta name="twitter:description" content="TODO 箱线图到底是怎么看的？ #4 Prediction Using Different Machine Learning Methods 这种方法在 sklearn 中是有的，之前好像没见过。 4.3 Gaussian Process Regression Although Gaussian Process Regression is not introduced in the class, it has received increased attention in the machine-learning community over the past decade. Rasmussen (1996) explores the idea"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Part 4.3 Prediction-Gaussian Process Regression-DEC10</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-26 </span>
+        
+        <span class="more-meta"> 3433 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#4-3-gaussian-process-regression">4.3 Gaussian Process Regression</a>
+<ul>
+<li><a href="#daily-prediction">Daily Prediction:</a></li>
+<li><a href="#daily-electricity">Daily Electricity</a></li>
+<li><a href="#daily-chilled-water">Daily Chilled Water</a>
+<ul>
+<li><a href="#add-one-more-feature-prediction-of-electricity">Add One More Feature: Prediction of Electricity</a></li>
+</ul></li>
+<li><a href="#daily-steam">Daily Steam</a></li>
+</ul></li>
+<li><a href="#hourly-prediction">Hourly Prediction</a>
+<ul>
+<li><a href="#hourly-electricity">Hourly Electricity</a>
+<ul>
+<li><a href="#train-and-test-for-all-hourly-data">Train and Test for all hourly data</a></li>
+</ul></li>
+<li><a href="#hourly-chilled-water">Hourly Chilled Water</a>
+<ul>
+<li><a href="#train-and-test-all-hourly-data">Train and test all hourly data</a></li>
+</ul></li>
+<li><a href="#hourly-steam">Hourly Steam</a>
+<ul>
+<li><a href="#try-train-and-test-all-hourly-steam">Try train and test all hourly steam</a></li>
+</ul></li>
+<li><a href="#summary">Summary</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>TODO</p>
+
+<ul>
+<li>箱线图到底是怎么看的？</li>
+</ul>
+
+<p>#4 Prediction Using Different Machine Learning Methods</p>
+
+<p>这种方法在 sklearn 中是有的，<span style="color:red;">之前好像没见过。</span></p>
+
+<h2 id="4-3-gaussian-process-regression">4.3 Gaussian Process Regression</h2>
+
+<p>Although Gaussian Process Regression is not introduced in the class, it has received increased attention in the machine-learning community over the past decade. Rasmussen (1996) explores the idea of replacing supervised Neural Networks with Gaussian Processes, while making a thorough comparison with other methods, including Neural Networks. Rasmussen finds that Gaussian Processes consistently outperform conventional Neural Networks, Nearest Neighbor models, and Multivariate Adaptive Regression Splines. Apart from a high level of prediction accuracy, Gaussian Processes are also relatively simple to implement and use. They are useful statistical modeling tools for automated tasks, not least because the outcomes of Gaussian Process regression come in the form of probability distributions, which take uncertainty in the modeling process into account.</p>
+
+<p>In a Gaussian Process regression, <b>inputs that are judged to be close to each other as a result of the covariance function are likely to have similar outputs. A prediction is made by considering the covariance between the predictive case and all the training cases </b> (Rasmussen, 1996).</p>
+
+<p>For more details, please refer to
+<a href="http://www.gaussianprocess.org/gpml/">http://www.gaussianprocess.org/gpml/</a></p>
+
+<p>There is a <a href="http://www.gaussianprocess.org/gpml/code/matlab/doc/">matlab package</a> to implement Gaussian Processes which seems to be quite reliable.  In this project, I use <a href = "http://scikit-learn.org/stable/modules/gaussian_process.html"> Sklearn </a> for the prediction.</p>
+
+<p>Reference:
+Rasmussen, C.E. 1996. Evaluation of Gaussian Processes and other methods for non-linear regression. PhD Thesis, University of Toronto.</p>
+
+<pre><code class="language-python">%matplotlib inline
+
+import requests
+from StringIO import StringIO
+import numpy as np
+import pandas as pd # pandas
+import matplotlib.pyplot as plt # module for plotting
+import datetime as dt # module for manipulating dates and times
+import numpy.linalg as lin # module for performing linear algebra operations
+from __future__ import division
+import matplotlib
+
+import sklearn.decomposition
+import sklearn.metrics
+from sklearn import gaussian_process
+from sklearn import cross_validation
+
+pd.options.display.mpl_style = 'default'
+</code></pre>
+
+<blockquote>
+<p>Read in data from Data Preprocessing</p>
+</blockquote>
+
+<pre><code class="language-python"># Read in data from Preprocessing results
+
+hourlyElectricityWithFeatures = pd.read_excel('Data/hourlyElectricityWithFeatures.xlsx')
+hourlyChilledWaterWithFeatures = pd.read_excel('Data/hourlyChilledWaterWithFeatures.xlsx')
+hourlySteamWithFeatures = pd.read_excel('Data/hourlySteamWithFeatures.xlsx')
+
+dailyElectricityWithFeatures = pd.read_excel('Data/dailyElectricityWithFeatures.xlsx')
+dailyChilledWaterWithFeatures = pd.read_excel('Data/dailyChilledWaterWithFeatures.xlsx')
+dailySteamWithFeatures = pd.read_excel('Data/dailySteamWithFeatures.xlsx')
+
+# An example of Dataframe
+dailyChilledWaterWithFeatures.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>chilledWater-TonDays</th>
+<th>startDay</th>
+<th>endDay</th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+<th>occupancy</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>0.961857</td>
+<td>2012-01-01</td>
+<td>2012-01-02</td>
+<td>76.652174</td>
+<td>7.173913</td>
+<td>3.073913</td>
+<td>1004.956522</td>
+<td>95.260870</td>
+<td>236.086957</td>
+<td>4.118361</td>
+<td>0.004796</td>
+<td>0</td>
+<td>7.826087</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>0.981725</td>
+<td>2012-01-02</td>
+<td>2012-01-03</td>
+<td>55.958333</td>
+<td>5.833333</td>
+<td>-2.937500</td>
+<td>994.625000</td>
+<td>87.333333</td>
+<td>253.750000</td>
+<td>5.914357</td>
+<td>0.003415</td>
+<td>0</td>
+<td>9.166667</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>1.003672</td>
+<td>2012-01-03</td>
+<td>2012-01-04</td>
+<td>42.500000</td>
+<td>-3.208333</td>
+<td>-12.975000</td>
+<td>1002.125000</td>
+<td>95.708333</td>
+<td>302.916667</td>
+<td>6.250005</td>
+<td>0.001327</td>
+<td>0</td>
+<td>18.208333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>1.483192</td>
+<td>2012-01-04</td>
+<td>2012-01-05</td>
+<td>41.541667</td>
+<td>-7.083333</td>
+<td>-16.958333</td>
+<td>1008.250000</td>
+<td>98.750000</td>
+<td>286.666667</td>
+<td>5.127319</td>
+<td>0.000890</td>
+<td>0</td>
+<td>22.083333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>3.465091</td>
+<td>2012-01-05</td>
+<td>2012-01-06</td>
+<td>46.916667</td>
+<td>-0.583333</td>
+<td>-9.866667</td>
+<td>1002.041667</td>
+<td>90.750000</td>
+<td>258.333333</td>
+<td>5.162041</td>
+<td>0.001746</td>
+<td>0</td>
+<td>15.583333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+
+<p>Above is a sample of our data.</p>
+
+<h3 id="daily-prediction">Daily Prediction:</h3>
+
+<h3 id="daily-electricity">Daily Electricity</h3>
+
+<blockquote>
+<p>Get the training/validation and test set. The dataframe shows the features and the target.</p>
+</blockquote>
+
+<pre><code class="language-python">def addDailyTimeFeatures(df):
+    df['weekday'] = df.index.weekday
+    df['day'] = df.index.dayofyear
+    df['week'] = df.index.weekofyear
+    return df
+
+
+dailyElectricityWithFeatures = addDailyTimeFeatures(dailyElectricityWithFeatures)
+
+df = dailyElectricityWithFeatures[['weekday', 'day', 'week', 'occupancy', 'electricity-kWh']]
+#df.to_excel('Data/trainSet.xlsx')
+trainSet = df['2012-01':'2013-06']
+testSet_dailyElectricity = df['2013-07':'2014-10']
+
+#normalizer = np.max(trainSet)
+#trainSet = trainSet / normalizer
+#testSet = testSet / normalizer
+trainX_dailyElectricity = trainSet.values[:,0:-1]
+trainY_dailyElectricity = trainSet.values[:,4]
+
+testX_dailyElectricity = testSet_dailyElectricity.values[:,0:-1]
+testY_dailyElectricity = testSet_dailyElectricity.values[:,4]
+
+trainSet.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>weekday</th>
+<th>day</th>
+<th>week</th>
+<th>occupancy</th>
+<th>electricity-kWh</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.0</td>
+<td>2800.244977</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>0.3</td>
+<td>3168.974047</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+<td>0.3</td>
+<td>5194.533376</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+<td>0.3</td>
+<td>5354.861935</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+<td>0.3</td>
+<td>5496.223993</td>
+</tr>
+</tbody>
+</table>
+
+<p>Above are the features I used in prediction for daily electricity.</p>
+
+<blockquote>
+<p>Cross validation to get input parameters</p>
+</blockquote>
+
+<p>For Gaussian Processes, there are two sets of parameters to be trained. First is the theta, which are the hyperparameters in the covariance function. The second is nugget, which are the noises in the target y. In the <a href="http://www.gaussianprocess.org/gpml/code/matlab/doc/">matlab package</a>, these two sets of parameters are optimized/trained automatically. However, in the Sklearn package, you need to specify nugget. Fortunately, nugget does not affect prediction results that significantly. In both Sklearn and Matlab code package, one need to input an initial theta value. A bad value will result in local optimum. In  Matlab code package, the prediction results are not very sensitive to the initial values of theta. However, in Sklearn, the prediction results <b>ARE SENSITIVE</b> to the initial values of theta. Therefore, one has to input a good initial theta value. I use cross validation on the training set to get the best initial values for theta and the value of nugget. I compared the prediction results (see hourly electricity prediction) with Matlab.</p>
+
+<p>The input data are normalized with in the sklearn GP module. Therefore, no need to normalize input data beforehanded.</p>
+
+<p>There are actually some behind-scence tests. I first do a coarse grid serach for parameters, which is not shown here. After that, I am able to get the range of parameters for fine grid search as shown below.</p>
+
+<pre><code class="language-python">def crossValidation_all(theta, nugget, nfold, trainX, trainY):
+
+    thetaU = theta * 2
+    thetaL = theta/2
+
+    scores = np.zeros((len(nugget) * len(theta), nfold))
+    labels = [&quot;&quot; for x in range(len(nugget) * len(theta))]
+
+    k = 0
+    for j in range(len(theta)):
+        for i in range(len(nugget)):
+            gp = gaussian_process.GaussianProcess(theta0 = theta[j], nugget = nugget[i])
+            scores[k, :] = cross_validation.cross_val_score(gp, trainX, trainY, scoring='r2', cv = nfold)
+            labels[k] = str(theta[j]) + '|' + str(nugget[i])
+            k = k + 1
+
+    plt.figure(figsize=(20,8))
+    plt.boxplot(scores.T, sym='b+', labels = labels, whis = 0.5)
+    plt.ylim([0,1])
+    plt.title('R2 score as a function of nugget')
+    plt.ylabel('R2 Score')
+    plt.xlabel('Choice of theta | nugget')
+    plt.show()
+
+
+theta = np.arange(1, 8, 2)
+nfold = 10
+nugget = np.arange(0.01, 0.2, 0.03)
+
+crossValidation_all(theta, nugget, nfold, trainX_dailyElectricity, trainY_dailyElectricity)
+
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/1cbd3H5jff.png?imageslim" alt="mark" /></p>
+
+<p>I choose theta = 3 and nuggest = 0.04, which gives the best median prediction accuracy.</p>
+
+<blockquote>
+<p>Predict, calculate accuracy and visualize</p>
+</blockquote>
+
+<pre><code class="language-python">def predictAll(theta, nugget, trainX, trainY, testX, testY, testSet, title):
+
+    gp = gaussian_process.GaussianProcess(theta0=theta, nugget =nugget)
+    gp.fit(trainX, trainY)
+
+    predictedY, MSE = gp.predict(testX, eval_MSE = True)
+    sigma = np.sqrt(MSE)
+
+    results = testSet.copy()
+    results['predictedY'] = predictedY
+    results['sigma'] = sigma
+
+    print &quot;Train score R2:&quot;, gp.score(trainX, trainY)
+    print &quot;Test score R2:&quot;, sklearn.metrics.r2_score(testY, predictedY)
+
+    plt.figure(figsize = (9,8))
+    plt.scatter(testY, predictedY)
+    plt.plot([min(testY), max(testY)], [min(testY), max(testY)], 'r')
+    plt.xlim([min(testY), max(testY)])
+    plt.ylim([min(testY), max(testY)])
+    plt.title('Predicted vs. observed: ' + title)
+    plt.xlabel('Observed')
+    plt.ylabel('Predicted')
+    plt.show()
+
+    return gp, results
+
+gp_dailyElectricity, results_dailyElectricity = predictAll(3, 0.04, trainX_dailyElectricity, trainY_dailyElectricity,
+                                  testX_dailyElectricity, testY_dailyElectricity, testSet_dailyElectricity, 'Daily Electricity')
+</code></pre>
+
+<pre><code>Train score R2: 0.922109831389
+Test score R2: 0.822408541698
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/aFgh3c1Lia.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">def plotGP(testY, predictedY, sigma):
+    fig = plt.figure(figsize = (20,6))
+    plt.plot(testY, 'r.', markersize=10, label=u'Observations')
+    plt.plot(predictedY, 'b-', label=u'Prediction')
+    x = range(len(testY))
+    plt.fill(np.concatenate([x, x[::-1]]), np.concatenate([predictedY - 1.9600 * sigma, (predictedY + 1.9600 * sigma)[::-1]]),
+             alpha=.5, fc='b', ec='None', label='95% confidence interval')
+
+
+subset = results_dailyElectricity['2013-12':'2014-06']
+testY = subset['electricity-kWh']
+predictedY = subset['predictedY']
+sigma = subset['sigma']
+
+plotGP(testY, predictedY, sigma)
+
+plt.ylabel('Electricity (kWh)', fontsize = 13)
+plt.title('Gaussian Process Regression: Daily Electricity Prediction', fontsize = 17)
+plt.legend(loc='upper right')
+plt.xlim([0, len(testY)])
+plt.ylim([1000,8000])
+
+xTickLabels = pd.DataFrame(data = subset.index[np.arange(0,len(subset.index),10)], columns=['datetime'])
+xTickLabels['date'] = xTickLabels['datetime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+ax = plt.gca()
+ax.set_xticks(np.arange(0, len(subset), 10))
+ax.set_xticklabels(labels = xTickLabels['date'], fontsize = 13, rotation = 90)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/iE0LaKd9cH.png?imageslim" alt="mark" /></p>
+
+<p>他会给出预测值，而且，会给出预测值的 95% 的置信区间。<span style="color:red;">为什么要给出这种置信区间？</span></p>
+
+<p>Above is the visualization of part of the prediction.</p>
+
+<p>Daily prediction of electricity is quite successful.</p>
+
+<h3 id="daily-chilled-water">Daily Chilled Water</h3>
+
+<blockquote>
+<p>Get the training/validation and test set. The dataframe shows the features and the target.</p>
+</blockquote>
+
+<pre><code class="language-python">dailyChilledWaterWithFeatures = addDailyTimeFeatures(dailyChilledWaterWithFeatures)
+
+df = dailyChilledWaterWithFeatures[['weekday', 'day', 'week', 'occupancy', 'coolingDegrees', 'T-C',
+                                    'humidityRatio-kg/kg', 'dehumidification', 'chilledWater-TonDays']]
+#df.to_excel('Data/trainSet.xlsx')
+trainSet = df['2012-01':'2013-06']
+testSet_dailyChilledWater = df['2013-07':'2014-10']
+
+trainX_dailyChilledWater = trainSet.values[:,0:-1]
+trainY_dailyChilledWater = trainSet.values[:,8]
+
+testX_dailyChilledWater = testSet_dailyChilledWater.values[:,0:-1]
+testY_dailyChilledWater = testSet_dailyChilledWater.values[:,8]
+
+trainSet.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>weekday</th>
+<th>day</th>
+<th>week</th>
+<th>occupancy</th>
+<th>coolingDegrees</th>
+<th>T-C</th>
+<th>humidityRatio-kg/kg</th>
+<th>dehumidification</th>
+<th>chilledWater-TonDays</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.0</td>
+<td>0</td>
+<td>7.173913</td>
+<td>0.004796</td>
+<td>0</td>
+<td>0.961857</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>5.833333</td>
+<td>0.003415</td>
+<td>0</td>
+<td>0.981725</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>-3.208333</td>
+<td>0.001327</td>
+<td>0</td>
+<td>1.003672</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>-7.083333</td>
+<td>0.000890</td>
+<td>0</td>
+<td>1.483192</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>-0.583333</td>
+<td>0.001746</td>
+<td>0</td>
+<td>3.465091</td>
+</tr>
+</tbody>
+</table>
+
+<p>Above are the features used in daily chilled water prediction.</p>
+
+<p>Again, need cross validation for chilled water.</p>
+
+<blockquote>
+<p>Cross validation to get input parameters</p>
+</blockquote>
+
+<pre><code class="language-python">def crossValidation(theta, nugget, nfold, trainX, trainY):
+
+    scores = np.zeros((len(theta), nfold))
+
+    for i in range(len(theta)):
+        gp = gaussian_process.GaussianProcess(theta0 = theta[i], nugget = nugget)
+        scores[i, :] = cross_validation.cross_val_score(gp, trainX, trainY, scoring='r2', cv = nfold)
+
+    plt.boxplot(scores.T, sym='b+', labels = theta, whis = 0.5)
+    #plt.ylim(ylim)
+    plt.title('R2 score as a function of theta0')
+    plt.ylabel('R2 Score')
+    plt.xlabel('Choice of theta0')
+    plt.show()
+</code></pre>
+
+<pre><code class="language-python">theta = np.arange(0.001, 0.1, 0.02)
+nugget = 0.05
+crossValidation(theta, nugget, 3, trainX_dailyChilledWater, trainY_dailyChilledWater)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/K7fF46kCLE.png?imageslim" alt="mark" /></p>
+
+<p>I will choose $\theta$ = 0.021.</p>
+
+<p>The cross validation actually does not work very well for chilled water. First, I have to use a three-fold cross validation instead of ten. In addition, in order to simply the process, from now on, I only show the cross validation results against initial values of theta: theta0. I did the search for nugget behind the scene.</p>
+
+<blockquote>
+<p>Predict, calculate accuracy and visualize</p>
+</blockquote>
+
+<pre><code class="language-python">theta = 0.021
+nugget =0.05
+
+# Predict
+gp, results_dailyChilledWater = predictAll(theta, nugget, trainX_dailyChilledWater, trainY_dailyChilledWater,
+                                           testX_dailyChilledWater, testY_dailyChilledWater, testSet_dailyChilledWater,
+                                           'Daily Chilled Water')
+
+# Visualize
+subset = results_dailyChilledWater['2014-08':'2014-10']
+testY = subset['chilledWater-TonDays']
+predictedY = subset['predictedY']
+sigma = subset['sigma']
+
+plotGP(testY, predictedY, sigma)
+
+plt.ylabel('Chilled water (ton-days)', fontsize = 13)
+plt.title('Gaussian Process Regression: Daily Chilled Water Prediction', fontsize = 17)
+plt.legend(loc='upper left')
+plt.xlim([0, len(testY)])
+#plt.ylim([1000,8000])
+
+xTickLabels = pd.DataFrame(data = subset.index[np.arange(0,len(subset.index),7)], columns=['datetime'])
+xTickLabels['date'] = xTickLabels['datetime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+ax = plt.gca()
+ax.set_xticks(np.arange(0, len(subset), 7))
+ax.set_xticklabels(labels = xTickLabels['date'], fontsize = 13, rotation = 90)
+plt.show()
+</code></pre>
+
+<pre><code>Train score R2: 0.91483040513
+Test score R2: 0.901408621289
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/f1dFAk3bK3.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/DkJ6e2hBEf.png?imageslim" alt="mark" /></p>
+
+<p>Above is the visualization of part of the prediction.</p>
+
+<p>Preidction is quite successful again.</p>
+
+<h4 id="add-one-more-feature-prediction-of-electricity">Add One More Feature: Prediction of Electricity</h4>
+
+<p>In order to improve prediction accuracy, I add one more feature, prediction of electricity consumption. Predicted electricity is generated based on time features as described above in the electricity section. This describes the occupancy schedule. Needs actual electricity consumption in the training data set for training, then predict electricity consumption as a feature for the test data set. Therefore, this predicting method still only requires time and weather information and historical energy consumption to predict future energy consumption</p>
+
+<pre><code class="language-python">dailyChilledWaterWithFeatures['predictedElectricity'] = gp_dailyElectricity.predict(
+                                                            dailyChilledWaterWithFeatures[['weekday', 'day', 'week', 'occupancy']].values)
+
+
+df = dailyChilledWaterWithFeatures[['weekday', 'day', 'week', 'occupancy', 'coolingDegrees', 'T-C',
+                                    'humidityRatio-kg/kg', 'dehumidification', 'predictedElectricity', 'chilledWater-TonDays']]
+#df.to_excel('Data/trainSet.xlsx')
+trainSet = df['2012-01':'2013-06']
+testSet_dailyChilledWaterMoreFeatures = df['2013-07':'2014-10']
+
+trainX_dailyChilledWaterMoreFeatures = trainSet.values[:,0:-1]
+trainY_dailyChilledWaterMoreFeatures = trainSet.values[:,9]
+
+testX_dailyChilledWaterMoreFeatures = testSet_dailyChilledWaterMoreFeatures.values[:,0:-1]
+testY_dailyChilledWaterMoreFeatures = testSet_dailyChilledWaterMoreFeatures.values[:,9]
+
+trainSet.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>weekday</th>
+<th>day</th>
+<th>week</th>
+<th>occupancy</th>
+<th>coolingDegrees</th>
+<th>T-C</th>
+<th>humidityRatio-kg/kg</th>
+<th>dehumidification</th>
+<th>predictedElectricity</th>
+<th>chilledWater-TonDays</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.0</td>
+<td>0</td>
+<td>7.173913</td>
+<td>0.004796</td>
+<td>0</td>
+<td>2883.784617</td>
+<td>0.961857</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>5.833333</td>
+<td>0.003415</td>
+<td>0</td>
+<td>4231.128909</td>
+<td>0.981725</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>-3.208333</td>
+<td>0.001327</td>
+<td>0</td>
+<td>5013.703046</td>
+<td>1.003672</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>-7.083333</td>
+<td>0.000890</td>
+<td>0</td>
+<td>4985.929899</td>
+<td>1.483192</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+<td>0.3</td>
+<td>0</td>
+<td>-0.583333</td>
+<td>0.001746</td>
+<td>0</td>
+<td>5106.976841</td>
+<td>3.465091</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Cross validation</p>
+</blockquote>
+
+<pre><code class="language-python">theta = np.arange(0.001, 0.15, 0.02)
+nugget = 0.05
+crossValidation(theta, nugget, 3, trainX_dailyChilledWaterMoreFeatures, trainY_dailyChilledWaterMoreFeatures)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/JFIKiAE59G.png?imageslim" alt="mark" /></p>
+
+<p>Again, I will choose $\theta$ =0.021.</p>
+
+<blockquote>
+<p>Predict, calculate accuracy and visualize</p>
+</blockquote>
+
+<pre><code class="language-python"># Predict
+gp, results_dailyChilledWaterMoreFeatures = predictAll(0.021, 0.05,
+                trainX_dailyChilledWaterMoreFeatures, trainY_dailyChilledWaterMoreFeatures,
+                testX_dailyChilledWaterMoreFeatures, testY_dailyChilledWaterMoreFeatures,
+                testSet_dailyChilledWaterMoreFeatures, 'Daily Chilled Water')
+
+# Visualize
+subset = results_dailyChilledWaterMoreFeatures['2014-08':'2014-10']
+testY = subset['chilledWater-TonDays']
+predictedY = subset['predictedY']
+sigma = subset['sigma']
+
+plotGP(testY, predictedY, sigma)
+
+plt.ylabel('Chilled water (ton-days)', fontsize = 13)
+plt.title('Gaussian Process Regression: Daily Chilled Water Prediction', fontsize = 17)
+plt.legend(loc='upper left')
+plt.xlim([0, len(testY)])
+#plt.ylim([1000,8000])
+
+xTickLabels = pd.DataFrame(data = subset.index[np.arange(0,len(subset.index),7)], columns=['datetime'])
+xTickLabels['date'] = xTickLabels['datetime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+ax = plt.gca()
+ax.set_xticks(np.arange(0, len(subset), 7))
+ax.set_xticklabels(labels = xTickLabels['date'], fontsize = 13, rotation = 90)
+plt.show()
+</code></pre>
+
+<pre><code>Train score R2: 0.937952834542
+Test score R2: 0.926978705167
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/9k6cAeFLlE.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/J18BlAb2fk.png?imageslim" alt="mark" /></p>
+
+<p>Above is the visualization of part of the prediction.</p>
+
+<p>The accuracy does improve a little, according to the R2 score. Therefore, I will include predicted electricity in the prediction.</p>
+
+<h3 id="daily-steam">Daily Steam</h3>
+
+<blockquote>
+<p>Get the training/validation and test set. The dataframe shows the features and the target.</p>
+</blockquote>
+
+<pre><code class="language-python">dailySteamWithFeatures = addDailyTimeFeatures(dailySteamWithFeatures)
+
+dailySteamWithFeatures['predictedElectricity'] = gp_dailyElectricity.predict(
+                                                            dailySteamWithFeatures[['weekday', 'day', 'week', 'occupancy']].values)
+
+
+df = dailySteamWithFeatures[['weekday', 'day', 'week', 'occupancy', 'heatingDegrees', 'T-C',
+                                    'humidityRatio-kg/kg', 'predictedElectricity', 'steam-LBS']]
+#df.to_excel('Data/trainSet.xlsx')
+trainSet = df['2012-01':'2013-06']
+testSet_dailySteam = df['2013-07':'2014-10']
+
+trainX_dailySteam = trainSet.values[:,0:-1]
+trainY_dailySteam = trainSet.values[:,8]
+
+testX_dailySteam = testSet_dailySteam.values[:,0:-1]
+testY_dailySteam = testSet_dailySteam.values[:,8]
+
+trainSet.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>weekday</th>
+<th>day</th>
+<th>week</th>
+<th>occupancy</th>
+<th>heatingDegrees</th>
+<th>T-C</th>
+<th>humidityRatio-kg/kg</th>
+<th>predictedElectricity</th>
+<th>steam-LBS</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.0</td>
+<td>7.826087</td>
+<td>7.173913</td>
+<td>0.004796</td>
+<td>2883.784617</td>
+<td>17256.468099</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>0</td>
+<td>2</td>
+<td>1</td>
+<td>0.3</td>
+<td>9.166667</td>
+<td>5.833333</td>
+<td>0.003415</td>
+<td>4231.128909</td>
+<td>17078.440755</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+<td>0.3</td>
+<td>18.208333</td>
+<td>-3.208333</td>
+<td>0.001327</td>
+<td>5013.703046</td>
+<td>59997.969401</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+<td>0.3</td>
+<td>22.083333</td>
+<td>-7.083333</td>
+<td>0.000890</td>
+<td>4985.929899</td>
+<td>56104.878906</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+<td>0.3</td>
+<td>15.583333</td>
+<td>-0.583333</td>
+<td>0.001746</td>
+<td>5106.976841</td>
+<td>45231.708984</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Cross validation to get input parameters</p>
+</blockquote>
+
+<pre><code class="language-python">theta = np.arange(0.06, 0.15, 0.01)
+nugget = 0.05
+crossValidation(theta, nugget, 3, trainX_dailySteam, trainY_dailySteam)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/2JiIL5b4BC.png?imageslim" alt="mark" /></p>
+
+<p>I will choose $\theta$ = 0.1.</p>
+
+<blockquote>
+<p>Predict, calculate accuracy and visualize</p>
+</blockquote>
+
+<pre><code class="language-python"># Predict
+gp, results_dailySteam = predictAll(0.1, 0.05, trainX_dailySteam, trainY_dailySteam,
+                                    testX_dailySteam, testY_dailySteam, testSet_dailySteam, 'Daily Steam')
+
+# Visualize
+subset = results_dailySteam['2013-10':'2014-02']
+testY = subset['steam-LBS']
+predictedY = subset['predictedY']
+sigma = subset['sigma']
+
+plotGP(testY, predictedY, sigma)
+
+plt.ylabel('Steam (LBS)', fontsize = 13)
+plt.title('Gaussian Process Regression: Daily Steam Prediction', fontsize = 17)
+plt.legend(loc='upper left')
+plt.xlim([0, len(testY)])
+#plt.ylim([1000,8000])
+
+xTickLabels = pd.DataFrame(data = subset.index[np.arange(0,len(subset.index),10)], columns=['datetime'])
+xTickLabels['date'] = xTickLabels['datetime'].apply(lambda x: x.strftime('%Y-%m-%d'))
+ax = plt.gca()
+ax.set_xticks(np.arange(0, len(subset), 10))
+ax.set_xticklabels(labels = xTickLabels['date'], fontsize = 13, rotation = 90)
+plt.show()
+</code></pre>
+
+<pre><code>Train score R2: 0.96729657748
+Test score R2: 0.933120481633
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/IEi8H6H7cD.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/2kF7dDfla2.png?imageslim" alt="mark" /></p>
+
+<p>Above is the visualization of part of the prediction.</p>
+
+<h2 id="hourly-prediction">Hourly Prediction</h2>
+
+<p>I used the same method to train and test hourly models. Because as the number of data points increases, the computational cost increases significantly. Cross validation on a large data set is not possible as we do not have a lot of time for project. Therefore, <b>I only use a small set of training/validation data to get the parameters and then train and test using the complete data set</b>, and let my computer run overnight.</p>
+
+<h3 id="hourly-electricity">Hourly Electricity</h3>
+
+<blockquote>
+<p>Get the training/validation and test set. Try on a small sample first. The dataframe shows the features and the target.</p>
+</blockquote>
+
+<pre><code class="language-python">def addHourlyTimeFeatures(df):
+    df['hour'] = df.index.hour
+    df['weekday'] = df.index.weekday
+    df['day'] = df.index.dayofyear
+    df['week'] = df.index.weekofyear
+
+    return df
+
+hourlyElectricityWithFeatures = addHourlyTimeFeatures(hourlyElectricityWithFeatures)
+
+df_hourlyElectricity = hourlyElectricityWithFeatures[['hour', 'weekday', 'day', 'week', 'cosHour',
+                                                      'occupancy', 'electricity-kWh']]
+#df_hourlyElectricity.to_excel('Data/trainSet_hourlyElectricity.xlsx')
+
+def setTrainTestSets(df, trainStart, trainEnd, testStart, testEnd, indY):
+
+    trainSet = df[trainStart : trainEnd]
+    testSet = df[testStart : testEnd]
+
+    trainX = trainSet.values[:,0:-1]
+    trainY = trainSet.values[:,indY]
+
+    testX = testSet.values[:,0:-1]
+    testY = testSet.values[:,indY]
+
+    return trainX, trainY, testX, testY, testSet
+
+
+trainStart = '2013-02'
+trainEnd = '2013-05'
+testStart = '2014-03'
+testEnd = '2014-04'
+
+df = df_hourlyElectricity;
+
+trainX_hourlyElectricity, trainY_hourlyElectricity, testX_hourlyElectricity, testY_hourlyElectricity, \
+    testSet_hourlyElectricity = setTrainTestSets(df, trainStart, trainEnd, testStart, testEnd, 6)
+
+
+df_hourlyElectricity.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>hour</th>
+<th>weekday</th>
+<th>day</th>
+<th>week</th>
+<th>cosHour</th>
+<th>occupancy</th>
+<th>electricity-kWh</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01 01:00:00</td>
+<td>1</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.866025</td>
+<td>0</td>
+<td>111.479277</td>
+</tr>
+
+<tr>
+<td>2012-01-01 02:00:00</td>
+<td>2</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.965926</td>
+<td>0</td>
+<td>117.989395</td>
+</tr>
+
+<tr>
+<td>2012-01-01 03:00:00</td>
+<td>3</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>1.000000</td>
+<td>0</td>
+<td>119.010131</td>
+</tr>
+
+<tr>
+<td>2012-01-01 04:00:00</td>
+<td>4</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.965926</td>
+<td>0</td>
+<td>116.005587</td>
+</tr>
+
+<tr>
+<td>2012-01-01 05:00:00</td>
+<td>5</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0.866025</td>
+<td>0</td>
+<td>111.132977</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Cross validation to get input parameters</p>
+</blockquote>
+
+<pre><code class="language-python">nugget = 0.008
+theta = np.arange(0.05, 0.5, 0.05)
+crossValidation(theta, nugget, 10, trainX_hourlyElectricity, trainY_hourlyElectricity)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/4HeHbLeBd5.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Predict, calculate accuracy and visualize</p>
+</blockquote>
+
+<pre><code class="language-python">gp_hourlyElectricity, results_hourlyElectricity = predictAll(0.1, 0.008, trainX_hourlyElectricity, trainY_hourlyElectricity,
+                                  testX_hourlyElectricity, testY_hourlyElectricity, testSet_hourlyElectricity,
+                                  'Hourly Electricity (Partial)')
+</code></pre>
+
+<pre><code>Train score R2: 0.957912601164
+Test score R2: 0.893873175566
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/a4FkB8Gcj1.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">subset = results_hourlyElectricity['2014-03-08 23:00:00':'2014-03-15']
+testY = subset['electricity-kWh']
+predictedY = subset['predictedY']
+sigma = subset['sigma']
+
+plotGP(testY, predictedY, sigma)
+
+plt.ylabel('Electricity (kWh)', fontsize = 13)
+plt.title('Gaussian Process Regression: Hourly Electricity Prediction', fontsize = 17)
+plt.legend(loc='upper right')
+plt.xlim([0, len(testY)])
+#plt.ylim([1000,8000])
+
+xTickLabels = subset.index[np.arange(0,len(subset.index),6)]
+ax = plt.gca()
+ax.set_xticks(np.arange(0, len(subset), 6))
+ax.set_xticklabels(labels = xTickLabels, fontsize = 13, rotation = 90)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/BkhGlcAgaI.png?imageslim" alt="mark" /></p>
+
+<p>Above is the visualization of part of the prediction.</p>
+
+<p>I compared the results with Matlab code output.</p>
+
+<p>Figure: Matlab output for hourly electricity predcition.
+<img src = "Pics/results_hourlyElectricity.png", style="width:100%"></p>
+
+<h4 id="train-and-test-for-all-hourly-data">Train and Test for all hourly data</h4>
+
+<blockquote>
+<p>Final prediction accuracy for hourly electricity.</p>
+</blockquote>
+
+<pre><code class="language-python">trainStart = '2012-01'
+trainEnd = '2013-06'
+testStart = '2013-07'
+testEnd = '2014-10'
+
+results_allHourlyElectricity = pd.read_excel('Data/results_allHourlyElectricity.xlsx')
+
+def plotR2(df, energyType, title):
+    testY = df[energyType]
+    predictedY = df['predictedY']
+
+    print &quot;Test score R2:&quot;, sklearn.metrics.r2_score(testY, predictedY)
+
+    plt.figure(figsize = (9,8))
+    plt.scatter(testY, predictedY)
+    plt.plot([min(testY), max(testY)], [min(testY), max(testY)], 'r')
+    plt.xlim([min(testY), max(testY)])
+    plt.ylim([min(testY), max(testY)])
+    plt.title('Predicted vs. observed: ' + title)
+    plt.xlabel('Observed')
+    plt.ylabel('Predicted')
+    plt.show()
+
+plotR2(results_allHourlyElectricity, 'electricity-kWh', 'All Hourly Electricity')
+</code></pre>
+
+<pre><code>Test score R2: 0.882986662109
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h4b7m3h8gC.png?imageslim" alt="mark" /></p>
+
+<h3 id="hourly-chilled-water">Hourly Chilled Water</h3>
+
+<blockquote>
+<p>Get the training/validation and test set. Try on a small sample first. The dataframe shows the features and the target.</p>
+</blockquote>
+
+<pre><code class="language-python">trainStart = '2013-08'
+trainEnd = '2013-10'
+testStart = '2014-08'
+testEnd = '2014-10'
+
+def getPredictedElectricity(trainStart, trainEnd, testStart, testEnd):
+    trainX, trainY, testX, testY, testSet = setTrainTestSets(df_hourlyElectricity, trainStart, trainEnd, testStart, testEnd, 6)
+
+    gp = gaussian_process.GaussianProcess(theta0 = 0.15, nugget = 0.008)
+    gp.fit(trainX, trainY)
+
+    trainSet = df_hourlyElectricity[trainStart : trainEnd]
+    predictedElectricity = pd.DataFrame(data = np.zeros(len(trainSet)), index = trainSet.index, columns = ['predictedElectricity'])
+    predictedElectricity = predictedElectricity.append(pd.DataFrame(data = np.zeros(len(testSet)), index = testSet.index,
+                                                   columns = ['predictedElectricity']))
+
+    predictedElectricity.loc[trainStart:trainEnd, 'predictedElectricity'] = gp.predict(trainX)
+    predictedElectricity.loc[testStart:testEnd, 'predictedElectricity'] = gp.predict(testX)
+
+    return predictedElectricity
+
+predictedElectricity = getPredictedElectricity(trainStart, trainEnd, testStart, testEnd)
+
+hourlyChilledWaterWithMoreFeatures = hourlyChilledWaterWithFeatures.join(predictedElectricity, how = 'inner')
+
+hourlyChilledWaterWithMoreFeatures = addHourlyTimeFeatures(hourlyChilledWaterWithMoreFeatures)
+
+df_hourlyChilledWater = hourlyChilledWaterWithMoreFeatures[['hour', 'cosHour', 'weekday', 'day', 'week', 'occupancy', 'T-C',
+                                                        'humidityRatio-kg/kg', 'predictedElectricity', 'chilledWater-TonDays']]
+
+
+df = df_hourlyChilledWater;
+
+trainX_hourlyChilledWater, trainY_hourlyChilledWater, testX_hourlyChilledWater, testY_hourlyChilledWater, \
+    testSet_hourlyChilledWater = setTrainTestSets(df, trainStart, trainEnd, testStart, testEnd, 9)
+
+
+df_hourlyChilledWater.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>hour</th>
+<th>cosHour</th>
+<th>weekday</th>
+<th>day</th>
+<th>week</th>
+<th>occupancy</th>
+<th>T-C</th>
+<th>humidityRatio-kg/kg</th>
+<th>predictedElectricity</th>
+<th>chilledWater-TonDays</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2013-08-01 00:00:00</td>
+<td>0</td>
+<td>0.707107</td>
+<td>3</td>
+<td>213</td>
+<td>31</td>
+<td>0.5</td>
+<td>17.7</td>
+<td>0.010765</td>
+<td>123.431454</td>
+<td>0.200647</td>
+</tr>
+
+<tr>
+<td>2013-08-01 01:00:00</td>
+<td>1</td>
+<td>0.866025</td>
+<td>3</td>
+<td>213</td>
+<td>31</td>
+<td>0.5</td>
+<td>17.8</td>
+<td>0.012102</td>
+<td>119.266616</td>
+<td>0.183318</td>
+</tr>
+
+<tr>
+<td>2013-08-01 02:00:00</td>
+<td>2</td>
+<td>0.965926</td>
+<td>3</td>
+<td>213</td>
+<td>31</td>
+<td>0.5</td>
+<td>17.7</td>
+<td>0.012026</td>
+<td>121.821887</td>
+<td>0.183318</td>
+</tr>
+
+<tr>
+<td>2013-08-01 03:00:00</td>
+<td>3</td>
+<td>1.000000</td>
+<td>3</td>
+<td>213</td>
+<td>31</td>
+<td>0.5</td>
+<td>17.6</td>
+<td>0.011962</td>
+<td>124.888675</td>
+<td>0.183318</td>
+</tr>
+
+<tr>
+<td>2013-08-01 04:00:00</td>
+<td>4</td>
+<td>0.965926</td>
+<td>3</td>
+<td>213</td>
+<td>31</td>
+<td>0.5</td>
+<td>17.7</td>
+<td>0.011912</td>
+<td>124.824413</td>
+<td>0.183318</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Cross validation to get input parameters</p>
+</blockquote>
+
+<pre><code class="language-python">nugget = 0.01
+theta = np.arange(0.001, 0.05, 0.01)
+crossValidation(theta, nugget, 5, trainX_hourlyChilledWater, trainY_hourlyChilledWater)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/GeiG1bjbFi.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Predict, calculate accuracy and visualize</p>
+</blockquote>
+
+<pre><code class="language-python">gp_hourlyChilledWater, results_hourlyChilledWater = predictAll(0.011, 0.01, trainX_hourlyChilledWater, trainY_hourlyChilledWater,
+                                  testX_hourlyChilledWater, testY_hourlyChilledWater, testSet_hourlyChilledWater,
+                                  'Hourly Chilled Water (Particial)')
+</code></pre>
+
+<pre><code>Train score R2: 0.914352370778
+Test score R2: 0.865202975683
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/2f7F3I2DAB.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">subset = results_hourlyChilledWater['2014-08-24':'2014-08-30']
+testY = subset['chilledWater-TonDays']
+predictedY = subset['predictedY']
+sigma = subset['sigma']
+
+plotGP(testY, predictedY, sigma)
+
+plt.ylabel('Chilled water (ton-days)', fontsize = 13)
+plt.title('Gaussian Process Regression: Hourly Chilled Water Prediction', fontsize = 17)
+plt.legend(loc='upper right')
+plt.xlim([0, len(testY)])
+#plt.ylim([1000,8000])
+
+xTickLabels = subset.index[np.arange(0,len(subset.index),6)]
+ax = plt.gca()
+ax.set_xticks(np.arange(0, len(subset), 6))
+ax.set_xticklabels(labels = xTickLabels, fontsize = 13, rotation = 90)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/lcal2E0i5E.png?imageslim" alt="mark" /></p>
+
+<p>Above is the visualization of part of the prediction.</p>
+
+<h4 id="train-and-test-all-hourly-data">Train and test all hourly data</h4>
+
+<blockquote>
+<p>Warning: this could take forever to execute the code.</p>
+</blockquote>
+
+<pre><code class="language-python"># This could take forever.
+
+trainStart = '2012-01'
+trainEnd = '2013-06'
+testStart = '2013-07'
+testEnd = '2014-10'
+
+
+predictedElectricity = getPredictedElectricity(trainStart, trainEnd, testStart, testEnd)
+
+# Chilled water
+hourlyChilledWaterWithMoreFeatures = hourlyChilledWaterWithFeatures.join(predictedElectricity, how = 'inner')
+hourlyChilledWaterWithMoreFeatures = addHourlyTimeFeatures(hourlyChilledWaterWithMoreFeatures)
+
+df_hourlyChilledWater = hourlyChilledWaterWithMoreFeatures[['hour', 'cosHour', 'weekday', 'day', 'week', 'occupancy', 'T-C',
+                                                        'humidityRatio-kg/kg', 'predictedElectricity', 'chilledWater-TonDays']]
+
+df = df_hourlyChilledWater;
+
+trainX_hourlyChilledWater, trainY_hourlyChilledWater, testX_hourlyChilledWater, testY_hourlyChilledWater, \
+    testSet_hourlyChilledWater = setTrainTestSets(df, trainStart, trainEnd, testStart, testEnd, 9)
+
+gp_hourlyChilledWater, results_hourlyChilledWater = predictAll(0.011, 0.01, trainX_hourlyChilledWater, trainY_hourlyChilledWater,
+                                  testX_hourlyChilledWater, testY_hourlyChilledWater, testSet_hourlyChilledWater)
+
+results_hourlyChilledWater.to_excel('Data/results_allHourlyChilledWater.xlsx')
+</code></pre>
+
+<blockquote>
+<p>Final accuracy for hourly chilled water prediction.</p>
+</blockquote>
+
+<pre><code class="language-python">results_allHourlyChilledWater = pd.read_excel('Data/results_allHourlyChilledWater.xlsx')
+
+plotR2(results_allHourlyChilledWater, 'chilledWater-TonDays', 'All Hourly Chilled Water')
+</code></pre>
+
+<pre><code>Test score R2: 0.887195665411
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/0AJ2E7d55h.png?imageslim" alt="mark" /></p>
+
+<h3 id="hourly-steam">Hourly Steam</h3>
+
+<blockquote>
+<p>Get the training/validation and test set. Try on a small sample first. The dataframe shows the features and the target.</p>
+</blockquote>
+
+<pre><code class="language-python">trainStart = '2012-01'
+trainEnd = '2012-03'
+testStart = '2014-01'
+testEnd = '2014-03'
+
+predictedElectricity = getPredictedElectricity(trainStart, trainEnd, testStart, testEnd)
+hourlySteamWithMoreFeatures = hourlySteamWithFeatures.join(predictedElectricity, how = 'inner')
+
+hourlySteamWithMoreFeatures = addHourlyTimeFeatures(hourlySteamWithMoreFeatures)
+
+df_hourlySteam = hourlySteamWithMoreFeatures[['hour', 'cosHour', 'weekday', 'day', 'week', 'occupancy', 'T-C',
+                                                        'humidityRatio-kg/kg', 'predictedElectricity', 'steam-LBS']]
+
+
+df = df_hourlySteam;
+
+trainX_hourlySteam, trainY_hourlySteam, testX_hourlySteam, testY_hourlySteam, \
+    testSet_hourlySteam = setTrainTestSets(df, trainStart, trainEnd, testStart, testEnd, 9)
+
+
+df_hourlySteam.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>hour</th>
+<th>cosHour</th>
+<th>weekday</th>
+<th>day</th>
+<th>week</th>
+<th>occupancy</th>
+<th>T-C</th>
+<th>humidityRatio-kg/kg</th>
+<th>predictedElectricity</th>
+<th>steam-LBS</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01 01:00:00</td>
+<td>1</td>
+<td>0.866025</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0</td>
+<td>4</td>
+<td>0.004396</td>
+<td>117.502720</td>
+<td>513.102214</td>
+</tr>
+
+<tr>
+<td>2012-01-01 02:00:00</td>
+<td>2</td>
+<td>0.965926</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0</td>
+<td>4</td>
+<td>0.004391</td>
+<td>114.720226</td>
+<td>1353.371311</td>
+</tr>
+
+<tr>
+<td>2012-01-01 03:00:00</td>
+<td>3</td>
+<td>1.000000</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0</td>
+<td>5</td>
+<td>0.004380</td>
+<td>113.079503</td>
+<td>1494.904514</td>
+</tr>
+
+<tr>
+<td>2012-01-01 04:00:00</td>
+<td>4</td>
+<td>0.965926</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0</td>
+<td>6</td>
+<td>0.004401</td>
+<td>112.428146</td>
+<td>490.090061</td>
+</tr>
+
+<tr>
+<td>2012-01-01 05:00:00</td>
+<td>5</td>
+<td>0.866025</td>
+<td>6</td>
+<td>1</td>
+<td>52</td>
+<td>0</td>
+<td>4</td>
+<td>0.004382</td>
+<td>113.892620</td>
+<td>473.258464</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Cross validation to get input parameters</p>
+</blockquote>
+
+<pre><code class="language-python">nugget = 0.01
+theta = np.arange(0.001, 0.014, 0.002)
+crossValidation(theta, nugget, 5, trainX_hourlySteam, trainY_hourlySteam)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/L6cK5FAGgb.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Predict, calculate accuracy and visualize</p>
+</blockquote>
+
+<pre><code class="language-python">gp_hourlySteam, results_hourlySteam = predictAll(0.007, 0.01, trainX_hourlySteam, trainY_hourlySteam,
+                                  testX_hourlySteam, testY_hourlySteam, testSet_hourlySteam, 'Hourly Steam (Particial)')
+</code></pre>
+
+<pre><code>Train score R2: 0.844826486064
+Test score R2: 0.570427290315
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/FGc8BiGk75.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">subset = results_hourlySteam['2014-01-26':'2014-02-01']
+testY = subset['steam-LBS']
+predictedY = subset['predictedY']
+sigma = subset['sigma']
+
+plotGP(testY, predictedY, sigma)
+
+plt.ylabel('Steam (LBS)', fontsize = 13)
+plt.title('Gaussian Process Regression: Hourly Steam Prediction', fontsize = 17)
+plt.legend(loc='upper right')
+plt.xlim([0, len(testY)])
+
+xTickLabels = subset.index[np.arange(0,len(subset.index),6)]
+ax = plt.gca()
+ax.set_xticks(np.arange(0, len(subset), 6))
+ax.set_xticklabels(labels = xTickLabels, fontsize = 13, rotation = 90)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/8IE96kL42i.png?imageslim" alt="mark" /></p>
+
+<p>Above is the visualization of part of the prediction.</p>
+
+<h4 id="try-train-and-test-all-hourly-steam">Try train and test all hourly steam</h4>
+
+<blockquote>
+<p>Warning: this could take forever to execute the code.</p>
+</blockquote>
+
+<pre><code class="language-python"># Warning: this could take forever to execute the code.
+
+trainStart = '2012-01'
+trainEnd = '2013-06'
+testStart = '2013-07'
+testEnd = '2014-10'
+
+
+predictedElectricity = getPredictedElectricity(trainStart, trainEnd, testStart, testEnd)
+
+# Steam
+hourlySteamWithMoreFeatures = hourlySteamWithFeatures.join(predictedElectricity, how = 'inner')
+
+hourlySteamWithMoreFeatures = addHourlyTimeFeatures(hourlySteamWithMoreFeatures)
+
+df_hourlySteam = hourlySteamWithMoreFeatures[['hour', 'cosHour', 'weekday', 'day', 'week', 'occupancy', 'T-C',
+                                                        'humidityRatio-kg/kg', 'predictedElectricity', 'steam-LBS']]
+
+
+df = df_hourlySteam;
+
+trainX_hourlySteam, trainY_hourlySteam, testX_hourlySteam, testY_hourlySteam, \
+    testSet_hourlySteam = setTrainTestSets(df, trainStart, trainEnd, testStart, testEnd, 9)
+
+gp_hourlySteam, results_hourlySteam = predictAll(0.007, 0.01, trainX_hourlySteam, trainY_hourlySteam,
+                                  testX_hourlySteam, testY_hourlySteam, testSet_hourlySteam)
+
+results_hourlySteam.to_excel('Data/results_allHourlySteam.xlsx')
+</code></pre>
+
+<blockquote>
+<p>Final accuracy for hourly steam prediction.</p>
+</blockquote>
+
+<pre><code class="language-python">results_allHourlySteam = pd.read_excel('Data/results_allHourlySteam.xlsx')
+
+plotR2(results_allHourlySteam, 'steam-LBS', 'All Hourly Steam')
+</code></pre>
+
+<pre><code>Test score R2: 0.84405417838
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/jemBkB75h7.png?imageslim" alt="mark" /></p>
+
+<p>The hourly prediction is not as good as daily. But still, we can get R2 score around 0.85.</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>The overall performance of Gaussian Process regression is quite good for this task. The advantage of GP is that it provides uncertainty range of predictions. The disavantage is that it is computationally expensive for large data sets.</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/%E4%B8%8A%E4%BA%86%E8%AF%BE%E7%A8%8B%E4%B9%8B%E5%90%8E%E6%84%9F%E8%A7%89%E8%BF%98%E6%AC%A0%E7%BC%BA%E7%9A%84/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">上了课程之后，感觉还欠缺的</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/01-collect-data/">
+            <span class="next-text nav-default">01 collect data</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>RL 强化学习总结 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="RL 强化学习总结 TODO 要合并到之前的章节里面去 INTRODUCTION aaa 强化学习的故事 强化学习是学习一个最优策略(policy)，可以让本体(agent)在特定环境(e" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="RL 强化学习总结" />
+<meta property="og:description" content="RL 强化学习总结 TODO 要合并到之前的章节里面去 INTRODUCTION aaa 强化学习的故事 强化学习是学习一个最优策略(policy)，可以让本体(agent)在特定环境(e" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" /><meta property="article:published_time" content="2018-08-21T18:16:22&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:22&#43;00:00"/>
+<meta itemprop="name" content="RL 强化学习总结">
+<meta itemprop="description" content="RL 强化学习总结 TODO 要合并到之前的章节里面去 INTRODUCTION aaa 强化学习的故事 强化学习是学习一个最优策略(policy)，可以让本体(agent)在特定环境(e">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:22&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:22&#43;00:00" />
+<meta itemprop="wordCount" content="4243">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RL 强化学习总结"/>
+<meta name="twitter:description" content="RL 强化学习总结 TODO 要合并到之前的章节里面去 INTRODUCTION aaa 强化学习的故事 强化学习是学习一个最优策略(policy)，可以让本体(agent)在特定环境(e"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">RL 强化学习总结</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 4243 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#rl-强化学习总结">RL 强化学习总结</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a>
+<ul>
+<li><a href="#强化学习的故事">强化学习的故事</a></li>
+<li><a href="#有限马尔卡夫决策过程">有限马尔卡夫决策过程</a>
+<ul>
+<li><a href="#故事1的数学版">故事1的数学版</a></li>
+<li><a href="#有限马尔卡夫决策过程的基本概念">有限马尔卡夫决策过程的基本概念：</a></li>
+</ul></li>
+<li><a href="#强化学习的术语">强化学习的术语</a></li>
+<li><a href="#强化学习算法的分类">强化学习算法的分类</a></li>
+<li><a href="#算法列表">算法列表</a>
+<ul>
+<li><a href="#4-动态规划-dynamic-programming">4 动态规划(Dynamic Programming)</a></li>
+<li><a href="#5-蒙特卡罗方法-monte-carlo-method">5 蒙特卡罗方法(Monte Carlo Method)</a></li>
+<li><a href="#6-时序差分方法-temporal-difference-learning">6 时序差分方法(Temporal-Difference Learning)</a></li>
+<li><a href="#7-多步时序差分方法">7 多步时序差分方法</a></li>
+<li><a href="#8-基于模型的算法">8 基于模型的算法</a></li>
+<li><a href="#9-近似预测方法">9 近似预测方法</a></li>
+<li><a href="#10-近似控制方法">10 近似控制方法</a></li>
+<li><a href="#12-lambda-return和资格迹-eligibility-traces">12 (\lambda)-return和资格迹(Eligibility traces)</a></li>
+<li><a href="#13-策略梯度方法">13 策略梯度方法</a>
+<ul>
+<li><a href="#策略梯度方法的新思路-policy-gradient-methods">策略梯度方法的新思路(Policy Gradient Methods)</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="rl-强化学习总结">RL 强化学习总结</h1>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><strong>要合并到之前的章节里面去</strong></li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h2 id="强化学习的故事">强化学习的故事</h2>
+
+<p>强化学习是学习一个最优策略(policy)，可以让本体(agent)在特定环境(environment)中，根据当前的状态(state)，做出行动(action)，从而获得最大回报(G or return)。</p>
+
+<h2 id="有限马尔卡夫决策过程">有限马尔卡夫决策过程</h2>
+
+<p>马尔卡夫决策过程理论定义了一个数学模型，可用于随机动态系统的最优决策过程。
+强化学习利用这个数学模型将一个现实中的问题变成一个数学问题。
+<strong>强化学习的故事1：找到最优价值</strong></p>
+
+<blockquote>强化学习就是：追求最大回报G
+追求最大回报G就是：找到最优的策略\(\pi_*\)。
+策略\(\pi_*\)告诉在状态\(s\)，应该执行什么行动\(a\)。
+最优策略可以由最优价值方法\(v_*(s)\)或者\(q_*(s, a)\)决定。</blockquote>
+
+<h3 id="故事1的数学版">故事1的数学版</h3>
+
+<p>[
+\text{Reinforcement Learning} \doteq \pi<em>* <br />
+\quad \updownarrow <br />
+\pi</em>* \doteq { \pi(s) }, \ s \in \mathcal{S} <br />
+\quad \updownarrow <br />
+\begin{cases}
+\pi(s) = \underset{a}{argmax} \ v<em>{\pi}(s&rsquo; | s, a), \ s&rsquo; \in S(s), \quad \text{or} <br />
+\pi(s) = \underset{a}{argmax} \ q</em>{\pi}(s, a) <br />
+\end{cases} <br />
+\quad \updownarrow <br />
+\begin{cases}
+v<em>*(s), \quad \text{or} <br />
+q</em>*(s, a) <br />
+\end{cases} <br />
+\quad \updownarrow <br />
+\text{approximation cases:} <br />
+\begin{cases}
+\hat{v}(s, \theta) \doteq \theta^T \phi(s), \quad \text{state value function} <br />
+\hat{q}(s, a, \theta) \doteq \theta^T \phi(s, a), \quad \text{action value function} <br />
+\end{cases} <br />
+where <br />
+\theta \text{ - value function&rsquo;s weight vector} <br />
+]</p>
+
+<h3 id="有限马尔卡夫决策过程的基本概念">有限马尔卡夫决策过程的基本概念：</h3>
+
+<p>state 状态
+action 行动
+reward 奖赏
+(G<em>t) 回报
+(p(s&rsquo; | s, a)) 表示在状态s下，执行行动a，状态变成s&rsquo;的可能性。
+(p(s&rsquo;, r | s, a)) 表示在状态s下，执行行动a，状态变成s&rsquo;，并获得奖赏r的可能性。
+(r(s, a)) 在状态s下，执行行动a的期望奖赏。
+[
+r(s,a) \doteq \mathbb{E}[R</em>{t+1} | S_t = s, A<em>t = a] = \sum</em>{r \in \mathcal{R} } r \sum_{s&rsquo; \in \mathcal{S} } p(s&rsquo;, r|s,a)
+]</p>
+
+<p>(r(s, a, s&rsquo;)) 在状态s下，执行行动a，状态变成s&rsquo;的期望奖赏。
+[
+r(s,a,s&rsquo;) \doteq \mathbb{E}[R_{t+1} | S_t = s, A<em>t = a, S</em>{t+1} = s&rsquo;] = \frac{\sum_{r \in \mathcal{R} } r p(s&rsquo;,r|s,a)}{p(s&rsquo;|s,a)}
+]</p>
+
+<p>(\pi) 策略(\pi)
+[
+\pi = [\pi(s_1), \cdots, \pi(s<em>n)]
+]
+(\pi(s)) 策略(\pi)，在状态s下，选择的行动。
+(\pi</em><em>) 最优策略
+(\pi(a|s)) 随机策略在在状态s下，选择行动a的可能性。
+(v<em>{\pi}(s)) 策略(\pi)的状态价值方法。
+[
+v</em>{\pi}(s) \doteq \mathbb{E}[G_t | S<em>t = s] = \mathbb{E}</em>{\pi} \left [ \sum<em>{k=0}^{\infty} \gamma^k R</em>{t+k+1} | S<em>t = s \right ] <br />
+where <br />
+\pi \text{ - policy} <br />
+\mathbb{E}</em>{\pi}[\cdot] \text{ - the expected value of a value follows policy } \pi
+]
+(q<em>{\pi}(s, a)) 策略(\pi)的行动价值方法。
+[
+q</em>{\pi}(s,a) \doteq \mathbb{E}[G_t | S_t = s, A<em>t = a] = \mathbb{E}</em>{\pi} \left [ \sum<em>{k=0}^{\infty} \gamma^k R</em>{t+k+1} | S_t = s, A<em>t = a \right ] <br />
+]
+(v</em>{</em>}(s)) 最优状态价值方法。
+[
+v<em>*(s) \doteq \underset{\pi}{max} \ v</em>{\pi}(s), \forall s \in \mathcal{S}
+]
+(q<em>{*}(s, a)) 最优行动价值方法。
+[
+q</em><em>(s, a) \doteq \underset{\pi}{max} \ q<em>{\pi}(s, a), \ \forall s \in \mathcal{S} \ and \ a \in \mathcal{A}(s) <br />
+q</em></em>(s,a) = \mathbb{E}[R<em>{t+1} + \gamma v</em>* (S_{t+1}) \ | \ S_t = s, A_t = a]
+]</p>
+
+<h2 id="强化学习的术语">强化学习的术语</h2>
+
+<p>学习任务可分为两类：</p>
+
+<ul>
+<li><p>情节性任务(episodic tasks)
+指（强化学习的问题）会在有限步骤下结束。比如：围棋。</p></li>
+
+<li><p>连续性任务(continuing tasks)
+指（强化学习的问题）有无限步骤。一个特征是：没有结束。比如：让一个立在指尖上的长棍不倒。（不知道这个例子好不好，我瞎编的。）</p></li>
+</ul>
+
+<p>学习的方法：</p>
+
+<ul>
+<li><p>online-policy方法(online-policy methods)
+评估的策略和优化的策略是同一个。</p></li>
+
+<li><p>offline-policy方法(offline-policy methods)
+评估的策略和优化的策略不是同一个。意味着优化策略使用来自外部的模拟数据。</p></li>
+</ul>
+
+<p>学习的算法：</p>
+
+<ul>
+<li><p>预测算法(predication algorithms)
+计算每个状态的价值(v(s))。然后预测(可以得到最大回报的)最优行动。</p></li>
+
+<li><p>控制算法(predication algorithms)
+计算每个状态下每个行动的价值(q(s, a))。</p></li>
+</ul>
+
+<p>学习的算法：</p>
+
+<ul>
+<li><p>列表方法(tabular methods)
+指使用表格存储每个状态（或者状态-行动）的价值。</p></li>
+
+<li><p>近似方法(approximation methods)
+指使用一个函数来计算状态（或者状态-行动）的价值。</p></li>
+
+<li><p>模型(model)
+环境的模型。可以模拟环境，模拟行动的结果。
+Dynamic Programming need a model。</p></li>
+
+<li><p>基于模型的方法(model-base methods)
+通过模型来模拟。可以模拟行动，获得（状态或者行动）价值。</p></li>
+</ul>
+
+<blockquote>注：这个模拟叫做模型模拟。</blockquote>
+
+<ul>
+<li>无模型的方法(model-free methods)
+使用试错法(trial-and-error)来获得（状态或者行动）价值。</li>
+</ul>
+
+<blockquote>注：这个模拟叫做试错、试验、模拟等。
+无模型的方法，可以用于有模型的环境。</blockquote>
+
+<ul>
+<li><p>引导性(bootstrapping)
+（状态或者行动）价值是根据其它的（状态或者行动）价值计算得到的。</p></li>
+
+<li><p>取样性(sampling)
+（状态或者行动）价值，或者部分值（比如：奖赏）是取样得到的。
+引导性和取样性并不是对立的。可以是取样的，并且是引导的。</p></li>
+</ul>
+
+<h2 id="强化学习算法的分类">强化学习算法的分类</h2>
+
+<p><strong>强化学习的故事2：我们该用哪个方法？</strong></p>
+
+<blockquote>如果有一个模型，可以获得价值函数\(v(s)\)或者\(q(s, a)\)的值 \(\to\) 动态规划方法
+如果可以模拟一个完整的情节 \(\to\) 蒙特卡罗方法
+如果需要在模拟一个情节中间就要学习策略 \(\to\) 时序差分方法
+\(\lambda\)-return用来优化近似方法中的误差。
+资格迹(Eligibility traces)用来优化近似方法中的，价值函数的微分。
+预测方法是求状态价值方法\(v(s)\)或者\(\hat{v}(s, \theta)\)。
+控制方法是求行动价值方法\(q(s, a)\)或者\(\hat(q)(s, a, \theta)\)。
+策略梯度方法(Policy Gradient Methods)是求策略方法\(\pi(a|s, \theta)\)。</blockquote>
+
+<table >
+
+<tr class="header" >
+算法类别
+需要模型
+引导性
+情节性任务
+连续性任务
+</tr>
+
+<tbody >
+<tr class="odd" >
+
+<td >动态规划方法
+</td>
+
+<td align="center" >Y
+</td>
+
+<td align="center" >Y
+</td>
+
+<td align="center" >-
+</td>
+
+<td align="center" >-
+</td>
+</tr>
+<tr class="even" >
+
+<td >蒙特卡罗方法
+</td>
+
+<td align="center" >N
+</td>
+
+<td align="center" >N
+</td>
+
+<td align="center" >Y
+</td>
+
+<td align="center" >N
+</td>
+</tr>
+<tr class="odd" >
+
+<td >时序差分方法
+</td>
+
+<td align="center" >N
+</td>
+
+<td align="center" >Y
+</td>
+
+<td align="center" >Y
+</td>
+
+<td align="center" >Y
+</td>
+</tr>
+<tr class="even" >
+
+<td >策略梯度方法
+</td>
+
+<td align="center" >N
+</td>
+
+<td align="center" >Y
+</td>
+
+<td align="center" >Y
+</td>
+
+<td align="center" >Y
+</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="算法列表">算法列表</h2>
+
+<p>在每个算法中，后面的算法会更好，或者更通用一些。</p>
+
+<h3 id="4-动态规划-dynamic-programming">4 动态规划(Dynamic Programming)</h3>
+
+<p>动态规划是基于模型的方法。
+注：一个常见的考虑是将每个action的reward设为-1，期望的结果(V(S_t))为0。</p>
+
+<ul>
+<li><p>Iterative policy evaluation
+使用随机策略(\pi(a|s))来迭代计算(v(s))</p></li>
+
+<li><p>Policy iteration (using iterative policy evaluation)
+通过使用迭代策略(\pi(s))来优化了计算(v(s))部分。但是，还是使用了期望值。</p></li>
+
+<li><p>Value iteration
+优化了整个流程，直接用行动的最大回报作为(v(s))的值。</p></li>
+</ul>
+
+<h3 id="5-蒙特卡罗方法-monte-carlo-method">5 蒙特卡罗方法(Monte Carlo Method)</h3>
+
+<ul>
+<li><p>First-visit MC policy evaluation (returns (V \approx v))
+在每个情节中，记录状态(s)第一个G。(v(s) = avg(G(s)))</p></li>
+
+<li><p>Monte Carlo ES (Exploring Starts)
+从一个特定起始点的蒙特卡罗方法。
+变成了计算(q(s, a))。</p></li>
+
+<li><p>On-policy first-visit MC control (for (\epsilon)-soft policies)
+在探索中使用了(\epsilon)-soft策略。</p></li>
+
+<li><p>Incremental off-policy every-visit MC policy evaluation
+支持off-policy。</p></li>
+
+<li><p>Off-policy every-visit MC control (returns (\pi \approx \pi_*))
+使用了贪婪策略来支持off-policy。</p></li>
+</ul>
+
+<h3 id="6-时序差分方法-temporal-difference-learning">6 时序差分方法(Temporal-Difference Learning)</h3>
+
+<p>时序差分方法的思想是：</p>
+
+<ol>
+<li><p>在一个情节进行过程中学习。
+比如：计算到公司的时间问题。早上晚起了10分钟，可以认为会比以往晚到10分钟。而不用完成从家到公司整个过程。</p></li>
+
+<li><p>视为蒙特卡罗方法的通用化。蒙特卡罗方法是步数为完成情节的TD算法。</p></li>
+</ol>
+
+<ul>
+<li><p>Tabular TD(0) for estimating (v_{\pi})
+计算(v(s))的单步TD算法。</p></li>
+
+<li><p>Sarsa: An on-policy TD control algorithm
+计算(q(s, a))的单步TD算法。</p></li>
+
+<li><p>Q-learning: An off-policy TD control algorithm
+是一个突破性算法。但是存在一个最大化偏差(Maximization Bias)问题。</p></li>
+
+<li><p>Double Q-learning
+解决了最大化偏差(Maximization Bias)问题。</p></li>
+</ul>
+
+<h3 id="7-多步时序差分方法">7 多步时序差分方法</h3>
+
+<ul>
+<li><p>n-step TD for estimating (V \approx v_{\pi})
+计算(v(s))的多步TD算法。</p></li>
+
+<li><p>n-step Sarsa for estimating (Q \approx q<em>*), or (Q \approx q</em>{\pi}) for a given (\pi)
+计算(q(s, a))的多步TD算法。</p></li>
+
+<li><p>Off-policy n-step Sarsa for estimating (Q \approx q<em>*), or (Q \approx q</em>{\pi}) for a given (\pi)
+考虑到重要样本，把(\rho)带入到Sarsa算法中，形成一个off-policy的方法。
+(\rho) - 重要样本比率(importance sampling ratio)
+[
+\rho \gets \prod_{i = \tau + 1}^{min(\tau + n - 1, T -1 )} \frac{\pi(A_t|S_t)}{\mu(A_t|S<em>t)} \qquad \qquad (\rho</em>{\tau+n}^{(\tau+1)})
+]</p></li>
+
+<li><p>n-step Tree Backup for estimating (Q \approx q<em>*), or (Q \approx q</em>{\pi}) for a given (\pi)
+Tree Backup Algorithm的思想是每步都求行动价值的期望值。
+求行动价值的期望值意味着对所有可能的行动(a)都评估一次。</p></li>
+
+<li><p>Off-policy n-step (Q(\sigma)) for estimating (Q \approx q<em>*), or (Q \approx q</em>{\pi}) for a given (\pi)
+(Q(\sigma))结合了Sarsa(importance sampling), Expected Sarsa, Tree Backup算法，并考虑了重要样本。
+当(\sigma = 1)时，使用了重要样本的Sarsa算法。
+当(\sigma = 0)时，使用了Tree Backup的行动期望值算法。</p></li>
+</ul>
+
+<h3 id="8-基于模型的算法">8 基于模型的算法</h3>
+
+<p>这里的思想是：通过体验来直接优化策略和优化模型（再优化策略）。</p>
+
+<ul>
+<li><p>Random-sample one-step tabular Q-planning
+通过从模型中获取奖赏值，计算(q(s, a))。</p></li>
+
+<li><p>Tabular Dyna-Q
+如果(n=0)，就是Q-learning算法。Dyna-Q的算法的优势在于性能上的提高。
+主要原因是通过建立模型，减少了执行行动的操作，模型学习到了(Model(S, A) \gets R, S&rsquo;)。</p></li>
+
+<li><p>Prioritized sweeping for a deterministic environment
+提供了一种性能的优化，只评估那些误差大于一定值(\theta)的策略价值。</p></li>
+</ul>
+
+<h3 id="9-近似预测方法">9 近似预测方法</h3>
+
+<p>预测方法就是求(v(s))。
+[
+\hat{v}(s, \theta) \doteq \theta^T \phi(s), \quad \text{state value function} <br />
+where <br />
+\theta \text{ - value function&rsquo;s weight vector} <br />
+]</p>
+
+<ul>
+<li><p>Gradient Monte Carlo Algorithm for Approximating (\hat{v} \approx v_{\pi})
+蒙特卡罗方法对应的近似预测方法。</p></li>
+
+<li><p>Semi-gradient TD(0) for estimating (\hat{v} \approx v_{\pi})
+单步TD方法对应的近似预测方法。
+之所以叫半梯度递减的原因是TD(0)和n-steps TD计算价值的公式不是精确的（而蒙特卡罗方法是精确的）。</p></li>
+
+<li><p>n-step semi-gradient TD for estimating (\hat{v} \approx v_{\pi})
+多步TD方法对应的近似预测方法。</p></li>
+
+<li><p>LSTD for estimating (\hat{v} \approx v_{\pi}) (O(n2) version)</p></li>
+</ul>
+
+<h3 id="10-近似控制方法">10 近似控制方法</h3>
+
+<p>控制方法就是求(q(s, a))。
+[
+\hat{q}(s, a, \theta) \doteq \theta^T \phi(s, a), \quad \text{action value function} <br />
+where <br />
+\theta \text{ - value function&rsquo;s weight vector} <br />
+]</p>
+
+<ul>
+<li><p>Episodic Semi-gradient Sarsa for Control
+单步TD的近似控制方法。（情节性任务）</p></li>
+
+<li><p>Episodic semi-gradient n-step Sarsa for estimating (\hat{q} \approx q<em>*), or (\hat{q} \approx q</em>{\pi})
+多步TD的近似控制方法。（情节性任务）</p></li>
+
+<li><p>Differential Semi-gradient Sarsa for Control
+单步TD的近似控制方法。（连续性任务）</p></li>
+
+<li><p>Differential semi-gradient n-step Sarsa for estimating (\hat{q} \approx q<em>*), or (\hat{q} \approx q</em>{\pi})
+多步TD的近似控制方法。（连续性任务）</p></li>
+</ul>
+
+<h3 id="12-lambda-return和资格迹-eligibility-traces">12 (\lambda)-return和资格迹(Eligibility traces)</h3>
+
+<p>求权重向量(\theta)是通过梯度下降的方法。比如：
+[
+\delta_t = G_t - \hat{v}(S_t, \theta<em>t) <br />
+\theta</em>{t+1} = \theta_t + \alpha \delta_t \nabla \hat{v}(S_t, \theta_t)
+]
+这里面，有三个元素：(\alpha, G_t, \nabla \hat{v}(S_t, \theta_t))。每个都有自己的优化方法。</p>
+
+<ul>
+<li><p>(\alpha)是学习步长
+要控制步长的大小。一般情况下步长是变化的。比如：如果误差(\delta_t)变大了，步长要变小。</p></li>
+
+<li><p>(G_t)的计算
+可以通过本章的(\lambda) - return方法。</p></li>
+
+<li><p>(\nabla \hat{v}(S_t, \theta_t))
+可以通过资格迹来优化。资格迹就是优化后的函数微分。
+为什么要优化，原因是在TD算法中(\hat{v}(S_t, \theta_t))是不精确的。
+(G_t)也是不精确的。
+<strong>(\lambda)-return用来优化近似方法中的误差。</strong>
+<strong>资格迹(Eligibility traces)用来优化近似方法中的，价值函数的微分。</strong></p></li>
+
+<li><p>Semi-gradient TD((\lambda)) for estimating (\hat{v} \approx v_{\pi})
+使用了(\lambda)-return和资格迹的TD算法。</p></li>
+
+<li><p>True Online TD((\lambda)) for estimating (\theta^T \phi \approx v_{\pi})
+Online TD((\lambda))算法</p></li>
+</ul>
+
+<h3 id="13-策略梯度方法">13 策略梯度方法</h3>
+
+<p>策略梯度方法就是求(\pi(a | s, \theta))。</p>
+
+<h4 id="策略梯度方法的新思路-policy-gradient-methods">策略梯度方法的新思路(Policy Gradient Methods)</h4>
+
+<p>$$
+\text{Reinforcement Learning} \doteq \pi<em>* <br />
+\quad \updownarrow <br />
+\pi</em>* \doteq { \pi(s) }, \ s \in \mathcal{S} <br />
+\quad \updownarrow <br />
+\pi(s) = \underset{a}{argmax} \ \pi(a|s, \theta) <br />
+where <br />
+\pi(a|s, \theta) \in [0, 1] <br />
+s \in \mathcal{S}, \ a \in \mathcal{A} <br />
+\quad \updownarrow <br />
+\pi(a|s, \theta) \doteq \frac{exp(h(s,a,\theta))}{\sum_b exp(h(s,b,\theta))} <br />
+\quad \updownarrow <br />
+exp(h(s,a,\theta)) \doteq \theta^T \phi(s,a) <br />
+where <br />
+\theta \text{ - policy weight vector} <br />
+$$</p>
+
+<ul>
+<li><p>REINFORCE, A Monte-Carlo Policy-Gradient Method (episodic)
+基于蒙特卡罗方法的策略梯度算法。</p></li>
+
+<li><p>REINFORCE with Baseline (episodic)
+带基数的蒙特卡洛方法的策略梯度算法。</p></li>
+
+<li><p>One-step Actor-Critic (episodic)
+带基数的TD方法的策略梯度算法。</p></li>
+
+<li><p>Actor-Critic with Eligibility Traces (episodic)
+这个算法实际上是：</p></li>
+</ul>
+
+<ol>
+<li><p>带基数的TD方法的策略梯度算法。</p></li>
+
+<li><p>加上资格迹(eligibility traces)</p></li>
+</ol>
+
+<ul>
+<li>Actor-Critic with Eligibility Traces (continuing)
+基于TD方法的策略梯度算法。（连续性任务）</li>
+</ul>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="http://www.cnblogs.com/steven-yang/p/6649213.html">强化学习总结</a></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%A4%9A%E8%87%82%E8%80%81%E8%99%8E%E6%9C%BA%E9%97%AE%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">RL 多臂老虎机问题</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7/">
+            <span class="next-text nav-default">RL 数学符号</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

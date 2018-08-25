@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>TL 迁移学习的基本方法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-20 15:10:10&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95 title: TL 迁移学习的基本方法 wordpress_id: 6126 categories: - 人工智能学习 tags: - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="TL 迁移学习的基本方法" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-20 15:10:10&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95 title: TL 迁移学习的基本方法 wordpress_id: 6126 categories: - 人工智能学习 tags: - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95/" /><meta property="article:published_time" content="2018-07-27T15:08:28&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T15:08:28&#43;00:00"/>
+<meta itemprop="name" content="TL 迁移学习的基本方法">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-20 15:10:10&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95 title: TL 迁移学习的基本方法 wordpress_id: 6126 categories: - 人工智能学习 tags: - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所">
+
+
+<meta itemprop="datePublished" content="2018-07-27T15:08:28&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T15:08:28&#43;00:00" />
+<meta itemprop="wordCount" content="2920">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TL 迁移学习的基本方法"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-20 15:10:10&#43;00:00 layout: post link: http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95/ slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95 title: TL 迁移学习的基本方法 wordpress_id: 6126 categories: - 人工智能学习 tags: - Transfer Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">TL 迁移学习的基本方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 2920 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#transfer-learning">- Transfer Learning</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#迁移学习的基本方法">迁移学习的基本方法</a>
+<ul>
+<li><a href="#基于样本的迁移-instance-based-transfer-learning">基于样本的迁移  ( Instance based Transfer Learning )</a></li>
+<li><a href="#基于特征迁移">基于特征迁移</a></li>
+<li><a href="#基于模型迁移">基于模型迁移</a></li>
+<li><a href="#基于关系迁移">基于关系迁移</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-20 15:10:10+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95/">http://106.15.37.116/2018/05/20/tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95/</a>
+slug: tl-%e8%bf%81%e7%a7%bb%e5%ad%a6%e4%b9%a0%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95
+title: TL 迁移学习的基本方法
+wordpress_id: 6126
+categories:
+- 人工智能学习
+tags:</p>
+
+<h2 id="transfer-learning">- Transfer Learning</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><a href="https://github.com/jindongwang/transferlearning-tutorial">迁移学习简明手册</a>  <a href="https://zhuanlan.zhihu.com/p/35352154">王晋东</a></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="迁移学习的基本方法">迁移学习的基本方法</h1>
+
+<p>迁移学习的基本方法可以分为四种：</p>
+
+<ul>
+<li><p>基于样本的迁移</p></li>
+
+<li><p>基于模型的迁移</p></li>
+
+<li><p>基于特征的迁移</p></li>
+
+<li><p>基于关系的迁移</p></li>
+</ul>
+
+<p>本部分简要叙述各种方法的基本原理和代表性相关工作。基于特征和模型的迁移方法是我们的重点。后续将会更加深入地讨论和分析。</p>
+
+<h2 id="基于样本的迁移-instance-based-transfer-learning">基于样本的迁移  ( Instance based Transfer Learning )</h2>
+
+<p>基于样本的迁移学习方法根据一定的权重生成规则，对数据样本进行重用，来进行迁移学习。</p>
+
+<p>下图形象地表示了基于样本迁移方法的思想：</p>
+
+<p>源域中存在不同种类的动物，如狗、鸟、猫等，目标域只有狗这一种类别。在迁移时，为了最大限度地和目标域相似，我们可以人为地提高 源域 中属于狗这个类别的样本权重。<strong>嗯，刚想写个为什么，想了下，感觉的确是这么回事。提高样本权重指的是什么？提高狗的样本个数吗？提升到多少合适？把目标领域全部包括进去？这个真的可行吗？不会使模型不平衡吗？而且目标域只有狗是什么意思？是分类狗的品种吗？如果权重是一个值的话怎么放到训练模型中的？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1B5Hl3780c.png?imageslim" alt="mark" /></p>
+
+<p>在迁移学习中，对于源域 (\mathcal{D}_s) 和目标域 (\mathcal{D}_t) ，通常假定产生它们的概率分布是不同且未知的( (P(\mathbf{x}_s) \ne P(\mathbf{x}_t)) )。</p>
+
+<p>由于实例的维度和数量通常都非常大，因此，直接对 (P(\mathbf{x}_s)) 和 (P(\mathbf{x}_t)) 进行估计是不可行的。<strong>什么叫进行估计？</strong></p>
+
+<p>因而，大量的研究工作都着眼于对源域和目标域的分布比值进行估计( (P(\mathbf{x}_t)/P(\mathbf{x}_s)) )。所估计得到的比值即为样本的权重。<strong>什么是分布比值进行估计？怎么作为样本的权重的？ </strong>这些方法通常都假设 (\frac{P(\mathbf{x}_t)}{P(\mathbf{x}_s)}&lt;\infty) 并且源域和目标域的条件概率分布相同( (P(y|\mathbf{x}_s)=P(y|\mathbf{x}_t)) )。特别的，有：</p>
+
+<ul>
+<li><p>TrAdaboost 方法，将 AdaBoost 的思想应用于迁移学习中，提高有利于目标分类任务的实例权重、降低不利于目标分类任务的实例权重，并基于PAC 理论推导了模型的泛化误差上界。TrAdaBoost 方法是此方面的经典研究之一。[note] Boosting for transfer learning [/note] <strong>后面有介绍这个吗？</strong></p></li>
+
+<li><p>核均值匹配方法 (Kernel Mean Matching, KMM) 对于概率分布进行估计，目标是使得加权后的源域和目标域的概率分布尽可能相近。[note] Correcting sample selection bias by unlabeled data  [/note] <strong>后面有介绍吗？</strong></p></li>
+
+<li><p>传递迁移学习方法 (Transitive Transfer Learning, TTL) 和远域迁移学习 (Distant Domain Transfer Learning, DDTL)，扩展了实例迁移学习方法的应用场景，利用联合矩阵分解和深度神经网络，将迁移学习应用于多个不相似的领域之间的知识共享，取得了良好的效果。[note] Transitive transfer learning [/note] [note] Distant domain transfer learning  [/note] <strong>这两个后面有介绍吗？</strong></p></li>
+</ul>
+
+<p>虽然实例权重法具有这些优点：</p>
+
+<ul>
+<li><p>较好的理论支撑</p></li>
+
+<li><p>容易推导泛化误差上界 <strong>什么叫容易推导泛化误差上界？怎么推导？</strong></p></li>
+</ul>
+
+<p>但是他们缺点比较大：</p>
+
+<ul>
+<li>这类方法通常只在领域间分布差异较小时有效，因此对自然语言处理、计算机视觉等任务效果并不理想。</li>
+</ul>
+
+<p>而对于这些任务，基于特征表示的迁移学习方法效果更好，因此基于特征迁移是我们的重点：</p>
+
+<h2 id="基于特征迁移">基于特征迁移</h2>
+
+<p>基于特征的迁移方法(Feature based Transfer Learning)是指将</p>
+
+<ul>
+<li><p>通过特征变换的方式互相迁移，来减少源域和目标域之间的差距  <strong>什么意思？</strong></p></li>
+
+<li><p>或者将源域和目标域的数据特征变换到统一特征空间中，然后利用传统的机器学习方法进行分类识别。 <strong>怎么变换到统一的特征空间中的？</strong></p></li>
+</ul>
+
+<p>根据特征的同构和异构性，又可以分为同构和异构迁移学习。下图很形象地表示了两种基于特征的迁移学习方法：<strong>什么是特征的同构与异构性？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/K3cEj9GDDm.png?imageslim" alt="mark" /></p>
+
+<p>基于特征的迁移学习方法是迁移学习领域中最热门的研究方法，这类方法通常假设源域和目标域间有一些交叉的特征。举几个例子：<strong>什么是交叉的特征？ 这几个例子所讲的方法都要总结下。</strong></p>
+
+<ul>
+<li><p>香港科技大学的Pan等人~\cite{pan2011domain}提出的迁移成分分析方法(Transfer Component Analysis, TCA)是其中较为典型的一个方法。该方法的核心内容是以最大均值差异(Maximum Mean Discrepancy, MMD)~\cite{borgwardt2006integrating}作为度量准则，将不同数据领域中的分布差异最小化。</p></li>
+
+<li><p>加州大学伯克利分校的Blitzer等人~\cite{blitzer2006domain}提出了一种基于结构对应的学习方法(Structural Corresponding Learning, SCL)，该算法可以通过映射将一个空间中独有的一些特征变换到其他所有空间中的轴特征上，然后在该特征上使用机器学习的算法进行分类预测。</p></li>
+
+<li><p>清华大学龙明盛等人~\cite{long2014transfer}提出在最小化分布距离的同时，加入实例选择的迁移联合匹配(Tranfer Joint Matching, TJM)方法，将实例和特征迁移学习方法进行了有机的结合。</p></li>
+
+<li><p>澳大利亚卧龙岗大学的Jing Zhang等人~\cite{zhang2017joint}提出对于源域和目标域各自训练不同的变换矩阵，从而达到迁移学习的目标。</p></li>
+</ul>
+
+<p>近年来，基于特征的迁移学习方法大多与神经网络进行结合，在神经网络的训练中进行学习特征和模型的迁移。后面我们会系统的介绍。</p>
+
+<h2 id="基于模型迁移">基于模型迁移</h2>
+
+<p>基于模型的迁移方法 (Parameter/Model based Transfer Learning) 是指从源域和目标域中找到他们之间共享的参数信息，以实现迁移的方法。这种迁移方式要求的假设条件是：源域中的数据与目标域中的数据可以共享一些模型的参数。</p>
+
+<p>下图形象地表示了基于模型的迁移学习方法的基本思想：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eH8lfKh3cG.png?imageslim" alt="mark" /></p>
+
+<p>下面介绍几种代表性的工作：<strong>都要总结下</strong></p>
+
+<ul>
+<li><p>中科院计算所的Zhao等人 ~\cite{zhao2011cross} 提出了 TransEMDT 方法。该方法首先针对已有标记的数据，利用决策树构建鲁棒性的行为识别模型，然后针对无标定数据，利用 K-Means 聚类方法寻找最优化的标定参数。</p></li>
+
+<li><p>西安邮电大学的Deng等人 ~\cite{deng2014cross} 也用超限学习机做了类似的工作。</p></li>
+
+<li><p>香港科技大学的Pan等人 ~\cite{pan2008transfer} 利用 HMM ，针对 Wifi 室内定位在不同设备、不同时间和不同空间下动态变化的特点，进行不同分布下的室内定位研究。</p></li>
+
+<li><p>另一部分研究人员对支持向量机 SVM 进行了改进研究~\cite{nater2011transferring,li2012cross}。这些方法假定SVM中的权重向量 (\mathbf{w}) 可以分成两个部分： (\mathbf{w}=\mathbf{w_o}+\mathbf{v}) ，其中 (\mathbf{w}_0) 代表源域和目标域的共享部分， (\mathbf{v}) 代表了对于不同领域的特定处理。</p></li>
+
+<li><p>在最新的研究成果中，香港科技大学的Wei等人~\cite{wei2016instilling}将社交信息加入迁移学习方法的正则项中，对方法进行了改进。</p></li>
+
+<li><p>清华大学龙明盛等人~\cite{long2015learning,long2016deep,long2017deep}改进了深度网络结构，通过在网络中加入概率分布适配层，进一步提高了深度迁移学习网络对于大数据的泛化能力。</p></li>
+</ul>
+
+<p>通过对现有工作的调研可以发现，目前绝大多数基于模型的迁移学习方法都与深度神经网络进行结合。这些方法对现有的一些神经网络结构进行修改，在网络中加入领域适配层，然后联合进行训练。因此，这些方法也可以看作是基于模型、特征的方法的结合。<strong>什么是领域适配层？</strong></p>
+
+<h2 id="基于关系迁移">基于关系迁移</h2>
+
+<p>基于关系的迁移学习方法 (Relation Based Transfer Learning) 与上述三种方法具有截然不同的思路。这种方法比较关注源域和目标域的样本之间的关系。</p>
+
+<p>下图表示了不同领域之间相似的关系。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/afGccJcgcl.png?imageslim" alt="mark" /></p>
+
+<p>就目前来说，基于关系的迁移学习方法的相关研究工作非常少，仅有几篇连贯式的文章讨论。这些文章都借助于马尔科夫逻辑网络 (Markov Logic Net) 来挖掘不同领域之间的关系相似性。<strong>什么意思？</strong></p>
+
+<p>基于马尔科夫网络的关系迁移：<strong>没看懂？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3gH9E4idHH.png?imageslim" alt="mark" /></p>
+
+<p>我们将重点讨论基于特征和基于模型的迁移学习方法，这也是目前绝大多数研究工作的热点。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+<p>迁移学习领域权威综述文章A survey on transfer learning</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%BA%94%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">TL 迁移学习的应用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/tl-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default">TL 迁移学习介绍</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

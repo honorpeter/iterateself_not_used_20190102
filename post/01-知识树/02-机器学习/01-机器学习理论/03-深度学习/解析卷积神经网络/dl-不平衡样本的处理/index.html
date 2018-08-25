@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>DL 不平衡样本的处理 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 不平衡样本的处理 在机器学习的经典假 是均衡（平衡）的， 一般说来，不平衡（ 的类别，而“轻视” 受到影响。一个极" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E4%B8%8D%E5%B9%B3%E8%A1%A1%E6%A0%B7%E6%9C%AC%E7%9A%84%E5%A4%84%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="DL 不平衡样本的处理" />
+<meta property="og:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 不平衡样本的处理 在机器学习的经典假 是均衡（平衡）的， 一般说来，不平衡（ 的类别，而“轻视” 受到影响。一个极" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E4%B8%8D%E5%B9%B3%E8%A1%A1%E6%A0%B7%E6%9C%AC%E7%9A%84%E5%A4%84%E7%90%86/" /><meta property="article:published_time" content="2018-06-26T19:34:10&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:34:10&#43;00:00"/>
+<meta itemprop="name" content="DL 不平衡样本的处理">
+<meta itemprop="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 不平衡样本的处理 在机器学习的经典假 是均衡（平衡）的， 一般说来，不平衡（ 的类别，而“轻视” 受到影响。一个极">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:34:10&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:34:10&#43;00:00" />
+<meta itemprop="wordCount" content="3746">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DL 不平衡样本的处理"/>
+<meta name="twitter:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 不平衡样本的处理 在机器学习的经典假 是均衡（平衡）的， 一般说来，不平衡（ 的类别，而“轻视” 受到影响。一个极"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">DL 不平衡样本的处理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 3746 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《解析卷积神经网络》魏秀参</li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p>不平衡样本的处理</p>
+
+<p>在机器学习的经典假</p>
+
+<p>是均衡（平衡）的，</p>
+
+<p>一般说来，不平衡（</p>
+
+<p>的类别，而“轻视”</p>
+
+<p>受到影响。一个极端 而负例只有i个。</p>
+
+<p>“放弃”负例预测，因</p>
+
+<p>准确率。但是试想，</p>
+
+<p>1%的测试正确率，</p>
+
+<p>设中往往假定训练样本各类别是同等数量即各类样本数目 但我们真实场景中遇到的实际任务却时常不符合这一假设。 imbalance）的训练样本会导致训练模型侧重样本数目较多 样本数目较少类别，这样模型在测试数据上的泛化能力就会 5的例子是对于某二分类问题，训练集中有99个正例样本， 不考虑样本不平衡的很多情况下，学习算法会使分类器 3为把所有样本都分为“正”便可获得高达99%的训练分类 若测试集有99个负例仅1个正例，这样该分类器仅仅只有 完全丧失了测试集上的预测能力。其实，除了常见的分类、 语义分割（semantic segmentation） [60]、深度估计（depth 素级别任务中也不乏不平衡样本出现的现象。为了进一步 解决网络训练时经常遇到的不平衡样本处理问题，本章将 算法层面”两个方面介绍不平衡样本问题的处理方法。</p>
+
+<p>lampling）使整体训练集样本趋于平衡，</p>
+
+<p>12.1</p>
+
+<p>数据层e 即各类</p>
+
+<p>12.1.1</p>
+
+<p>勺数据重采样包括上采样（over-sampling或up-sampling）和下采样 •-sampling或down-sampling）。对于样本较少类，可使用上采样，即复制 C象直至与样本最多类的样本数一致。当然也可以用数据扩充方式替代简 ）制操作。而对于样本较多类别，可采用下采样。需指出的是，对深度学 「下采样并不是直接随机丢弃一部分图像，因为那样做会降低训练数据多 i而影响模型泛化能力。正确的下采样方式为，在批处理训练时对每批随 〔的图像严格控制其样本较多类别的图像数量。以二分类为例，原数据分 a下每次批处理训练正负样本平均数量比例为5 : 1。如仅使用下采样，可</p>
+
+<p>12.1.数据层面处理方法</p>
+
+<p>在每批随机挑选训练样本时每5个正例只取1个放人作为该批训练集的正例，</p>
+
+<p>负例选取仍按照原来准则，这样可使得每批选取的数据中正负比例均等。此外，</p>
+
+<p>还需指出的是，仅使用数据上采样有可能会引起模型过拟合问题。更保险且有</p>
+
+<p>效的数据重采样是将上采样和下采样结合使用。</p>
+
+<p>12.1.2类别平衡采样</p>
+
+<p>另一类数据重采样策略则直接着眼于类别，即类别平衡采样。其策略是把样本</p>
+
+<p>按类别分组，每个类别生成一个样本列表。训练过程中先随机选择1个或几个 类别，然后从各个类别所对应的样本列表中随机选择样本。这样可以保证每个 类别参与训练的机会比较均衡。</p>
+
+<p>不过上述方法对于样本类别较多任务需事先定义与类别数等量的列表，对 于海量类别任务如ImageNet数据集等此举将极其繁琐。在类别平衡采样的基 础上，国内海康威视研究院Shicai Yang等在ILSVRC场景分类任务中提出了 “类别重组”(label shuffling) ［92］的平衡方法，值得一提的是他们还获得2016 年ILSVRC场景分类(scene classification)任务的冠军。</p>
+
+<p>类别重组法［92］只需原始图像列表即可完成同样的均匀采样任务。如图</p>
+
+<p>12.2,其方法步骤如下：首先按照类别顺序对原始样本进行排序，之后计算每 个类别的样本数目，并记录样本最多的那个类别的样本数量。之后，根据这个 最多样本数对每类样本产生一个随机排列列表，然后用此列表中的随机数对各 自类别的样本数求余，得到对应的索引值。接着，根据索引从该类的图像中提 取图像，生成该类的图像随机列表。之后，把所有类别的随机列表连在一起随 机打乱次序，即可得到最终图像列表，可以发现最终列表中每类样本数目均等。 根据此列表训练模型，当训练时列表遍历完毕，则重头再做一遍上述操作即可 进行第二轮训练，如此重复下去……类别重组法的优点在于，只需原始图像列 表，且所有操作均在内存中在线完成，易于实现。细心的读者或许能发现，类 别重组法与上节提到的数据下采样有异曲同工之意。</p>
+
+<p>ID</p>
+
+<p>图像名</p>
+
+<p>图像类别</p>
+
+<p>0</p>
+
+<p>img0⑻</p>
+
+<p>a</p>
+
+<p>1</p>
+
+<p>img001</p>
+
+<p>a</p>
+
+<p>2</p>
+
+<p>img002</p>
+
+<p>a</p>
+
+<p>0</p>
+
+<p>img003</p>
+
+<p>b</p>
+
+<p>1</p>
+
+<p>img004</p>
+
+<p>b</p>
+
+<p>0</p>
+
+<p>img005</p>
+
+<p>c</p>
+
+<p>1</p>
+
+<p>img006</p>
+
+<p>c</p>
+
+<p>2</p>
+
+<p>img007</p>
+
+<p>c</p>
+
+<p>3</p>
+
+<p>img008</p>
+
+<p>c</p>
+
+<p>4</p>
+
+<p>img009</p>
+
+<p>c</p>
+
+<p>1.按类别排序</p>
+
+<p>0</p>
+
+<p>img0⑻</p>
+
+<p>a</p>
+
+<p>img004</p>
+
+<p>b</p>
+
+<p>img006</p>
+
+<p>c</p>
+
+<p>img001</p>
+
+<p>a</p>
+
+<p>img003</p>
+
+<p>b</p>
+
+<p>img002</p>
+
+<p>a</p>
+
+<p>img007</p>
+
+<p>c</p>
+
+<p>img004</p>
+
+<p>b</p>
+
+<p>img0⑻</p>
+
+<p>a</p>
+
+<p>img009</p>
+
+<p>c</p>
+
+<p>img001</p>
+
+<p>a</p>
+
+<p>img005</p>
+
+<p>c</p>
+
+<p>img008</p>
+
+<p>c</p>
+
+<p>img003</p>
+
+<p>b</p>
+
+<p>img003</p>
+
+<p>b</p>
+
+<p>6.随机打乱</p>
+
+<p>图12.2:类别</p>
+
+<p>12.2
+对于不平衡样本导致样本数目较少的类别“欠学习”这一现象，一个很自然的 解决办法是增加小样本错分的“惩罚代价”并将此“惩罚代价”直接体现在目 标函数中，这便是“代价敏感”方法、这样通过优化目标函数就可以调整模型 在小样本上的“注意力”。算法层面处理不平衡样本问题的方法也多从代价敏感 (cost-sensitive)角度出发。</p>
+
+<p>12.2.1代价敏感方法</p>
+
+<p>代价敏感方法可概括为两种，一则基于代价敏感矩阵，另一则是基于代价敏感</p>
+
+<p>1可将原始目标函数看作对不同类别样本错分权重均等的情形。在使用代价敏感法后，如错分则</p>
+
+<p>施加对应权重的惩罚，相对样本较多类别来说小样本类别其错分代价往往更高。</p>
+
+<p>12.2.算法层面处理方法</p>
+
+<p>基于代价敏感矩阵的代价敏感</p>
+
+<p>以分类问题为例，假设某训练集共N个样本，形如：{Xn,yn}N=1,其中样本标 记y隶属于K类。基于代价敏感矩阵方法是利用K x K的矩阵C对不同样 本类别施加错分惩罚(亦可称为权重)：</p>
+
+<p>C(1, 1) C(1, 2) C(2, 1) C(2, 2)</p>
+
+<p>C (K, 1) C (K, 2</p>
+
+<p>其中，C(yi,yj) e [0,^)表示类别yi错分为类别yj的“惩罚”或“代价”，其 取值不小于0;且C(yi,yi)=0。施加代价后的训练目标变为：训练得到某分类 器g使得期望代价之和EnC(yn,g(Xn))最小。可以发现，式12.1中的代价敏 感矩阵反映的是类别级别的错分惩罚。</p>
+
+<p>基于代价敏感向量的代价敏感</p>
+
+<p>另一种代价敏感的反映方式则针对样本级别：对某样本(Xn,yn),有对应的一 个K维代价敏感向量Cn € [0, ^)K，其中Cn的第k维表示该样本被错分为 第k类的惩罚，自然其第yn维应为0。基于代价敏感向量的方法在模型训练阶 段是将样本级别的代价敏感向量与样本以 (xn,yn,Cn) 三元组形式一同作为输 人数据送人学习算法。细心的读者不难发现，代价敏感矩阵法实际上是代价敏 感向量法的一种特殊形式，即对于某类的所有样本其错分惩罚向量为同一向量。</p>
+
+<p>12.2.2代价敏感法中权重的指定方式</p>
+
+<p>通过以上描述可发现，代价敏感方法处理不平衡样本问题的前提是需事先指定</p>
+
+<p>代价敏感矩阵或向量，其中关键是错分惩罚或错分权重的设定。实际使用中可</p>
+
+<p>根据样本比例、分类结果的混淆矩阵等信息指定代价敏感矩阵或向量中错分权</p>
+
+<p>按照样本比例指定</p>
+
+<p>在此以代价敏感矩阵为例说明如何按照样本比例信息指定矩阵取值。假设训练 样本标记共计3类：a类，b类和c类，它们的样本数目比例为3 : 2 : 1。则根 据节12+2+1的描述，代价敏感矩阵可指定为：</p>
+
+<p>113 112 O</p>
+
+<p>2-3 O 2</p>
+
+<p>O 3-2 3</p>
+
+<p>具体来讲，当a类样本被错分为b类(c类)时，由于其样本数最多，对应惩 罚权重可设为稍小值，即b类(c类)样本数与a类样本数的比值3 (1);当b 类样本被错分为a类(c类)时，对应惩罚权重同样为a类(c类)样本数与 b类样本数的比值2 (2);当样本数最少的c类样本被错分为a类(b类)时， 对应惩罚权重应加大，为 3 (2)，以增加小样本错分代价从而体现小样本数据 的重要程度。当然，也可在以上矩阵基础上对矩阵元素都乘上类别数的最小公 倍数6,确保有效惩罚权重不小于1,即：</p>
+
+<p>042</p>
+
+<p>C =    9    0    3.    (12.3)</p>
+
+<p>18 12 0</p>
+
+<p>根据混淆矩阵指定</p>
+
+<p>混淆矩阵(confusion matrix)是人工智能中的一种算法分析工具，用来度量模</p>
+
+<p>型或学习算法在监督学习中预测能力的优劣。在机器学习领域,混淆矩阵通常 也被称作“列联表”或“误差矩阵”。混淆矩阵的每一列代表一个类的实例预测 而每一行表示其真实类别,如下表所示。仍以 a、b、c 三类分类为例,有如下</p>
+
+<p>混淆矩阵：</p>
+
+<p>矩阵对角线为正确分类样本数，各类分别为4、3和21。矩阵其他位置为错 分样本数，如a类错分为b类的样本数为1,错分为c类的样本数为3; b类 错分为a类的样本有2个，错分为c类的样本有4个；c类错分为a类的样本 数为3个，错分为b类的样本有2个。虽说各类错分的样本数的绝对数值接近</p>
+
+<p>12.3.小结</p>
+
+<p>预测结果</p>
+
+<p>类别《</p>
+
+<p>类别*</p>
+
+<p>类别c</p>
+
+<p>真实标记</p>
+
+<p>类别打</p>
+
+<p>4</p>
+
+<p>1</p>
+
+<p>3</p>
+
+<p>类别*</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>4</p>
+
+<p>类别C</p>
+
+<p>3</p>
+
+<p>2</p>
+
+<p>21</p>
+
+<p>（均错分了 3个左右的样本），但相对而言，样本数较少的a和b类分别有50% 和66.67%样本被错分，比例相当高。而对于样本较多的c类，其错分概率就 相对较低（约19%）。该情况下利用代价敏感法处理时，可根据各类错分样本数 设置代价敏感矩阵的取值。一种方式可直接以错分样本数为矩阵取值：</p>
+
+<p>013</p>
+
+<p>C =    2 0 4    .    （12.4）</p>
+
+<p>320</p>
+
+<p>不过，更优方案还需考虑各类的错分比例，并以此比例调整各类错分权重。对 a类而言，a类错分比例为50%,占所有错分比例136% （50%十67%十19%）的 百分之36.76;同理，b类占49.26%, c类最少，占13.97%。以此为权重乘上 原代价矩阵可得新的代价矩阵（已取整）：</p>
+
+<p>(12+5)</p>
+
+<p>12.3小结
+§ 许多真实应用问题中都会遇到样本不平衡问题,且样本不平衡对深度网络</p>
+
+<p>模型的预测性能有较大影响,因此在实践中需考虑样本不平衡因素并做出</p>
+
+<p>解决方案；</p>
+
+<p>§ 数据层面多采用数据重采样法处理样本不平衡问题,其操作简单,不过该 类方法会改变数据原始分布,有可能因此产生过拟合等问题；</p>
+
+<p>§ 算法层面多采用代价敏感法处理样本不平衡问题，通过指定代价敏感矩阵 或代价敏感向量的错分权重，可缓解样本不平衡带来的影响。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">DL 激活函数</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90%E6%96%B9%E6%B3%95/">
+            <span class="next-text nav-default">DL 模型集成方法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03_exploring_2012_data - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="计算是非常耗时间和资源的，所以你不要以为说，我所有东西都有了，我先跑一个 baseline model 这个事情不是那么合适的。 一个比较合适的事情是：你先保证你的流程能" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/03_exploring_2012_data/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03_exploring_2012_data" />
+<meta property="og:description" content="计算是非常耗时间和资源的，所以你不要以为说，我所有东西都有了，我先跑一个 baseline model 这个事情不是那么合适的。 一个比较合适的事情是：你先保证你的流程能" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/03_exploring_2012_data/" /><meta property="article:published_time" content="2018-07-25T07:45:18&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-25T07:45:18&#43;00:00"/>
+<meta itemprop="name" content="03_exploring_2012_data">
+<meta itemprop="description" content="计算是非常耗时间和资源的，所以你不要以为说，我所有东西都有了，我先跑一个 baseline model 这个事情不是那么合适的。 一个比较合适的事情是：你先保证你的流程能">
+
+
+<meta itemprop="datePublished" content="2018-07-25T07:45:18&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-25T07:45:18&#43;00:00" />
+<meta itemprop="wordCount" content="2203">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03_exploring_2012_data"/>
+<meta name="twitter:description" content="计算是非常耗时间和资源的，所以你不要以为说，我所有东西都有了，我先跑一个 baseline model 这个事情不是那么合适的。 一个比较合适的事情是：你先保证你的流程能"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03_exploring_2012_data</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-25 </span>
+        
+        <span class="more-meta"> 2203 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#2012数据探索">2012数据探索</a>
+<ul>
+<li><a href="#1-导入2012子数据集">1.导入2012子数据集</a></li>
+<li><a href="#格式化时间列">格式化时间列</a></li>
+</ul></li>
+<li><a href="#2-补充缺失的天气信息">2. 补充缺失的天气信息</a>
+<ul>
+<li><a href="#导出完整数据到csv文件中"><em>导出完整数据到csv文件中</em></a></li>
+</ul></li>
+<li><a href="#3-构造特征">3. 构造特征</a></li>
+<li><a href="#4-gradient-boosting-regression">4. Gradient Boosting Regression</a></li>
+<li><a href="#5-ordinary-least-squares-regression">5. Ordinary Least Squares Regression</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>计算是非常耗时间和资源的，所以你不要以为说，我所有东西都有了，我先跑一个 baseline model 这个事情不是那么合适的。</p>
+
+<p>一个比较合适的事情是：你先保证你的流程能跑通，保证你的当前的探索的方法是有意义的，是值得做的。</p>
+
+<h2 id="2012数据探索">2012数据探索</h2>
+
+<p><span style="color:red;">工作中，模型做好了之后，一定要先在小数据集上先跑一下。看看情况。</span></p>
+
+<p>本 ipython notebook 使用2种方法(Gradient Boosting regression 和 OLS回归)在2012数据上小试验一把。<span style="color:red;">OLS 回归是什么？</span></p>
+
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+</code></pre>
+
+<h3 id="1-导入2012子数据集">1.导入2012子数据集</h3>
+
+<pre><code class="language-python">loads = pd.read_csv('load2012.csv')
+weather = pd.read_csv('weather2012.csv')
+</code></pre>
+
+<h3 id="格式化时间列">格式化时间列</h3>
+
+<pre><code class="language-python">weather['date'] = weather.dateutc.apply(lambda x: pd.to_datetime(x).date())
+weather['timeest'] = weather.timeest.apply(lambda x: pd.to_datetime(x).time())
+foo = weather[['date', 'timeest']].astype(str)
+weather['timestamp'] = pd.to_datetime(foo['date'] + ' ' + foo['timeest'])
+loads['timestamp'] = loads.timestamp.apply(lambda x: pd.to_datetime(x))
+</code></pre>
+
+<p>上面这段的操作不是特别清楚。要自己跑一下。</p>
+
+<p>之所以要进行上面的操作是因为要把 weather 和 loads 合并起来，在工业界，实际上是大家不会给你一个完整的数据的，不会帮你做很多工作的，这些合并和处理都要自己做。<span style="color:red;">这种合并和处理数据的方法和具体的 python 使用都要整理，并熟练掌握。</span></p>
+
+<p>在实际的工作中，数据库也会分不同的表来存贮，文件也会分不同的表来存储，数据库可能会有第几范式来节省空间。<span style="color:red;">什么是数据库的第几范式？</span></p>
+
+<h2 id="2-补充缺失的天气信息">2. 补充缺失的天气信息</h2>
+
+<p><span style="color:red;">永远我对我拿到手的数据保持警惕，数据里面可能会有缺失的。</span></p>
+
+<p>天气信息的频度是小时级别的，我们载入的 2012 数据是每 5 分钟的间隔。下面这个函数实际上就是使用 KNN 去补全 5 分钟级别数据里的天气信息。当然，详细的天气数据是可以从气象局购买的，不过需要钱。<span style="color:red;">还有这样的。</span></p>
+
+<p><span style="color:red;">没想到还可以使用 KNN 进行填充。</span></p>
+
+<pre><code class="language-python">from sklearn.neighbors import NearestNeighbors
+
+def find_nearest(group, match, groupname):
+    nbrs = NearestNeighbors(1).fit(match['timestamp'].values[:, None])
+    dist, ind = nbrs.kneighbors(group['timestamp'].values[:, None])
+
+    group['nearesttime'] = match['timestamp'].values[ind.ravel()]
+    return group
+
+loads = find_nearest(loads,weather,'timestamp')
+</code></pre>
+
+<p><span style="color:red;">厉害了，这个 NearestNeighbors 竟然用 1 作为参数，嗯，好想法。</span></p>
+
+<p><span style="color:red;">这个 None 是什么？</span></p>
+
+<p>嗯，上面这段程序，把 loads 的时间戳最近的完整的小时的时间放到 nearesttime 里面。这样这个 nearesttime 就可以与天气的时间对应了。这时候就可以把 weather 和 loads merge 在一起了：</p>
+
+<pre><code class="language-python">full = loads.merge(weather, left_on='nearesttime', right_on='timestamp')
+
+#去除冗余列，重命名部分列
+full = full[['timestamp_x', 'load', 'nearesttime', 'temperaturef', \
+            'dewpointf', 'humidity', 'sealevelpressurein', 'winddirection', 'windspeedkmh', \
+            'precipitationmm']].rename(columns={'timestamp_x': 'timestamp', 'nearesttime':'weathertime'})
+</code></pre>
+
+<p>部分的列明进行了重命名。</p>
+
+<p>上面这些都是很耗费时间，但是必须要做的数据处理的事情。</p>
+
+<h3 id="导出完整数据到csv文件中"><em>导出完整数据到csv文件中</em></h3>
+
+<pre><code class="language-python">full.to_csv('full2012.csv', index=False)
+</code></pre>
+
+<h2 id="3-构造特征">3. 构造特征</h2>
+
+<p>现在，我们已经把天气填充到 loads 里面了。由于我们没有气象方面的专业背景，所以不知道要对天气特征进行什么处理才对这个场景更有效，另外一方面，天气信息里面已经包含了一些气温等的数字信息，这些再给平方或开放什么的，意义不是很大。</p>
+
+<p>因此，我们接下来准备挖掘一些时间的特征。</p>
+
+<p>这是一个时间序列上的回归问题，需要在时间上做一些特征，可参照论文<a href="http://arxiv.org/pdf/1506.06972.pdf">Barta et al. 2015</a>提到的方式，去构造细粒度的时间特征，上面那篇论文的应用场景也是用概率模型预测电价。构造的特征如下：</p>
+
+<ul>
+<li><code>dow</code>: day of the week (integer 0-6)</li>
+<li><code>doy</code>: day of the year (integer 0-365)</li>
+<li><code>day</code>: day of the month (integer 1-31)</li>
+<li><code>woy</code>: week of the year (integer 1-52)</li>
+<li><code>month</code>: month of the year (integer 1-12)</li>
+<li><code>hour</code>: hour of the day (integer 0-23)</li>
+
+<li><p><code>minute</code>: minute of the day (integer 0-1339) <span style="color:red;">好吧，这个也有。</span></p></li>
+
+<li><p><code>t_m24</code>: load value from 24 hours earlier</p></li>
+
+<li><p><code>t_m48</code>: load value from 48 hours earlier</p></li>
+
+<li><p><code>tdif</code>: difference between load and t_m24 ：每隔 24 小时的 diff。</p></li>
+</ul>
+
+<p>论文中告诉了我们这些特征是有用的。</p>
+
+<p>我们先构造一个函数获取 n 天前的相同时刻的电力需求：</p>
+
+<pre><code class="language-python">#取出 n 天前相同时刻的电力需求
+pday = pd.Timedelta('1 day')
+
+def get_prev_days(x, n_days):
+    '''Take a datetime (x) in the 'full' dataframe, and outputs the load value n_days before that datetime'''
+    try:
+        lo = full[full.timestamp == x - n_days*pday].load.values[0]
+    except:
+        lo = full[full.timestamp == x].load.values[0]
+    return lo
+</code></pre>
+
+<p>真的，看厉害的人写的代码真的像手术刀一样精准。上面这个 <code>pd.Timedelta('1 day')</code> 简直，做梦都没想到还可以这样写。</p>
+
+<p>开始构造特征：</p>
+
+<pre><code class="language-python">full['dow'] = full.timestamp.apply(lambda x: x.dayofweek)
+full['doy'] = full.timestamp.apply(lambda x: x.dayofyear)
+full['day'] = full.timestamp.apply(lambda x: x.day)
+full['month'] = full.timestamp.apply(lambda x: x.month)
+full['hour'] = full.timestamp.apply(lambda x: x.hour)
+full['minute'] = full.timestamp.apply(lambda x: x.hour*60 + x.minute)
+
+full['t_m24'] = full.timestamp.apply(get_prev_days, args=(1,))
+full['t_m48'] = full.timestamp.apply(get_prev_days, args=(2,))
+full['tdif'] = full['load'] - full['t_m24']
+</code></pre>
+
+<p><span style="color:red;">震惊了，没想到 pandas 里面是这样构造特征的，简直太方便了。怪不得要求 pandas 里面关于时间的操作最起码要知道有这些操作，因为知道之后可能直接一句话就行，如果不知道可能需要自己来手工处理。</span></p>
+
+<p><span style="color:red;"><code>full.timestamp.apply(get_prev_days, args=(1,))</code> 这种写法也很厉害，以前不知道还可以这样写。</span></p>
+
+<p><span style="color:red;">如果想把过去24小时使用的时间总和作为特征怎么写？</span></p>
+
+<p>把这个时间特征也构造好的数据存放起来：</p>
+
+<pre><code class="language-python">full.to_csv('full2012_features.csv', index=False)
+</code></pre>
+
+<p>到目前为止，我们做好了数据的采集和数据的清洗和特征的构建。</p>
+
+<h2 id="4-gradient-boosting-regression">4. Gradient Boosting Regression</h2>
+
+<p>这里使用的是 GradientBoostingRegressor ，但是他比较慢，所以很多人都使用 XGBoost。</p>
+
+<pre><code class="language-python">from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.cross_validation import train_test_split
+</code></pre>
+
+<pre><code class="language-python">full.columns
+</code></pre>
+
+<pre><code>Index([u'timestamp', u'load', u'weathertime', u'temperaturef', u'dewpointf',
+       u'humidity', u'sealevelpressurein', u'winddirection', u'windspeedmph',
+       u'precipitationin', u'dow', u'doy', u'day', u'month', u'hour',
+       u'minute', u't_m24', u't_m48', u'tdif'],
+      dtype='object')
+</code></pre>
+
+<pre><code class="language-python">X = full[[\
+          'temperaturef',\
+          'dewpointf', \
+          'humidity', \
+          'sealevelpressurein', \
+          'windspeedkmh', \
+          'precipitationmm',\
+          'dow',\
+          'doy', \
+          'month',\
+          'hour',\
+          'minute',\
+          't_m24', \
+          't_m48', \
+          'tdif'\
+         ]]
+y = full['load']
+</code></pre>
+
+<pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+</code></pre>
+
+<p>直接使用默认的值跑一下：</p>
+
+<pre><code class="language-python">gbr = GradientBoostingRegressor(loss='ls', verbose=1, warm_start=True)
+</code></pre>
+
+<pre><code class="language-python">gbr_fitted = gbr.fit(X_train, y_train)
+</code></pre>
+
+<pre><code>      Iter       Train Loss   Remaining Time
+         1       54422.8242            9.84s
+         2       46096.6971           11.07s
+         3       39293.9887            9.98s
+         4       33773.5271            8.73s
+         5       29246.6397            8.50s
+         6       25568.6157            8.23s
+         7       22550.6621            7.98s
+         8       20025.1744            7.74s
+         9       17956.5337            7.52s
+        10       16236.3410            7.46s
+        20        9033.7561            5.55s
+        30        7353.5608            4.25s
+        40        6528.5173            3.39s
+        50        5909.5739            2.73s
+        60        5598.7196            2.08s
+        70        5323.0064            1.52s
+        80        5056.9857            1.08s
+        90        4865.8749            0.53s
+       100        4670.0520            0.00s
+</code></pre>
+
+<pre><code class="language-python">gbr.score(X_test, y_test)
+</code></pre>
+
+<pre><code>0.92513322840797652
+</code></pre>
+
+<pre><code class="language-python">gbr.score(X_train, y_train)
+</code></pre>
+
+<pre><code>0.92779521041729107
+</code></pre>
+
+<p><span style="color:red;">这种是分越高越好的吗？看来很不错呀，没想到。</span></p>
+
+<h2 id="5-ordinary-least-squares-regression">5. Ordinary Least Squares Regression</h2>
+
+<p>使用传统的 LSR 来做：</p>
+
+<pre><code class="language-python">import statsmodels.api as sm
+
+model = sm.OLS(y,X)
+results = model.fit()
+results.summary()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Dep. Variable:</th>
+<th>load</th>
+<th>R-squared:</th>
+<th>0.996</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Model:</td>
+<td>OLS</td>
+<td>Adj. R-squared:</td>
+<td>0.996</td>
+</tr>
+
+<tr>
+<td>Method:</td>
+<td>Least Squares</td>
+<td>F-statistic:</td>
+<td>1.856e+06</td>
+</tr>
+
+<tr>
+<td>Date:</td>
+<td>Wed, 16 Mar 2016</td>
+<td>Prob (F-statistic):</td>
+<td>0.00</td>
+</tr>
+
+<tr>
+<td>Time:</td>
+<td>16:19:54</td>
+<td>Log-Likelihood:</td>
+<td>-6.3477e+05</td>
+</tr>
+
+<tr>
+<td>No. Observations:</td>
+<td>107000</td>
+<td>AIC:</td>
+<td>1.270e+06</td>
+</tr>
+
+<tr>
+<td>Df Residuals:</td>
+<td>106987</td>
+<td>BIC:</td>
+<td>1.270e+06</td>
+</tr>
+
+<tr>
+<td>Df Model:</td>
+<td>13</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Covariance Type:</td>
+<td>nonrobust</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>coef</th>
+<th>std err</th>
+<th>t</th>
+<th>P&gt;|t|</th>
+<th>[95.0% Conf. Int.]</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>temperaturef</td>
+<td>-1.3140</td>
+<td>0.172</td>
+<td>-7.626</td>
+<td>0.000</td>
+<td>-1.652 -0.976</td>
+</tr>
+
+<tr>
+<td>dewpointf</td>
+<td>1.9076</td>
+<td>0.183</td>
+<td>10.447</td>
+<td>0.000</td>
+<td>1.550 2.265</td>
+</tr>
+
+<tr>
+<td>humidity</td>
+<td>-1.0322</td>
+<td>0.080</td>
+<td>-12.865</td>
+<td>0.000</td>
+<td>-1.189 -0.875</td>
+</tr>
+
+<tr>
+<td>sealevelpressurein</td>
+<td>8.2132</td>
+<td>0.246</td>
+<td>33.328</td>
+<td>0.000</td>
+<td>7.730 8.696</td>
+</tr>
+
+<tr>
+<td>windspeedmph</td>
+<td>0.4577</td>
+<td>0.054</td>
+<td>8.522</td>
+<td>0.000</td>
+<td>0.352 0.563</td>
+</tr>
+
+<tr>
+<td>precipitationin</td>
+<td>-51.7532</td>
+<td>11.751</td>
+<td>-4.404</td>
+<td>0.000</td>
+<td>-74.785 -28.721</td>
+</tr>
+
+<tr>
+<td>dow</td>
+<td>-16.3734</td>
+<td>0.145</td>
+<td>-113.264</td>
+<td>0.000</td>
+<td>-16.657 -16.090</td>
+</tr>
+
+<tr>
+<td>doy</td>
+<td>0.0893</td>
+<td>0.032</td>
+<td>2.824</td>
+<td>0.005</td>
+<td>0.027 0.151</td>
+</tr>
+
+<tr>
+<td>month</td>
+<td>-2.4457</td>
+<td>0.970</td>
+<td>-2.522</td>
+<td>0.012</td>
+<td>-4.346 -0.545</td>
+</tr>
+
+<tr>
+<td>hour</td>
+<td>1.7808</td>
+<td>0.970</td>
+<td>1.835</td>
+<td>0.066</td>
+<td>-0.121 3.683</td>
+</tr>
+
+<tr>
+<td>minute</td>
+<td>-0.0007</td>
+<td>0.016</td>
+<td>-0.042</td>
+<td>0.967</td>
+<td>-0.032 0.031</td>
+</tr>
+
+<tr>
+<td>t_m24</td>
+<td>0.8563</td>
+<td>0.003</td>
+<td>290.160</td>
+<td>0.000</td>
+<td>0.851 0.862</td>
+</tr>
+
+<tr>
+<td>t_m48</td>
+<td>0.0259</td>
+<td>0.003</td>
+<td>8.694</td>
+<td>0.000</td>
+<td>0.020 0.032</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>Omnibus:</th>
+<th>11294.270</th>
+<th>Durbin-Watson:</th>
+<th>0.074</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Prob(Omnibus):</td>
+<td>0.000</td>
+<td>Jarque-Bera (JB):</td>
+<td>40839.219</td>
+</tr>
+
+<tr>
+<td>Skew:</td>
+<td>0.509</td>
+<td>Prob(JB):</td>
+<td>0.00</td>
+</tr>
+
+<tr>
+<td>Kurtosis:</td>
+<td>5.850</td>
+<td>Cond. No.</td>
+<td>8.81e+04</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import Ridge
+
+avg_MSE = []
+alphas = np.linspace(-2, 8, 20, endpoint=False)
+alphas
+for alpha in alphas:
+    MSE = []
+    for i in range(20):
+#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=20)
+#     model = sm.OLS(X_train, y_train)
+        model = Ridge(alpha=alpha)
+        model.fit(X_test, y_test)
+        test_error = mean_squared_error(y_test, model.predict(X_test))
+        MSE.append(test_error)
+    avg_MSE.append(np.mean(MSE))
+
+plt.figure(figsize=(6,2))
+plt.xlabel('alpha', fontsize=14)
+plt.ylabel('Cross Validation MSE', fontsize=11)
+plt.title('alpha vs. Cross Validation MSE', fontsize=11)
+plt.plot(alphas, avg_MSE)
+</code></pre>
+
+<pre><code>[&lt;matplotlib.lines.Line2D at 0x12646d190&gt;]
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/53KgdkaGd4.png?imageslim" alt="mark" /></p>
+
+<p>这个只是在小数据集上跑了全部的流程，并没有确定现在我们要用什么参数。因为在小数据集上表现好的参数并不一定在全局的时候表现好。</p>
+
+<p>参数其实我们不担心，我们只需要把 grid-search 和 cross-validation 用上之后，给计算机跑就行。我们真正要关注的是前面的数据如何去产出我们最合适的特征，产出我们对目标场景有帮助的特征。</p>
+
+<p>其实，关于模型的选择，和关于超参的选择，是我们比较不担心的事情，因为大部分都是写好之后给计算机跑就行。可供选择的模型和超参不是那么的多。</p>
+
+<p><span style="color:red;">其实我对交叉验证这个词的概念还有一些不确定。到底什么样叫做交叉验证？有哪些参数？</span></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-25</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/04_clean_and_combine_data/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04_clean_and_combine_data</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/02_collect_weather_data/">
+            <span class="next-text nav-default">02_collect_weather_data</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

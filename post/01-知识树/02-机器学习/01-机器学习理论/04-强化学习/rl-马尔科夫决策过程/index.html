@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>RL 马尔科夫决策过程 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-17 05:53:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b/ slug: rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b title: RL 马尔科夫决策过程 wordpress_id: 5928 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="RL 马尔科夫决策过程" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-17 05:53:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b/ slug: rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b title: RL 马尔科夫决策过程 wordpress_id: 5928 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="RL 马尔科夫决策过程">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-17 05:53:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b/ slug: rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b title: RL 马尔科夫决策过程 wordpress_id: 5928 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="3714">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RL 马尔科夫决策过程"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-17 05:53:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b/ slug: rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b title: RL 马尔科夫决策过程 wordpress_id: 5928 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">RL 马尔科夫决策过程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 3714 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#reinforcement-learning">- Reinforcement Learning</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#知识前提">知识前提</a></li>
+<li><a href="#马尔科夫决策过程介绍">马尔科夫决策过程介绍</a>
+<ul>
+<li><a href="#马尔科夫决策过程的发展">马尔科夫决策过程的发展</a></li>
+<li><a href="#到底什么是马尔科夫决策过程">到底什么是马尔科夫决策过程？</a></li>
+</ul></li>
+<li><a href="#文章主题">文章主题</a></li>
+<li><a href="#首先-是马尔可夫性">首先，是马尔可夫性</a></li>
+<li><a href="#马尔科夫过程是什么">马尔科夫过程是什么？</a></li>
+<li><a href="#把决策和回报考虑在内的马尔科夫过程就是马尔科夫决策过程">把决策和回报考虑在内的马尔科夫过程就是马尔科夫决策过程</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-17 05:53:08+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/17/rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b/">http://106.15.37.116/2018/05/17/rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b/</a>
+slug: rl-%e9%a9%ac%e5%b0%94%e7%a7%91%e5%a4%ab%e5%86%b3%e7%ad%96%e8%bf%87%e7%a8%8b
+title: RL 马尔科夫决策过程
+wordpress_id: 5928
+categories:
+- 人工智能学习
+tags:
+- NOT_ADD</p>
+
+<h2 id="reinforcement-learning">- Reinforcement Learning</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<p>1.</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/25498081">强化学习入门 第一讲 MDP</a></p>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="知识前提">知识前提</h1>
+
+<ul>
+<li><p>概率相关知识。概率在强化学习中还是很重要的。</p>
+
+<ul>
+<li><p>首先，强化学习的策略往往是随机策略。采用随机策略的好处是可以将探索耦合到采样的过程中，探索就是指机器人尝试其他的动作以便找到更好的策略。<strong>什么是随机策略？什么是将探索耦合到采样的过程中？</strong></p></li>
+
+<li><p>其次，在实际应用中，存在各种噪声，这些噪声大都服从正态分布，如何去掉这些噪声也需要用到概率的知识。<strong>怎么去除噪声？</strong></p></li>
+</ul></li>
+</ul>
+
+<h1 id="马尔科夫决策过程介绍">马尔科夫决策过程介绍</h1>
+
+<h2 id="马尔科夫决策过程的发展">马尔科夫决策过程的发展</h2>
+
+<p>无数学者们通过几十年不断地努力和探索，提出了一套可以解决大部分强化学习问题的框架，这个框架就是马尔科夫决策过程，简称 MDP。<strong>是这样吗？马尔科夫决策过程是为了解决强化学习的问题的吗？</strong></p>
+
+<h2 id="到底什么是马尔科夫决策过程">到底什么是马尔科夫决策过程？</h2>
+
+<h1 id="文章主题">文章主题</h1>
+
+<p>我们会按下列顺序循序渐进地介绍马尔科夫决策过程：</p>
+
+<ol>
+<li><p>马尔科夫性</p></li>
+
+<li><p>马尔科夫过程</p></li>
+
+<li><p>马尔科夫决策过程</p></li>
+</ol>
+
+<p>##</p>
+
+<h1 id="首先-是马尔可夫性">首先，是马尔可夫性</h1>
+
+<p>什么是马尔科夫性？</p>
+
+<p>所谓马尔科夫性，就是指系统的下一个状态 (s_{t+1}) 仅与当前状态 (s_t) 有关，而与以前的状态无关。<strong>这个马尔可夫性的前提和应用范围还是要提一下的吧？不然大家以为是普遍适用的吧？前提是什么？</strong></p>
+
+<p>OK，我们把定义写出来：</p>
+
+<p>状态 (s<em>t) 是马尔科夫的，当且仅当 ( P\left[s</em>{t+1}|s<em>t\right]=P\left[s</em>{t+1}|s_1,\cdots ,s_t\right] ) 。</p>
+
+<p>从定义中可以看到，当前状态 (s_t) 其实是蕴含了所有相关的历史信息 (s_1,\cdots ,s_t)，因此一旦当前状态已知，那么所有的历史信息可以被抛弃。<strong>我们怎么知道一个系统是不是满足马尔科夫性呢？</strong></p>
+
+<p>OK，马尔科夫性描述的是每个状态的性质。</p>
+
+<p>那么马尔科夫随机过程又是什么呢？</p>
+
+<h1 id="马尔科夫过程是什么">马尔科夫过程是什么？</h1>
+
+<p>首先我们要知道：在数学中，所谓的随机过程就是指<strong>随机变量序列</strong>。因此，如果随机变量序列中的每个状态都是马尔科夫的，那么我们就称这个随机过程为马尔科夫随机过程。它本质上还是一个变量序列，即一个状态序列。<strong>马尔科夫随机过程跟马尔科夫过程是一个意思吗？</strong></p>
+
+<p>那么马尔科夫过程呢？定义如下：</p>
+
+<p>马尔科夫过程是一个二元组 (\left(S,P\right)) ，且满足：</p>
+
+<ul>
+<li><p>(S) 是有限状态集合</p></li>
+
+<li><p>(P) 是状态转移概率 ，是一个矩阵：( P=\left[\begin{matrix} P<em>{11}&amp; \cdots&amp; P</em>{1n}\ \vdots&amp; \vdots&amp; \vdots\ P<em>{n1}&amp; \cdots&amp; P</em>{nn}\ \end{matrix}\right] )</p></li>
+</ul>
+
+<p>OK，下面我们借用一个例子来说明这里面的参数和整个的马尔科夫过程：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/g7f3CAe5g3.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>学生的状态集为： { 娱乐，课程1，课程2， 课程3，考过，睡觉，论文 }，7 种状态。每种状态之间的转换概率已经标注在图上。</li>
+</ul>
+
+<p>现在，一个学生以 课程1 为开始，那么接下来他的状态序列可能为：</p>
+
+<ul>
+<li><p>课1-课2-课3-考过-睡觉</p></li>
+
+<li><p>课1-课2-睡觉</p></li>
+</ul>
+
+<p>上面这种状态序列就被称为马尔科夫链。</p>
+
+<p>可以看出，当给定状态转移概率的时候，从某个状态出发存在着多条马尔科夫链。</p>
+
+<p>实际上，对于人或者机器人，马尔科夫过程还不足以描述其行为特点，因为不管是人还是机器人，他们都是通过动作与环境进行交互，并从环境中获得奖励，而马尔科夫过程中不存在动作和奖励。</p>
+
+<p>OK，我们现在把动作（策略）和回报添加进去看下：</p>
+
+<h1 id="把决策和回报考虑在内的马尔科夫过程就是马尔科夫决策过程">把决策和回报考虑在内的马尔科夫过程就是马尔科夫决策过程</h1>
+
+<p>把决策和回报考虑在内的马尔科夫过程就是马尔科夫决策过程。</p>
+
+<p>定义如下：</p>
+
+<p>马尔科夫决策过程由元组 (\left(S,A,P,R,\gamma\right)) 描述，其中：</p>
+
+<ul>
+<li><p>(S) 为有限的状态集</p></li>
+
+<li><p>(A) 为有限的动作集</p></li>
+
+<li><p>(P) 为状态转移概率</p></li>
+
+<li><p>(R) 为回报函数 <strong>回报函数是怎么定的？</strong></p></li>
+
+<li><p>(\gamma ) 为折扣因子，用来计算累积回报。<strong>什么是折扣因子？以前看的时候就没怎么明白。</strong></p></li>
+</ul>
+
+<p>注意：跟马尔科夫过程不同的是，马尔科夫决策过程的状态转移概率是包含动作的即： (P<em>{ss&rsquo;}^{a}=P\left[S</em>{t+1}=s&rsquo;|S_t=s,A_t=a\right])</p>
+
+<p>OK，我们同样举上面的例子，然后把动作的回报添加进来：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d4cB2c732c.png?imageslim" alt="mark" />上面就是马尔科夫决策过程的示例图，与之前的例子类似。之前讲马尔科夫过程，只有状态，现在有动作集了：</p>
+
+<ul>
+<li><p>学生的状态集为 (S=\left{s_1,s_2,s_3,s_4,s_5\right}) ，五个状态。</p></li>
+
+<li><p>动作集为 A= { 玩，退出，学习，发论文，睡觉 } 。</p></li>
+</ul>
+
+<p>而动作的立即回报已经用红色标记出来。<strong>要强调是立即回报吗？</strong></p>
+
+<p>强化学习的目标是给定一个马尔科夫决策过程，寻找最优策略。而所谓的策略其实就是状态到动作的映射。</p>
+
+<p>OK，策略的定义如下：是用条件概率分布给出的</p>
+
+<p>策略常用符号 (\pi ) 表示，它是指给定状态 (s) 时，动作集上的一个分布，即</p>
+
+<p>[ \pi\left(a|s\right)=p\left[A_t=a|S_t=s\right] ] (1.1)</p>
+
+<p>这个公式是什么意思呢？</p>
+
+<p>言归正传，公式(1.1)的含义是：策略 (\pi) 在每个状态 (s) 指定一个动作概率。如果给出的策略 (\pi) 是确定性的，那么策略 (\pi) 在每个状态 (s) 指定一个确定的动作。</p>
+
+<p>例如其中一个学生的策略为 [ \pi_1\left(\textrm{玩}|s_1\right)=0.8 ] ，是指该学生在状态 (s_1) 时玩的概率为0.8，不玩的概率是0.2，显然这个学生更喜欢玩。</p>
+
+<p>另外一个学生的策略为 (\pi_2\left(\textrm{玩}|s_1\right)=0.3) ，是指该学生在状态 (s_1) 时玩的概率是0.3，显然这个学生不爱玩。依此类推，每学生都有自己的策略。强化学习是找到最优的策略，这里的最优是指得到的总回报最大。</p>
+
+<p>当给定一个策略 (\pi) 时，我们就可以计算累积回报了。首先定义累积回报：</p>
+
+<p>[ G<em>t=R</em>{t+1}+\gamma R<em>{t+2}+\cdots =\sum</em>{k=0}^{\infty}{\gamma^kR_{t+k+1} }\\\ \left(1.2\right) ]</p>
+
+<p>当给定策略 (\pi) 时，假设从状态 (s_1) 出发，学生状态序列可能为：</p>
+
+<p>( s_1\rightarrow s_2\rightarrow s_3\rightarrow s_4\rightarrow s_5 ;\ s_1\rightarrow s_2\rightarrow s_3\rightarrow s_5 \ &hellip;&hellip;)</p>
+
+<p>此时，在策略 (\pi) 下，利用(1.2)式可以计算累积回报 (G_1) ，此时 (G_1) 有多个可能值 。由于策略 (\pi) 是随机的，因此累积回报也是随机的。为了评价状态 (s_1) 的价值，我们需要定义一个确定量来描述状态 (s_1) 的价值，很自然的想法是利用累积回报来衡量状态 (s_1) 的价值。然而，累积回报 (G_1) 是个随机变量，不是一个确定值，因此无法进行描述。但其期望是个确定值，可以作为状态值函数的定义。</p>
+
+<p>状态值函数：</p>
+
+<p>当智能体采用策略 (\pi) 时，累积回报服从一个分布，累积回报在状态 (s) 处的期望值定义为状态-值函数：</p>
+
+<p>(\upsilon<em>{\pi}\left(s\right)=E</em>{\pi}\left[\sum<em>{k=0}^{\infty}{\gamma^kR</em>{t+k+1}|S_t=s}\right]) (1.3)</p>
+
+<p>注意：状态值函数是与策略 (\pi) 相对应的，这是因为策略 (\pi) 决定了累积回报G的状态分布。</p>
+
+<p>图1.4 状态值函数示意图</p>
+
+<p>如图1.4所示为与图1.3相对应的状态值函数图。图中白色圆圈中的数值为该状态下的值函数。即：</p>
+
+<p>( \upsilon_{\pi}\left(s<em>1\right)=-2.3,\ \upsilon</em>{\pi}\left(s<em>2\right)=-1.3,\ \upsilon</em>{\pi}\left(s<em>3\right)=2.7,\\upsilon</em>{\pi}\left(s<em>4\right)=7.4,\ \upsilon</em>{\pi}\left(s_5\right)=0 )</p>
+
+<p>相应地，状态-行为值函数为：</p>
+
+<p>[ q<em>{\pi}\left(s,a\right)=E</em>{\pi}\left[\sum<em>{k=0}^{\infty}{\gamma^kR</em>{t+k+1}|S_t=s,A_t=a}\right] ] (1.4)</p>
+
+<p>式(1.3)和式(1.4)分别给出了状态值函数和状态-行为值函数的定义计算式，但在实际真正计算和编程的时候并不会按照定义式去编程。接下来我们会从不同的方面对定义式进行解读。</p>
+
+<p><strong>状态值函数与状态-行为值函数的贝尔曼方程</strong></p>
+
+<p>由状态值函数的定义式(1.3)可以得到：</p>
+
+<p>( \upsilon\left(s\right)=E\left[G_t|S<em>t=s\right] \ =E\left[R</em>{t+1}+\gamma R_{t+2}+\cdots |S<em>t=s\right] \ =E\left[R</em>{t+1}+\gamma\left(R<em>{t+2}+\gamma R</em>{t+3}+\cdots\right)|S<em>t=s\right] \ =E\left[R</em>{t+1}+\gamma G_{t+1}|S<em>t=s\right] \ =E\left[R</em>{t+1}+\gamma\upsilon\left(S_{t+1}\right)|S_t=s\right] ) (1.5)</p>
+
+<p><strong>最后一个等号的补充证明：</strong></p>
+
+<p>(\ V\left(S<em>t\right)=E</em>{s<em>t,s</em>{t+1},\cdots}\left(R\left(t+1\right)+\gamma G\left(S<em>{t+1}\right)\right) \ =E</em>{s<em>t}\left(R\left(t+1\right)+\gamma E</em>{s<em>{t+1},\cdots}\left(G\left(S</em>{t+1}\right)\right)\right) \ =E_{s<em>t}\left(R\left(t+1\right)+\gamma V\left(S</em>{t+1}\right)\right) \ =E\left(R\left(t+1\right)+\gamma V\left(S_{t+1}\right)\right) )</p>
+
+<p><strong>需要注意的是对哪些变量求期望。</strong></p>
+
+<p>同样我们可以得到状态-动作值函数的贝尔曼方程：</p>
+
+<p>[q<em>{\pi}\left(s,a\right)=E</em>{\pi}\left[R<em>{t+1}+\gamma q\left(S</em>{t+1},A_{t+1}\right)|S_t=s,A_t=a\right] \eqno{(1.6)}]</p>
+
+<p>状态值函数与状态-行为值函数的具体推导过程：</p>
+
+<p>图1.5和图1.6分别为状态值函数和行为值函数的具体计算过程。其中空心圆圈表示状态，实心圆圈表示状态-行为对。</p>
+
+<p>图1.5 状态值函数的计算示意图</p>
+
+<p>图1.5为值函数的计算分解示意图，图1.5B计算公式为：</p>
+
+<p>[ \upsilon<em>{\pi}\left(s\right)=\sum</em>{a\in A}{\pi\left(a|s\right)q_{\pi}\left(s,a\right)}\\\left(1.7\right) ]</p>
+
+<p>图1.5B给出了状态值函数与状态-行为值函数的关系。图1.5C计算状态-行为值函数为：</p>
+
+<p>[ q<em>{\pi}\left(s,a\right)=R</em>{s}^{a}+\gamma\sum<em>{s&rsquo;}{P</em>{ss&rsquo;}^{a} }\upsilon_{\pi}\left(s&rsquo;\right)\\\left(1.8\right) ]</p>
+
+<p>将(1.8)式带入到(1.7)式可以得到：</p>
+
+<p>[ \upsilon<em>{\pi}\left(s\right)=\sum</em>{a\in A}{\pi\left(a|s\right)\left(R<em>{s}^{a}+\gamma\sum</em>{s&rsquo;\in S}{P<em>{ss&rsquo;}^{a}\upsilon</em>{\pi}\left(s&rsquo;\right)}\right)}\\\left(1.9\right) ]</p>
+
+<p>图1.6 状态-行为值函数计算</p>
+
+<p>在1.6C中，</p>
+
+<p>[ \upsilon<em>{\pi}\left(s&rsquo;\right)=\sum</em>{a&rsquo;\in A}{\pi\left(a&rsquo;|s&rsquo;\right)q_{\pi}\left(s&rsquo;,a&rsquo;\right)}\\\left(1.10\right) ]</p>
+
+<p>将(1.10)带入到(1.8)中，得到行为状态-行为值函数：</p>
+
+<p>[ q<em>{\pi}\left(s,a\right)=R</em>{s}^{a}+\gamma\sum<em>{s&rsquo;\in S}{P</em>{ss&rsquo;}^{a}\sum<em>{a&rsquo;\in A}{\pi\left(a&rsquo;|s&rsquo;\right)q</em>{\pi}\left(s&rsquo;,a&rsquo;\right)} }\\\left(1.11\right) ]</p>
+
+<p>公式(1.9)可以在图1.4中进行验证。选择状态 (s_4) 处。由图1.4知道 (\upsilon\left(s_4\right)=7.4) ，由公式(1.9)得：</p>
+
+<p>[ \upsilon\left(s_4\right)=0.5<em>\left(1+0.2</em>\left(-1.3\right)+0.4*2.7+0.4*7.4\right)+0.5*10=7.39 ]</p>
+
+<p>保留一位小数为7.4</p>
+
+<p>计算状态值函数的目的是为了构建学习算法从数据中得到最优策略。每个策略对应着一个状态值函数，最优策略自然对应着最优状态值函数。</p>
+
+<p>定义：最优状态值函数 (\upsilon^<em>\left(s\right)) ,为在所有策略中值最大的值函数即： (\upsilon^</em>\left(s\right)=\max<em>{\pi}\upsilon</em>{\pi}\left(s\right)) ，最优状态-行为值函数 (q^*\left(s,a\right)) 为在所有策略中最大的状态-行为值函数，即：</p>
+
+<p>(q^*\left(s,a\right)=\max<em>{\pi}q</em>{\pi}\left(s,a\right))</p>
+
+<p>我们由(1.9)式和(1.11)式分别得到最优状态值函数和最优状态-行动值函数的贝尔曼最优方程：</p>
+
+<p>[ \upsilon^<em>\left(s\right)=\max<em>aR</em>{s}^{a}+\gamma\sum<em>{s&rsquo;\in S}{P</em>{ss&rsquo;}^{a}\upsilon^</em>\left(s&rsquo;\right)\\\left(1.12\right)} ]</p>
+
+<p>[ q^<em>\left(s,a\right)=R<em>{s}^{a}+\gamma\sum</em>{s&rsquo;\in S}{P<em>{ss&rsquo;}^{a}\max</em>{a&rsquo;}q^</em>\left(s&rsquo;,a&rsquo;\right)}\\\left(1.13\right) ]</p>
+
+<p>若已知最优状态-动作值函数，最优策略可通过直接最大化 (q^*\left(s,a\right)) 来决定。</p>
+
+<p>[ \pi<em>*\left(a|s\right)=\left{\begin{array}{c} 1\ if\ a=\underset{a\in A}{arg\max}q</em>*\left(s,a\right)\ 0\ otherwis\ \end{array}\right. ] (1.14)</p>
+
+<p>图1.7 最优值函数和最优策略</p>
+
+<p>图1.7为最优状态值函数示意图，图中红色箭头所示的动作为最优策略。</p>
+
+<p>至此，我们将强化学习的基本理论介绍完毕。现在是时候该对强化学习算法进行形式化描述了。</p>
+
+<p>我们定义一个离散时间有限范围的折扣马尔科夫决策过程 [ M=\left(S,A,P,r,\rho<em>0,\gamma ,T\right) ] ，其中 (S) 为状态集， (A) 为动作集， (P:S\times A\times S\rightarrow R) 是转移概率， [ r:S\times A\rightarrow\left[-R</em>{\max},R_{\max}\right] ] 为立即回报函数， [ \rho_0:S\rightarrow R ] 是初始状态分布， [ \gamma\in\left[0,1\right] ] 为折扣因子， (T) 为水平范围（其实就是步数）. (\tau) 为一个轨迹序列，即 (\tau =\left(s_0,a_0,s_1,a<em>1,\cdots\right)) ，累积回报为 [ R=\sum</em>{t=0}^T{\gamma^t}r<em>t ] ，强化学习的目标是：找到最优策略 (\pi) ，使得该策略下的累积回报期望最大，即： [ \max</em>{\pi}\int{R\left(\tau\right)}p_{\pi}\left(\tau\right)d\tau ] 。</p>
+
+<p>根据策略最优定理知道，当值函数最优时采取的策略也是最优的。反过来，策略最优时值函数也最优。</p>
+
+<p>图1.8 强化学习算法分类</p>
+
+<p>如图1.8所示，强化学习算法根据以策略为中心还是以值函数最优可以分为两大类，策略优化方法和动态规划方法。其中策略优化方法又分为进化算法和策略梯度方法；动态规划方法分为策略迭代算法和值迭代算法。策略迭代算法和值迭代算法可以利用广义策略迭代方法进行统一描述。</p>
+
+<p>另外，强化学习算法根据策略是否是随机的，分为确定性策略强化学习和随机性策略强化学习。根据转移概率是否已知可以分为基于模型的强化学习算法和无模型的强化学习算法。另外，强化学习算法中的回报函数 (r) 十分关键，根据回报函数是否已知，可以分为强化学习和逆向强化学习。逆向强化学习是根据专家实例将回报函数学出来。</p>
+
+<p>第一讲结束，如果对你有帮助，请赞赏，支持原创教程。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E8%B5%84%E6%A0%BC%E7%97%95%E8%BF%B9eligibility-traces/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">RL 资格痕迹(Eligibility Traces)</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/ai%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A14-%E6%9C%9F%E6%9C%9B-%E6%96%B9%E5%B7%AE-%E5%8D%8F%E6%96%B9%E5%B7%AE/">
+            <span class="next-text nav-default">ai概率统计(4)-期望 方差 协方差</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

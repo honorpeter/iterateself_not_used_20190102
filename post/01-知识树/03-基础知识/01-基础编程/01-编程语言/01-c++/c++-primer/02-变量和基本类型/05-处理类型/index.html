@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 处理类型 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2.5处理类型 随着程序越来越复杂，程序中用到的类型也越来越复杂，这种复杂性体现在两个方面。 一是一些类型难于“拼写”，它们的名字既难记又容易写" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/02-%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/05-%E5%A4%84%E7%90%86%E7%B1%BB%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 处理类型" />
+<meta property="og:description" content="2.5处理类型 随着程序越来越复杂，程序中用到的类型也越来越复杂，这种复杂性体现在两个方面。 一是一些类型难于“拼写”，它们的名字既难记又容易写" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/02-%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/05-%E5%A4%84%E7%90%86%E7%B1%BB%E5%9E%8B/" /><meta property="article:published_time" content="2018-08-03T19:55:42&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T19:55:42&#43;00:00"/>
+<meta itemprop="name" content="05 处理类型">
+<meta itemprop="description" content="2.5处理类型 随着程序越来越复杂，程序中用到的类型也越来越复杂，这种复杂性体现在两个方面。 一是一些类型难于“拼写”，它们的名字既难记又容易写">
+
+
+<meta itemprop="datePublished" content="2018-08-03T19:55:42&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T19:55:42&#43;00:00" />
+<meta itemprop="wordCount" content="4156">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 处理类型"/>
+<meta name="twitter:description" content="2.5处理类型 随着程序越来越复杂，程序中用到的类型也越来越复杂，这种复杂性体现在两个方面。 一是一些类型难于“拼写”，它们的名字既难记又容易写"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 处理类型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 4156 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#2-5处理类型">2.5处理类型</a>
+<ul>
+<li><a href="#2-5-1类型别名">2.5.1类型别名</a></li>
+<li><a href="#2-5-2-auto类型说明符">2.5.2 auto类型说明符</a></li>
+<li><a href="#2-5-2节练习">2.5.2节练习</a></li>
+<li><a href="#2-5-3节练习">2.5.3节练习</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h5 id="2-5处理类型">2.5处理类型</h5>
+
+<p>随着程序越来越复杂，程序中用到的类型也越来越复杂，这种复杂性体现在两个方面。 一是一些类型难于“拼写”，它们的名字既难记又容易写错，还无法明确体现其真实目的 和含义。二是有时候根本搞不清到底需要的类型是什么，程序员不得不回过头去从程序的 上下文中寻求帮助。</p>
+
+<h6 id="2-5-1类型别名">2.5.1类型别名</h6>
+
+<p>类型别名(type alias)是一个名字，它是某种类型的同义词。使用类型别名有很多好 处，它让复杂的类型名字变得简单明了、易于理解和使用，还有助于程序员清楚地知道使 用该类型的真实目的。</p>
+
+<p>有两种方法可用于定义类型别名。传统的方法是使用关键字typedef： typedef double wages; //wages 是 double 的同义词</p>
+
+<p>typedef wages base, *p; //base 是 double 的同义词，p 是 double*的同义词</p>
+
+<p>其中，关键字typedef作为声明语句中的基本数据类型(参见2.3节，第45页)的一部 分出现。含有typedef的声明语句定义的不再是变量而是类型别名。和以前的声明语句</p>
+
+<p>® 一样，这里的声明符也可以包含类型修饰，从而也能由基本数据类型构造出复合类型来。</p>
+
+<p>新标准规定了一种新的方法，使用别名声明(alias declaration)来定义类型的别名： using SI = Sales_item; // SI 是 Sales_item 的同义词</p>
+
+<p>这种方法用关键字using作为别名声明的开始，其后紧跟别名和等号，其作用是把等号 左侧的名字规定成等号右侧类型的别名。</p>
+
+<p>类型别名和类型的名字等价，只要是类型的名字能出现的地方，就能使用类型别名: wages hourly, weekly;    // 等价于 double hourly、weekly;</p>
+
+<p>SI item;    // 等价于 Sales_item item</p>
+
+<p>指针、常量和类型别名</p>
+
+<p>如果某个类型别名指代的是复合类型或常量，那么把它用到声明语句里就会产生意想 不到的后果。例如下面的声明语句用到了类型pstring,它实际上是类型char*的别名：</p>
+
+<p>typedef char *pstring;</p>
+
+<p>const pstring cstr = 0;    // cstr 是指向 char 的常量指针</p>
+
+<p>const pstring *ps;    // ps是一个指针，它的对象是指向char的常量指针</p>
+
+<p>上述两条声明语句的基本数据类型都是const pstring,和过去一样，const是对给定 类型的修饰。pstring实际上是指向char的指针，因此，const pstring就是指向 char的常量指针，而非指向常量字符的指针。</p>
+
+<p>遇到一条使用了类型别名的声明语句时，人们往往会错误地尝试把类型别名替换成它 本来的样子，以理解该语句的含义：</p>
+
+<p>const char *cstr = 0;    // 是对 const pstring cstr 的错误理解</p>
+
+<p>再强调一遍：这种理解是错误的。声明语句中用到pstring时，其基本数据类型是指针。</p>
+
+<p>可是用char*重写了声明语句后，数据类型就变成了 char, *成为了声明符的一部分。</p>
+
+<p>这样改写的结果是，const char成了基本数据类型。前后两种声明含义截然不同，前者 声明了一个指向char的常量指针，改写后的形式则声明了一个指向const char的指针。</p>
+
+<h6 id="2-5-2-auto类型说明符">2.5.2 auto类型说明符</h6>
+
+<p>编程时常常需要把表达式的值赋给变量，这就要求在声明变量的时候清楚地知道表达 式的类型。然而要做到这一点并非那么容易，有时甚至根本做不到。为了解决这个问题，</p>
+
+<p>C++11新标准引入了 auto类型说明符，用它就能让编译器替我们去分析表达式所属的类 型。和原来那些只对应一种特定类型的说明符（比如double）不同，auto让编译器通＜691 过初始值来推算变量的类型，显然，auto定义的变量必须有初始值：</p>
+
+<p>//由vail和val2相加的结果可以推断出item的类型</p>
+
+<p>auto item = vail + val2; // item 初始化为 vail 和 val2 相加的结果</p>
+
+<p>此处编译器将根据vail和val2相加的结果来推断item的类型。如果vail和val2 是类Sales_item （参见1.5节，第17页）的对象，则item的类型就是Sales_item: 如果这两个变量的类型是double,贝G item的类型就是double,以此类推。</p>
+
+<p>使用auto也能在一条语句中声明多个变量。因为一条声明语句只能有一个基本数据 类型，所以该语句中所有变量的初始基本数据类型都必须一样：</p>
+
+<p>auto i = ◦, *p = &i;    //正确：i是整数、p是整型指针</p>
+
+<p>auto sz = 0, pi = 3.14;    // 错误：sz 和 pi 的类型不一致</p>
+
+<p>复合类型、常量和auto</p>
+
+<p>编译器推断出來的auto类型有时候和初始值的类型并不完全一样，编译器会适当地 改变结果类型使其更符合初始化规则。</p>
+
+<p>首先，正如我们所熟知的，使用引用其实是使用引用的对象，特别是当引用被用作初 始值时，真正参与初始化的其实是引用对象的值。此时编译器以引用对象的类型作为auto 的类型：</p>
+
+<p>int i = 0, &amp;r = i;</p>
+
+<p>auto a = r;    // a是一个整教（r是i的别名，而i是一个整数）</p>
+
+<p>其次，auto—般会忽略掉顶层const （参见2.4.3节，第57页），同时底层const则会 保留下来，比如当初始值是一个指向常量的指针时，</p>
+
+<p>const int ci = i, &amp;cr = ci;</p>
+
+<p>auto b = ci; // b是一个整数（ci的顶层const特性被忽略掉了）</p>
+
+<p>auto c = cr; // c是一个整数（cr是ci的别名，ci本身是一个顶层const ）</p>
+
+<p>auto d = &i;    //d是一个整型指针（整数的地址就是指向整数的指针）</p>
+
+<p>auto e = &ci; // e是一个指向整数常量的指针（对常量对象取地址是一种底层const ）</p>
+
+<p>如果希望推断出的auto类型是一个顶层const,需要明确指出：</p>
+
+<p>const auto f = ci;    // ci 的推演类型是 int, f 是 const int</p>
+
+<p>还可以将引用的类型设为auto,此时原来的初始化规则仍然适用：</p>
+
+<p>auto &amp;g = ci;    // g是一个整型常量引用，绑定到ci</p>
+
+<p>auto &amp;h = 42;    //错误：不能为非常量引用绑定字面值</p>
+
+<p>const auto &amp;j = 42;    //正确：可以为常量引用绑定字面值</p>
+
+<p>S＞设置一个类型为auto的引用时，初始值中的顶层常量属性仍然保留。和往常一样，如果 我们给初始值绑定一个引用，则此时的常量就不是顶层常量了。</p>
+
+<p>要在一条语句中定义多个变量，切记，符号&amp;和*只从属于某个声明符，而非基本数据 类型的一部分，因此初始值必须是同一种类型：</p>
+
+<p>auto k = ci, &amp;1 = i;    / / k是整数，1是整型引用</p>
+
+<p>auto &amp;m = ci, *p = &ci; // m是对整型常量的引用，p是指向整型常量的指针 //错误：i的类型是int而&amp;ci的类型是const int auto &amp;n = i, *p2 = &ci;</p>
+
+<h6 id="2-5-2节练习">2.5.2节练习</h6>
+
+<p>练习2.33:利用本节定义的变量，判断下列语句的运行结果。</p>
+
+<p>a = 42; b = 42; c = 42; d = 42; e = 42; g = 42;</p>
+
+<p>练习2.34:基于上一个练习中的变量和语句编写一段程序，输出赋值前后变量的内容, 你刚才的推断正确吗？如果不对，请反复研读本节的示例直到你明白错在何处为止。 练习2.35:判断下列定义推断出的类型是什么，然后编写程序进行验证。 const int i = 42;</p>
+
+<p>auto j = i; const auto &amp;k = i; auto *p = &i; const auto j2 = i, &amp;k2 = i;</p>
+
+<p>啦2.5.3 decltype类型指示符</p>
+
+<p>有时会遇到这种情况：希望从表达式的类型推断出要定义的变量的类型，似是不想用 岡该表达式的值初始化变量，为了满足这一要求，c++n新标准引入了第二种类型说明符 decltype,它的作用是选择并返回操作数的数据类型。在此过程中，编译器分析表达式</p>
+
+<p>并得到它的类型，却不实际计算表达式的值：</p>
+
+<p>decltype(f()) sum</p>
+
+<p>x;</p>
+
+<p>// sum的类型就是函数f的返回类型</p>
+
+<p>编译器并不实际调用函数f，而是使用当调用发生时f的返回值类型作为sum的类型，换 句话说，编译器为sum指定的类型是什么呢？就是假如f被调用的话将会返回的那个类 型。</p>
+
+<p>decltype处理顶层const和引用的方式与auto有些许不同=如果decltype使 用的表达式是一个变量，则decltype返回该变量的类型(包括顶层const和引用在内)：＜!□</p>
+
+<p>const int ci = 0, &amp;cj = ci;</p>
+
+<p>decltype (ci) x = 0;    // x 的类型是 const int</p>
+
+<p>decltype (cj) y = x;    // y 的类型是 const int&amp;, y 绑定到变量 x</p>
+
+<p>decltype (cj ) z;    //错误：z是一个引用，必须初始化</p>
+
+<p>因为cj是一个引用，decltype (cj)的结果就是引用类型，因此作为引用的z必须被初 始化=</p>
+
+<p>需要指出的是，引用从來都作为其所指对象的同义词出现，只有用在decltype处 是一个例外。</p>
+
+<p>decltype和引用</p>
+
+<p>如果decltype使用的表达式不是一个变量，则decltype返回表达式结果对应的 类型。如4.1.1节(第120页)将要介绍的，有些表达式将向decltype返回一个引用类 型。一般來说当这种情况发生吋，意味着该表达式的结果对象能作为一条赋值语句的左值：</p>
+
+<p>// decltype的结果可以是引用类型 int i = 42, *p = &amp;i, &amp;r = i;</p>
+
+<p>decltype (r + 0) b; //正确：加法的结果是int，因此b是一个(未初始化的)int decltype (*p) c;    //错误：c是int&amp;,必须初始化</p>
+
+<p>因为r是一个引用，因此decltype &reg;的结果是引用类型。如果想让结果类型是r所指 的类型，可以把r作为表达式的一部分，如r+0,显然这个表达式的结果将是一个具体值 而非一个引用。</p>
+
+<p>另一方面，如果表达式的内容是解引用操作，则decltype将得到引用类型。正如 我们所熟悉的那样，解引用指针可以得到指针所指的对象，而且还能给这个对象赋值。因 此，decltype (*p＞的结果类型就是int&amp;，而非int。</p>
+
+<p>decltype和auto的另一处重要区别是，decltype的结果类型与表达式形式密切@ 相关。有一种情况需要特别注意：对于decltype所用的表达式来说，如果变量名加上 了一对括号，则得到的类型与不加括号时会有不同。如果decltype使用的是一•个不加 括号的变量，则得到的结果就是该变量的类型；如果给变量加上了一层或多层括号，编译 器就会把它当成是一个表达式。变量是一种可以作为赋值语句左值的特殊表达式，所以这 样的decltype就会得到引用类型：</p>
+
+<p>// decltype的表达式如果是加上了括号的变量，结果将是引用 decltype ( (i) ) d;    // 错误：d 是 intS.，必须初始化</p>
+
+<p>decltype (i) e;    //正确：e是一个(未初始化的)int</p>
+
+<p>/a 切记：decltype ( (variable))(注意是双层括号)的结果永远是引用，而 / ! \ decltype (variaWe)结果只有当variaide本身就是一个引用时才是</p>
+
+<p>WARNING 引用。</p>
+
+<p><img src="C++  Primer 5-28.jpg" alt="img" /></p>
+
+<h6 id="2-5-3节练习">2.5.3节练习</h6>
+
+<p>练习2.36:关于下面的代码，请指出每一个变量的类型以及程序结束时它们各自的值。</p>
+
+<p>int a = 3, b = 4; decltype(a) c = a; decltype((b)) d = a;</p>
+
+<p>++c;</p>
+
+<p>++d;</p>
+
+<p>练习2.37：赋值是会产生引用的一类典型表达式，引用的类型就是左值的类型。也就是 说，如果i是int,则表达式i=x的类型是int&amp;。根据这一特点，请指出下面的代码 中每一个变量的类型和值。</p>
+
+<p>int a = 3, b = 4; decltype(a) c = a; decltype(a = b) d = a;</p>
+
+<p>练习2.38：说明由decltype指定类型和由auto指定类型有何区别。请举出一个例 子，decltype指定的类型与auto指定的类型一样；再举一个例子，decltype指定 的类型与auto指定的类型不一样。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/02-%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/07-%E5%B0%8F%E7%BB%93%E4%B8%8E%E6%9C%AF%E8%AF%AD/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">07 小结与术语</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/02-%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/04-const-%E9%99%90%E5%AE%9A%E7%AC%A6/">
+            <span class="next-text nav-default">04 const 限定符</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

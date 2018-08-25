@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 网络管理协议介绍 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第三章 运维必备的网络管理技能 Linux系统在服务器市场占有很大的份额，尤其在互联网时代，要使用计算机就离不开网络。本章将讲解Linux系统的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/01-%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 网络管理协议介绍" />
+<meta property="og:description" content="第三章 运维必备的网络管理技能 Linux系统在服务器市场占有很大的份额，尤其在互联网时代，要使用计算机就离不开网络。本章将讲解Linux系统的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/01-%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E5%8D%8F%E8%AE%AE%E4%BB%8B%E7%BB%8D/" /><meta property="article:published_time" content="2018-07-12T16:26:56&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-12T16:26:56&#43;00:00"/>
+<meta itemprop="name" content="01 网络管理协议介绍">
+<meta itemprop="description" content="第三章 运维必备的网络管理技能 Linux系统在服务器市场占有很大的份额，尤其在互联网时代，要使用计算机就离不开网络。本章将讲解Linux系统的">
+
+
+<meta itemprop="datePublished" content="2018-07-12T16:26:56&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-12T16:26:56&#43;00:00" />
+<meta itemprop="wordCount" content="2919">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 网络管理协议介绍"/>
+<meta name="twitter:description" content="第三章 运维必备的网络管理技能 Linux系统在服务器市场占有很大的份额，尤其在互联网时代，要使用计算机就离不开网络。本章将讲解Linux系统的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 网络管理协议介绍</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-12 </span>
+        
+        <span class="more-meta"> 2919 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#第三章-运维必备的网络管理技能">第三章 运维必备的网络管理技能</a>
+<ul>
+<li><a href="#3-1-网络管理协议介绍">3.1 网络管理协议介绍</a>
+<ul>
+<li><a href="#3-1-1-tcp-ip-概述">3.1.1 TCP/IP 概述</a>
+<ul>
+<li><a href="#1-osi参考鯉">1.OSI参考鯉</a></li>
+<li><a href="#2-包-packet">2.包(packet)</a></li>
+<li><a href="#3-网络字节顺序">3.网络字节顺序</a></li>
+<li><a href="#4-地址解析协议-arp">4.地址解析协议(ARP)</a></li>
+</ul></li>
+<li><a href="#3-1-2-udp-与-icmp-协议简介">3.1.2 UDP 与 ICMP 协议简介</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="第三章-运维必备的网络管理技能">第三章 运维必备的网络管理技能</h1>
+
+<p>Linux系统在服务器市场占有很大的份额，尤其在互联网时代，要使用计算机就离不开网络。本章将讲解Linux系统的网络配置。在开始配置网络之前，需要了解一些基本的网络原理。</p>
+
+<p>对于提供互联网应用的服务器，网络防火墙是其抵御攻击破坏的安全屏障，如何在攻击时及时做出有效的措施是网络应用时时刻刻面对的问题。高昂的硬件防火墙是一般开发者难以接受的。Linux 系统的出现，为开发者低成本解决安全问题提供了一种可行的方案。要熟练应用 Linux 防火墙，首先需要了解TCP/IP网络的基本原理，理解Linux防火墙的工作原理，并熟练掌握Linux系统下提供的各种工具。<span style="color:red;">嗯。非常想知道 Linux 防火墙是怎么工作的？要怎么设置？</span></p>
+
+<p>如果管理的计算机有几十台，初始化服务器配置 IP 地址、网关和子网掩码等参数是个烦琐耗时的过程。如果网络结构要更改，需要重新初始化网络参数，使用动态主机配置协议 (Dynamic Host Configuration Protocol, DHCP)则可以避免此问题，客户端可以从 DHCP 服端检索相关信息并完成相关网络配置，在系统重启后依然可以工作。尤其在移动办公领域, 只要区域内有一台 DHCP 服务器，用户就可以在办公室之间自由活动而不必担心网络参数配置的问题。DHCP提供一种动态指定 IP 地址和相关网络配置参数的机制。<span style="color:red;">这么厉害？为什么之前没有听说过？DHCP 是在路由器里面的吗？</span></p>
+
+<p>如今互联网应用越来越丰富，如仅仅用 IP 地址标识网络上的计算机是不可能完成任务的，</p>
+
+<p>也没有必要，于是产生了域名系统。域名系统通过一系列有意义的名称标识网络上的计算机，用户按域名请求某个网络服务吋，域名系统负责将其解析为对应的 IP 地址，这便是DNS。<span style="color:red;">嗯，DNS服务器怎么弄得？而且，本地可以给几个计算机搭建自己的DNS吗？</span></p>
+
+<p>本章主要涉及的知识点有：</p>
+
+<ul>
+<li>网络管理协议</li>
+<li>常用的网络管理命令</li>
+<li>Linux的网络配置方法</li>
+</ul>
+
+<h2 id="3-1-网络管理协议介绍">3.1 网络管理协议介绍</h2>
+
+<p>要了解 Linux 的配置，首先需要了解相关的网络管理，本节主要介绍和网络配置密切相关的 TCP/IP 协议、 UDP 协议和 ICMP 协议。</p>
+
+<h3 id="3-1-1-tcp-ip-概述">3.1.1 TCP/IP 概述</h3>
+
+<p>计算机网络是由地理上分散的、具有独立功能的多台计算机，通过通信设备和线路互相连接起来，在配有相应的网络软件的情况下，实现计算机之间通信和资源共享的系统。计算机网络按其所跨越的地理范围可分为局域网(Local Area Network, LAN)和广域网(Wide Area Network, WAN)。在整个计算机网络通信中，使用最为广泛的通信协议便是 TCP/IP 协议，为网络互联事实上的标准协议，每个接入互联网的计算机如果进行信息传输必然使用该协议。 TCP/IP协议主要包含传输控制协议(Transmission Control Protocol,简称TCP)和网际协议(Internet Protocol，简称 IP )。<span style="color:red;">传输协议和网际协议？为什么会有这两个？</span></p>
+
+<h4 id="1-osi参考鯉">1.OSI参考鯉</h4>
+
+<p>计算机网络是为了实现计算机之间的通信，任何双方要成功地进行通信，必须遵守一定的信息交换规则和约定，在所有的网络中，每一层的目的都是向上一层提供一定的服务，同时利用下一层所提供的功能。 TCP/IP 协议体系在和 OSI 协议体系的竞争中取得了决定性的胜利，得到了广泛的认可，成为事实上的网络协议体系标准。Linux 系统也是采用 TCP/IP 体系结构进行网络通信。TCP/IP协议体系和 OSI 参考模型一样，也是一种分层结构。由基于硬件层次上的4个概念性层次构成，即网络接口层、网际互联层、传输层和应用层。OSI参考模型与 TCP/IP对比如图3.1所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/cb4fkgadhj.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li><p>网络接口层主要为上层提供服务，完成链路控制等功能，</p></li>
+
+<li><p>网际互联层主要解决主机到主机之间的通信问题。其主要协议有：网际协议(IP)、地址解析协议(ARP)、反向地址解析协议 (RARP)和互联网控制报文协议(ICMP)。</p></li>
+
+<li><p>传输层为应用层提供端到端的通信功能，同时提供流量控制，确保数据完整和正确。TCP协议位于该层，提供一种可靠的、面向连接的数据传输服务；与此对应的是UDP协议，提供不可靠的、无连接的数据报传输服务。</p></li>
+
+<li><p>应用层对应于OSI参考模型中的上面3层，为用户提供所需要的各种应用服务，如 FTP、Telnet、DNS、SMTP 等。</p></li>
+</ul>
+
+<p>TCP/IP 协议体系及其实现中有很多概念和术语，为方便理解，本节集中介绍一些最常用的概念与术语。</p>
+
+<h4 id="2-包-packet">2.包(packet)</h4>
+
+<p>包(packet)是网络上传输的数据片段，也称分组，同时称作 IP 数据报。用户数据按照规定划分为大小适中的若干组，每个组加上包头构成一个包，这个过程称为封装。网络上使用包为单位传输。包是一种统称，在不同的层次，包有不同的名字，如 TCP/IP 称作帧，而 IP 层称为IP数据报，TCP 层称为 TCP 报文等。图3.2为 IP 数据报格式。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/aadEkDgk4b.png?imageslim" alt="mark" /></p>
+
+<h4 id="3-网络字节顺序">3.网络字节顺序</h4>
+
+<p>由于不同体系结构的计算机存储数据的格式和顺序都不一样，要使用互联网互联必须定义一个数据的表示标准。如一台计算机发送1个32位的整数至另外一台计算机，由于机器上存储整数的字节顺序可能不一样，按照源计算机的格式发送到目的主机可能会改变数字的值。 TCP/IP 协议定义了一种所有机器在互联网分组的二进制字段中必须使用的网络标准字节顺序(network standard byte order)，与此对应的是主机字节顺序，主机字节顺序是和各个主机密切相关的。传输时需要遵循以下转换规则：“主机字节顺序-&gt;网络字节顺序-&gt;主机字节顺序”，即发送方将主机字节顺序的整数转换为网络字节顺序然后发送出去，接收方收到数据后将网络字节顺序的整数转换为自己的主机字节顺序然后处理。<span style="color:red;">嗯。</span></p>
+
+<h4 id="4-地址解析协议-arp">4.地址解析协议(ARP)</h4>
+
+<p>TCP/IP 网络使用 IP 址寻址，IP 包在 IP 层实现路由选择。但是 IP 包在数据链路层的传输却需要知道设备的物理地址，因此需要一种 IP 地址到物理地址的转换协议。TCP/IP协议栈使用一种动态绑定技术，来实现一种维护起来既高效又容易的机制，这就是地址解析协议(ARP)。<span style="color:red;">怎么实现的？</span></p>
+
+<p>ARP 协议是在以太网这种有广播能力的网络中解决地址转换问题的方法。这种办法允许在不重新编译代码、不需维护一个集中式数据库的情况下，在网络中动态增加新机器。其原理简单描述为：当主机A想转换某一 IP 地址时，通过向网络中广播一个专门的报文分组，要求具有该 IP 地址机以其物理地址做出应答。当所有主机都收到这个请求，但是只有符合条件的主机才辨认该IP地址，同时发回一个应答，应答中包含其物理地址。主机 A 收到应答时便知道了该IP地址对应的物理硬件地址，并使用这个地址直接把数据分组发送出去。<span style="color:red;">这个会不会很慢？而且会不会有伪造？</span></p>
+
+<h3 id="3-1-2-udp-与-icmp-协议简介">3.1.2 UDP 与 ICMP 协议简介</h3>
+
+<p>UDP (User Datagram Protocol)是一种无连接的传输层协议，主要用于不要求分组顺序到达的传输中，分组传输顺序的检查与排序由应用层完成，提供面向事务的简单不可靠信息传送服务。由于其不提供数据包分组、组装和不能对数据包进行排序的缺点，当报文发送之后，是无法得知其是否安全完整到达的，同时流量不易控制，如网络质量较差，则UDP协议数据包丢失会比较严重。但 UDP 协议具有资源消耗小，处理速度快的优点。<span style="color:red;">丢包怎么办？</span></p>
+
+<p>ICMP 是 Internet Control Message Protocol (Internet 控制报文协议)的缩写，属于 TCP/IP 协议族的一个子协议，用于在 IP 主机、路由器之间传递控制消息。控制消息是指网络通不通、主机是否可达、路由是否可用等网络本身的消息。如经常使用的用于检查网络通不通的 <code>ping</code> 命令，<code>ping</code>的过程实际上就是ICMP协议工作的过程。ICMP唯一的功能是报告问题而不是纠正错误，纠正错误的任务由发送方完成。<span style="color:red;">嗯。</span></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/02-%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 网络管理命令</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/03-%E8%BF%90%E7%BB%B4%E5%BF%85%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86%E6%8A%80%E8%83%BD/08-%E5%B0%8F%E7%BB%93/">
+            <span class="next-text nav-default">08 小结</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

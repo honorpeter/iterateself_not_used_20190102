@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>C&#43;&#43; main 函数运行前后 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="main 函数运行前后 main 函数运行前发生了什么？ 我们通常认为 C 语言的起始函数是main()函数，实质上一个程序的启动函数并不一定是main()函数，这" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-main-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%89%8D%E5%90%8E/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="C&#43;&#43; main 函数运行前后" />
+<meta property="og:description" content="main 函数运行前后 main 函数运行前发生了什么？ 我们通常认为 C 语言的起始函数是main()函数，实质上一个程序的启动函数并不一定是main()函数，这" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-main-%E5%87%BD%E6%95%B0%E8%BF%90%E8%A1%8C%E5%89%8D%E5%90%8E/" /><meta property="article:published_time" content="2018-08-03T19:34:31&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T19:34:31&#43;00:00"/>
+<meta itemprop="name" content="C&#43;&#43; main 函数运行前后">
+<meta itemprop="description" content="main 函数运行前后 main 函数运行前发生了什么？ 我们通常认为 C 语言的起始函数是main()函数，实质上一个程序的启动函数并不一定是main()函数，这">
+
+
+<meta itemprop="datePublished" content="2018-08-03T19:34:31&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T19:34:31&#43;00:00" />
+<meta itemprop="wordCount" content="1518">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="C&#43;&#43; main 函数运行前后"/>
+<meta name="twitter:description" content="main 函数运行前后 main 函数运行前发生了什么？ 我们通常认为 C 语言的起始函数是main()函数，实质上一个程序的启动函数并不一定是main()函数，这"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">C&#43;&#43; main 函数运行前后</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 1518 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#main-函数运行前后">main 函数运行前后</a>
+<ul>
+<li><a href="#main-函数运行前发生了什么">main 函数运行前发生了什么？</a></li>
+<li><a href="#main-函数执行完后发生了什么">main()函数执行完后发生了什么？</a>
+<ul>
+<li><a href="#main-结束-整个进程就结束了吗">main 结束，整个进程就结束了吗？</a></li>
+<li><a href="#atexit-的运行情况">atexit 的运行情况</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="main-函数运行前后">main 函数运行前后</h1>
+
+<h2 id="main-函数运行前发生了什么">main 函数运行前发生了什么？</h2>
+
+<p>我们通常认为 C 语言的起始函数是<code>main()</code>函数，实质上一个程序的启动函数并不一定是<code>main()</code>函数，这个可以采用链接器来设置，但是 gcc 中默认<code>main()</code>就是C语言的入口函数，在 <code>main()</code>函数启动之前，内核会调用一个特殊的启动例程，这个启动例程从内核中取得命令行参数值和环境变量值，为调用<code>main()</code>函数做好准备。</p>
+
+<p>因此对应程序而言<code>main()</code>函数并不是起始，但是对应 C 语言而言，<code>main()</code>函数就是入口地址。</p>
+
+<p><span style="color:red;">对上面的说法半信半疑，还是要找到权威的说明确认下。</span></p>
+
+<h2 id="main-函数执行完后发生了什么">main()函数执行完后发生了什么？</h2>
+
+<h3 id="main-结束-整个进程就结束了吗">main 结束，整个进程就结束了吗？</h3>
+
+<p>main结束，不代表整个进程结束。</p>
+
+<p><span style="color:red;">下面这段估计也是博客作者从别的地方整理来的，有些重复，还是要找权威的资料确认下的。</span></p>
+
+<ol>
+<li>全局对象的构造函数会在 main 函数之前执行。全局对象的析构函数会在main函数之后执行；    用atexit注册的函数也会在main之后执行。</li>
+<li>一些全局变量、对象和静态变量、对象的空间分配和赋初值就是在执行 main 函数之前，而 main 函数执行完后，还要去执行一些诸如释放空间、释放资源使用权等操作</li>
+<li>进程启动后，要执行一些初始化代码（如设置环境变量等），然后跳转到 main 执行。全局对象的构造也在main之前。</li>
+</ol>
+
+<h3 id="atexit-的运行情况">atexit 的运行情况</h3>
+
+<p>按照 ISO C 的规定，一个进程可以登记多达 32 个函数，这些函数将由 exit 自动调用，通常这 32 个函数被称为终止处理程序，并调用<code>atexit()</code>函数来登记这些函数。 (函数的调用顺序与注册的顺序是相反的，通过下面的实例可以看出来)<span style="color:red;">一个进程智能登记32个函数吗？什么意思？找一些权威的资料确认下。</span></p>
+
+<p>代码如下：</p>
+
+<pre><code class="language-cpp">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+void fun1(void)
+{
+  	printf(&quot;fun1\n&quot;);
+}
+void fun2(void)
+{
+  	printf(&quot;fun2\n&quot;);
+}
+void fun3(void)
+{
+  	printf(&quot;fun3\n&quot;);
+}
+
+int main()
+{
+
+  	// 注册需要在 main 函数结束后执行的函数.
+  	// 请注意它们的注册顺序和执行顺序
+  	// 在 main 函数结束后被调用，调用顺序与注册顺序相反。 先注册后执行。
+
+  	atexit(fun1);
+  	atexit(fun2);
+  	atexit(fun3);
+  	printf(&quot;main exit\n&quot;);
+  	return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7H5b81CkAe.png?imageslim" alt="mark" /></p>
+
+<p>说明：</p>
+
+<p>头文件：<code>#include &lt;stdlib.h&gt;</code>定义函数：<code>int atexit(void (*func)(void));</code>;<code>atexit()</code>用来设置一个程序正常结束前调用的函数. 当程序通过调用<code>exit()</code>或从<code>main()</code>中返回时, 参数<code>function</code> 所指定的函数会先被调用, 然后才真正由<code>exit()</code>结束程序。</p>
+
+<p>atexit 函数是标准 C 新增的。它“注册”一个函数，使这个函数将在 exit 函数被调用时或者当 mian 函数返回时被调用。当程序异常终止时（例如调用 abort 或 raise），通过它注册的函数并不会被调用。编译器必须至少允许程序员注册32个函数。如果注册成功，atexit 返回0，否则返回非零值。没有办法取消一个函数的注册。在 exit 所执行的任何标准清理操作之前，被注册的函数按照与注册顺序相反的顺序被依次调用。每个被调用的函数不接受任何参数，并且返回类型是 void。被注册的函数不应该试图引用任何存储类别为 auto 或 register 的对象（例如通过指针），除非是它自己所定义的。多次注册同一个函数将导致这个函数被多次调用。有些传统 C 编译器用 onexit 这个名称实现了像是的功能。</p>
+
+<p>atexit是注册后进先出的函数，和函数入栈出栈是一样的。</p>
+
+<p>在这里注册了四个函数，理解为入栈的顺序为fn1() -&gt; fn2() -&gt; fn3() -&gt; fn4();出栈的顺序正好相反，而什么时候出栈呢？就是在调用函数结束时，准确的说应该是函数调用的最后的操作就是出栈过程。main()同样也是一个函数，在结束时，按出栈的顺序调用四个函数，即为fn4() -&gt; fn3() -&gt; fn2() -&gt; fn1();</p>
+
+<p>注册这个函数的目的就是为了在函数退出时调用的，即使是main()函数也是这样的。可以在这些函数中加入一些清理工作，比如内存释放等等。</p>
+
+<p><span style="color:red;">上面这几段没有看，找权威资料确认下。</span></p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><p><a href="https://blog.csdn.net/rl529014/article/details/51671270">C++面试题： main函数执行完之后还会调用其他的函数吗？</a></p></li>
+
+<li><p><a href="https://blog.csdn.net/huang_xw/article/details/8542105">main函数执行前、后再执行的代码</a></p></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/07-%E5%B0%8F%E7%BB%93%E4%B8%8E%E6%9C%AF%E8%AF%AD%E8%A1%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">07 小结与术语表</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/06-%E4%B9%A6%E5%BA%97%E7%A8%8B%E5%BA%8F/">
+            <span class="next-text nav-default">06 书店程序</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

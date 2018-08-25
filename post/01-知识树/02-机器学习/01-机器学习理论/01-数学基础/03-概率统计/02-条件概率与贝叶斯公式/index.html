@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 条件概率与贝叶斯公式 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="TODO 还是要补充的，关于似然，没讲，而且关于贝叶斯，还想知道更多更系统。 ORIGIN 对条件概率和贝叶斯公式进行总结。 事件的概率 整个概率空间是一个事件，这个" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/02-%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 条件概率与贝叶斯公式" />
+<meta property="og:description" content="TODO 还是要补充的，关于似然，没讲，而且关于贝叶斯，还想知道更多更系统。 ORIGIN 对条件概率和贝叶斯公式进行总结。 事件的概率 整个概率空间是一个事件，这个" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/02-%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="02 条件概率与贝叶斯公式">
+<meta itemprop="description" content="TODO 还是要补充的，关于似然，没讲，而且关于贝叶斯，还想知道更多更系统。 ORIGIN 对条件概率和贝叶斯公式进行总结。 事件的概率 整个概率空间是一个事件，这个">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="1872">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 条件概率与贝叶斯公式"/>
+<meta name="twitter:description" content="TODO 还是要补充的，关于似然，没讲，而且关于贝叶斯，还想知道更多更系统。 ORIGIN 对条件概率和贝叶斯公式进行总结。 事件的概率 整个概率空间是一个事件，这个"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 条件概率与贝叶斯公式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 1872 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#origin">ORIGIN</a></li>
+<li><a href="#事件的概率">事件的概率</a></li>
+<li><a href="#条件概率公式">条件概率公式</a></li>
+<li><a href="#全概率公式">全概率公式</a></li>
+<li><a href="#贝叶斯公式-bayes">贝叶斯公式 Bayes</a></li>
+<li><a href="#贝叶斯公式的应用">贝叶斯公式的应用：</a></li>
+<li><a href="#由贝叶斯公式引发的-频率学派与贝叶斯学派">由贝叶斯公式引发的，频率学派与贝叶斯学派：</a></li>
+<li><a href="#先验概率-后验概率-似然函数">先验概率，后验概率，似然函数</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>还是要补充的，关于似然，没讲，而且关于贝叶斯，还想知道更多更系统。</li>
+</ul>
+
+<h1 id="origin">ORIGIN</h1>
+
+<p>对条件概率和贝叶斯公式进行总结。</p>
+
+<h1 id="事件的概率">事件的概率</h1>
+
+<ul>
+<li>整个概率空间是一个事件，这个事件一定发生所以全空间的概率为 1</li>
+<li>事件是随机变量值域的子集 S</li>
+<li>事件的概率则表示 S 里面概率之和或概率密度之积分. <span style="color:red;">这个句子有点怪吧？</span></li>
+</ul>
+
+<h1 id="条件概率公式">条件概率公式</h1>
+
+<ul>
+<li>条件也是事件，也可表示为随机变量值域的子集:A</li>
+<li>条件概率里面的事件，又是这个条件的子集： $S\cap A\subset A$</li>
+<li>事件的条件概率则表示 S ∩ A 在 A 里面所占的比例. 故而 $P(S|A)=\frac{P(S\cap A)}{P(A)}$</li>
+</ul>
+
+<p>条件概率公式如下：</p>
+
+<p>$$P(A\mid B)=\frac{P(AB)}{P(B)}$$</p>
+
+<h1 id="全概率公式">全概率公式</h1>
+
+<p>假设({B_n:n=1,2,3,\cdots })是一个概率空间的有限或者可数无限的<a href="https://zh.wikipedia.org/wiki/%E9%9B%86%E5%90%88%E5%88%92%E5%88%86">分割</a>（即(B_n)为一完备事件组），且每个集合(B_n)是一个可测集和，则对任意事件_A_有<strong>全概率公式</strong>：</p>
+
+<p> [P(A)=\sum_{n}\P(A\cap B_n)]</p>
+
+<p>又因为</p>
+
+<p>[P(A\cap B<em>{n})=\P(A\mid B</em>{n})\P(B_{n})]</p>
+
+<p>此处(P(A\mid B))是B发生后A的<a href="https://zh.wikipedia.org/wiki/%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87">条件概率</a>，所以<strong>全概率公式</strong>又可写作：</p>
+
+<p>[P(A)=\sum<em>{n}\P(A\mid B</em>{n})\P(B_{n}]</p>
+
+<p>到这里，全概率公式将对一复杂事件A的概率求解问题转化为了在不同情况或不同原因(B_n)下发生的简单事件的概率的求和问题。<strong>厉害</strong></p>
+
+<h1 id="贝叶斯公式-bayes">贝叶斯公式 Bayes</h1>
+
+<p>如果 A,B 是两个事件，那么条件概率满足公式：</p>
+
+<p>[P(A|B)=\frac{P(B|A)P(A)}{P(B)}]</p>
+
+<p>利用前面的定义我们知道，事件A，B同时发生的概率为：(P(A\cap B))，一方面：</p>
+
+<p>[P(A\cap B)=P(B|A)P(A)]</p>
+
+<p>另一方面对称的有：</p>
+
+<p>[P(A\cap B)=P(A|B)P(B)]</p>
+
+<p>所以(P(B|A)P(A)=P(A|B)P(B))，两边同时除以(P(B))就得到了贝叶斯公式。</p>
+
+<p>[P(B_n\mid A)=\frac{P(A\mid B_n)P(B<em>n)}{\sum</em>{n}\P(A\mid B<em>{n})\P(B</em>{n} }]</p>
+
+<p>本来是A发生的时候B_n发生的概率，即B_n是原因，A是结果，但是现在A是原因，B_n是结果，感觉相当于把因果关系搞乱。<strong>是这样吗？</strong>因此，后面谈到贝叶斯网络里面，会用自然语言说因果，但是实际上都说有关联，至于谁是因谁是果不考虑。</p>
+
+<p><strong>这个地方对贝叶斯公式没怎么讲，实际上我是非常想知道贝叶斯公式的来龙去脉的。再补充下</strong></p>
+
+<h1 id="贝叶斯公式的应用">贝叶斯公式的应用：</h1>
+
+<p>支步枪中有5支已校准过，3支未校准。一名射手用校准过的枪射击，中靶概率为0.8；用未校准的枪射击，中靶概率为0.3；现从8支枪中随机取一支射击，结果中靶。求该枪是已校准过的概率。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mjCfbIgj36.png?imageslim" alt="mark" /></p>
+
+<h1 id="由贝叶斯公式引发的-频率学派与贝叶斯学派">由贝叶斯公式引发的，频率学派与贝叶斯学派：</h1>
+
+<p>给定某系统的若干样本，求该系统的参数。怎么求？</p>
+
+<ul>
+<li><p>可以用：矩估计/MLE/MaxEnt/EM等：即假定参数是某个/某些未知的定值，求这些参数如何取值，能够使得某目标函数取极大/极小。 这种就属于频率学派。<strong>什么是MLE？MaxEnt？EM？</strong></p></li>
+
+<li><p>也可以用：贝叶斯模型来求：假定参数本身是变化的，服从某个分布。求在这个分布约束下使得某目标函数极大/极小。这种就属于贝叶斯学派。</p></li>
+</ul>
+
+<p>这两种方式没有高低好坏之分，都是认识自然的手段。只是，在当前人们掌握的数学工具和需解决的实践问题中，贝叶斯学派的理论体系往往能够比较好的解释目标函数、分析相互关系等。<strong>为什么可以比较好的解释和分析？</strong></p>
+
+<p>前面章节的内容，大多是频率学派的思想；下面的推理，使用贝叶斯学派的观点。</p>
+
+<p><strong>还是没明白什么时频率学派，什么是贝叶斯学派？</strong></p>
+
+<h1 id="先验概率-后验概率-似然函数">先验概率，后验概率，似然函数</h1>
+
+<p><strong>这个是我一直没有明白清楚的</strong></p>
+
+<p>给定某系统的若干样本x，计算该系统的参数，即：</p>
+
+<p>[P(\theta \mid x)=\frac{P(x\mid \theta)P(\theta )}{P(x)}]</p>
+
+<p>那么，先验概率是什么呢？</p>
+
+<p>就是没有给定任何信息，你想猜这个概率，没有任何东西可言，比如没有任何信息猜一个人姓什么。对应式子中就是：P(\theta)，即在没有数据支持的情况下，(\theta)发生的概率。</p>
+
+<p>后验概率是什么呢？</p>
+
+<p>有了一些知识之后猜的概率，比如某人来自牛家村，那么姓牛的概率就比较大，这个就是后验概率，但是他虽然来自牛家村也可能姓马，所以不管先验后验都可能出错的，不是一定对的。对应式子中就是：(P(\theta\mid x))：在数据x的支持下，(\theta)发生的概率。</p>
+
+<p>那么什么是似然函数呢？</p>
+
+<p>式子中的P(x\mid\theta))：给定某参数(\theta)的概率分布就是似然函数。即：在某一个参数的情况下，样本的发生概率就是似然函数，<strong>样本像那个样子得到了。</strong><strong>这个似然这个词到底是什么意思？确认下。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LhhIFe0dEc.png?imageslim" alt="mark" /></p>
+
+<p><strong>这个地方是在讲贝叶斯网络的时候讲到的。在琢磨下。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/fkKFkH8HlF.png?imageslim" alt="mark" /> 这个地方我们假定了 (P(A_i)) 是相等的。要注意。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7G5D8Di30l.png?imageslim" alt="mark" />指的是：在给定数据的时候，我们想去看一下那一条结论是最有可能发生的。但是我们往往算的是反方向，在A_i给定的时候这个数据出现的极大值。而这个</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ad45g7Flcm.png?imageslim" alt="mark" />就是极大似然估计。再理解下。</p>
+
+<p>所以极大似然估计其实是先验性的假定了A_1,A_2,A_n  出现的概率是相同的。</p>
+
+<p>但是在贝叶斯学派中，最多的是探讨先验概率 (P(A_i)) 如果是不相等的时候如何进行建模的问题。<strong>那么先验概率怎么知道是不是相等的？</strong></p>
+
+<p>怎么理解P(D)是常数呢，仅为归一化因子？P(D)其实是似然，它是表示样本已经出现了。<strong>还是没有很理解？</strong></p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>七月在线 深度学习</li>
+<li>七月在线 机器学习</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/04-%E6%9C%80%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/02-%E5%87%B8%E5%87%BD%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 凸函数</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/02-%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/02-%E7%9F%A9%E9%98%B5%E5%8F%98%E6%8D%A2%E4%B8%8E%E7%89%B9%E5%BE%81%E5%80%BC/">
+            <span class="next-text nav-default">02 矩阵变换与特征值</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

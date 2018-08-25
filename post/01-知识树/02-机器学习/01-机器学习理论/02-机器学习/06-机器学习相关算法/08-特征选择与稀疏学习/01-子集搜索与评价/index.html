@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 子集搜索与评价 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="子集搜索与评价 我们能用很多属性描述一个西瓜，例如色泽、根蒂、敲声、纹理、触感 等，但有经验的人往往只需看看根蒂、听听敲声就知道是否好瓜.换言之" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/01-%E5%AD%90%E9%9B%86%E6%90%9C%E7%B4%A2%E4%B8%8E%E8%AF%84%E4%BB%B7/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 子集搜索与评价" />
+<meta property="og:description" content="子集搜索与评价 我们能用很多属性描述一个西瓜，例如色泽、根蒂、敲声、纹理、触感 等，但有经验的人往往只需看看根蒂、听听敲声就知道是否好瓜.换言之" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/01-%E5%AD%90%E9%9B%86%E6%90%9C%E7%B4%A2%E4%B8%8E%E8%AF%84%E4%BB%B7/" /><meta property="article:published_time" content="2018-06-29T12:31:13&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-29T12:31:13&#43;00:00"/>
+<meta itemprop="name" content="01 子集搜索与评价">
+<meta itemprop="description" content="子集搜索与评价 我们能用很多属性描述一个西瓜，例如色泽、根蒂、敲声、纹理、触感 等，但有经验的人往往只需看看根蒂、听听敲声就知道是否好瓜.换言之">
+
+
+<meta itemprop="datePublished" content="2018-06-29T12:31:13&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-29T12:31:13&#43;00:00" />
+<meta itemprop="wordCount" content="2332">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 子集搜索与评价"/>
+<meta name="twitter:description" content="子集搜索与评价 我们能用很多属性描述一个西瓜，例如色泽、根蒂、敲声、纹理、触感 等，但有经验的人往往只需看看根蒂、听听敲声就知道是否好瓜.换言之"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 子集搜索与评价</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-29 </span>
+        
+        <span class="more-meta"> 2332 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>子集搜索与评价</p>
+
+<p>我们能用很多属性描述一个西瓜，例如色泽、根蒂、敲声、纹理、触感 等，但有经验的人往往只需看看根蒂、听听敲声就知道是否好瓜.换言之，对一个学习任务来说，给定属性集，其中有些属性可能很关键、很有用，另一些 属性则可能没什么用。</p>
+
+<p>我们将属性称为“特征”(feature)，对当前学习任务有用的属性称为“相关特征”(relevant feature)、没什么用的属性称为“无关特征” (irrelevant feature).从给定的特征集合中选择出相关特征子集的过程，称为“特征选择” (feature selection).<span style="color:red;">嗯，这个相关不是线性相关的意思。只是有用的意思，确认下。</span></p>
+
+<p>特征选择是一个重要的“数据预处理”(data preprocessing)过程，在现实机器学习任务中，获得数据之后通常先进行特征选择，此后再训练学习器.那么，为什么要进行特征选择呢？</p>
+
+<p>有两个很重要的原因：
+- 首先，我们在现实任务中经常会遇到维数灾难问题, 这是由于属性过多而造成的，若能从中选择出重要的特征，使得后续学习过程 仅需在一部分特征上构建模型,则维数灾难问题会大为减轻.从这个意义上说， 特征选择与第10章介绍的降维有相似的动机；事实上，它们是处理高维数据的 两大主流技术。
+- 第二个原因是，去除不相关特征往往会降低学习任务的难度，这就像侦探破案一样，若将纷繁复杂的因素抽丝剥茧，只留下关键因素，则真相往往更易看清.</p>
+
+<p>需注意的是，特征选择过程必须确保不丢失重要特征，否则后续学习过程 会因为重要信息的缺失而无法获得好的性能。</p>
+
+<p>给定数据集，若学习任务不同，则 相关特征很可能不同，因此，特征选择中所谓的“无关特征”是指与当前学习任务无关.有一类特征称为“冗余特征” (redundant feature),它们所包含的信息能从其他特征中推演出来.例如，考虑立方体对象，若已有特征“底面长” “底面宽”，则“底面积”是冗余特征，因为它能从“底面长”与“底面宽” 得到.冗余特征在很多时候不起作用，去除它们会减轻学习过程的负担.但有时冗余特征会降低学习任务的难度，例如若学习目标是估算立方体的体积，则 “底面积”这个冗余特征的存在将使得体积的估算更容易；更确切地说，若某个冗余特征恰好对应了完成学习任务所需的“中间概念”，则该冗余特征是有益的 <span style="color:red;">是呀，这么来看，冗余特征也是不是那么轻易就可以去掉的。</span>。为简化讨论，本章暂且假定数据中不涉及冗余特征，并且假定初始的特征集合包含了所有的重要信息.<span style="color:red;">好吧，那么有冗余特征的时候怎么对应呢？</span></p>
+
+<p>欲从初始的特征集合中选取一个包含了所有重要信息的特征子集，若没有任何领域知识作为先验假设，那就只好遍历所有可能的子集了；然而这在计算上却是不可行的，因为这样做会遭遇组合爆炸，特征个数稍多就无法进行.可行的做法是产生一个“候选子集”，评价出它的好坏，基于评价结果产生下一个候选子集，再对其进行评价，……这个过程持续进行下去，直至无法找到更好的候选子集为止。</p>
+
+<p>显然，这里涉及两个关键环节：如何根据评价结果获取下一个候选特征子集？如何评价候选特征子集的好坏？</p>
+
+<p>第一个环节是“子集搜索” (subset search)问题.给定特征集合${a_1,a_2,\cdots ,a_d}$ ，我们可将每个特征看作一个候选子集，对这d个候选单特征子集进行评价，假定 ${a_2}$ 最优，于是将 ${a_2}$ 作为第一轮的选定集；然后，在上一轮的选定集中加入一个特征，构成包含两个特征的候选子集，假定在这 d-1 个候选两特征子集中  ${a_2,a_4}$ 最优，且优于 ${a_2}$ 于是将  ${a_2,a_4}$ 作为本轮的选定集；……假定在第 k+1 轮时，最优的候选 (k+1) 特征子集不如上一轮的选定集，则停止生成候选子集，并将上一轮选定的特征集合作为特征选择结果。这样逐渐増加相关特征的策略称为“前向”(fdrward)搜索.类似的，若我们从完整的特征集合开始，每次尝试去掉一个无关特征，这样逐渐减少特征的策略 称为“后向”(backward)搜索.还可将前向与后向搜索结合起来，每一轮逐渐增加选定相关特征(这些特征在后续轮中将确定不会被去除)、同时减少无关特征，这样的策略称为“双向”(bidirectional)搜索.</p>
+
+<p>显然，上述策略都是贪心的，因为它们仅考虑了使本轮选定集最优，例如在 第三轮假定选择 $a_5$ 优于 $a_6$ ,于是选定集为  ${a_2,a_4,a_5}$ ,然而在第四轮却可能是  ${a_2,a_4,a_6,a_8}$ 比所有的 ${a_2,a_4,a_5,a_i}$ 都更优。遗憾的是，若不进行穷举搜索, 则这样的问题无法避兔.</p>
+
+<p>第二个环节是“子集评价”(subset evaluation)问题。给定数据集 D ,假定 D 中第 i 类样本所占的比例为 $p_i(i=1,2,\cdots ,|\mathcal{Y}|)$ 。为便于讨论，假定样本属性均为离散型.对属性子集 A ，假定根据其取值将 D 分成了 V 个子集 ${D^1,D^2,\cdots ,D^V}$ ，每个子集中的样本在 A 上取值相同，于是我们可计算属性子集 A 的信息增益</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/JImllbHcCJ.png?imageslim" alt="mark" /></p>
+
+<p>其中信息熵定义为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/JaA48hDFJF.png?imageslim" alt="mark" /></p>
+
+<p>信息增益 Gain(A) 越大，意味着特征子集 A 包含的有助于分类的信息越多.于 是，对每个候选特征子集，我们可基于训练数据集 D 来计算其信息増益，以此作为评价准则.</p>
+
+<p>更一般的，特征子集 A 实际上确定了对数据集D的一个划分，每个划分区域对应着 A 上的一个取值，而样本标记信息 Y 则对应着对 D 的真实划分，通过估算这两个划分的差异，就能对 A 进行评价.与 Y 对应的划分的差异越小，则说明A越好.信息熵仅是判断这个差异的一种途径，其他能判断两个划分差异 的机制都能用于特征子集评价。</p>
+
+<p>将特征子集搜索机制与子集评价机制相结合，即可得到特征选择方法.例如将前向搜索与信息熵相结合，这显然与决策树算法非常相似。事实上，决策树可用于特征选择，树结点的划分属性所组成的集合就是选择出的特征子集.其他的特征选择方法未必像决策树特征选择这么明显，但它们在本质上都是显式或隐式地结合了某种(或多种)子集搜索机制和子集评价机制.</p>
+
+<p>常见的特征选择方法大致可分为三类：过滤式(filter)、包裹式(wrapper)、 嵌入式(embedding).</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-29</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/02-%E8%BF%87%E6%BB%A4%E5%BC%8F%E9%80%89%E6%8B%A9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 过滤式选择</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/06-%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/">
+            <span class="next-text nav-default">06 度量学习</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

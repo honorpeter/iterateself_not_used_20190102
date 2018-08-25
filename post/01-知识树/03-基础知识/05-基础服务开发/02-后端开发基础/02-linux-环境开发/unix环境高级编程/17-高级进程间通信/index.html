@@ -1,0 +1,2802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>17 高级进程间通信 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第17章 离级进程间通信 17.1引言 前面两章讨论了 UNIX系统提供的各种IPC，其中包括管道和套接字。本章介绍一种髙级 IPC——UNIX域套接" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/17-%E9%AB%98%E7%BA%A7%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="17 高级进程间通信" />
+<meta property="og:description" content="第17章 离级进程间通信 17.1引言 前面两章讨论了 UNIX系统提供的各种IPC，其中包括管道和套接字。本章介绍一种髙级 IPC——UNIX域套接" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/17-%E9%AB%98%E7%BA%A7%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/" /><meta property="article:published_time" content="2018-08-21T18:15:07&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:15:07&#43;00:00"/>
+<meta itemprop="name" content="17 高级进程间通信">
+<meta itemprop="description" content="第17章 离级进程间通信 17.1引言 前面两章讨论了 UNIX系统提供的各种IPC，其中包括管道和套接字。本章介绍一种髙级 IPC——UNIX域套接">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:15:07&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:15:07&#43;00:00" />
+<meta itemprop="wordCount" content="19596">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="17 高级进程间通信"/>
+<meta name="twitter:description" content="第17章 离级进程间通信 17.1引言 前面两章讨论了 UNIX系统提供的各种IPC，其中包括管道和套接字。本章介绍一种髙级 IPC——UNIX域套接"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">17 高级进程间通信</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 19596 words </span>
+        <span class="more-meta"> 40 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#第17章">第17章</a>
+<ul>
+<li><a href="#离级进程间通信">离级进程间通信</a>
+<ul>
+<li><a href="#17-1引言">17.1引言</a></li>
+<li><a href="#17-2-unix域套接字">17.2 UNIX域套接字</a>
+<ul>
+<li><a href="#17-3唯一连接">17,3唯一连接</a></li>
+</ul></li>
+<li><a href="#17-5-open服务器进程第1版">17.5 open服务器进程第1版</a></li>
+<li><a href="#17-6-open服务器进程第2版">17.6 open服务器进程第2版</a></li>
+<li><a href="#17-7小结">17.7小结</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h3 id="第17章">第17章</h3>
+
+<h4 id="离级进程间通信">离级进程间通信</h4>
+
+<h5 id="17-1引言">17.1引言</h5>
+
+<p>前面两章讨论了 UNIX系统提供的各种IPC，其中包括管道和套接字。本章介绍一种髙级 IPC——UNIX域套接字机制，并说明它的应用方法。这种形式的IPC可以在同一计算机系统上运 行的两个进程之间传送打开文件描述符。服务进程可以使它们的打开文件描述符与指定的名字相 关联，同一系统上运行的客户进程可以使用这些名字与服务器进程汇聚。我们还会了解到操作系 统如何为每一个客户进程提供一个独用的IPC通道。</p>
+
+<h5 id="17-2-unix域套接字">17.2 UNIX域套接字</h5>
+
+<p>UNIX域套接字用于在同一台计算机上运行的进程之间的通信。虽然因特网域套接字可用于 同一目的，但UNIX域套接字的效率更高。UNIX域套接字仅仅复制数据，它们并不执行协议处 理，不需要添加或删除网络报头，无需计算校验和，不要产生顺序号，无需发送确认报文。</p>
+
+<p>UNIX域套接字提供流和数据报两种接口。UNIX域数据报服务是可靠的，既不会丢失报文 也不会传递出错。UNIX域套接字就像是套接字和管道的混合。可以使用它们面向网络的域套接 字接口或者使用socketpair函数来创建一对无命名的、相互连接的UNIX域套接字。    岡</p>
+
+<p>♦include <sys/socket.h></p>
+
+<p>int socketpair （int domain, int type, int protocol, int sod^&ldquo;d[2]、；</p>
+
+<p>返回值：若成功，返回0:若出错，返回-1</p>
+
+<p>虽然接口足够通用，允许socketpair用于其他域，但一般来说操 作系统仅对UNIX域提供支持。</p>
+
+<p>用户进程</p>
+
+<table>
+<thead>
+<tr>
+<th>fd【O]</th>
+<th>fdlll</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>套接字丨</td>
+<td>套接字</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>图17-1套接字对</p>
+
+<p>一对相互连接的UNIX域套接字可以起到全双工管道的作用：两端对 读和写开放（见图17-1）。我们将其称为fd管道（fd-pipe），以便与普通 的半双工管道区分开来。</p>
+
+<p>■实例：f d_pipe函数</p>
+
+<p>图17-2展示了 fd_pipe函数，它使用socketpair函数来创建一 对相互连接的UNIX域流套接字。</p>
+
+<p>井include &ldquo;apue.h&rsquo;1 ♦include <sys/socket.h></p>
+
+<p>*    Returns a full-duplex pipe (a UNIX domain socket) with</p>
+
+<p>*    the two file descriptors returned in fd[0] and fd[l]. */</p>
+
+<p>int</p>
+
+<p>fd_pipe(int fd[2])</p>
+
+<p>return(socketpair(AF_UNIX, SOCK_STREAM, 0, fd));</p>
+
+<p>}</p>
+
+<p>图17,2创建一个全双工管道</p>
+
+<p>某些基于BSD的系统使用UNIX域套接字来实现管道。但当调用pipe时，第一描述符的写 |630l    j端和第二描述符的读端都是关闭的。为了得到全双工管道，必须直接调用socketpair。</p>
+
+<p>s■实例：借助UNIX艇询XSI消息队列</p>
+
+<p>15.6.4节曾经提到XSI消息队列的使用存在一个问题，即不能将它们和poll或者select 一起使用，这是因为它们不能关联到文件描述符，然而，套接字是和文件描述符相关联的，消息 到达时，可以用套接字来通知。对每个消息队列使用一个线程，每个线程都会在msgrcv调用中 阻塞。当消息到达时，线程会把它写入一个UNIX域套接字的一端。当poll指示套接字可以读 取数据时，应用程序会使用这个套接字的另外一端来接收这个消息。</p>
+
+<p>图17-3中的程序说明了这个技术。main函数中创建了一些消息队列和UNIX域套接字，并</p>
+
+<p>为每个消息队列开启了一个新线程。然后它在一个无限循环中用poll来轮询选择一个套接字端 点。当某个套接字可读时，程序可以从套接字中读取数据并把消息打印到标准输出上。</p>
+
+<p>#include ’• apue.h&rdquo;</p>
+
+<p>#include <poll.h></p>
+
+<p>#include <pthread.h></p>
+
+<p>#include <sys/msg.h></p>
+
+<p>tinclude <sys/socket,h></p>
+
+<p>#define NQ    3    /*    number of queues */</p>
+
+<p>#define MAXMSZ    512    /*    maximum message size */</p>
+
+<p>#define KEY    0x123    /*    key for first message queue    */</p>
+
+<p>struct threadinfo { int qid; int fd;</p>
+
+<p>}；</p>
+
+<p>struct mymesg { long mtype; char mtext[MAXMSZ];</p>
+
+<p>}；</p>
+
+<p>void *</p>
+
+<p>helper(void *arg)</p>
+
+<p>int</p>
+
+<p>struct mymesg</p>
+
+<p>n;</p>
+
+<p>m?</p>
+
+<p>struct threadinfo *tip = arg;</p>
+
+<p>for(；;) {</p>
+
+<p>memset(&amp;m, 0, sizeof(m));</p>
+
+<p>if ((n = msgrcv(tip-&gt;qid, &amp;m, MAXMS2, 0, MSG_NOERROR)) &lt; 0) err_sys(&ldquo;msgrcv error&rdquo;)；</p>
+
+<p>if (write(tip-&gt;fdr m.mtext, n) &lt; 0) err_sys{&ldquo;write error&rdquo;);</p>
+
+<p>}</p>
+
+<p>int</p>
+
+<p>main()    [^T|</p>
+
+<table>
+<thead>
+<tr>
+<th>int</th>
+<th></th>
+<th>i, n, err;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>int</td>
+<td></td>
+<td>fdI2];</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td></td>
+<td>qid[NQ];</td>
+</tr>
+
+<tr>
+<td>struct</td>
+<td>pollfd</td>
+<td>pfd[NQ];</td>
+</tr>
+
+<tr>
+<td>struct</td>
+<td>threadinfo</td>
+<td>ti[NQ];</td>
+</tr>
+
+<tr>
+<td>pthread_t</td>
+<td>tid[NQ];</td>
+<td></td>
+</tr>
+
+<tr>
+<td>char</td>
+<td></td>
+<td>buf[MflXMSZ]</td>
+</tr>
+
+<tr>
+<td>for (i</td>
+<td>=0; i &lt; NQ;</td>
+<td>i++) {</td>
+</tr>
+</tbody>
+</table>
+
+<p>if ((qid[i] = msgget((KEY+i), IPC_CREAT|0666》)&lt; 0) err_sys(&ldquo;msgget error&rdquo;);</p>
+
+<p>printf(&ldquo;queue ID %d is %d\n&rdquo;, i, qid[i]);</p>
+
+<p>if (socketpair(AF_UNIX, SOCK_DGRAM, 0, fd) &lt; 0) err_sys(&ldquo;socketpair error&rdquo;);</p>
+
+<p>pfd[i].fd = fd[0]； pfd[i).events = POLLIN; ti[i].qid = qid[i]; ti[i].fd = fd[l];</p>
+
+<p>if ((err = pthread_create(£tid[i] , NULL, helper, Sti[i]))    != 0)</p>
+
+<p>err_exit(err, &ldquo;pthread_create error&rdquo;);</p>
+
+<p>}</p>
+
+<p>for (;;) {</p>
+
+<p>if (poll(pfd, NQ, -1) &lt; 0) err_sys(&ldquo;poll error&rdquo;); for (i = 0; i &lt; NQ; i++) {</p>
+
+<p>if (pfd[i].revents &amp; POLLIN) {</p>
+
+<p>if ((n = read(pfd[i].fd, buf, sizeof(buf))) &lt; 0)</p>
+
+<p>err_sys{&ldquo;read error&rdquo;); buf[n] =0;</p>
+
+<p>printf(&ldquo;queue id %d, message %s\n&rdquo;, qid[i], buf);</p>
+
+<p>}</p>
+
+<p>exit(0);</p>
+
+<p>图17-3使用UNIX域套接字轮询XSI消息队列</p>
+
+<p>注意，我们使用的是数据报（SOCK_DGRAM）套接字而不是流套接字》这样做可以保持消息 边界，以保证从套接字里一次只读取一条消息。</p>
+
+<p>这种技术可以（非直接地）在消息队列中运用poll或者select,只要为每个队列分配一 个线程的开销以及每个消息额外复制两次（一次写入套接字，另一次从套接字里读取出来）的开 销是可接受的.这种技术就会使XSI消息队列的使用更加容易。</p>
+
+<p>[«2]    使用图174中所示的程序给图17-3中所示的测试程序发送消息。</p>
+
+<p>tinclude &ldquo;apue.h&rdquo; #include <sys/msg.h></p>
+
+<p>#define MAXMSZ 512</p>
+
+<p>struct mymesg { long mtype; char mtext[MAXMSZ];</p>
+
+<p>int</p>
+
+<p>main (int argc, char *argv[])</p>
+
+<p>key_t key; long qid; size_t nbytes; struct mymesg m;</p>
+
+<p>if (argc != 3}(</p>
+
+<p>fprintf(stderr, &ldquo;usage: sendmsg KEY message\n&rdquo;); exit (1);</p>
+
+<p>key = strtol(argv[1], NULL, 0); if ((qid = msgget(key, 0}) &lt; 0)</p>
+
+<p>err^sya(&ldquo;can&rsquo;t open queue key %s&rdquo;, argv[l]); raemset(&amp;m, 0, sizeof(m)); strncpy(m.mtext, argv[2], MAXMSZ-1); nbytes = strlen(m.mtext)； m.mtype = 1;</p>
+
+<p>if (msgsnd(qid, &amp;m, nbytes, 0) &lt; 0) err_sys{&ldquo;can&rsquo;t send message&rdquo;);</p>
+
+<p>exit(0);</p>
+
+<p>J</p>
+
+<p>图174给XSI消息队列发送消息</p>
+
+<p>这个程序需要两个参数：消息队列关联的键值以及一个包含消息主体的字符串。发送消息到 服务器端时，它会打印如下信息：</p>
+
+<p>$ . /pollmsg fi</p>
+
+<p>[1] 12814</p>
+
+<p>$ queue ID 0 is 196608</p>
+
+<p>queue ID 1 is 196609</p>
+
+<p>queue ID 2 is 196610</p>
+
+<p>? ./sandmsg 0x123 &ldquo;hellor wocld&rdquo;</p>
+
+<p>queue id 196608, message hello, world</p>
+
+<p>$ .fsendmsg 0x124 &ldquo;just a teat&rdquo;</p>
+
+<p>在后台运行服务器</p>
+
+<p>给第一个队列发送一条消息</p>
+
+<p>给第二个队列发送一条消息</p>
+
+<p>queue id 196609, message just a test</p>
+
+<p>$ ./sandmsg 0x125 &ldquo;bye&rdquo;    给第三个队列发送一条消息</p>
+
+<p>queue id 196610, message bye    ■题 |6331</p>
+
+<p>命名UNIX域套接字</p>
+
+<p>虽然socketpair函数能创建一对相互连接的套接字，但是每一个套接字都没有名字。这 意味着无关进程不能使用它们。</p>
+
+<p>在16.3.4节中学习了如何将一个地址绑定到一个因特网域套接字上。恰如因特网域套接字一 样，可以命名UNIX域套接字，并可将其用于告示服务。但是要注意，UNIX域套接字使用的地 址格式不同于因特网域套接字。</p>
+
+<p>回忆16.3节，套接字地址格式会随实现而变。UNIX域套接字的地址由sockaddr_un结构 表示。在Linux 3.2.0和Solaris 10中，sockaddr_un结构在头文件＜sys/un. h＞中的定义 如下：</p>
+
+<p>struct sockaddr_un {</p>
+
+<p>/* AF^UNIX <em>/ /</em> pathname */</p>
+
+<p>sa_family_t sun_family; char    sun_path[108];</p>
+
+<p>}；</p>
+
+<p>但是在FreeBSD 8.0和Mac OS X 10.6.8中，sockaddr_un结构的定义如下:</p>
+
+<p>struct sockaddr_un unsigned char sa_family_t char</p>
+
+<p>sun_len; sun_family; sun_j&gt;ath[104];</p>
+
+<p>/* sockaddr length <em>/ /</em> AF_UNIX */</p>
+
+<p>/* pathname */</p>
+
+<p>｝；</p>
+
+<p>sockaddr_un结构的sun_path成员包含一个路授名。当我们将一个地址绑定到一个UNIX 域套接字时，系统会用该路径名创建一个S_IFSOCK类型的文件。</p>
+
+<p>孩文件仅用于向客户进程告示套接字名字。该文件无法打开，也不能由应用程序用于 通信。</p>
+
+<p>如果我们试图绑定同一地址时，该文件己经存在，那么bind请求会失败。当关闭套接字时， 并不自动删除该文件，所以必须确保在应用程序退出前，对该文件执行解除链接操作。</p>
+
+<p>簿■实例</p>
+
+<p>图17-5所示的程序是一个将地址绑定到UNIX域套接字的例子。</p>
+
+<p>运行此程序时，bind请求成功执行。但是，若第二次运行该程序，则出错返回，其原因是 该文件己经存在。在删除该文件之前，该程序不会再成功运行。</p>
+
+<table>
+<thead>
+<tr>
+<th>$ ./a.out</th>
+<th>运行该程序</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>UNIX domain socket bound</td>
+<td></td>
+</tr>
+
+<tr>
+<td>$ Is -1 foo.socket</td>
+<td>査看套接字文件</td>
+</tr>
+
+<tr>
+<td>srwxrw-xr-x 1 sar    0 May 18 00:44 foo.socket</td>
+<td></td>
+</tr>
+
+<tr>
+<td>$ ./a.out</td>
+<td>试图再次运行该程序</td>
+</tr>
+
+<tr>
+<td>bind failed: Address already in use</td>
+<td></td>
+</tr>
+
+<tr>
+<td>$ rm foo.socket</td>
+<td>刪除该套接字文件</td>
+</tr>
+
+<tr>
+<td>$ ./a.out:</td>
+<td>第三次运行该程序</td>
+</tr>
+
+<tr>
+<td>UNIX domain socket bound</td>
+<td>现在成功啦</td>
+</tr>
+</tbody>
+</table>
+
+<p>#include &ldquo;apue.h&rdquo;</p>
+
+<p>#include <sys/socket.h></p>
+
+<p>#include <sys/un.h></p>
+
+<p>int</p>
+
+<p>main(void)</p>
+
+<p>{</p>
+
+<p>int fd, size; struct sockaddr_un un;</p>
+
+<p>un.sun_family = AF_JJNIX?</p>
+
+<p>strcpy{un.sun_path, &ldquo;foo.socket&rdquo;);</p>
+
+<p>if {(fd = socket(AF_UNIX, SOCK_STREAM, 0)) &lt; 0)</p>
+
+<p>err_sys(&ldquo;socket failed&rdquo;);</p>
+
+<p>size = offsetof(struct sockaddr_un, sun_path) + strlen{un.sun_path); if (bind(fd, (struct sockaddr *)&amp;un, size) &lt; 0)</p>
+
+<p>err_sys(&ldquo;bind failed&rdquo;); printf(&ldquo;UNIX domain socket bound\n&rdquo;)； exit(0);</p>
+
+<p>图n-5将地址绑定到UNIX域套接字</p>
+
+<p>确定绑定地址长度的方法是，先计算sun_path成员在sockaddr_un结构中的偏務量，然 后将结果与路径名长度(不包括终止null字符)相加。因为sockaddr_un结钩中sun_path之 前的成员与实现相笑，所以我们使用＜stddef .h＞头文件(包括在apue.h中)中的offsetof 宏计算sim_path成员从结构开始处的偏移量。如果査看＜社(1加匕11＞，则可见到类似于下列形 式的定义：</p>
+
+<p>ttdefine offsetof(TYPE, MEMBER) ({int)S ((TYPE *)0)-＞MEM8ER)</p>
+
+<p>假定该结构从地址0开始，此表达式求得成员起始地址的整型值，    •霧</p>
+
+<h6 id="17-3唯一连接">17,3唯一连接</h6>
+
+<p>634</p>
+
+<p>I</p>
+
+<p>635</p>
+
+<p>服务器进程可以使用标准bind、listen和accept函数，为客户进程安排一个唯一 UNIX 域连接。客户进程使用connect与服务器进程联系。在服务器进程接受了 connect请求后，在 服务器进程和客户进程之间就存在了唯一连接。选种风格的操作与我们在图16-16和图16-17中 所示的对因特网域套接字的操作相同。</p>
+
+<p>图17-6展示了客户进程和服务器进程存在连接之前二者的情形。服务器端把它的套接字绑定 到sockaddr.un的地址并监听新的连接请求。图17-7展示了在服务器端接受客户端连接请求后， 客户端和服务器端之间建立的唯一的连接。</p>
+
+<p>现在，我们将开发3个函数，使用这些函数可以在运行于同一台计算机上的两个无关进程之 间创建唯一连接。这些函数模仿了在16.4节中讨论过的面向连接的套接字函数。这里，我们将 UNIX域套接字应用于底层通信机制。</p>
+
+<p>原务器进程    客户进程</p>
+
+<p>图17-6 connect之前的客户端    图17-7 connect之后的客户端</p>
+
+<p>套接字和服务器端套接字    套接字和服务器端套接字</p>
+
+<p>#include &ldquo;apue. h•’</p>
+
+<p>int serv_listen（const char <a href="#bookmark10">1</a> <a href="#bookmark11">2</a>name）;</p>
+
+<p>返回值：若成功，返回要监听的文件描述符：若出错，返回负值 int serv_accept {int listenfd, uid_t <a href="#bookmark11">2</a>uidptr）；</p>
+
+<p>返回值：若成功，返回新文件描述符；若出错，返回负值</p>
+
+<p>int cli_conn（const char <a href="#bookmark11">2</a>name}；</p>
+
+<p>返回值：若成功，返回文件描述符：若出错，返回负值</p>
+
+<p>服务器进程可以调用serv_listen函数（见图17-8）声明它要在一个众所周知的名字（文件 系统中的某个路径名）上监听客户进程的连接请求。当客户进程想要连接至服务器进程时，它们将 使用该名字。servjisten函数的返回值是用于接收客户进程连接请求的服务器UNIX域套接字。</p>
+
+<p>服务器进程可以使用serv_accept函数（见图17-9）等待客户进程连接请求的到达。当一 个请求到达时，系统自动创建一个新的UNIX域套接字，并将它与客户端套接字连接，最后将这 个新套接字返回给服务器。此外，客户进程的有效用户ID存放在价指向的存储区中。</p>
+
+<p>客户进程调用cli.conn函数（见图17-10）连接至服务器进程。客户进程指定的name参数 必须与服务器进程调用serv_listen函数时所用的名字相同。函数返回时，客户进程得到接连 至服务器进程的文件描述符。</p>
+
+<p>图 17-8 给出了 serv_listen 函数。</p>
+
+<p>struct sockaddr_un un;</p>
+
+<p>if (strlen(name) &gt;= sizeof(un.sun_path)) { errno = ENAMETOOLONG; return(-1,;</p>
+
+<p>/* create a UNIX domain stream socket */</p>
+
+<p>if ((fd = socket&lt;AF_UNIX, SOCK_STREAM, 0)) &lt; 0) return (-2);</p>
+
+<p>unlink {name) ;    /* in case it already exists */</p>
+
+<p>/* fill in socket address structure */</p>
+
+<p>memset(&amp;un, 0, sizeof(un));</p>
+
+<p>un.sun_family = AF_UNIX;</p>
+
+<p>strcpy(un.sun_path, name);</p>
+
+<p>len = of fsetof (struct sockaddr_un, sun_path) + strlen (name)&lsquo;•</p>
+
+<p>/* bind the name to the descriptor */</p>
+
+<p>if (bind(fd» {struct sockaddr *)&amp;un, len) &lt; 0) { rval = -3; goto errout;</p>
+
+<p>}</p>
+
+<p>if (listen(fd, QLEN) &lt; 0) {    /* tell kernel we&rsquo;re a server */</p>
+
+<p>rval = -4; goto errout;</p>
+
+<p>}</p>
+
+<p>return(fd);</p>
+
+<p>errout:</p>
+
+<p>err = errno; close(fd); errno = err; return(rval);</p>
+
+<p>1</p>
+
+<p>图 17-8 serv_listen 函数</p>
+
+<p>首先，调用socket创建一个UNIX域套接字，然后将欲赋给套接字的众所周知的路径名填 入sockaddr.un结构。该结构是调用bind的参数。注意，不需要设置某些平台提供的sun.len 字段，因为操作系统会用传送给bind函数的地址长度设置该字段。</p>
+
+<p>最后，调用listen函数（见16.4节）来通知内核该进程将作为服务器进程等待客户进程的 连接请求。当收到一个客户进程的连接请求后，服务器进程调用serv.accept函数（见图17-9）。</p>
+
+<p>#define STALE</p>
+
+<p>*    Wait for a client connection to arrive, and accept it.</p>
+
+<p>*    We also obtain the client&rsquo;s user ID from the pathname</p>
+
+<p>*    that it must bind before calling us.</p>
+
+<p>*    Returns new fd if all OK, &lt;0 on error */</p>
+
+<p>int</p>
+
+<p>serv_accept(int listenfd, uid_t *uidptr)</p>
+
+<p>int    clifd, err, rval;</p>
+
+<p>socklen_t    len;</p>
+
+<p>staletime;</p>
+
+<p>struct    sockaddr_un un;</p>
+
+<p>struct    stat    statbuf;</p>
+
+<p>char    *name；</p>
+
+<p>/* allocate enough space for longest name plus terminating null */ if ((name * malloc(sizeof(un.sun_path) + 1)) == NULL)</p>
+
+<p>return(-1); len = sizeof(un);</p>
+
+<p>if ((clifd = accept(listenfd, (struct sockaddr *)&amp;un, &amp;len)) &lt; 0}( free(name);</p>
+
+<p>return(-2);    /* often errno=EINTR, if signal caught */</p>
+
+<p>)</p>
+
+<p>/* obtain the client&rsquo;s uid from its calling address */</p>
+
+<p>len -= of fsetof (struct sockaddr_un, sun_path); /* len of pathname */</p>
+
+<p>memcpy{name, un.sun_path, len);</p>
+
+<p>name[len] = 0;    /* null terminate */</p>
+
+<p>if (stat (name, Sistatbuf) &lt; 0) {</p>
+
+<p>rval = -3; goto errout;</p>
+
+<p>Hfdef S_ISSOCK    /* not defined for SVR4 */</p>
+
+<p>if (S_ISSOCK(statbuf.st_mode) == 0) {</p>
+
+<p>rval = -4;    /* not a socket */</p>
+
+<p>goto errout;</p>
+
+<p>J</p>
+
+<p>释endif</p>
+
+<p>rval = -6;    /* i-node is too old */</p>
+
+<p>goto errout?</p>
+
+<p>J</p>
+
+<p>if (uidptr != NULL)</p>
+
+<p>*uidptr = statbuf.st_uid; /<a href="#bookmark14">3</a> <a href="#bookmark15">4</a> return uid of caller <a href="#bookmark15">4</a>/ unlink (name);    /<a href="#bookmark15">4</a> we&rsquo;re done with pathname now <a href="#bookmark15">4</a>/</p>
+
+<p>free(name);</p>
+
+<p>return(clifd);</p>
+
+<p>errout:</p>
+
+<p>err = errno; close(clifd); free(name); errno = err； return(rval);</p>
+
+<p>l</p>
+
+<p>图 17-9 serv_accept 函数</p>
+
+<p>服务器进程在调用serv_accept中阻塞，等待一个客户进程调用cli_conn。从accept 返回时，返回值是连接到客户进程的崭新的描述狩，另外，accept函数也经由其第二个参数（指 向30^3&lt;1€^_1^结构的指针）返回客户进程赋给其套接字的路極名（包含客户进程ID的名字）。 接着，程序复制这个路径名，并确保它是以null终止的（如果路径名占用了 SOckaddr_im结构 里的survpath成员所有的可用空间，那就没有空间存放终止mill字符）。然后，调用stat函 数验证：该路径名确实是一个套接字：其权限仅允许用户读、用户写以及用户执行。还要验证与 套接字相关联的3个时间参数不比当前时间早30秒。（回忆6.10节，time函数返回当前时间和 日期，用公元1970年1月1日00:00:00以来经过的秒数表示。）</p>
+
+<p>如若通过了所有这些检验，则可认为客户进程的身份（其有效用户ID）是该套接字的所有者。 虽然这种检验并不完善，但这是对当前系统所能做到的最佳方案。（如若内核能通过accept的 参数返回有效用户ID，则会更好一些。）</p>
+
+<p>客户进程调用cli_conn函数（见图17-10）对连到服务器进程的连接进行初始化。</p>
+
+<p>/* create a UNIX domain stream socket */</p>
+
+<p>if {(fd = socket(AF_UNIX, SOCK_STREAM, 0)) &lt; 0)</p>
+
+<p>return(-1);</p>
+
+<p>/* fill socket address structure with our address */ memset(&amp;un, 0, sizeof(un)); un.sun_family = AF_DNIX；</p>
+
+<p>sprintf (un.sunjpath, &ldquo;%s%051d&rdquo;, CLI_PATH, (long)getpid());</p>
+
+<p>len = offsetof(struct sockaddr_un, sun_path) + strlsn(un.sun_path);</p>
+
+<p>unlink(un.sun_path);    /* in case it already exists */</p>
+
+<p>if (bind(fd, (struct sockaddr *)&amp;un, len) &lt; 0) {</p>
+
+<p>rval = -2； goto errout;</p>
+
+<p>J</p>
+
+<p>if (chmod(un.sun_path, CLI^PERM) &lt; 0) { rval = -3； do_unlink = 1; goto errout;</p>
+
+<p>/* fill socket address structure with server&rsquo;s address */ memset(&amp;sun, 0, sizeof(sun)); sun.sun_family = AF_UNIX; strcpy(sun-sun_path, name);</p>
+
+<p>len = offsetof(struct sockaddr_un, sun_path) + strlen(name); if (connect{fd, (struct sockaddr *)&amp;sun, len) &lt; 0) {</p>
+
+<p>rval = -4; do_unlink = 1; goto errout;</p>
+
+<p>J</p>
+
+<p>return(fd);</p>
+
+<p>errout:</p>
+
+<p>err = errno; close{fd); if <do_unlink></p>
+
+<p>unlink(un.sun_path); errno = err; return(rval);</p>
+
+<p>}</p>
+
+<p>图 17-10 cli_conn 函数</p>
+
+<p>调用socket函数创建UNIX域套接字的客户进程端，然后用客户进程专有的名字填入 sockaddr_un 结构。</p>
+
+<p>此例中没让系统选择默认地址，其原因是，如果这样处理，服务器进程将不能区分各个客户 进程（如果不为UNIX域套接字显式地绑定名字，内核会代表我们隐式地练定一个地址且不会在 文件系统创建文件来表示这个套接字）。于是，我们绑定自己的地址，但在开发使用套接字的客 户端程序时通常并不采用送一步骤。</p>
+
+<p>绑定的路径名的最后5个字抑来自客户进程ID。仅在该路径名已存在时调用unlink-然后， 调用bind将名字赋给客户进程套接字。送在文件系统中创建了一个套接字文件，所用的名字与 被绑定的路径名一样。棲着，调用chmod关闭除用户读、用户写以及用户执行以外的其他权限。</p>
+
+<p>在Serv_aCCept中，服务器进程检验这些权限以及套接字用户ID以验证客户进程的身份。</p>
+
+<p>岡 然后，必须填充另一个SOCJcaddr_un结构，这次用的是服务进程众所周知的路径名。最后，</p>
+
+<p>调用connect函数初始化与服务进程的连接。</p>
+
+<p>17.4传送文件描述符</p>
+
+<p>在两个进程之间传送打开文件描述符的技术是非常有用的。因此可以对客户进程-服务器进程 应用进行不同的设计。它使一个进程（通常是服务器进程）能够处理打开一个文件所要做的一切 操作（包括将网络名翻译为网络地址、拨号调制解调器、协商文件锁等）以及向调用进程送回一 个描述符，该描述符可被用于以后的所有I/O函数。涉及打开文件或设备的所有细节对客户进程 而言都是透明的、</p>
+
+<p>下面进一步说明从一个进程向另一个进程“传送一个打开文件描述符”的含义。回忆图3-8, 其中显示了两个进程，它们打开了同一文件。虽然它们共享同一个v节点，但每个进程都有它自 己的文件表项。</p>
+
+<p>当一个进程向另一个进程传送一个打开文件描述符时，我们想让发送进程和接收进程共享同 一文件表项。图17-11显示了所期望的安排。</p>
+
+<p>进酸领</p>
+
+<p>0:1:2:3:</p>
+
+<p>H,dfdH</p>
+
+<p>文件状态标志 当前文件偏移量 v节点指针</p>
+
+<p>文件表</p>
+
+<p>v节点表 v节点信息</p>
+
+<p><img src="UNIXaf83d8a7160b-68.png" alt="img" /></p>
+
+<p>i节点信息 O支恥虔</p>
+
+<p>，志文件指针</p>
+
+<p>0:1:2:3:4:</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>图17-11从顶部进程传送一个打开文件至底部进程 在技术上，我们是将指向一个打开文件表项的指针从一个进程发送到另外一个进程。该指针</p>
+
+<p>被分配存放在接收进程的第一个可用描述符项中。（注意，不要造成错觉，以为发送进程和接收 进程中的描述符编号是相同的，它们通常是不同的。〉两个进程井享同一个打开文件表，这与fork 之后的父进程和子进程共享打开文件表的情况完全相同（见图8-2）。</p>
+
+<p>当发遽进程将描述符传送给接收进程后，通常会关闭读描述符。发送进程关闭该描述符并不会真的 关闭该文件或设备，其原因是读描述符仍被视为由接收进程打开(即使接收进程尚未接收到读描述符)。</p>
+
+<p>下面定义本章用以没送和接收文件描述符的3个函数。本节后面会给出这3个函数的代码。</p>
+
+<p>#include &ldquo;apue.h&rdquo;</p>
+
+<p>int send_fd(int fd, int fd_to_send)；</p>
+
+<p>int send_err (int fd, int status, const char ★errmsg);</p>
+
+<p>两个函数的返回值：若成功，返回0;若出错I返回-1</p>
+
+<p>int recv_fd(int fd, ssize_t {*userfimc} (int, const void *, size_t));</p>
+
+<p>返回值：若成功，返回文件描述符；若出错，返回负值</p>
+
+<p>[6421</p>
+
+<p>当一个进程(通常是服务器进程)想将一个描述符传送给另一个进程时，可以调用send_fd 或Send_err。等待接收描述符的进程(客户进程)调用reCV_fd。</p>
+
+<p>send_fd使用沖代表的UNIX域套接字发送描述符fd」o_send。send_err使用片发选 errmsg以及后随的status字节。status的值应在-1^—255。</p>
+
+<p>客户进程调用redfd接收描述符。如果一切正常(发送者调用了 send_fd)，则函数返回 值为非负描述符。舌贝U，返回值是由send_err发送的(-1 —255的一个负值)。另夕卜，如 果服务器进程发送了一条出错消息，则客户进程调用它自己的userfunc函数处理该消息。userjunc 的第一个参数是常量STDERR.FILENO,然后是指向出错消息的指针及其长度。userfunc函数的 返回值是己写的字节数或负的出错编号值。客户进程常将普通的write函数指定为userfunc.</p>
+
+<p>我们实现用于这3个函数的我们自己制定的协议。为发送一个描述符，send_fd先发送2字 节0,然后是实际描述符。为了发送一条出错消息，send_err发送errmsg,然后是1字节0，岡 最后是字节的绝对值(1〜255)。recv_fd函数读取套接字中所有字节直至遇到皿11字符。 null字符之前的所有字符都传送给调用者的userfunc. recv_fd读取的下一个字节是状态(status)</p>
+
+<p>字节。若状态字节为0,则表示一个描述符已传送过来，否则表示没有描述符可接收。</p>
+
+<p>sencLerr函数在将出错消息写到套接字后，即调用send_fd函数，如图17-12所示。</p>
+
+<p>♦include &ldquo;apue.h&rdquo;</p>
+
+<p>*    Used when we had planned to send an fd using send_fd{),</p>
+
+<p>*    but encountered an error instead. We send the error back</p>
+
+<p>*    using the send_fd()/recv_fd() protocol.</p>
+
+<p>*/</p>
+
+<p>int</p>
+
+<p>send_err(int fd, int errcode, const char *msg)</p>
+
+<p>{</p>
+
+<p>int    n;</p>
+
+<p>if ((n = strlen(msg)) &gt; 0)</p>
+
+<p>if (writen(fd, msg, n) != n) /* send the error message */ return(-1);</p>
+
+<p>if (errcode &gt;= 0)</p>
+
+<p>errcode = -1;    /* must be negative */</p>
+
+<p>if (send_fd(fd, errcode) &lt; 0)</p>
+
+<p>return(-1);</p>
+
+<p>return (0);</p>
+
+<p>}</p>
+
+<p>图 17-12 send_err 函数</p>
+
+<p>为了用UNIX域套接字交换文件描述符，调用sendmsg（2）和recvmsg（2）函数（见16.5节）。 这两个函数的参数中都有一个指向msghdr结构的指针，该结构包含了所有关于要发送或要接收 的消息的信息。该结构的定义大致如下：</p>
+
+<p>struct msghdr {</p>
+
+<table>
+<thead>
+<tr>
+<th>void</th>
+<th>*msg_name;</th>
+<th>/*</th>
+<th>optional ‘</th>
+<th>address */</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>socklen_t</td>
+<td>msg_namelen;</td>
+<td>/*</td>
+<td>address s</td>
+<td>ize in bytes */</td>
+</tr>
+
+<tr>
+<td>struct iovec</td>
+<td>*msg_iov;</td>
+<td>/*</td>
+<td>array of</td>
+<td>I/O buffers */</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td>msg_iovlen;</td>
+<td>/*</td>
+<td>number of</td>
+<td>elements in array</td>
+</tr>
+
+<tr>
+<td>void</td>
+<td>*msg_control;</td>
+<td>/*</td>
+<td>ancillary</td>
+<td>data */</td>
+</tr>
+
+<tr>
+<td>socklen_t</td>
+<td>msg_controllen;</td>
+<td>/*</td>
+<td>number of</td>
+<td>ancillary bytes */</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td>msg_flags;</td>
+<td>/*</td>
+<td>flags for</td>
+<td>received message *,</td>
+</tr>
+</tbody>
+</table>
+
+<p>1；</p>
+
+<p>前两个元素通常用于在网络连接上发送数据报，其中目的地址可以由每个数据报指定。接下 来的两个元素使我们可以指定一个由多个缓冲区构成的数组（散布读和聚集写），这与对readv 和writev函数（见14.6节）的说明一样。msg_flags字段包含了描述接收到的消息的标志，</p>
+
+<p>[644|图16-15总结了这些标志。</p>
+
+<p>两个元素处理控制信息的传送和接收。msg_control字段指向cmsghdr （控制信息头）结 构，msg_controllen字段包含控制信息的字节数。</p>
+
+<p>struct cmsghdr {</p>
+
+<p>socklen_t cmsg_len; int    cmsg_level;</p>
+
+<p>int    cmsg_type;</p>
+
+<p>/* followed by the actual</p>
+
+<p>/* data byte count, including header <em>/ /</em> originating protocol */</p>
+
+<p>/* protocol-specific type */ control message data */</p>
+
+<p>}；</p>
+
+<p>为了发送文件描述符，将cmsg_len设置为cmsghdr结构的长度加一个整型的长度（描述 符的长度），cmg_level字段设置为SOL_SOCKET，cmsg_type字段设置为SCM_RIGHTS,用 以表明在传送访问权。（SCM是Socket-level Control Message的缩写，即套接字级控制消息》）访 问权仅能通过UNIX域套接字传送，描述符紧随cmsg_type字段之后存储，用CMSG_DATA宏 获得该整型量的指针。</p>
+
+<p>在此定义3个宏，用于访问控制数据，一个宏用于帮助计算cmsg.len所使用的值。</p>
+
+<p>♦include <sys/socket.h></p>
+
+<p>unsigned char *CMSG_DATA{struct cmsghdr *cp);</p>
+
+<p>返回值：返回一个指针，指向与cmsghdr结构相关联的数据</p>
+
+<p>struct cmsghdr *CMSG_FIRSTHDR(struct msghdr *mp);</p>
+
+<p>返回值：返回一个指针，指向与msghdr结构相关联的第一个cmsghdr结构： 若无这样的结垮，返回NULL</p>
+
+<p>struct cmsghdr *CMSG_NXTHDR(struct msghdr *mp,</p>
+
+<p>struct cmsghdr *cp);</p>
+
+<p>返回值：返回一个指针，指向与msghdr结构相关联的下一个cmsghdr 结构，该msghdr结构给出了当前的cmsghdr结构：若当前 cmsghdr结构已是最后一个I返回NULL</p>
+
+<p>unsigned int CMSG_LEN (unsigned int nbytes);</p>
+
+<p>返回值：返回为n/ytes长的数据对象分配的长度 Single UNIX Specification 定义了前 3 个宏，但没有定义 CMSG_LEN。</p>
+
+<p>CMSG_LEN定返回存储nbytes长的数据对象所需的字节数，它先将nbytes加上cmsghdr结 构的长度，然后按处理器体系结构的对齐要求进行调整，最后再向上取整。</p>
+
+<p>图17-13中的程序是UNIX域套接字的send.fd函数，它通过UNIX域套接字传递文件描述 符。sendmsg调用被用来传送协议数据(包括mill字节和状态字节)以及描述符。    [645]</p>
+
+<p>=SOL_SOCKET; =SCM_RIGHTS; =CONTROLLEN;</p>
+
+<p>/<a href="#bookmark19">5</a> <a href="#bookmark20">6</a> the fd to pass <a href="#bookmark20">6</a>/</p>
+
+<table>
+<thead>
+<tr>
+<th>buf[l] = 0;)</th>
+<th>/<a href="#bookmark21">7</a></th>
+<th>zero status means OK <a href="#bookmark21">7</a>/</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>buf[0] = 0;</td>
+<td></td>
+<td>null byte flag to recv_fd()</td>
+</tr>
+
+<tr>
+<td>if (sendmsg(fd,</td>
+<td>&amp;msg, 0)</td>
+<td>!= 2)</td>
+</tr>
+
+<tr>
+<td>return(-l);</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>return(0};</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>|646|    图17-13通过UNIX域套接字发送文件描述符</p>
+
+<p>为了接收一个文件描述符（见图17-14），我们为cmsghdr结构和描述符分配了足够大的空</p>
+
+<p>间，设置msg_control指向该好配到的存储区，然后调用了 recvmsg。使用CMSG_LEN定计 算所需的空间总量。</p>
+
+<p>读取UNIX域套接字，直至读到null字节，它位于最后的状态字节之前，null字节之前是一 条来自发送者的出错消息。</p>
+
+<table>
+<thead>
+<tr>
+<th>intcharcharstruct iovecstruct msghdr</th>
+<th>newfd, nr, status; *ptr;buf[MAXLINE]； iov[l]；msg;</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>status</td>
+<td>=-1;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>for</p>
+
+<p>iov[0].iov_base iov[0].iov_len msg.msg_iov msg.msg_iovlen msg.msg_name msg.msg_namelen</p>
+
+<p>=buf;</p>
+
+<p>=sizeof(buf) =iov;</p>
+
+<p>=1;</p>
+
+<p>=NULL；</p>
+
+<p>=0；</p>
+
+<p>if (cmptr == NULL &amp;&amp; (cmptr = malloc(CONTROLLEN))</p>
+
+<p>==NULL)</p>
+
+<p>return(-1);</p>
+
+<p>msg.msg_control = cmptr;</p>
+
+<p>msg.msg_controllen = CONTROLLEN;</p>
+
+<p>if ((nr = recvmsg{fd, &amp;msg, 0)) &lt; 0) {</p>
+
+<p>err_ret(&ldquo;recvmsg error&rdquo;); return(-1);</p>
+
+<p>} else if (nr ==</p>
+
+<p>0)(</p>
+
+<p>err_ret(&ldquo;connection closed by server&rdquo;); return (-1)；</p>
+
+<p>*    See if this is the final data with null &amp; status. Null</p>
+
+<p>*    is next to last byte of buffer; status byte is last byte.</p>
+
+<p>*    Zero status means there is a file descriptor to receive.</p>
+
+<p>&rdquo;    |647|</p>
+
+<p>for (ptr = buf; ptr &lt; &amp;buf[nr]? ) {</p>
+
+<p>if (*ptr++ == 0) {</p>
+
+<p>if (ptr != &amp;buf[nr-1])</p>
+
+<p>err_dump(&ldquo;message format error&rdquo;); status = <em>ptr &amp; OxFF;    /</em> prevent sign extension */</p>
+
+<p>if (status == 0) {</p>
+
+<p>if (msg.msg_controllen &lt; CONTROLLEN) err_dump(&ldquo;status = 0 but no fd&rdquo;);</p>
+
+<p>newfd = *(int *)CMSG_DATA(cmptr)；</p>
+
+<p>} else {</p>
+
+<p>newfd = -status;</p>
+
+<p>nr -= 2;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>if (nr &gt; 0 &amp;&amp; (*userfunc) (STDERR_FILENO, buf, nr) != nr) return(-1);</p>
+
+<p>if {status &gt;= 0)    /* final data has arrived */</p>
+
+<p>return(newfd);    /* descriptor, or -status */</p>
+
+<p>)</p>
+
+<p>}</p>
+
+<p>图17-14通过UNIX域套接字接收文件描述符</p>
+
+<p>注意，该程序总是准备接收一个描述符（在每次调用recvmsg之前，设置msg_control 和msg_controllen）»但是仗当msg_controllen返回的是非0值时，才确宪接收到描 述符。</p>
+
+<p>回忆serv_accept函数（见图17-9）确定调用者身份的步骤。如果内核能够把调用者的证 书在调用accept之后返回给调用处会更好。某些UNIX域套接字的实现提供类似的功能，但它 们的接口不同，</p>
+
+<p>* FreeBSD 8.0和Linux 3.2.0都支持通过UNIX域套接字发送证书，但它们的实现方式不同。</p>
+
+<p>&gt; Mac OS X 10.6.8是部分从FreeBSD派生出来的，但禁止传送证书。Solaris 10不支持通过UNIX ■域套接字传送证书，然而它支持从一个通过STREAMS管道传输文件描述符的进程中获得证书，</p>
+
+<p>这里我们不讨论它的细节。</p>
+
+<p>在FreeBSD中，将证书作为cmsgcred结构待选。</p>
+
+<p>ttdefine CMGROUP_MAX 16 struct cmsgcred {</p>
+
+<p>pid_t    cmcred_pid;    Z*    sender&rsquo;s    process ID */</p>
+
+<p>uid_t    cmcred_uid；    /*    sender’s    real UID */</p>
+
+<p>uid_t    cmcred_euid;    /*    sender&rsquo;s    effective UID */</p>
+
+<p>gid_t    cmcred_gid;    /*    sender&rsquo;s    real GID */</p>
+
+<p>short cmcred_ngroups;    /<a href="#bookmark28">8</a> <a href="#bookmark29">9</a> number of groups <a href="#bookmark29">9</a>/</p>
+
+<p>gid_t cmcred_groups[CMGROUP_MAX];    /<a href="#bookmark29">9</a> groups <a href="#bookmark29">9</a>/</p>
+
+<p>[648|</p>
+
+<p>在传送证书时，仅需为cmsgcred结构保留存储空间。内核将填充该结构以防止应用程序伪装成 具有另一种身份。</p>
+
+<p>在Linux中，将证书作为ucred结构传送。</p>
+
+<p>struct ucred {</p>
+
+<p>pid_t pid;    /<a href="#bookmark29">9</a> sender&rsquo;s process ID <a href="#bookmark29">9</a>/</p>
+
+<p>uid_t uid;    /<a href="#bookmark29">9</a> sender&rsquo;s user ID <a href="#bookmark29">9</a>Z</p>
+
+<p>gid_fc gid; /<a href="#bookmark29">9</a> sender&rsquo;s group ID <a href="#bookmark29">9</a>/</p>
+
+<p>与FreeBSD不同，Linux需要在传输前初始化这个结构。内核会确保应用程序要么能够使用对应 调用者的值，要么有使用其他值的合适权限。</p>
+
+<p>图17-15显示了更新过后的send.fd函数，它包含了发送进程的证书。</p>
+
+<p>static struct cmaghdr</p>
+
+<p>*credp; *cmp; iov[l]; msg; buf[2];</p>
+
+<p>send_fd/recv_ufd 2-byte protocol <a href="#bookmark29">9</a>/</p>
+
+<p>msg.msg_name = NULL; rasg.msg_namelen = 0; msg.msg_flags = 0; if (fd_to_send &lt; 0)(</p>
+
+<p>msg.msg_control = NULL; msg.msg_controllen =0;</p>
+
+<p>buf[1] = -fd_to_send; /* nonzero status means error */ if (buf[1] == 0)</p>
+
+<p>buf[1] = 1;    /* -256, etc. would screw up protocol */</p>
+
+<p>} else {</p>
+
+<p>if (cmptr == NULL &amp;&amp; (cmptr = malloc(CONTROLLENJ) == NULL) return(-1);</p>
+
+<p>msg.msg_control = cmptr； msg.msg_controllen = CONTROLLEN; cmp = cmptr;</p>
+
+<p>cmp-&gt;cmsg_level = SOL_SOCKET; cmp-&gt;cmsg_type = SCM_RIGHTS; cmp-&gt;cmsg_len = RIGHTSLEN;</p>
+
+<p>*(int <em>)CMSG_DATA(cmp) = fd_to_send; /</em> the fd to pass */</p>
+
+<p>cmp = CMSG_NXTHDR(&amp;msg, cmp);</p>
+
+<p>cmp-&gt;cmsg_level = SOL_SOCKET;</p>
+
+<p>cmp-&gt;cmsg_type = SCM_CREDTYPE;</p>
+
+<p>cmp-&gt;cmsg_len = CREDSLEN;</p>
+
+<p>credp = (struct CREDSTRUCT *)CMSG_DATA{cmp);</p>
+
+<p>#if defined(SCM_CREDENTIALS)</p>
+
+<p>credp-&gt;uid = geteuid(); credp-&gt;gid = getegid(); credp-&gt;pid = getpid();</p>
+
+<p>#endif</p>
+
+<p>buf[1] =0;    /* zero status means OK */</p>
+
+<p>}</p>
+
+<p>buf[0] = 0;    /* null byte flag to recv_ufd() */</p>
+
+<p>if (sendmsg(fd, &amp;msg, 0) != 2)</p>
+
+<p>return (-1); return(0);</p>
+
+<p>图17-15通过UNIX域套接字发送证书 注意，只有在Linux上才需要初始化证书结构。</p>
+
+<p>图17-16中的recv.ufd函数是recv_fd的修改版，它通过一个引用参数返回发送者的用户ID。</p>
+
+<p>struct msghdr */</p>
+
+<p>#if defined(SCM.CREDS) #define CREDSTRUCT #define CR_UID ttdefine SCM_CREDTYPE</p>
+
+<p>/* BSD interface */</p>
+
+<p>cmsgcred</p>
+
+<p>cmcred_uid</p>
+
+<p>SCM_CREDS</p>
+
+<p>#elif defined(SCM^CREDENTIALS)</p>
+
+<p>/* Linux interface */</p>
+
+<p>ttdefine CREDSTRUCT #define CRJJID #define CREDOPT #define SCM_CREDTYPE #else</p>
+
+<p>ucred</p>
+
+<p>uid</p>
+
+<p>SO_PASSCRED</p>
+
+<p>SCM_CREDENTIALS</p>
+
+<p>terror passing credentials is unsupported! tendif</p>
+
+<p>/* size #define ♦define ♦define</p>
+
+<p>of control RIGHTSLEN CREDSLEN CONTROLLEN</p>
+
+<p>buffer to send/recv one file descriptor */ CMSG_LEN(sizeof(int))</p>
+
+<p>CMSG_LEN(sizeof(struct CREDSTRUCT)) (RIGHTSLEN + CREDSLEN}</p>
+
+<p>static struct cmsghdr</p>
+
+<p>*cmptr = NULL;</p>
+
+<p>/* malloc&rsquo;ed first time */</p>
+
+<p>*    Receive a file descriptor from a server process. Also, any data</p>
+
+<p>*    received is passed to (*userfunc) (STDERR_FILENO, buf, nbytes).</p>
+
+<p>*    We have a 2-byte protocol for receiving the fd from send_fd().</p>
+
+<p>*/</p>
+
+<p>int</p>
+
+<p>recv_ufd(int fd, uid_t *uidptr,</p>
+
+<p>ssize_t (*userfunc) (int, const void *, size_t))</p>
+
+<table>
+<thead>
+<tr>
+<th>struct</th>
+<th>cmsghdr</th>
+<th>*cmp;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>struct</td>
+<td>CREDSTRUCT</td>
+<td>*credp;</td>
+</tr>
+
+<tr>
+<td>char</td>
+<td></td>
+<td>*ptr;</td>
+</tr>
+
+<tr>
+<td>char</td>
+<td></td>
+<td>buf[MAXLINE];</td>
+</tr>
+
+<tr>
+<td>struct</td>
+<td>iovec</td>
+<td>iov[l];</td>
+</tr>
+
+<tr>
+<td>struct</td>
+<td>msghdr</td>
+<td>msg;</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td></td>
+<td>nr;</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td></td>
+<td>newfd = -1;</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td></td>
+<td>status = -1;</td>
+</tr>
+</tbody>
+</table>
+
+<p>#if defined(CREDOPT)</p>
+
+<p>const int    on = 1;</p>
+
+<p>if (setsockopt(fd, SOL_SOCKET, CREDOPT, &amp;onr sizeof(int)) &lt; 0) { err_ret(&ldquo;setsockopt error&rdquo;); return(-1);</p>
+
+<p>}</p>
+
+<p>#endif</p>
+
+<p>for { ; ; ) {</p>
+
+<p>iov[0].iov_base = buf;</p>
+
+<p>iov[0].iov_len = sizeof(buf)i</p>
+
+<p>msg.msg_iov    =    iov;</p>
+
+<p>msg.msg_iovlen = 1;</p>
+
+<p>msg.msg_neune = NULL;</p>
+
+<p>msg.msg_namelen = 0;</p>
+
+<p>if (cmptr == NULL &amp;&amp; {cmptr =</p>
+
+<p>malloc(CONTROLLEN))</p>
+
+<p>NULL)</p>
+
+<p>return (-1) &lsquo;•</p>
+
+<p>msg.msg_control = cmptr;</p>
+
+<p>msg.msg_controllen = CONTROLLEN; if &ldquo;nr = recvmsg (fd, smsg, 0)) &lt; 0) {</p>
+
+<p>err_ret(&ldquo;recvmsg error&rdquo;);</p>
+
+<p>return(-1);</p>
+
+<p>} else if {nr == 0) {</p>
+
+<p>err_ret(&ldquo;connection closed by server&rdquo;)； return(-1);</p>
+
+<p>*    See if this is the final data with null &amp; status. Null</p>
+
+<p>*    is next to last byte of buffer； status byte is last byte.</p>
+
+<p>*    Zero status means there is a file descriptor to receive.</p>
+
+<p>*/</p>
+
+<p>for (ptr = buf; ptr &lt; &amp;buf [nr]，-)( if (*ptr++ == 0) {</p>
+
+<p>if (ptr != &amp;buf[nr-1])</p>
+
+<p>err_dump{&ldquo;message format error&rdquo;);</p>
+
+<p>status = <em>ptr &amp; OxFF; /</em> prevent sign extension */ if {status == 0) {</p>
+
+<p>if (msg.msg_controllen != CONTROLLEN) err_dump(&ldquo;status = 0 but no fd&rdquo;);</p>
+
+<p>/* process the control data */ for (cmp = CMSG_FIRSTHDR(Smsg);</p>
+
+<p>crnp != NULL; cmp = CMSG_NXTHDR(Smsg, cmp)) { if {cmp-&gt;cmsg_level != SOL_SOCKET)</p>
+
+<p>continue;</p>
+
+<p>switch {cmp-&gt;cmsg_type} { case SCM_RIGHTS:</p>
+
+<p>newfd = *(int *)CMSG_DATA(cmp); break;</p>
+
+<p>case SCM_CREDTYPE:</p>
+
+<p>credp = (struct CREDSTRUCT *)CMSG_DATA(cmp); *uidptr = credp-&gt;CR_UID;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>} else {</p>
+
+<p>newfd = -status;</p>
+
+<p>}</p>
+
+<p>nr —= 2;</p>
+
+<p>if (nr &gt; 0 &amp;&amp; (*userfunc) {STDERR_FILENO, buf, nr) != nr) return(-1);</p>
+
+<p>if (status &gt;= 0)    /* final data has arrived */</p>
+
+<p>return(newfd);    /* descriptor, or -status */</p>
+
+<p>}</p>
+
+<p>J</p>
+
+<p>图17-16通过UNIX域套接字接收证书</p>
+
+<p>在FreeBSD中，指定SCM_CREDS表示要传送证书。在Linux中，则使用SCM_CREDENTIALS。[652]</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>ftinclude &ldquo;apue.h&rdquo;</p>
+
+<p>番include <sys/socket.h></p>
+
+<p>#include <sys/un.h></p>
+
+<p>#include <errno.h></p>
+
+<p>#define QLEN    10</p>
+
+<p>/<a href="#bookmark11">2</a></p>
+
+<p>*    Create a server endpoint of a connection.</p>
+
+<p><a href="#footnote2">2</a></p>
+
+<p>Returns fd if all OK, &lt;0 on error.</p>
+
+<p>*/</p>
+
+<p>int</p>
+
+<p>serv_listen(const char <a href="#bookmark11">2</a>name)</p>
+
+<p>#include &ldquo;apue.h”</p>
+
+<p>#include <sys/socket.h></p>
+
+<p>#include <sys/un.h></p>
+
+<p>ftinclude <time.h></p>
+
+<p>linclude <errno.h></p>
+
+<p>30    /* client&rsquo;s name can&rsquo;t be older than this (sec) */</p>
+
+<p><a href="#footnote3">3</a></p>
+
+<p>#include &ldquo;apue.h&rdquo;</p>
+
+<p>#include <sys/socket.h></p>
+
+<p>#include <sys/un.h></p>
+
+<p>ftinclude <errno.h></p>
+
+<p>#define CLI^PATH    &ldquo;/var/tmp/&rdquo;</p>
+
+<p>#define CLI_PERM    S_IRWXU    /<a href="#bookmark15">4</a> rwx for user only <a href="#bookmark15">4</a>/</p>
+
+<p>*    Create a client endpoint and connect to a server.</p>
+
+<p><a href="#footnote4">4</a></p>
+
+<p>Returns fd if all OK, &lt;0 on error.</p>
+
+<p>*/</p>
+
+<p>int</p>
+
+<p>cli_conn(const char <a href="#bookmark15">4</a>name)</p>
+
+<p>{</p>
+
+<p>int    fd, len, err, rval;</p>
+
+<p>struct sockaddr_un    un, sun;</p>
+
+<p>int    do_unlink = 0;</p>
+
+<p>if (strlen(name) &gt;= sizeof(un.sun_path)) { errno = ENAMETOOLONG; return(-1);</p>
+
+<p><a href="#footnote5">5</a></p>
+
+<p>tinclude &ldquo;apue.h&rdquo;</p>
+
+<p>♦include <sys/socket.h></p>
+
+<p>/<a href="#bookmark20">6</a> size of control buffer to send/recv one file descriptor <a href="#bookmark20">6</a>/ #define CONTROLLEN CMSG_LEN(sizeof(int)J</p>
+
+<p>static struct cmsghdr <a href="#bookmark20">6</a>cmptr = NULL; /<a href="#bookmark20">6</a> malloc&rsquo;ed first time <a href="#bookmark20">6</a>/</p>
+
+<p>/<a href="#bookmark20">6</a></p>
+
+<p>*    Pass a file descriptor to another process.</p>
+
+<p><a href="#footnote6">6</a></p>
+
+<p>#include &ldquo;apue.h&rdquo;</p>
+
+<p>#include <sys/socket.h>    /<a href="#bookmark21">7</a> struct msghdr <a href="#bookmark21">7</a>/ /<a href="#bookmark21">7</a> size of control buffer to send/recv one file descriptor <a href="#bookmark21">7</a>/</p>
+
+<p>ttdefine CONTROLLEN CMSG_LEN(sizeof(int))</p>
+
+<p>static struct cmsghdr    <a href="#bookmark21">7</a>cmptr = NULL; /<a href="#bookmark21">7</a> malloc<a href="#bookmark21">7</a>ed first time <a href="#bookmark21">7</a>/</p>
+
+<p>*    Receive a file descriptor from a server process. Also, any data</p>
+
+<p>*    received is passed to (<a href="#bookmark21">7</a>userfunc) (STDERR_FILENO, buf, nbytes).</p>
+
+<p><a href="#footnote7">7</a></p>
+
+<p>We have a 2-byte protocol for receiving the fd from send_fd().</p>
+
+<p>*/</p>
+
+<p>int recv_fd(int fd, ssize_t (<a href="#bookmark21">7</a>userfunc)(int, const void <a href="#bookmark21">7</a>, size_t))</p>
+
+<p><a href="#footnote8">8</a></p>
+
+<p>#include &ldquo;apue.h&rdquo;</p>
+
+<p>#Include <sys/socket.h></p>
+
+<p>#if defined(SCM_CREDS)    /<a href="#bookmark29">9</a> BSD interface <a href="#bookmark29">9</a>/</p>
+
+<p>tdefine CREDSTRUCT    cmsgcred</p>
+
+<p>#define SCM_CREDTYPE    SCM_CREDS</p>
+
+<p>#elif defined(SCM_CREDENTIALS&gt;    /<a href="#bookmark29">9</a> Linux interface <a href="#bookmark29">9</a>/</p>
+
+<p>择define CREDSTRUCT    ucred</p>
+
+<p>#define SCM_CREDTYPE    SCM_CREDENTIALS</p>
+
+<p>#else</p>
+
+<p>#error passing credentials is unsupported!</p>
+
+<p>#endif</p>
+
+<p>/<a href="#bookmark29">9</a> size of control buffer to send/recv one file descriptor <a href="#bookmark29">9</a>/ #define RIGHTSLEN    CMSG_LEN(sizeof(int))</p>
+
+<p>♦define CREDSLEN    CMSG_LEN(sizeof(struct CREDSTRUCT))</p>
+
+<p>#define CONTROLLEN (RIGHTSLEN + CREDSLEN)</p>
+
+<p>*cmptr = NULL; /<a href="#bookmark29">9</a> malloc&rsquo;ed first time <a href="#bookmark29">9</a>/</p>
+
+<p>*    Pass a file descriptor to another process.</p>
+
+<p><a href="#footnote9">9</a></p>
+
+<p>If fd&lt;0, then -fd is sent back instead as the */</p>
+
+<p>int</p>
+
+<p>send_fd&lt;int fd, int fd_to_send)</p>
+
+<p>Struct CREDSTRUCT struct cmsghdr struct iovec struct msghdr char</p>
+
+<p>iov[0].iov_base = buf; iov[0],iov_len = 2； msg.msg_iov    =    iov；</p>
+
+<p>msg.msg_iovlen = 1;</p>
+
+<p>#include &ldquo;apue.h&rdquo; #include <sys/socket.h> #include <sys/un.h></p>
+
+<h5 id="17-5-open服务器进程第1版">17.5 open服务器进程第1版</h5>
+
+<p>使用文件描述符传送技术开发一个open服务器进程&ndash;个由一个进程执行以打开一个或</p>
+
+<p>多个文件。该服务器进程不是将文件内容送回调用进程，而是送回一个打开文件描述符。这使该 服务器进程对任何类型的文件（如设备或套接字）而不单是普通文件都能起作用。客户进程和服 务器进程用IPC交换最小量的信息：从客户进程到服务器进程传送文件名和打开模式，而从服务 器进程到客户进程返回描述符。文件内容不需通过IPC交换。</p>
+
+<p>将服务器进程设计成一个单独的可执行程序（或者是由客户进程执行的，这正是本节所说明 的：或者是由守护服务器进程执行的，将在下一节进行说明）有很多优点。</p>
+
+<p>•任何客户进程都能很容易地和服务器进程联系，这类似于客户进程调用一个库函数。我 们没有将特定服务硬编码在应用程序中，而是设计了一种可供重用的设施。</p>
+
+<p>•如若需要更改服务器进程，那么也只影响一个程序。相反，更新一个库函数可能需要更 新调用此库函数的所有程序（即用连接编辑器重新连接）。共享库函数可以简化这种更新 （见7.7节）„</p>
+
+<p>•服务器进程可以是一个设置用户ID程序，于是使其具有客户进程没有的附加权限。注意， 库函数（或共享库函数）不能提供这种能力。</p>
+
+<p>客户进程创建一个fd管道，然后调用fork和exec来调用服务器进程。客户进程使用一端 经fd管道发送请求，服务器进程使用另一端经fd管道回送响应。</p>
+
+<p>定义客户进程和服务器进程间的应用程序协议如下。</p>
+
+<p>（1）    客户进程通过fd管道向服务器进程发送“open <pathname> <openmode>\^n形式的请 求。&lt;^«»«0也&gt;是数值.以ASCII十进制数表示，是open函数的第二个参数。该请求字符串以 null字符终止。</p>
+
+<p>（2）    服务器进程调用send_fd或send_err回送打开描述符或出错消息。</p>
+
+<p>这是一个进程向其父进程发送打开描述符的实例。17.6节将修改此实例来使用一个守护服务 器进程，它的服务器进程将一个描述符发送给一个完全无关的进程。</p>
+
+<p>首先要有一个头文件open.h （见图17-17）,它包括标准头文件，并且定义了函数原型。</p>
+
+<p>#include &ldquo;apue .h&rsquo;*</p>
+
+<p>^include <errno.h></p>
+
+<p>#define CL_OPEN &ldquo;open&rdquo;    /* client&rsquo;s request for server */</p>
+
+<p>int    csopen（char *, int）;</p>
+
+<p>[6531    图 17-17 open.h 头文件</p>
+
+<p>main函数(见图17-18)是一个循环，它先从标准输入读一个路径名，然后将该文件复制到</p>
+
+<p>标准输出。它调用csopen函数来联系open服务器进程，从其返回一个打开描述符。</p>
+
+<p>#include    &ldquo;open.h&rdquo;</p>
+
+<p>#include    <fcntl.h></p>
+
+<p>tdefine BUFFSI2E 8192</p>
+
+<p>int</p>
+
+<p>main(int argc, char *argv[],</p>
+
+<p>int    n, fd;</p>
+
+<p>char    buf[BUFFSIZE];</p>
+
+<p>char    line[MAXLXNEJ;</p>
+
+<p>/* read filename to cat from stdin */</p>
+
+<p>while (fgets(line, MAXLINE, stdin) != NULL) {</p>
+
+<p>if (line[strlen(line) - 1] == &lsquo;\n&rsquo;)</p>
+
+<p>line[strlen(line) - 1] = 0; Z* replace newline with null */</p>
+
+<p>/* open the file */</p>
+
+<p>if ((fd = csopen(line, O_RDONLY)) &lt; 0)</p>
+
+<p>continue; /* csopen () prints error from server */</p>
+
+<p>}</p>
+
+<p>exit(0);</p>
+
+<p>/* and cat to stdout */</p>
+
+<p>while ((n = read(fd, buf, BUFFSIZE)) &gt; 0) if (write(STDOUT_FILENO, buf, n) != n)</p>
+
+<p>err_sys(&ldquo;write error&rdquo;); if (n &lt; 0)</p>
+
+<p>err_sys(&ldquo;read error&rdquo;); close (fd);</p>
+
+<p>图17-18 main函数</p>
+
+<p>函数csopen （见图17-19）在创建了 fd管道之后，进行了服务器进程的fork和exec操作。</p>
+
+<p>#include    &ldquo;open.h&rdquo;</p>
+
+<p>#include    <sys/uio.h></p>
+
+<p>/* struct iovec */</p>
+
+<p>/*</p>
+
+<p>*    Open the file by sending the &ldquo;name&rdquo; and &ldquo;oflag&rdquo; to the</p>
+
+<p>*    connection server and reading a file descriptor back. */</p>
+
+<p>int</p>
+
+<p>csopen(char *name,</p>
+
+<p>pid_t</p>
+
+<p>int</p>
+
+<p>char</p>
+
+<p>struct iovec static int</p>
+
+<p>int oflag)</p>
+
+<p>pid;</p>
+
+<p>len；</p>
+
+<p>buf[10];</p>
+
+<p>iov[3];</p>
+
+<p>fd[2] = { -1, -1 }</p>
+
+<p>if (fd【0】&lt; 0) {    /* fork/exec our open server first time */</p>
+
+<p>if (fd_pipe(fd) &lt; 0》{</p>
+
+<p>err_ret(&ldquo;fd_pipe error&rdquo;); return{-1);</p>
+
+<p>J</p>
+
+<p>if {(pid = forkO) &lt; 0) { err_ret(&ldquo;fork error&rdquo;,; return (-1);</p>
+
+<p>} else if (pid == 0) {    /* child &ldquo;</p>
+
+<p>close(fd[0]);</p>
+
+<p>if (fd[l] != STDIN_FILENO &amp;&amp; dup2(fd[l], STDIN_FILENO) != STDIN_FILENO)</p>
+
+<p>err_sys(&ldquo;dup2 error to stdin&rdquo;); if (fd[l] != STDOUT_FILENO &amp;&amp;</p>
+
+<p>dup2(fd[l], STDOUT_FILENO) != STDOUT_FILENO) err_sys(&ldquo;dup2 error to stdout&rdquo;)；</p>
+
+<p>if (execl(&ldquo;./opend&rdquo;, &ldquo;opend&rdquo;, (char *)0) &lt; 0) err_sys(&ldquo;execl error&rdquo;);</p>
+
+<p>}</p>
+
+<p>close(fd(l】};    /* parent */</p>
+
+<p>sprintf(buf, &ldquo; %d&rdquo;, oflag);    /* oflag to ascii */</p>
+
+<p>iov[0].iov_base = CL_OPEN &ldquo;    /* string concatenation */</p>
+
+<p>iov[0].iov_len = strlen(CL_OPEN) + 1; iov[l].iov_base = name;</p>
+
+<p>iov[1].iov_len = strlen(name);</p>
+
+<p>iov[2].iov_base = buf;</p>
+
+<p>iov [2] . iov_len = strlen (buf)十 1;    /* +1 for null at end of buf */</p>
+
+<p>len = iov[0].iov_len + iov[1].iov_len + iov[2].iov_len; if (writev(fd[0], fiiov[0], 3) != len)(</p>
+
+<p>err„ret(&ldquo;writev error&rdquo;); return(-1);</p>
+
+<p>/* read descriptor, returned errors handled by write() */ return(recv_fd(fd[0], write));</p>
+
+<p>图 17-19 csopen 函数</p>
+
+<p>子进程关闭fd管道的一端，父进程关闭另一端。作为服务器进程，子进程也将fd管道的一</p>
+
+<p>端复制到其标淮输入和标准输出。（另一种可选择的方案是，将描述符fd[l]的ASCII表示形式 作为一个参数传送给服务器进程。）</p>
+
+<p>父进程将包含路径名和打开模式的请承发送给服务器进程。最后，父进程调用reCv_fd返回描 岡述符或出错消息。如果服务器进程返回出错消息，那么父进程调用write,向标准错误输出该消息。</p>
+
+<p>现在，让我们来看看open服务器进程。其程序是opend,由图17-19中的子进程执行。首先， 要有一个opend.h头文件（见图17-20〉，它包括标准头文件，并且声明了全局变量和函数原型。</p>
+
+<p>♦include &ldquo;apue.h&rdquo;</p>
+
+<p>^include <errno.h></p>
+
+<p>#define CL_OPEN &ldquo;open&rdquo;</p>
+
+<p>extern char errmsg门； extern int oflag; extern char *pathnarae;</p>
+
+<p>/* client&rsquo;s request for server */</p>
+
+<p>/* error message string to return to client <em>/ /</em> open{) flag: 0_xxx &hellip; */</p>
+
+<p>/* of file to open() for client */</p>
+
+<p>int    cli_args(int, char **);</p>
+
+<p>void    handle request(char *, int, int&gt;;</p>
+
+<p>图17-20 opend.h头文件</p>
+
+<p>main函数（见图17-21）经fd管道（它的标准输入）读来自客户进程的请求，然后调用函 数 handle_request«,</p>
+
+<p>#include    &ldquo;opend.h&rdquo;</p>
+
+<p>char    errmsg[MAXLINE];</p>
+
+<p>int    oflag;</p>
+
+<p>char *pathname;</p>
+
+<p>int</p>
+
+<p>main(void) {</p>
+
+<p>inc    nread;</p>
+
+<p>char    buf[MAXLINE];</p>
+
+<p>for ( ; ; ) {/* read arg buffer from client, process request */ if ((nread = read{STDIN_FXLENO, buf, MAXLINE)) &lt; 0)</p>
+
+<p>err_sys(&ldquo;read error on stream pipe&rdquo;); else if (nread == 0)</p>
+
+<p>break；    /* client has closed the stream pipe */</p>
+
+<p>handle_request(buf, nread, STDOUT_FILENO);</p>
+
+<p>)</p>
+
+<p>exit(0);</p>
+
+<p>图17-21服务器进程main函数第1版</p>
+
+<p>图17-22中的harxUejequest函数承担了全部工作。它调用函数buf_argS将客户进程请求分 解成标准argv型的参数表，然后调用函数cli_args处理客户进程的参数。如果一切正常，则调用 open打开相应文件，接着调用Send_fd,经由fd管道(它的标准输出)将描述符回送给客户进程 如果出错则调用send_err回送一则出错消息，其中使用了前面说明的客户进程-服务器进程协议。[656]</p>
+
+<p>#    include    <em>&lsquo;opend.h&rsquo;</em></p>
+
+<p>#    include    <fcnt1.h></p>
+
+<p>void</p>
+
+<p>handle_request(char *buf, int nread, int fd)</p>
+
+<p>int    newfd;</p>
+
+<p>if (buf[nread-1] != 0) {</p>
+
+<p>snprintf(errmsg, MAXLINE-1,</p>
+
+<p>&ldquo;request not null terminated: %*.*s\n&rdquo;, nread, nread, buf); send_err(fd, -1, errmsg); return;</p>
+
+<p>J</p>
+
+<p>if (buf_args(buf, cli_args) &lt; 0) { Z* parse args &amp; set options */ send_err(fd, -1, errmsg); return;</p>
+
+<p>}</p>
+
+<p>if ((newfd = open(pathname, oflag)) &lt; 0) {</p>
+
+<p>snprintf(errmsg, MAXLINE-1, &ldquo;can&rsquo;t open %s: %s\n&rdquo;, pathname,</p>
+
+<p>strerror(errno)); send_err(fd, -1, errmsg); return；</p>
+
+<p>}</p>
+
+<p>if (send_fd&lt;fd, newfd) &lt; 0)    /* send the descriptor */</p>
+
+<p>err_sys(&ldquo;send_fd error&rdquo;};</p>
+
+<p>close(newfd);    /* we*re done with descriptor */</p>
+
+<p>}</p>
+
+<p>图 17-22 handle_request 函数第 1 版</p>
+
+<p>客户进程请求是一个以null终止的字符串，它包含由空格分隔的参数。图17-23中的buf_ args函数将字符串分解成标准argv型参数表，并调用用户函数处理参数。我们使用ISO C函 数strtok将字符串分割成独立的参数。</p>
+
+<p>#include &ldquo;apue.h&rdquo;</p>
+
+<p>#define MAXARGC    50    /<a href="#bookmark7">1</a> <a href="#bookmark8">2</a> max number of arguments in buf <a href="#bookmark8">2</a>/</p>
+
+<p>#define WHITE &ldquo; \t\n&rdquo;    /<a href="#bookmark8">2</a> white space for tokenizing arguments <a href="#bookmark8">2</a>/</p>
+
+<p>*    buf[] contains white-space-separated arguments. We convert it to an</p>
+
+<p>*    argv-style array of pointers, and call the user<a href="#bookmark8">2</a>s function (optfunc)</p>
+
+<p>*    to process the array. We return -1 if there<a href="#bookmark8">2</a>s a problem parsing buf,</p>
+
+<p>*    else we return whatever optfunc() returns. Note that user&rsquo;s buf []</p>
+
+<p>*    array is modified (nulls placed after each token).</p>
+
+<p>*/</p>
+
+<p>int</p>
+
+<p>i__t buf_args (char <a href="#bookmark8">2</a>buf, int (<a href="#bookmark8">2</a>optfunc) tint, char <a href="#bookmark9">3</a>))</p>
+
+<p>[6571 {</p>
+
+<p>char    <a href="#bookmark8">2</a>ptr, <a href="#bookmark8">2</a>argv[MAXARGC];</p>
+
+<p>int    argc;</p>
+
+<p>if (strtok(buf, WHITE) == MULL)    /<a href="#bookmark8">2</a> an argv[0] is required ★/</p>
+
+<p>return(-1);</p>
+
+<p>argv[argc = 0] = buf;</p>
+
+<p>while ((ptr = strtok(NOLL, WHITE)) != NULL) {</p>
+
+<p>if {++argc &gt;= MAXARGC-1)    /<a href="#bookmark8">2</a> -1 for room for NULL at end <a href="#bookmark8">2</a>/</p>
+
+<p>return(-1); argv[argc] = ptr;</p>
+
+<p>}</p>
+
+<p>argv【++argc] = NULL;</p>
+
+<p>/<a href="#bookmark8">2</a></p>
+
+<p>*    Since argv[] pointers point into the user&rsquo;s buf[],</p>
+
+<p>*    user&rsquo;s function can just copy the pointers, even</p>
+
+<p>*    though argv[] array will disappear on return.</p>
+
+<p>*/</p>
+
+<p>return((<a href="#bookmark8">2</a>optfunc)(argc, argv))；</p>
+
+<p>J</p>
+
+<p>图 17-23 buf_args 函数</p>
+
+<p>buf_args调用的服务器进程函数是cli_args (见图17-24)。它验证客户进程发送的参数 个数是否正确，然后将路径名和打开模式存储在全局变量中。</p>
+
+<p>pathname = argv[l];    Z<a href="#bookmark11">4</a> save ptr to pathname to open <a href="#bookmark11">4</a>/</p>
+
+<p>oflag = atoi(argv【2]); return(0);</p>
+
+<p>图]7-24 cli_args 函数</p>
+
+<p>这样也就完成了 open服务器进程，它由客户进程执行fork和exec来调用。在fork之前 创建了一个fd管道，然后客户进程和服务器进程用其进行通信。在这种安排下，每个客户进程都 有一个服务器进程。    [658]</p>
+
+<h5 id="17-6-open服务器进程第2版">17.6 open服务器进程第2版</h5>
+
+<p>在上一节中，我们开发了一个叩en服务器进程，由客户进程执行fork和exec调用，它说 明了如何从子程序向父程序传送文件描述符。本节将开发一个守护进程方式的open服务器进程。 一个服务器进程处理所有客户进程的请求。由于避免了使用fork和exec，我们期望这个设计 会更有效。在客户进程和服务器进程之间仍使用UNIX域套接字连接，并用实例说明在两个无关 进程之间如何传送文件描述符。我们将使用VZ.3节引入的3个函数：serv<em>listen&gt; serv</em> accept和Cli_COrm。这个服务器进程还将演示一个服务器进程如何处理多个客户进程，为此 要用到14.4节中说明的select和poll菌数。</p>
+
+<p>本节所述的客户进程类似于17.5节中的客户进程。实际上，文件main.c是完全相同的（见 图17-18）。我们将在open.h头文件（见图17-17〉中加入下面这行：</p>
+
+<p>#define CS_OPEN &ldquo;/tmp/opend.socket&rdquo; /<a href="#bookmark11">4</a> server&rsquo;s well-known name <a href="#bookmark11">4</a>/</p>
+
+<p>因为在此例中调用的是cli_conn而非fork和exec，所以文件open, c与图17-19中的不同。 修改后如图17-25所示。</p>
+
+<p>/<a href="#bookmark11">4</a> struct iovec <a href="#bookmark11">4</a>/</p>
+
+<p>int oflag)</p>
+
+<p>len;</p>
+
+<p>buf(12]; iov[3]; csfd = -1;</p>
+
+<p>iov[0]-iov_base = CL_OPEN &ldquo; &ldquo;; /* string concatenation */ iovIO].iov_len = strlen(CL_OPEN) + 1; iov[l].iov_base = name;</p>
+
+<p>iov[l],iov_len = strlen(name);</p>
+
+<p>iov[2].iov_base = buf；</p>
+
+<p>iov【2] . iov_len = strlen (buf &gt; + 1；    /* null always sent */</p>
+
+<p>len = iov[0],iov_len + iov[1】.iov_len + iov[2].iov_len; if {writev(csfd, &amp;iov[0],3) != len) {</p>
+
+<p>err_ret(&ldquo;writev error&rdquo;)； return(-1);</p>
+
+<p>/* read back descriptor; returned errors handled by write。 */ return(recv_fd(csfd, write));</p>
+
+<p>图17-25 csopen函数第2版 客户进程与服务器进程之间使用的协议仍然相同。</p>
+
+<p>接下来再看服务器进程。头文件opend.h （见图17-26）包括了标淮头文件，并且声明了全 局变量和函数原型。</p>
+
+<p>♦include &ldquo;apue.h&rdquo;</p>
+
+<p>#include <errno.h></p>
+
+<p>释define CS_OPEN &ldquo;/tmp/opend.socket&rdquo;    /* well-known name */</p>
+
+<p>#define CL_OPEN &ldquo;open&rdquo;    /★ client&rsquo;s request for server */</p>
+
+<table>
+<thead>
+<tr>
+<th>extern</th>
+<th>int</th>
+<th>debug;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>extern</td>
+<td>char</td>
+<td>errmsg【];</td>
+</tr>
+
+<tr>
+<td>extern</td>
+<td>int</td>
+<td>oflag;</td>
+</tr>
+
+<tr>
+<td>extern</td>
+<td>char</td>
+<td>★pathname;</td>
+</tr>
+
+<tr>
+<td>typedef</td>
+<td>struct {    /■</td>
+<td></td>
+</tr>
+
+<tr>
+<td>int</td>
+<td>fd;</td>
+<td>/-</td>
+</tr>
+
+<tr>
+<td>uid_t</td>
+<td>uid;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>} Client;</p>
+
+<p>/* nonzero if interactive (not daemon) */</p>
+
+<p>/* error message string to return to client <em>/ /</em> open flag: O_xxx &hellip; */</p>
+
+<p>/* of file to open for client */</p>
+
+<p>one Client struct per connected client */ fd, or -1 if available */</p>
+
+<p>extern Client^client;</p>
+
+<p>extern int    client_size;</p>
+
+<p>/* ptr to malloc&rsquo;ed array */</p>
+
+<p>/* 林 entries in client[] array */</p>
+
+<p>int    cli_args(int, char **);</p>
+
+<p>int    client^add(int, uid„t);</p>
+
+<p>void    client_del(int);</p>
+
+<p>void    loop(void);</p>
+
+<p>void    handle request&lt;char *, int, int, uid t);</p>
+
+<p>图17-26 opend.h头文件第2版</p>
+
+<p>因为此服务器进程处理所有客户进程，所以它必须保存每个客户进程连接的状态。这是用在 opend.h头文件中声明的client数组实现的。图17-27定义了 3个处理此数组的函数。</p>
+
+<p>#include</p>
+
+<p>&ldquo;opend.h&rdquo;</p>
+
+<p>♦define NALLOC    10</p>
+
+<p>/* # client structs to alloc/realloc for */</p>
+
+<p>static void</p>
+
+<p>client_alloc(void)    /* alloc more entries in the client[] array */</p>
+
+<p>int    i;</p>
+
+<p>if (client == NULL)</p>
+
+<p>client = malloc(NALLOC * sizeof(Client));</p>
+
+<p>else</p>
+
+<p>client = realloc(client, (client_size+NALLOC)*sizeof(Client)); if (client == MULL)</p>
+
+<p>err_sys(&ldquo;can11 alloc for client array&rdquo;);</p>
+
+<p>/* initialize the new entries */</p>
+
+<p>for (i = client_size; i &lt; client_size + NALLOC; i++)</p>
+
+<p>client[i].fd = -1;    /* fd of -1 means entry available */</p>
+
+<p>client_size += NALLOC;</p>
+
+<p>* Called by loop() when connection request from a new client arrives. */</p>
+
+<p>int</p>
+
+<p>client_add(int fd, uid_t uid)</p>
+
+<p>t</p>
+
+<p>int    i;</p>
+
+<p>if (client == NULL}    /* first time we&rsquo;re called */</p>
+
+<p>client_alloc(};</p>
+
+<p>again:</p>
+
+<p>for (i = 0; i &lt; client_size; i++) {</p>
+
+<p>if (client [i] .fd == -1) {    /* find an available entry */</p>
+
+<p>client[i].fd = fd; client[i].uid = uid;</p>
+
+<p>return(i);/* return index in clientt] array */</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>/* client array full, time to realloc for more */ client_alloc();</p>
+
+<p>goto again;    /* and search again (will work this time) */</p>
+
+<p>* Called by loopO when we&rsquo;re done with a client. */</p>
+
+<p>void</p>
+
+<p>client_del《int fd)</p>
+
+<p>{</p>
+
+<p>int    i;</p>
+
+<p>for {i = 0; i &lt; client_size; i++)(</p>
+
+<p>if (client[i].fd == fd) {    |661|</p>
+
+<p>client[i].fd = -1; return;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>log_quit(&ldquo;can&rsquo;t find client entry for fd %d&rdquo;, fd,;</p>
+
+<p>图17-27处理client数组的3个函数</p>
+
+<p>第一?欠调用 client_add 时，它调用 client_alloc. client_alloc 又调用 malloc 为 该数组的10个登记项分配空间。在这10个登记项全部用完后，如若再调用client_add，那么 client_allOC函数将调用realloc来分配附加空间，依靠这种动态空间分配，我们无需在编 译时将估计的数组长度值放入头文件中从而限制client数组的长度。如果出错，这些函数将调 用109_函数(见附录B)，因为我们假定服务器进程是守护进程。</p>
+
+<p>通常服务器进程会作为守护进程运行，但我们想提供一个让其前台运行的选项，同时能够把 分析信息发送到标准错误输出。这应该能使服务器更容易评测和调试，特别是当用户没有权限读 取那些分析信息经常写入的日志文件时。可以使用一个命令行选项来控制服务器是否在前台运行 或者作为守护进程在后台运行。</p>
+
+<p>一个系统的所有命令遵循相同的约定是非常重要的，因为这会提髙它的易用性。如果有人熟 悉某条命令的选项风格，那么若后面的命令使用了其他的风格，他就很容易犯错。</p>
+
+<p>处理命令行空格就很容易发生这样的问题。有些命令需要它的选项和其参数以空格隔开，而 另一些则希望它的参数直接跟在它的选项之后。如果没有遵循一个一致的规则，用户就得记住所 有命令的语法，或者在尝试和调错中调用这些命令。</p>
+
+<p>Single UNIX Specification包括了一系列的约定和规范来保证命令行语法的一致性，其中包括一些建 议，如“限制每个命令行逸项为一个单一的阿拉伯字符”以及“所有选项必须以‘-’作为开头字符&rsquo;</p>
+
+<p>幸运的是，getopt函数能够帮助命令开发者以一致的方式处理命令行选项。 linclude <unistd.h></p>
+
+<p>int getopt (int argc, char * const argv[], const char ’options}; extern int optind, opterr, optopt; extern char *optarg;</p>
+
+<p>返回值：若所有选项被处理完，返回-1:否则，返回下一个选项字符 参数和arsy与传入main函数的一样-options参数是一个包含读命令支持的选项字符 的字符串。如果一个选项字符后面接了一个冒号，则表示该选项需要参数；否则，该选项不需要 额外参数。举例来说，如果一条命令的用法说明如下：</p>
+
+<p>command 【-i] [-u username] [-z] filename 则我们可以给getopt侍送一个&rdquo;iu: z&rdquo;作为options字符串。</p>
+
+<p>函数getopt—般用在循环体内，循环直到getopt返回-1时退出。每次迭代中，getopt 会返回下一个选项。应用程序负责筛选这些选项，判断是否有冲突，getopt仅负责解释选项并 保证一个标准的格式。</p>
+
+<p>当遇至(J无效的选项时，getopt返回一个问题标记(question mark)而不是这个字符。如果选项缺 少参数，getopt也会返回一个问题标记，但如果选项字符串的第一个字符是冒号，getopt会直接返 回冒号。而特殊的“一”格式则会导致getopt停止处理选项并返回-1。这允许用户侍递以开头 但不是选项的参数。例如，如果有一个名字为“-bar”的文件’下面的命令行是无法删除这个文件的：</p>
+
+<p>rm -bar</p>
+
+<p>因为rm会试图把-bar解释为选项。正确的删除文件的命令应该是： rm &ndash; -bar</p>
+
+<p>getopt函数支持以下4个外部变量。</p>
+
+<p>optarg如果一个选项需要参数，在处理读选项时，getopt会设置optarg指向该选项的 参数字符串。</p>
+
+<p>opterr如果一个选项发生了错误，getopt会默认打印一条出错消息。庇用程序可以通过 设置opterr参数为0来禁止这个行为。</p>
+
+<p>optind用来存放下一个要处理的字符串在argv数组里的下标。它从1开始，每处理一个 参数，getopt都会对其递増k</p>
+
+<p>optopt如果处理选项时发生了错误，getopt会设置optopt指向导致出错的选项字符串。 open服务器进程的main函数(见图17-28〉定义全局变量，处理命令行选项，并且调用loop</p>
+
+<p>函数。如果以-d选项调用服务器进程，则服务器进程将以交互方式运行而非守护进程方式。测试 服务器进程时会用到这个选项。</p>
+
+<p>♦include    &ldquo;opend.h&rdquo;</p>
+
+<p>♦include    <syslog.h></p>
+
+<p>int    debug, oflag, client_size, log_to_stderr;</p>
+
+<p>char    errmsg[MAXLINE];</p>
+
+<p>char *pathname;    _</p>
+
+<p>Client *client = NULL;    「秘习</p>
+
+<p>int</p>
+
+<p>main(int argc, char *argv[])</p>
+
+<p>{</p>
+
+<p>int    c;</p>
+
+<p>log_open(&ldquo;open.serv&rdquo;, LOG_PID, LOG_USER);</p>
+
+<p>opterr = 0;    /* don&rsquo;t want getopt() writing to stderr */</p>
+
+<p>while ((c = getopt(argc, argv, &ldquo;d&rdquo;)) != EOF) {</p>
+
+<p>switch &copy; {</p>
+
+<p>case &rsquo;d&rsquo; :    /* debug */</p>
+
+<p>debug = log_to_stderr = 1; break;</p>
+
+<p>case 1f:</p>
+
+<p>err_quit(&ldquo;unrecognized option: -%c&rdquo;, optopt);</p>
+
+<p>}</p>
+
+<p>if (debug == 0)</p>
+
+<p>daemonize(&ldquo;opend&rdquo;);</p>
+
+<p>loop ();</p>
+
+<p>/* never returns */</p>
+
+<p>图17-28服务器进程main函数第2版</p>
+
+<p>loop函数是服务器进程的无限循环。我们将给出该函数的两种版本。图17-29是使用select 的一种版本。图17-30所示的程序是使用poll的另一种版本。</p>
+
+<p>#include    &ldquo;opend.h&rdquo;</p>
+
+<p>#include    <sys/select.h> void</p>
+
+<p>loop(void)</p>
+
+<p>(</p>
+
+<p>int    i, n,    maxfd, maxi, listenfd, clifd, nread;</p>
+
+<p>char    buf[MAXLINE];</p>
+
+<p>uid_t    uid;</p>
+
+<p>fd_set    rset,    allset;</p>
+
+<p>FD_ZERO(&amp;allset);</p>
+
+<p>/* obtain fd to listen for client requests on */ if ((listenfd = serv_listen(CS_OPEN)) &lt; 0)</p>
+
+<p>log_sys{&ldquo;serv_listen error&rdquo;);</p>
+
+<p>FD_SET(listenfd, &amp;allset); maxfd = listenfd;</p>
+
+<p>[^1    maxi = -1;</p>
+
+<p>for ( ; ; ) {</p>
+
+<p>rset = allset;    /* rset gets modified each time around ★/</p>
+
+<p>if ( (n = select (maxfd + 1, &amp;rset, NULL, NULL, NULL” &lt; 0)</p>
+
+<p>log_sys(&ldquo;select error&rdquo;);</p>
+
+<p>if (FD_ISSET(listenfd, &amp;rset)) {</p>
+
+<p>/* accept new client request */</p>
+
+<p>if ((clifd = serv_accept(listenfd, &amp;uid)) &lt; 0)</p>
+
+<p>log_sys(n3erv_accept error: %d&rdquo;, clifd); i » client_add(clifd, uid);</p>
+
+<p>FD_SET(clifd, &amp;allset); if (clifd &gt; maxfd)</p>
+
+<p>maxfd = clifd； /* max fd for select t) */ if (i &gt; maxi)</p>
+
+<p>maxi = i; /* max index in client [ ] array */ log_msg(&ldquo;new connection: uid %d, fd %d&rdquo;, uid, clifd}; continue;</p>
+
+<p>}</p>
+
+<p>for (i = 0; i &lt;= maxi; i++) {    /* go through client[] array */</p>
+
+<p>if ((clifd = client[i].fd) &lt; 0)</p>
+
+<p>continue;</p>
+
+<p>if (FD_ISSET(clifd, &amp;rset))(</p>
+
+<p>/* read argument buffer from client */</p>
+
+<p>if ((nread = read(clifd, buf, MAXLINE)) &lt; 0) {</p>
+
+<p>log_sys(&ldquo;read error on fd %d&rdquo;, clifd);</p>
+
+<p>1 else if {nread == 0) {</p>
+
+<p>log_msg{&ldquo;closed: uid %dz fd %d&rdquo;, clientfi].uid, clifd);</p>
+
+<p>client_del(clifd);/* client has closed cxn */</p>
+
+<p>FD_CLR(clifd, fiallset); close(clifd);</p>
+
+<p>} else { /<a href="#bookmark17">5</a> <a href="#bookmark18">6</a> process client&rsquo;s request <a href="#bookmark18">6</a>/</p>
+
+<p>handle_request{buf, nread, clifd, client[i].uid);</p>
+
+<p>图17-29使用select的loop函数</p>
+
+<p>此函数调用serv.listen （见图17-8）创建服务器进程与客户进程连接的端点。此函 数的其余部分是一个循环，它从select调用开始。在select返回后，可能会发生下面 两种情况。</p>
+
+<p>（1）    描述符listenfd可以随时读取，这意味着一个新客户进程已调用了 Cli_COnru为了</p>
+
+<p>处理这种情况，我们将调用serv_accept （见图17-9）,然后为新客户进程更新client数组以岡 及与该新客户进程相关的簿记信息。（我们要跟踪select的第一个参数的最髙描述符编号，还 要跟踪使用中的client数组的最髙下标。）</p>
+
+<p>（2）    —个现有的客户进程的连接可以随时读取。这意味着该客户进程已经终止，或者该客户 进程已发送一个新请求。如果read返回0 （文件结束），则表示客户进程已终止。如果read返 回的值大于0,则表示有一个新请求需处理，可以调用request来处理。</p>
+
+<p>用allset描述符集跟踪当前使用的描述符。当新客户进程连接至服务器进程时，会打开此 描述符集的相应位。当该客户进程终止时，会关闭相应位。</p>
+
+<p>因为客户进程的所有描述狩都由内核自动关闭（包括与服务器进程的连接），所以我们总能 知道什么时候客户进程终止了，该终止是否是自愿的。这与XSIIPC机制不同。</p>
+
+<p>使用poll函数的loop函数如图17-30所示。</p>
+
+<table>
+<thead>
+<tr>
+<th>int</th>
+<th>i, listenfd, clifd, nread;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>char</td>
+<td>buf[MAXLINE];</td>
+</tr>
+
+<tr>
+<td>uid_t</td>
+<td>uid;</td>
+</tr>
+
+<tr>
+<td>struct pollfd</td>
+<td>*pollfd;</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td>numfd = 1;</td>
+</tr>
+
+<tr>
+<td>int</td>
+<td>maxfd = NALLOC;</td>
+</tr>
+</tbody>
+</table>
+
+<p>|666|</p>
+
+<p>if ((pollfd = malloc(NALLOC * sizeof(struct pollfd))) == NULL) err_sys C&rsquo;malloc error&rdquo;);</p>
+
+<p>for (i =0; i &lt; NALLOC; i++) { pollfd[i].fd = -1; pollfd[i] .events = POLLIN&rsquo;-pollfd[i].revents = 0;</p>
+
+<p>/* obtain fd to listen for client requests on */ if { {listenfd = serv_listen(CS_OPEN)) &lt; 0)</p>
+
+<p>log_sys(&ldquo;serv_listen error&rdquo;); client_add(listenfd, 0); &ldquo;we use 【0] for listenfd */ pollfd[0].fd = listenfd;</p>
+
+<p>for ( ; ; , {</p>
+
+<p>if (poll(pollfd, numfd, -1) &lt; 0) log_sys(&ldquo;poll error&rdquo;);</p>
+
+<p>if (pollfd(0].revents &amp; POLLIN) {</p>
+
+<p>/* accept new client request */</p>
+
+<p>if { (clifd = serv_accept {listenfd, &amp;uid” &lt; 0}</p>
+
+<p>log_sys{&ldquo;serv_accept error: %d&rdquo;, clifd); client_add(clifd, uid);</p>
+
+<p>/* possibly increase the size of the pollfd array */ if (numfd == maxfd)</p>
+
+<p>pollfd = grow_pollfd(pollfd, &amp;maxfd); pollfd【numfd].fd = clifd; pollfd[numfd].events = POLLIN; pollfd[numfd].revents = 0; numfd++;</p>
+
+<p>log_msg(&ldquo;new connection: uid %d, fd %d&rdquo;, uid, clifd);</p>
+
+<p>for (i = 1; i &lt; numfd; i++) {</p>
+
+<p>if (pollfdfi].revents &amp; POLLHUP)(</p>
+
+<p>goto hungup;</p>
+
+<p>} else if &lt;pollfd[i】.revents &amp; POLLIN) {</p>
+
+<p>/* read argument buffer from client */</p>
+
+<p>if ((nread = read(pollfd[i】.fd, buf, MAXLINE)) &lt; 0) {</p>
+
+<p>log_sys&lt;&ldquo;read error on fd %d&rdquo;, pollfd[i].fd);</p>
+
+<p>} else if (nread == 0) {</p>
+
+<p>hungup:</p>
+
+<p>/* the client closed the connection */ log_msg(&ldquo;closed: uid %d, fd %d&rdquo;,</p>
+
+<p>client[i].uid, pollfd[i].fd); client_del(pollfd[i].fd);</p>
+
+<p>close(pollfd[i].fd);</p>
+
+<p>if (i &lt; (numfd-1)) 1</p>
+
+<p>/* pack the array <em>/ pollfdli】.fd = pollfd[numfd-l].fd; pollfdfi].events = pollfd[numfd-l].events; pollfd[i].revents = pollfd[numfd-l].revents; i&ndash;;    /</em> recheck this entry */</p>
+
+<p>numfd&ndash;;</p>
+
+<p>} else {    /* process client&rsquo;s request */</p>
+
+<p>handle_request(buf, nread, pollfd[i].fd,</p>
+
+<p>client[i1.uid);</p>
+
+<p>}</p>
+
+<p>图17-30使用poll的loop圉数</p>
+
+<p>为使打开描述符的数量能与客户进程数量相当，我们动态地为pollfd结构的数字分配空间， 所使用的策略与client_alloc函数分K client数组（见图17-27）时所使用的相同。</p>
+
+<p>pollfd数组中的第一个登记项（下标号为0）用于listenfd描述符。新客户进程连接的 到达由listenfd描述符中的POLLIN指示。如同前述，调用serv_accept来接受该连接。</p>
+
+<p>对于一个现有的客户进程，应当处理来自poll的两个不同事件：由POLLHUP指示的客户进程 终止，由POLLIN指示的来自现有客户进程的一个新请求。即使连接的服务器端还在读取数据，客 户端也能够关闭它这端的连接。即使连接的一端己经被标记为挂起状态，服务器仍然可以读取在它 那端队列里的数据，当然，服务器在收到客户端的挂起消息时用close关闭到客户端的连接，可有 效地抛弃所有队列里的数据。剩下的请求也没必要处理，因为我们已经无法发回响应的信息。</p>
+
+<p>如同此函数的select版本，调用request函数（见图17-31）处理来自客户进程的新请求。 此函数类似于其早期版本（见图17-22）。忘调用同一函数buf_args （见图17-23），buf_args 又调用cli_argS （见图17-24〉，但是，因为它是在一个守护进程中运行的，所以它在日志文件 中记录出错消息，而不是在标准错误上打印它们。</p>
+
+<p>#include    &ldquo;opend.h&rdquo;</p>
+
+<p>#include    <fcntl.h></p>
+
+<p>void</p>
+
+<p>handle_request(char *buf, int nread, int clifd, uid_t uid) (</p>
+
+<p>int    newfd;</p>
+
+<p>if (buf[nread-11 != 0) {</p>
+
+<p>snprintf(errmsg, MAXLINE-1,</p>
+
+<p>&ldquo;request from uid %d not null terminated: %*.*s\n&rdquo;, uid, nread, nread, buf);</p>
+
+<p>send„err(clifd, -1, errmsg); return;</p>
+
+<p>)</p>
+
+<p>16681</p>
+
+<p>log_msg(&ldquo;request: %s, from uid %d&rdquo;, buf, uid);</p>
+
+<p>/* parse the arguments, set options */ if (buf_args(buf, cli_args) &lt; 0) {</p>
+
+<p>send_err(clifd, -1, errmsg}；</p>
+
+<p>log_msg(errmsg);</p>
+
+<p>return;</p>
+
+<p>}</p>
+
+<p>if ((newfd = open{pathname, oflag)) &lt; 0) {</p>
+
+<p>snprintf(errmsg, MAXLINE-1, &ldquo;can1t open is: %s\n&rdquo;,</p>
+
+<p>pathname, strerror(errno)); send_err{clifd, -1, errmsg); log_msg(errmsg);</p>
+
+<p>return;</p>
+
+<p>I</p>
+
+<p>/* send the descriptor */ if (send_fd{clifd, newfd) &lt; 0)</p>
+
+<p>log_sys(&ldquo;send_fd error&rdquo;);</p>
+
+<p>log_msg(&ldquo;sent fd %d over fd %d for %s&rdquo;, newfd, clifd, pathname); close(newfd);    /* we&rsquo;re done with descriptor */</p>
+
+<p>}</p>
+
+<p>图 17-31 request 函数</p>
+
+<p>这就完成了 open服务器进程第2版，它仅使用一个守护进程就处理了所有的客户进程请求。</p>
+
+<h5 id="17-7小结">17.7小结</h5>
+
+<p>本章的关键点是如何在两个进程之间传送文件描述符，以及服务器进程如何接受来自客户进 程的唯一连接。虽然所有平台都支持UNIX域套接字（见图15-1）,但是各种实现都有不同之处， 这使我们很难开发可移植的应用程序。</p>
+
+<p>整章都使用了 UNIX域套接字。我们了解了如何用它们来实现一个全双工的管道以及如何利 用它们来适应14.4节的I/O多路转接函数以间接地用于XSI消息队列中。</p>
+
+<p>本章给出了 open服务器进程的两个版本。一个版本由客户进程用fork和exec直接调用， 另一版本是一个守护服务器进程处理所有客户进程请求。这两个版本均采用文件描述符传送和接 收函数。</p>
+
+<p>我们还展示了如何使用getopt函数来保证命令行参数处理的一致性。最终的open服务器 进程版本使用了 getopt函数、17.3节中引入的客户进程-服务器进程连接函数和14.4节中的I/O</p>
+
+<p>[669]多路转接函数，</p>
+
+<p>习题</p>
+
+<p>17.1我们选择使用图17-3中的UNIX域数据报套接字，因为它们能够保留消息边界。描述如果 使用常规的管道实现需要哪些必要的改动。我们应当如何避免额外的两次消息复制呢？</p>
+
+<p>17.2使用本章描述的文件描述符侍送函数以及8.9节中描述的父进程和子进程同步例程，编写具 有下列功能的程序。该程序调用fork,子进程打开一个现有的文件并将打开文件描述符传 送给父进程。然后，子进程调用lseek确定该文件的当前读、写位置，通知父进程。父进</p>
+
+<p>程读该文件的当前偏移量，并打印它以便验证。若此文件按上述方式从子进程传递到父进 程，则父进程和子进程应共享同一个文件表项，所以当子进程每次更改该文件当前偏移量 时，这种更改应该也会影响父进程的描述符。使子进程将该文件定位至一个不同偏移量，</p>
+
+<p>并再次通知父进程。</p>
+
+<p>17.3图17-20和图17-21中的程序分别定义和声明了全局变量，两者的区别是什么？</p>
+
+<p>17.4改写bUf_args函数（见图17-23），删除其中对argv数组长度的编译时限制。请用动态 存储分配。</p>
+
+<p>17.5描述优化图17-29和图17-30中的loop函数的方法，并实现之。</p>
+
+<p>17.6在serHisten函数（见图17-8）中，如果文件己经存在，我们要先对代表UNIX域套 接字的文件名解除链接。为了防止误删除不是套接字的文件，我们可以先调用stat来验证 文件类型。解释这种做法存在的两个问题。</p>
+
+<p>17.7请给出两种可能的方法，使得单次调用sendmsg可以传递多个文件描述符。尝试实现你的</p>
+
+<p>方法并验证你的操作系统是否支持这样的方法。    [670]</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>#include &ldquo;opend.h&rdquo;</p>
+
+<p>/<a href="#bookmark8">2</a></p>
+
+<p>*    This function is called by buf_args(), which is called by</p>
+
+<p>*    handle_request(). buf_args(| has broken up the client&rsquo;s</p>
+
+<p><a href="#footnote2">2</a></p>
+
+<p>buffer into an argv[]-style array, which we now process.</p>
+
+<p><a href="#footnote3">3</a></p>
+
+<p>#include    &ldquo;open.h&rdquo;</p>
+
+<p>#include    <sys/uio.h> /<a href="#bookmark11">4</a></p>
+
+<p>*    Open the file by sending the &ldquo;name&rdquo; and &ldquo;oflag&rdquo; to the</p>
+
+<p><a href="#footnote4">4</a></p>
+
+<p>connection server and reading a file descriptor back.</p>
+
+<p><a href="#footnote5">5</a></p>
+
+<p>ttinclude    &ldquo;opend.h&rdquo;</p>
+
+<p>♦include    <poll.h></p>
+
+<p>#define NALLOC    10 /<a href="#bookmark18">6</a> # pollfd structs to alloc/realloc <a href="#bookmark18">6</a>/</p>
+
+<p>static struct pollfd <a href="#bookmark18">6</a></p>
+
+<p>grow^pollfd(struct pollfd <a href="#bookmark18">6</a>pfd, int <a href="#bookmark18">6</a>naxfd)</p>
+
+<p>int    i;</p>
+
+<p>int    oldmax    =    <a href="#bookmark18">6</a>maxfd;</p>
+
+<p>int    newmax    =    oldmax +    NALLOC;</p>
+
+<p>if ((pfd = realloc(pfd, newmax <a href="#bookmark18">6</a> sizeof(struct pollfd))) == NULL) err_sys(&ldquo;realloc error&rdquo;);</p>
+
+<p>for (i = oldmax; i &lt; newmax; i++) { pfd[i].fd = -1; pfd[i].events = POLLIN; pfd[i].revents =0;</p>
+
+<p>}</p>
+
+<p><a href="#footnote6">6</a></p>
+
+<p>maxfd = newmax； return(pfd);</p>
+
+<p>}</p>
+
+<p>void</p>
+
+<p>loop(void)</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/10-%E4%BF%A1%E5%8F%B7/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">10 信号</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/22-%E9%99%84%E5%BD%95/">
+            <span class="next-text nav-default">22 附录</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

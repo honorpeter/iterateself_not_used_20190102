@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>17 使用期物处理并发 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第 17 章 使用期物处理并发 抨击线程的往往是系统程序员，他们考虑的使用场景对一般的应用程序员来说，也许 一生都不会遇到……应用程序员遇到的使用场景，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/17-%E4%BD%BF%E7%94%A8%E6%9C%9F%E7%89%A9%E5%A4%84%E7%90%86%E5%B9%B6%E5%8F%91/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="17 使用期物处理并发" />
+<meta property="og:description" content="第 17 章 使用期物处理并发 抨击线程的往往是系统程序员，他们考虑的使用场景对一般的应用程序员来说，也许 一生都不会遇到……应用程序员遇到的使用场景，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/17-%E4%BD%BF%E7%94%A8%E6%9C%9F%E7%89%A9%E5%A4%84%E7%90%86%E5%B9%B6%E5%8F%91/" /><meta property="article:published_time" content="2018-06-26T21:37:44&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:37:44&#43;00:00"/>
+<meta itemprop="name" content="17 使用期物处理并发">
+<meta itemprop="description" content="第 17 章 使用期物处理并发 抨击线程的往往是系统程序员，他们考虑的使用场景对一般的应用程序员来说，也许 一生都不会遇到……应用程序员遇到的使用场景，">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:37:44&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:37:44&#43;00:00" />
+<meta itemprop="wordCount" content="19045">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="17 使用期物处理并发"/>
+<meta name="twitter:description" content="第 17 章 使用期物处理并发 抨击线程的往往是系统程序员，他们考虑的使用场景对一般的应用程序员来说，也许 一生都不会遇到……应用程序员遇到的使用场景，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">17 使用期物处理并发</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 19045 words </span>
+        <span class="more-meta"> 39 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#第-17-章-使用期物处理并发">第 17 章 使用期物处理并发</a>
+<ul>
+<li><a href="#17-1-示例-网络下载的三种风格">17.1 示例：网络下载的三种风格</a>
+<ul>
+<li><a href="#为了高效处理网络i-o-需要使用并发-因为网络有很高的延迟-所以为了不浪费cpu周-期去等待-最好在收到网络响应之前做些其他的事">为了高效处理网络I/O,需要使用并发，因为网络有很高的延迟，所以为了不浪费CPU周 期去等待，最好在收到网络响应之前做些其他的事。</a></li>
+<li><a href="#❶-每次运行脚本后-首先显示下载过程中下载完毕的国家代码-最后显示一个消息-说-明耗时">❶ 每次运行脚本后，首先显示下载过程中下载完毕的国家代码，最后显示一个消息，说 明耗时。</a></li>
+</ul></li>
+<li><a href="#17-2-阻塞型i-o和gil">17.2    阻塞型I/O和GIL</a></li>
+<li><a href="#17-3-使用concurrentfutures模块启动进程">17.3 使用concurrentfutures模块启动进程</a></li>
+<li><a href="#17-4-实验-executor-map-方法">17.4    实验 Executor.map 方法</a>
+<ul>
+<li><a href="#示例-17-6-demo-executor-map-py-简单演示-threadpoolexecutor-类的-map-方法">示例 17-6 demo_executor_map.py:简单演示 ThreadPoolExecutor 类的 map 方法</a></li>
+<li><a href="#❶-这个函数的作用很简单-把传入的参数打印出来-并在前面加上-hh-mm-ss-格式的">❶ 这个函数的作用很简单，把传入的参数打印出来，并在前面加上 [HH:MM:SS] 格式的</a></li>
+<li><a href="#❹-创建-threadpoolexecutor-实例-有-3-个线程">❹ 创建 ThreadPoolExecutor 实例，有 3 个线程。</a></li>
+<li><a href="#❺把五个任务提交给executor-因为只有3个线程-所以只有3个任务会立即开-始-loiter-0-loiter-1-和-loiter-2-这是非阻塞调用">❺把五个任务提交给executor (因为只有3个线程，所以只有3个任务会立即开 始：loiter(0)、loiter(1)和 loiter(2));这是非阻塞调用。</a></li>
+<li><a href="#❻-立即显示调用-executor-map-方法的结果-一个生成器-如示例-17-7-中的输出所示">❻ 立即显示调用 executor.map 方法的结果：一个生成器，如示例 17-7 中的输出所示。</a></li>
+<li><a href="#❼for循环中的enumerate函数会隐式调用next-results-这个函数又会在-内部-表示第一个任务-loiter-0-的-f期物上调用-f-result-方法-result方法会阻">❼for循环中的enumerate函数会隐式调用next(results)，这个函数又会在(内部) 表示第一个任务(loiter(0))的_f期物上调用_f.result()方法。result方法会阻</a></li>
+<li><a href="#❶-这次运行从-15-56-50-开始">❶ 这次运行从 15:56:50 开始。</a></li>
+<li><a href="#❷第一个线程执行loiter-0-因此休眠0秒-甚至会在第二个线程开始之前就结束">❷第一个线程执行loiter(0)，因此休眠0秒，甚至会在第二个线程开始之前就结束，</a></li>
+<li><a href="#❸-loiter-1-和-loiter-2-立即开始-因为线程池中有三个职程-可以并发运行三个函-数">❸ loiter(1) 和 loiter(2) 立即开始(因为线程池中有三个职程，可以并发运行三个函 数)。</a></li>
+</ul></li>
+<li><a href="#17-5-显示下载进度并处理错误">17.5 显示下载进度并处理错误</a>
+<ul>
+<li><a href="#以上是-flags2-系列示例的用户界面-下面分析实现方式">以上是 flags2 系列示例的用户界面。下面分析实现方式。</a></li>
+<li><a href="#示例-17-12-flags2-sequential-py-负责下载的基本函数-flags2-threadpool-py-脚本重">示例 17-12 flags2_sequential+py：负责下载的基本函数；flags2_threadpool+py 脚本重</a></li>
+<li><a href="#❶-get-flag-函数没有处理错误-当-http-代码不是-200-时-10使用-requests-response-raise-for-status-方法抛出异常-10">❶ get_flag 函数没有处理错误，当 HTTP 代码不是 200 时，10使用 requests.Response.raise_for_status 方法抛出异常。 10</a></li>
+<li><a href="#❸-方法是-把局部变量status设为httpstatus-not-found-httpstatus是从">❸&hellip;&hellip;方法是，把局部变量status设为HTTPStatus. not_found； HTTPStatus是从</a></li>
+<li><a href="#download-one函数的返回值是一个namedtuple-result-其中有个status字">© download_one函数的返回值是一个namedtuple-Result，其中有个status字</a></li>
+<li><a href="#示例-17-13-flags2-sequential-py-实现依序下载的-download-many-函数">示例 17-13 flags2_sequential+py：实现依序下载的 download_many 函数</a></li>
+<li><a href="#❶-这个-counter-实例用于统计不同的下载状">❶ 这个 Counter 实例用于统计不同的下载状</a></li>
+<li><a href="#❶-导入显示进度条的库">❶ 导入显示进度条的库。</a></li>
+<li><a href="#❻把-max-workers-设为-concur-req-创建-threadpoolexecutor-实例-main-函数会">❻把 max_workers 设为 concur_req，创建 ThreadPoolExecutor 实例；main 函数会</a></li>
+<li><a href="#❽-按字母顺序迭代国家代码列表-结果的顺序主要由-http-响应的时间长短决定-不">❽ 按字母顺序迭代国家代码列表。结果的顺序主要由 HTTP 响应的时间长短决定，不</a></li>
+</ul></li>
+<li><a href="#17-6-本章小结">17.6 本章小结</a></li>
+<li><a href="#17-7-延伸阅读">17.7 延伸阅读</a>
+<ul>
+<li><a href="#程-那么-asyncio-生态系统成熟后-python-赢回这些人能有多难呢-不过-这是下">程，那么 asyncio 生态系统成熟后， Python 赢回这些人能有多难呢？不过，这是下</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="第-17-章-使用期物处理并发">第 17 章 使用期物处理并发</h2>
+
+<p>抨击线程的往往是系统程序员，他们考虑的使用场景对一般的应用程序员来说，也许 一生都不会遇到……应用程序员遇到的使用场景， 99% 的情况下只需知道如何派生 一堆独立的线程，然后用队列收集结果。 1</p>
+
+<p>——Michele Simionato 深度思考 Python 的人</p>
+
+<p>1摘自 Michele Simionato 发表的文章“Threads, processes and concurrency in Python: some</p>
+
+<p>thoughts” (<a href="http://www.artima.com/weblogs/viewpost.jsp?thread=299551">http://www.artima.com/weblogs/viewpost.jsp?thread=299551</a>)，畐ij标题为&rsquo;“Removing the hype around the multicore (non) revolution and some (hopefully) sensible comment about threads and other forms of concurrency”。</p>
+
+<p>本章主要讨论 Python 3.2 引入的 concurrent.futures 模块，从 PyPI 中安装 futures 包 (<a href="https://pypi.python.org/pypi/futures/">https://pypi.python.org/pypi/futures/</a>)之后，也能在 Python 2.5 及以上版本中使用这个库。</p>
+
+<p>这个库封装了前面的引文中 Michele Simionato 所述的模式，特别易于使用。</p>
+
+<p>这一章还会介绍“期物”(future) 2的概念。期物指一种对象，表示异步执行的操作。这个 概念的作用很大，是 concurrent.futures 模块和 asyncio 包(第 18 章讨论)的基 础。</p>
+
+<p>2“期物”是我自创的词，其中的“物”是指“物件”(object，也就是对象)。起初读者可能不明其意，可与期货、期权和期 房对比理解。一译者注</p>
+
+<p>下面举个示例，作为引子。</p>
+
+<h3 id="17-1-示例-网络下载的三种风格">17.1 示例：网络下载的三种风格</h3>
+
+<h4 id="为了高效处理网络i-o-需要使用并发-因为网络有很高的延迟-所以为了不浪费cpu周-期去等待-最好在收到网络响应之前做些其他的事">为了高效处理网络I/O,需要使用并发，因为网络有很高的延迟，所以为了不浪费CPU周 期去等待，最好在收到网络响应之前做些其他的事。</h4>
+
+<p>为了通过代码说明这一点，我写了三个示例程序，从网上下载 20 个国家的国旗图像。第 一个示例程序 flags.py 是依序下载的：下载完一个图像，并将其保存在硬盘中之后，才请 求下一个图像。另外两个脚本是并发下载的：几乎同时请求所有图像，每下载完一个文件</p>
+
+<p>就保存一个文件。 flags_threadpool .py 脚本使用 concurrent.futures 模块，而 flags_asyncio.py 脚本使用 asyncio 包。</p>
+
+<p>示例 17-1 是运行这三个脚本得到的结果，每个脚本都运行三次。我还在 YouTube 上发布 了一个 73 秒的视频(<a href="https://www.youtube.com/watch?v=A9e9Cy1UkME">https://www+youtube+com/watch?v=A9e9Cy1UkME</a>)，让你观看这些 脚本的运行情况，你会看到一个 OS X Finder 窗口，显示运行过程中保存的国旗图像文 件。这些脚本从 flupy.org 下载图像，而这个网站架设在 CDN 之后，因此第一次运行时可 能要等很久才能看到结果。示例 17-1 中显示的结果是运行几次之后收集的，因此 CDN 中 己经有了缓存。</p>
+
+<p>示例 17-1 运行 flags.py、flags_threadpool.py 和 flags_asyncio.py 脚本得到的结果</p>
+
+<p>$ python3 flags.py</p>
+
+<p>BD BR CD CN DE EG ET FR ID IN IR JP MX NG PH PK RU TR US VN O 20 flags downloaded in 7.26s ©</p>
+
+<p>$ python3 flags.py</p>
+
+<p>BD BR CD CN DE EG ET FR ID IN IR JP MX NG PH PK RU TR US VN 20 flags downloaded in 7.20s $ python3 flags.py</p>
+
+<p>BD BR CD CN DE EG ET FR ID IN IR JP MX NG PH PK RU TR US VN 20 flags downloaded in 7.09s $ python3 flags_threadpool.py</p>
+
+<p>DE BD CN JP ID EG NG BR RU CD IR MX US PH FR PK VN IN ET TR 20 flags downloaded in 1.37s ©</p>
+
+<p>$ python3 flags_threadpool.py</p>
+
+<p>EG BR FR IN BD JP DE RU PK PH CD MX ID US NG TR CN VN ET IR 20 flags downloaded in 1.60s $ python3 flags_threadpool.py</p>
+
+<p>BD DE EG CN ID RU IN VN ET MX FR CD NG US JP TR PK BR IR PH 20 flags downloaded in 1.22s $ python3 flags_asyncio.py ©</p>
+
+<p>BD BR IN ID TR DE CN US IR PK PH FR RU NG VN ET MX EG JP CD 20 flags downloaded in 1.36s $ python3 flags_asyncio.py</p>
+
+<p>RU CN BR IN FR BD TR EG VN IR PH CD ET ID NG DE JP PK MX US 20 flags downloaded in 1.27s $ python3 flags_asyncio.py</p>
+
+<p>RU IN ID DE BR VN PK MX US IR ET EG NG BD FR CN JP PH CD TR © 20 flags downloaded in 1.42s</p>
+
+<h4 id="❶-每次运行脚本后-首先显示下载过程中下载完毕的国家代码-最后显示一个消息-说-明耗时">❶ 每次运行脚本后，首先显示下载过程中下载完毕的国家代码，最后显示一个消息，说 明耗时。</h4>
+
+<p>❷ flags+py 脚本下载 20 个图像平均用时 7+18 秒。</p>
+
+<p>❸ flags_threadpool+py 脚本平均用时 1+40 秒。</p>
+
+<p>❹ flags_asynci o+py 脚本平均用时 1+35 秒。</p>
+
+<p>❺ 注意国家代码的顺序：对并发下载的脚本来说，每次下载的顺序都不同。</p>
+
+<p>两个并发下载的脚本之间性能差异不大，不过都比依序下载的脚本快 5 倍多。这只是一个 特别小的任务，如果把下载的文件数量增加到几百个，并发下载的脚本能比依序下载的脚</p>
+
+<p>本快 20 倍或更多。</p>
+
+<p><img src="08414584Python-79.jpg" alt="img" /></p>
+
+<p>在公网中测试HTTP并发客户端可能不小心变成拒绝服务(Denial-of-Service，DoS)攻击，或者有这么做的嫌疑。我们可以像示例17-1那样做，因为那 三个脚本被硬编码，限制只发起 20 个请求。如果想大规模测试 HTTP 服务器，应该 自己架设测试服务器。在本书的 GitHub 仓库中</p>
+
+<p>(<a href="https://github.com/fluentpython/example-code">https://github+com/fluentpython/example-code</a>) ， 1 7-futures/countries/README+rst 文件 (<a href="https://github+com/fluentpython/example-code/blob/master/17-futures/countries/README+rst)说明了如何在本地架设Nginx服务器。">https://github+com/fluentpython/example-code/blob/master/17-futures/countries/README+rst)说明了如何在本地架设Nginx服务器。</a></p>
+
+<p>下面我们来分析示例17-1测试的两个脚本-flags+py和flags_threadpool+py，看看它们的</p>
+
+<p>实现方式。第三个脚本 flags_asynci o+py 留到第 18 章再分析。将这三个脚本一起演示是为 了表明一个观点：在 I/O 密集型应用中，如果代码写得正确，那么不管使用哪种并发策略 (使用线程或 asyncio 包)，吞吐量都比依序执行的代码高很多。</p>
+
+<p>下面分析代码。</p>
+
+<p>17.1.1 依序下载的脚本</p>
+
+<p>示例 17-2 不太有吸引力，不过实现并发下载的脚本时会重用其中的大部分代码和设置 因此值得分析一下。</p>
+
+<p>为了清楚起见， 说明代码的基本结构，</p>
+
+<p>示例 17-2 没有处理异常。稍后会处理异常，这里我们想集中 以便和并发下载的脚本进行对比。</p>
+
+<p>示例17-2 flags+py：依序下载的脚本；另外两个脚本会重用其中几个函数</p>
+
+<p>&lsquo;MX PH VN ET EG DE IR TR CD FR&rsquo;).split() &amp;</p>
+
+<p>BASE_URL = &lsquo;<http://flupy.org/data/flags'>    ©</p>
+
+<p>DEST_DIR = &lsquo;downloads/&rsquo; ©</p>
+
+<p>def save_flag(img, filename):❺</p>
+
+<p>path = os.path.join(DEST_DIR, filename) with open(path, &lsquo;wb&rsquo;) as fp:</p>
+
+<p>fp.write(img)</p>
+
+<p>def get_flag(cc):    ©</p>
+
+<p>url = &lsquo;{}/{cc}/{cc}.gif&rsquo;.format(BASE_URL, cc=cc.lower()) resp = requests.get(url) return resp.content</p>
+
+<p>def show(text):    &amp;</p>
+
+<p>print(text, end=&rsquo; &lsquo;) sys.stdout.flush()</p>
+
+<p>def download_many(cc_list):❻ for cc in sorted(cc_list): ©</p>
+
+<p>image = get_flag(cc) show(cc)</p>
+
+<p>save_flag(image, cc.lower() + &lsquo;.gif&rsquo;) return len(cc_list)</p>
+
+<p>def main(download_many): © t0 = time.time() count = download_many(POP20_CC) elapsed = time.time() - t0 msg = &lsquo;\n{} flags downloaded in {:.2f}s print(msg.format(count, elapsed))</p>
+
+<p>if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;: main(download_many) ®</p>
+
+<p>❹ 保存图像的本地目录。</p>
+
+<p>❺把img (字节序列)保存到DEST_DIR目录中，命名为filename。</p>
+
+<p>❻指定国家代码，构建URL，然后下载图像，返回响应中的二进制内容。</p>
+
+<p>❼显示一个字符串，然后刷新sys.stdout，这样能在一行消息中看到进度。在Python 中得这么做，因为正常情况下，遇到换行才会刷新 stdout 缓冲。</p>
+
+<p>❽ download_many 是与并发实现比较的关键函数。</p>
+
+<p>❾ 按字母表顺序迭代国家代码列表，明确表明输出的顺序与输入一致。返回下载的国旗 数量。</p>
+
+<p>❿ main 函数记录并报告运行 download_many 函数之后的耗时。</p>
+
+<p>G main函数必须调用执行下载的函数；我们把download_many函数当作参数传给main 函数，这样 main 函数可以用作库函数，在后面的示例中接收 download_many 函数的其 他实现。</p>
+
+<p>Kenneth Reitz开发的requests库可通过PyPI安装 (<a href="https://pypi.python.org/pypi/requests">https://pypi+python+org/pypi/requests</a>) ，比 Python 3 标准库中的 urllib.request 模 块更易于使用。其实， requests 库提供的 API 更符合 Python 的习惯用法，而且与 Python 2+6 及以上版本兼容。因为 Python 2 中删除了 urllib2， Python 3 又使用了其 他名称，所以不管使用哪一版Python，使用requests库都更方便。</p>
+
+<p>flags+py 脚本中没有什么新知识，只是与其他脚本对比的基准，而且我把它作为一个库使</p>
+
+<p>用，避免实现其他脚本时重复编写代码。下面分析使用 concurrent.futures 模块重新 实现的版本。</p>
+
+<p>17.1.2 使用 concurrentfutures 模块下载</p>
+
+<p>concurrent.futures 模块的主要特色是 ThreadPoolExecutor 和</p>
+
+<p>ProcessPoolExecutor 类，这两个类实现的接口能分别在不同的线程或进程中执行可调</p>
+
+<p>用的对象。这两个类在内部维护着一个工作线程或进程池，以及要执行的任务队列。不</p>
+
+<p>过，这个接口抽象的层级很高，像下载国旗这种简单的案例，无需关心任何实现细节。</p>
+
+<p>示例 17-3 展示如何使用 ThreadPoolExecutor.map 方法，以最简单的方式实现并发下 载。</p>
+
+<p>示例 17-3 flags_threadpool+py:使用 futures.ThreadPoolExecutor 类实现多线程</p>
+
+<p>下载的脚本</p>
+
+<p>def download_one(cc): © image = get_flag(cc) show(cc)</p>
+
+<p>save_flag(image, cc.lower() + &lsquo;.gif&rsquo;) return cc</p>
+
+<p>def download_many(cc_list):</p>
+
+<p>workers = min(MAX_WORKERS, len(cc_list)) ©</p>
+
+<p>with futures.ThreadPoolExecutor(workers) as executor: ©</p>
+
+<p>res = executor.map(download_one, sorted(cc_list)) © return len(list(res)) O</p>
+
+<p>if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;: main(download_many)❻</p>
+
+<p>❶ 重用 flags 模块(见示例 17-2)中的几个函数。</p>
+
+<p>❷ 设定 ThreadPoolExecutor 类最多使用几个线程。</p>
+
+<p>❸ 下载一个图像的函数；这是在各个线程中执行的函数。</p>
+
+<p>❹设定工作的线程数量：使用允许的最大值(MAX_WORKERS)与要处理的数量之间较小 的那个值，以免创建多余的线程。</p>
+
+<p>❺使用工作的线程数实例化ThreadPoolExecutor类；executor.<strong>exit</strong>方法会调</p>
+
+<p>用 executor.shutdown(wait=True) 方法，它会在所有线程都执行完毕前阻塞线程。</p>
+
+<p>❻ map 方法的作用与内置的 map 函数类似，不过 download_one 函数会在多个线程中并 发调用； map 方法返回一个生成器，因此可以迭代，获取各个函数返回的值。</p>
+
+<p>❼ 返回获取的结果数量；如果有线程抛出异常，异常会在这里抛出，这与隐式调用 next() 函数从迭代器中获取相应的返回值一样。</p>
+
+<p>❽ 调用 flags 模块中的 main 函数，传入 download_many 函数的增强版。</p>
+
+<p>注意，示例 17-3 中的 download_one 函数其实是示例 17-2 中 download_many 函数的 for 循环体。编写并发代码时经常这样重构：把依序执行的 for 循环体改成函数，以便 并发调用。</p>
+
+<p>我们用的库叫concurrency.futures，可是在示例17-3中没有见到期物，因此你可能</p>
+
+<p>想知道期物在哪里。下一节会解答这个问题。</p>
+
+<p>17.1.3 期物在哪里</p>
+
+<p>期物是 concurrent.futures 模块和 asyncio 包的重要组件，可是，作为这两个库的用</p>
+
+<p>户，我们有时却见不到期物。示例 17-3 在背后用到了期物，但是我编写的代码没有直接</p>
+
+<p>使用。这一节概述期物，还会举一个例子，展示用法。</p>
+
+<p>从Python3.4起，标准库中有两个名为Future的类：concurrent.futures .Future和 asyncio.Future。这两个类的作用相同：两个Future类的实例都表示可能己经完成或 者尚未完成的延迟计算。这与 Twisted 引擎中的 Deferred 类、 Tornado 框架中的 Future 类，以及多个 JavaScript 库中的 Promise 对象类似。</p>
+
+<p>期物封装待完成的操作，可以放入队列，完成的状态可以查询，得到结果(或抛出异常)</p>
+
+<p>后可以获取结果(或异常)。</p>
+
+<p>我们要记住一件事：通常情况下自己不应该创建期物，而只能由并发框架</p>
+
+<p>(concurrent.futures或asyncio)实例化。原因很简单：期物表示终将发生的事</p>
+
+<p>情，而确定某件事会发生的唯一方式是执行的时间己经排定。因此，只有排定把某件事交</p>
+
+<p>给 concurrent.futures.Executor 子类处理时，才会创建</p>
+
+<p>concurrent.futures.Future 实例。例如， Executor.submit() 方法的参数是一个可 调用的对象，调用这个方法后会为传入的可调用对象排期，并返回一个期物。</p>
+
+<p>客户端代码不应该改变期物的状态，并发框架在期物表示的延迟计算结束后会改变期物的</p>
+
+<p>状态，而我们无法控制计算何时结束。</p>
+
+<p>这两种期物都有 .done() 方法，这个方法不阻塞，返回值是布尔值，指明期物链接的可 调用对象是否己经执行。客户端代码通常不会询问期物是否运行结束，而是会等待通知。 因此，两个 Future 类都有 .add_done_callback() 方法：这个方法只有一个参数，类 型是可调用的对象，期物运行结束后会调用指定的可调用对象。</p>
+
+<p>此外，还有 .result() 方法。在期物运行结束后调用的话，这个方法在两个 Future 类 中的作用相同：返回可调用对象的结果，或者重新抛出执行可调用的对象时抛出的异常。 可是，如果期物没有运行结束， result 方法在两个 Future 类中的行为相差很大。对 concurrency.futures.Future 实例来说，调用 f.result() 方法会阻塞调用方所在的 线程，直到有结果可返回。此时， result 方法可以接收可选的 timeout 参数，如果在指 定的时间内期物没有运行完毕，会抛出 TimeoutError 异常。读到 18.1.1 节你会发 现， asyncio.Future.result 方法不支持设定超时时间，在那个库中获取期物的结果最 好使用 yield from 结构。不过，对 concurrency.futures.Future 实例不能这么做。</p>
+
+<p>这两个库中有几个函数会返回期物，其他函数则使用期物，以用户易于理解的方式实现自 身。使用 17-3 中的 Executor.map 方法属于后者：返回值是一个迭代器，迭代器的 <strong>next</strong> 方法调用各个期物的 result 方法，因此我们得到的是各个期物的结果，而非 期物本身。</p>
+
+<p>为了从实用的角度理解期物，我们可以使用 concurrent.futures.as_completed 函数 (<a href="https://docs.python.org/3/library/concurrent.futures.html%23concurrent.futures.as_completed">https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.as_completed</a>)重</p>
+
+<p>写示例 17-3。这个函数的参数是一个期物列表，返回值是一个迭代器，在期物运行结束 后产出期物。</p>
+
+<p>为了使用 futures.as_completed 函数，只需修改 download_many 函数，把较抽象的</p>
+
+<p>executor.map 调用换成两个 for 循环：一个用于创建并排定期物，另一个用于获取期物</p>
+
+<p>的结果。同时，我们会添加几个 print 调用，显示运行结束前后的期物。修改后的</p>
+
+<p>download_many 函数如示例 17-4，代码行数由 5 变成 17，不过现在我们能一窥神秘的期 物了。其他函数不变，与示例 17-3 中的一样。</p>
+
+<p>示例 17-4 flags_threadpool_ac+py：把downloadjmany 函数中的 executor.map 方法 换成 executor.submit 方法和 futures.as_completed 函数</p>
+
+<p>def download_many(cc_list): cc_list = cc_list[:5] O</p>
+
+<p>with futures.ThreadPoolExecutor(max_workers=3) as executor: © to_do = []</p>
+
+<p>for cc in sorted(cc_list): ©</p>
+
+<p>future = executor.submit(download_one, cc) © to_do.append(future) ©</p>
+
+<p>msg = &lsquo;Scheduled for {}: {}&rsquo; print(msg.format(cc, future)) © results = []</p>
+
+<p>for future in futures.as_completed(to_do): O res = future.result() ❻ msg = &lsquo;{} result: {!r}&rsquo; print(msg.format(future, res)) © results.append(res) return len(results)</p>
+
+<p>❶ 这次演示只使用人口最多的 5 个国家。</p>
+
+<p>❷ 把 max_workers 硬编码为 3，以便在输出中观察待完成的期物。</p>
+
+<p>❸ 按照字母表顺序迭代国家代码，明确表明输出的顺序与输入一致。</p>
+
+<p>❹ executor.submit 方法排定可调用对象的执行时间，然后返回一个期物，表示这个待</p>
+
+<p>执行的操作。</p>
+
+<p>❺ 存储各个期物，后面传给 as_completed 函数。</p>
+
+<p>❻ 显示一个消息，包含国家代码和对应的期物。</p>
+
+<p>❼ as_completed 函数在期物运行结束后产出期物。</p>
+
+<p>❽ 获取该期物的结果。</p>
+
+<p>❾ 显示期物及其结果。</p>
+
+<p>注意，在这个示例中调用 future.result() 方法绝不会阻塞，因为 future 由 as_completed 函数产出。运行示例 17-4 得到的输出如示例 17-5 所示。</p>
+
+<p>示例 17-5 flags_threadpool_ac.py 脚本的输出</p>
+
+<p>$ python3 flags_threadpool_ac.py</p>
+
+<p>Scheduled for BR: <Future at 0x100791518 state=running> O Scheduled for CN: <Future at 0x100791710 state=running></p>
+
+<p>Scheduled for ID: <Future at 0x100791a90 state=running></p>
+
+<p>Scheduled for IN: 〈Future at 0x101807080 state=pending&gt; ©</p>
+
+<p>Scheduled for US: <Future at 0x101807128 state=pending></p>
+
+<p>CN <Future at 0x100791710 state=finished returned str> result: &lsquo;CN&rsquo;</p>
+
+<p>BR ID <Future at 0x100791518 state=finished returned str> result: &lsquo;BR&rsquo; o <Future at 0x100791a90 state=finished returned str> result: &lsquo;ID&rsquo;</p>
+
+<p>IN <Future at 0x101807080 state=finished returned str> result: &lsquo;IN&rsquo;</p>
+
+<p>US <Future at 0x101807128 state=finished returned str> result: &lsquo;US&rsquo;</p>
+
+<p>5 flags downloaded in 0.70s</p>
+
+<p>❶ 排定的期物按字母表排序；期物的 repr() 方法会显示期物的状态：前三个期物的状</p>
+
+<p>态是running，因为有三个工作的线程。</p>
+
+<p>❷后两个期物的状态是pending，等待有线程可用。</p>
+
+<p>❸ 这一行里的第一个 CN 是运行在一个工作线程中的 download_one 函数输出的，随后的 内容是 download_many 函数输出的。</p>
+
+<p>❹ 这里有两个线程输出国家代码，然后主线程中的 download_many 函数输出第一个线程 的结果。</p>
+
+<p>多次运行flags_threadpool_ac+py脚本，看到的结果有所不同。如果把 max_workers 参数的值增大到 5，结果的顺序变化更多。把 max_workers 参数的值 设为 1，代码依序运行，结果的顺序始终与调用 submit 方法的顺序一致。</p>
+
+<p>我们分析了两个版本的使用 concurrent.futures 库实现的下载脚本：使用 ThreadPoolExecutor.map 方法的示例 17-3 和使用 futures.as_completed 函数的示 例 17-4。如果你对 flags_asynci o+py 脚本的代码好奇，可以看一眼第 18 章中的示例 18-5。</p>
+
+<p>严格来说，我们目前测试的并发脚本都不能并行下载。使用 concurrent.futures 库实</p>
+
+<p>现的那两个示例受GIL (Global Interpreter Lock，全局解释器锁)的限制，而 flags_asyncio+py 脚本在单个线程中运行。 读到这里，你可能会对前面做的非正规基准测试有下述疑问。</p>
+
+<p>•既然Python线程受GIL的限制，任何时候都只允许运行一个线程，那么 flags_threadpool+py 脚本的下载速度怎么会比 flags+py 脚本快 5 倍？</p>
+
+<p>• flags_asyncio+py脚本和flags+py脚本都在单个线程中运行，前者怎么会比后者快5</p>
+
+<p>倍？</p>
+
+<p>第二个问题在 18+3 节解答。</p>
+
+<p>GIL 几乎对 I/O 密集型处理无害，原因参见下一节。</p>
+
+<h3 id="17-2-阻塞型i-o和gil">17.2    阻塞型I/O和GIL</h3>
+
+<p>CPython解释器本身就不是线程安全的，因此有全局解释器锁(GIL)，一次只允许使用 一个线程执行 Python 字节码。因此，一个 Python 进程通常不能同时使用多个 CPU 核</p>
+
+<p>心。 5</p>
+
+<p>I5这是CPython解释器的局限，与Python语言本身无关。Jython和IronPython没有这种限制。不过，目前最快的Python 解释器PyPy也有GIL。</p>
+
+<p>编写Python代码时无法控制GIL;不过，执行耗时的任务时，可以使用一个内置的函数或 一个使用C语言编写的扩展释放GIL。其实，有个使用C语言编写的Python库能管理 GIL，自行启动操作系统线程，利用全部可用的CPU核心。这样做会极大地增加库代码的 复杂度，因此大多数库的作者都不这么做。</p>
+
+<p>然而，标准库中所有执行阻塞型 I/O 操作的函数，在等待操作系统返回结果时都会释放 GIL。这意味着在Python语言这个层次上可以使用多线程，而I/O密集型Python程序能从 中受益：一个Python线程等待网络响应时，阻塞型I/O函数会释放GIL，再运行一个线 程。</p>
+
+<p>因此 David Beazley 才说： “Python 线程毫无作用。 ”6</p>
+
+<p>6出自“Generators: The Final Frontier” (<a href="http://www.dabeaz.com/finalgenerator/">http://www.dabeaz.com/finalgenerator/</a>)，第 106 张幻灯片。</p>
+
+<p>Python标准库中的所有阻塞型I/O函数都会释放GIL，允许其他线程运 行。time.sleep()函数也会释放GIL。因此，尽管有GIL，Python线程还是能在I/O</p>
+
+<p>密集型应用中发挥作用。</p>
+
+<p>下面简单说明如何在 CPU 密集型作业中使用 concurrent.futures 模块轻松绕开 GIL。</p>
+
+<h3 id="17-3-使用concurrentfutures模块启动进程">17.3 使用concurrentfutures模块启动进程</h3>
+
+<p>concurrent.futures 模块的文档</p>
+
+<p>(<a href="https://docs.python.org/3/library/concurrent.futures.html">https://docs+python.org/3/library/concurrent.futures+html</a>)畐ij标题是“Launching parallel tasks” (执行并行任务)。这个模块实现的是真正的并行计算，因为它使用 ProcessPoolExecutor 类把工作分配给多个 Python 进程处理。因此，如果需要做 CPU 密集型处理，使用这个模块能绕开GIL，利用所有可用的CPU核心。</p>
+
+<p>ProcessPoolExecutor 和 ThreadPoolExecutor 类都实现了通用的 Executor 接口，因 此使用 concurrent.futures 模块能特别轻松地把基于线程的方案转成基于进程的方 案。</p>
+
+<p>下载国旗的示例或其他 I/O 密集型作业使用 ProcessPoolExecutor 类得不到任何好处。 这一点易于验证，只需把示例 17-3 中下面这几行：</p>
+
+<p>def download_many(cc_list):</p>
+
+<p>workers = min(MAX_WORKERS, len(cc_list))</p>
+
+<p>with futures.ThreadPoolExecutor(workers) as executor:</p>
+
+<p>改成：</p>
+
+<p>def download_many(cc_list):</p>
+
+<p>with futures.ProcessPoolExecutor() as executor:</p>
+
+<p>对简单的用途来说，这两个实现 Executor 接口的类唯一值得注意的区别</p>
+
+<p>是， ThreadPoolExecutor.<strong>init</strong> 方法需要 max_workers 参数，指定线程池中线程 的数量。在 ProcessPoolExecutor 类中，那个参数是可选的，而且大多数情况下不使用 ——默认值是 os.cpu_count() 函数返回的 CPU 数量。这样处理说得通，因为对 CPU 密 集型的处理来说，不可能要求使用超过 CPU 数量的职程。而对 I/O 密集型处理来说，可 以在一个 ThreadPoolExecutor 实例中使用 10 个、100 个或 1000 个线程；最佳线程数 取决于做的是什么事，以及可用内存有多少，因此要仔细测试才能找到最佳的线程数。</p>
+
+<p>经过几次测试，我发现使用 ProcessPoolExecutor 实例下载 20 面国旗的时间增加到了 1.8 秒，而原来使用 ThreadPoolExecutor 的版本是 1.4 秒。主要原因可能是，我的电脑 用的是四核CPU，因此限制只能有4个并发下载，而使用线程池的版本有20个工作的线 程。</p>
+
+<p>ProcessPoolExecutor 的价值体现在 CPU 密集型作业上。我用两个 CPU 密集型脚本做 了一些性能测试。</p>
+
+<p>arcfour_futures.py</p>
+
+<p>这个脚本(代码清单参见示例A-7)纯粹使用Python实现RC4算法。我加密并解密 了 12 个字节数组，大小从 149KB 到 384KB 不等。</p>
+
+<p>sha_futures+py</p>
+
+<p>这个脚本（代码清单参见示例A-9）使用标准库中的hashlib模块（使用OpenSSL 库实现）实现 SHA-256 算法。我计算了 12 个 1MB 字节数组的 SHA-256 散列值。</p>
+
+<p>这两个脚本除了显示汇总结果之外，没有使用I/O。构建和处理数据的过程都在内存中完 成，因此 I/O 对执行时间没有影响。</p>
+
+<p>我运行了 64 次 RC4 示例， 48 次 SHA 示例，平均时间如表 17-1 所示。统计的时间中包含 派生工作进程的时间。</p>
+
+<p>表17-1：在配有Intel Core i7 2.7 GHz四核CPU的设备中，使用Python 3.4运行RC4和</p>
+
+<p>SHA示例，分别使用1~4个职程得到的时间和提速倍数</p>
+
+<table>
+<thead>
+<tr>
+<th>职程数</th>
+<th>运行RC4示例的时间</th>
+<th>RC4示例的提速倍数</th>
+<th>运行SHA示例的时间</th>
+<th>SHA示例的提速倍数</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>11+48s</td>
+<td>1+00X</td>
+<td>22+66s</td>
+<td>1+00X</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>8+65s</td>
+<td>1+33x</td>
+<td>14+90s</td>
+<td>1+52x</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>6+04s</td>
+<td>1+90x</td>
+<td>11+91s</td>
+<td>1+90x</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>5+58s</td>
+<td>2+06x</td>
+<td>10+89s</td>
+<td>2+08x</td>
+</tr>
+</tbody>
+</table>
+
+<p>可以看出，对加密算法来说，使用 ProcessPoolExecutor 类派生 4 个工作的进程后（如 果有 4 个 CPU 核心的话），性能可以提高两倍。</p>
+
+<p>对那个纯粹使用 Python 实现的 RC4 示例来说，如果使用 PyPy 和 4 个职程，与使用 CPython 和 4 个职程相比，速度能提高 3+8 倍。以表 17-1 中使用 CPython 和一个职程的运 行时间为基准，速度提升了 7+8 倍。</p>
+
+<p>如果使用Python处理CPU密集型工作，应该试试PyPy （<a href="http://pypy.org">http://pypy+org</a>）。使 用 PyPy 运行 arcfour_futures+py 脚本，速度快了 3+8~5+1 倍；具体的倍数由职程的数量 决定。我测试时使用的是 PyPy 2+4+0，这一版与 Python 3+2+5 兼容，因此标准库中有 concurrent.futures 模块。</p>
+
+<p>下面通过一个演示程序来研究线程池的行为。这个程序会创建一个包含 3 个职程的线程 池，运行 5 个可调用的对象，输出带有时间戳的消息。</p>
+
+<h3 id="17-4-实验-executor-map-方法">17.4    实验 Executor.map 方法</h3>
+
+<p>若想并发运行多个可调用的对象，最简单的方式是使用示例 17-3 中见过的 Executor.map 方法。示例 17-6 中的脚本演示了 Executor.map 方法的某些运作细节。 这个脚本的输出在示例 17-7 中。</p>
+
+<h4 id="示例-17-6-demo-executor-map-py-简单演示-threadpoolexecutor-类的-map-方法">示例 17-6 demo_executor_map.py:简单演示 ThreadPoolExecutor 类的 map 方法</h4>
+
+<p>from time import sleep, strftime from concurrent import futures</p>
+
+<p>def display(*args): O</p>
+
+<p>print(strftime(&rsquo;[%H:%M:%S]&lsquo;), end=&rsquo; &lsquo;) print(*args)</p>
+
+<p>def loiter(n): ©</p>
+
+<p>msg = &lsquo;{}loiter({}): doing nothing for {}s&hellip;&rsquo;</p>
+
+<p>display(msg.format(&rsquo;\t&rsquo;*n, n, n))</p>
+
+<p>sleep(n)</p>
+
+<p>msg = &lsquo;{}loiter({}): done.&rsquo; display(msg.format(&rsquo;\t&rsquo;*n, n)) return n * 10 &amp;</p>
+
+<p>def main():</p>
+
+<p>display(&lsquo;Script starting.&rsquo;)</p>
+
+<p>executor = futures.ThreadPoolExecutor(max_workers=3) o results = executor.map(loiter, range(5))❺ display(&lsquo;results:&lsquo;, results) ©</p>
+
+<p>display(&lsquo;Waiting for individual results:&lsquo;) for i, result in enumerate(results): O</p>
+
+<p>display(&lsquo;result {}: {}&lsquo;.format(i, result))</p>
+
+<p>main()</p>
+
+<h4 id="❶-这个函数的作用很简单-把传入的参数打印出来-并在前面加上-hh-mm-ss-格式的">❶ 这个函数的作用很简单，把传入的参数打印出来，并在前面加上 [HH:MM:SS] 格式的</h4>
+
+<p>时间戳。</p>
+
+<p>❷ loiter 函数什么也没做，只是在开始时显示一个消息，然后休眠 n 秒，最后在结束时 再显示一个消息；消息使用制表符缩进，缩进的量由 n 的值确定。</p>
+
+<p>❸ loiter 函数返回 n * 10，以便让我们了解收集结果的方式。</p>
+
+<h4 id="❹-创建-threadpoolexecutor-实例-有-3-个线程">❹ 创建 ThreadPoolExecutor 实例，有 3 个线程。</h4>
+
+<h4 id="❺把五个任务提交给executor-因为只有3个线程-所以只有3个任务会立即开-始-loiter-0-loiter-1-和-loiter-2-这是非阻塞调用">❺把五个任务提交给executor (因为只有3个线程，所以只有3个任务会立即开 始：loiter(0)、loiter(1)和 loiter(2));这是非阻塞调用。</h4>
+
+<h4 id="❻-立即显示调用-executor-map-方法的结果-一个生成器-如示例-17-7-中的输出所示">❻ 立即显示调用 executor.map 方法的结果：一个生成器，如示例 17-7 中的输出所示。</h4>
+
+<h4 id="❼for循环中的enumerate函数会隐式调用next-results-这个函数又会在-内部-表示第一个任务-loiter-0-的-f期物上调用-f-result-方法-result方法会阻">❼for循环中的enumerate函数会隐式调用next(results)，这个函数又会在(内部) 表示第一个任务(loiter(0))的_f期物上调用_f.result()方法。result方法会阻</h4>
+
+<p>塞，直到期物运行结束，因此这个循环每次迭代时都要等待下一个结果做好准备。</p>
+
+<p>我建议你运行示例 17-6，看着结果逐渐显示出来。此外，还可以修改</p>
+
+<p>ThreadPoolExecutor 构造方法的 max_workers 参数，以及 executor.map 方法中</p>
+
+<p>range 函数的参数；或者自己挑选几个值，以列表的形式传给 map 方法，得到不同的延 迟。</p>
+
+<p>示例 17-7 是运行示例 17-6 得到的输出示例。</p>
+
+<p>示例 17-7 示例 17-6 中 demo_executor_map.py 脚本的运行示例</p>
+
+<p>$ python3 demo_executor_map.py [15:56:50] Script starting. O [15:56:50] loiter(0): doing nothing for 0s&hellip; ©</p>
+
+<p>[15:56:50] loiter(0): done.</p>
+
+<p>[15:56:50]    loiter(1): doing nothing for 1s&hellip; ©</p>
+
+<p>[15:56:50]    loiter(2): doing nothing for 2s&hellip;</p>
+
+<p>[15:56:50] results: 〈generator object result_iterator at 0x106517168&gt; © [15:56:50]    loiter(3): doing nothing for 3s&hellip;❺</p>
+
+<p>[15:56:50] Waiting for individual results:</p>
+
+<p>[15:56:50] result 0: 0 ©</p>
+
+<p>[15:56:51]    loiter(1): done. ©</p>
+
+<p>[15:56:51]    loiter(4): doing nothing for 4s&hellip;</p>
+
+<p>[15:56:51] result 1: 10 ©</p>
+
+<p>[15:56:52]    loiter(2): done. ©</p>
+
+<p>[15:56:52] result 2: 20</p>
+
+<p>[15:56:53]    loiter(3): done.</p>
+
+<p>[15:56:53] result 3: 30</p>
+
+<p>[15:56:55]    loiter(4): done. ©</p>
+
+<p>[15:56:55] result 4: 40</p>
+
+<h4 id="❶-这次运行从-15-56-50-开始">❶ 这次运行从 15:56:50 开始。</h4>
+
+<h4 id="❷第一个线程执行loiter-0-因此休眠0秒-甚至会在第二个线程开始之前就结束">❷第一个线程执行loiter(0)，因此休眠0秒，甚至会在第二个线程开始之前就结束，</h4>
+
+<p>不过具体情况因人而异。 7</p>
+
+<p>7具体情况因人而异：对线程来说，你永远不知道某一时刻事件的具体排序；有可能在另一台设备中会看到</p>
+
+<p>loiter(1)在loiter(0)结束之前开始，这是因为sleep函数总会释放GIL。因此，即使休眠0秒，Python也可能</p>
+
+<p>会切换到另一个线程。</p>
+
+<h4 id="❸-loiter-1-和-loiter-2-立即开始-因为线程池中有三个职程-可以并发运行三个函-数">❸ loiter(1) 和 loiter(2) 立即开始(因为线程池中有三个职程，可以并发运行三个函 数)。</h4>
+
+<p>❹这一行表明，executor.map方法返回的结果(results)是生成器；不管有多少任 务，也不管 max_workers 的值是多少，目前不会阻塞。</p>
+
+<p>❺ loiter(0) 运行结束了，第一个职程可以启动第四个线程，运行 loiter(3)。</p>
+
+<p>❻ 此时执行过程可能阻塞，具体情况取决于传给 loiter 函数的参数： results 生成器 的 <strong>next</strong> 方法必须等到第一个期物运行结束。此时不会阻塞，因为 loiter(0) 在循 环开始前结束。注意，这一点之前的所有事件都在同一刻发生——15:56:50。</p>
+
+<p>❼ 一秒钟后，即 15:56:51， loiter(1) 运行完毕。这个线程闲置，可以开始运行</p>
+
+<p>loiter(4) 。</p>
+
+<p>❽ 显示 loiter(1) 的结果： 10。现在， for 循环会阻塞，等待 loiter(2) 的结果。</p>
+
+<p>❾同上：loiter(2)运行结束，显示结果；loiter(3)也一样。</p>
+
+<p>❿ 2 秒钟后 loiter(4) 运行结束，因为 loiter(4) 在 15:56:51 时开始，休眠了 4 秒。</p>
+
+<p>Executor.map 函数易于使用，不过有个特性可能有用，也可能没用，具体情况取决于需 求：这个函数返回结果的顺序与调用开始的顺序一致。如果第一个调用生成结果用时 10 秒，而其他调用只用 1 秒，代码会阻塞 10 秒，获取 map 方法返回的生成器产出的第一个</p>
+
+<p>结果。在此之后，获取后续结果时不会阻塞，因为后续的调用已经结束。如果必须等到获</p>
+
+<p>取所有结果后再处理，这种行为没问题；不过，通常更可取的方式是，不管提交的顺序，</p>
+
+<p>只要有结果就获取。为此，要把 Executor.submit 方法和 futures.as_completed 函</p>
+
+<p>数结合起来使用，像示例 17-4 中那样。 17+5+2 节会继续讨论这种方式。</p>
+
+<p>executor.submit 和 futures.as_completed 这个组合比 executor.map 更 灵活，因为 submit 方法能处理不同的可调用对象和参数，而 executor.map 只能处 理参数不同的同一个可调用对象。此外，传给 futures.as_completed 函数的期物 集合可以来自多个 Executor 实例，例如一些由 ThreadPoolExecutor 实例创建， 另一些由 ProcessPoolExecutor 实例创建。</p>
+
+<p>下一节根据新的需求继续实现下载国旗的示例，这一次不使用 executor.map 方法，而 是迭代 futures.as_completed 函数返回的结果。</p>
+
+<h3 id="17-5-显示下载进度并处理错误">17.5 显示下载进度并处理错误</h3>
+
+<p>前面说过， 17.1 节中的几个脚本没有处理错误，这样做是为了便于阅读和比较三种方案</p>
+
+<p>（依序、多线程和异步）的结构。</p>
+
+<p>为了处理各种错误，我创建了 flags2 系列示例。</p>
+
+<p>flags2_common.py</p>
+
+<p>这个模块中包含所有 flags2 示例通用的函数和设置，例如 main 函数，负责解析命</p>
+
+<p>令行参数、计时和报告结果。这个脚本中的代码其实是提供支持的，与本章的话题没有直</p>
+
+<p>接关系，因此我把源码放在附录 A 里的示例 A-10 中。</p>
+
+<p>flags2_sequential.py</p>
+
+<p>能正确处理错误，以及显示进度条的 HTTP 依序下载客户端。 flags2_threadpool.py 脚 本会用到这个模块里的 download_one 函数。 flags2_threadpool.py</p>
+
+<p>基于 futures.ThreadPoolExecutor 类实现的 HTTP 并发客户端，演示如何处理错 误，以及集成进度条。</p>
+
+<p>flags2_asyncio.py</p>
+
+<p>与前一个脚本的作用相同，不过使用 asyncio 和 aiohttp 实现。这个脚本在第 18</p>
+
+<p>章的 18.4 节中分析。</p>
+
+<p>测试并发客户端时要小心</p>
+
+<p>在公开的 HTTP 服务器上测试 HTTP 并发客户端时要小心，因为每秒可能会发起很多</p>
+
+<p>请求，这相当于是拒绝服务（DoS）攻击。我们不想攻击任何人，只是在学习如何开</p>
+
+<p>发高性能的客户端。访问公开的服务器时一定要管好自己的客户端。做高并发试验 时，应该在本地架设 HTTP 服务器供测试。本书代码仓库中的 17-futures/countries/ 目 录里有个 README.rst 文件( <a href="https://github.com/fluentpython/example-code/blob/master/17-futures/countries/README.rst">https://github.com/fluentpython/example-code/blob/master/17-futures/countries/README.rst</a><a href="https://github.com/fluentpython/example-code/blob/master/17-futures/countries/README.rst">) ，那里有架设说明</a>。</p>
+
+<p>flags2系列示例最明显的特色是，有使用TQDM包（<a href="https://github.com/noamraph/tqdm">https://github+com/noamraph/tqdm</a></p>
+
+<p>实现的文本动画进度条。我在 YouTube 上发布了一个 108 秒的视频 （<a href="https://www.youtube.com/watch?v=M8Z65tAl5l4">https://www+youtube+com/watch?v=M8Z65tAl5l4</a>） ，展示了这个进度条，还对比了三个 flags 脚本的下载速度。在那个视频中，我先运行依序下载的脚本，不过 32 秒后中断</p>
+
+<p>了，因为那个脚本要用5分多钟访问676个URL，下载194面国旗；然后，我分别运行 多线程和 asyncio 版三次，每次都在 6 秒之内（即快了 60 多倍）完成任务。图 17-1 中 有两个截图，分别是 flags2_threadpool+py 脚本运行中和运行结束后。</p>
+
+<p><img src="08414584Python-81.jpg" alt="img" /></p>
+
+<p><img src="08414584Python-82.jpg" alt="img" /></p>
+
+<p><img src="08414584Python-83.jpg" alt="img" /></p>
+
+<p>图 17-1：（左上） flags2_threadpool.py 运行中，显示着 tqdm 包生成的进度条；（右 下）同一个终端窗口，脚本运行完毕后</p>
+
+<p>TQDM 包特别易于使用，项目的 README+md 文件</p>
+
+<p>（ <a href="https://github.com/noamraph/tqdm/blob/master/README.md">https: //github+com/noamraph/tqdm/blob/master/README+md</a> ）中有个 GIF 动画，演示了最 简单的用法。安装 tqdm 包之后， 8 在 Python 控制台中输入下述代码，会在注释那里看到</p>
+
+<p>进度条动画：</p>
+
+<p>8可以使用pip install tqdm命令安装tqdm包。-编者注</p>
+
+<p>&gt;&gt;&gt; import time</p>
+
+<p>&gt;&gt;&gt; from tqdm import tqdm</p>
+
+<p>&gt;&gt;&gt; for i in tqdm(range(1000)):</p>
+
+<p>time.sleep(.01)</p>
+
+<p>&gt;&gt;&gt; # -&gt; 进度条会出现在这里 &lt;-</p>
+
+<p>除了这个灵巧的效果之外， tqdm 函数的实现方式也很有趣：能处理任何可迭代的对象， 生成一个迭代器；使用这个迭代器时，显示进度条和完成全部迭代预计的剩余时间。为了</p>
+
+<p>计算预计剩余时间， tqdm 函数要获取一个能使用 len 函数确定大小的可迭代对象，或者</p>
+
+<p>在第二个参数中指定预期的元素数量。借助在flags2系列示例中集成TQDM，我们可以 深入了解这几个脚本的运作方式，因为我们必须使用 futures.as_completed 函数</p>
+
+<p>( <a href="https://docs.python.org/3/library/concurrent.futures.html%23concurrent.futures.as_completed">https: //docs+python+ org/3/library/concurrent+futures+html#concurrent+futures+as_completed</a> )和 asyncio.as_completed 函数(<a href="https://docs+python+org/3/library/asyncio-">https://docs+python+org/3/library/asyncio-</a></p>
+
+<p><a href="https://docs.python.org/3/library/asyncio-task.html%23asyncio.as_completed">task+html#asyncio+as_completed</a><a href="https://docs.python.org/3/library/asyncio-task.html%23asyncio.as_completed">） ，这样 tqdm 函数才能在每个期物运行结</a>束后更新进度。</p>
+
+<p>flags2 系列示例的另一个特色是，提供了命令行接口。三个脚本接受的选项相同，运行 任意一个脚本时指定 -h 选项就能看到所有选项。示例 17-8 显示的是帮助文本。</p>
+
+<p>示例 17-8 flags2 系列脚本的帮助界面</p>
+
+<p>[-v]</p>
+
+<p>[CC [CC &hellip;]]</p>
+
+<p>Download flags for country codes. Default: top 20 countries by population.</p>
+
+<p>positional arguments</p>
+
+<p>CC</p>
+
+<p>country code or 1st letter (eg. B for BA&hellip;BZ)</p>
+
+<p>optional arguments:</p>
+
+<p>-h, &ndash;help -a, &ndash;all</p>
+
+<p>-e, &ndash;every</p>
+
+<p>-l N, &ndash;limit N</p>
+
+<p>-m CONCURRENT, &ndash;max</p>
+
+<p>show this help message and exit</p>
+
+<p>get all available flags (AD to ZW)</p>
+
+<p>get flags for every possible code (AA&hellip;ZZ)</p>
+
+<p>limit to N first codes</p>
+
+<p>-s LABEL, &ndash;server LABEL</p>
+
+<p>_req CONCURRENT</p>
+
+<p>maximum concurrent requests (default=30)</p>
+
+<p>-v, &ndash;verbose</p>
+
+<p>Server to hit; one of DELAY, ERROR, LOCAL, REMOTE</p>
+
+<p>(default=LOCAL)</p>
+
+<p>output detailed progress info</p>
+
+<p>使用 <a href="http://localhost:8003/flags%ef%bc%9b%e8%bf%99%e6%98%af%e4%b8%80%e4%b8%aa%e4%bb%a3%e7%90%86%ef%bc%8c%e7%9b%91%e5%90%ac">http://localhost:8003/flags</a><a href="http://localhost:8003/flags%ef%bc%9b%e8%bf%99%e6%98%af%e4%b8%80%e4%b8%aa%e4%bb%a3%e7%90%86%ef%bc%8c%e7%9b%91%e5%90%ac">；这是一个代理，监听</a> 8003 端口，引入了</p>
+
+<p>HTTP 错误，并延迟响应。这个服务器使用的 Vaurien 配置与前面不同。</p>
+
+<p>仅当在本地架设HTTP服务器，并且监听8001端口时，才能使用LOCAL选 项。 DELAY 和 ERROR 选项需要代理，分别监听 8002 和 8003 端口。在 GitHub 上本书 的代码仓库中有个 1 7-futures/countries/README+rst 文件</p>
+
+<p><a href="https://github.com/fluentpython/example-code/blob/master/17-futures/countries/README.rst">（</a><a href="https://github.com/fluentpython/example-code/blob/master/17-futures/countries/README.rst">https://github+com/fluentpython/example-code/blob/master/17-</a></p>
+
+<p>futures/countries/README+rst），说明了如何配置 Nginx 和 Mozilla Vaurien，以实现这</p>
+
+<p>些选项的要求。</p>
+
+<p>默认情况下，各个 flags2 脚本会使用默认的并发连接数（各脚本有所不同）从 LOCAL 服务器（<a href="http://localhost:8001/flags">http://localhost:8001/flags</a>）中下载人口最多的20个国家的国旗。示例17-9是全 部使用默认值运行 flags2_sequential+py 脚本得到的输出。</p>
+
+<p>示例17-9全部使用默认值运行flags2_sequential+py脚本：LOCAL服务器，人口最多</p>
+
+<p>的 20 国国旗， 1 个并发连接</p>
+
+<p>$ python3 flags2_sequential.py LOCAL site: <a href="http://localhost:8001/flags">http://localhost:8001/flags</a> Searching for 20 flags: from BD to VN 1 concurrent connection will be used.</p>
+
+<p>20 flags downloaded. Elapsed time: 0.10s</p>
+
+<p>我们可以使用多种不同的方式选择下载哪些国家的国旗。示例 17-10 展示如何下载国家代</p>
+
+<p>码以字母 A、B 或 C 开头的所有国旗。</p>
+
+<p>示例 17-10 运行 flags2_threadpool+py 脚本，从 DELAY 服务器中下载国家代码以 A、</p>
+
+<p>B 或 C 开头的所有国旗</p>
+
+<p>$ python3 flags2_threadpool.py -s DELAY a b c DELAY site: <a href="http://localhost:8002/flags">http://localhost:8002/flags</a> Searching for 78 flags: from AA to CZ 30 concurrent connections will be used.</p>
+
+<p>43 flags downloaded. 35 not found.</p>
+
+<p>Elapsed time: 1.72s</p>
+
+<p>不管使用什么方式选择国家代码，下载的国旗数量都可以使用 -l/&ndash;limit 选项限制。示 例 17-11 演示如何发起 100 个请求，结合 -a 和 -l 选项下载 100 面国旗。</p>
+
+<p>示例17-11运行flags2_asyncio+py脚本，使用100个并发请求（-m 100）从ERROR</p>
+
+<p>服务器中下载100面国旗（-al 100）</p>
+
+<p>ERROR site: <a href="http://localhost:8003/flags">http://localhost:8003/flags</a> Searching for 100 flags: from AD to LK 100 concurrent connections will be used.</p>
+
+<p>73 flags downloaded. 27 errors.</p>
+
+<p>Elapsed time: 0.64s</p>
+
+<h4 id="以上是-flags2-系列示例的用户界面-下面分析实现方式">以上是 flags2 系列示例的用户界面。下面分析实现方式。</h4>
+
+<p>17.5.1    flags2系列示例处理错误的方式</p>
+
+<p>这三个示例在负责下载一个文件的函数(download_one)中使用相同的策略处理HTTP 404 错误(未找到)。其他异常则向上冒泡，交给 download_many 函数处理。</p>
+
+<p>我们还是先分析依序下载的代码，因为这些代码更易于理解，而且使用线程池的脚本重用 了这里的大部分代码。示例 17-12 列出的是 flags2_sequential+py 和 flags2_threadpool+py 脚 本真正用于下载的函数。</p>
+
+<h4 id="示例-17-12-flags2-sequential-py-负责下载的基本函数-flags2-threadpool-py-脚本重">示例 17-12 flags2_sequential+py：负责下载的基本函数；flags2_threadpool+py 脚本重</h4>
+
+<p>用了这两个函数</p>
+
+<p>def get_flag(base_url, cc):</p>
+
+<p>url = &lsquo;{}/{cc}/{cc}.gif&rsquo;.format(base_url, cc=cc.lower()) resp = requests.get(url) if resp.status_code != 200: O resp.raise_for_status() return resp.content</p>
+
+<p>def download_one(cc, base_url, verbose=False): try:</p>
+
+<p>image = get_flag(base_url, cc) except requests.exceptions.HTTPError as exc: ©</p>
+
+<p>res = exc.response if res.status_code == 404:</p>
+
+<p>status = HTTPStatus.not_found © msg = &lsquo;not found&rsquo; else: ©</p>
+
+<p>raise</p>
+
+<p>else:</p>
+
+<p>save_flag(image, cc.lower() + &lsquo;.gif&rsquo;)</p>
+
+<p>status = HTTPStatus.ok</p>
+
+<p>msg = &lsquo;OK&rsquo;</p>
+
+<p>if verbose: ❺ print(cc, msg)</p>
+
+<p>return Result(status, cc) ©</p>
+
+<h4 id="❶-get-flag-函数没有处理错误-当-http-代码不是-200-时-10使用-requests-response-raise-for-status-方法抛出异常-10">❶ get_flag 函数没有处理错误，当 HTTP 代码不是 200 时，10使用 requests.Response.raise_for_status 方法抛出异常。 10</h4>
+
+<p>| 10HTTP代码200表示成功完成HTTP请求。一编者注</p>
+
+<p>❷ download_one 函数捕获 requests.exceptions.HTTPError 异常，特别处理 HTTP 404 错误……</p>
+
+<h4 id="❸-方法是-把局部变量status设为httpstatus-not-found-httpstatus是从">❸&hellip;&hellip;方法是，把局部变量status设为HTTPStatus. not_found； HTTPStatus是从</h4>
+
+<p>flags2_common模块（见示例A-10）中导入的Enum对象。</p>
+
+<p>❹ 重新抛出其他 HTTPError 异常；这些异常会向上冒泡，传给调用方。</p>
+
+<p>❺ 如果在命令行中设定了 -v/&ndash;verbose 选项，显示国家代码和状态消息；这就是详细</p>
+
+<p>模式中看到的进度信息。</p>
+
+<h4 id="download-one函数的返回值是一个namedtuple-result-其中有个status字">© download_one函数的返回值是一个namedtuple-Result，其中有个status字</h4>
+
+<p>段，其值是 HTTPStatus.not_found 或 HTTPStatus.ok。</p>
+
+<p>示例 17-13 列出的是 download_many 函数的依序下载版。代码虽然简单，不过值得分析 一下，以便后面与并发版对比。我们要关注的是报告进度、处理错误和统计下载数量的方 式。</p>
+
+<h4 id="示例-17-13-flags2-sequential-py-实现依序下载的-download-many-函数">示例 17-13 flags2_sequential+py：实现依序下载的 download_many 函数</h4>
+
+<p>def download_many(cc_list, base_url, verbose, max_req):</p>
+
+<p>counter = collections.Counter() O cc_iter = sorted(cc_list) © if not verbose:</p>
+
+<p>cc_iter = tqdm.tqdm(cc_iter) © for cc in cc_iter: ©</p>
+
+<p>try:</p>
+
+<p>res = download_one(cc, base_url, verbose) except requests.exceptions.HTTPError as exc: ©</p>
+
+<p>error_msg = &lsquo;HTTP error {res.status_code} - {res.reason} error_msg = error_msg.format(res=exc.response) except requests.exceptions.ConnectionError as exc: O error_msg = &lsquo;Connection error&rsquo;</p>
+
+<p>else:❻</p>
+
+<p>error_msg = &ldquo; status = res.status</p>
+
+<p>if error_msg:</p>
+
+<p>status = HTTPStatus.error 0 counter[status] += 1    ©</p>
+
+<p>if verbose and error_msg: ®</p>
+
+<p>print(&rsquo;*** Error for {}: {}&lsquo;.format(cc, error_msg)) return counter ❽</p>
+
+<h4 id="❶-这个-counter-实例用于统计不同的下载状">❶ 这个 Counter 实例用于统计不同的下载状</h4>
+
+<p>态： HTTPStatus.ok、HTTPStatus.not_found 或 HTTPStatus.error。</p>
+
+<p>❷ 按字母顺序传入的国家代码列表，保存在 cc_iter 变量中。</p>
+
+<p>❸ 如果不是详细模式，把 cc_iter 传给 tqdm 函数，返回一个迭代器，产出 cc_iter 中 的元素，还会显示进度条动画。</p>
+
+<p>❹这个for循环迭代cc_iter&hellip;&hellip;</p>
+
+<p>❺ ……不断调用 download_one 函数，执行下载。</p>
+
+<p>❻ 处理 get_flag 函数抛出的与 HTTP 有关的且 download_one 函数没有处理的异常。</p>
+
+<p>❼ 处理其他与网络有关的异常。其他异常会中止这个脚本，因为调用 download_many 函 数的 flags2_common.main 函数中没有 try/except 块。</p>
+
+<p>❽ 如果没有异常从 download_one 函数中逃出，从 download_one 函数返回的 namedtuple (HTTPStatus) &ldquo;中获取 status。</p>
+
+<p>❾ 如果有错误，把局部变量 status 设为相应的状态。</p>
+
+<p>❿以HTTPStatus (一个Enum)中的值为键，增加计数器。</p>
+
+<p>®如果是详细模式，而且有错误，显示带有当前国家代码的错误消息。</p>
+
+<p>©返回counter，以便main函数能在最终的报告中显示数量。</p>
+
+<p>下面分析重构后的线程池示例-fl ags2_threadpool.py。</p>
+
+<p>17.5.2 使用 futures.as_completed 函数</p>
+
+<p>为了集成 TQDM 进度条，并处理各次请求中的错误， flags2_threadpool.py 脚本用到我们见 过的 futures.ThreadPoolExecutor 类和 futures.as_completed 函数。示例 17-14 是 flags2_threadpool.py 脚本的完整代码清单。这个脚本只实现了 download_many 函数， 其他函数都重用 flags2_common 和 flags2_sequential 模块里的。</p>
+
+<p>示例17-14 flags2_threadpool+py:完整的代码清单</p>
+
+<p>import collections</p>
+
+<p>from concurrent import futures</p>
+
+<p>import requests</p>
+
+<p>import tqdm O</p>
+
+<p>from flags2_common import main, HTTPStatus ©</p>
+
+<p>from flags2_sequential import download_one ©</p>
+
+<p>DEFAULT_CONCUR_REQ = 30 ©</p>
+
+<p>MAX_CONCUR_REQ = 1000 ❺</p>
+
+<p>def download_many(cc_list, base_url, verbose, concur_req): counter = collections.Counter()</p>
+
+<p>with futures.ThreadPoolExecutor(max_workers=concur_req) as executor: ©</p>
+
+<p>to_do_map = {}    ©</p>
+
+<p>for cc in sorted(cc_list):❻</p>
+
+<p>future = executor.submit(download_one,</p>
+
+<p>cc, base_url, verbose) o</p>
+
+<p>to_do_ma p[fut u re] = cc © done_iter = futures.as_completed(to_do_map) ® if not verbose:</p>
+
+<p>done_iter = tqdm.tqdm(done_iter, total=len(cc_list)) ® for future in done_iter: ©</p>
+
+<p>try:</p>
+
+<p>res = future.result() © except requests.exceptions.HTTPError as exc: ©</p>
+
+<p>error_msg = &lsquo;HTTP {res.status_code} - {res.reason}&rsquo; error_msg = error_msg.format(res=exc.response)</p>
+
+<p>except requests.exceptions.ConnectionError as exc: error_msg = &lsquo;Connection error&rsquo;</p>
+
+<p>else:</p>
+
+<p>error_msg = &ldquo; status = res.status</p>
+
+<p>if error_msg:</p>
+
+<p>status = HTTPStatus.error</p>
+
+<p>counter[status] += 1 if verbose and error_msg:</p>
+
+<p>cc = to_do_ma p[fut u re]    ©</p>
+
+<p>print(&rsquo;*** Error for {}: {}&lsquo;.format(cc, error_msg)) return counter</p>
+
+<p>if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>main（download_many, DEFAULT_CONCUR_REQ, MAX_CONCUR_REQ）</p>
+
+<h4 id="❶-导入显示进度条的库">❶ 导入显示进度条的库。</h4>
+
+<p>❷ 从 flags2_common 模块中导入一个函数和一个 Enum。</p>
+
+<p>❸ 重用 flags2_sequential 模块（见示例 17-12）里的 download_one 函数。</p>
+
+<p>❹ 如果没有在命令行中指定 -m/&ndash;max_req 选项，使用这个值作为并发请求数的最大 值，也就是线程池的大小；真实的数量可能会比这少，例如下载的国旗数量较少。</p>
+
+<p>❺ 不管要下载多少国旗，也不管 -m/&ndash;max_req 命令行选项的值是多</p>
+
+<p>少， MAX_CONCUR_REQ 会限制最大的并发请求数；这是一项安全预防措施。</p>
+
+<h4 id="❻把-max-workers-设为-concur-req-创建-threadpoolexecutor-实例-main-函数会">❻把 max_workers 设为 concur_req，创建 ThreadPoolExecutor 实例；main 函数会</h4>
+
+<p>把下面这三个值中最小的那个赋值给 concur_req： MAX_CONCUR_REQ、cc_list 的长</p>
+
+<p>度、-m/&ndash;max_req命令行选项的值。这样能避免创建超过所需的线程。</p>
+
+<p>❼ 这个字典把各个 Future 实例（表示一次下载）映射到相应的国家代码上，在处理错 误时使用。</p>
+
+<h4 id="❽-按字母顺序迭代国家代码列表-结果的顺序主要由-http-响应的时间长短决定-不">❽ 按字母顺序迭代国家代码列表。结果的顺序主要由 HTTP 响应的时间长短决定，不</h4>
+
+<p>过，如果线程池的大小（由 concur_req 设定）比 len（cc_list） 小得多，可能会发现 有按字母顺序批量下载的情况。</p>
+
+<p>❾ 每次调用 executor.submit 方法排定一个可调用对象的执行时间，然后返回一个 Future 实例。第一个参数是可调用的对象，其余的参数是传给可调用对象的参数。</p>
+
+<p>❿ 把返回的 future 和国家代码存储在字典中。</p>
+
+<p>G futures.as_completed函数返回一个迭代器，在期物运行结束后产出期物。</p>
+
+<p>© 如果不是详细模式，把 as_completed 函数返回的结果传给 tqdm 函数，显示进度 条；因为 done_iter 没有 len 函数，所以我们必须通过 total= 参数告诉 tqdm 函数预 期的元素数量，这样 tqdm 才能预计剩余的工作量。</p>
+
+<p>®迭代运行结束后的期物。</p>
+
+<p>©在期物上调用result方法，要么返回可调用对象的返回值，要么抛出可调用的对象 在执行过程中捕获的异常。这个方法可能会阻塞，等待确定结果；不过，在这个示例中不 会阻塞，因为 as_completed 函数只返回已经运行结束的期物。</p>
+
+<p>吸处理可能出现的异常；这个函数余下的代码与依序下载版download_many函数一样</p>
+
+<p>（见示例 17-13），不过下一点除外。</p>
+
+<p>©为了给错误消息提供上下文，以当前的future为键，从to_do_map中获取国家代</p>
+
+<p>码。在依序下载版中无须这么做，因为那一版迭代的是国家代码，所以知道当前国家的代</p>
+
+<p>码；而这里迭代的是期物。</p>
+
+<p>示例 17-14 用到了一个对 futures.as_completed 函数特别有用的惯用法：构建一个字 典，把各个期物映射到其他数据（期物运行结束后可能有用）上。这里，在 to_do_map 中，我们把各个期物映射到对应的国家代码上。这样，尽管期物生成的结果顺序已经乱 了，依然便于使用结果做后续处理。</p>
+
+<p>Python 线程特别适合 I/O 密集型应用， concurrent.futures 模块大大简化了某些使用场 景下 Python 线程的用法。我们对 concurrent.futures 模块基本用法的介绍到此结束。 下面讨论不适合使用 ThreadPoolExecutor 或 ProcessPoolExecutor 类时，有哪些替</p>
+
+<p>代方案。</p>
+
+<p>17.5.3 线程和多进程的替代方案</p>
+
+<p>Python 自 0.9.8 版（1993 年）就支持线程了， concurrent.futures 只不过是使用线程的 最新方式。 Python 3 废弃了原来的 thread 模块，换11成了高级的 threading 模块</p>
+
+<p>（<a href="https://docs.python.org/3/library/threading.html">https://docs.python.org/3/library/threading.html</a>） 。 11 如果</p>
+
+<p>futures.ThreadPoolExecutor 类对某个作业来说不够灵活，可能要使用 threading 模</p>
+
+<p>块中的组件（如 Thread、Lock、Semaphore 等）自行制定方案，比如说使用 queue 模 块（<a href="https://docs.python.org/3/library/queue.html">https://docs+python+org/3/library/queue+html</a>）创建线程安全的队列，在线程之间传递数</p>
+
+<p>据。 futures.ThreadPoolExecutor 类已经封装了这些组件。</p>
+
+<p>thread模块重命名为_thread，以此强调这是低层实现，不应该在应用代码中使用。</p>
+
+<p>对CPU密集型工作来说，要启动多个进程，规避GIL。创建多个进程最简单的方式是， 使用 futures.ProcessPoolExecutor 类。不过和前面一样，如果使用场景较复杂，需</p>
+
+<p>要更高级的工具。 multiprocessing 模块</p>
+
+<p><a href="https://docs.python.org/3/library/multiprocessing.html">https://docs+python+org/3/library/multiprocessing+html</a>）的 API 与 threading 模块相仿，不 过作业交给多个进程处理。对简单的程序来说，可以用 multiprocessing 模块代替 threading 模块，少量改动即可。不过， multiprocessing 模块还能解决协作进程遇到</p>
+
+<p>的最大挑战：在进程之间传递数据。</p>
+
+<h3 id="17-6-本章小结">17.6 本章小结</h3>
+
+<p>本章开头对两个 HTTP 并发客户端和一个依序下载的客户端做了对比，结果是并发版比依</p>
+
+<p>序下载的脚本性能高很多。</p>
+
+<p>分析过使用 concurrent.futures 实现的第一个示例后，我们深入探讨了期物对象，即 concurrent.futures.Future 或 asyncio.Future 类的实例，着重说明了二者的共同</p>
+
+<p>点(区别在第 18 章详述)。我们说明了如何使用 Executor.submit(&hellip;) 方法创建期 物，以及如何使用 concurrent.futures.as_completed(&hellip;) 函数迭代运行结束的期 物。</p>
+
+<p>接下来，我们分析了为什么尽管有 GIL， Python 线程仍然适合 I/O 密集型应用：标准库中</p>
+
+<p>每个使用C语言编写的I/O函数都会释放GIL，因此，当某个线程在等待I/O时，Python</p>
+
+<p>调度程序会切换到另一个线程。然后，我们讨论了如何借助</p>
+
+<p>concurrent.futures.ProcessPoolExecutor 类使用多进程，以此绕开 GIL，使用多个</p>
+
+<p>CPU 核心运行加密算法，并通过四个职程实现一倍多的速度提升。</p>
+
+<p>在随后的一节中，我们深入分析了 concurrent.futures.ThreadPoolExecutor 类的运</p>
+
+<p>作方式。为了说明问题，我特意举了一个示例，创建几个任务，但是休眠几秒钟，什么也</p>
+
+<p>不做，只是显示带有时间戳的状态。</p>
+
+<p>接下来，本章回到下载国旗的示例，增加了进度条和错误处理代码，并且进一步探索了</p>
+
+<p>future.as_completed 生成器函数。我们得知一个常见的做法：把期物存储在一个字典 中，提交期物时把期物与相关的信息联系起来；这样， as_completed 迭代器产出期物 后，就可以使用那些信息。</p>
+
+<p>最后，本章简要说明了多线程和多进程并发的低层实现(但却更灵活) ——threading</p>
+
+<p>和 multiprocessing 模块。这两个模块代表在 Python 中使用线程和进程的传统方式。</p>
+
+<h3 id="17-7-延伸阅读">17.7 延伸阅读</h3>
+
+<p>Brian Quinlan 是 concurrent.futures 包的贡献者，他在 PyCon Australia 2010 上所做 的“The Future Is Soon!” （<a href="http://www+pyvideo+org/video/480/pyconau-2010--the-future-is-soon）演讲对这个包做了介绍。Quinlan演讲时没用幻灯片，而是直接在Python控制台中">http://www+pyvideo+org/video/480/pyconau-2010--the-future-is-soon）演讲对这个包做了介绍。Quinlan演讲时没用幻灯片，而是直接在Python控制台中</a> 输入代码，以此说明这个库的用途。作为引子，他在演讲中推荐了 XKCD 漫画家和程序 员 Randall Munroe 制作的一个视频， Randall 在这个视频中对 Google Maps 发起了 DoS 攻 击（非有意为之），绘制一个彩色地图，显示他驾车绕城的路线。这个库的正式介绍文件 是“PEP 3148—futures—execute computations</p>
+
+<p>asynchronously” （<a href="https://www.python.org/dev/peps/pep-3148/">https://www+python+org/dev/peps/pep-3148/</a>） 。在这个 PEP 中， Quinlan 写 道， concurrent.futures 库“受 Java 的 java.util.concurrent 包影响很大”。</p>
+
+<p>Jan Palach 写的 Parallel Programming with Python（ Packt 出版社）一书介绍了几个并发编 程的工具，包括 concurrent.futures、threading 和 multiprocessing 库。除了标 <a href="http://celery.readthedocs.org/en/latest/getting-started/introduction.html">准库之外，这本书还讨论了 </a><a href="http://celery.readthedocs.org/en/latest/getting-started/introduction.html">Celery （http://celery+readthedocs+org/en/latest/getting-</a>started/introduction+html） 。这是一个任务队列，用于把工作分配给多个线程和进程，甚至 是不同的设备。在 Django 社区中，为了减轻繁重任务的负担（例如，把生成 PDF 的工作 交给其他进程，防止 HTTP 响应延迟生成）， Celery 可能是使用最广泛的系统。</p>
+
+<p>Beazley与Jones的著作《Python Cookbook （第3版）中文版》有多个使用</p>
+
+<p>concurrent.futures 的诀窍，首先是“11+12 理解事件驱动型 I/O”。 “12+7 创建线程池”展 示了一个简单的 TCP 回显服务器， “12+8 实现简单的并行编程”提供了一个特别实用的示 例：借助 ProcessPoolExecutor 实例分析一整个目录中使用 gzip 压缩的 Apache 日志 文件。这本书的第 12 章对线程做了更多介绍，特别值得一提的是“12+10 定义一个 Actor 任务”，这个诀窍演示了参与者模型：通过传递消息协调多个线程的可行方式。</p>
+
+<p>Brett Slatkin写的《Effective Python：编写高质量Python代码的59个有效方法》一书中有</p>
+
+<p>一章探讨了并发的多个话题，包括：协程；使用 concurrent.futures 库处理线程和进 程；不使用 ThreadPoolExecutor 类，而使用锁和队列做线程编程。</p>
+
+<p>Micha Gorelick 与 Ian Ozsvald 写的 High Performance Python （O&rsquo;Reilly 出版社）和 Doug Hellmann写的《Python标准库》都涵盖了线程和进程。</p>
+
+<p>若想了解不使用线程或回调的现代并发方式，推荐阅读 Paul Butcher 写的《七周七并发模 型》。12我喜欢这本书的副标题“When Threads Unravel” （线程束手无策之时）。这本书 的第 1 章简单介绍了线程和锁，后面的六章探讨了不同语言（不包括 Python、Ruby 和 JavaScript）为并发编程提供的现代化替代方案。</p>
+
+<p>12该书己由人民邮电出版社出版，书号：978-7-115-38606-9。——编者注</p>
+
+<p>如果对 GIL 感兴趣，请先阅读 Python 文档中的“Python Library and Extension FAQ” （“Can&rsquo;t we get rid of the Global Interpreter Lock?”， <a href="https://docs.python.org/3/faq/library.html%23id18">https://docs+python+org/3/faq/library+html#id18</a>） 。 Guido van Rossum 写的“It isn&rsquo;t Easy to Remove the</p>
+
+<p>GIL” （<a href="http://www.artima.com/weblogs/viewpost.jsp?thread=214235">http:&ldquo;www+artima+com/weblogs/viewpost.jsp?thread=214235</a>）和 Jesse</p>
+
+<p>Noller （multiprocessing 包的贡献者）写的“Python Threads and the Global Interpreter</p>
+
+<p>Lock’ (<a href="http://jessenoller.com/2009/02/01/python-threads-and-the-global-interpreter-lock/">http://jessenoller+com/2009/02/01/python-threads-and-the-global-interpreter-lock/</a>)也值 得一读。此外，David Beazley 在“Understanding the Python</p>
+
+<p>GIL’ (<a href="http://www.dabeaz.com/GIL/">http://www+ dabeaz.com/GIL/</a>)中详细探讨了 GIL的内部运作。13在这次演讲的第54 张幻灯片中(<a href="http://www.dabeaz.com/python/UnderstandingGIL.pdf">http://www+dabeaz+com/python/UnderstandingGIL+pdf</a>)，Beazley 得出了一些令 人担忧的结果，例如，使用 Python 3+2 引入的新 GIL 算法做基准测试时，他发现处理时间 增加了 20 倍。不过， Beazley 似乎使用一个空的 while True: pass 循环模拟 CPU 密集 型工作，而现实中不会这样做。在Beazley提交的缺陷报告中，根据Antoine Pitrou (实现 新 GIL 算法的人)的评论(<a href="http://bugs.python.org/issue7946%23msg223110">http://bugs+python+org/issue7946#msg223110</a>)，这个问题与工作 负载没有太大关系。</p>
+
+<p>13感谢Lucas Brunialti把这个演讲的链接发给我。</p>
+
+<p>GIL 是实际存在的问题，而且短时间内不可能消失，不过 Jesse Noller 和 Richard Oudkerk</p>
+
+<p>开发了一个库，能让CPU密集型应用轻松地绕开这个问题-multiprocessing包。这</p>
+
+<p>个包在多个进程中模拟threading模块的API，而且支持基础设施的锁、队列、管道、 共享内存，等等。这个包由“PEP371 —Addition of the multiprocessing package to the standard library” (<a href="https://www.python.org/dev/peps/pep-0371/">https://www+python+org/dev/peps/pep-0371/</a>)引入。这个包的官方文档是个 93KB 的 +rst 文件(大约 63 页)，是 Python 标准库文档中最长的一章。多进程是</p>
+
+<p>concurrent.futures.ProcessPoolExecutor 类的基础。</p>
+
+<p>对于 CPU 密集型和数据密集型并行处理，现在有个新工具可用——分布式计算引擎</p>
+
+<p>Apache Spark(<a href="https://spark.apache.org/">https://spark+apache+org/</a>)。 Spark 在大数据领域发展势头强劲，提供了友好 的Python API，支持把Python对象当作数据，如示例页面所示</p>
+
+<p>(<a href="https://spark.apache.org/examples.html">https://spark+apache+org/examples+html</a>) 。</p>
+
+<p>Joao S+ O+ Bueno 开发的 lelo 库(<a href="https://pypi.python.org/pypi/lelo">https://pypi+python+org/pypi/lelo</a>)和 Nat Pryce 开发的 python-parallelize 库( <a href="https://github.com/npryce/python-parallelize">https ://gi thub + com/npryce/python-parall elize</a> )简洁且十分易于使 用，它们的作用是使用多个进程处理并行任务。 lelo 包定义了一个 @parallel 装饰器， 可以应用到任何函数上，把函数变成非阻塞：调用被装饰的函数时，函数在一个新进程中 执行。 Nat Pryce 开发的 python-parallelize 包提供了一个 parallelize 生成器，能 把 for 循环分配给多个 CPU 执行。这两个包在内部都使用了 multiprocessing 模块。</p>
+
+<p>杂谈</p>
+
+<p>远离线程</p>
+
+<p>并发是计算机科学中最难的概念之一(通常最好别去招惹它)。 14</p>
+
+<p>——David Beazley Python 教练和科学狂人</p>
+
+<p>上面引自 David Beazley 的话与本章开头引自 Michele Simionato 的话明显矛盾，但我</p>
+
+<p>都同意。在大学学过一门并发课程之后(那门课把“并发编程’与管理线程和锁划上等</p>
+
+<p>号)，我得出一个结论，我不该自己管理线程和锁，而应该管理内存分配和释放。线</p>
+
+<p>程和锁最好由懂行的系统程序员管理，他们有这种爱好，也有时间去管理(但愿如</p>
+
+<p>此)。</p>
+
+<p>因此我觉得 concurrent.futures 包很棒，它把线程、进程和队列视作服务的基础 设施，不用自己动手直接处理。当然，这个包针对的是简单的作业，也就是所谓</p>
+
+<p>的“高度并行，，问题（<a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel）。可是，正">https://en.wikipedia.org/wiki/Embarrassingly_parallel）。可是，正</a> 如本章开头 Simionato 所说的那样，编写应用（而非操作系统或数据库服务器）时，</p>
+
+<p>遇到的大部分并发问题都属于这一种。</p>
+
+<p>对于并发程度不高的问题来说，线程和锁也不是解决之道。在操作系统层面，线程永 远不会消失；不过，过去七年我觉得让人眼前一亮的编程语言（包括 Go、 Elixir 和</p>
+
+<p>Clojure）都对并发做了更好、更高层的抽象，正如《七周七并发模型》一书所述。 Erlang （实现Elixir的语言）是典型示例，设计这门语言时彻底考虑到了并发。我对</p>
+
+<p>这门语言不感兴趣的原因很简单——句法丑陋。我被 Python 的句法宠坏了。</p>
+
+<p>Jose Valim是著名的Ruby on Rails核心贡献者，他设计的Elixir提供了友好而现代的 句法。与 Lisp 和 Clojure 一样， Elixir 也实现了句法宏。这是把双刃剑。使用句法宏 能实现强大的DSL，可是衍生语言多起来之后，代码基会出现兼容问题，社区会分 裂。大量涌现的宏导致 Lisp 没落，因为各种 Lisp 实现都使用独特难懂的方言。标准 化的 Common Lisp 则开始复苏。我希望 Jose Valim 能引领 Elixir 社区，不要重蹈覆 辙。</p>
+
+<p>与 Elixir 类似， Go 也是一门充满新意的现代语言。可是，与 Elixir 相比，某些方面</p>
+
+<p>有点保守。 Go 不支持宏，句法比 Python 简单。 Go 也不支持继承和运算符重载，而</p>
+
+<p>且提供的元编程支持没有 Python 多。这些限制被认为是 Go 语言的特点，因为行为和 性能更可预料。这对高并发来说是好事，而 Go 的重要使命是取代 C++、 Java 和</p>
+
+<p>Python。</p>
+
+<p>虽然 Elixir 和 Go 在高并发领域是直接的竞争者，但是设计原理的不同则吸引了不同 的用户群。这两门语言都可能蓬勃发展。可是纵观编程语言的历史，保守的语言更能 吸引程序员。我希望自己能精通 Go 和 Elixir。</p>
+
+<p>关于 GIL</p>
+
+<p>GIL 简化了 CPython 解释器和 C 语言扩展的实现。得益于 GIL， Python 有很多 C 语言 扩展——这绝对是如今 Python 如此受欢迎的主要原因之一。</p>
+
+<p>多年以来，我一直觉得 GIL 导致 Python 线程几乎没有用武之地，只能开发一些玩具 应用。直到发现标准库中每一个阻塞型 I/O 函数都会释放 GIL 之后，我才意识到</p>
+
+<p>Python 线程特别适合在 I/O 密集型系统（鉴于我的工作经验，客户经常付费让我开发</p>
+
+<p>这种应用）中使用。</p>
+
+<p>竞争对手对并发的支持</p>
+
+<p>MRI （推荐使用的Ruby实现）也有GIL，因此，Ruby线程与Python线程受到同样的 限制。相比之下， JavaScript 解释器则根本不支持用户层级的线程。在 JavaScript 中，只能通过回调式异步编程实现并发。我提到这些是因为， Ruby 和 JavaScript 是最 能直接与 Python 竞争的通用动态编程语言。</p>
+
+<p>在深谙并发的这一批新语言中， Go 和 Elixir 或许是最能蚕食 Python 的语言。不过， 现在有 asyncio 了。既然这么多人相信纯粹使用回调的 Node.js 平台可以做并发编</p>
+
+<h4 id="程-那么-asyncio-生态系统成熟后-python-赢回这些人能有多难呢-不过-这是下">程，那么 asyncio 生态系统成熟后， Python 赢回这些人能有多难呢？不过，这是下</h4>
+
+<p>一章“杂谈”的话题。</p>
+
+<p>14摘自 PyCon 2009 教程“A Curious Course on Coroutines and Concurrency” (<a href="http://www.dabeaz.com/coroutines/">http://www+ dabeaz+com/coroutines/</a>)的第 9 张</p>
+
+<p>幻灯片。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/11-%E6%8E%A5%E5%8F%A3%E4%BB%8E%E5%8D%8F%E8%AE%AE%E5%88%B0%E6%8A%BD%E8%B1%A1%E5%9F%BA%E7%B1%BB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">11 接口：从协议到抽象基类</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/18-%E4%BD%BF%E7%94%A8-asyncio-%E5%8C%85%E5%A4%84%E7%90%86%E5%B9%B6%E5%8F%91/">
+            <span class="next-text nav-default">18 使用 asyncio 包处理并发</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

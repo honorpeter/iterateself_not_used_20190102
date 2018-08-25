@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：不用加减乘除做加法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="REF CodingInterviews TODO asm 不知道。要总结下。 INTRODUCTION aaa 题目 题目描述 写一个函数，求两个整数之和，要求在函数体内不得使用&#43;、-、*、/四则运算符号。 样例输入 3 4 7 9 样例" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%B8%8D%E7%94%A8%E5%8A%A0%E5%87%8F%E4%B9%98%E9%99%A4%E5%81%9A%E5%8A%A0%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：不用加减乘除做加法" />
+<meta property="og:description" content="REF CodingInterviews TODO asm 不知道。要总结下。 INTRODUCTION aaa 题目 题目描述 写一个函数，求两个整数之和，要求在函数体内不得使用&#43;、-、*、/四则运算符号。 样例输入 3 4 7 9 样例" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%B8%8D%E7%94%A8%E5%8A%A0%E5%87%8F%E4%B9%98%E9%99%A4%E5%81%9A%E5%8A%A0%E6%B3%95/" /><meta property="article:published_time" content="2018-07-05T21:26:30&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-05T21:26:30&#43;00:00"/>
+<meta itemprop="name" content="算法：不用加减乘除做加法">
+<meta itemprop="description" content="REF CodingInterviews TODO asm 不知道。要总结下。 INTRODUCTION aaa 题目 题目描述 写一个函数，求两个整数之和，要求在函数体内不得使用&#43;、-、*、/四则运算符号。 样例输入 3 4 7 9 样例">
+
+
+<meta itemprop="datePublished" content="2018-07-05T21:26:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-05T21:26:30&#43;00:00" />
+<meta itemprop="wordCount" content="1344">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：不用加减乘除做加法"/>
+<meta name="twitter:description" content="REF CodingInterviews TODO asm 不知道。要总结下。 INTRODUCTION aaa 题目 题目描述 写一个函数，求两个整数之和，要求在函数体内不得使用&#43;、-、*、/四则运算符号。 样例输入 3 4 7 9 样例"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：不用加减乘除做加法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-05 </span>
+        
+        <span class="more-meta"> 1344 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+<li><a href="#样例输入"><strong>样例输入</strong></a></li>
+<li><a href="#样例输出"><strong>样例输出</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#c-c-内敛汇编">C/C++ 内敛汇编</a></li>
+<li><a href="#使用位运算来模拟加法">使用位运算来模拟加法</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="ref">REF</h1>
+
+<ul>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ul>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><strong>asm 不知道。要总结下。</strong></li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。</p>
+
+<h2 id="样例输入"><strong>样例输入</strong></h2>
+
+<ul>
+<li><p>3  4</p></li>
+
+<li><p>7  9</p></li>
+</ul>
+
+<h2 id="样例输出"><strong>样例输出</strong></h2>
+
+<ul>
+<li><p>7</p></li>
+
+<li><p>16</p></li>
+</ul>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="c-c-内敛汇编">C/C++ 内敛汇编</h2>
+
+<p><strong>没看懂，为什么是可以的？ asm 不知道。</strong></p>
+
+<p>通过内敛汇编我们直接使用 add 指令来进行相加操作。C/C++内敛汇编使用AT&amp;T汇编语法。</p>
+
+<ul>
+<li><p>在INTEL语法中，第一个表示目的操作数，第二个表示源操作数，赋值方向从右向左。</p></li>
+
+<li><p>AT&amp;T语法第一个为源操作数，第二个为目的操作数，方向从左到右，合乎自然。</p>
+
+<p>#include <iostream>
+#include <stdio.h>
+using namespace std;</p>
+
+<p>class Solution {
+public:
+    int Add(int left, int right) {
+        __asm <strong>volatile</strong>
+            (
+            &ldquo;addl %1,%0;\n&rdquo;     /* 相当于 add b, a结果存储在a中*/
+            : &ldquo;=m&rdquo;(left)
+            : &ldquo;r&rdquo;(right), &ldquo;m&rdquo;(left)
+            //  :
+            );
+        return left;
+    }
+};</p>
+
+<p>int main() {
+    Solution solu;
+    cout &lt;&lt; solu.Add(5,7) &lt;&lt; endl;
+    return 0;
+}</p></li>
+</ul>
+
+<p><strong>代码报错了，不知道怎么改。</strong></p>
+
+<h2 id="使用位运算来模拟加法">使用位运算来模拟加法</h2>
+
+<p>如何用位运算来模拟加法操作呢</p>
+
+<p>基本的位操作符有与、或、异或、取反、左移、右移这6种，它们的运算规则如下所示：
+<table ></p>
+
+<p><tr >
+符号
+描述
+运算规则
+</tr></p>
+
+<p><tbody >
+<tr ></p>
+
+<p><td style="width: 47px; text-align: center;" >&amp;
+</td></p>
+
+<p><td style="width: 69px; text-align: center;" align="center" >与
+</td></p>
+
+<p><td style="width: 507px;" align="right" >有0则0, 全1则1(两个位都为1时，结果才为1)
+</td>
+</tr>
+<tr ></p>
+
+<p><td style="width: 47px; text-align: center;" >|
+</td></p>
+
+<p><td style="width: 69px; text-align: center;" align="center" >或
+</td></p>
+
+<p><td style="width: 507px;" align="right" >有1则1, 全0则0(两个位都为0时，结果才为0)
+</td>
+</tr>
+<tr ></p>
+
+<p><td style="width: 47px; text-align: center;" >^
+</td></p>
+
+<p><td style="width: 69px; text-align: center;" align="center" >异或
+</td></p>
+
+<p><td style="width: 507px;" align="right" >相同则0, 不同则1
+</td>
+</tr>
+<tr ></p>
+
+<p><td style="width: 47px; text-align: center;" >~
+</td></p>
+
+<p><td style="width: 69px; text-align: center;" align="center" >取反
+</td></p>
+
+<p><td style="width: 507px;" align="right" >0变1, 1变0
+</td>
+</tr>
+<tr ></p>
+
+<p><td style="width: 47px; text-align: center;" >&lt;&lt;
+</td></p>
+
+<p><td style="width: 69px; text-align: center;" align="center" >左移
+</td></p>
+
+<p><td style="width: 507px;" align="right" >各二进位全部左移若干位，高位丢弃，低位补0
+</td>
+</tr>
+<tr ></p>
+
+<p><td style="width: 47px; text-align: center;" >&gt;&gt;
+</td></p>
+
+<p><td style="width: 69px; text-align: center;" align="center" >右移
+</td></p>
+
+<p><td style="width: 507px;" align="right" >各二进位全部右移若干位，对无符号数，高位补0，有符号数，各编译器处理方法不一样，有的补符号位（算术右移），有的补0（逻辑右移）
+</td>
+</tr>
+</tbody>
+</table>
+OK，这么多位运算的规则，我们能不能用来模拟加法呢？</p>
+
+<ul>
+<li><p>如果不带进位的话：我们可以用异或来模拟不带进位的加法运算，因为异或相同则 0，不同则 1，正好与不带进位的加法结果相同。</p></li>
+
+<li><p>那么进位要怎么处理呢？</p>
+
+<ul>
+<li><p>首先，我们怎么判断要进位呢？进位的产生主要是1+1=10，因此可以用与操作来判断两个位是不是需要进位。</p></li>
+
+<li><p>那么怎么表示进位呢？进位无非是进到上一位去，因此我们直接把与的结果左移一位就可以表示进位。</p></li>
+</ul></li>
+</ul>
+
+<p>OK，按照上面的处理方法，我们就能得到两个数：</p>
+
+<ul>
+<li><p>一个是：异或运算得出的不带进位的结果</p></li>
+
+<li><p>一个是：两个数相与再左移后得到的所有进位</p></li>
+</ul>
+
+<p>嗯，下面就OK了，我们直接反复将两个数进行上述的加法操作， 直到没有进位，那么这个时候的结果就是我们想要的。<strong>利害的。</strong></p>
+
+<p>举个例子  5+7=12 ：</p>
+
+<p>首先看十进制是如何做的：</p>
+
+<ol>
+<li><p>相加各位的值，不算进位，得到5 + 7 = 2（不算进位）</p></li>
+
+<li><p>看进位值，得到10。 如果这一步的进位值为 0，那么第一步得到的值就是最终结果。</p></li>
+
+<li><p>重复上述两步，只是相加的值变成上述两步的得到的结果 2 和 10，得到 12。</p></li>
+</ol>
+
+<p>再看一下二进制值如何做： 5 -&gt; 101     7 -&gt; 111</p>
+
+<ol>
+<li><p>相加各位的值，不算进位，得到010，二进制每位相加就相当于各位做异或操作，101^111=010</p></li>
+
+<li><p>计算进位值，得到 1010，相当于各位做与操作得到 101，再向左移一位得到 1010，(101&amp;111)&lt;&lt;1。</p></li>
+
+<li><p>重复上述两步， 各位相加 010^1010=1000，进位值为 100=(010&amp;1010)&lt;&lt;1。</p></li>
+
+<li><p>继续重复上述两步：1000^100 = 1100，进位值为0，跳出循环，1100为最终结果。</p></li>
+</ol>
+
+<p>OK，完整代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+
+class Solution {
+public:
+    int Add(int left, int right) {
+        int temp;
+        while (right != 0) {
+            temp = left ^ right;                //  计算不带进位的情况
+            right = (left &amp; right) &lt;&lt; 1;         //  计算进位
+            left = temp;
+        }
+        return left;
+    }
+};
+
+
+int main() {
+    Solution solu;
+    cout &lt;&lt; solu.Add(5,7) &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>12
+</code></pre>
+
+<p>我们也可以用递归来实现：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+using namespace std;
+
+class Solution {
+public:
+    int Add(int left, int right) {
+        return right == 0 ? left : Add(left ^ right, (left &amp; right) &lt;&lt; 1);
+    }
+};
+
+
+int main() {
+    Solution solu;
+    cout &lt;&lt; solu.Add(5, 7) &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>12
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-05</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%AD%A9%E5%AD%90%E4%BB%AC%E7%9A%84%E6%B8%B8%E6%88%8F%E5%9C%86%E5%9C%88%E4%B8%AD%E6%9C%80%E5%90%8E%E5%89%A9%E4%B8%8B%E7%9A%84%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：孩子们的游戏（圆圈中最后剩下的数）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%92%8C%E4%B8%BAs%E7%9A%84%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B0%E5%BA%8F%E5%88%97/">
+            <span class="next-text nav-default">算法：和为S的连续正数序列</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

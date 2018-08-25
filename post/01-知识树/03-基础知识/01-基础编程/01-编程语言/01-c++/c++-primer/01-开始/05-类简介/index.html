@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 类简介 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="5 类简介 在解决书店程序之前，我们还需要了解的唯一一个 C&#43;&#43; 特性，就是如何定义一个数据结构 (data structure) 来表示销售数据。在 C&#43;&#43; 中，我们通过定义一个类 (clas" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/05-%E7%B1%BB%E7%AE%80%E4%BB%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 类简介" />
+<meta property="og:description" content="5 类简介 在解决书店程序之前，我们还需要了解的唯一一个 C&#43;&#43; 特性，就是如何定义一个数据结构 (data structure) 来表示销售数据。在 C&#43;&#43; 中，我们通过定义一个类 (clas" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/05-%E7%B1%BB%E7%AE%80%E4%BB%8B/" /><meta property="article:published_time" content="2018-08-03T18:30:36&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T18:30:36&#43;00:00"/>
+<meta itemprop="name" content="05 类简介">
+<meta itemprop="description" content="5 类简介 在解决书店程序之前，我们还需要了解的唯一一个 C&#43;&#43; 特性，就是如何定义一个数据结构 (data structure) 来表示销售数据。在 C&#43;&#43; 中，我们通过定义一个类 (clas">
+
+
+<meta itemprop="datePublished" content="2018-08-03T18:30:36&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T18:30:36&#43;00:00" />
+<meta itemprop="wordCount" content="3148">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 类简介"/>
+<meta name="twitter:description" content="5 类简介 在解决书店程序之前，我们还需要了解的唯一一个 C&#43;&#43; 特性，就是如何定义一个数据结构 (data structure) 来表示销售数据。在 C&#43;&#43; 中，我们通过定义一个类 (clas"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 类简介</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 3148 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#5-类简介">5 类简介</a>
+<ul>
+<li><a href="#1-5-1-sales-item-类">1.5.1 Sales_item 类</a>
+<ul>
+<li><a href="#读写-sales-item">读写 Sales_item</a></li>
+<li><a href="#sales-item-对象的加法">Sales_item 对象的加法</a></li>
+<li><a href="#什么是成员函数">什么是成员函数？</a></li>
+<li><a href="#1-5-2节练习">1.5.2节练习</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="5-类简介">5 类简介</h2>
+
+<p>在解决书店程序之前，我们还需要了解的唯一一个 C++ 特性，就是如何定义一个数据结构 (data structure) 来表示销售数据。在 C++ 中，我们通过定义一个类 (class)来定义 自己的数据结构。一个类定义了一个类型，以及与其关联的一组操作。类机制是C++最重要的特性之一。实际上，C++ 最初的一个设计焦点就是能定义使用上像内置类型一样自然的类类型(classtype)。</p>
+
+<p>在本节中，我们将介绍一个在编写书店程序中会用到的简单的类。当我们在后续章节中学习了更多关于类型、表达式、语句和函数的知识后，会真正实现这个类。</p>
+
+<p>为了使用类，我们需要了解三件事情：</p>
+
+<ul>
+<li>类名是什么？</li>
+<li>它是在哪里定义的？</li>
+<li>它支持什么操作？</li>
+</ul>
+
+<p>对于书店程序来说，我们假定类名为 Sales_item，头文件 Sales_item.h 中已经定义了这个类。</p>
+
+<p>如前所见，为了使用标准库设施，我们必须包含相关的头文件。类似的，我们也需要使用头文件来访问为自己的应用程序所定义的类。习惯上，头文件根据其中定义的类的名字来命名。我们通常使用 <code>.h</code> 作为头文件的后缀，但也有一些程序员习惯<code>.H</code>、<code>.hpp</code>或<code>.hxx</code>。标准库头文件通常不带后缀。编译器一般不关心头文件名的形式，但有的 IDE 对此有特定要求。<span style="color:red;">编译器不关心文件名的形式吗？</span></p>
+
+<h3 id="1-5-1-sales-item-类">1.5.1 Sales_item 类</h3>
+
+<p>Sales_item 类的作用是表示一本书的总销售额、售出册数和平均售价。我们现在不关心这些数如何存储、如何计算。为了使用一个类，我们不必关心它是如何实现的，只需知道类对象可以执行什么操作。</p>
+
+<p>每个类实际上都定义了一个新的类型，其类型名就是类名。因此，我们的 Sales_item 类定义了一个名为 Sales_item 的类型。与内置类型一样，我们可以定义类类型变量。 当我们写下如下语句</p>
+
+<pre><code class="language-cpp">Sales_item item;
+</code></pre>
+
+<p>是想表达 item 是一个 Sales_item 类型的对象。我们通常将 “一个 Sales_item 类型的对象” 简单说成 “一个 Sales_item 对象”，或更简单的“一个Sales_item”。</p>
+
+<p>除了可以定义 Sales_item 类型的变量之外，我们还可以：</p>
+
+<ul>
+<li>调用一个名为 isbn 的函数从一个 Sales_item 对象中提取 ISBN 书号。</li>
+<li>用输入运算符（&gt;&gt;）和输出运算符（&lt;&lt;）读、写Sales_item类型的对象。</li>
+<li>用赋值运算符（=）将一个 Sales_item 对象的值赋予另一个 Sales_item 对象。</li>
+<li>用加法运算符（+）将两个 Sales_item 对象相加。两个对象必须表示同一本书（相同的 ISBN ）。加法结果是一个新的 Sales_item 对象，其 ISBN 与两个运算对象相同，而其总销售额和售出册数则是两个运算对象的对应值之和。</li>
+<li>使用复合赋值运算符（+=）将一个 Sales_item 对象加到另一个对象上。</li>
+</ul>
+
+<blockquote>
+<p>关键概念：类定义了行力</p>
+
+<p>当你读这些程序时，一件要牢记的重要事情是，类 Sales_item 的作者定义了类对 象可以执行的所有动作。即，Sales_item类定义了创建一个 Sales_item 对象时会发 生什么事情，以及对 Sales_item 对象进行赋值、加法或输入输出运算时会发生什么事情。</p>
+
+<p>一般而言，类的作者决定了类类型对象上可以使用的所有操作。当前，我们所知道的可以在 Sales_item 对象上执行的全部操作就是本节所列出的那些操作。</p>
+</blockquote>
+
+<h4 id="读写-sales-item">读写 Sales_item</h4>
+
+<p>既然已经知道可以对 Sales_item 对象执行哪些操作，我们现在就可以编写使用类的程序了。例如，下面的程序从标准输入读入数据，存入一个 Sales_item 对象中，然 后将Sales_item的内容写回到标准输出：</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;Sales_item.h&quot;
+
+int main(){
+  Sales_item book;
+  //读入ISBN号、售出的册数以及销售价格
+  std::cin &gt;&gt; book;
+  //写入ISBN、售出的册数、总销售额和平均价格
+  std::cout &lt;&lt; book &lt;&lt; std::endl;
+  return 0;
+}
+</code></pre>
+
+<p>如果输入：</p>
+
+<pre><code>0-201-70353-X 4 24.99
+</code></pre>
+
+<p>则输出为：</p>
+
+<pre><code>0-201-70353-X 4 99.96 24.99
+</code></pre>
+
+<p>输入表示我们以每本 24.99 美元的价格售出了 4 册书，而输出告诉我们总售出册数为 4 ，总销售额为 99.96 美元，而每册书的平均销售价格为 24.99 美元。</p>
+
+<p>此程序以两个<code>#include</code>指令开始，其中一个使用了新的形式。包含来自标准库的头文件时，也应该用尖括号(<code>&lt; &gt;</code>)包围头文件名。对于不属于标准库的头文件，则用双引号(<code>&quot; &quot;</code>)包围。</p>
+
+<p>在 <code>main</code> 中我们定义了一个名为 <code>book</code> 的对象，用来保存从标准输入读取出的数据，下一条语句读取数据存入对象中，第三条语句将对象打印到标准输出上并打印一个 <code>endl</code>。</p>
+
+<h4 id="sales-item-对象的加法">Sales_item 对象的加法</h4>
+
+<p>下面是一个更有意思的例子，将两个 Sales_item 对象相加:</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &quot;Sales_item.h&quot;
+
+int main(){
+  Sales_item item1,item2;
+  std::cin &gt;&gt; item1 &gt;&gt; item2; //读取一对交易记录
+  std::cout &lt;&lt; item1+item2 &lt;&lt; std::endl; //打印它们的和
+  return 0;
+}
+</code></pre>
+
+<p>如果输入如下内容：</p>
+
+<pre><code>0-201-78345-X 3 20.00
+0-201-78345-X 2 25.00
+</code></pre>
+
+<p>则输出为：</p>
+
+<pre><code>0-201-78345-X 5 110 22
+</code></pre>
+
+<p>此程序开始包含了 <code>Sales_item</code> 和 <code>iostream</code> 两个头文件。然后定义了两个 <code>Sales_item</code> 对象来保存销售记录。我们从标准输入读取数据，存入两个对象之中。输出表达式完成加法运算并打印结果。</p>
+
+<p>值得注意的是，此程序看起来与第5页的程序非常相似：读取两个输入数据并输出它们的和。造成如此相似的原因是，我们只不过将运算对象从两个整数变为两个 <code>Sales_item</code> 而已，但读取与打印和的运算方式没有发生任何变化。两个程序的另一个不同之处是，“和”的概念是完全不一样的。对于 <code>int</code> ，我们计算传统意义上的和一两个数值的算术加法结果。对于 <code>Sales_item</code> 对象，我们用了一个全新的“和”的概念&ndash;两个 <code>Sales_item</code> 对象的成员对应相加的结果。</p>
+
+<blockquote>
+<p>使用文件重定向</p>
+
+<p>当你测试程序时，反复从键盘敲入这些销售记录作为程序的输入，是非常乏味的。大多数操作系统支持文件重定向，这种机制允许我们将标准输入和标准输出与命名文件 关联起来：</p>
+
+<pre><code>&gt; $ addItems &lt;infile &gt;outfile
+&gt; ```
+&gt;
+&gt; 假定 `$` 是操作系统提示符，我们的加法程序已经编译为名为 `addItems.exe` 的可执行文件(在UNIX中是 `addItems` )，则上述命令会从一个名为 `infile` 的文件读取销售记录，并将输出结果写入到一个名为 `outfile` 的文件中，两个文件都位于当前目录中。&lt;span style=&quot;color:red;&quot;&gt;真的假的？`cin` 和 `cout` 可以通过这样从文件中输入和输出？这种方式是只对应 `cin` `cout` 吗？还是 `scanf` 等等也支持？&lt;/span&gt;
+
+#### 1.5.1节练习
+
+练习 1.20:在网站 &lt;http://www.informit.com/title/0321714113&gt; 上。第 1 章的代码目录中包含了头文件 `Sales_item.h`。将它拷贝到你自己的工作目录中。用它编写一个程序，读取一组书籍销售记录，将每条记录打印到标准输出上。
+
+练习 1.21:编写程序，读取两个 ISBN 相同的 `Sales_item` 对象，输出它们的和。
+
+练习 1.22:编写程序，读取多个具有相同 ISBN 的销售记录，输出所有记录的和。
+
+### 1.5.2 初识成员函数
+
+将两个 Sales_item 对象相加的程序首先应该检査两个对象是否具有相同的ISBN。 方法如下：
+
+
+
+```cpp
+#include &lt;iostream&gt;
+#include &quot;Sales_item.h&quot;
+
+int main(){
+  Sales_item item1,item2;
+  std::cin &gt;&gt; item1 &gt;&gt; item2 ;
+
+  //首先检查 item1 和 item2 是否表示相同的书
+  if (item1.isbn() == item2.isbn()){
+    std::cout &lt;&lt; item1+item2 &lt;&lt; std::endl;
+    return 0;     //表示成功
+  }
+  else{
+    std::cerr &lt;&lt; &quot;Data must refer to same ISBN&quot;
+              &lt;&lt; std::endl;
+    return -1;    //表示失败
+  }
+}
+</code></pre>
+</blockquote>
+
+<p>此程序与上一版本的差别是 if 语句及其 else 分支。即使不了解这个 if 语句的检测条件，我们也很容易理解这个程序在干什么。如果条件成立，如上一版本一样，程序打印计算结果，并返回0，表明成功。如果条件失败，我们执行跟在 else 之后的语句块， 打印一条错误信息，并返回一个错误标识。</p>
+
+<h4 id="什么是成员函数">什么是成员函数？</h4>
+
+<p>这个 if 语句的检测条件</p>
+
+<pre><code class="language-cpp">item1.isbn() == item2.isbn()
+</code></pre>
+
+<p>调用名为 isbn 的成员函数(memberfunction)。成员函数是定义为类的一部分的函数，有时也被称为方法(method)。</p>
+
+<p>我们通常以一个类对象的名义来调用成员函数。例如，上面相等表达式左侧运算对象的第一部分</p>
+
+<pre><code class="language-cpp">item1.isbn()
+</code></pre>
+
+<p>使用点运算符(<code>.</code>)来表达我们需要 “名为<code>item1</code>的对象的<code>isbn</code>成员”。点运算符只能用于类类型的对象。其左侧运算对象必须是一个类类型的对象，右侧运算对象必须是该类型的一个成员名，运算结果为右侧运算对象指定的成员。</p>
+
+<p>当用点运算符访问一个成员函数时，通常我们是想(效果也确实是)调用该函数。我们使用调用运算符(<code>()</code>)来调用一个函数。调用运算符是一对圆括号，里面放置实参 (argument)列表(可能为空)。成员函数 <code>isbn</code> 并不接受参数。因此</p>
+
+<pre><code>item1.isbn()
+</code></pre>
+
+<p>调用名为 item1 的对象的成员函数 isbn，此函数返回 item1 中保存的 ISBN 书号。</p>
+
+<p>在这个 if 条件中，相等运算符的右侧运算对象也是这样执行的——它返回保存在 item2 中的 ISBN 书号。如果 ISBN 相同，条件为真，否则为假。</p>
+
+<h4 id="1-5-2节练习">1.5.2节练习</h4>
+
+<p>练习 1.23:编写程序，读取多条销售记录，并统计每个ISBN (每本书)有几条销售记 录。</p>
+
+<p>练习 1.24:输入表示多个ISBN的多条销售记录来测试上一个程序，每个ISBN的记录应该聚在一起。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/06-%E4%B9%A6%E5%BA%97%E7%A8%8B%E5%BA%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 书店程序</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/04-%E6%8E%A7%E5%88%B6%E6%B5%81/">
+            <span class="next-text nav-default">04 控制流</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

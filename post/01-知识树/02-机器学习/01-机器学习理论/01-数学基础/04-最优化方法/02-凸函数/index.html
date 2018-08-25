@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 凸函数 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-31 07:34:40&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-convex-functions/ slug: ai-convex-optimization-convex-functions title: wordpress_id: 2174 categories: - 随想与反思 tags: - &amp;lsquo;@todo&amp;rsquo; - &amp;lsquo;@want_to_know&amp;rsquo; [mathjax] REF： 七月在线 深度学习 缘由： 对凸函数相关的知识进行整理。 凸函数 定义 若函数 (f) 的定义" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/04-%E6%9C%80%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/02-%E5%87%B8%E5%87%BD%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 凸函数" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-31 07:34:40&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-convex-functions/ slug: ai-convex-optimization-convex-functions title: wordpress_id: 2174 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 深度学习 缘由： 对凸函数相关的知识进行整理。 凸函数 定义 若函数 (f) 的定义" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/04-%E6%9C%80%E4%BC%98%E5%8C%96%E6%96%B9%E6%B3%95/02-%E5%87%B8%E5%87%BD%E6%95%B0/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="02 凸函数">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-31 07:34:40&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-convex-functions/ slug: ai-convex-optimization-convex-functions title: wordpress_id: 2174 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 深度学习 缘由： 对凸函数相关的知识进行整理。 凸函数 定义 若函数 (f) 的定义">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="2705">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 凸函数"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-31 07:34:40&#43;00:00 layout: post link: http://106.15.37.116/2018/03/31/ai-convex-optimization-convex-functions/ slug: ai-convex-optimization-convex-functions title: wordpress_id: 2174 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] REF： 七月在线 深度学习 缘由： 对凸函数相关的知识进行整理。 凸函数 定义 若函数 (f) 的定义"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 凸函数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 2705 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#want-to-know">- &lsquo;@want_to_know&rsquo;</a></li>
+</ul></li>
+<li><a href="#ref">REF：</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#凸函数">凸函数</a>
+<ul>
+<li><a href="#定义">定义</a></li>
+<li><a href="#一阶可微">一阶可微</a>
+<ul>
+<li><a href="#进一步的思考">进一步的思考</a></li>
+</ul></li>
+<li><a href="#二阶可微">二阶可微</a></li>
+<li><a href="#凸函数举例">凸函数举例</a></li>
+<li><a href="#上境图">上境图</a>
+<ul>
+<li><a href="#定义-1">定义：</a></li>
+<li><a href="#凸函数与上境图">凸函数与上境图</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#jensen不等式">Jensen不等式</a>
+<ul>
+<li><a href="#定义-2">定义：</a></li>
+<li><a href="#推广">推广：</a></li>
+<li><a href="#jensen不等式是几乎所有不等式的基础">Jensen不等式是几乎所有不等式的基础：</a></li>
+</ul></li>
+<li><a href="#凸函数的保凸运算">凸函数的保凸运算</a>
+<ul>
+<li><a href="#一些保凸运算">一些保凸运算</a></li>
+<li><a href="#逐点上确界仍为凸函数-的证明">逐点上确界仍为凸函数 的证明：</a></li>
+<li><a href="#逐点上确界和上境图的关系">逐点上确界和上境图的关系</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-31 07:34:40+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/31/ai-convex-optimization-convex-functions/">http://106.15.37.116/2018/03/31/ai-convex-optimization-convex-functions/</a>
+slug: ai-convex-optimization-convex-functions
+title:
+wordpress_id: 2174
+categories:
+- 随想与反思
+tags:
+- &lsquo;@todo&rsquo;</p>
+
+<h2 id="want-to-know">- &lsquo;@want_to_know&rsquo;</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 深度学习</li>
+</ol>
+
+<hr />
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对凸函数相关的知识进行整理。</p>
+
+<h1 id="凸函数">凸函数</h1>
+
+<h2 id="定义">定义</h2>
+
+<p>若函数 (f) 的定义域 ( dom\,f ) 为凸集，且满足</p>
+
+<p>[\forall x,y\in dom f,0\leq \theta \leq 1,有f(\theta x+(1-\theta)y)\leq \theta f(x)+(1-\theta)f(y)]</p>
+
+<p>即：割线位于函数之上，就是凸函数。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eH69fc0LGK.png?imageslim" alt="mark" /></p>
+
+<h2 id="一阶可微">一阶可微</h2>
+
+<p>若 (f) 一阶可微，则函数 (f) 为凸函数当且仅当 (f) 的定义域 ( dom\,f ) 为凸集，且</p>
+
+<p>[\forall x,y\in dom \,f,f(y)\geq f(x)+\bigtriangledown f(x)^T(y-x)]</p>
+
+<p>即：原始的函数值是大于切线的值的。函数图像位于切线图像的上方，就是凸函数。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0c9BB5B56E.png?imageslim" alt="mark" /></p>
+
+<h3 id="进一步的思考">进一步的思考</h3>
+
+<p>[f(y)\geq f(x)+\bigtriangledown f(x)^T(y-x)</p>
+
+<p>一种理解的方式：结合凸函数图像和支撑超平面理解上面这个式子。<strong>怎么结合？厉害了</strong>：曲线之上的部分实际上是一个凸集，而这个切线相当于这个边界点的支撑超平面。也就意味着，这种写法与用凸集的那套语言的表述完全一致，即（集合(C)，(x_0) 为 (C) 边界上的点。若存在 (a\neq 0)，满足对任意 (x\in C)，都有 (a^Tx\leq a^Tx_0) 成立）。</p>
+
+<p>另一种理解的方式：对于这个式子，我们可以把它看作一阶Taylor展开式，那么就可以把它看作f(y)的下界。因此：对于凸函数，其一阶Taylor展开式近似本质上是该函数的全局下估计。反之，如果一个函数的一阶Taylor近似总是起全局下估计，则该函数是凸函数。 该不等式说明从一个函数的局部信息，可以得到一定程度的全局信息。<strong>这个没明白？为什么从一个函数的局部信息，就可以得到一定程度的全局信息？</strong></p>
+
+<h2 id="二阶可微">二阶可微</h2>
+
+<p>若函数(f)二阶可微，则函数(f)为凸函数当前仅当(dom)为凸集，且：<strong>这个(\succ =)是个什么符号？ 这个符号基本上就是大于等于的意思。表示的是n阶的东西 大于等于</strong></p>
+
+<p>[\bigtriangledown^2f(x)\succ =0]</p>
+
+<ul>
+<li><p>若(f)是一元函数，上式表示二阶导大于等于0</p></li>
+
+<li><p>若(f)是多元函数，上式表示二阶导 Hessian 矩阵半正定。<strong>什么是Hessian矩阵？</strong></p></li>
+</ul>
+
+<h2 id="凸函数举例">凸函数举例</h2>
+
+<ul>
+<li><p>指数函数 (e^{ax})</p></li>
+
+<li><p>幂函数 ( x^a,x\in R_+,a\geq 1 or a\leq 0)</p></li>
+
+<li><p>负对数函数 (-logx)</p></li>
+
+<li><p>负熵函数  (xlogx)</p></li>
+
+<li><p>范数函数 (\left |x\right |_p)</p></li>
+
+<li><p>(f(x)=max(x_1,\cdots ,x_n))</p></li>
+
+<li><p>(f(x)=x^2/y,y&gt;0) 对于任何一个y&gt;0 这个函数都是一个凸函数。</p></li>
+
+<li><p>(f(x)=log(e^{x_1}+\cdots +e^{x_n}))</p></li>
+
+<li><p>(x^2)是凸函数 ，但是(x^{frac{1}{2} })就不是凸函数。</p></li>
+
+<li><p>直线既是凸函数也是凹函数。</p></li>
+
+<li><p>sin 函数是凹函数。</p></li>
+</ul>
+
+<h2 id="上境图">上境图</h2>
+
+<h3 id="定义-1">定义：</h3>
+
+<p>函数(f)的图像定义为：({(x,f(x))\mid x\in dom\,f })</p>
+
+<p>函数(f)的上境图定义为：(epi\,f={(x,t)\mid x\in dom \,f,f(x)\leq t})</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/L0Flfej86L.png?imageslim" alt="mark" /></p>
+
+<h3 id="凸函数与上境图">凸函数与上境图</h3>
+
+<p>一个函数是凸函数，当且仅当其上境图是凸集。思考：如何证明？(提示：定义)。凸集合与凸函数有很多相对应的性质可以由这个结论来进行链接。</p>
+
+<p>对应的，一个函数是凹函数，当且仅当其亚图(hypograph)是凸集。<strong>嗯</strong></p>
+
+<p>[hypo \, f={(x,t)\mid t\leq f(x)}]</p>
+
+<p>#</p>
+
+<p>#</p>
+
+<p>#</p>
+
+<h1 id="jensen不等式">Jensen不等式</h1>
+
+<p>Jensen是凸函数的重要应用。</p>
+
+<h2 id="定义-2">定义：</h2>
+
+<p>凸集合的性质：假设(\Omega)是一个凸集合，那么(\Omega)任意n个点的凸组合仍包含于(\Omega)。</p>
+
+<p>而琴生不等式就是对凸集合性质的描述：<strong>厉害</strong></p>
+
+<p>如果(f:\Omega\rightarrow \mathbb{R})是一个凸函数，则对于任何({x<em>i\in \Omega}</em>{i=1}^{n})，以及凸组合(\sum_{i=1}^{n}w_ix_i)，都有：</p>
+
+<p>[\sum_{i=1}^{n}w_if(x<em>i)\geq f(\sum</em>{i=1}^{n}w_ix_i)]</p>
+
+<h2 id="推广">推广：</h2>
+
+<p>若(f)是凸函数：</p>
+
+<p>基本的Jensen不等式：</p>
+
+<p>[f(\theta x+(1-\theta)y)\leq \theta f(x)+(1-\theta)f(y)]</p>
+
+<p>那么推广到k个参数呢：注意：两个变量的和k个变量表达的信息是完全一样的</p>
+
+<p>若(\theta_1,\cdots \theta_k\geq 0)，(\theta)1+\cdots +\theta_k=1)，那么：</p>
+
+<p>[f(\theta_1x_1+\cdots +\theta_kx_k)\leq \theta_1f(x_1)+\cdots +\theta_kf(x_k)]</p>
+
+<p>那么继续推广，如果k变成无穷多个，以至于连到一起了：</p>
+
+<p>若(p(x)\geq 0 on S\subseteq dom\,f,\int_S p(x)dx=1)：</p>
+
+<p>[f(\int_S p(x)xdx)\leq \int_S f(x)p(x)dx]</p>
+
+<p>即如果f是凸函数的话：</p>
+
+<p>[f(Ex)\leq Ef(x)]</p>
+
+<p><strong>这个就很厉害了。</strong></p>
+
+<h2 id="jensen不等式是几乎所有不等式的基础">Jensen不等式是几乎所有不等式的基础：</h2>
+
+<p>1.利用(y=-logx)是凸函数，证明：</p>
+
+<p>[\frac{a+b}{2}\geq \sqrt{ab},a&gt;0,b&gt;0]</p>
+
+<p>提示：任取a,b&gt;0,(\theta=0.5)带入基本Jensen不等式。</p>
+
+<p>2.利用(f(E(x))\leq E(f(x)))，(f是凸函数），证明下式：(D\geq 0)</p>
+
+<p>[D(p\mid\mid q)=\sum<em>{x} p(x)log\frac{p(x)}{q(x)}=E</em>{p(x)}log\frac{p(x)}{q(x)}]</p>
+
+<p>p和q都是概率密度函数，D是这两个概率密度函数的距离（正式一点是散度： Divergence，或者说时相对熵），然后把D定义为这么个式子，而这个式子可以看成是对(log\frac{p(x)}{q(x)})求期望，那么就可以把log看作一个函数，里面的(\frac{p(x)}{q(x)})看作x，注意到 (y=-logx) 在定义域上是凸函数，因此可以使用 Jensen不等式了。</p>
+
+<p>证明如下：<strong>厉害的证明</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/kG76KFhBAH.png?imageslim" alt="mark" /></p>
+
+<p>那么上面这个(D(p\mid\mid q))式子用在什么场合呢？</p>
+
+<p>它是变分的基础。变分推导的主要用到的基本的思想就是这个。</p>
+
+<p>比如：如果我们有一个系统是 (p(x))，但是我们不知道是 (p(x)) 是什么，我们给定了一些样本 (x_1,x_2,\cdots x_n) 等，去估计这个 (p(x)) 。那么我们有两个思路：</p>
+
+<ul>
+<li><p>可以用极大似然估计</p></li>
+
+<li><p>也可以用这些样本估计一个q出来，让这个q取接近这个p，那么如何去定义接近呢？就是用的上面这个(D(p\mid\mid q))，如果这个很小，那么我们就可以说q接近p了，因此我们可以把这个当作目标函数，然后不断减小它。那么关于p怎么选，就比较困难了。<strong>困难在那里？到底怎么选？变分还是要了解下。到底是怎么实现的？</strong></p></li>
+</ul>
+
+<h1 id="凸函数的保凸运算">凸函数的保凸运算</h1>
+
+<p>函数保凸与集合的保凸差不多</p>
+
+<h2 id="一些保凸运算">一些保凸运算</h2>
+
+<p>1.凸函数的非负加权和仍是凸函数：非负加权和实际上对应于凸集合的求交集。</p>
+
+<ul>
+<li>(f(x)=\omega_1f_1(x)+\cdots +\omega_nf_n(x))</li>
+</ul>
+
+<p>2.凸函数与仿射函数的复合仍是凸函数：</p>
+
+<ul>
+<li>(g(x)=f(Ax+b))</li>
+</ul>
+
+<p>3.凸函数的逐点求最大值，逐点上确界仍是凸函数：<strong>这个很重要，是对偶函数的基础。</strong></p>
+
+<ul>
+<li><p>离散的情况时：(f(x)=max(f_1(x),\cdots ,f_n(x)))</p></li>
+
+<li><p>连续的情况时：(f(x)=sup\,g(x,y))  sup值得时上确界 y时一个维度</p></li>
+</ul>
+
+<p>4.固定一个凸函数的若干变量，所得到的函数仍然是凸函数。</p>
+
+<p>你固定变量的时候，比如x=1，那么相当于拿x=1这个面去切你的凸函数，这个时候，就是你这个面对应的凸集合于原函数的凸集合的交集，还是凸集合，因此对应的函数还是凸函数。</p>
+
+<p>5.凸函数的sublevel set都是凸集合。</p>
+
+<p>sublevel set 就是说 (f(x)\leq C)，这个就是sublevel set，等于C就是level set ，小于等于C说明你用y=C跟你的原函数取交集，y=C 这个面是凸的，原函数是凸的，交完之后还是凸的。<strong>还是没明白什么是sublevel set？</strong></p>
+
+<h2 id="逐点上确界仍为凸函数-的证明">逐点上确界仍为凸函数 的证明：</h2>
+
+<p>(f_1)，(f_2)均为凸函数，定义函数(f)：(f(x)=max{f_1(x),f_2(x)})，则函数f为凸函数</p>
+
+<p>证明：</p>
+
+<p>[\begin{align<em>}f(\theta x+(1-\theta)y)&amp;=max{f_1(\theta x+(1-\theta)y),f_2(\theta_x+(1-\theta)y)}\&amp; \leq max{\theta f_1(x)+(1-\theta)f_1(y),\theta f_2(x)+(1-\theta)f_2(y)}\&amp; \leq \theta max{f_1(x),f_2(x)}+(1-\theta)max{f_1(y),f_2(y)}\&amp;=\theta f(x)+(1-\theta)f(y)\end{align</em>}]</p>
+
+<h2 id="逐点上确界和上境图的关系">逐点上确界和上境图的关系</h2>
+
+<p>逐点上确界和上境图的关系：一系列函数逐点上确界函数对应着这些函数上境图的交集。</p>
+
+<p>直观例子：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6D9Dh837j9.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/g1cL4gdf5d.png?imageslim" alt="mark" /></p>
+
+<p>Oxy平面上随意画N条直线(直线是凸的——虽然直线也是凹的)，在每个 x 处取这些直线的最大的点，则构成的新函数是凸函数；</p>
+
+<p>同时：N条直线逐点求下界，是凹函数；</p>
+
+<p>这个结论在Lagrange对偶函数中会用到。</p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>还是有很多不明白的</strong></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/02-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 Unix标准及实现</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/02-%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87%E4%B8%8E%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%85%AC%E5%BC%8F/">
+            <span class="next-text nav-default">02 条件概率与贝叶斯公式</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

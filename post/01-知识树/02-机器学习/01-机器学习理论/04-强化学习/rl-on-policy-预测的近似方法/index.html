@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>RL on-policy 预测的近似方法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="RL on-policy 预测的近似方法 这一章开始了第二部门 - 近似解决方案 近似方法的重要性 我们先看看传统方法中存在的问题： 不适用复杂的环境。主要原因是状态和行动太" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-on-policy-%E9%A2%84%E6%B5%8B%E7%9A%84%E8%BF%91%E4%BC%BC%E6%96%B9%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="RL on-policy 预测的近似方法" />
+<meta property="og:description" content="RL on-policy 预测的近似方法 这一章开始了第二部门 - 近似解决方案 近似方法的重要性 我们先看看传统方法中存在的问题： 不适用复杂的环境。主要原因是状态和行动太" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-on-policy-%E9%A2%84%E6%B5%8B%E7%9A%84%E8%BF%91%E4%BC%BC%E6%96%B9%E6%B3%95/" /><meta property="article:published_time" content="2018-08-21T18:16:22&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:22&#43;00:00"/>
+<meta itemprop="name" content="RL on-policy 预测的近似方法">
+<meta itemprop="description" content="RL on-policy 预测的近似方法 这一章开始了第二部门 - 近似解决方案 近似方法的重要性 我们先看看传统方法中存在的问题： 不适用复杂的环境。主要原因是状态和行动太">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:22&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:22&#43;00:00" />
+<meta itemprop="wordCount" content="1571">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RL on-policy 预测的近似方法"/>
+<meta name="twitter:description" content="RL on-policy 预测的近似方法 这一章开始了第二部门 - 近似解决方案 近似方法的重要性 我们先看看传统方法中存在的问题： 不适用复杂的环境。主要原因是状态和行动太"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">RL on-policy 预测的近似方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 1571 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#rl-on-policy-预测的近似方法">RL on-policy 预测的近似方法</a>
+<ul>
+<li><a href="#近似方法的重要性">近似方法的重要性</a></li>
+<li><a href="#近似预测方法的目标">近似预测方法的目标</a></li>
+<li><a href="#随机梯度递减方法-stochastic-gradient-descend-method">随机梯度递减方法（Stochastic gradient descend method）</a>
+<ul>
+<li><a href="#随机梯度递减算法">随机梯度递减算法</a></li>
+<li><a href="#蒙特卡洛">蒙特卡洛</a></li>
+</ul></li>
+<li><a href="#半梯度递减方法-semi-gradient-method">半梯度递减方法（Semi-gradient method）</a>
+<ul>
+<li><a href="#半梯度下降-semi-gradient-td-0">半梯度下降(Semi-gradient TD(0))</a></li>
+<li><a href="#n-steps-td">n-steps TD</a></li>
+</ul></li>
+<li><a href="#特征选择">特征选择</a></li>
+<li><a href="#线性方程的定义">线性方程的定义</a>
+<ul>
+<li><a href="#多项式基-polynomials-basis">多项式基(polynomials basis)</a></li>
+<li><a href="#傅里叶基-fourier-basis">傅里叶基(Fourier basis)</a></li>
+<li><a href="#径向基-radial-basis">径向基(Radial Basis)</a></li>
+</ul></li>
+<li><a href="#最小二乘法td-least-squares-td">最小二乘法TD(Least-Squares TD)</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="rl-on-policy-预测的近似方法">RL on-policy 预测的近似方法</h1>
+
+<p>这一章开始了第二部门 - <strong>近似解决方案</strong></p>
+
+<h2 id="近似方法的重要性">近似方法的重要性</h2>
+
+<p>我们先看看传统方法中存在的问题：</p>
+
+<ul>
+<li>不适用复杂的环境。主要原因是状态和行动太多，策略需要大量空间来记忆策略价值。</li>
+<li>环境可能是不稳定的，过去的经验不能适用于未来的情况。需要一个通用性的方法来更新策略价值。</li>
+<li>策略价值是一个数值，缺乏通用性。期望有一个通用的方法来计算策略价值。</li>
+</ul>
+
+<p>所以对近似预测方法的理解是，找到一个通用的方法 $\hat{v}(s, \theta)$。
+<strong>数学表示</strong>
+[
+\hat{v}(s, \theta) \approx v_{\pi}(s) <br />
+where <br />
+\theta \text{ - a weight vector} <br />
+\theta \doteq (\theta_1, \theta_2, &hellip;, \theta_n)^T
+]</p>
+
+<p><strong>解释</strong>
+近似预测方法是指求策略的状态价值的近似值。
+求策略的行动状态价值的近似值叫做近似控制方法(Control Methods)(下一章的内容)。</p>
+
+<h2 id="近似预测方法的目标">近似预测方法的目标</h2>
+
+<p>首先，我们需要找到一个判断近似预测方法质量的计算公式。</p>
+
+<p><strong>价值均方误差（Mean Squared Value Error）</strong>
+[
+MSVE(\theta) = \sum<em>{s \in \mathcal{S} } d(s) [v</em>{\pi} - \hat{v}(s, \theta)]^2 <br />
+where <br />
+d(s) \text{ - on-policy distribution, the fraction of time spent in s under the target policy } \pi <br />
+]</p>
+
+<ul>
+<li><p>在情节性任务中
+[
+\eta(s) = h(s) + \sum<em>{\bar{s} } \eta(\bar{s}) \sum</em>{a} \pi(a|\bar{s})p(s|\bar{s}, a), \ \forall s \in \mathcal{S} <br />
+d(s) = \frac{\eta(s)}{\sum_{s&rsquo;} \eta(s&rsquo;)} <br />
+where <br />
+\eta(s) \text{ - the number of time steps spent in state s in a single episode} <br />
+h(s) \text{ - time spent in a state s if episodes start in it}
+]</p></li>
+
+<li><p>在连续性任务中
+[
+d(s) = \text{ the stationary distribution under } \pi <br />
+]</p></li>
+</ul>
+
+<p><strong>解释：</strong>
+(\eta(s) = h(s) + \sum<em>{\bar{s} } \eta(\bar{s}) \sum</em>{a} \pi(a|\bar{s})p(s|\bar{s}, a), \ \forall s \in \mathcal{S})
+状态s的发生时间（次数） = 在情节中状态s发生在开始的时间（次数） + 状态s发生在其它的时间（次数）</p>
+
+<h2 id="随机梯度递减方法-stochastic-gradient-descend-method">随机梯度递减方法（Stochastic gradient descend method）</h2>
+
+<p>那么如何求(\theta)呢？一个常见的方法是通过梯度递减的方法，迭代的求解(\theta)。</p>
+
+<h3 id="随机梯度递减算法">随机梯度递减算法</h3>
+
+<p><strong>Stochastic gradient descend</strong>
+[
+\begin{align}
+\theta<em>{t+1}
+&amp; \doteq \theta</em>{t} - \frac{1}{2} \alpha \nabla [v_{\pi}(S_t) - \hat{v}(S_t, \theta<em>t)]^2 <br />
+&amp; = \theta</em>{t} + \alpha [v_{\pi}(S_t) - \hat{v}(S_t, \theta_t)] \nabla \hat{v}(S_t, \theta_t) <br />
+\end{align} <br />
+where <br />
+\nabla f(\theta) \doteq \left ( \frac{\partial f(\theta)}{\partial \theta_1}, \frac{\partial f(\theta)}{\partial \theta_2}, \cdots, \frac{\partial f(\theta)}{\partial \theta_n} \right )^T <br />
+\alpha \text{ - the step size, learning rate}
+]</p>
+
+<p><strong>解释</strong>
+这个方法可以在多次迭代后，让(\theta)最优。
+(v_{\pi}(S_t))是实际值。
+(\hat{v}(S_t, \theta_t))是当前计算值。
+随机梯度递减方法通过误差（实际值 - 当前计算值）接近最优值的方法。
+比较麻烦的是：如何求(\nabla \hat{v}(S_t, \theta<em>t))。
+传统的方法是求(v</em>{\pi}(s), q_{\pi}(s, a))，在近似方法中变成了求(\theta, \hat{v}(s, \theta), \hat{q}(s, a,\theta))。</p>
+
+<h3 id="蒙特卡洛">蒙特卡洛</h3>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>Input: the policy \(\pi\) to be evaluated
+Input: a differentiable function \(\hat{v} : \mathcal{S} \times \mathbb{R^n} \to \mathbb{R}\)
+
+Initialize value-function weights \(\theta\) arbitrarily (e.g. \(\theta = 0\))
+Repeat (for each episode):
+Generate an episode \(S_0, A_0, R_1 ,S_1 ,A_1, \cdots ,R_t ,S_t\) using \(\pi\)
+For \(t = 0, 1, \cdots, T - 1\)
+\(\theta \gets \theta + \alpha [G_t -\hat{v}(S_t, \theta)] \nabla \hat{v}(S_t, \theta)\)</blockquote>
+
+<h2 id="半梯度递减方法-semi-gradient-method">半梯度递减方法（Semi-gradient method）</h2>
+
+<p>之所以叫<strong>半梯度递减</strong>的原因是TD(0)和n-steps TD计算价值的公式不是精确的（而蒙特卡罗方法是精确的）。</p>
+
+<h3 id="半梯度下降-semi-gradient-td-0">半梯度下降(Semi-gradient TD(0))</h3>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>Input: the policy \(\pi\) to be evaluated
+Input: a differentiable function \(\hat{v} : S^+ \times \mathbb{R^n} \to \mathbb{R}\) such that \(\hat{v}(terminal, \dot \ ) = 0\)
+
+Initialize value-function weights \(\theta\) arbitrarily (e.g. \(\theta = 0\))
+Repeat (for each episode):
+Initialize \(\mathcal{S}\)
+Repeat (for each step of episode):
+Choose $A \sim \pi(\dot |S) $
+Take action \(A\), observe \(R, S'\)
+\(\theta \gets \theta + \alpha [R + \gamma \hat{v}(S', \theta) -\hat{v}(S', \theta)] \nabla \hat{v}(S, \theta)\)
+\(S \gets S'\)
+Until \(S'\) is terminal</blockquote>
+
+<h3 id="n-steps-td">n-steps TD</h3>
+
+<p>请看原书，不做拗述。</p>
+
+<h2 id="特征选择">特征选择</h2>
+
+<h2 id="线性方程的定义">线性方程的定义</h2>
+
+<p>[
+\phi(s) \doteq (\phi_1(s), \phi_2(s), \dots, \phi<em>n(s))^T <br />
+\hat{v} \doteq \theta^T \phi(s) \doteq \sum</em>{i=1}^n \theta_i \phi_i(s)
+]
+(\phi(s)) 为<strong>特征函数</strong>。
+这里讨论特征函数的通用化定义方法。</p>
+
+<h3 id="多项式基-polynomials-basis">多项式基(polynomials basis)</h3>
+
+<p>(s)的每一个维度都可以看成一个特征。多项式基的方法是使用(s)的高维多项式作为新的特征。
+比如：二维的(s = (s_1, s_2))，可以选择多项式为((1, s_1, s_2, s_1s_2))或者((1, s_1, s_2, s_1s_2, s_1^2, s_2^2, s_1s_2^2, s_1^2s_2, s_1^2s_2^2))</p>
+
+<p><strong>多项式基方法的通用数学表达：</strong>
+[
+\phi<em>i(s) = \prod</em>{j=1}^d s<em>j^{C</em>{i,j} } <br />
+where <br />
+s = (s_1,s_2,\cdots,s_d)^T <br />
+\phi_i(s) \text{ - polynomials basis function}
+]</p>
+
+<h3 id="傅里叶基-fourier-basis">傅里叶基(Fourier basis)</h3>
+
+<p><strong>傅里叶基方法的通用数学表达：</strong>
+[
+\phi_i(s) = \cos(\pi c^i \dot s), \ s \in [0,1)] <br />
+where <br />
+c^i = (x_1^i, c_2^i, \cdots, c_d^i)^T, \ with \ c_j^i \in {0, \cdots, N} \ for \ j = 1, \cdots, d \ and \ i = 0, \cdots, (N + 1)^d
+]</p>
+
+<h3 id="径向基-radial-basis">径向基(Radial Basis)</h3>
+
+<p><strong>径向基方法的通用数学表达：</strong>
+[
+\phi_i(s) \doteq exp \left ( - \frac{\lVert s-c_i \rVert ^2 }{2 \sigma_i^2} \right )
+]</p>
+
+<h2 id="最小二乘法td-least-squares-td">最小二乘法TD(Least-Squares TD)</h2>
+
+<blockquote>Input: feature representation \(\phi(s) \in \mathbb{R}^n, \forall s \in \mathcal{S}, \phi(terminal) \doteq 0\)
+
+$\hat{A^{-1} } \gets \epsilon^{-1} I \qquad \text{An } n \times n matrix $
+\(\hat{b} \gets 0\)
+Repeat (for each episode):
+Initialize S; obtain corresponding \(\phi\)
+Repeat (for each step of episode):
+Choose \(A \sim \pi(\dot \ | S)\)
+Take action \(A\), observer \(R, S'\); obtain corresponding \(\phi'\)
+\(v \gets \hat{A^{-1} }^T (\phi - \gamma \phi')\)
+\(\hat{A^{-1} } \gets \hat{A^{-1} } - (\hat{A^{-1} }\phi) v^T / (1+v^T\phi)\)
+\(\hat{b} \gets \hat{b} + R \phi\)
+\(\theta \gets \hat{A^{-1} } \hat{b}\)
+\(S \gets S'; \phi \gets \phi'\)
+until S' is terminal</blockquote>
+
+<h1 id="ref">REF</h1>
+
+<p>1.# <a href="http://www.cnblogs.com/steven-yang/p/6535418.html">强化学习读书笔记 - 09 - on-policy预测的近似方法</a></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/03-%E9%9D%9E%E6%A0%B8%E5%BF%83/markdown-%E7%9A%84%E4%BD%BF%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Markdown 的使用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%A4%9A%E8%87%82%E8%80%81%E8%99%8E%E6%9C%BA%E9%97%AE%E9%A2%98/">
+            <span class="next-text nav-default">RL 多臂老虎机问题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>矩阵和向量相乘 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="矩阵和向量相乘 REF 《深度学习》 矩阵的乘积 矩阵乘法是矩阵运算中最重要的操作之一。两个矩阵 A 和 B 的 矩阵乘积（matrix product）是第三个矩" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E7%9F%A9%E9%98%B5%E5%92%8C%E5%90%91%E9%87%8F%E7%9B%B8%E4%B9%98/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="矩阵和向量相乘" />
+<meta property="og:description" content="矩阵和向量相乘 REF 《深度学习》 矩阵的乘积 矩阵乘法是矩阵运算中最重要的操作之一。两个矩阵 A 和 B 的 矩阵乘积（matrix product）是第三个矩" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/%E7%9F%A9%E9%98%B5%E5%92%8C%E5%90%91%E9%87%8F%E7%9B%B8%E4%B9%98/" /><meta property="article:published_time" content="2018-08-01T18:36:41&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T18:36:41&#43;00:00"/>
+<meta itemprop="name" content="矩阵和向量相乘">
+<meta itemprop="description" content="矩阵和向量相乘 REF 《深度学习》 矩阵的乘积 矩阵乘法是矩阵运算中最重要的操作之一。两个矩阵 A 和 B 的 矩阵乘积（matrix product）是第三个矩">
+
+
+<meta itemprop="datePublished" content="2018-08-01T18:36:41&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T18:36:41&#43;00:00" />
+<meta itemprop="wordCount" content="983">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="矩阵和向量相乘"/>
+<meta name="twitter:description" content="矩阵和向量相乘 REF 《深度学习》 矩阵的乘积 矩阵乘法是矩阵运算中最重要的操作之一。两个矩阵 A 和 B 的 矩阵乘积（matrix product）是第三个矩"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">矩阵和向量相乘</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 983 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#矩阵和向量相乘">矩阵和向量相乘</a></li>
+<li><a href="#ref">REF</a></li>
+<li><a href="#矩阵的乘积">矩阵的乘积</a></li>
+<li><a href="#向量的乘积">向量的乘积</a></li>
+<li><a href="#矩阵乘积的一些性质">矩阵乘积的一些性质</a></li>
+<li><a href="#表达一个线性方程组">表达一个线性方程组</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="矩阵和向量相乘">矩阵和向量相乘</h1>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《深度学习》</li>
+</ol>
+
+<h1 id="矩阵的乘积">矩阵的乘积</h1>
+
+<p>矩阵乘法是矩阵运算中最重要的操作之一。两个矩阵 A 和 B 的 矩阵乘积（matrix product）是第三个矩阵 C。为了使乘法定义良好，矩阵 A 的列数必须和矩阵 B 的行数相等。如果矩阵 A 的形状是 m×n，矩阵 B 的形状是 n×p，那么矩阵 C 的形状是 m×p。</p>
+
+<p>我们可以通过将两个或多个矩阵并列放置以书写矩阵乘法：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ejCJ6IG3eE.png?imageslim" alt="mark" /></p>
+
+<p>具体地，该乘法操作定义为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3a09DJiKDF.png?imageslim" alt="mark" /></p>
+
+<p>注意：两个矩阵的标准乘积不是指两个矩阵中对应元素的乘积。但是，矩阵中对应元素的乘积这种矩阵操作确实是存在的，它被称为 元素对应乘积（element-wise product）或者 Hadamard 乘积（Hadamard product），记为 (\mathbf{A}\odot \mathbf{B})。  <strong>这个就是卷积把？再确认下。</strong></p>
+
+<h1 id="向量的乘积">向量的乘积</h1>
+
+<p>两个相同维数的向量 (\mathbf{x}) 和 (\mathbf{y}) 的 点积（dot product）可看作是矩阵乘积 (\mathbf{x}^T\mathbf{y}) 。我们可以把矩阵乘积(\mathbf{C}=\mathbf{A}\mathbf{B}) 中计算(C_{i,j}) 的步骤看作是 (\mathbf{A}) 的第 i 行和 (\mathbf{B}) 的第 j 列之间的点积。<strong>嗯，怪不得乘积有叫做点积。</strong></p>
+
+<h1 id="矩阵乘积的一些性质">矩阵乘积的一些性质</h1>
+
+<p>矩阵乘积运算有许多有用的性质，从而使矩阵的数学分析更加方便。比如，矩阵乘积服从分配律：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/JfcLAHj33e.png?imageslim" alt="mark" /></p>
+
+<p>矩阵乘积也服从结合律：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1iK2HlKHij.png?imageslim" alt="mark" /></p>
+
+<p>不同于标量乘积，矩阵乘积并不满足交换律（AB = BA 的情况并非总是满足）。然而，两个向量的 点积（dot product）满足交换律：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/K4AECkgljI.png?imageslim" alt="mark" /></p>
+
+<p>矩阵乘积的转置有着简单的形式：<strong>这个矩阵乘积的转置一直不是很理解，为什么结果是这样的？要仔细了解下。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/h84a2Jhiba.png?imageslim" alt="mark" /></p>
+
+<p>利用两个向量点积的结果是标量，标量转置是自身的事实，我们可以得到向量的点积满足交换律的原因：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HjBIhf02I6.png?imageslim" alt="mark" /></p>
+
+<p>矩阵乘积还有很多有用的性质，这里不一一提及。<strong>后续学习的时候另外总结一下。</strong></p>
+
+<h1 id="表达一个线性方程组">表达一个线性方程组</h1>
+
+<p>现在我们已经知道了足够多的线性代数符号，可以表达下列线性方程组：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/JbIiL49Gf3.png?imageslim" alt="mark" /></p>
+
+<p>其中 (\mathbf{A}\in \mathbb{R}^{m\times n}) 是一个已知矩阵， (\mathbf{b}\in \mathbb{R}^{m}) 是一个已知向量， (\mathbf{x}\in \mathbb{R}^{n})是一个我们要求解的未知向量。向量 (\mathbf{x})的每一个元素(x_i) 都是未知的。矩阵 (\mathbf{A})  的每一行和 (\mathbf{b}) 中对应的元素构成一个约束。我们可以把上面的式子重写为：<strong>这个还是要好好理解下的，尤其是每个矩阵和向量是多少行，多少列的。从这个式子可以看出，向量的确默认指的是列向量的形式。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/G1Ej8j786B.png?imageslim" alt="mark" /></p>
+
+<p>或者，更明确地，写作</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hJJL2IiF1J.png?imageslim" alt="mark" /></p>
+
+<p>矩阵向量乘积符号为这种形式的方程提供了更紧凑的表示。<strong>是的，这三种写法，还是要感受一下的。很好啊，很清晰。</strong></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/docker/docker-%E5%AE%89%E8%A3%85/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Docker 安装</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/02-%E4%B8%AA%E4%BA%BA%E8%BF%AD%E4%BB%A3/02-%E4%B8%AA%E4%BA%BA/01-%E6%80%9D%E6%83%B3%E8%AE%A4%E8%AF%86/02-%E5%AF%B9%E4%BA%BA%E7%94%9F%E7%9A%84%E8%AE%A4%E8%AF%86/%E7%8E%8B%E9%81%93%E6%97%A0%E8%BF%91%E5%8A%9F/">
+            <span class="next-text nav-default">王道无近功</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

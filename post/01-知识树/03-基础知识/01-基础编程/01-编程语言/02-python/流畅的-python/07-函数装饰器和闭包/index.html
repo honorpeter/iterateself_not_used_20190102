@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>07 函数装饰器和闭包 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第 7 章 函数装饰器和闭包 有很多人抱怨，把这个特性命名为“装饰器”不好。主要原因是，这个名称与 GoF 书 1 使用的不一致。装饰器这个名称可能更适合在编译" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/07-%E5%87%BD%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E5%92%8C%E9%97%AD%E5%8C%85/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="07 函数装饰器和闭包" />
+<meta property="og:description" content="第 7 章 函数装饰器和闭包 有很多人抱怨，把这个特性命名为“装饰器”不好。主要原因是，这个名称与 GoF 书 1 使用的不一致。装饰器这个名称可能更适合在编译" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/07-%E5%87%BD%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E5%92%8C%E9%97%AD%E5%8C%85/" /><meta property="article:published_time" content="2018-06-26T21:32:36&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:32:36&#43;00:00"/>
+<meta itemprop="name" content="07 函数装饰器和闭包">
+<meta itemprop="description" content="第 7 章 函数装饰器和闭包 有很多人抱怨，把这个特性命名为“装饰器”不好。主要原因是，这个名称与 GoF 书 1 使用的不一致。装饰器这个名称可能更适合在编译">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:32:36&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:32:36&#43;00:00" />
+<meta itemprop="wordCount" content="14853">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="07 函数装饰器和闭包"/>
+<meta name="twitter:description" content="第 7 章 函数装饰器和闭包 有很多人抱怨，把这个特性命名为“装饰器”不好。主要原因是，这个名称与 GoF 书 1 使用的不一致。装饰器这个名称可能更适合在编译"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">07 函数装饰器和闭包</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 14853 words </span>
+        <span class="more-meta"> 30 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#第-7-章-函数装饰器和闭包">第 7 章 函数装饰器和闭包</a>
+<ul>
+<li><a href="#7-1-装饰器基础知识">7.1 装饰器基础知识</a>
+<ul>
+<li><a href="#上述代码的效果与下述写法一样">上述代码的效果与下述写法一样：</a></li>
+</ul></li>
+<li><a href="#7-2-python何时执行装饰器">7.2 Python何时执行装饰器</a>
+<ul>
+<li><a href="#装饰器的一个关键特性是-它们在被装饰的函数定义之后立即运行-这通常是在导入时">装饰器的一个关键特性是，它们在被装饰的函数定义之后立即运行。这通常是在导入时</a></li>
+<li><a href="#❶-registry-保存被-register-装饰的函数引用">❶ registry 保存被 @register 装饰的函数引用。</a></li>
+<li><a href="#❸-为了演示-显示被装饰的函数">❸ 为了演示，显示被装饰的函数。</a></li>
+<li><a href="#❽-main-显示-registry-然后调用-f1-f2-和-f3">❽ main 显示 registry，然后调用 f1()、f2()和 f3()。</a></li>
+</ul></li>
+<li><a href="#7-3-使用装饰器改进-策略-模式">7.3    使用装饰器改进“策略”模式</a>
+<ul>
+<li><a href="#❶-promos-列表起初是空的">❶ promos 列表起初是空的。</a></li>
+</ul></li>
+<li><a href="#7-4-变量作用域规则">7.4 变量作用域规则</a>
+<ul>
+<li><a href="#出现错误并不奇怪-3在示例7-4中-如果先给全局变量b赋值-然后再调用f-那就不-会出错">出现错误并不奇怪。3在示例7-4中，如果先给全局变量b赋值，然后再调用f，那就不 会出错：</a></li>
+<li><a href="#下面看一个可能会让你吃惊的示例">下面看一个可能会让你吃惊的示例。</a></li>
+<li><a href="#❶-加载全局名称-print">❶ 加载全局名称 print。</a></li>
+<li><a href="#o加载本地名称b-这表明-编译器把b视作局部变量-即使在后面才为b赋值-因为变量的种类-是不是局部变量-不能改变函数的定义体">O加载本地名称b。这表明，编译器把b视作局部变量，即使在后面才为b赋值， 因为变量的种类（是不是局部变量）不能改变函数的定义体。</a></li>
+</ul></li>
+<li><a href="#7-5-闭包">7.5 闭包</a></li>
+<li><a href="#7-7-实现一个简单的装饰器">7.7 实现一个简单的装饰器</a>
+<ul>
+<li><a href="#❶定义内部函数clocked-它接受任意个定位参数">❶定义内部函数clocked,它接受任意个定位参数。</a></li>
+<li><a href="#运行示例-7-16-得到的输出如下">运行示例 7-16 得到的输出如下：</a></li>
+<li><a href="#记得吗-如下代码">记得吗，如下代码</a></li>
+<li><a href="#其实等价于">其实等价于：</a></li>
+<li><a href="#所以-现在-factorial-保存的是-clocked-函数的引用-自此之后-每次调用-factorial-n-执行的都是clocked-n-clocked大致做了下面几件事">所以，现在 factorial 保存的是 clocked 函数的引用。自此之后，每次调用 factorial(n)，执行的都是clocked(n)。clocked大致做了下面几件事。</a></li>
+<li><a href="#5-返回第-2-步保存的结果">(5) 返回第 2 步保存的结果。</a></li>
+<li><a href="#这是装饰器的典型行为-把被装饰的函数替换成新函数-二者接受相同的参数-而且-通">这是装饰器的典型行为：把被装饰的函数替换成新函数，二者接受相同的参数，而且(通</a></li>
+<li><a href="#gamma等人写的-设计模式-可复用面向对象软件的基础-一书是这样概">Gamma等人写的《设计模式：可复用面向对象软件的基础》一书是这样概</a></li>
+<li><a href="#functools-wraps-只是标准库中拿来即用的装饰器之一-下一节将介绍-functools-模块-中最让人印象深刻的两个装饰器-lru-cache-和-singledispatch">functools.wraps 只是标准库中拿来即用的装饰器之一。下一节将介绍 functools 模块 中最让人印象深刻的两个装饰器： lru_cache 和 singledispatch。</a></li>
+</ul></li>
+<li><a href="#7-8-标准库中的装饰器">7.8 标准库中的装饰器</a>
+<ul>
+<li><a href="#浪费时间的地方很明显-fibonacci-l-调用了-8次-fibonacci-2-调用了-5次-但">浪费时间的地方很明显：fibonacci(l)调用了 8次，fibonacci(2)调用了 5次&hellip;&hellip;但</a></li>
+<li><a href="#❶注意-必须像常规函数那样调用lru-cache-这一行中有一对括">❶注意，必须像常规函数那样调用lru_cache。这一行中有一对括</a></li>
+<li><a href="#这样一来-执行时间减半了-而且-n-的每个值只调用一次函数">这样一来，执行时间减半了，而且 n 的每个值只调用一次函数：</a></li>
+</ul></li>
+<li><a href="#7-9-叠放装饰器">7.9 叠放装饰器</a></li>
+<li><a href="#7-10-参数化装饰器">7.10 参数化装饰器</a>
+<ul>
+<li><a href="#解析源码中的装饰器时-python把被装饰的函数作为第一个参数传给装饰器函数-那怎么">解析源码中的装饰器时，Python把被装饰的函数作为第一个参数传给装饰器函数。那怎么</a></li>
+<li><a href="#❷register-表达式返回decorate-然后把它应用到f3上">❷register()表达式返回decorate，然后把它应用到f3上。</a></li>
+<li><a href="#参数化装饰器的原理相当复杂-我们刚刚讨论的那个比大多数都简单-参数化装饰器通常">参数化装饰器的原理相当复杂，我们刚刚讨论的那个比大多数都简单。参数化装饰器通常</a></li>
+<li><a href="#为了简单起见-示例7-25基于示例7-15中最初实现的clock-而不是示例7-17-中使用-functools-wraps-改进后的版本-因为那一版增加了一层函数">为了简单起见，示例7-25基于示例7-15中最初实现的clock，而不是示例7-17 中使用 @functools.wraps 改进后的版本，因为那一版增加了一层函数。</a></li>
+<li><a href="#示例-7-25-clockdeco-param-py-模块-参数化-clock-装饰器">示例 7-25 clockdeco_param.py 模块：参数化 clock 装饰器</a></li>
+<li><a href="#示例-7-26-的输出">示例 7-26 的输出：</a></li>
+<li><a href="#示例-7-27-clockdeco-param-demo2-py">示例 7-27 clockdeco_param_demo2.py</a></li>
+<li><a href="#示例-7-27-的输出">示例 7-27 的输出：</a></li>
+<li><a href="#受本书篇幅限制-我们对装饰器的探讨到此结束-延伸阅读中的资料讨论了构建工业级装">受本书篇幅限制，我们对装饰器的探讨到此结束。延伸阅读中的资料讨论了构建工业级装</a></li>
+<li><a href="#graham-dumpleton和lennart-regebro-本书的技术审校之一-认为-装饰器最">Graham Dumpleton和Lennart Regebro （本书的技术审校之一）认为，装饰器最</a></li>
+</ul></li>
+<li><a href="#7-11-本章小结">7.11 本章小结</a></li>
+<li><a href="#7-12-延伸阅读">7.12 延伸阅读</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="第-7-章-函数装饰器和闭包">第 7 章 函数装饰器和闭包</h2>
+
+<p>有很多人抱怨，把这个特性命名为“装饰器”不好。主要原因是，这个名称与 GoF 书 1</p>
+
+<p>使用的不一致。装饰器这个名称可能更适合在编译器领域使用，因为它会遍历并注</p>
+
+<p>解句法树。</p>
+
+<p>——“PEP 318 — Decorators for Functions and Methods”</p>
+
+<p>1指1995年出版的英文原版《设计模式：可复用面向对象软件的基础》，作者是四个人，人们称之为“四人组”(Gng of Four)。</p>
+
+<p>函数装饰器用于在源码中“标记”函数，以某种方式增强函数的行为。这是一项强大的功</p>
+
+<p>能，但是若想掌握，必须理解闭包。</p>
+
+<p>nonlocal 是新近出现的保留关键字，在 Python 3.0 中引入。作为 Python 程序员，如果严</p>
+
+<p>格遵守基于类的面向对象编程方式，即便不知道这个关键字也不会受到影响。然而，如果</p>
+
+<p>你想自己实现函数装饰器，那就必须了解闭包的方方面面，因此也就需要知道</p>
+
+<p>nonlocal。</p>
+
+<p>除了在装饰器中有用处之外，闭包还是回调式异步编程和函数式编程风格的基础。</p>
+
+<p>本章的最终目标是解释清楚函数装饰器的工作原理，包括最简单的注册装饰器和较复杂的</p>
+
+<p>参数化装饰器。但是，在实现这一目标之前，我们要讨论下述话题：</p>
+
+<p>•    Python如何计算装饰器句法</p>
+
+<p>•    Python如何判断变量是不是局部的 •闭包存在的原因和工作原理</p>
+
+<p>•    nonlocal能解决什么问题</p>
+
+<p>掌握这些基础知识后，我们可以进一步探讨装饰器：</p>
+
+<p>•实现行为良好的装饰器 •标准库中有用的装饰器 •实现一个参数化装饰器</p>
+
+<p>下面将首先介绍装饰器的基础知识，然后再讨论上面列出的各个话题。</p>
+
+<h3 id="7-1-装饰器基础知识">7.1 装饰器基础知识</h3>
+
+<p>装饰器是可调用的对象，其参数是另一个函数(被装饰的函数)。 2 装饰器可能会处理被</p>
+
+<p>装饰的函数，然后把它返回，或者将其替换成另一个函数或可调用对象。</p>
+
+<p>2Python也支持类装饰器，参见第21章。</p>
+
+<p>假如有个名为 decorate 的装饰器：</p>
+
+<p>@decorate</p>
+
+<p>def target():</p>
+
+<p>print(&lsquo;running target()&rsquo;)</p>
+
+<h4 id="上述代码的效果与下述写法一样">上述代码的效果与下述写法一样：</h4>
+
+<p>def target():</p>
+
+<p>print(&lsquo;running target()&rsquo;) target = decorate(target)</p>
+
+<p>两种写法的最终结果一样：上述两个代码片段执行完毕后得到的 target 不一定是原来那 个 target 函数，而是 decorate(target) 返回的函数。 为了确认被装饰的函数会被替换，请看示例 7-1 中的控制台会话。</p>
+
+<p>示例 7-1 装饰器通常把函数替换成另一个函数</p>
+
+<p>&gt;&gt;&gt; def deco(func):</p>
+
+<p>&hellip;    def inner():</p>
+
+<p>&hellip;    print(&lsquo;running inner()&rsquo;)</p>
+
+<p>&hellip;    return inner O</p>
+
+<p>&gt;&gt;&gt; @deco</p>
+
+<p>&hellip;def target(): ©</p>
+
+<p>&hellip; print(&lsquo;running target()&rsquo;)</p>
+
+<p>&gt;&gt;&gt; target()    ©</p>
+
+<p>running inner()</p>
+
+<p>&gt;&gt;&gt; target ©</p>
+
+<p><function deco.<locals>.inner at 0x10063b598&gt;</p>
+
+<p>❶ deco 返回 inner 函数对象。</p>
+
+<p>❷ 使用 deco 装饰 target。</p>
+
+<p>❸ 调用被装饰的 target 其实会运行 inner。</p>
+
+<p>❹ 审查对象，发现 target 现在是 inner 的引用。</p>
+
+<p>严格来说，装饰器只是语法糖。如前所示，装饰器可以像常规的可调用对象那样调用，其</p>
+
+<p>参数是另一个函数。有时，这样做更方便，尤其是做元编程（在运行时改变程序的行</p>
+
+<p>为）时。</p>
+
+<p>综上，装饰器的一大特性是，能把被装饰的函数替换成其他函数。第二个特性是，装饰器</p>
+
+<p>在加载模块时立即执行。下一节会说明。</p>
+
+<h3 id="7-2-python何时执行装饰器">7.2 Python何时执行装饰器</h3>
+
+<h4 id="装饰器的一个关键特性是-它们在被装饰的函数定义之后立即运行-这通常是在导入时">装饰器的一个关键特性是，它们在被装饰的函数定义之后立即运行。这通常是在导入时</h4>
+
+<p>(即 Python 加载模块时)，如示例 7-2 中的 registration.py 模块所示。</p>
+
+<p>示例 7-2 registration.py 模块</p>
+
+<p>registry =[] O</p>
+
+<p>def register(func): &amp;</p>
+
+<p>print(&lsquo;running register(%s)&rsquo; % func) © registry.append(func) &amp;</p>
+
+<p>return func ❺</p>
+
+<p>@register © def f1():</p>
+
+<p>print(&lsquo;running f1()&rsquo;)</p>
+
+<p>@register def f2():</p>
+
+<p>print(&lsquo;running f2()&rsquo;)</p>
+
+<p>def f3():    &amp;</p>
+
+<p>print(&lsquo;running f3()&rsquo;)</p>
+
+<p>def main(): ©</p>
+
+<p>print(&lsquo;running main()&rsquo;) print(&lsquo;registry -&gt;&rsquo;, registry) f1()</p>
+
+<p>f2()</p>
+
+<p>f3()</p>
+
+<p>if <strong>name</strong>==&rsquo;<strong>main</strong>&lsquo;: main() 0</p>
+
+<h4 id="❶-registry-保存被-register-装饰的函数引用">❶ registry 保存被 @register 装饰的函数引用。</h4>
+
+<p>❷ register 的参数是一个函数。</p>
+
+<h4 id="❸-为了演示-显示被装饰的函数">❸ 为了演示，显示被装饰的函数。</h4>
+
+<p>❹ 把 func 存入 registry。</p>
+
+<p>❺返回func：必须返回函数；这里返回的函数与通过参数传入的一样。 ❻ f1 和 f2 被 @register 装饰。</p>
+
+<p>❼ f3 没有装饰。</p>
+
+<h4 id="❽-main-显示-registry-然后调用-f1-f2-和-f3">❽ main 显示 registry，然后调用 f1()、f2()和 f3()。</h4>
+
+<p>❾ 只有把 registration.py 当作脚本运行时才调用 main（）。 把 registration.py 当作脚本运行得到的输出如下：</p>
+
+<p>$ python3 registration.py running register(<function f1 at 0x100631bf8>) running register(<function f2 at 0x100631c80>) running main()</p>
+
+<p>registry -&gt; [<function f1 at 0x100631bf8>, <function f2 at 0x100631c80>] running f1() running f2() running f3()</p>
+
+<p>注意， register 在模块中其他函数之前运行（两次）。调用 register 时，传给它的参 数是被装饰的函数，例如 <function f1 at 0x100631bf8>。</p>
+
+<p>加载模块后，registry中有两个被装饰函数的引用：f1和f2。这两个函数，以及f3，</p>
+
+<p>只在 main 明确调用它们时才执行。</p>
+
+<p>如果导入 registration.py 模块（不作为脚本运行），输出如下：</p>
+
+<p>&gt;&gt;&gt; import registration</p>
+
+<p>running register(<function f1 at 0x10063b1e0>)</p>
+
+<p>running register(<function f2 at 0x10063b268>)</p>
+
+<p>此时查看 registry 的值，得到的输出如下：</p>
+
+<p>&gt;&gt;&gt; registration.registry</p>
+
+<p>[<function f1 at 0x10063b1e0>, <function f2 at 0x10063b268>]</p>
+
+<p>示例 7-2 主要想强调，函数装饰器在导入模块时立即执行，而被装饰的函数只在明确调用 时运行。这突出了 Python 程序员所说的导入时和运行时之间的区别。 考虑到装饰器在真实代码中的常用方式，示例 7-2 有两个不寻常的地方。</p>
+
+<p>-装饰器函数与被装饰的函数在同一个模块中定义。实际情况是，装饰器通常在一个模 块中定义，然后应用到其他模块中的函数上。</p>
+
+<p>• register装饰器返回的函数与通过参数传入的相同。实际上，大多数装饰器会在内 部定义一个函数，然后将其返回。</p>
+
+<p>虽然示例 7-2 中的 register 装饰器原封不动地返回被装饰的函数，但是这种技术并非没 有用处。很多 Python Web 框架使用这样的装饰器把函数添加到某种中央注册处，例如把 URL 模式映射到生成 HTTP 向应的函数上的注册处。这种注册装饰器可能会也可能不会修 改被装饰的函数。下一节会举例说明。</p>
+
+<h3 id="7-3-使用装饰器改进-策略-模式">7.3    使用装饰器改进“策略”模式</h3>
+
+<p>使用注册装饰器可以改进 6.1 节中的电商促销折扣示例。</p>
+
+<p>回顾一下，示例 6-6 的主要问题是，定义体中有函数的名称，但是 best_promo 用来判断 哪个折扣幅度最大的 promos 列表中也有函数名称。这种重复是个问题，因为新增策略函 数后可能会忘记把它添加到 promos 列表中，导致 best_promo 忽略新策略，而且不报 错，为系统引入了不易察觉的缺陷。示例 7-3 使用注册装饰器解决了这个问题。</p>
+
+<p>示例 7-3 promos 列表中的值使用 promotion 装饰器填充</p>
+
+<p>promos = [] O</p>
+
+<p>def promotion(promo_func): © promos.append(promo_func) return promo_func</p>
+
+<p>@promotion © def fidelity(order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;为积分为1000或以上的顾客提供5%折扣&rdquo;&ldquo;&rdquo;</p>
+
+<p>return order.total() * .05 if order.customer.fidelity &gt;= 1000 else 0</p>
+
+<p>@promotion</p>
+
+<p>def bulk_item(order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;单个商品为20个或以上时提供10%折扣&rdquo;&ldquo;&rdquo;</p>
+
+<p>discount = 0</p>
+
+<p>for item in order.cart:</p>
+
+<p>if item.quantity &gt;= 20:</p>
+
+<p>discount += item.total() * .1 return discount @promotion</p>
+
+<p>def large_order(order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;订单中的不同商品达到10个或以上时提供7%折扣&rdquo;&ldquo;&rdquo;</p>
+
+<p>distinct_items = {item.product for item in order.cart} if len(distinct_items) &gt;= 10:</p>
+
+<p>return order.total() * .07 return 0</p>
+
+<p>def best_promo(order): ©</p>
+
+<p>&rdquo;&ldquo;&ldquo;选择可用的最佳折扣</p>
+
+<p>return max(promo(order) for promo in promos)</p>
+
+<h4 id="❶-promos-列表起初是空的">❶ promos 列表起初是空的。</h4>
+
+<p>❷ promotion 把 promo_func 添加到 promos 列表中，然后原封不动地将其返回。 ❸ 被 @promotion 装饰的函数都会添加到 promos 列表中。</p>
+
+<p>❹ best_promos 无需修改，因为它依赖 promos 列表。</p>
+
+<p>与 6.1 节给出的方案相比，这个方案有几个优点。</p>
+
+<p>•促销策略函数无需使用特殊的名称（即不用以_promo结尾）。</p>
+
+<p>• @promotion装饰器突出了被装饰的函数的作用，还便于临时禁用某个促销策略：只 需把装饰器注释掉。</p>
+
+<p>•促销折扣策略可以在其他模块中定义，在系统中的任何地方都行，只要使用 @promotion 装饰即可。</p>
+
+<p>不过，多数装饰器会修改被装饰的函数。通常，它们会定义一个内部函数，然后将其返</p>
+
+<p>回，替换被装饰的函数。使用内部函数的代码几乎都要靠闭包才能正确运作。为了理解闭</p>
+
+<p>包，我们要退后一步，先了解 Python 中的变量作用域。</p>
+
+<h3 id="7-4-变量作用域规则">7.4 变量作用域规则</h3>
+
+<p>在示例 7-4 中，我们定义并测试了一个函数，它读取两个变量的值：一个是局部变量 a</p>
+
+<p>是函数的参数；另一个是变量b，这个函数没有定义它。</p>
+
+<p>示例 7-4 一个函数，读取一个局部变量和一个全局变量</p>
+
+<p>&gt;&gt;&gt; def f1(a):</p>
+
+<p>&hellip;    print(a)</p>
+
+<p>&hellip;    print(b)</p>
+
+<p>&gt;&gt;&gt; f1(3)</p>
+
+<p>3</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in <module> File &ldquo;<stdin>&rdquo;, line 3, in f1</p>
+
+<p>NameError: global name &lsquo;b&rsquo; is not defined</p>
+
+<h4 id="出现错误并不奇怪-3在示例7-4中-如果先给全局变量b赋值-然后再调用f-那就不-会出错">出现错误并不奇怪。3在示例7-4中，如果先给全局变量b赋值，然后再调用f，那就不 会出错：</h4>
+
+<p>| 3在 Python3+5 中，错误信息是 NameError: name &lsquo;b&rsquo; is not defined，删險了 global。-编者注</p>
+
+<p>&gt;&gt;&gt; b = 6</p>
+
+<p>&gt;&gt;&gt; f1(3) 3</p>
+
+<p>6</p>
+
+<h4 id="下面看一个可能会让你吃惊的示例">下面看一个可能会让你吃惊的示例。</h4>
+
+<p>看一下示例 7-5 中的 f2 函数。前两行代码与示例 7-4 中的 f1 一样，然后为 b 赋值，再打 印它的值。可是，在赋值之前，第二个 print 失败了。</p>
+
+<p>示例 7-5 b 是局部变量，因为在函数的定义体中给它赋值了</p>
+
+<p>&gt;&gt;&gt; b = 6</p>
+
+<p>&gt;&gt;&gt; def f2(a):</p>
+
+<p>&hellip; print(a)</p>
+
+<p>&hellip; print(b)</p>
+
+<p>&hellip; b = 9</p>
+
+<p>&gt;&gt;&gt; f2(3)</p>
+
+<p>3</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in <module></p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 3, in f2</p>
+
+<p>UnboundLocalError: local variable &lsquo;b&rsquo; referenced before assignment</p>
+
+<p>注意，首先输出了 3，这表明 print(a) 语句执行了。但是第二个语句 print(b) 执行不</p>
+
+<p>了。一开始我很吃惊，我觉得会打印6,因为有个全局变量b，而且是在print(b)之后 为局部变量 b 赋值的。</p>
+
+<p>可事实是， Python 编译函数的定义体时，它判断 b 是局部变量，因为在函数中给它赋值</p>
+
+<p>了。生成的字节码证实了这种判断，Python会尝试从本地环境获取b。后面调用f2(3) 时， f2 的定义体会获取并打印局部变量 a 的值，但是尝试获取局部变量 b 的值时，发现</p>
+
+<p>b 没有绑定值。</p>
+
+<p>这不是缺陷，而是设计选择：Python不要求声明变量，但是假定在函数定义体中赋值的变</p>
+
+<p>量是局部变量。这比 JavaScript 的行为好多了， JavaScript 也不要求声明变量，但是如果</p>
+
+<p>忘记把变量声明为局部变量(使用var)，可能会在不知情的情况下获取全局变量。 如果在函数中赋值时想让解释器把 b 当成全局变量，要使用 global 声明：</p>
+
+<p>&gt;&gt;&gt; b = 6 &gt;&gt;&gt; def f3(a):</p>
+
+<p>&hellip; global b &hellip; print(a) &hellip; print(b) &hellip; b = 9</p>
+
+<p>&gt;&gt;&gt; f3(3)</p>
+
+<p>3</p>
+
+<p>6</p>
+
+<p>&gt;&gt;&gt; b</p>
+
+<p>9</p>
+
+<p>&gt;&gt;&gt; f3(3)</p>
+
+<p>&gt;&gt;&gt; b = 30</p>
+
+<p>&gt;&gt;&gt; b</p>
+
+<p>30</p>
+
+<p>&gt;&gt;&gt;</p>
+
+<p>了解 Python 的变量作用域之后，下一节可以讨论闭包了。如果好奇示例 7-4 和示例 7-5 中</p>
+
+<p>的两个函数生成的字节码有什么区别，请阅读下述附注栏。</p>
+
+<p>比较字节码</p>
+
+<p>dis 模块为反汇编 Python 函数字节码提供了简单的方式。示例 7-6 和 7-7 中分别是示 例 7-4 中 f1 和示例 7-5 中 f2 的字节码。</p>
+
+<p>示例 7-6 反汇编示例 7-4 中的 f1 函数</p>
+
+<p>from dis import dis</p>
+
+<p>dis(f1)</p>
+
+<p>0 LOAD_GLOBAL 3 LOAD_FAST 6 CALL_FUNCTION 9 POP_TOP</p>
+
+<p>0 (print) O</p>
+
+<p>0 (a)    ©</p>
+
+<p>1 (1 positional, 0 keyword pair)</p>
+
+<p>10 LOAD_GLOBAL 13 LOAD_GLOBAL 16 CALL_FUNCTION 19 POP_TOP 20 LOAD_CONST 23 RETURN VALUE</p>
+
+<h4 id="❶-加载全局名称-print">❶ 加载全局名称 print。</h4>
+
+<p>❷ 加载本地名称 a。</p>
+
+<p>❸ 加载全局名称 b 。</p>
+
+<p>请比较示例 7-6 中 f1 的字节码和示例 7-7 中 f2 的字节码。</p>
+
+<p>示例 7-7 反汇编示例 7-5 中的 f2 函数</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; dis(f2)2</th>
+<th>0 LOAD_GLOBAL3 LOAD_FAST6 CALL_FUNCTION9 POP_TOP</th>
+<th>001</th>
+<th>(print)(a)(1 positional, 0 keyword</th>
+<th>pair)</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>3</td>
+<td>10</td>
+<td>LOAD_GLOBAL</td>
+<td>0</td>
+<td>(print)</td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>13</td>
+<td>LOAD_FAST</td>
+<td>1</td>
+<td>(b) O</td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>16</td>
+<td>CALL_FUNCTION</td>
+<td>1</td>
+<td>(1 positional, 0 keyword</td>
+<td>pair)</td>
+</tr>
+
+<tr>
+<td></td>
+<td>19</td>
+<td>POP_TOP</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>20</td>
+<td>LOAD_CONST</td>
+<td>1</td>
+<td>(9)</td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>23</td>
+<td>STORE_FAST</td>
+<td>1</td>
+<td>(b)</td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>26</td>
+<td>LOAD_CONST</td>
+<td>0</td>
+<td>(None)</td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>29</td>
+<td>RETURN VALUE</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="o加载本地名称b-这表明-编译器把b视作局部变量-即使在后面才为b赋值-因为变量的种类-是不是局部变量-不能改变函数的定义体">O加载本地名称b。这表明，编译器把b视作局部变量，即使在后面才为b赋值， 因为变量的种类（是不是局部变量）不能改变函数的定义体。</h4>
+
+<p>运行字节码的 CPython VM 是栈机器，因此 LOAD 和 POP 操作引用的是栈。深入说明 Python 操作码不在本书范畴之内，不过 dis 模块的文档</p>
+
+<p><a href="http://docs.python.org/3/library/dis.html">http://docs.python.org/3/library/dis.html</a>）对其做了说明。</p>
+
+<h3 id="7-5-闭包">7.5 闭包</h3>
+
+<p>在博客圈，人们有时会把闭包和匿名函数弄混。这是有历史原因的：在函数内部定义函数</p>
+
+<p>不常见，直到开始使用匿名函数才会这样做。而且，只有涉及嵌套函数时才有闭包问题。</p>
+
+<p>因此，很多人是同时知道这两个概念的。</p>
+
+<p>其实，闭包指延伸了作用域的函数，其中包含函数定义体中引用、但是不在定义体中定义</p>
+
+<p>的非全局变量。函数是不是匿名的没有关系，关键是它能访问定义体之外定义的非全局变</p>
+
+<p>量。</p>
+
+<p>这个概念难以掌握，最好通过示例理解。</p>
+
+<p>假如有个名为 avg 的函数，它的作用是计算不断增加的系列值的均值；例如，整个历史</p>
+
+<p>中某个商品的平均收盘价。每天都会增加新价格，因此平均值要考虑至目前为止所有的价</p>
+
+<p>格。</p>
+
+<p>起初， avg 是这样使用的：</p>
+
+<p>&gt;&gt;&gt; avg(10) 10.0</p>
+
+<p>&gt;&gt;&gt; avg(11) 10.5</p>
+
+<p>&gt;&gt;&gt; avg(12) 11.0</p>
+
+<p>avg 从何而来，它又在哪里保存历史值呢？</p>
+
+<p>初学者可能会像示例 7-8 那样使用类实现。</p>
+
+<p>示例7-8 average_oo.py：计算移动平均值的类</p>
+
+<p>class Averager():</p>
+
+<p>def <strong>init</strong>(self): self.series = []</p>
+
+<p>def <strong>call</strong>(self, new_value): self.series.append(new_value) total = sum(self.series) return total/len(self.series)</p>
+
+<p>Averager 的实例是可调用对象：</p>
+
+<p>示例 7-9 是函数式实现，使用高阶函数 make_averager。 示例7-9 average.py：计算移动平均值的高阶函数</p>
+
+<p>def make_averager(): series = []</p>
+
+<p>def averager(new_value): series.append(new_value) total = sum(series) return total/len(series)</p>
+
+<p>return averager</p>
+
+<p>调用 make_averager 时，返回一个 averager 函数对象。每次调用 averager 时，它会 把参数添加到系列值中，然后计算当前平均值，如示例 7-10 所示。</p>
+
+<p>示例 7-10 测试示例 7-9</p>
+
+<p>&gt;&gt;&gt; avg = make_averager() &gt;&gt;&gt; avg(10)</p>
+
+<p>10.0</p>
+
+<p>&gt;&gt;&gt; avg(11)</p>
+
+<p>10.5</p>
+
+<p>&gt;&gt;&gt; avg(12)</p>
+
+<p>11.0</p>
+
+<p>注意，这两个示例有共通之处：调用 Averager() 或 make_averager() 得到一个可调用 对象avg，它会更新历史值，然后计算当前均值。在示例7-8中，avg是Averager的实 例；在示例7-9中是内部函数averager。不管怎样，我们都只需调用avg(n)，把n放 入系列值中，然后重新计算均值。</p>
+
+<p>Averager 类的实例 avg 在哪里存储历史值很明显： self.series 实例属性。但是第二 个示例中的 avg 函数在哪里寻找 series 呢？</p>
+
+<p>注意， series 是 make_averager 函数的局部变量，因为那个函数的定义体中初始化了 series： series = []。可是，调用 avg(10) 时， make_averager 函数已经返回了，</p>
+
+<p>而它的本地作用域也一去不复返了。</p>
+
+<p>在averager函数中，series是自由变量(free variable)。这是一个技术术语，指未在</p>
+
+<p>本地作用域中绑定的变量，参见图 7-1。</p>
+
+<p>图 7-1：averager 的闭包延伸到那个函数的作用域之外，包含自由变量 series 的绑</p>
+
+<p>定 审查返回的 averager 对象，我们发现 Python 在 <strong>code</strong> 属性（表示编译后的函数定义 体）中保存局部变量和自由变量的名称，如示例 7-11 所示。</p>
+
+<p>示例7-11 审查make_averager （见示例7-9）创建的函数</p>
+
+<p>&gt;&gt;&gt; avg.<strong>code</strong>.co_varnames</p>
+
+<p>(&lsquo;new_value&rsquo;, &lsquo;total&rsquo;)</p>
+
+<p>&gt;&gt;&gt; avg.<strong>code</strong>.co_freevars</p>
+
+<p>(&lsquo;series&rsquo;,)</p>
+
+<p>series 的绑定在返回的 avg 函数的 <strong>closure</strong> 属性中。 avg.<strong>closure</strong> 中的各个 元素对应于 avg.<strong>code</strong>.co_freevars 中的一个名称。这些元素是 cell 对象，有个 cell_contents 属性，保存着真正的值。这些属性的值如示例 7-12 所示。</p>
+
+<p>示例 7-12 接续示例 7-11</p>
+
+<p>&gt;&gt;&gt; avg.<strong>code</strong>.co_freevars</p>
+
+<p>(&lsquo;series&rsquo;,)</p>
+
+<p>&gt;&gt;&gt; avg.<strong>closure</strong></p>
+
+<p>(<cell at 0x107a44f78: list object at 0x107a91a48>,) &gt;&gt;&gt; avg.<strong>closure</strong>[0].cell_contents [10, 11, 12]</p>
+
+<p>综上，闭包是一种函数，它会保留定义函数时存在的自由变量的绑定，这样调用函数时，</p>
+
+<p>虽然定义作用域不可用了，但是仍能使用那些绑定。</p>
+
+<p>注意，只有嵌套在其他函数中的函数才可能需要处理不在全局作用域中的外部变量。</p>
+
+<p>前面实现 make_averager 函数的方法效率不高。在示例 7-9 中，我们把所有值存储在历 史数列中，然后在每次调用 averager 时使用 sum 求和。更好的实现方式是，只存储目 前的总值和元素个数，然后使用这两个数计算均值。</p>
+
+<p>示例 7-13 中的实现有缺陷，只是为了阐明观点。你能看出缺陷在哪儿吗？</p>
+
+<p>示例 7-13 计算移动平均值的高阶函数，不保存所有历史值，但有缺陷</p>
+
+<table>
+<thead>
+<tr>
+<th>def make_averager(): count = 0 total = 0</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>def averager(new_value): count += 1 total += new_value return total / count</td>
+<td></td>
+</tr>
+
+<tr>
+<td>return averager</td>
+<td></td>
+</tr>
+
+<tr>
+<td>尝试使用示例 7-13 中定义的函数，</td>
+<td>会得到如下结果：</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; avg = make_averager()&gt;&gt;&gt; avg(10)Traceback (most recent call last):</td>
+<td></td>
+</tr>
+
+<tr>
+<td>UnboundLocalError: local variable &lsquo;count&rsquo; referenced before assignment &gt;&gt;&gt;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>问题是，当 count 是数字或任何不可变类型时， count += 1 语句的作用其实与 count</p>
+
+<p>= count + 1 一样。因此，我们在 averager 的定义体中为 count 赋值了，这会把 count 变成局部变量。 total 变量也受这个问题影响。</p>
+
+<p>示例 7-9 没遇到这个问题，因为我们没有给 series 赋值，我们只是调用</p>
+
+<p>series.append，并把它传给sum和len。也就是说，我们利用了列表是可变的对象这 一事实。</p>
+
+<p>但是对数字、字符串、元组等不可变类型来说，只能读取，不能更新。如果尝试重新绑</p>
+
+<p>定，例如count = count + 1，其实会隐式创建局部变量count。这样，count就不是</p>
+
+<p>自由变量了，因此不会保存在闭包中。</p>
+
+<p>为了解决这个问题， Python 3 引入了 nonlocal 声明。它的作用是把变量标记为自由变 量，即使在函数中为变量赋予新值了，也会变成自由变量。如果为 nonlocal 声明的变量 赋予新值，闭包中保存的绑定会更新。最新版 make_averager 的正确实现如示例 7-14 所 示。</p>
+
+<p>示例 7-14 计算移动平均值，不保存所有历史（使用 nonlocal 修正）</p>
+
+<p>def make_averager(): count = 0 total = 0</p>
+
+<p>def averager(new_value): nonlocal count, total count += 1 total += new_value return total / count</p>
+
+<p>return averager</p>
+
+<p>对付没有nonlocal的Python 2</p>
+
+<p>Python 2 没有 nonlocal，因此需要变通方法，“PEP 3104—Access to Names in Outer Scopes”（nonlocal 在这个 PEP 中引入， <a href="http://www.python.org/dev/peps/pep-3104/">http://www.python.org/dev/peps/pep-3 104/</a>）</p>
+
+<p>中的第三个代码片段给出了一种方法。基本上，这种处理方式是把内部函数需要修改</p>
+
+<p>的变量（如count和total）存储为可变对象（如字典或简单的实例）的元素或属 性，并且把那个对象绑定给一个自由变量。</p>
+
+<p>至此，我们了解了 Python 闭包，下面可以使用嵌套函数正式实现装饰器了。</p>
+
+<h3 id="7-7-实现一个简单的装饰器">7.7 实现一个简单的装饰器</h3>
+
+<p>示例 7-15 定义了一个装饰器，它会在每次调用被装饰的函数时计时，然后把经过的时 间、传入的参数和调用的结果打印出来。</p>
+
+<p>示例 7-15 一个简单的装饰器，输出函数的运行时间</p>
+
+<p>import time</p>
+
+<p>def clock(func):</p>
+
+<p>def clocked(*args): # O</p>
+
+<p>t0 = time.perf_counter()</p>
+
+<p>result = func(*args) # © elapsed = time.perf_counter() - t0 name = func.<strong>name</strong></p>
+
+<p>arg_str = &lsquo;, &lsquo;.join(repr(arg) for arg in args)</p>
+
+<p>print(&rsquo;[%0.8fs] %s(%s) -&gt; %r&rsquo; % (elapsed, name, arg_str, result)) return result return clocked # &amp;</p>
+
+<h4 id="❶定义内部函数clocked-它接受任意个定位参数">❶定义内部函数clocked,它接受任意个定位参数。</h4>
+
+<p>❷ 这行代码可用，是因为 clocked 的闭包中包含自由变量 func。</p>
+
+<p>❸ 返回内部函数，取代被装饰的函数。示例 7-16 演示了 clock 装饰器的用法 示例 7-16 使用 clock 装饰器</p>
+
+<p># clockdeco_demo.py import time</p>
+
+<p>from clockdeco import clock @clock</p>
+
+<p>def snooze(seconds): time.sleep(seconds)</p>
+
+<p>@clock</p>
+
+<p>def factorial(n):</p>
+
+<p>return 1 if n &lt; 2 else n*factorial(n-1)</p>
+
+<p>if <strong>name</strong>==&rsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>print(&rsquo;*&rsquo; * 40, &lsquo;Calling snooze(.123)&rsquo;) snooze(.123)</p>
+
+<p>print(&rsquo;*&rsquo; * 40, &lsquo;Calling factorial(6)&rsquo;) print(&lsquo;6! =&rsquo;, factorial(6))</p>
+
+<h4 id="运行示例-7-16-得到的输出如下">运行示例 7-16 得到的输出如下：</h4>
+
+<p>$ python3 clockdeco_demo.py [0.12405610s] snooze(.123) -&gt; None</p>
+
+<p>Calling snooze(123) Calling factorial(6)</p>
+
+<p>[0</p>
+
+<p>[0</p>
+
+<p>[0</p>
+
+<p>[0</p>
+
+<p>[0</p>
+
+<p>[0</p>
+
+<p>6!</p>
+
+<table>
+<thead>
+<tr>
+<th>00000191s]</th>
+<th>factorial(1)</th>
+<th>-&gt;</th>
+<th>1</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>00004911s]</td>
+<td>factorial(2)</td>
+<td>-&gt;</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>00008488s]</td>
+<td>factorial(3)</td>
+<td>-&gt;</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>00013208s]</td>
+<td>factorial(4)</td>
+<td>-&gt;</td>
+<td>24</td>
+</tr>
+
+<tr>
+<td>00019193s]</td>
+<td>factorial(5)</td>
+<td>-&gt;</td>
+<td>120</td>
+</tr>
+
+<tr>
+<td>00026107s]</td>
+<td>factorial(6)</td>
+<td>-&gt;</td>
+<td>720</td>
+</tr>
+
+<tr>
+<td>= 720</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>工作原理</p>
+
+<h4 id="记得吗-如下代码">记得吗，如下代码</h4>
+
+<p>@clock</p>
+
+<p>def factorial(n):</p>
+
+<p>return 1 if n &lt; 2 else n*factorial(n-1)</p>
+
+<h4 id="其实等价于">其实等价于：</h4>
+
+<p>def factorial(n):</p>
+
+<p>return 1 if n &lt; 2 else n*factorial(n-1) factorial = clock(factorial)</p>
+
+<p>因此，在两个示例中，factorial会作为func参数传给clock (参见示例7-15)。然 后， clock 函数会返回 clocked 函数， Python 解释器在背后会把 clocked 赋值给 factorial。其实，导入 clockdeco_demo 模块后查看 factorial 的 <strong>name</strong> 属性，</p>
+
+<p>会得到如下结果：</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; import clockdeco_demo</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;&gt;&gt; clockdeco_demo.factorial. &lsquo;clocked&rsquo;&gt;&gt;&gt;</td>
+<td>_name__</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="所以-现在-factorial-保存的是-clocked-函数的引用-自此之后-每次调用-factorial-n-执行的都是clocked-n-clocked大致做了下面几件事">所以，现在 factorial 保存的是 clocked 函数的引用。自此之后，每次调用 factorial(n)，执行的都是clocked(n)。clocked大致做了下面几件事。</h4>
+
+<p>(1)    记录初始时间 t0。</p>
+
+<p>(2)    调用原来的 factorial 函数，保存结果</p>
+
+<p>(3)    计算经过的时间。</p>
+
+<p>(4)    格式化收集的数据，然后打印出来。</p>
+
+<h4 id="5-返回第-2-步保存的结果">(5) 返回第 2 步保存的结果。</h4>
+
+<h4 id="这是装饰器的典型行为-把被装饰的函数替换成新函数-二者接受相同的参数-而且-通">这是装饰器的典型行为：把被装饰的函数替换成新函数，二者接受相同的参数，而且(通</h4>
+
+<p>常)返回被装饰的函数本该返回的值，同时还会做些额外操作。</p>
+
+<p><img src="08414584Python-36.jpg" alt="img" /></p>
+
+<h4 id="gamma等人写的-设计模式-可复用面向对象软件的基础-一书是这样概">Gamma等人写的《设计模式：可复用面向对象软件的基础》一书是这样概</h4>
+
+<p>述“装饰器”模式的： “动态地给一个对象添加一些额外的职责。 ”函数装饰器符合这一</p>
+
+<p>说法。但是，在实现层面， Python 装饰器与《设计模式：可复用面向对象软件的基</p>
+
+<p>础》中所述的“装饰器”没有多少相似之处。 “杂谈”会进一步探讨这个话题。</p>
+
+<p>示例 7-15 中实现的 clock 装饰器有几个缺点：不支持关键字参数，而且遮盖了被装饰函 数的 <strong>name</strong> 和 <strong>doc</strong> 属性。示例 7-17 使用 functools.wraps 装饰器把相关的属</p>
+
+<p>性从 func 复制到 clocked 中。此外，这个新版还能正确处理关键字参数。</p>
+
+<p>示例 7-17 改进后的 clock 装饰器</p>
+
+<p># clockdeco2.py</p>
+
+<p>import time import functools</p>
+
+<p>def clock(func):</p>
+
+<p>@functools.wraps(func) def clocked(*args, **kwargs): t0 = time.time() result = func(*args, **kwargs) elapsed = time.time() - t0 name = func.<strong>name</strong> arg_lst = [] if args:</p>
+
+<p>arg_lst.append(&lsquo;, &lsquo;.join(repr(arg) for arg in args)) if kwargs:</p>
+
+<p>pairs = [&lsquo;%s=%r&rsquo; % (k, w) for k, w in sorted(kwargs.items())] arg_lst.append(&lsquo;, &lsquo;.join(pairs)) arg_str = &lsquo;, &lsquo;.join(arg_lst)</p>
+
+<p>print(&rsquo;[%0.8fs] %s(%s) -&gt; %r &lsquo; % (elapsed, name, arg_str, result)) return result return clocked</p>
+
+<h4 id="functools-wraps-只是标准库中拿来即用的装饰器之一-下一节将介绍-functools-模块-中最让人印象深刻的两个装饰器-lru-cache-和-singledispatch">functools.wraps 只是标准库中拿来即用的装饰器之一。下一节将介绍 functools 模块 中最让人印象深刻的两个装饰器： lru_cache 和 singledispatch。</h4>
+
+<h3 id="7-8-标准库中的装饰器">7.8 标准库中的装饰器</h3>
+
+<p>Python内置了三个用于装饰方法的函数：property、classmethod和</p>
+
+<p>staticmethod。 property 在 19.2 节讨论，另外两个在 9.4 节讨论。</p>
+
+<p>另一个常见的装饰器是functools.wraps,它的作用是协助构建行为良好的装饰器。我 们在示例 7-17 中用过。标准库中最值得关注的两个装饰器是 lru_cache 和全新的 singledispatch(Python 3.4 新增)。这两个装饰器都在 functools 模块中定义。接下</p>
+
+<p>来分别讨论它们。</p>
+
+<p>7.8.1 使用 functools. lru_cache 做备忘</p>
+
+<p>functools .lru_cache是非常实用的装饰器，它实现了备忘(memoization)功能。这是</p>
+
+<p>一项优化技术，它把耗时的函数的结果保存起来，避免传入相同的参数时重复计算。 LRU</p>
+
+<p>三个字母是“Least Recently Used”的缩写，表明缓存不会无限制增长，一段时间不用的缓存</p>
+
+<p>条目会被扔掉。</p>
+
+<p>生成第《个斐波纳契数这种慢速递归函数适合使用lru_cache，如示例7-18所示。</p>
+
+<p>示例 7-18 生成第 n 个斐波纳契数，递归方式非常耗时</p>
+
+<p>from clockdeco import clock @clock</p>
+
+<p>def fibonacci(n): if n &lt; 2: return n</p>
+
+<p>return fibonacci(n-2) + fibonacci(n-1)</p>
+
+<p>if <strong>name</strong>==&rsquo;<strong>main</strong>&lsquo;: print(fibonacci(6))</p>
+
+<p>运行 fibo_demo.py 得到的结果如下。除了最后一行，其余输出都是 clock 装饰器生成 的。</p>
+
+<p>$ python3 fibo_demo.py [0.00000095s] fibonacci(0) -&gt; 0 [0.00000095s] fibonacci(1) -&gt; 1 [0.00007892s] fibonacci(2) -&gt; 1 [0.00000095s] fibonacci(1) -&gt; 1 [0.00000095s] fibonacci(0) -&gt; 0 [0.00000095s] fibonacci(1) -&gt; 1 [0.00003815s] fibonacci(2) -&gt; 1 [0.00007391s] fibonacci(3) -&gt; 2 [0.00018883s] fibonacci(4) -&gt; 3 [0.00000000s] fibonacci(1) -&gt; 1 [0.00000095s] fibonacci(0) -&gt; 0 [0.00000119s] fibonacci(1) -&gt; 1</p>
+
+<p>[0.00004911s] fibonacci(2) -&gt; 1 [0.00009704s] fibonacci(3) -&gt; 2 [0.00000000s] fibonacci(0) -&gt; 0 [0.00000000s] fibonacci(1) -&gt; 1 [0.00002694s] fibonacci(2) -&gt; 1 [0.00000095s] fibonacci(1) -&gt; 1 [0.00000095s] fibonacci(0) -&gt; 0 [0.00000095s] fibonacci(1) -&gt; 1 [0.00005102s] fibonacci(2) -&gt; 1 [0.00008917s] fibonacci(3) -&gt; 2 [0.00015593s] fibonacci(4) -&gt; 3 [0.00029993s] fibonacci(5) -&gt; 5 [0.00052810s] fibonacci(6) -&gt; 8 8</p>
+
+<h4 id="浪费时间的地方很明显-fibonacci-l-调用了-8次-fibonacci-2-调用了-5次-但">浪费时间的地方很明显：fibonacci(l)调用了 8次，fibonacci(2)调用了 5次&hellip;&hellip;但</h4>
+
+<p>是，如果增加两行代码，使用lru_cache，性能会显著改善，如示例7-19所示。</p>
+
+<p>示例 7-19 使用缓存实现，速度更快</p>
+
+<p>import functools from clockdeco import clock</p>
+
+<p>@functools.lru_cache() # O @clock # ©</p>
+
+<p>def fibonacci(n):</p>
+
+<p>if n &lt; 2: return n</p>
+
+<p>return fibonacci(n-2) + fibonacci(n-1)</p>
+
+<p>if <strong>name</strong>==&rsquo;<strong>main</strong>&lsquo;: print(fibonacci(6))</p>
+
+<h4 id="❶注意-必须像常规函数那样调用lru-cache-这一行中有一对括">❶注意，必须像常规函数那样调用lru_cache。这一行中有一对括</h4>
+
+<p>号：@functools.lru_cache()。这么做的原因是，lru_cache可以接受配置参数，稍</p>
+
+<p>后说明。</p>
+
+<p>❷ 这里叠放了装饰器： @lru_cache() 应用到 @clock 返回的函数上。</p>
+
+<h4 id="这样一来-执行时间减半了-而且-n-的每个值只调用一次函数">这样一来，执行时间减半了，而且 n 的每个值只调用一次函数：</h4>
+
+<p>$ python3 fibo_demo_lru.py</p>
+
+<p>[0.00000119s]</p>
+
+<p>fibonacci(0) -&gt; fibonacci(1) -&gt; fibonacci(2) -&gt; fibonacci(3) -&gt; fibonacci(4) -&gt; fibonacci(5) -&gt; fibonacci(6) -&gt;</p>
+
+<p>0</p>
+
+<p>1</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>5</p>
+
+<p>8</p>
+
+<p>[0.00000119s]</p>
+
+<p>[0.00010800s]</p>
+
+<p>[0.00000787s]</p>
+
+<p>[0.00016093s]</p>
+
+<p>[0.00001216s]</p>
+
+<p>[0.00025296s]</p>
+
+<p>在计算 fibonacci(30) 的另一个测试中，示例 7-19 中的版本在 0.0005 秒内调用了 31 次 fibonacci 函数，而示例 7-18 中未缓存的版本调用 fibonacci 函数 2 692 537 次，在使 用 Intel Core i7 处理器的笔记本电脑中耗时 17.7 秒。</p>
+
+<p>除了优化递归算法之外， lru_cache 在从 Web 中获取信息的应用中也能发挥巨大作用。 特别要注意， lru_cache 可以使用两个可选的参数来配置。它的签名是：</p>
+
+<p>functools.lru_cache(maxsize=128, typed=False)</p>
+
+<p>maxsize 参数指定存储多少个调用的结果。缓存满了之后，旧的结果会被扔掉，腾出空</p>
+
+<p>间。为了得到最佳性能，maxsize应该设为2的幂。typed参数如果设为True，把不同 参数类型得到的结果分开保存，即把通常认为相等的浮点数和整数参数(如 1 和 1.0)区</p>
+
+<p>分开。顺便说一下，因为 lru_cache 使用字典存储结果，而且键根据调用时传入的定位</p>
+
+<p>参数和关键字参数创建，所以被 lru_cache 装饰的函数，它的所有参数都必须是可散列 的。</p>
+
+<p>接下来讨论吸引人的 functools.singledispatch 装饰器。</p>
+
+<p>7.8.2 单分派泛函数</p>
+
+<p>假设我们在开发一个调试Web应用的工具，我们想生成HTML，显示不同类型的Python 对象。</p>
+
+<p>我们可能会编写这样的函数：</p>
+
+<p>import html</p>
+
+<p>def htmlize(obj):</p>
+
+<p>content = html.escape(repr(obj)) return &lsquo;<pre>{}</pre>&rsquo;.format(content)</p>
+
+<p>这个函数适用于任何 Python 类型，但是现在我们想做个扩展，让它使用特别的方式显示 某些类型。</p>
+
+<p>•    str:把内部的换行符替换为&rsquo;＜br＞\n &lsquo;；不使用＜pre＞，而是使用＜p＞。</p>
+
+<p>•    int:以十进制和十六进制显示数字。</p>
+
+<p>•    list：输出一个HTML列表，根据各个元素的类型进行格式化。 我们想要的行为如示例 7-20 所示。</p>
+
+<p>示例 7-20 生成 HTML 的 htmlize 函数，调整了几种对象的输出</p>
+
+<p>&lsquo;<pre>{1, 2, 3}</pre>&lsquo;</p>
+
+<p>&gt;&gt;&gt; htmlize(abs)</p>
+
+<p>&lsquo;<pre><built-in function abs></pre>&lsquo;</p>
+
+<p>&gt;&gt;&gt; htmlize(&lsquo;Heimlich &amp; Co.\n- a game&rsquo;) ©</p>
+
+<p>&lsquo;<p>Heimlich &amp; Co.<br>\n- a game</p>&lsquo;</p>
+
+<p>&gt;&gt;&gt; htmlize(42) ©</p>
+
+<p>&lsquo;<pre>42 (0x2a)</pre>&lsquo;</p>
+
+<p>&gt;&gt;&gt; print(htmlize([&lsquo;alpha&rsquo;, 66, {3, 2, 1}]))    ©</p>
+
+<p><ul></p>
+
+<p><li><p>alpha</p></li></p>
+
+<p><li><pre>66 (0x42)</pre></li></p>
+
+<p><li><pre>{1, 2, 3}</pre></li></p>
+
+<p></ul> def htmlize(obj):</p>
+
+<p>content = html.escape(repr(obj))</p>
+
+<p>return &lsquo;<pre>{}</pre>&rsquo;.format(content)</p>
+
+<p>@htmlize.register(str) ©</p>
+
+<p>def _(text):    ©</p>
+
+<p>content = html.escape(text).replace(&rsquo;\n&rsquo;, &lsquo;<br>\n&rsquo;) return &lsquo;<p>{0}</p>&rsquo;.format(content)</p>
+
+<p>@htmlize.register(numbers.Integral) ©</p>
+
+<p>def _(n):</p>
+
+<p>return &lsquo;<pre>{0} (0x{0:x})</pre>&rsquo;.format(n)</p>
+
+<p>@htmlize.register(tuple)❺</p>
+
+<p>@htmlize.register(abc.MutableSequence)</p>
+
+<p>def _(seq):</p>
+
+<p>inner = &lsquo;</li>\n<li>&rsquo;.join(htmlize(item) for item in seq) return &lsquo;<ul>\n<li>&rsquo; + inner + &lsquo;</li>\n</ul>&lsquo;</p>
+
+<p>❶ @singledispatch 标记处理 object 类型的基函数。</p>
+
+<p>❷ 各个专门函数使用 @«base_function».register(«type») 装饰。</p>
+
+<p>❸ 专门函数的名称无关紧要；_ 是个不错的选择，简单明了。</p>
+
+<p>❹ 为每个需要特殊处理的类型注册一个函数。 numbers.Integral 是 int 的虚拟超类。</p>
+
+<p>❺ 可以叠放多个 register 装饰器，让同一个函数支持不同类型。</p>
+
+<p>只要可能，注册的专门函数应该处理抽象基类(如 numbers.Integral 和</p>
+
+<p>abc.MutableSequence)，不要处理具体实现(如int和list)。这样，代码支持的 兼容类型更广泛。例如，Python扩展可以子类化numbers.Integral，使用固定的位数实 现 int 类型。</p>
+
+<p><img src="08414584Python-37.jpg" alt="img" /></p>
+
+<p>使用抽象基类检查类型，可以让代码支持这些抽象基类现有和未来的具体子类 或虚拟子类。抽象基类的作用和虚拟子类的概念在第 11 章讨论。</p>
+
+<p>singledispatch 机制的一个显著特征是，你可以在系统的任何地方和任何模块中注册专 门函数。如果后来在新的模块中定义了新的类型，可以轻松地添加一个新的专门函数来处 理那个类型。此外，你还可以为不是自己编写的或者不能修改的类添加自定义函数。</p>
+
+<p>singledispatch 是经过深思熟虑之后才添加到标准库中的，它提供的特性很多，这里无</p>
+
+<p>法一一说明。这个机制最好的文档是“PEP 443 — Single-dispatch generic</p>
+
+<p>functions”( <a href="https://www.python.org/dev/peps/pep-0443/">https://www.python.org/dev/peps/pep-0443/</a>) 。</p>
+
+<p>@singledispatch不是为了把Java的那种方法重载带入Python。在一个类中</p>
+
+<p>为同一个方法定义多个重载变体，比在一个函数中使用一长串 if/elif/elif/elif</p>
+
+<p>块要更好。但是这两种方案都有缺陷，因为它们让代码单元（类或函数）承担的职责</p>
+
+<p>太多。 @singledispath 的优点是支持模块化扩展:各个模块可以为它支持的各个类 型注册一个专门函数。</p>
+
+<p>装饰器是函数，因此可以组合起来使用（即，可以在已经被装饰的函数上应用装饰器，如 示例 7-21 所示）。下一节说明其中的原理。</p>
+
+<h3 id="7-9-叠放装饰器">7.9 叠放装饰器</h3>
+
+<p>示例 7-19 演示了叠放装饰器的方式: @lru_cache 应用到 @clock 装饰 fibonacci 得到 的结果上。在示例 7-21 中，模块中最后一个函数应用了两个 @htmlize.register 装饰 器。</p>
+
+<p>把 @d1 和 @d2 两个装饰器按顺序应用到 f 函数上，作用相当于 f = d1(d2(f))。 也就是说，下述代码:</p>
+
+<p>@d1</p>
+
+<p>@d2</p>
+
+<p>def f():</p>
+
+<p>print(&lsquo;f&rsquo;)</p>
+
+<p>等同于:</p>
+
+<p>def f():</p>
+
+<p>print(&lsquo;f&rsquo;) f = d1(d2(f))</p>
+
+<p>除了叠放装饰器之外，本章还用到了几个接受参数的装饰器，例如 @lru_cache() 和示</p>
+
+<p>例 7-21 中 @singledispatch 生成的 htmlize.register(«type»)。下一节说明如何构</p>
+
+<p>建接受参数的装饰器。</p>
+
+<h3 id="7-10-参数化装饰器">7.10 参数化装饰器</h3>
+
+<h4 id="解析源码中的装饰器时-python把被装饰的函数作为第一个参数传给装饰器函数-那怎么">解析源码中的装饰器时，Python把被装饰的函数作为第一个参数传给装饰器函数。那怎么</h4>
+
+<p>让装饰器接受其他参数呢？答案是：创建一个装饰器工厂函数，把参数传给它，返回一个</p>
+
+<p>装饰器，然后再把它应用到要装饰的函数上。不明白什么意思？当然。下面以我们见过的</p>
+
+<p>最简单的装饰器为例说明：示例 7-22 中的 register。</p>
+
+<p>示例 7-22 示例 7-2 中 registration.py 模块的删减版，这里再次给出是为了便于讲解</p>
+
+<p>registry = []</p>
+
+<p>def register(func):</p>
+
+<p>print(&lsquo;running register(%s)&rsquo; % func) registry.append(func)</p>
+
+<p>return func</p>
+
+<p>@register</p>
+
+<p>def f1():</p>
+
+<p>print(&lsquo;running f1()&rsquo;)</p>
+
+<p>print(&lsquo;running main()&rsquo;)</p>
+
+<p>print(&lsquo;registry -&gt;&rsquo;, registry)</p>
+
+<p>f1()</p>
+
+<p>7.10.1 一个参数化的注册装饰器</p>
+
+<p>为了便于启用或禁用 register 执行的函数注册功能，我们为它提供一个可选的 active</p>
+
+<p>参数，设为 False 时，不注册被装饰的函数。实现方式参见示例 7-23。从概念上看，这 个新的 register 函数不是装饰器，而是装饰器工厂函数。调用它会返回真正的装饰器，</p>
+
+<p>这才是应用到目标函数上的装饰器。</p>
+
+<p>示例 7-23 为了接受参数，新的 register 装饰器必须作为函数调用</p>
+
+<p>registry = set() O</p>
+
+<p>def register(active=True): © def decorate(func): ©</p>
+
+<p>print(&lsquo;running register(active=%s)-&gt;decorate(%s)&rsquo; % (active, func))</p>
+
+<p>if active: ©</p>
+
+<p>registry.add(func)</p>
+
+<p>else:</p>
+
+<p>registry.discard(func)❺</p>
+
+<p>return func © return decorate &amp;</p>
+
+<p>@register(active=False)❻</p>
+
+<p>def f1():</p>
+
+<p>print(&lsquo;running f1()&rsquo;)</p>
+
+<p>@register() 0 def f2():</p>
+
+<p>print(&lsquo;running f2()&rsquo;) def f3():</p>
+
+<p>print(&lsquo;running f3()&rsquo;)</p>
+
+<p>❶ registry 现在是一个 set 对象，这样添加和删除函数的速度更快。</p>
+
+<p>❷ register 接受一个可选的关键字参数。</p>
+
+<p>❸ decorate 这个内部函数是真正的装饰器；注意，它的参数是一个函数。</p>
+
+<p>❹ 只有 active 参数的值(从闭包中获取)是 True 时才注册 func。</p>
+
+<p>❺ 如果 active 不为真，而且 func 在 registry 中，那么把它删除。</p>
+
+<p>❻ decorate 是装饰器，必须返回一个函数。</p>
+
+<p>❼ register 是装饰器工厂函数，因此返回 decorate。</p>
+
+<p>❽ @register 工厂函数必须作为函数调用，并且传入所需的参数。</p>
+
+<p>❾即使不传入参数，register也必须作为函数调用(@register())，即要返回真正的 装饰器 decorate。</p>
+
+<p>这里的关键是，register()要返回decorate，然后把它应用到被装饰的函数上。</p>
+
+<p>示例 7-23 中的代码在 registration_param.py 模块中。如果导入，得到的结果如下：</p>
+
+<p>&gt;&gt;&gt; import registration_param</p>
+
+<p>running register(active=False)-&gt;decorate(<function f1 at 0x10063c1e0>) running register(active=True)-&gt;decorate(<function f2 at 0x10063c268>) &gt;&gt;&gt; registration_param.registry</p>
+
+<p>{<function f2 at 0x10063c268>}</p>
+
+<p>注意，只有f2函数在registry中；fl不在其中，因为传给register装饰器工厂函数 的参数是active=False，所以应用到fl上的decorate没有把它添加到registry</p>
+
+<p>中。</p>
+
+<p>如果不使用@句法，那就要像常规函数那样使用register；若想把f添加到registry 中，则装饰f函数的句法是register()(f);不想添加(或把它删除)的话，句法是 register(active=False)(f)。示例7-24演示了如何把函数添加到registry中，以及</p>
+
+<p>如何从中删除函数。</p>
+
+<p>示例 7-24 使用示例 7-23 中的 registration_param 模块</p>
+
+<p>running register(active=True)-&gt;decorate(<function f2 at 0x10073c268>) &gt;&gt;&gt; registry # O</p>
+
+<p>{<function f2 at 0x10073c268>}</p>
+
+<p>&gt;&gt;&gt; register()(f3) # ©</p>
+
+<p>running register(active=True)-&gt;decorate(<function f3 at 0x10073c158>)</p>
+
+<p><function f3 at 0x10073c158></p>
+
+<p>&gt;&gt;&gt; registry # ©</p>
+
+<p>{<function f3 at 0x10073c158>, <function f2 at 0x10073c268>}</p>
+
+<p>&gt;&gt;&gt; register(active=False)(f2) # ©</p>
+
+<p>running register(active=False)-&gt;decorate(<function f2 at 0x10073c268>)</p>
+
+<p><function f2 at 0x10073c268></p>
+
+<p>&gt;&gt;&gt; registry # ❺</p>
+
+<p>{<function f3 at 0x10073c158>}</p>
+
+<p>❶ 导入这个模块时， f2 在 registry 中。</p>
+
+<h4 id="❷register-表达式返回decorate-然后把它应用到f3上">❷register()表达式返回decorate，然后把它应用到f3上。</h4>
+
+<p>❸ 前一行把 f3 添加到 registry 中。</p>
+
+<p>❹ 这次调用从 registry 中删除 f2。</p>
+
+<p>❺ 确认 registry 中只有 f3。</p>
+
+<h4 id="参数化装饰器的原理相当复杂-我们刚刚讨论的那个比大多数都简单-参数化装饰器通常">参数化装饰器的原理相当复杂，我们刚刚讨论的那个比大多数都简单。参数化装饰器通常</h4>
+
+<p>会把被装饰的函数替换掉，而且结构上需要多一层嵌套。接下来会探讨这种函数金字塔。</p>
+
+<p>7.10.2参数化clock装饰器</p>
+
+<p>本节再次探讨 clock 装饰器，为它添加一个功能：让用户传入一个格式字符串，控制被 装饰函数的输出。参见示例 7-25。</p>
+
+<h4 id="为了简单起见-示例7-25基于示例7-15中最初实现的clock-而不是示例7-17-中使用-functools-wraps-改进后的版本-因为那一版增加了一层函数">为了简单起见，示例7-25基于示例7-15中最初实现的clock，而不是示例7-17 中使用 @functools.wraps 改进后的版本，因为那一版增加了一层函数。</h4>
+
+<h4 id="示例-7-25-clockdeco-param-py-模块-参数化-clock-装饰器">示例 7-25 clockdeco_param.py 模块：参数化 clock 装饰器</h4>
+
+<p>import time</p>
+
+<p>DEFAULT_FMT = &lsquo;[{elapsed:0.8f}s] {name}({args}) -&gt; {result}&rsquo;</p>
+
+<p>def clock(fmt=DEFAULT_FMT): def decorate(func):</p>
+
+<p>O©©</p>
+
+<p>def clocked(*_args): t0 = time.time()</p>
+
+<p>_result = func(*_args) © elapsed = time.time() - t0 name = func.<strong>name</strong></p>
+
+<p>args = &lsquo;, &lsquo;.join(repr(arg) for arg in _args) ❺</p>
+
+<p>result = repr(_result) © print(fmt.format(**locals())) © return _result ❻</p>
+
+<p>return clocked o return decorate ©</p>
+
+<p>if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>@clock()</p>
+
+<p>def snooze(seconds): time.sleep(seconds)</p>
+
+<p>for i in range(3): snooze(.123)</p>
+
+<p>❶ clock 是参数化装饰器工厂函数。</p>
+
+<p>❷ decorate 是真正的装饰器。</p>
+
+<p>❸ clocked 包装被装饰的函数。</p>
+
+<p>❹ _result 是被装饰的函数返回的真正结果。</p>
+
+<p>❺ _args 是 clocked 的参数， args 是用于显示的字符串。</p>
+
+<p>❻ result 是 _result 的字符串表示形式，用于显示。</p>
+
+<p>❼ 这里使用 **locals() 是为了在 fmt 中引用 clocked 的局部变量。</p>
+
+<p>❽ clocked 会取代被装饰的函数，因此它应该返回被装饰的函数返回的值。</p>
+
+<p>❾ decorate 返回 clocked。</p>
+
+<p>❿ clock 返回 decorate 。</p>
+
+<p>®在这个模块中测试，不传入参数调用clock()，因此应用的装饰器使用默认的格式 str。</p>
+
+<p>在 shell 中运行示例 7-25，会得到下述结果：</p>
+
+<p>$ python3 clockdeco_param.py</p>
+
+<p>[0.12412500s] snooze(0.123) -&gt; None [0.12411904s] snooze(0.123) -&gt; None [0.12410498s] snooze(0.123) -&gt; None</p>
+
+<p>示例 7-26 和示例 7-27 是另外两个模块，它们使用了 clockdeco_param 模块中的新功 能，随后是两个模块输出的结果。</p>
+
+<p>示例 7-26 clockdeco_param_demo1.py</p>
+
+<p>import time</p>
+
+<p>from clockdeco_param import clock</p>
+
+<p>@clock(&lsquo;{name}: {elapsed}s&rsquo;) def snooze(seconds): time.sleep(seconds)</p>
+
+<p>for i in range(3): snooze(.l23)</p>
+
+<h4 id="示例-7-26-的输出">示例 7-26 的输出：</h4>
+
+<p>$ python3 clockdeco_param_demol.py snooze: 0.l24l469383239746ls snooze: 0.l24ll594390869l4s snooze: 0.l24l2ll89ll743l64s</p>
+
+<h4 id="示例-7-27-clockdeco-param-demo2-py">示例 7-27 clockdeco_param_demo2.py</h4>
+
+<p>import time</p>
+
+<p>from clockdeco_param import clock</p>
+
+<p>@clock(&lsquo;{name}({args}) dt={elapsed:0.3f}s&rsquo;) def snooze(seconds): time.sleep(seconds)</p>
+
+<p>for i in range(3): snooze(.l23)</p>
+
+<h4 id="示例-7-27-的输出">示例 7-27 的输出：</h4>
+
+<p>$ python3 clockdeco_param_demo2.py snooze(0.l23) dt=0.l24s snooze(0.l23) dt=0.l24s snooze(0.l23) dt=0.l24s</p>
+
+<h4 id="受本书篇幅限制-我们对装饰器的探讨到此结束-延伸阅读中的资料讨论了构建工业级装">受本书篇幅限制，我们对装饰器的探讨到此结束。延伸阅读中的资料讨论了构建工业级装</h4>
+
+<p>饰器的技术，尤其是 Graham Dumpleton 的博客和 wrapt 模块。</p>
+
+<h4 id="graham-dumpleton和lennart-regebro-本书的技术审校之一-认为-装饰器最">Graham Dumpleton和Lennart Regebro （本书的技术审校之一）认为，装饰器最</h4>
+
+<p>好通过实现 <strong>call</strong> 方法的类实现，不应该像本章的示例那样通过函数实现。我同 意使用他们建议的方式实现非平凡的装饰器更好，但是使用函数解说这个语言特性的</p>
+
+<p>基本思想更易于理解。</p>
+
+<h3 id="7-11-本章小结">7.11 本章小结</h3>
+
+<p>本章介绍了很多基础知识，虽然学习之路崎岖不平，我还是尽可能让路途平坦顺畅。毕</p>
+
+<p>竟，我们已经进入元编程领域了。</p>
+
+<p>开始，我们先编写了一个没有内部函数的 @register 装饰器；最后，我们实现了有两层 嵌套函数的参数化装饰器 @clock()。</p>
+
+<p>尽管注册装饰器在多数情况下都很简单，但是在高级的 Python 框架中却有用武之地。我 们使用注册方式对第 6 章的“策略”模式做了重构。</p>
+
+<p>参数化装饰器基本上都涉及至少两层嵌套函数，如果想使用 @functools.wraps 生成装</p>
+
+<p>饰器，为高级技术提供更好的支持，嵌套层级可能还会更深，比如前面简要介绍过的叠放</p>
+
+<p>装饰器。</p>
+
+<p>我们还讨论了标准库中functools模块提供的两个出色的函数装饰器：@lru_cache()</p>
+
+<p>和 @singledispatch。</p>
+
+<p>若想真正理解装饰器，需要区分导入时和运行时，还要知道变量作用域、闭包和新增的</p>
+
+<p>nonlocal 声明。掌握闭包和 nonlocal 不仅对构建装饰器有帮助，还能协助你在构建</p>
+
+<p>GUI 程序时面向事件编程，或者使用回调处理异步 I/O。</p>
+
+<h3 id="7-12-延伸阅读">7.12 延伸阅读</h3>
+
+<p>《Python Cookbook (第 3 版)中文版》(David Beazley 和 Brian K. Jones 著)的第 9 章“元</p>
+
+<p>编程”有几个诀窍构建了基本的装饰器和特别复杂的装饰器。其中， “9.6 定义一个能接收</p>
+
+<p>可选参数的装饰器”一节中的装饰器可以作为常规的装饰器调用，也可以作为装饰器工厂 函数调用，例如 @clock 或 @clock()。</p>
+
+<p>Graham Dumpleton 写了一系列博客文章</p>
+
+<p>( <a href="https://github.com/GrahamDumpleton/wrapt/blob/develop/blog/README.md">https://github .com/GrahamDumpleton/wrapt/blob/develop/blog/README.md</a> ) ，深入剖析了 如何实现行为良好的装饰器，第一篇是“How You Implemented Your Python Decorator is <a href="https://github.com/GrahamDumpleton/wrapt/blob/develop/blog/01-how-you-implemented-your-python-decorator-is-wrong.md">Wrong” </a><a href="https://github.com/GrahamDumpleton/wrapt/blob/develop/blog/01-how-you-implemented-your-python-decorator-is-wrong.md">(https://github.com/GrahamDumpleton/wrapt/blob/develop/blog/01-how-you-</a>implemented-your-python-decorator-is-wrong.md)。他在这方面的深厚知识充分体现在在他 编写的wrapt模块(<a href="http://wrapt.readthedocs.org/en/latest/">http://wrapt+readthedocs+org/en/latest/</a>)中。这个模块的作用是简化装 饰器和动态函数包装器的实现，即使多层装饰也支持内省，而且行为正确，既可以应用到 方法上，也可以作为描述符使用。(描述符在本书第 20 章讨论。)</p>
+
+<p>Michele Simionato 开发了一个包，根据文档，它旨在“简化普通程序员使用装饰器的方 式，并且通过各种复杂的示例推广装饰器”。这个包是</p>
+
+<p>decorator (<a href="https://pypi.python.org/pypi/decorator">https://pypi.python.org/pypi/decorator</a>) ，可通过 PyPI 安装。</p>
+
+<p>Python Decorator Library 维基页面(<a href="https://wiki.python.org/moin/PythonDecoratorLibrary">https://wiki+python.org/moin/PythonDecoratorLibrary</a>)在 Python 刚添加装饰器这个特性时就创建了，里面有很多示例。由于那个页面是几年前开始 编写的，有些技术已经过时了，不过仍是很棒的灵感来源。</p>
+
+<p>PEP 443 (<a href="http://www.python.org/dev/peps/pep-0443/">http://www.python.org/dev/peps/pep-0443/</a>)对单分派泛函数的基本原理和细节做 了说明。Guido van Rossum很久以前(2005年3月)写的一篇博客文章“Five-Minute Multimethods in Python” (<a href="http://www.artima.com/weblogs/viewpost.jsp?thread=101605">http://www+artima+com/weblogs/viewpost.jsp?thread=101605</a>)详细 说明了如何使用装饰器实现泛函数(也叫多方法)。他给出的代码支持多分派(即根据多 个定位参数进行分派)。 Guido 写的多方法代码很棒，但那只是教学示例。如果想使用现 代的技术实现多分派泛函数，并支持在生产环境中使用，可以用 Martij n Faassen 开发的 Reg(<a href="http://reg.readthedocs.io/en/latest/">http://reg.readthedocs.io/en/latest/</a>)。 Martijn 还是模型驱动型 REST 式 Web 框架 Morepath (<a href="http://morepath.readthedocs.org/en/latest/">http://morepath.readthedocs.org/en/latest/</a>)的开发者。</p>
+
+<p>Fredrik Lundh 写的一篇短文“Closures in Python” (<a href="http://effbot.org/zone/closure.htm">http://effbot+org/zone/closure+htm</a>)解说了</p>
+
+<p>闭包这个术语。</p>
+
+<p>“PEP 3104—Access to Names in Outer Scopes”(<a href="http://www.python.org/dev/peps/pep-3104/">http://www.python.org/dev/peps/pep-3104/</a>) 说明了引入 nonlocal 声明的原因：重新绑定既不在本地作用域中也不在全局作用域中的 名称。这份PEP还概述了其他动态语言(Perl、Ruby、JavaScript，等等)解决这个问题 的方式，以及 Python 中可用设计方案的优缺点。</p>
+
+<p>“PEP 227—Statically Nested Scopes” (<a href="http://www.python.org/dev/peps/pep-0227/">http://www.python.org/dev/peps/pep-0227/</a>)更偏重于 理论，说明了 Python 2.1 引入的词法作用域。词法作用域在这一版里是一种方案，到 Python 2.2 就变成了标准。此外，这份 PEP 还说明了 Python 中闭包的基本原理和实现方式 的选择。</p>
+
+<p>杂谈</p>
+
+<p>任何把函数当作一等对象的语言，它的设计者都要面对一个问题：作为一等对象的函</p>
+
+<p>数在某个作用域中定义，但是可能会在其他作用域中调用。问题是，如何计算自由变</p>
+
+<p>量？首先出现的最简单的处理方式是使用“动态作用域”。也就是说，根据函数调用所</p>
+
+<p>在的环境计算自由变量。</p>
+
+<p>如果Python使用动态作用域，不支持闭包，那么avg （与示例7-9类似）可以写成这 样：</p>
+
+<p>&gt;&gt;&gt; ###这不是真实的Python控制台会话！ ### &gt;&gt;&gt; avg = make_averager()</p>
+
+<p>&gt;&gt;&gt; series =[]# O &gt;&gt;&gt; avg(l0)</p>
+
+<p>l0.0</p>
+
+<p>&gt;&gt;&gt; avg(ll) # ©</p>
+
+<p>l0.5</p>
+
+<p>&gt;&gt;&gt; avg(l2)</p>
+
+<p>ll.0</p>
+
+<p>&gt;&gt;&gt; series = [1] # ©</p>
+
+<p>&gt;&gt;&gt; avg(5)</p>
+
+<p>3.0</p>
+
+<p>❶使用avg之前要自己定义series =[]，因此我们必须知道averager （在</p>
+
+<p>make_averager 内部）引用的是一个列表。</p>
+
+<p>❷ 在背后使用 series 累计要计入平均值的值。</p>
+
+<p>❸ 执行 series = [l] 后，之前的列表消失了。同时计算两个独立的移动平均值时 可能会发生这种意外。</p>
+
+<p>函数应该是黑盒，把实现隐藏起来，不让用户知道。但是对动态作用域来说，如果函</p>
+
+<p>数使用自由变量，程序员必须知道函数的内部细节，这样才能搭建正确运行所需的环</p>
+
+<p>境。</p>
+
+<p>另一方面，动态作用域易于实现，这可能就是John McCarthy创建Lisp （第一门把函 数视作一等对象的语言）时采用这种方式的原因。Paul Graham写的“The Roots of Lisp”一文（<a href="http://www.paulgraham.com/rootsoflisp.html">http://www.paulgraham.com/rootsoflisp.html</a>）对 John McCarthy 关于 Lisp 语 言那篇论文（“Recursive Functions of Symbolic Expressions and Their Computation by Machine, Part I，，<a href="http://www-formal.stanford.edu/jmc/recursive/recursive.html">http://www-formal.stanford.edu/jmc/recursive/recursive.html</a>）做了通俗 易懂的解说。 McCarthy 那篇论文是和贝多芬第九交响曲一样伟大的杰作。 Paul Graham 使用通俗易懂的语言翻译了那篇论文，把数学原理转换成了英语和可运行的 代码。</p>
+
+<p>Paul Graham的注解还指出动态作用域难以实现。下面这段文字引自“The Roots of Lisp” 一文：</p>
+
+<p>就连第一个 Lisp 高阶函数示例都因为动态作用域而无法运行，这充分证明了动 态作用域的危险性。 McCarthy 在 1960 年可能没有全面认识到动态作用域的影</p>
+
+<p>响。动态作用域在各种 Lisp 实现中存在的时间特别长，直到 Sussman 和 Steele 在 1975 年开发出 Scheme 为止。词法作用域不会把 eval 的定义变得多么复杂， 只是编译器可能更难编写。</p>
+
+<p>如今，词法作用域已成常态：根据定义函数的环境计算自由变量。词法作用域让人更 难实现支持一等函数的语言，因为需要支持闭包。不过，词法作用域让代码更易于阅 读。 Algol 之后出现的语言大都使用词法作用域。</p>
+
+<p>多年来， Python 的 lambda 表达式不支持闭包，因此在博客圈的函数式编程极客群体 中，这个特性的名声并不好。 Python 2.2（2001 年 12 月发布）修正了这个问题，但是 博客圈的固有印象不会轻易转变。自此之后，仅仅由于句法上的局限， lambda 一直 处于尴尬的境地。</p>
+
+<p>Python 装饰器和装饰器设计模式</p>
+
+<p>Python 函数装饰器符合 Gamma 等人在《设计模式：可复用面向对象软件的基础》一 书中对“装饰器”模式的一般描述： “动态地给一个对象添加一些额外的职责。就扩展 功能而言，装饰器模式比子类化更灵活。 ”</p>
+
+<p>在实现层面， Python 装饰器与“装饰器”设计模式不同，但是有些相似之处。</p>
+
+<p>在设计模式中， Decorator 和 Component 是抽象类。为了给具体组件添加行为，具</p>
+
+<p>体装饰器的实例要包装具体组件的实例。《设计模式：可复用面向对象软件的基础》</p>
+
+<p>一书是这样说的：</p>
+
+<p>装饰器与它所装饰的组件接口一致，因此它对使用该组件的客户透明。它将客户</p>
+
+<p>请求转发给该组件，并且可能在转发前后执行一些额外的操作（例如绘制一个边</p>
+
+<p>框）。透明性使得你可以递归嵌套多个装饰器，从而可以添加任意多的功能。</p>
+
+<p>（第 115 页）</p>
+
+<p>在 Python 中，装饰器函数相当于 Decorator 的具体子类，而装饰器返回的内部函数 相当于装饰器实例。返回的函数包装了被装饰的函数，这相当于“装饰器”设计模式中 的组件。返回的函数是透明的，因为它接受相同的参数，符合组件的接口。返回的函</p>
+
+<p>数把调用转发给组件，可以在转发前后执行额外的操作。因此，前面引用那段话的最 后一句可以改成： “透明性使得你可以递归嵌套多个装饰器，从而可以添加任意多的</p>
+
+<p>行为。 ”这就是叠放装饰器的理论基础。</p>
+
+<p>注意，我不是建议在 Python 程序中使用函数装饰器实现“装饰器”模式。在特定情况 下确实可以这么做，但是一般来说，实现“装饰器”模式时最好使用类表示装饰器和要</p>
+
+<p>包装的组件。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/06-%E4%BD%BF%E7%94%A8%E4%B8%80%E7%AD%89%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 使用一等函数实现设计模式</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/08-%E5%AF%B9%E8%B1%A1%E5%BC%95%E7%94%A8%E5%8F%AF%E5%8F%98%E6%80%A7%E5%92%8C%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+            <span class="next-text nav-default">08 对象引用、可变性和垃圾回收</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

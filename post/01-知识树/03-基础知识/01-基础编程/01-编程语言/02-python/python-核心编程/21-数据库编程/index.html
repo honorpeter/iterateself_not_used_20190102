@@ -1,0 +1,3165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>21 数据库编程 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="据库编程 本章主题 •介绍 •数据库和 Python RDBMSs, ORMs, and Python • Python数据库应用程序程序员接口(DB-API) •关系数据库(RDBMSs) •对象-关系管理" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/21-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="21 数据库编程" />
+<meta property="og:description" content="据库编程 本章主题 •介绍 •数据库和 Python RDBMSs, ORMs, and Python • Python数据库应用程序程序员接口(DB-API) •关系数据库(RDBMSs) •对象-关系管理" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/21-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/" /><meta property="article:published_time" content="2018-06-26T21:19:47&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:19:47&#43;00:00"/>
+<meta itemprop="name" content="21 数据库编程">
+<meta itemprop="description" content="据库编程 本章主题 •介绍 •数据库和 Python RDBMSs, ORMs, and Python • Python数据库应用程序程序员接口(DB-API) •关系数据库(RDBMSs) •对象-关系管理">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:19:47&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:19:47&#43;00:00" />
+<meta itemprop="wordCount" content="20666">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="21 数据库编程"/>
+<meta name="twitter:description" content="据库编程 本章主题 •介绍 •数据库和 Python RDBMSs, ORMs, and Python • Python数据库应用程序程序员接口(DB-API) •关系数据库(RDBMSs) •对象-关系管理"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">21 数据库编程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 20666 words </span>
+        <span class="more-meta"> 42 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#21-1-介绍">21.1 介绍</a></li>
+<li><a href="#21-1-1-持久存储">21.1.1 持久存储</a></li>
+<li><a href="#21-1-2基本的数据库操作和sql语言">21.1.2基本的数据库操作和SQL语言</a>
+<ul>
+<li><a href="#底层存储">底层存储</a></li>
+<li><a href="#用户界面">用户界面</a></li>
+<li><a href="#数据库">数据库</a></li>
+<li><a href="#组件">组件</a></li>
+<li><a href="#sql">SQL</a></li>
+<li><a href="#创建数据库">创建数据库</a></li>
+<li><a href="#选择要使用的数据库">选择要使用的数据库</a></li>
+<li><a href="#创建表">创建表</a></li>
+<li><a href="#删除表">删除表</a></li>
+<li><a href="#插入行">插入行</a></li>
+<li><a href="#更新行">更新行</a></li>
+<li><a href="#删除行">删除行</a></li>
+</ul></li>
+<li><a href="#21-1-3-数据库-和-python">21.1.3 数据库 和 Python</a></li>
+<li><a href="#21-2-python数据库应用程序-程序员接口-db-api">21.2 Python数据库应用程序 程序员接口（DB-API）</a></li>
+<li><a href="#21-2-1模块属性">21.2.1模块属性</a>
+<ul>
+<li><a href="#数据属性">数据属性</a></li>
+<li><a href="#threadsafety">threadsafety</a></li>
+<li><a href="#paramstyle">paramstyle</a></li>
+<li><a href="#函数属性">函数属性</a></li>
+<li><a href="#异常">异常</a></li>
+</ul></li>
+<li><a href="#21-2-2-连接对象">21.2.2 连接对象</a>
+<ul>
+<li><a href="#方法">方法</a></li>
+</ul></li>
+<li><a href="#21-2-4-类型对象和构造器">21.2.4 类型对象和构造器</a>
+<ul>
+<li><a href="#db-api版本变更">DB-API版本变更</a></li>
+</ul></li>
+<li><a href="#21-2-6数据库和python-接口程序">21.2.6数据库和Python:接口程序</a></li>
+<li><a href="#21-2-7-使用数据库接口程序举例">21.2.7 使用数据库接口程序举例</a>
+<ul>
+<li><a href="#mysql">MySQL</a></li>
+<li><a href="#postgresql">PostgreSQL</a></li>
+<li><a href="#pypgsql">PyPgSQL</a></li>
+<li><a href="#pygresql">PyGreSQL</a></li>
+<li><a href="#pypgsql-1">PyPgSQL</a></li>
+<li><a href="#pygresql-1">PyGreSQL</a></li>
+<li><a href="#数据库接口程序应用程序举例-i">数据库接口程序应用程序举例    I</a></li>
+<li><a href="#第1-18行">第1-18行</a></li>
+<li><a href="#第20-75行">第20-75行</a></li>
+<li><a href="#第77-89行">第77-89行</a></li>
+<li><a href="#91-103行">91-103行</a></li>
+<li><a href="#105-115行">105-115行</a></li>
+<li><a href="#第117行">第117行</a></li>
+<li><a href="#第119-129行">第119-129行</a></li>
+<li><a href="#第131-137行">第131-137行</a></li>
+<li><a href="#第-139-174-行">第 139-174 行</a></li>
+</ul></li>
+<li><a href="#21-3-1考虑对象-而不是sql">21.3.1考虑对象，而不是SQL</a></li>
+<li><a href="#21-3-2-python-和-orm">21.3.2 Python 和 ORM</a></li>
+<li><a href="#21-3-3-雇员数据库举例">21.3.3 雇员数据库举例</a>
+<ul>
+<li><a href="#sqlalchemy">SQLAlchemy</a></li>
+<li><a href="#第1-10行">第1-10行</a></li>
+<li><a href="#第12-31行">第12-31行</a></li>
+<li><a href="#第46-70行">第46-70行</a></li>
+<li><a href="#第72-77行">第72-77行</a></li>
+<li><a href="#lines-79-80">Lines 79-80</a></li>
+<li><a href="#lines-82-84">Lines 82-84</a></li>
+<li><a href="#第86-114行">第86-114行</a></li>
+<li><a href="#第1-10行-1">第1-10行</a></li>
+<li><a href="#12-42-行">12-42 行</a></li>
+<li><a href="#第44-67行-77-78行">第44-67行， 77-78行</a></li>
+<li><a href="#第69-75行">第69-75行</a></li>
+<li><a href="#第80-108行">第80-108行</a></li>
+</ul></li>
+<li><a href="#21-3-4-总结">21.3.4 总结</a></li>
+<li><a href="#21-4-相关模块">21.4 相关模块</a></li>
+<li><a href="#21-5-练习">21.5 练习</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>据库编程</p>
+
+<p><img src="07Python38c3160b-3002.jpg" alt="img" /></p>
+
+<p>本章主题</p>
+
+<p>•介绍</p>
+
+<p>•数据库和 Python RDBMSs, ORMs, and Python • Python数据库应用程序程序员接口(DB-API)</p>
+
+<p>•关系数据库(RDBMSs)</p>
+
+<p>•对象-关系管理器(ORMs)</p>
+
+<p>•关系模块</p>
+
+<p>•练习</p>
+
+<p><img src="07Python38c3160b-3003.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3004.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3005.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3006.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3007.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3008.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3009.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3010.png" alt="img" /></p>
+
+<p>本章的主题是如何通过Python访问数据库。前面我们已经了解了简单持久存储，但是在更多场 合下，我们的应用程序需要的是一个功能齐全的关系型数据库。</p>
+
+<h3 id="21-1-介绍">21.1 介绍</h3>
+
+<p><img src="07Python38c3160b-3011.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3012.jpg" alt="img" /></p>
+
+<h3 id="21-1-1-持久存储">21.1.1 持久存储</h3>
+
+<p>在任何的应用程序中，都需要持久存储。一般说来，有三种基本的存储机制：文件、关系型数 据库或其它的一些变种，例如现有系统的API，0RM、文件管理器、电子表格、配置文件等等。</p>
+
+<p>在前面的章节中，我们研宄了通过基于常规文件的 Python 和 DBM 接口来实现持久存储, 比如 *dbm, dbhas/bsddb文件，shelve（pickle和DBM的结合）.这些接口都提供了类似字典的对象接口。 本章的主题是如何在中大型项目中使用关系型数据库.（对这些项目而言, 那些接口力不从心）</p>
+
+<h3 id="21-1-2基本的数据库操作和sql语言">21.1.2基本的数据库操作和SQL语言</h3>
+
+<p>在深入主题之前，下面先简单介绍一下基本的数据库概念和结构化查询语言（SQL）。如果你有 足够的经验, 可以跳过, 也可以通过阅读正文来复习一下.</p>
+
+<h4 id="底层存储">底层存储</h4>
+
+<p>数据库的底层存储通常使用文件系统, 它可以是普通操作系统文件、专用操作系统文件,甚至有 可能是磁盘分区。</p>
+
+<h4 id="用户界面">用户界面</h4>
+
+<p><img src="07Python38c3160b-3013.jpg" alt="img" /></p>
+
+<p>大部分的数据库系统会提供一个命令行工具来执行 SQL 命令和查询，当然也有一些使用图形界 面的漂漂亮亮的客户端程序来干同样的事。</p>
+
+<h4 id="数据库">数据库</h4>
+
+<p>关系型数据库管理系统通常通常都支持多个数据库，例如销售库、市场库、客户支持库等等. 如 果你使用的关系数据库管理系统是基于服务器的，这些数据库就都在同一台服务器上 （一些简单的</p>
+
+<p>关系型数据库没有服务器，如sqlite）.本章的例子中，MySQL是一种基于服务器的关系数据库管 理系统（只要服务器在运行，它就一直在等待运行指令），SQLite和Gadfly则是另一种轻量型的基 于文件的关系数据库（它们没有服务器）。</p>
+
+<h4 id="组件">组件</h4>
+
+<p>你可以将数据库存储想像为一个表格， 每行数据都有一个或多个字段对应着数据库中的列. 每 个表每个列及其数据类型的集合构成数据库结构的定义. 数据库能够被创建， 也可以被删除. 表也</p>
+
+<p>一样.往数据库里增加一条记录称为插入（inserting） —条记录，修改库中一条已有的记录则称 为更新（updating），删除表中已经有的数据行称为删除（deleting）.这些操作通常作为数据库操 作命令来提交.从一个数据库中请求符合条件的数据称为查询（querying）.当你对一个数据库进行</p>
+
+<p>查询时， 你可以一步取回所有符合条件的数据， 也可以循环逐条取出每一行. 有些数据库使用游标 的概念来表示 SQL 命令， 查询， 取回结果集等等.</p>
+
+<h4 id="sql">SQL</h4>
+
+<p>数据库命令和查询操作需要通过SQL语句来执行.不是所有的数据库都使用SQL，但所有主流 的关系型数据库都使用SQL.下面是一些SQL命令的例子.绝大多数数据库被配置为大小写不敏感， 除了数据库操作命令以外.被广为接受的书写SQL的基本风格是关键字大写.绝大多数命令行程序</p>
+
+<p>要求用一个分号来结束一条SQL语句.</p>
+
+<h4 id="创建数据库">创建数据库</h4>
+
+<p>CREATE DATABASE test;</p>
+
+<p>GRANT ALL ON test.* to user（s）;</p>
+
+<p>第一行创建一个名为“test”的数据库，第二行将该数据库的权限赋给具体的用户（或者全部 用户），以便它们可以执行下面的数据库操作。</p>
+
+<h4 id="选择要使用的数据库">选择要使用的数据库</h4>
+
+<p>USE test;</p>
+
+<p>如果在登录数据库时没有指定要使用那个数据库，这条简单的语句就可以指定你打算访问的数</p>
+
+<p>据库.</p>
+
+<p>删除数据库</p>
+
+<p>DROP DATABASE test;</p>
+
+<p>这条短短的语句具有极大的威力. 它用来删除数据库(包括数据库中所有的表及表中的数据).</p>
+
+<p>在输入完这条语句按下回车之前, 好好想想你是否真的打算这么做.</p>
+
+<h4 id="创建表">创建表</h4>
+
+<p>CREATE TABLE users (login VARCHAR(8), uid INT, prid INT);</p>
+
+<p>这个语句用于创建表users，它有一个类型为字符串的列login和两个类型为整数的字段uid 和 prid。</p>
+
+<h4 id="删除表">删除表</h4>
+
+<p>DROP TABLE users;</p>
+
+<p>这个简单的语句删除数据库中的一个表和它的所有数据。</p>
+
+<h4 id="插入行">插入行</h4>
+
+<p>INSERT INTO users VALUES(&lsquo;leanna&rsquo;, 311, 1);</p>
+
+<p>INSERT语句用来向数据库中添加新的数据行.语句中必须指定要插入的表及该表中各个字段的 值。上例中，表名是users,字符串’leanna&rsquo;对应着login字段，311和1分别对应着uid和 prid。</p>
+
+<h4 id="更新行">更新行</h4>
+
+<p>UPDATE users SET prid=4 WHERE prid=2;</p>
+
+<p>UPDATE users SET prid=1 WHERE uid=311;</p>
+
+<p>UPDATE 语句用来改变数据库中的已有记录. 使用 SET 关键字来指定你要修改的字段及新值, 你可以指定条件来筛选出需要更新的记录.在第一个例子中, 所有 prid 字段值为 2 的记录, 其 prid 字段的值都变更为 4. 在第二个例子里, uid 字段值为 311 的用户, 其 prid 字段的新值被 置为 1.</p>
+
+<h4 id="删除行">删除行</h4>
+
+<p>DELETE FROM users WHERE prid=%d;</p>
+
+<p>DELETE FROM users;</p>
+
+<p>DELETE FROM 命令用来删除数据. 必须指定你要删除的数据所在表名, 如果未提供(可选的)筛 选条件, 就象第二个例子一样, 表中所有的数据都会被删除.</p>
+
+<p>现在你已经了解数据库的基本概念, 有了这些基础, 本章余下的部分学起来会更加容易. 如果 需要进一步了解数据库知识, 市面是有数不清的数据库书籍可以选择.</p>
+
+<h3 id="21-1-3-数据库-和-python">21.1.3 数据库 和 Python</h3>
+
+<p>下面我们要详细了解Python数据库API. Python能够直接通过数据库接口，也可以通过ORM</p>
+
+<p>（不需要自己书写SQL）来访问关系数据库.</p>
+
+<p>类似数据库原理, 并发能力, 视图, 原子性, 数据完整性, 数据可恢复性, 还有左连接, 触发 器, 查询优化, 事务支持, 及存储过程等等, 这些东西, （市面上）有数不清的资源可供参考. 本章 不讨论这些主题, 我们将从一个 python 应用程序开始, 了解在 python 框架下如何将数据保存到 数据库, 如果将数据从数据库中取出来. 之后你就可以决定哪种方式适用于你手头的项目. 通过学 习示例代码，你可以立马动手把某种数据库整合到你的python应用程序当中.</p>
+
+<p>在python世界里，无需怀疑，与数据库协同工作已经是几乎所有应用程序的核心部分.在本 章中，我们将不仅仅使用&rdquo;万能&rdquo;的Python标准库.尽管我们需要从标准库开始.</p>
+
+<p>作为一个软件工程师, 在你的职业生涯中, 你可能永远不需要学习数据库知识: 如何使用命令 行工具，如何使用SQL?如何添加和更新数据？等等等等.如果python是你的编程工具，为你的 python应用添加数据库支持易如反掌.下面我们先来介绍一下Python DB-API,然后给出使用这个 标准的例子.</p>
+
+<p>我们的例子会使用开源的数据库系统. 不过我们不会去讨论开源产品好还是商业产品更好. 要 适应其它的数据库也相当容易, 需要特别提到的是 Aaron Watter 的 Gadfly 数据库, 一个完全由 Python代码写成的数据库系统.</p>
+
+<p>从python中访问数据库需要接口程序.接口程序是一个python模块，它提供数据库客户端 库（通常是C语言写成的）的接口供你访问.需要提到一点，所有Python接口程序都一定程度上遵</p>
+
+<p>守 Python DB-API 规范. 这也是本章的第一个主要主题.</p>
+
+<p>图21.1 演绎了 Python 数据库应用程序的结构（包括使用和不使用 ORM）. 你可以看到 DB-API 是数据库客户端 C 库的接口.</p>
+
+<p>图 21-1 数据库和应用程序之间的多层通讯.第一个盒子一般是 C/C++ 程序, 你的程序通过 DB-API兼容接口程序访问数据库.0RM通过程序处理数据库细节来简化数据库开发.</p>
+
+<p><img src="07Python38c3160b-3021.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3022.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3023.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3024.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3025.jpg" alt="img" /></p>
+
+<h3 id="21-2-python数据库应用程序-程序员接口-db-api">21.2 Python数据库应用程序 程序员接口（DB-API）</h3>
+
+<p>去哪儿找一个合适的接口访问数据库? 很简单， 去 python.org 找到数据库主题那一节， 你会 发现所有支持DB-API 2.0的各种数据库模块，文档，SIG等等.从那时起，DB-API被移到PEP 249 中（这个PEP废弃了老的DB-API 1.0，也就是PEP248标准）.那么，什么是DB-API ?</p>
+
+<p>DB-API是一个规范.它定义了一系列必须的对象和数据库存取方式，以便为各种各样的底层数 据库系统和多种多样的数据库接口程序提供一致的访问接口.象绝大多数社区成果一样，这个API 的产生来自于强烈的需求.</p>
+
+<p>在&rdquo;旧社会&rdquo;， 不同的人为各种各样的数据库实现了各种各样的数据库接口程序. 同一个轮子被 不同的人一遍又一遍的重复发明. 这些接口由不同的人在不同的时间实现， 功能接口各不兼容. 这 意味着使用这些接口的程序必须自定义他们选择的接口模块. 当这个接口模块变化时， 应用程序的 代码也必须随之更新.</p>
+
+<p>一个处理Python数据库事务的特殊事物小组（SIG，special interest group）因此诞生，</p>
+
+<p>最后.DB-API 1.0问世.DB-API为不同的数据库提供了一致的访问接口，在不同的数据库之间移</p>
+
+<p>H植代码成为一件轻松的事情（一般来说，只修要修改几行代码）.接下来你会看到这样的例子.    H</p>
+
+<h3 id="21-2-1模块属性">21.2.1模块属性</h3>
+
+<p>DB-API规范里的以下特性和属性必须提供.一个DB-API兼容的模块必须定义下表Table 21.1 中定义的所有全局属性.</p>
+
+<h4 id="数据属性">数据属性</h4>
+
+<p>apilevel</p>
+
+<p>apilevel这个字符串（不是浮点数）表示这个DB-API模块所兼容的DB-API最高版本号.如果 &ldquo;1.0&rdquo;， &ldquo;2.0&rdquo;， 如果未定义， 则默认是 &ldquo;1.0&rdquo;;</p>
+
+<p>表21.1 DB-API模块属性</p>
+
+<p>属性名</p>
+
+<p>apilevel</p>
+
+<p>threadsafety</p>
+
+<p>paramstyle</p>
+
+<p>connect()</p>
+
+<p>描述</p>
+
+<p>DB-API模块兼容的DB-API版本号 线程安全级别</p>
+
+<p>该模块支持的SQL语句参数风格 连接函数</p>
+
+<p>异常（参见表21.4）</p>
+
+<p><img src="07Python38c3160b-3027.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3028.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3029.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3030.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3031.jpg" alt="img" /></p>
+
+<h4 id="threadsafety">threadsafety</h4>
+
+<p>threadsafety 这是一个整数， 取值范围如下</p>
+
+<p>•    0:不支持线程安全，多个线程不能共享此模块</p>
+
+<p>•    1:初级线程安全支持：线程可以共享模块，但不能共享连接</p>
+
+<p>•    2:中级线程安全支持线程可以共享模块和连接，但不能共享游标</p>
+
+<p>•    3:完全线程安全支持线程可以共享模块，连接及游标.</p>
+
+<p>如果一个资源被共享， 就必需使用自旋锁或者是信号量这样的同步原语对其进行原子目标锁定 对这个目标来说， 磁盘文件和全局变量都不可靠， 并且有可能妨碍 .</p>
+
+<p>mutex（互斥量）的操作.参阅threading模块或第16章（多线程编程）来了解如何使用锁.</p>
+
+<h4 id="paramstyle">paramstyle</h4>
+
+<p>DB-API支持多种方式的SQL参数风格.这个参数是一个字符串，表明SQL语句中字符串替代的 方式. （参阅表21.2）</p>
+
+<h4 id="函数属性">函数属性</h4>
+
+<p><img src="07Python38c3160b-3032.jpg" alt="img" /></p>
+
+<p>connect 方法生成一个 connect 对象， 我们通过这个对象来访问数据库. 符合标准的模块都 会实现 connect 方法. 表21.3列出了 connect 函数的参数.</p>
+
+<p><img src="07Python38c3160b-3033.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3034.jpg" alt="img" /></p>
+
+<p>表21.2 数据库参数风格</p>
+
+<table>
+<thead>
+<tr>
+<th>Patameter</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>凤格</td>
+<td>描述</td>
+<td>示例</td>
+</tr>
+
+<tr>
+<td>数字</td>
+<td>数字位置成格</td>
+<td>WHERE name=:1</td>
+</tr>
+
+<tr>
+<td>命名</td>
+<td>命名参数成格</td>
+<td>VJHERE name=: name</td>
+</tr>
+
+<tr>
+<td>pyformat</td>
+<td>pyAhon字典格式转换</td>
+<td>WHERE name=%(name</td>
+</tr>
+
+<tr>
+<td>问号</td>
+<td>问号成格</td>
+<td>WHERE name=?</td>
+</tr>
+
+<tr>
+<td>format</td>
+<td>标准ABSI    格式转换</td>
+<td>VJHERE name=%s</td>
+</tr>
+</tbody>
+</table>
+
+<p>数据库连接参数可以以一个 DSN 字符串的形式提供， 也可以以多个位置相关参数的形式提供 （如果你明确知道参数的顺序的话）， 也可以以关键字参数的形式提供. 下面是一个来自 PEP 249 的 使用 connect（） 的例子:</p>
+
+<p>connect（dsn=&lsquo;myhost:MYDB&rsquo;，user=&lsquo;guido&rsquo;，password=&lsquo;234$&lsquo;）</p>
+
+<p>使用DSN字符串还是独立参数？这要看你连接的是哪种数据库.举例来说，如果你使用类似</p>
+
+<p><img src="07Python38c3160b-3036.jpg" alt="img" /></p>
+
+<p>ODBC 或 JDBC 的 API, 你就应该使用 DSN 字符串. 如果你直接访问数据库, 你就会更倾向于使用 独立参数. 另一个使用独立参数的原因是, 很多数据库接口程序还不支持 DSN 参数. 下面是一个 非 DSN 的例子.</p>
+
+<p>表 21.3 connect() 函数 属性</p>
+
+<p>参数</p>
+
+<p>user</p>
+
+<p>password</p>
+
+<p>host</p>
+
+<p>database</p>
+
+<p>dsn</p>
+
+<p>描述</p>
+
+<p>Username Password Hostname Database name Data source name</p>
+
+<p>connect()调用.注意不是所有的接口程序都是严格按照规范实现的.MySQLdb就使用了 db参 数而不是规范推荐的 database 参数来表示要访问的数据库.</p>
+
+<p>•    MySQLdb.connect(host二&rsquo;dbserv&rsquo;，db二&rsquo;inv&rsquo;，user二&rsquo;smith&rsquo;)</p>
+
+<p>•    PgSQL.connect(database二&rsquo;sales&rsquo;)</p>
+
+<p>•    psycopg.connect(database二&rsquo;template1&rsquo;，user二&rsquo;pgsql&rsquo;)</p>
+
+<p>•    gadfly.dbapi20.connect(&lsquo;csrDB&rsquo;，&rsquo;/usr/local/database&rsquo;)</p>
+
+<p>•    sqlite3.connect(&lsquo;marketing/test&rsquo;)</p>
+
+<h4 id="异常">异常</h4>
+
+<p>兼容标准的模块也应该提供这些异常类. 见表 21.4</p>
+
+<h3 id="21-2-2-连接对象">21.2.2 连接对象</h3>
+
+<p>要与数据库进行通信, 必须先和数据库建立连接. 连接对象处理命令如何送往服务器, 以及如 何从服务器接收数据等基础功能. 连接成功(或一个连接池)后你就能够向数据库服务器发送请求, 得到响应.</p>
+
+<p><img src="07Python38c3160b-3038.jpg" alt="img" /></p>
+
+<p>表21.4 DB-API 异常类</p>
+
+<p>异常</p>
+
+<p>Warning</p>
+
+<p>Error</p>
+
+<p>InterfaceError</p>
+
+<p>DatabaseError</p>
+
+<p>DataError</p>
+
+<p>OperationalError</p>
+
+<p>IntegrityError</p>
+
+<p>InternalError</p>
+
+<p>ProgrammingError</p>
+
+<p>描述</p>
+
+<p>警告异常基类</p>
+
+<p>错误异常基类</p>
+
+<p>数据库接口错误</p>
+
+<p>数据库错误</p>
+
+<p>理数据时出错</p>
+
+<p>数据库执行命令时出错</p>
+
+<p>数据完整性错误</p>
+
+<p>数据库内部出错 SQL 执行失败</p>
+
+<p><img src="07Python38c3160b-3039.jpg" alt="img" /></p>
+
+<p>NotSupportedError 试图执行数据库不支持的特性</p>
+
+<h4 id="方法">方法</h4>
+
+<p>连接对象没有必须定义的数据属性， 但是它至少应该定义表21.5中的这些方法.</p>
+
+<p>一旦执行了 close() 方法， 再试图使用连接对象的方法将会导致异常.</p>
+
+<p>对不支持事务的数据库或者虽然支持事务，但设置了自动提交(auto-commit)的数据库系统来 说，commitO方法什么也不做.如果你确实需要，可以实现一个自定义方法来关闭自动提交行为. 由于 DB-API 要求必须实现此方法， 对那些没有事务概念的数据库来说， 这个方法只需要有一条 pass 语句就可以了.</p>
+
+<p>类似commitO，rollback()方法仅对支持事务的数据库有意义.执行完rollback()，数据库 将恢复到提交事务前的状态.根据PEP249，在提交commitO之前关闭数据库连接将会自动调用 rollbackO方法.</p>
+
+<p>对不支持游标的数据库来说，cursorO方法仍然会返回一个尽量模仿游标对象的对象.这些是 最低要求. 特定数据库接口程序的开发者可以任意为他们的接口程序添加额外的属性， 只要他们愿</p>
+
+<p>意.</p>
+
+<p><img src="07Python38c3160b-3041.jpg" alt="img" /></p>
+
+<p>DB-API 规范建议但不强制接口程序的开发者为所有数据库接口模块编写异常类. 如果没有提 供异常类， 则假定该连接对象会引发一致的模块级异常. 一旦你完成了数据库连接， 并且关闭了 游标对象， 你应该执行 commit() 提交你的操作， 然后关闭这个连接.</p>
+
+<p><img src="07Python38c3160b-3042.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3043.jpg" alt="img" /></p>
+
+<p>表 21.5 连接对象方法</p>
+
+<p>Method Name close()</p>
+
+<p>Description</p>
+
+<p>关闭数据库连接</p>
+
+<p>commit()</p>
+
+<p>rollback()</p>
+
+<p>cursor()</p>
+
+<p>errorhandler</p>
+
+<p>errcls， errval)</p>
+
+<p>提交当前事务</p>
+
+<p>取消当前事务</p>
+
+<p>使用这个连接创建并返回一个游标或类游标的对象 (cxn， cur，</p>
+
+<p>21.2.3 游标对象</p>
+
+<p>当你建立连接之后， 就可以与数据库进行交互. 我们在前面那一小节提交， 一个游标允许用户 执行数据库命令和得到查询结果. 一个 Python DB-API 游标对象总是扮演游标的角色， 无论数据库 是否真正支持游标. 从这一点讲， 数据库接口程序必须实现游标对象. 只有这样， 才能保证无论使 用何种后端数据库你的代码都不需要做任何改变.</p>
+
+<p>创建游标对象之后， 你就可以执行查询或其它命令(或者多个查询和多个命令)， 也可以从结果</p>
+
+<p><img src="07Python38c3160b-3045.jpg" alt="img" /></p>
+
+<p>集中取出一条或多条记录. 表 21.6 列举了游标对象拥有的属性和方法.</p>
+
+<p>表 21.6 游标对象的属性 对象属性 arraysize connectionn description</p>
+
+<p>描述</p>
+
+<p>使用fechmanyO方法一次取出多少条记录，默认值为1 创建此游标对象的连接(可选)</p>
+
+<p>返回游标活动状态(一个包含七个元素的元组): (name， type_code， display<em>size， internal</em> size， precision， scale， null_ok); 只有 name 和 type_code 是必须提供的.</p>
+
+<p>lastrowid    返回最后更新行的 id (可选)， 如果数据库不支持行 id， 默认返回 None)</p>
+
+<p>rowcount    最后一次 execute() 操作返回或影响的行数.</p>
+
+<p>callproc(func[，args]) 调用一个存储过程</p>
+
+<p>close()    关闭游标对象</p>
+
+<p>execute(op[，args]) 执行一个数据库查询或命令</p>
+
+<p>executemany(op，args) 类似 execute() 和 map() 的结合， 为给定的每一个参数准备并执行 一个数据库查询/命令</p>
+
+<p>表 21.6 游标对象属性(续)</p>
+
+<p>对象属性    描述</p>
+
+<p>fetchone()    得到结果集的下一行</p>
+
+<p>fetchmany([size=cursor. arraysize])</p>
+
+<p>fetchall()</p>
+
+<p><strong>iter</strong>() messages next() nextset() rownumber</p>
+
+<p>得到结果集的下几行 (几 = size)</p>
+
+<p>返回结果集中剩下的所有行 创建一个迭代对象 (可选; 参阅 next())</p>
+
+<p>游标执行后数据库返回的信息列表 (元组集合) (可选) 使用迭代对象得到结果集的下一行(可选; 类似 fetchone()， 参阅 <strong>iter</strong>()) 移到下一个结果集 (如果支持的话)</p>
+
+<p>当前结果集中游标的索引 (以行为单位， 从0开始) (可选)</p>
+
+<p><img src="07Python38c3160b-3047.jpg" alt="img" /></p>
+
+<p>setinput- sizes(sizes) 设置输入最大值 (必须有， 但具体实现是可选的) setoutput- size(size[，col]) 设置大列的缓冲区大写(必须有， 但具体实现是可选的)</p>
+
+<p>游标对象最重要的属性是 execute<em>() 和 fetch</em>() 方法. 所有对数据库服务器的请求都由它 们来完成.对fetchmanyO方法来说，设置一个合理的arraysize属性会很有用.当然，在不需要时 关掉游标对象也是个好主意.如果你的数据库支持存储过程，你就可以使用callprocO方法.</p>
+
+<h3 id="21-2-4-类型对象和构造器">21.2.4 类型对象和构造器</h3>
+
+<p>通常两个不同系统的接口要求的参数类型是不一致的，譬如python调用c函数时Python对象和 C类型之间就需要数据格式的转换，反之亦然.类似的，在Python对象和原生数据库对象之间也是 如此. 对于 Python DB-API 的开发者来说， 你传递给数据库的参数是字符串形式的， 但数据库会根</p>
+
+<p>据需要将它转换为多种不同的形式. 以确保每次查询能被正确执行.</p>
+
+<p>举例来说，一个Python字符串可能被转换为一个VARCHAR,或一个TEXT,或一个BLOB,或一 个原生BINARY对象，或一个DATE或TIME对象.一个字符串到底会被转换成什么类型？必须小心 的尽可能以数据库期望的数据类型来提供输入，因此另一个DB-API的需求是创建一个构造器以生成 特殊的对象，以便能够方便的将Python对象转换为合适的数据库对象.表21.7描述了可以用于此 目的的类.SQL的NULL值被映射为Pyhton的NULL对象，也就是None.</p>
+
+<p>表21.7 类型对象和构造器</p>
+
+<p>类型对象    描述</p>
+
+<p>Date(yr,mo,dy)    日期值对象</p>
+
+<p>Time(hr,min,sec) 时间值对象</p>
+
+<p>Timestamp(yr,mo,dy,</p>
+
+<p>hr, min,sec)    时间戳对象</p>
+
+<p>DateFromTicks(ticks)通过自 1970-01-01 00:00:01 utc 以来的 ticks 秒数得到日期 TimeFromTicks(ticks)通过自 1970-01-01 00:00:01 utc 以来的 ticks 秒数得到时间值对象 TimestampFromTicks(ticks)通过自 1970-01-01 00:00:01 utc 以来的 ticks 秒数得到时间戳</p>
+
+<p>对象</p>
+
+<p><img src="07Python38c3160b-3050.jpg" alt="img" /></p>
+
+<p>Binary(string) 对应二进制长字符串值的对象 STRING    描述字符串列的对象, 比如    VARCHAR</p>
+
+<p>BINARY    描述二进制长列的对象 比如    RAW,    BLOB</p>
+
+<p>NUMBER    描述数字列的对象</p>
+
+<p>DATETIME 描述日期时间列的对象</p>
+
+<p>ROWID    描述 “row ID” 列的对象</p>
+
+<h4 id="db-api版本变更">DB-API版本变更</h4>
+
+<p>有几个重要的变更发生在 DB-API 从1.0(1996)升级到2.0(1999)时:</p>
+
+<p>•从API中移除了原来必须的dbi模块</p>
+
+<p>•更新了类型对象</p>
+
+<p>•增加了新的属性以提供更易用的数据库绑定</p>
+
+<p>•变更了 callproc()的语义及重定义了 execute()的返回值</p>
+
+<p>•基于异常的错误处理</p>
+
+<p>自从DB-API 2.0发布以来，曾经在2002年加入了一些可选的DB- API扩展，但一直没有什么 重大的变更.在DB-SIG邮件列表中一直在讨论DB-API的未来版本&ndash;暂时命名为DB-API 3.0.它 将包括以下特性:</p>
+
+<p>当有一个新的结果集时nextsetO会有一个更合适的返回值 • float 变更为 Decimal</p>
+
+<p><img src="07Python38c3160b-3052.jpg" alt="img" /></p>
+
+<p>•支持更灵活的参数风格</p>
+
+<p>•预备语句或语句缓存</p>
+
+<p>•优化事务模型</p>
+
+<p>•确定DB-API可移值性的角色</p>
+
+<p>•增加单元测试</p>
+
+<p>如果你对这些API特别感兴趣，欢迎积极参与.下面有一些手边的资源.</p>
+
+<p>•    <a href="http://python.org/topics/database">http://python.org/topics/database</a></p>
+
+<p>•    <a href="http://www.linuxjournal.com/article/2605">http://www.linuxjournal.com/article/2605</a></p>
+
+<p>•    <a href="http://wiki.python.org/moin/DbApi3">http://wiki.python.org/moin/DbApi3</a></p>
+
+<p>21.2.5 关系数据库</p>
+
+<p>现在我们准备开始，一个问题摆在面前，在Pyhton里我可以使用哪种数据库接口？换言之， Python支持哪些平台？答案是几乎所有的平台.下面是一个不怎么完整的数据库支持列表：</p>
+
+<p><img src="07Python38c3160b-3053.jpg" alt="img" /></p>
+
+<p>商业关系数据库管理系统</p>
+
+<p><img src="07Python38c3160b-3054.jpg" alt="img" /></p>
+
+<p>參 Informix</p>
+
+<p>•    Sybase</p>
+
+<p>參 Oracle</p>
+
+<p>•    MS SQL Server</p>
+
+<p>•    DB/2</p>
+
+<p>參 SAP</p>
+
+<p>•    Interbase</p>
+
+<p>參 Ingres</p>
+
+<p>开源关系数据库管理系统</p>
+
+<p>•    MySQL</p>
+
+<p>•    PostgreSQL 參 SQLite</p>
+
+<p>參 Gadfly</p>
+
+<p>数据库APIs</p>
+
+<p>•    JDBC</p>
+
+<p>•    ODBC</p>
+
+<p><img src="07Python38c3160b-3056.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3057.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3058.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3059.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3060.jpg" alt="img" /></p>
+
+<p>要知道 Python 支持哪些数据库， 请参阅下面网址:</p>
+
+<p><a href="http://python.org/topics/database/modules.html">http://python.org/topics/database/modules.html</a></p>
+
+<h3 id="21-2-6数据库和python-接口程序">21.2.6数据库和Python:接口程序</h3>
+
+<p>对每一种支持的数据库，都有一个或多个Python接口程序允许你连接到目标数据库系统.某些 数据库，比如Sybase， SAP， Oracle和SQLServer，都有两个或更多个接口程序可供选择.你要做 的就是挑选一个最能满足你需求的接口程序. 你挑选接口程序的标准可以是: 性能如何? 文档或 WEB 站点的质量如何? 是否有一个活跃的用户或开发社区? 接口程序的质量和稳定性如何? 等等等 等. 记住绝大多数接口程序只提供基本的连接功能， 你可能需要一些额外的特性. 高级应用代码如 线程和线程管理以及数据库连接池的管理等等， 需要你自己来完成.</p>
+
+<p>如果你不想处理这些， 比方你不喜欢自己写 SQL， 也不想参与数据库管理的细节&ndash;那么本章后 面讲到的 ORM 应该可以满足你的要求. 现在来看一些使用接口程序访问数据库的例子， 关键之处在 于设置数据库连接.在建立连接之后， 不管后端是何种数据库， 对 DB-API 对象的属性和方法进行</p>
+
+<p>操作都是一样的.</p>
+
+<h3 id="21-2-7-使用数据库接口程序举例">21.2.7 使用数据库接口程序举例</h3>
+
+<p>首先， 我们来看一下例子代码， 创建数据库， 创建表， 使用表. 我们分别提供了使用 MySQL， PostgreSQL， SQLite 的例子.</p>
+
+<h4 id="mysql">MySQL</h4>
+
+<p>这里我们以 MySQL 数据库为例， 使用唯一的 MySQL 接口程序: MySQLdb， 这个接口程序又名 MySQL-python. 在这部分代码里， 我们故意在例子里埋下一个错误</p>
+
+<p>首先我们以管理员身份登录， 创建一个数据库， 并赋予相应权限， 之后我们再以普通用户身份</p>
+
+<p>登录数据库. 以便你能了解你希望得到什么， 这样你会想到为它创建一个事件处理程序.</p>
+
+<p>&gt;&gt;&gt; import MySQLdb</p>
+
+<p>&gt;&gt;&gt; cxn = MySQLdb.connect(user=&lsquo;root&rsquo;)</p>
+
+<p>&gt;&gt;&gt; cxn.query(&lsquo;DROP DATABASE test&rsquo;) Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&ldquo;， line 1， in ?</p>
+
+<p>_mysql_exceptions.OperationalError: (1008， &ldquo;Can&rsquo;t drop database &lsquo;test&rsquo;; database doesn&rsquo;t exist&rdquo;)</p>
+
+<p>&gt;&gt;&gt; cxn.query(&lsquo;CREATE DATABASE test&rsquo;)</p>
+
+<p><img src="07Python38c3160b-3061.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; cxn.query(&ldquo;GRANT ALL ON test.* to &ldquo;@&lsquo;localhost&rsquo;&rdquo;) &gt;&gt;&gt; cxn.commit()</p>
+
+<p>&gt;&gt;&gt; cxn.close()</p>
+
+<p>在上面的代码中，我们没有使用cursor对象。某些(但不是所有的)接口程序拥有连接对象， 这些连接对象拥有query()方法，可以执行SQL查询。我们建议你不要使用这个方法，或者事先检 查该方法在当前接口程序当中是否可用。之后我们以普通用户身份再次连接这个新数据， 创建表， 然后通过Python执行SQL查询和命令，来完成我们的工作。这次我们使用游标对象(cursors)和它 们的execute()方法，下一个交互集演示了创建表。</p>
+
+<p>下面的代码演示了如何创建一个表. 在删除一个表之前如果试图重建这个表将产生错误.</p>
+
+<p>&gt;&gt;&gt; cxn = MySQLdb.connect(db=&lsquo;test&rsquo;)</p>
+
+<p>&gt;&gt;&gt; cur = cxn.cursor()</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;CREATE TABLE users(login VARCHAR(8), uid INT)&rsquo;) 0L</p>
+
+<p>现在我们来插入几行数据到数据库, 然后再将它们取出来.</p>
+
+<p>&gt;&gt;&gt; cur.execute(&ldquo;INSERT INTO users VALUES(&lsquo;john&rsquo;, 7000)&rdquo;)</p>
+
+<p><img src="07Python38c3160b-3063.jpg" alt="img" /></p>
+
+<p>1L</p>
+
+<p>&gt;&gt;&gt; cur.execute(&ldquo;INSERT INTO users VALUES(&lsquo;jane&rsquo;, 7001)&rdquo;)</p>
+
+<p>1L</p>
+
+<p>&gt;&gt;&gt; cur.execute(&ldquo;INSERT INTO users VALUES(&lsquo;bob&rsquo;, 7200)&rdquo;)</p>
+
+<p>1L</p>
+
+<p>&gt;&gt;&gt; cur.execute(&ldquo;SELECT * FROM users WHERE login LIKE &lsquo;j%&rsquo;&ldquo;)</p>
+
+<p>2L</p>
+
+<p>&gt;&gt;&gt; for data in cur.fetchall():</p>
+
+<p>&hellip; print &lsquo;%s\t%s&rsquo; % data</p>
+
+<p>john 7000</p>
+
+<p>jane 7001</p>
+
+<p>最后一个特性是更新表, 包括更新或删除数据.</p>
+
+<p>&gt;&gt;&gt; cur.execute(&ldquo;UPDATE users SET uid=7100 WHERE uid=7001&rdquo;)</p>
+
+<p>1L</p>
+
+<p>&gt;&gt;&gt; cur.execute(&ldquo;SELECT * FROM users&rdquo;)</p>
+
+<p>3L</p>
+
+<p>&gt;&gt;&gt; for data in cur.fetchall():</p>
+
+<p><img src="07Python38c3160b-3064.jpg" alt="img" /></p>
+
+<p>print &lsquo;%s\t%s&rsquo; % data</p>
+
+<p>john 7000 jane    7100</p>
+
+<p>bob    7200</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;DELETE FROM users WHERE login=&ldquo;bob&rdquo;&rsquo;)</p>
+
+<p>1L</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;DROP TABLE users&rsquo;)</p>
+
+<p>0L</p>
+
+<p>&gt;&gt;&gt; cur.close()</p>
+
+<p>&gt;&gt;&gt; cxn.commit()</p>
+
+<p>&gt;&gt;&gt; cxn.close()</p>
+
+<p>Mysql是最流行的开源数据库之一.毫无疑问会有一个针对MySQL的Python接口程序.不过 Python标准库中并没有集成这个接口程序，这是一个第三方包，你需要单独下载并安装它.在本章 的末尾的索引页， 你可以找到如何下载它.</p>
+
+<h4 id="postgresql">PostgreSQL</h4>
+
+<p><img src="07Python38c3160b-3066.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3067.jpg" alt="img" /></p>
+
+<p>另一个著名的开源数据库是 PostgreSQL. 与 MySQL 不同， 有至少 3 个 Python 接口程序可 以访问 PosgreSQL: psycopg， PyPgSQL 和 PyGreSQL. 第四个， PoPy， 现在已经被废弃(2003年， 它 贡献出自己的代码，与PygreSQL整合在一起).这三个接口程序各有长处，各有缺点，根据实践结</p>
+
+<p>果选择使用哪个接口是个好主意.</p>
+
+<p>多亏他们都支持 DB-API， 所以他们的接口基本一致， 你只需要写一个应用程序， 然后分别测 试这三个接口的性能(如果性能对你的程序很重要的化). 下面我给出这三个接口的连接代码:</p>
+
+<p>psycopg</p>
+
+<p>&gt;&gt;&gt; import psycopg</p>
+
+<p>&gt;&gt;&gt; cxn = psycopg.connect(user=&lsquo;pgsql&rsquo;)</p>
+
+<h4 id="pypgsql">PyPgSQL</h4>
+
+<p>&gt;&gt;&gt; from pyPgSQL import PgSQL &gt;&gt;&gt; cxn = PgSQL.connect(user=&lsquo;pgsql&rsquo;)</p>
+
+<h4 id="pygresql">PyGreSQL</h4>
+
+<p>&gt;&gt;&gt; import pgdb</p>
+
+<p>&gt;&gt;&gt; cxn = pgdb.connect(user=&lsquo;pgsql&rsquo;)</p>
+
+<p><img src="07Python38c3160b-3069.jpg" alt="img" /></p>
+
+<p>好， 下面的代码就能够在所有接口程序下工作了.</p>
+
+<p>&gt;&gt;&gt; cur = cxn.cursor()</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;SELECT * FROM pg_database&rsquo;) &gt;&gt;&gt; rows = cur.fetchall()</p>
+
+<p>&gt;&gt;&gt; for i in rows:</p>
+
+<p>&hellip; print i &gt;&gt;&gt; cur.close()</p>
+
+<p>&gt;&gt;&gt; cxn.commit()</p>
+
+<p>&gt;&gt;&gt; cxn.close()</p>
+
+<p>最后， 你会发现他们的输出有一点点轻微的不同.</p>
+
+<h4 id="pypgsql-1">PyPgSQL</h4>
+
+<p>sales</p>
+
+<p>template1</p>
+
+<p><img src="07Python38c3160b-3070.jpg" alt="img" /></p>
+
+<p>template0</p>
+
+<p>psycopg</p>
+
+<p><img src="07Python38c3160b-3071.jpg" alt="img" /></p>
+
+<p>(&lsquo;sales&rsquo;， 1， 0， 0， 1， 17140， &lsquo;140626&rsquo;， &lsquo;3221366099&rsquo;， &ldquo;， None， None)</p>
+
+<p>(&lsquo;template1&rsquo;， 1， 0， 1， 1， 17140， &lsquo;462&rsquo;， &lsquo;462&rsquo;， &ldquo;， None &lsquo;{pgsql=C<em>T</em>/pgsql}&lsquo;)</p>
+
+<p>(&lsquo;template0&rsquo;， 1， 0， 1， 0， 17140， &lsquo;462&rsquo;， &lsquo;462&rsquo;， &ldquo;， None &lsquo;{pgsql=C<em>T</em>/pgsql}&lsquo;)</p>
+
+<h4 id="pygresql-1">PyGreSQL</h4>
+
+<p>[&lsquo;sales&rsquo;， 1， 0， False， True， 17140L， &lsquo;140626&rsquo;， &lsquo;3221366099&rsquo;， &ldquo;， None， None]</p>
+
+<p>[&lsquo;template1&rsquo;， 1， 0， True， True， 17140L， &lsquo;462&rsquo;， &lsquo;462&rsquo;， &ldquo;， None， &lsquo;{pgsql=C<em>T</em>/pgsql}&lsquo;]</p>
+
+<p>[&lsquo;template0&rsquo;， 1， 0， True， False， 17140L， &lsquo;462&rsquo;，</p>
+
+<p>&lsquo;462&rsquo;， &ldquo;， None， &lsquo;{pgsql=C<em>T</em>/pgsql}&lsquo;]</p>
+
+<p>SQLite</p>
+
+<p>对非常简单的应用来说, 使用文件进行持久存储通常就足够了. 但对于绝大多数数据驱动的应 用程序必须使用全功能的关系数据库. SQLite 介于二者之间, 它定位于中小规模的应用.它是相当</p>
+
+<p>轻量级的全功能关系型数据库, 速度很快, 几乎不用配置, 并且不需要服务器.</p>
+
+<p>SQLite 正在快速的流行. 并且在各个平台上都能用. 在 python2.5 集成了前面介绍的 pysqlite数据库接口程序，作为python2.5的sqlite3模块.这是Python标准库第一次将一个 数据库接口程序纳入标准库, 也许这标志着一个新的开始.</p>
+
+<p>它被打包到 Python 当中并不是因为他比其它的数据库接口程序更优秀, 而是因为他足够简单, 使用文件（或内存）作为它的后端存储, 就象 DBM 模块做的那样, 不需要服务器, 而且也不存在授 权问题.它是Python中其它的持久存储解决方案的一个替代品，一个拥有SQL访问界面的优秀替 代品. 在标准库中有这么一个模块, 就能方便用户使用 Python 和 SQLite 进行软件开发, 等到软 件产品正式上市发布时, 只要需要, 就能够很容易的将产品使用的数据库后端变更为一个全功能的, 更强大的类似 MySQL, PostgreSQL, Oracle 或 SQL Server 那样的数据库. 当然, 对那些不需要那 么大马力的应用程序来说, SQLite 已经足够使用. :）</p>
+
+<p>尽管标准库已经提供了数据库接口程序, 你仍然需要自己下载真正的数据库软件.(作者好像此 处犯糊涂了. sqlite 是不需要额外下载东西的, 只要有接口程序就可以工作). 一旦你安装好之后, 你只需要打开 Python 解释器, 下面是一个例子:</p>
+
+<p><img src="07Python38c3160b-3074.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; import sqlite3</p>
+
+<p>&gt;&gt;&gt; cxn = sqlite3.connect(&lsquo;sqlite_test/test&rsquo;)</p>
+
+<p>&gt;&gt;&gt; cur = cxn.cursor()</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;CREATE TABLE users(login VARCHAR(8), uid</p>
+
+<p>INTEGER)&lsquo;)</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;INSERT INTO users VALUES(&ldquo;john&rdquo;, 100)&rsquo;)</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;INSERT INTO users VALUES(&ldquo;jane&rdquo;, 110)&rsquo;)</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;SELECT * FROM users&rsquo;)</p>
+
+<p>&gt;&gt;&gt; for eachUser in cur.fetchall():</p>
+
+<p>&hellip; print eachUser</p>
+
+<p>(u&rsquo;john&rsquo;, 100)</p>
+
+<p>(u&rsquo;jane&rsquo;, 110)</p>
+
+<p>&gt;&gt;&gt; cur.execute(&lsquo;DROP TABLE users&rsquo;) <sqlite3.Cursor object at 0x3d4320> &gt;&gt;&gt; cur.close()</p>
+
+<p>&gt;&gt;&gt; cxn.commit()</p>
+
+<p>&gt;&gt;&gt; cxn.close()</p>
+
+<p>OK, 这个小例子已经足够了. 接下来, 我们来看一个小程序, 它类似前面使用 MySQL 的例子,</p>
+
+<p>不过更简单一些.</p>
+
+<p>•创建数据库（如果成功）</p>
+
+<p>•创建表</p>
+
+<p>•从表中增加行</p>
+
+<p>•从表中修改行</p>
+
+<p>•从表中删除行</p>
+
+<p>•删除表</p>
+
+<p>对这个例子来说中， 我们仍然使用两个其它的开源数据库. SQLite 现如今已经相当流行. 它体 积小， 而且足够快， 是一个几乎拥有全部功能的相当轻量级的数据库. 这个例子中用到的另一个数 据库是 Gadfly， 一个基本兼容 SQL 的纯 Python 写成的关系数据库. （某些关键的数据库结构有一 个C模块，不过Gadfly没有它也一样可以运行［当然，会慢不少，嘿嘿］）.</p>
+
+<p>在进入代码之前，有几个提醒.SQLite和Gadfly需要用户指定保存数据库文件的位置（Mysql 有一个默认区域保存数据，在使用Mysql数据库时无需指定这个）.另外，Gadfly目前的版本还不 兼容 DB-API 2.0， 也就是说， 它缺失一些功能， 尤其是缺少我们例子中用到的 cursor 属性 rowcount.</p>
+
+<h4 id="数据库接口程序应用程序举例-i">数据库接口程序应用程序举例    I</h4>
+
+<p>在下面这个例子里，我们演示了 Python如何访问数据库.事实上，我们的程序支持三种不 同的数据库系统: Gadfly， SQLite 和 MySQL. 我们将要创建一个数据库（如果它不存在的话）. 然后 进行多种数据库操作， 比如创建表， 删除表， 插入数据， 更新数据， 删除数据等等.</p>
+
+<p>在下一小节中的 ORM 中我们将重复例子21.1 的这些功能.</p>
+
+<p>逐行解释</p>
+
+<h4 id="第1-18行">第1-18行</h4>
+
+<p>脚本的第一部分导入必须的模块， 创建一些&rdquo;全局常量&rdquo;（列的显示大小及我们的程序支持的数 据库）. 其中 setup（） 函数， 提供一个简单界面让用户选择使用哪种数据库.</p>
+
+<p>值得留意的是 DB_EXC 常量， 它代表数据库异常. 他最终的值由用户最终选择使用的数据库 决定. 也就是说， 如果用户选择 MySQL， DB_EXC 将是 _mysql_exceptions， 以此类推&hellip; 如果我们 用流行的面向对象的方式来开发这个应用， 它将会以一个实例属性的方式表示， 比如 self.db_exc_module 或者什么别的名字.</p>
+
+<h4 id="第20-75行">第20-75行</h4>
+
+<p>表现数据库存取一致性本质的connectO函数在这一段.在每一小节的开头，我们尝试载入需 要的数据库模块. 如果找不到合适的模块， None 值被返回， 表示这个数据库系统暂不支持.</p>
+
+<p>在数据库连接建立以后， 其余的代码对数据库和接口程序来说都是透明的（不区分哪种数据库， 哪种接口程序，代码都可以工作）.有一个唯一的例外，就是脚本的insertO函数.在所有三个 小节的这段代码里， 数据库连接成功后会返回一个连接对象 cxn.</p>
+
+<p>如果选中了 SQLite（24行-36行），我们尝试载入一个数据库接口程序.我们首先尝试载入标准 库模块 sqlite3（Python2.5 及更高版本支持）， 如果载入失败， 就会去寻找第三方 pysqlite2 包. 这个包支持 Python 2.4.x 或更老些的系统.</p>
+
+<p>如果成功导入合适的接口程序， 由于 SQLite 是基于文件的数据库系统，同我们需要确认一下数 据库文件所在的目录是否存在.（当然， 你也可以选择在内存里创建一个数据库）. 当调用 connect（） 函数时， 如果这个数据库文件已经存在， SQLite 会使用这个数据库， 如果文件不存， 它就会创建一</p>
+
+<p>个新文件.</p>
+
+<p>例子21.1 数据库接口程序示例</p>
+
+<p>这段脚本使用同样的接口对多种数据库执行了一些数据库基本操作.</p>
+
+<p>I    #!/usr/bin/env python</p>
+
+<p>2</p>
+
+<p><img src="07Python38c3160b-3079.jpg" alt="img" /></p>
+
+<p>3    import os</p>
+
+<p>4    from random import randrange as rrange</p>
+
+<p>5</p>
+
+<p>6    COLSIZ = 10</p>
+
+<p>7    RDBMSs = {&rsquo;s&rsquo;: &lsquo;sqlite&rsquo;， &rsquo;m&rsquo;: &lsquo;mysql&rsquo;， &lsquo;g&rsquo;: &lsquo;gadfly&rsquo;}</p>
+
+<p>8    DB_EXC = None</p>
+
+<p>9</p>
+
+<p>10 def setup():</p>
+
+<p>II    return RDBMSs[raw_input(&ldquo;&rsquo;</p>
+
+<p>12    Choose a database system:</p>
+
+<p>13</p>
+
+<p>14    (M)ySQL</p>
+
+<p>15    (G)adfly</p>
+
+<p>16    (S)QLite</p>
+
+<p>17</p>
+
+<p>18    Enter choice: &ldquo;&lsquo;).strip().lower()[0]]</p>
+
+<p>19</p>
+
+<p>20    def connect(db， dbName):</p>
+
+<p>21    global DB_EXC</p>
+
+<p>22    dbDir = &lsquo;%s_%s&rsquo; % (db， dbName)</p>
+
+<p>23</p>
+
+<p><img src="07Python38c3160b-3080.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3081.jpg" alt="img" /></p>
+
+<p>24    if db == &lsquo;sqlite&rsquo;:</p>
+
+<p>25    try:</p>
+
+<p>26    import sqlite3</p>
+
+<p>27    except ImportError， e:</p>
+
+<p>28    try:</p>
+
+<p>29    from pysqlite2 import dbapi2 as sqlite3</p>
+
+<p>30    except ImportError， e:</p>
+
+<p>31    return None</p>
+
+<p>32</p>
+
+<p>33    DB_EXC = sqlite3</p>
+
+<p>34    if not os.path.isdir(dbDir):</p>
+
+<p>35    os.mkdir(dbDir)</p>
+
+<p>36    cxn = sqlite.connect(os.path.join(dbDir， dbName))</p>
+
+<p>37</p>
+
+<p>38    elif db == &lsquo;mysql&rsquo;:</p>
+
+<p>39    try:</p>
+
+<p>40    import MySQLdb</p>
+
+<p>41    import _mysql_exceptions as DB_EXC</p>
+
+<p><img src="07Python38c3160b-3082.jpg" alt="img" /></p>
+
+<p>42    except ImportError， e:</p>
+
+<p><img src="07Python38c3160b-3083.jpg" alt="img" /></p>
+
+<p>43    return None</p>
+
+<p>44</p>
+
+<p>45    try:</p>
+
+<p>46    cxn = MySQLdb.connect(db=dbName)</p>
+
+<p>47    except _mysql_exceptions.OperationalError， e:</p>
+
+<p>48    cxn = MySQLdb.connect(user=&lsquo;root&rsquo;)</p>
+
+<p>49    try:</p>
+
+<p>50    cxn.query(&lsquo;DROP DATABASE %s&rsquo; % dbName)</p>
+
+<p>51    except DB_EXC.OperationalError， e:</p>
+
+<p>52    pass</p>
+
+<p>53    cxn.query(&lsquo;CREATE DATABASE %s&rsquo; % dbName)</p>
+
+<p>54    cxn.query(&ldquo;GRANT ALL ON %s.* to &ldquo;@&lsquo;localhost&rsquo;&rdquo; % dbName)</p>
+
+<p>55    cxn.commit()</p>
+
+<p>56    cxn.close()</p>
+
+<p>57    cxn = MySQLdb.connect(db=dbName)</p>
+
+<p>58</p>
+
+<p>59    elif db == &lsquo;gadfly&rsquo;:</p>
+
+<p>60    try:</p>
+
+<p>61    from gadfly import gadfly</p>
+
+<p>62    DB_EXC = gadfly</p>
+
+<p>63 except ImportError， e:</p>
+
+<p><img src="07Python38c3160b-3084.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3085.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3086.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3087.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3088.jpg" alt="img" /></p>
+
+<p>64    return None</p>
+
+<p>65</p>
+
+<p>66    try:</p>
+
+<p>67    cxn = gadfly(dbName, dbDir)</p>
+
+<p>68    except IOError, e:</p>
+
+<p>69    cxn = gadfly()</p>
+
+<p>70    if not os.path.isdir(dbDir):</p>
+
+<p>71    os.mkdir(dbDir)</p>
+
+<p>72    cxn.startup(dbName, dbDir)</p>
+
+<p>73    else:</p>
+
+<p>74    return None</p>
+
+<p>75    return cxn</p>
+
+<p>76</p>
+
+<p>77    def create(cur):</p>
+
+<p>78    try:</p>
+
+<p>79    cur.execute(&ldquo;&rsquo;</p>
+
+<p>80    CREATE TABLE users (</p>
+
+<p>81    login VARCHAR(8),</p>
+
+<p>82    uid INTEGER,</p>
+
+<p><img src="07Python38c3160b-3089.jpg" alt="img" /></p>
+
+<p>83    prid INTEGER)</p>
+
+<p>84    &ldquo;&lsquo;)</p>
+
+<p>85 except DB_EXC.OperationalError, e:</p>
+
+<p>86    drop(cur)</p>
+
+<p>87    create(cur)</p>
+
+<p>88</p>
+
+<p>89    drop = lambda cur: cur.execute(&lsquo;DROP TABLE users&rsquo;)</p>
+
+<p>90</p>
+
+<p>91    NAMES = (</p>
+
+<p>92    (&lsquo;aaron&rsquo;, 8312), (&lsquo;angela&rsquo;, 7603), (&lsquo;dave&rsquo;, 7306),</p>
+
+<p>93    (&lsquo;davina&rsquo;,7902), (&lsquo;elliot&rsquo;, 7911), (&lsquo;ernie&rsquo;, 7410)</p>
+
+<p>94    (&lsquo;jess&rsquo;, 7912), (&lsquo;jim&rsquo;, 7512), (&lsquo;larry&rsquo;, 7311),</p>
+
+<p>95    (&lsquo;leslie&rsquo;, 7808), (&lsquo;melissa&rsquo;, 8602), (&lsquo;pat&rsquo;, 7711)</p>
+
+<p>96    (&lsquo;serena&rsquo;, 7003), (&lsquo;stan&rsquo;, 7607), (&lsquo;faye&rsquo;, 6812),</p>
+
+<p>97    (&lsquo;amy&rsquo;, 7209),</p>
+
+<p>98    )</p>
+
+<p>99</p>
+
+<p>100    def randName():</p>
+
+<p>101    pick = list(NAMES)</p>
+
+<p>102    while len(pick) &gt; 0:</p>
+
+<p>103    yield pick.pop(rrange(len(pick)))</p>
+
+<p><img src="07Python38c3160b-3090.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3091.jpg" alt="img" /></p>
+
+<p>104</p>
+
+<p>105    def insert(cur， db):</p>
+
+<p>106    if db == &lsquo;sqlite&rsquo;:</p>
+
+<p>107    cur.executemany(&ldquo;INSERT INTO users VALUES(?， ?， ?)&ldquo;，</p>
+
+<p>108    [(who， uid， rrange(1，5)) for who， uid in randName()])</p>
+
+<p>109    elif db == &lsquo;gadfly&rsquo;:</p>
+
+<p>110    for who， uid in randName():</p>
+
+<p>111    cur.execute(&ldquo;INSERT INTO users VALUES(?， ?， ?)&ldquo;，</p>
+
+<p>112    (who， uid， rrange(1，5)))</p>
+
+<p>113    elif db == &lsquo;mysql&rsquo;:</p>
+
+<p>114    cur.executemany(&ldquo;INSERT INTO users VALUES(%s， %s， %s)&rdquo;</p>
+
+<p>115    [(who， uid， rrange(1，5)) for who， uid in randName()])</p>
+
+<p>116</p>
+
+<p>117    getRC = lambda cur: cur.rowcount if hasattr(cur， &lsquo;rowcount&rsquo;) else -1</p>
+
+<p>118</p>
+
+<p>119    def update(cur):</p>
+
+<p>120    fr = rrange(1，5)</p>
+
+<p>121    to = rrange(1，5)</p>
+
+<p><img src="07Python38c3160b-3092.jpg" alt="img" /></p>
+
+<p>122    cur.execute(</p>
+
+<p>123    &ldquo;UPDATE users SET prid=%d WHERE prid=%d&rdquo; % (to， fr))</p>
+
+<p>124    return fr， to， getRC(cur)</p>
+
+<p>125</p>
+
+<p>126    def delete(cur):</p>
+
+<p>127    rm = rrange(1，5)</p>
+
+<p>128    cur.execute(&lsquo;DELETE FROM users WHERE prid=%d&rsquo; % rm)</p>
+
+<p>129    return rm， getRC(cur)</p>
+
+<p>130</p>
+
+<p>131    def dbDump(cur):</p>
+
+<p>132    cur.execute(&lsquo;SELECT * FROM users&rsquo;)</p>
+
+<p>133    print &lsquo;\n%s%s%s&rsquo; % (&lsquo;LOGIN&rsquo;.ljust(COLSIZ)，</p>
+
+<p>134    &lsquo;USERID&rsquo;.ljust(COLSIZ)， &lsquo;PROJ#&rsquo;.ljust(COLSIZ))</p>
+
+<p>135    for data in cur.fetchall():</p>
+
+<p>136    print &lsquo;%s%s%s&rsquo; % tuple([str(s).title().ljust(COLSIZ) </p>
+
+<p>137    for s in data])</p>
+
+<p>138</p>
+
+<p>139    def main():</p>
+
+<p>140    db = setup()</p>
+
+<p>141    print &lsquo;*** Connecting to %r database&rsquo; % db</p>
+
+<p>142    cxn = connect(db， &lsquo;test&rsquo;)</p>
+
+<p><img src="07Python38c3160b-3093.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3094.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3095.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3096.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3097.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3098.jpg" alt="img" /></p>
+
+<p>143    if not cxn:</p>
+
+<p>144    print &lsquo;ERROR: %r not supported， exiting&rsquo; % db</p>
+
+<p>145    return</p>
+
+<p>146    cur = cxn.cursor()</p>
+
+<p>147</p>
+
+<p>148    print &lsquo;\n*** Creating users table&rsquo;</p>
+
+<p>149    create(cur)</p>
+
+<p>150</p>
+
+<p>151    print &lsquo;\n*** Inserting names into table&rsquo;</p>
+
+<p>152    insert(cur， db)</p>
+
+<p>153    dbDump(cur)</p>
+
+<p>154</p>
+
+<p>155    print &lsquo;\n*** Randomly moving folks&rsquo;，</p>
+
+<p>156    fr， to， num = update(cur)</p>
+
+<p>157    print &lsquo;from one group (%d) to another (%d)&rsquo; % (fr， to)</p>
+
+<p>158    print &lsquo;\t(%d users moved)&rsquo; % num</p>
+
+<p>159    dbDump(cur)</p>
+
+<p>160</p>
+
+<p>161    print &lsquo;\n*** Randomly choosing group&rsquo;，</p>
+
+<p><img src="07Python38c3160b-3099.jpg" alt="img" /></p>
+
+<p>162    rm， num = delete(cur)</p>
+
+<p>163    print &lsquo;(%d) to delete&rsquo; % rm</p>
+
+<p>164    print &lsquo;\t(%d users removed)&rsquo; % num</p>
+
+<p>165    dbDump(cur)</p>
+
+<p>166</p>
+
+<p>167    print &lsquo;\n*** Dropping users table&rsquo;</p>
+
+<p>168    drop(cur)</p>
+
+<p>169    cur.close()</p>
+
+<p>170    cxn.commit()</p>
+
+<p>171    cxn.close()</p>
+
+<p>172</p>
+
+<p>173    if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>174    main()</p>
+
+<p>例子21.1 数据库接口程序示例</p>
+
+<p>MySQL（38-57 行）的数据文件会存保在默认的数据存储区域， 所以不需要用户指定存储位置. 我</p>
+
+<p>们的代码尝试连接指定的数据库. 如果发生错误， 有可能是数据库不存在或者虽然数据库存在但我</p>
+
+<p>们没有权限访问它. 由于这仅仅是一个测试应用程序， 我们选择完全先删掉这个数据库（忽略掉如 果数据库不存在可能引发的错误）， 然后重建该库， 然后给访问它的用户赋予权限.</p>
+
+<p><img src="07Python38c3160b-3100.jpg" alt="img" /></p>
+
+<p>我们的应用程序支持的最后一个数据库是Gadfly （第59-75行）.在本书写作的时候，这个数据 库已经几乎但还没有完全兼容DB-API，你也会在这个程序里看到这一点.）它使用类似SQLite的启</p>
+
+<p>动机制: 它的启动目录是数据文件所在的目录. 如果数据文件在那儿， OK， 如果那儿没有数据文件，</p>
+
+<p>你必须重新启动一个新的数据库.（为什么非要这样， 我们也不十分清楚. 我们认为 startup（） 函 数应该被合并到构造器函数gadfly.gadflyO当中去）.</p>
+
+<h4 id="第77-89行">第77-89行</h4>
+
+<p>create（） 函数在数据库中创建一个新的 users 表， 如果中间产生问题， 几乎肯定是因为这个 表已经存在.如果正是这个原因的话，删掉这个表，然后递归调用createO函数来重新创建它.这 个代码有一个缺陷， 就是当重建表仍然失败的话， 你将陷入死循环， 直至内存耗尽.在本章最后有 一道习题就是这个问题，你可以试着修复这个潜在的bug.</p>
+
+<h4 id="91-103行">91-103行</h4>
+
+<p>这可能是除了数据库操作之外最有趣的代码部分了.它由一组固定用户名及ID值的集合及一个 生成器函数 randName（） 构成. 这个函数的代码也可以在第11章的11.10小节找到. NAMES 常量是 一个元组，因为我们在randNameO这个生成器里需要改变它的值，所以我们必须在randNameO里 先将它转换为一个列表. 我们一次随机的移除一个名字， 直到列表为空为止. 如果 NAMES 本身是 一个列表， 我们只能使用它一次（它就被消耗光了）. 我们将它设计成为一个元组， 这样我们就可以 多次从这个元组生成一个列表供生成器使用.</p>
+
+<h4 id="105-115行">105-115行</h4>
+
+<p>由于各种数据库之间有一些细微差别，insertO函数里的代码是依赖具体数据库的.举例来说， SQLite和MySQL的接口程序都是DB-API兼容的，所以它们的游标对象都拥有executemany（）方 法， 可是是 Gadfly 没有这个方法， 因此它只能一次插入一行.</p>
+
+<p>另一个不同之处在于 SQLite 和 Gadfly 的参数风格是 qmark， 而 MySQL 的参数风格是 format.</p>
+
+<p>由于这些原因， 格式字符串必须不同. 如果你比较细心的话， 你会看到他们的参数创建过程非 常相似.</p>
+
+<p>这段代码的功能是：对每个name-userID数据对，随机分配一个项目小组id（，然后存入数据 库）.</p>
+
+<h4 id="第117行">第117行</h4>
+
+<p>这独立的一行是有一个条件表达式（读作， Python 3目操作符）， 它返回最后一步操作所影响的 行数，如果游标对象不支持这个属性（也就是说这个接口程序不兼容DB-API）的话，它返回-1.</p>
+
+<p>python 2.5中新增了条件表达式，如果你使用的是python 2.4.x或更老版本，你可能需要将 它转换为老风格的方式， 如下:</p>
+
+<p>getRC = lambda cur: (hasattr(cur， &lsquo;rowcount&rsquo;) </p>
+
+<p>and [cur.rowcount] or [-1])[0]</p>
+
+<p>如果你对这行代码看不太明白， 不用着急. 看看 FAQ 就能知道为什么最终 Python 2.5 中加入 了条件表达式.如果你能弄明白，你就彻底搞明白了 python对象以及他们的布尔值.</p>
+
+<h4 id="第119-129行">第119-129行</h4>
+
+<p>update() 和 delete() 函数随机从一个组里选择了几条记录， 如果是 update 操作， 就将他 们从当前小组移到另一个小组(也是随机选择的). 如果是 delete 操作， 则删除它们.</p>
+
+<h4 id="第131-137行">第131-137行</h4>
+
+<p>dbDumpO函数从数据库中读取所有数据，并将数据进行格式化，然后显示给用户看.print语 句显示每个用户不够清晰， 所以我们将它分开显示.</p>
+
+<p>首先，通过fetchall()方法读取数据，然后迭代遍历每个用户，将三列数据(login，uid， prid)转换为字符串(如果它们还不是的话)，并将姓和名的首字母大写，再格式化整个字符为左对 齐的 COLSIZ 列.(右边留白) . 由代码生成的字符串是一个列表(通过列表解析， list comprehension)， 我们需要将它们转换成一个元组以支持 % 运算符.</p>
+
+<h4 id="第-139-174-行">第 139-174 行</h4>
+
+<p><img src="07Python38c3160b-3104.jpg" alt="img" /></p>
+
+<p>本部影片的导演main()出场.它将上面定义的这些函数组织起来，让他们尽情发挥.(假定 它们没有因为找不到数据库接口程序或者不能得到有效连接对象而中途退出［第143-145行］).它 的大部分代码都是能够自我解释的print语句.最后main()关闭游标对象，提交操作，然后关 闭数据库连接. 脚本的最后几行代码用来启动脚本的执行.</p>
+
+<p>Edit By Vheavens21.3对象-关系管理器(ORMs)</p>
+
+<p>通过前一节我们知道，如今有很多种数据库系统，他们中的绝大多数都有Python接口，以方便 你驾驭他们的能量.这些系统唯一的缺点是需要你懂得SQL.如果你是一个喜欢折腾Python对象 却讨厌 SQL 查询的家伙， 又想使用关系型数据库做为你的数据存储的后端， 你就完全具备成为一 个 ORM 用户的天资.</p>
+
+<h3 id="21-3-1考虑对象-而不是sql">21.3.1考虑对象，而不是SQL</h3>
+
+<p>这些系统的创建者将绝大多数纯SQL层功能抽象为Python对象，这样你就无需编写SQL也能够 完成同样的任务. 如果你在某些情况下实在需要 SQL， 有些系统也允许你拥有这种灵活性. 但绝大 多数情况下，你应该尽量避免进行直接的SQL查询.</p>
+
+<p>数据库的表被转换为 Python 类， 它具有列属性和操作数据库的方法. 让你的应用程序支持</p>
+
+<p><img src="07Python38c3160b-3105.jpg" alt="img" /></p>
+
+<p>ORM 非常类似使用那些标准的数据库接口程序. 由于大部分工作由 ORM 代为处理, 相比直接使用 接口程序来说, 一些事情可能实际需要更多的代码. 另人欣慰的是, 一点点额外的付出会回报你更 高的生产率.</p>
+
+<h3 id="21-3-2-python-和-orm">21.3.2 Python 和 ORM</h3>
+
+<p>如今最知名的Python ORM模块是SQLAlchemy和SQLObject.由于二者有着不同的设计哲学， 我们会分别给出SQLAlchemy和SQLObject的例子.只要你能搞清楚这两种ORM的使用，转到其它 的 ORM 将是相当简单的事.</p>
+
+<p>其它的 Python ORM 包括 PyDO/PyDO2，PDO，Dejavu，Durus，QLime 和 ForgetSQL. 一些大型 的Web开发工具/框架也可以有自己的ORM组件，如WebWare MiddleKit和Django的数据库API. 需要指出的是，知名的0RM并不意味着就是最适合你的应用程序的0RM.那些其它的0RM虽然没 有纳入我们的讨论范围， 但一样有可能是适合你的应用程序的选择.</p>
+
+<h3 id="21-3-3-雇员数据库举例">21.3.3 雇员数据库举例</h3>
+
+<p><img src="07Python38c3160b-3107.jpg" alt="img" /></p>
+
+<p>现在我们将shuffle应用程序ushuffle_db.py改造为使用SQLAlchemy和SQLObject实 现.数据库后端仍然是MySQL.相对于直接使用原始SQL来讲，我们使用0RM时用类代替了函数， 这样会更有对象的感觉.两个例子都使用了 ushuffle_db.py中的NAMES集合和随机名字选择 函数.这是为了避免将同样的代码到处复制-粘贴，代码能够被有效重用是件好事情.</p>
+
+<h4 id="sqlalchemy">SQLAlchemy</h4>
+
+<p>与SQLObject相比，SQLAlchemy的接口在某种程度上更接近SQL，所以我们先从SQLAlchemy 开始.SQLAlchemy的抽象层确实相当完美，而且在你必须使用SQL完成某些功能时，它提供了足够 的灵活性.你会发现这两个0RM模块在设置及存取数据时使用的术语非常相似，代码长度也很接近， 都比ushuffle_db.py少.（包括共享的names列表和随机名字生成器）.</p>
+
+<p>逐行解释</p>
+
+<h4 id="第1-10行">第1-10行</h4>
+
+<p>和前面一样，第一件事是导入相关的模块和常量.我们倡导首先导入Python标准库模块，然后 再导入第三方或扩展模块， 最后导入本地模块这种风格. 这些常量都是自解释的， 所以无需废话.</p>
+
+<h4 id="第12-31行">第12-31行</h4>
+
+<p>是类的构造器， 类似 ushuffle_db.connect（）. 它确保数据库可用并返回一个有效连接（第</p>
+
+<p>18-31行）.这也是唯一能看到原始SQL的地方.这是一种典型的操作任务，不是面向应用的任务.</p>
+
+<p><img src="07Python38c3160b-3108.jpg" alt="img" /></p>
+
+<p>第33-44行</p>
+
+<p>这个 try-except 子句（第33-40行）用来重新载入一个已有的表， 或者在表不存在的情况下创</p>
+
+<p>建一个新表. 最终我们得到一个合适的对象实例.</p>
+
+<p>例子21.2 SQLAlchemy ORM 例子</p>
+
+<p>这个user shuffle程序的主角是SQLAlchemy前端和MySQL数据库后端</p>
+
+<p>1    #!/usr/bin/env python</p>
+
+<p>2</p>
+
+<p>3    import os</p>
+
+<p>4    from random import randrange as rrange</p>
+
+<p>5    from sqlalchemy import *</p>
+
+<p>6    from ushuffle_db import NAMES， randName</p>
+
+<p>7</p>
+
+<p>8    FIELDS = (&lsquo;login&rsquo;， &lsquo;uid&rsquo;， &lsquo;prid&rsquo;)</p>
+
+<p>9    DBNAME = &lsquo;test&rsquo;</p>
+
+<p>10    COLSIZ = 10</p>
+
+<p>11</p>
+
+<p>12    class MySQLAlchemy(object):</p>
+
+<p><img src="07Python38c3160b-3110.jpg" alt="img" /></p>
+
+<p>13    def <strong>init</strong>(self， db， dbName):</p>
+
+<p>14    import MySQLdb</p>
+
+<p>15    import _mysql_exceptions</p>
+
+<p>16    MySQLdb = pool.manage(MySQLdb)</p>
+
+<p>17    url = &lsquo;mysql://db=%s&rsquo; % DBNAME</p>
+
+<p>18    eng = create_engine(url)</p>
+
+<p>19    try:</p>
+
+<p>20    cxn = eng.connection()</p>
+
+<p>21    except _mysql_exceptions.OperationalError， e:</p>
+
+<p>22    eng1 = create_engine(&lsquo;mysql://user=root&rsquo;)</p>
+
+<p>23    try:</p>
+
+<p>24    eng1.execute(&lsquo;DROP DATABASE %s&rsquo; % DBNAME)</p>
+
+<p>25    except _mysql_exceptions.OperationalError， e:</p>
+
+<p>26    pass</p>
+
+<p>27    eng1.execute(&lsquo;CREATE DATABASE %s&rsquo; % DBNAME)</p>
+
+<p>28    eng1.execute(</p>
+
+<p>29    &ldquo;GRANT ALL ON %s.* TO &ldquo;@&lsquo;localhost&rsquo;&rdquo; % DBNAME)</p>
+
+<p>30    eng1.commit()</p>
+
+<p>31    cxn = eng.connection()</p>
+
+<p>32</p>
+
+<p>33 try:</p>
+
+<p><img src="07Python38c3160b-3111.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3112.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3113.jpg" alt="img" /></p>
+
+<p>34    users = Table(&lsquo;users&rsquo;， eng， autoload=True)</p>
+
+<p>35    except exceptions.SQLError， e:</p>
+
+<p>36    users = Table(&lsquo;users&rsquo;， eng，</p>
+
+<p>37    Column(&lsquo;login&rsquo;， String(8))，</p>
+
+<p>38    Column(&lsquo;uid&rsquo;， Integer)，</p>
+
+<p>39    Column(&lsquo;prid&rsquo;， Integer)，</p>
+
+<p>40    redefine=True)</p>
+
+<p>41</p>
+
+<p>42    self.eng = eng</p>
+
+<p>43    self.cxn = cxn</p>
+
+<p>44    self.users = users</p>
+
+<p>45</p>
+
+<p>46    def create(self):</p>
+
+<p>47    users = self.users</p>
+
+<p>48    try:</p>
+
+<p>49    users.drop()</p>
+
+<p>50    except exceptions.SQLError， e:</p>
+
+<p>51    pass</p>
+
+<p><img src="07Python38c3160b-3114.jpg" alt="img" /></p>
+
+<p>52    users.create()</p>
+
+<p><img src="07Python38c3160b-3115.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3116.jpg" alt="img" /></p>
+
+<p>53</p>
+
+<p>54    def insert(self):</p>
+
+<p>55    d = [dict(zip(FIELDS，</p>
+
+<p>56    [who， uid， rrange(1，5)])) for who，uid in randName()]</p>
+
+<p>57    return self.users.insert().execute(*d).rowcount</p>
+
+<p>58</p>
+
+<p>59    def update(self):</p>
+
+<p>60    users = self.users</p>
+
+<p>61    fr = rrange(1，5)</p>
+
+<p>62    to = rrange(1，5)</p>
+
+<p>63    return fr， to， </p>
+
+<p>64    users.update(users.c.prid==fr).execute(prid=to).rowcount</p>
+
+<p>65</p>
+
+<p>66    def delete(self):</p>
+
+<p>67    users = self.users</p>
+
+<p>68    rm = rrange(1，5)</p>
+
+<p>69    return rm， </p>
+
+<p>70    users.delete(users.c.prid==rm).execute().rowcount</p>
+
+<p>71</p>
+
+<p>72    def dbDump(self):</p>
+
+<p>73    res = self.users.select().execute()</p>
+
+<p><img src="07Python38c3160b-3118.jpg" alt="img" /></p>
+
+<p>74    print &lsquo;\n%s%s%s&rsquo; % (&lsquo;LOGIN&rsquo;.ljust(COLSIZ)，</p>
+
+<p>75    &lsquo;USERID&rsquo;.ljust(COLSIZ)， &lsquo;PROJ#&rsquo;.ljust(COLSIZ))</p>
+
+<p>76    for data in res.fetchall():</p>
+
+<p>77    print &lsquo;%s%s%s&rsquo; % tuple([str(s).title().ljust (COLSIZ) for s in data])</p>
+
+<p>78</p>
+
+<p>79    def <strong>getattr</strong>(self， attr):</p>
+
+<p>80    return getattr(self.users， attr)</p>
+
+<p>81</p>
+
+<p>82    def finish(self):</p>
+
+<p>83    self.cxn.commit()</p>
+
+<p>84    self.eng.commit()</p>
+
+<p>85</p>
+
+<p>86    def main():</p>
+
+<p>87    print &lsquo;*** Connecting to %r database&rsquo; % DBNAME</p>
+
+<p>88    orm = MySQLAlchemy(&lsquo;mysql&rsquo;， DBNAME)</p>
+
+<p>89</p>
+
+<p>90    print &lsquo;\n*** Creating users table&rsquo;</p>
+
+<p><img src="07Python38c3160b-3119.jpg" alt="img" /></p>
+
+<p>91    orm.create()</p>
+
+<p><img src="07Python38c3160b-3120.jpg" alt="img" /></p>
+
+<p>92</p>
+
+<p>93    print &lsquo;\n*** Inserting names into table&rsquo;</p>
+
+<p>94    orm.insert()</p>
+
+<p>95    orm.dbDump()</p>
+
+<p>96</p>
+
+<p>97    print &lsquo;\n*** Randomly moving folks&rsquo;，</p>
+
+<p>98    fr， to， num = orm.update()</p>
+
+<p>99    print &lsquo;from one group (%d) to another (%d)&rsquo; % (fr， to)</p>
+
+<p>100    print &lsquo;\t(%d users moved)&rsquo; % num</p>
+
+<p>101    orm.dbDump()</p>
+
+<p>102</p>
+
+<p>103    print &lsquo;\n*** Randomly choosing group&rsquo;，</p>
+
+<p>104    rm， num = orm.delete()</p>
+
+<p>105    print &lsquo;(%d) to delete&rsquo; % rm</p>
+
+<p>106    print &lsquo;\t(%d users removed)&rsquo; % num</p>
+
+<p>107    orm.dbDump()</p>
+
+<p>108</p>
+
+<p>109    print &lsquo;\n*** Dropping users table&rsquo;</p>
+
+<p>110    orm.drop()</p>
+
+<p>111    orm.finish()</p>
+
+<p>112</p>
+
+<p><img src="07Python38c3160b-3121.jpg" alt="img" /></p>
+
+<p>113    if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>114    main()</p>
+
+<p>例子 21.2 SQLAlchemy ORM 示例(ushuffle_sa.py)</p>
+
+<h4 id="第46-70行">第46-70行</h4>
+
+<p>这四个方法处理数据库核心功能: 创建表(46-52行)， 插入数据(54-57 行)， 更新数据(59-64 行)， 删除数据(66-70行). 我们也有一个方法用来删除表.</p>
+
+<p>def drop(self):</p>
+
+<p>self.users.drop()</p>
+
+<p>or</p>
+
+<p>drop = lambda self: self.users.drop()</p>
+
+<p>不过， 我们还是决定提供另一种委托处理方式(曾在第13章， 面向对象编程中介绍). 委托处理 就是指一个方法调用不存在时， 转交给另一个拥有此方法的对象去处理. 参见第79-80行的解释.</p>
+
+<h4 id="第72-77行">第72-77行</h4>
+
+<p>输出内容由dbDump()方法完成.它从数据库中得到数据，就象ushuffle_db.py中那样对数 据进行美化，事实上，这部分代码几乎完全相同.</p>
+
+<h4 id="lines-79-80">Lines 79-80</h4>
+
+<p>应该尽量避免为一个表创建一个 drop() 方法， 因为这总是会调用 table 自身的 drop() 方 法. 同样， 既然没有新增功能， 那我们有什么必要要创建另一个函数?无论属性查找是否成功特殊 方法 <strong>getattr</strong>() 总是会被调用. 如果调用 orm.drop() 却发现这个对象并没有 drop() 方法， getattr(orm，’drop&rsquo;)就会被调用.发生这种情况时，<em>getattr</em>()被调用，之后将这个属性名委 托给 self.users. 解释器会发现 self.users 有一个 drop 属性并执行.</p>
+
+<p>Example 21.3 SQLObject ORM Example (ushuffle_so.py)</p>
+
+<p>这个user shuffle应用程序的主角前端是SQLObject，后端是MySQL数据库.</p>
+
+<p>1    #!/usr/bin/env python</p>
+
+<p>2</p>
+
+<p>3    import os</p>
+
+<p>4    from random import randrange as rrange</p>
+
+<p>5    from sqlobject import *</p>
+
+<p>6    from ushuffle_db import NAMES， randName</p>
+
+<p>7</p>
+
+<p>8    DBNAME = &lsquo;test&rsquo;</p>
+
+<p>9    COLSIZ = 10</p>
+
+<p><img src="07Python38c3160b-3124.jpg" alt="img" /></p>
+
+<p>10    FIELDS = (&lsquo;login&rsquo;， &lsquo;uid&rsquo;， &lsquo;prid&rsquo;)</p>
+
+<p>11</p>
+
+<p>12    class MySQLObject(object):</p>
+
+<p>13    def <strong>init</strong>(self， db， dbName):</p>
+
+<p>14    import MySQLdb</p>
+
+<p>15    import _mysql_exceptions</p>
+
+<p>16    url = &lsquo;mysql://localhost/%s&rsquo; % DBNAME</p>
+
+<p>17</p>
+
+<p>18    while True:</p>
+
+<p>19    cxn = connectionForURI(url)</p>
+
+<p>20    sqlhub.processConnection = cxn</p>
+
+<p>21    #cxn.debug = True</p>
+
+<p>22    try:</p>
+
+<p>23    class Users(SQLObject):</p>
+
+<p>24    class sqlmeta:</p>
+
+<p>25    fromDatabase = True</p>
+
+<p>26    login = StringCol(length=8)</p>
+
+<p>27    uid = IntCol()</p>
+
+<p><img src="07Python38c3160b-3125.jpg" alt="img" /></p>
+
+<p>28    prid = IntCol()</p>
+
+<p><img src="07Python38c3160b-3126.jpg" alt="img" /></p>
+
+<p>29    break</p>
+
+<p>30    except _mysql_exceptions.ProgrammingError， e:</p>
+
+<p>31    class Users(SQLObject):</p>
+
+<p>32    login = StringCol(length=8)</p>
+
+<p>33    uid = IntCol()</p>
+
+<p>34    prid = IntCol()</p>
+
+<p>35    break</p>
+
+<p>36    except _mysql_exceptions.OperationalError， e:</p>
+
+<p>37    cxn1 = sqlhub.processConnection= connectionForURI(&lsquo;mysql://root@localhost&rsquo;)</p>
+
+<p>38    cxn1.query(&ldquo;CREATE DATABASE %s&rdquo; % DBNAME)</p>
+
+<p>39    cxn1.query(&ldquo;GRANT ALL ON %s.* TO &ldquo;@&rsquo; localhost&rsquo;&rdquo; % DBNAME)</p>
+
+<p>40    cxn1.close()</p>
+
+<p>41    self.users = Users</p>
+
+<p>42    self.cxn = cxn</p>
+
+<p>43</p>
+
+<p>44    def create(self):</p>
+
+<p>45    Users = self.users</p>
+
+<p>46    Users.dropTable(True)</p>
+
+<p>47    Users.createTable()</p>
+
+<p><img src="07Python38c3160b-3127.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3128.jpg" alt="img" /></p>
+
+<p>48</p>
+
+<p>49    def insert(self):</p>
+
+<p>50    for who， uid in randName():</p>
+
+<p>51    self.users(**dict(zip(FIELDS，</p>
+
+<p>52    [who， uid， rrange(1，5)])))</p>
+
+<p>53</p>
+
+<p>54    def update(self):</p>
+
+<p>55    fr = rrange(1，5)</p>
+
+<p>56    to = rrange(1，5)</p>
+
+<p>57    users = self.users.selectBy(prid=fr)</p>
+
+<p>58    for i， user in enumerate(users):</p>
+
+<p>59    user.prid = to</p>
+
+<p>60    return fr， to， i+1</p>
+
+<p>61</p>
+
+<p>62    def delete(self):</p>
+
+<p>63    rm = rrange(1，5)</p>
+
+<p>64    users = self.users.selectBy(prid=rm)</p>
+
+<p>65    for i， user in enumerate(users):</p>
+
+<p>66    user.destroySelf()</p>
+
+<p><img src="07Python38c3160b-3129.jpg" alt="img" /></p>
+
+<p>67    return rm， i+1</p>
+
+<p>68</p>
+
+<p>69    def dbDump(self):</p>
+
+<p>70    print &lsquo;\n%s%s%s&rsquo; % (&lsquo;LOGIN&rsquo;.ljust(COLSIZ)，</p>
+
+<p>71    &lsquo;USERID&rsquo;.ljust(COLSIZ)， &lsquo;PROJ#&rsquo;.ljust(COLSIZ))</p>
+
+<p>72    for usr in self.users.select():</p>
+
+<p>73    print &lsquo;%s%s%s&rsquo; % (tuple([str(getattr(usr，</p>
+
+<p>74    field)).title().ljust(COLSIZ) </p>
+
+<p>75    for field in FIELDS]))</p>
+
+<p>76</p>
+
+<p>77    drop = lambda self: self.users.dropTable()</p>
+
+<p>78    finish = lambda self: self.cxn.close()</p>
+
+<p>79</p>
+
+<p>80    def main():</p>
+
+<p>81    print &lsquo;*** Connecting to %r database&rsquo; % DBNAME</p>
+
+<p>82    orm = MySQLObject(&lsquo;mysql&rsquo;， DBNAME)</p>
+
+<p>83</p>
+
+<p>84    print &lsquo;\n*** Creating users table&rsquo;</p>
+
+<p>85    orm.create()</p>
+
+<p>86</p>
+
+<p>87 print &lsquo;\n*** Inserting names into table&rsquo;</p>
+
+<p><img src="07Python38c3160b-3130.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3131.jpg" alt="img" /></p>
+
+<p>88    orm.insert()</p>
+
+<p>89    orm.dbDump()</p>
+
+<p>90</p>
+
+<p>91    print &lsquo;\n*** Randomly moving folks&rsquo;,</p>
+
+<p>92    fr, to, num = orm.update()</p>
+
+<p>93    print &lsquo;from one group (%d) to another (%d)&rsquo; % (fr, to)</p>
+
+<p>94    print &lsquo;\t(%d users moved)&rsquo; % num</p>
+
+<p>95    orm.dbDump()</p>
+
+<p>96</p>
+
+<p>97    print &lsquo;\n*** Randomly choosing group&rsquo;,</p>
+
+<p>98    rm, num = orm.delete()</p>
+
+<p>99    print &lsquo;(%d) to delete&rsquo; % rm</p>
+
+<p>100    print &lsquo;\t(%d users removed)&rsquo; % num</p>
+
+<p>101    orm.dbDump()</p>
+
+<p>102</p>
+
+<p>103    print &lsquo;\n*** Dropping users table&rsquo;</p>
+
+<p>104    orm.drop()</p>
+
+<p>105    orm.finish()</p>
+
+<p><img src="07Python38c3160b-3132.jpg" alt="img" /></p>
+
+<p>106</p>
+
+<p><img src="07Python38c3160b-3133.jpg" alt="img" /></p>
+
+<p>107    if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>108    main()</p>
+
+<h4 id="lines-82-84">Lines 82-84</h4>
+
+<p>最后一个方法是 finish, 它来提交整个事务.</p>
+
+<h4 id="第86-114行">第86-114行</h4>
+
+<p>main() 函数是整个应用程序的入口, 它创建了一个 MySQLAlchemy 对象并通过它完成所有的 数据库操作. 这段脚本和 ushuffle_db.py 功能一样. 你会注意到数据库参数 db 是可选的,而且</p>
+
+<p>在ushuffle_sa.py和即将碰到的ushuffle_so.py中，它不起任何作用.它只是一个占位符以方</p>
+
+<p>便你对这个应用程序添加其它的数据库支持.(参见本章后面的习题)</p>
+
+<p>运行这段脚本， 你会看到类似下面的输出:</p>
+
+<p><img src="07Python38c3160b-3134.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3135.jpg" alt="img" /></p>
+
+<p>$ ushuffle_sa.py</p>
+
+<p>*** Connecting to &lsquo;test&rsquo; database</p>
+
+<p>*** Creating users table</p>
+
+<p>*** Inserting names into table</p>
+
+<p><img src="07Python38c3160b-3136.jpg" alt="img" /></p>
+
+<table>
+<thead>
+<tr>
+<th>LOGIN</th>
+<th>USERID</th>
+<th>PROJit</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Serena</td>
+<td>7003</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Faye</td>
+<td>6812</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Leslie</td>
+<td>7808</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Ernie</td>
+<td>7410</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Dave</td>
+<td>7306</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Melissa</td>
+<td>8602</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Amy</td>
+<td>7209</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Angela</td>
+<td>7603</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Jess</td>
+<td>7912</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Larry</td>
+<td>7311</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Jin</td>
+<td>7512</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Davina</td>
+<td>7902</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Stan</td>
+<td>7607</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Pat</td>
+<td>7711</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Aaron</td>
+<td>8312</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Elliot</td>
+<td>7911</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+
+<p>*** Randomly moving folks from one group (1) to another (3) (3 users moved)</p>
+
+<p><img src="07Python38c3160b-3137.jpg" alt="img" /></p>
+
+<table>
+<thead>
+<tr>
+<th>LOGIN</th>
+<th>USERID</th>
+<th>PROJ#</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Serena</td>
+<td>7003</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Faye</td>
+<td>6812</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Leslie</td>
+<td>7808</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Ernie</td>
+<td>7410</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Dave</td>
+<td>7306</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Melissa</td>
+<td>8602</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Amy</td>
+<td>7209</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Angela</td>
+<td>7603</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Jess</td>
+<td>7912</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Larry</td>
+<td>7311</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Jim</td>
+<td>7512</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Davina</td>
+<td>7902</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Stan</td>
+<td>7607</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Pat</td>
+<td>7711</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Aaron</td>
+<td>8312</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>Elliot</td>
+<td>7911</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="07Python38c3160b-3138.jpg" alt="img" /></p>
+
+<p>*** Randomly choosing group (2) to delete (5 users removed)</p>
+
+<p><img src="07Python38c3160b-3140.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3141.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3142.jpg" alt="img" /></p>
+
+<table>
+<thead>
+<tr>
+<th>LOGIN</th>
+<th>USERID</th>
+<th>PROJ#</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Serena</td>
+<td>7003</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Faye</td>
+<td>6812</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Leslie</td>
+<td>7808</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Ernie</td>
+<td>7410</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Melissa</td>
+<td>8602</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Am/</td>
+<td>7209</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Angela</td>
+<td>7603</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Larry</td>
+<td>7311</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Davina</td>
+<td>7902</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Stan</td>
+<td>7607</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Elliot</td>
+<td>7911</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>*** Dropping users</td>
+<td>table</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>$</p>
+
+<p>逐行解释</p>
+
+<h4 id="第1-10行-1">第1-10行</h4>
+
+<p>除了我们使用的是 SQLObject 而不是 SQLAlchemy 以外， 导入模块和常量声明几乎与 ushuffle_sa.py 相同.</p>
+
+<h4 id="12-42-行">12-42 行</h4>
+
+<p>类似我们的SQLAlchemy例子，类的构造器做大量工作以确保有一个数据库可用，然后返回一 个连接.同样的，这也是你能在程序里看到SQL语句的唯一位置.我们这个程序，如果因为某种原 因造成SQLObject无法成功创建用户表，就会陷入无限循环当中.</p>
+
+<p>我们尝试能够聪明的处理错误， 解决掉这个重建表的问题. 因为 SQLObject 使用元类， 我们 知道类的创建幕后发生特殊事件， 所以我们不得不定义两个不同的类， 一个用于表已经存在的情况， 一个用于表不存的情况. 代码工作原理如下:</p>
+
+<p>\1.    尝试建立一个连接到一个已经存在的表. 如果正常工作， OK. （第23-29行）</p>
+
+<p>\2.    如果第一步不成功， 则从零开始为这个表创建一个类， 如果成功， OK. （第31-36行）</p>
+
+<p>\3.    如果第二步仍不成功， 我们的数据库可能遇到麻烦， 那就重新创建一个新的数据库（第</p>
+
+<p>37-40行）</p>
+
+<p>\4.    重新开始新的循环.</p>
+
+<p>希望程序最终能在第一步或第二步成功完成.当循环结束时，类似ushuffle_sa.py，我们得到 合适的对象实例.</p>
+
+<h4 id="第44-67行-77-78行">第44-67行， 77-78行</h4>
+
+<p>这些行处理数据库操作. 我们在 44-47行创建了表， 并在77行删掉了表. 在49-52行插入数据，</p>
+
+<p>在54-60行更新数据，在62-67行删除了数据.78行调用了 finishO方法来关闭数据库连接.我们</p>
+
+<p>不能象SQLAlchemy那样使用删表代理，因为SQLObject的删表代理名为dropTableO而不是</p>
+
+<p>drop().</p>
+
+<h4 id="第69-75行">第69-75行</h4>
+
+<p>使用dbDumpO方法，我们从数据库中得到数据，并将它显示在屏幕上.</p>
+
+<h4 id="第80-108行">第80-108行</h4>
+
+<p>又到了 main() 函数. 它工作的方式非常类似 ushuffle_sa.py . 同样的， 构造器的 db 参数 仅仅是一个占位符， 用以支持其它的数据库系统(参阅本章最后的习题)</p>
+
+<p>当你运行这段脚本时， 你的输出可能类似这样:</p>
+
+<p><img src="07Python38c3160b-3145.jpg" alt="img" /></p>
+
+<p>$ ushuffle_so.py</p>
+
+<table>
+<thead>
+<tr>
+<th>*** Connecting to r</th>
+<th>test1</th>
+<th>database</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>*** Creating users</td>
+<td>table</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>*** Inserting names</td>
+<td>into</td>
+<td>table</td>
+<td></td>
+</tr>
+
+<tr>
+<td>LOGIN</td>
+<td>USERID</td>
+<td>PRCXT#</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Jess</td>
+<td>7912</td>
+<td>1</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Amy</td>
+<td>7209</td>
+<td>4</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Melissa</td>
+<td>8602</td>
+<td>2</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Dave</td>
+<td>7306</td>
+<td>4</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Angela</td>
+<td>7603</td>
+<td>4</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Serena</td>
+<td>7003</td>
+<td>2</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Aaron</td>
+<td>8312</td>
+<td>1</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Leslie</td>
+<td>7808</td>
+<td>1</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Stan</td>
+<td>7607</td>
+<td>3</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Pat</td>
+<td>7711</td>
+<td>3</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Jim</td>
+<td>7512</td>
+<td>4</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Larry</td>
+<td>7311</td>
+<td>3</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Ernie</td>
+<td>7410</td>
+<td>2</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>4</p>
+
+<p><img src="07Python38c3160b-3146.jpg" alt="img" /></p>
+
+<p>Faye 6812 Davina 7902 Elliot 7911</p>
+
+<p>*** Randomly moving folks from one group (2) (3 users moved)</p>
+
+<p>to another (3)</p>
+
+<p><img src="07Python38c3160b-3147.jpg" alt="img" /></p>
+
+<table>
+<thead>
+<tr>
+<th>LOGIN</th>
+<th>USERID</th>
+<th>PROJ#</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Jess</td>
+<td>7912</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Amy</td>
+<td>7209</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Melissa</td>
+<td>8602</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Dave</td>
+<td>7306</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Angela</td>
+<td>7603</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Serena</td>
+<td>700S</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Aaron</td>
+<td>8312</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Leslie</td>
+<td>7803</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Stan</td>
+<td>7607</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Pat</td>
+<td>7711</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Jim</td>
+<td>7512</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Larry</td>
+<td>7311</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Ernie</td>
+<td>7 410</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>Faye</td>
+<td>6812</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Davina</td>
+<td>7902</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Elliot</td>
+<td>7911</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="07Python38c3160b-3148.jpg" alt="img" /></p>
+
+<p>* * * Randomly choosing group (6 users removed)</p>
+
+<p>(3) to delete</p>
+
+<p><img src="07Python38c3160b-3149.jpg" alt="img" /></p>
+
+<table>
+<thead>
+<tr>
+<th>LOGIN</th>
+<th>USERID</th>
+<th>PROJ#</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Jess</td>
+<td>7912</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Amy</td>
+<td>7209</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Dave</td>
+<td>7306</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Angela</td>
+<td>7603</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Aaron</td>
+<td>8312</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Leslie</td>
+<td>7808</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Jim</td>
+<td>7512</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Faye</td>
+<td>6812</td>
+<td>4</td>
+</tr>
+
+<tr>
+<td>Davina</td>
+<td>7902</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>Elliot</td>
+<td>7911</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="07Python38c3160b-3150.jpg" alt="img" /></p>
+
+<p>*** Dropping users table S</p>
+
+<p>Edit By Vheavens</p>
+
+<h3 id="21-3-4-总结">21.3.4 总结</h3>
+
+<p>关于如何在python中使用关系型数据库，希望我们前面介绍的东西对你有用.当你应用程序的 需求超出纯文本或类似DBM等特殊文件的能力时，有多种数据库可以选择，别忘了还有一个完全由 Python实现的真正的免安装维护和管理的真实数据库系统.你能在下面找到多种Python数据库接口 程序和0RM系统.我们也建议你研宄一下互联网上的DB-SIG的网页和邮件列表.类似其它的软件 开发领域， 只不过 Python 更简单易学， 用户体验更好.</p>
+
+<h3 id="21-4-相关模块">21.4 相关模块</h3>
+
+<p><img src="07Python38c3160b-3151.jpg" alt="img" /></p>
+
+<p>表21.8列出了常见的Python数据库接口程序，注意不是所有的接口程序都是DB-API兼容</p>
+
+<p>的.</p>
+
+<p>表 21.8 数据库相关模块及其站点</p>
+
+<p>名字</p>
+
+<p>数据库</p>
+
+<p>Gadfly</p>
+
+<p>MySQL</p>
+
+<p>网站 参考或描述</p>
+
+<p><a href="http://gadfly.sf.net">http://gadfly.sf.net</a></p>
+
+<p><a href="http://mysql.com">http://mysql.com</a> or <a href="http://mysql.org">http://mysql.org</a></p>
+
+<p>MySQLdb a.k.a. MySQL-</p>
+
+<p>Python    <a href="http://sf.net/projects/mysql-python">http://sf.net/projects/mysql-python</a></p>
+
+<p>PostgreSQL <a href="http://postgresql.org">http://postgresql.org</a> Psycopg    <a href="http://initd.org/projects/psycopg1">http://initd.org/projects/psycopg1</a></p>
+
+<p>psycopg2    <a href="http://initd.org/software/initd/psycopg/">http://initd.org/software/initd/psycopg/</a></p>
+
+<p>PyPgSQL    <a href="http://pypgsql.sf.net">http://pypgsql.sf.net</a></p>
+
+<p>PyGreSQL    <a href="http://pygresql.org">http://pygresql.org</a></p>
+
+<p>PoPy 已废弃， 与 PyGreSQL 项目合并 SQLite    <a href="http://sqlite.org">http://sqlite.org</a></p>
+
+<p><img src="07Python38c3160b-3153.jpg" alt="img" /></p>
+
+<p>pysqlite    <a href="http://initd.org/projects/pysqlite">http://initd.org/projects/pysqlite</a></p>
+
+<p><img src="07Python38c3160b-3154.jpg" alt="img" /></p>
+
+<p>sqlite3a    pysqlite已经整合到Python标准库；除非你要下载最新的补丁，否则建议</p>
+
+<p>使用标准库</p>
+
+<p>APSW <a href="http://rogerbinns.com/apsw.html">http://rogerbinns.com/apsw.html</a> 表 21.8 数据库相关模块及其站点(续)</p>
+
+<p>名字 网站 参考或描述</p>
+
+<p>数据库</p>
+
+<p>MaxDB (SAP) <a href="http://mysql.com/products/maxdb">http://mysql.com/products/maxdb</a></p>
+
+<p>sdb <a href="http://dev.mysql.com/downloads/maxdb/7.6.00.html%23Python">http://dev.mysql.com/downloads/maxdb/7.6.00.html#Python</a></p>
+
+<p>sapdb <a href="http://sapdb.org/sapdbPython.html">http://sapdb.org/sapdbPython.html</a></p>
+
+<p>Firebird (InterBase) <a href="http://firebird.sf.net">http://firebird.sf.net</a></p>
+
+<p>KInterbasDB <a href="http://kinterbasdb.sf.net">http://kinterbasdb.sf.net</a></p>
+
+<p>SQL Server    <a href="http://microsoft.com/sql">http://microsoft.com/sql</a></p>
+
+<p>pymssql    <a href="http://pymssql.sf.net">http://pymssql.sf.net</a> (requires FreeTDS [<a href="http://freetds.org">http://freetds.org</a>])</p>
+
+<p>adodbapi    <a href="http://adodbapi.sf.net">http://adodbapi.sf.net</a></p>
+
+<p>Sybase <a href="http://sybase.com">http://sybase.com</a></p>
+
+<p>sybase <a href="http://object-craft.com.au/projects/sybase">http://object-craft.com.au/projects/sybase</a></p>
+
+<p>Oracle <a href="http://oracle.com">http://oracle.com</a></p>
+
+<p>cx_Oracle    <a href="http://starship.python.net/crew/atuining/cx_Oracle">http://starship.python.net/crew/atuining/cx_Oracle</a></p>
+
+<p>DCOracle2    <a href="http://zope.org/Members/matt/dco2">http://zope.org/Members/matt/dco2</a></p>
+
+<p>(older， for Oracle8 only)</p>
+
+<p><img src="07Python38c3160b-3155.jpg" alt="img" /></p>
+
+<p>Ingres <a href="http://ingres.com">http://ingres.com</a></p>
+
+<p>Ingres DBI <a href="http://ingres.com/products/Prod_Download_Python_DBI.html">http://ingres.com/products/Prod_Download_Python_DBI.html</a> ingmod <a href="http://www.informatik.uni-rostock.de/~hme/software/">http://www.informatik.uni-rostock.de/~hme/software/</a></p>
+
+<p><img src="07Python38c3160b-3157.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3158.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3159.jpg" alt="img" /></p>
+
+<p>ORMs</p>
+
+<p>SQLObject</p>
+
+<p>SQLAlchemy</p>
+
+<p>PyDO/PyDO2</p>
+
+<p><a href="http://sqlobject.org">http://sqlobject.org</a></p>
+
+<p><a href="http://sqlalchemy.org">http://sqlalchemy.org</a></p>
+
+<p><a href="http://skunkweb.sf.net/pydo.html">http://skunkweb.sf.net/pydo.html</a></p>
+
+<p>a.    pysqlite已经添加到python2.5中，作为它的sqlite3模块</p>
+
+<h3 id="21-5-练习">21.5 练习</h3>
+
+<p>21-1. 什么是 Python DB-API? 它是一个好东西么? 为什么是?(或为什么不是?)</p>
+
+<p>21-2. 描述一下数据库模块参数风格之间的不同在哪儿?</p>
+
+<p>21-3. 游标对象的 execute*() 系列方法有何区别?</p>
+
+<p>21-4. 游标对象的 fetch*() 系列方法有何区别?</p>
+
+<p>21-5.    研宄一下你使用的数据库及相应的python模块.它是否与DB-API兼容？该模块是</p>
+
+<p>否提供了 DB-API必须功能之外的更多特性？</p>
+
+<p>21-6.针对你使用的数据库和DB-API接口程序，学习使用Type对象写一段小的脚本，至 -少要用到其中的一个对象.</p>
+
+<p><img src="07Python38c3160b-3160.jpg" alt="img" /></p>
+
+<p>21 - 7. 重构例子21.1(ushuffle_db.py)中的create()函数，一个table会先被删除， 然后递归调用create()函数重建这个table.如果在重建这个table时失败，就会陷入无限循 环之中.通过在异常处理中不再调用create命令(cur.executeO)修复这个问题，搞一个更实用 的解决方案出来. 附加题： 实现如果创建 table 失败， 在返回失败之前最多重试三次.</p>
+
+<p>21-8.</p>
+
+<p>数据库和html利用现有数据库的一个表和你在第20章学到的开发知识，读出数据库表的内容， 将它放到一个 html table 中去.</p>
+
+<p>21-9. 数据库网站开发给我们的user shuffle例子写一个网页界面.</p>
+
+<p>21-10. 数据库界面编程 给我们的 user shuffle 例子写一个图形界面.</p>
+
+<p>21-11. 股票投资组合类 修改第十三章股票数据的例子， 将它改造为使用某一种关系数据库</p>
+
+<p>保存数据.</p>
+
+<p>21-12. 切换 ORM 后端为其它的数据库. 将 SQLAlchemy(ushuffle_sa.py) 或 SQLObject(ushuffle_so.py) 应用程序后端数据库由 MySQL 切换为另一种数据库系统.</p>
+
+<p><img src="07Python38c3160b-3161.jpg" alt="img" /></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/20-web%E7%BC%96%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">20 Web编程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/22-%E6%89%A9%E5%B1%95-python/">
+            <span class="next-text nav-default">22 扩展 Python</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

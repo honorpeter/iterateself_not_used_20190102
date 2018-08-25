@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 序列的增量赋值 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2.6 序列的增量赋值 增量赋值运算符 &#43;= 和 *= 的表现取决于它们的第一个操作对象。简单起见，我们把讨论 集中在增量加法(&#43;=)上，但是这些概念对 *= 和其他增" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/06-%E5%BA%8F%E5%88%97%E7%9A%84%E5%A2%9E%E9%87%8F%E8%B5%8B%E5%80%BC/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 序列的增量赋值" />
+<meta property="og:description" content="2.6 序列的增量赋值 增量赋值运算符 &#43;= 和 *= 的表现取决于它们的第一个操作对象。简单起见，我们把讨论 集中在增量加法(&#43;=)上，但是这些概念对 *= 和其他增" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/06-%E5%BA%8F%E5%88%97%E7%9A%84%E5%A2%9E%E9%87%8F%E8%B5%8B%E5%80%BC/" /><meta property="article:published_time" content="2018-07-11T15:00:15&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-11T15:00:15&#43;00:00"/>
+<meta itemprop="name" content="06 序列的增量赋值">
+<meta itemprop="description" content="2.6 序列的增量赋值 增量赋值运算符 &#43;= 和 *= 的表现取决于它们的第一个操作对象。简单起见，我们把讨论 集中在增量加法(&#43;=)上，但是这些概念对 *= 和其他增">
+
+
+<meta itemprop="datePublished" content="2018-07-11T15:00:15&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-11T15:00:15&#43;00:00" />
+<meta itemprop="wordCount" content="1689">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 序列的增量赋值"/>
+<meta name="twitter:description" content="2.6 序列的增量赋值 增量赋值运算符 &#43;= 和 *= 的表现取决于它们的第一个操作对象。简单起见，我们把讨论 集中在增量加法(&#43;=)上，但是这些概念对 *= 和其他增"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 序列的增量赋值</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-11 </span>
+        
+        <span class="more-meta"> 1689 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#2-6-序列的增量赋值">2.6 序列的增量赋值</a>
+<ul>
+<li><a href="#python-tutor-http-www-pythontutor-com-是一个对python运行原理进行可视化分析的工">Python Tutor （<a href="http://www.pythontutor.com">http://www.pythontutor.com</a>）是一个对Python运行原理进行可视化分析的工</a></li>
+<li><a href="#示例-2-16-s-a-b-背后的字节码">示例 2-16 s[a] = b 背后的字节码</a></li>
+<li><a href="#o将s-a-的值存入tos-top-of-stack-栈的顶端">O将s[a]的值存入TOS （Top Of Stack，栈的顶端）。</a></li>
+<li><a href="#o-s-a-tos赋值-这一步失败-是因为s是不可变的元组-示例2-15中的元组-t">O s[a] = TOS赋值。这一步失败，是因为s是不可变的元组（示例2-15中的元组 t）。</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h3 id="2-6-序列的增量赋值">2.6 序列的增量赋值</h3>
+
+<p>增量赋值运算符 += 和 *= 的表现取决于它们的第一个操作对象。简单起见，我们把讨论 集中在增量加法(+=)上，但是这些概念对 *= 和其他增量运算符来说都是一样的。</p>
+
+<p>+= 背后的特殊方法是 <strong>iadd</strong> (用于“就地加法”)。但是如果一个类没有实现这个方 法的话， Python 会退一步调用 <strong>add</strong> 。考虑下面这个简单的表达式：</p>
+
+<p>&gt;&gt;&gt; a += b</p>
+
+<p>如果 a 实现了 <strong>iadd</strong> 方法，就会调用这个方法。同时对可变序列(例如</p>
+
+<p>list、bytearray 和 array.array)来说，a 会就地改动，就像调用了 a.extend(b)</p>
+
+<p>一样。但是如果 a 没有实现 <strong>iadd</strong> 的话， a += b 这个表达式的效果就变得跟 a = a + b 一样了：首先计算a + b，得到一个新的对象，然后赋值给a。也就是说，在这个表 达式中，变量名会不会被关联到新的对象，完全取决于这个类型有没有实现 <strong>iadd</strong> 这 个方法。</p>
+
+<p>总体来讲，可变序列一般都实现了 <strong>iadd</strong> 方法，因此 += 是就地加法。而不可变序列 根本就不支持这个操作，对这个方法的实现也就无从谈起。</p>
+
+<p>上面所说的这些关于 += 的概念也适用于 *=，不同的是，后者相对应的是 <strong>imul</strong>。关 于 <strong>iadd</strong> 和 <strong>imul</strong>，第 13 章中会再次提到。</p>
+
+<p>接下来有个小例子，展示的是 *= 在可变和不可变序列上的作用：</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; l = [1, 2, 3]</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;&gt;&gt; id(l)</td>
+</tr>
+
+<tr>
+<td>4311953800 O</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; l *= 2</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; l</td>
+</tr>
+
+<tr>
+<td>[1, 2, 3, 1, 2, 3]</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; id(l)</td>
+</tr>
+
+<tr>
+<td>4311953800    &amp;</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; t = (1, 2, 3)</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; id(t)</td>
+</tr>
+
+<tr>
+<td>4312681568    ©</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; t *= 2</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; id(t)</td>
+</tr>
+
+<tr>
+<td>4301348296    ©</td>
+</tr>
+</tbody>
+</table>
+
+<p>❶ 刚开始时列表的 ID。</p>
+
+<p>❷ 运用增量乘法后，列表的 ID 没变，新元素追加到列表上。 ❸ 元组最开始的 ID。</p>
+
+<p>❹ 运用增量乘法后，新的元组被创建。</p>
+
+<p>对不可变序列进行重复拼接操作的话，效率会很低，因为每次都有一个新对象，而解释器</p>
+
+<p>需要把原来对象中的元素先复制到新的对象里，然后再追加新的元素。 4</p>
+
+<p>|4str是一个例外，因为对字符串做+=实在是太普遍了，所以CPython对它做了优化。为str初始化内存的时候，程 序会为它留出额外的可扩展空间，因此进行増量操作的时候，并不会涉及复制原有字符串到新位置这类操作。</p>
+
+<p>我们已经认识了 += 的一般用法，下面来看一个有意思的边界情况。这个例子可以说是突 出展示了“不可变性”对于元组来说到底意味着什么。</p>
+
+<p>一个关于+=的谜题</p>
+
+<p>读完下面的代码，然后回答这个问题：示例 2-14 中的两个表达式到底会产生什么结果？ 5回答之前不要用控制台去运行这两个式子。</p>
+
+<p>| 5感谢Leonardo Rochael在2013年的Python巴西会议上提到这个谜题。</p>
+
+<p>示例 2-14 一个谜题</p>
+
+<p>&gt;&gt;&gt; t = (1, 2, [30, 40])</p>
+
+<p>&gt;&gt;&gt; t[2] += [50, 60]</p>
+
+<p>到底会发生下面 4 种情况中的哪一种？</p>
+
+<p>a.    t 变成 (1, 2, [30, 40, 50, 60])。</p>
+
+<p>b.    因为 tuple 不支持对它的元素赋值，所以会抛出 TypeError 异常。</p>
+
+<p>c.    以上两个都不是。</p>
+
+<p>d.    a 和 b 都是对的。</p>
+
+<p>我刚看到这个问题的时候，异常确定地选择了 b，但其实答案是d，也就是说a和b都是</p>
+
+<p>对的！示例 2-15 是运行这段代码得到的结果，用的 Python 版本是 3.4，但是在 2.7 中结果 也一样。 <a href="#bookmark12">1</a></p>
+
+<h4 id="python-tutor-http-www-pythontutor-com-是一个对python运行原理进行可视化分析的工">Python Tutor （<a href="http://www.pythontutor.com">http://www.pythontutor.com</a>）是一个对Python运行原理进行可视化分析的工</h4>
+
+<p>具。图 2-3 里是两张截图，分别代表示例 2-15 中 t 的初始和最终状态。</p>
+
+<p>■ 1 t = (1, 2, [30, 40])</p>
+
+<p>2 t[2] += [50. 60]</p>
+
+<p>Edit code</p>
+
+<p>[&lt;&lt;first ] [ &lt; tack-| Step 2 of 2 [ Forwaid» j【Last</p>
+
+<p>line that has just executed</p>
+
+<p>next line to execute</p>
+
+<p>t = (1, 2， [30， 40])</p>
+
+<p>2 t[2] += [SO, 60】—</p>
+
+<p>Edit code</p>
+
+<p>[&lt;<nr«t ] [ <Back j Program terminated f ward ></p>
+
+<p>TypeError: &lsquo;tuple&rsquo; object does not support item assignment</p>
+
+<p>line that has just executed next line to execute</p>
+
+<p><img src="08414584Python-13.jpg" alt="img" /></p>
+
+<p><img src="08414584Python-14.jpg" alt="img" /></p>
+
+<p>图 2-3：元组赋值之谜的初始和最终状态（图表由 Python Tutor 网站生成） 下面来看看示例 2-16 中 Python 为表达式 s[a] += b 生成的字节码，可能这个现象背后的 原因会变得清晰起来。</p>
+
+<h4 id="示例-2-16-s-a-b-背后的字节码">示例 2-16 s[a] = b 背后的字节码</h4>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; dis.dis(&rsquo;s[a] += b&rsquo;)</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1    0 LOAD_NAME</td>
+<td>0(s)</td>
+<td></td>
+</tr>
+
+<tr>
+<td>3 LOAD_NAME</td>
+<td>1(a)</td>
+<td></td>
+</tr>
+
+<tr>
+<td>6 DUP_TOP_TWO</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>7 BINARY_SUBSCR</td>
+<td></td>
+<td>O</td>
+</tr>
+
+<tr>
+<td>8 LOAD_NAME</td>
+<td>2(b)</td>
+<td></td>
+</tr>
+
+<tr>
+<td>11 INPLACE_ADD</td>
+<td></td>
+<td>©</td>
+</tr>
+
+<tr>
+<td>12 ROT_THREE</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>13 STORE_SUBSCR</td>
+<td></td>
+<td>O</td>
+</tr>
+
+<tr>
+<td>14 LOAD_CONST</td>
+<td>0(None)</td>
+<td></td>
+</tr>
+
+<tr>
+<td>17 RETURN VALUE</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="o将s-a-的值存入tos-top-of-stack-栈的顶端">O将s[a]的值存入TOS （Top Of Stack，栈的顶端）。</h4>
+
+<p>©计算TOS += b。这一步能够完成，是因为TOS指向的是一个可变对象（也就是示例 2-15 里的列表）。</p>
+
+<h4 id="o-s-a-tos赋值-这一步失败-是因为s是不可变的元组-示例2-15中的元组-t">O s[a] = TOS赋值。这一步失败，是因为s是不可变的元组（示例2-15中的元组 t）。</h4>
+
+<p>这其实是个非常罕见的边界情况，在 15 年的 Python 生涯中，我还没见过谁在这个地方吃</p>
+
+<p>过亏。</p>
+
+<p>至此我得到了 3 个教训。</p>
+
+<p>•不要把可变对象放在元组里面。</p>
+
+<p>.增量赋值不是一个原子操作。我们刚才也看到了，它虽然抛出了异常，但还是完成了 操作。</p>
+
+<p>•查看Python的字节码并不难，而且它对我们了解代码背后的运行机制很有帮助。</p>
+
+<p>在见证了 + 和 * 的微妙之处后，我们把话题转移到序列类型的另一个重要部分上：排</p>
+
+<p>序。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/05-%E5%AF%B9%E5%BA%8F%E5%88%97%E4%BD%BF%E7%94%A8%E5%8A%A0%E5%92%8C%E4%B9%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 对序列使用加和乘</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/07-list.sort-%E6%96%B9%E6%B3%95%E5%92%8C%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0-sorted/">
+            <span class="next-text nav-default">07 list.sort 方法和内置函数 sorted</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

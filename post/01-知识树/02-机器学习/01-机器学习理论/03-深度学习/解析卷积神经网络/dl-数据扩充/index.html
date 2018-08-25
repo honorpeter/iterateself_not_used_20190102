@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>DL 数据扩充 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 实践应用篇 数据扩充 深度卷积 至海量数 并不是 本。因此 一步。有 一方面可 种常用 据扩充方式 ，不过正因如此，网络本身" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E6%95%B0%E6%8D%AE%E6%89%A9%E5%85%85/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="DL 数据扩充" />
+<meta property="og:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 实践应用篇 数据扩充 深度卷积 至海量数 并不是 本。因此 一步。有 一方面可 种常用 据扩充方式 ，不过正因如此，网络本身" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E6%95%B0%E6%8D%AE%E6%89%A9%E5%85%85/" /><meta property="article:published_time" content="2018-06-26T19:33:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:33:23&#43;00:00"/>
+<meta itemprop="name" content="DL 数据扩充">
+<meta itemprop="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 实践应用篇 数据扩充 深度卷积 至海量数 并不是 本。因此 一步。有 一方面可 种常用 据扩充方式 ，不过正因如此，网络本身">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:33:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:33:23&#43;00:00" />
+<meta itemprop="wordCount" content="2351">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DL 数据扩充"/>
+<meta name="twitter:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 实践应用篇 数据扩充 深度卷积 至海量数 并不是 本。因此 一步。有 一方面可 种常用 据扩充方式 ，不过正因如此，网络本身"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">DL 数据扩充</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 2351 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《解析卷积神经网络》魏秀参</li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p>实践应用篇</p>
+
+<p>数据扩充</p>
+
+<p>深度卷积</p>
+
+<p>至海量数</p>
+
+<p>并不是</p>
+
+<p>本。因此</p>
+
+<p>一步。有</p>
+
+<p>一方面可</p>
+
+<p>种常用</p>
+
+<p>据扩充方式</p>
+
+<p>，不过正因如此，网络本身需要大量甚</p>
+
+<p>极大可能陷入过拟合的窘境。可实际中，</p>
+
+<p>ft如ImageNet数据集一般的海量训练样 iugmentation)便成为深度模型训练的第 样本数量，还能增加训练样本的多样性，</p>
+
+<p>来模型性能的提升。本章将介绍目前几</p>
+
+<p>:扩充方面，简单的方法有如图5.1b和图5.1c所示的图像水平翻转 ntally flipping)和随机抠取(random crops)。水平翻转操作会使原数据 一倍。随机抠取操作一般用较大(约0.8至0.9倍原图大小)的正方形 的随机位置处抠取图像块(image patch/crop),每张图像随机抠取的次 了数据集扩充的倍数。在此使用正方形的原因是由于卷积神经网络模型 一般是方形图像，直接以方形抠取避免了矩形抠取后续的图像拉伸操作</p>
+
+<p>5.1.简单的数据扩充方式</p>
+
+<p>带来的分辨率失真。</p>
+
+<p>(a)原图</p>
+
+<p>&copy;随机抠取</p>
+
+<p>图5+1:数据扩充的几种常用方法：图像水平翻转、随机抠取、尺度变换和旋转。</p>
+
+<p>除此，其他简单的数据扩充方式还有尺度变换(scaling)、旋转(rotating) 等，从而增加卷积神经网络对物体尺度和方向上的鲁棒性。尺度变换一般是将 图像分辨率变为原图的0+8、0+9、1 + 1、1+2、1+3等倍数，将尺度变换后的图像作 为扩充的训练样本加人原训练集。旋转操作类似，将原图旋转一定角度，如-30 度、-15度、15度、30度等，同样将旋转变换的图像作为扩充样本加人模型训 练。</p>
+
+<p>在此基础上，对原图或已变换的图像(或图像块)进行色彩抖动(color jittering)也是一种常用的数据扩充手段。色彩抖动是在RGB颜色空间对原有 RGB色彩分布进行轻微的扰动，也可在HSV颜色空间尝试随机改变图像原有 的饱和度和明度(即，改变S和V通道的值)或对色调进行微调(小范围改变 该通道的值)。</p>
+
+<p>在实践中，往往会将上述几种方式叠加使用，如此便可将图像数据扩充至原</p>
+
+<p>1更多图像数据扩充方法代码可参见<a href="https://github.com/aleju/imgaug。不过需要指出的是">https://github.com/aleju/imgaug。不过需要指出的是</a>,</p>
+
+<p>实际使用中还需“量体裁衣”，根据自身任务特点选择合适数据扩充方式，而不要一股脑将所有的</p>
+
+<p>数据扩充方法都用到自己任务中，因为一些数据扩充方法不仅无益于提高性能，反而还会起到相反</p>
+
+<p>5.2特殊的数据扩充方式</p>
+
+<p>5.2.1 Fancy PCA</p>
+
+<p>著名的Alex-Net提出的同时，, 的数据扩充方法［52］。Fancy P 主成分分析（Principal Compo］ 征向量Pi和特征值人（i = 1J 随机值［Pi,P2,P3］ ［aiAi,a2A2, 中，ai为取自以0为均值，标 练（一个epoch）后，ai将重新 在文献［52］中，Krizhevsky等 的一个重要特性，即物体特质与 类准确度方面，Fancy PCA数 Alex-Net的top-1错误率降低-讲可以说是很大的提升。</p>
+
+<p>3对所有训练数据的R, G, B像素值进行 alysis,简称PCA）操作，得到对应的特 后根据特征向量和特征值可以计算一组 将其作为扰动加到原像素值中即可。其 3.1高斯分布的随机值。在每经过一轮训 取并重复上述操作对原像素值进行扰动。 “Fancy PCA可以近似的捕获自然图像 度和颜色变化无关”。在提高网络模型分 斤法在2012年的ImageNet竞赛中使得 分点，这个效果对于当时的模型性能来</p>
+
+<p>5.2.2</p>
+
+<p>以上提及 息。201</p>
+
+<p>种监督式</p>
+
+<p>据扩充方法均直接作用于原图，且并未借助任何图像标记信 Net竞赛的场景分类任务中，国内海康威视研究院提出了一 S像标记信息——的新型数据扩充方式［92］。</p>
+
+<p>为中心” （object-centric）的图像分类任务，场景分类（scene-ification）往往依靠图像整体所蕴含的高层语义（high-level</p>
+
+<p>分类。此时若采用随机扣取等简单的数据扩充方式，很有</p>
+
+<p>景标记为“海滩”）中的两个扣取结果。扣取的图像块（红</p>
+
+<p>“树”和“天空”，但要知道，“树”和“天空”这类物体也</p>
+
+<p>他场景中，不像“沙滩”、“大海”和“泳者”这些物体是与</p>
+
+<p>关。换句话说，这类一般物体对于场景分类并无很强的判别</p>
+
+<p>如，若某任务为人脸识别，则图像竖直翻转不应用于数据扩充，因为上下倒置的人脸图像</p>
+
+<p>现在常规人脸识别任务中。</p>
+
+<p>5.3.小结</p>
+
+<p>能力(discriminative ability)。如果把“树”和“天空”这样的图像块打上“海</p>
+
+<p>滩”的场景标记，不免会造成标记混乱，势必影响模型的分类精度。</p>
+
+<p>图5.2:场景图像的随机扣取：两个可能的扣取结果(黄色框和红色框)。</p>
+
+<p>对此，可借助图像标记信息解决上述问题。具体而言，首先根据原数据</p>
+
+<p>训练一个分类的初始模型。而后，利用该模型，对每张图生成对应的特征图</p>
+
+<p>(activation map)或热力图(heat map) 2。这张特征图可指示图像区域与场景</p>
+
+<p>标记间的相关概率。之后，可根据此概率映射回原图选择较强相关的图像区域</p>
+
+<p>作为扣取的图像块。上述过程如图5.3所示，图5.3b展示了对应该场景图像的热 力图，按照此热力图指示，我们选取了两个强响应区域作为扣取的扩充图像块。</p>
+
+<p>由于一开始利用了图像标记训练了一个初始分类模型，因此这样的过程被称作</p>
+
+<p>监督式数据扩充”。同样的数据扩充方式适用于高层语义图像分类任务，如场</p>
+
+<p>景分类和基于图像的节日分类［83］等问题。</p>
+
+<p>5.3小结
+§ 数据扩充是深度模型训练前的必须一步，此操作可扩充训练数据集，增强 数据多样性，防止模型过拟合；</p>
+
+<p>§ 一些简单的数据扩充方法为：图像水平翻转、随机扣取、尺度变换、旋转</p>
+
+<p>生成特征图的方式可直接将分类模型最后一层卷积层特征按照深度方向加和得到，另外也可参</p>
+
+<p>99］生成 class activation map。</p>
+
+<p>⑷根据</p>
+
+<p>个图像块</p>
+
+<p>钟广充法［92］示意</p>
+
+<p>§特殊的数据扩充方式有“Fancy PCA”，和对基于高层语义进行图像分类</p>
+
+<p>任务较有效的“监督式数据扩充”方法等。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E6%A8%A1%E5%9E%8B%E9%9B%86%E6%88%90%E6%96%B9%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">DL 模型集成方法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E8%B6%85%E5%8F%82%E6%95%B0%E8%AE%BE%E5%AE%9A%E4%B8%8E%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83/">
+            <span class="next-text nav-default">DL 超参数设定与网络训练</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

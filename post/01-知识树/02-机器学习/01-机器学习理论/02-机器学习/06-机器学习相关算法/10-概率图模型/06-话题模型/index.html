@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 话题模型 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="话题模型 话题模型(topic model)是一族生成式有向图模型，主要用于处理离散型的 数据(如文本集合)，在信息检索、自然语言处理等领域有广泛" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/10-%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/06-%E8%AF%9D%E9%A2%98%E6%A8%A1%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 话题模型" />
+<meta property="og:description" content="话题模型 话题模型(topic model)是一族生成式有向图模型，主要用于处理离散型的 数据(如文本集合)，在信息检索、自然语言处理等领域有广泛" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/10-%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/06-%E8%AF%9D%E9%A2%98%E6%A8%A1%E5%9E%8B/" /><meta property="article:published_time" content="2018-07-05T19:41:59&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-05T19:41:59&#43;00:00"/>
+<meta itemprop="name" content="06 话题模型">
+<meta itemprop="description" content="话题模型 话题模型(topic model)是一族生成式有向图模型，主要用于处理离散型的 数据(如文本集合)，在信息检索、自然语言处理等领域有广泛">
+
+
+<meta itemprop="datePublished" content="2018-07-05T19:41:59&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-05T19:41:59&#43;00:00" />
+<meta itemprop="wordCount" content="2499">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 话题模型"/>
+<meta name="twitter:description" content="话题模型 话题模型(topic model)是一族生成式有向图模型，主要用于处理离散型的 数据(如文本集合)，在信息检索、自然语言处理等领域有广泛"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 话题模型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-05 </span>
+        
+        <span class="more-meta"> 2499 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#comment">COMMENT</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>话题模型</p>
+
+<p>话题模型(topic model)是一族生成式有向图模型，主要用于处理离散型的 数据(如文本集合)，在信息检索、自然语言处理等领域有广泛应用。隐狄利克雷分配模型(Latent Dirichlet Allocation,简称LDA)是话题模型的典型代表.</p>
+
+<p>我们先来了解一下话题模型中的几个概念：词(word)、文档(document)和 话题(topic).具体来说：</p>
+
+<ul>
+<li>“词”是待处理数据的基本离散单元，例如在文本处理 任务中，一个词就是一个英文单词或有独立意义的中文词.</li>
+<li>“文档”是待处理 的数据对象，它由一组词组成，这些词在文档中是不计顺序的，例如一篇论文、 一个网页都可看作一个文档；这样的表示方式称为“词袋”(bag-of-words).数 据对象只要能用词袋描述，就可使用话题模型.</li>
+<li>“话题”表示一个概念，具体表 示为一系列相关的词，以及它们在该概念下出现的概率.</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/ikfEl45aL5.png?imageslim" alt="mark" /></p>
+
+<p>形象地说，如图14.11所示，一个话题就像是一个箱子，里面装着在这 个概念下出现概率较高的那些词.不妨假定数据集中一共包含 K 个话题和 T 篇文档，文档中的词来自一个包含 $N$ 个词的词典.我们用 T 个 $N$ 维向量 $W={w_1,w_2,\cdots,w_T}$ 表示数据集(即文档集合)，K个 $N$ 维向量典 $\beta_k=(k=1,2,\cdots,K)$ 表示话题，其中 $w<em>t\in\mathbb{R}^N$ 的第 n 个分量 $w</em>{t,n}$ 表示文档 t 中词 n 的词频，$\beta<em>k\in \mathbb{R}^N$ 的第 n 个分量 $\beta</em>{k,n}$ 表示话题 k 中词 n 的词频.</p>
+
+<p>在现实任务中可通过统计文档中出现的词来获得词频向量 $w_i(i=1,2,\cdots ,T)$ ，但通常并不知道这组文档谈论了哪些话题，也不知道每篇文档与哪些话题有关。LDA从生成式模型的角度来看待文档和话题.具体来说，LDA认为每篇文档包含多个话题，不妨用向量 $\Theta<em>t\in\mathbb{R}^K$  表示文档 $t$ 中所包含的每个话题的比例，$\Theta</em>{t,k}$ 即表示文档 t 中包含话题 k 的比例，进而通过下面的步骤由话题“生成”文档 t:</p>
+
+<ol>
+<li>根据参数为 $\alpha$ 的狄利克雷分布随机采样一个话题分布 $\Theta_t$ ;</li>
+<li>按如下步骤生成文档中的 $N$ 个词：
+
+<ul>
+<li>根据 $\Theta<em>t$ 进行话题指派，得到文档 t 中词 n 的话题 $z</em>{t,n}$</li>
+<li>根据指派的话题所对应的词频分布 $\beta_k$ 随机采样生成词.</li>
+</ul></li>
+</ol>
+
+<p>图14.11演示出根据以上步骤生成文档的过程.显然，这样生成的文档自 然地以不同比例包含多个话题（步骤1）,文档中的每个词来自一个话题（步骤 2b）,而这个话题是依据话题比例产生的（步骤2a）.</p>
+
+<p>图14.12描述了 LDA 的变量关系，其中文档中的词频 $w<em>{t,n}$ 是唯一的已观测变量，它依赖于对这个词进行的话题指派 $z</em>{t,n}$ ,以及话题所对应的词频 $\beta<em>k$ ;同时，话题指派 $z</em>{t,n}$ 依赖于话题分布$\Theta_t$,$\Theta_t$ 依赖于狄利克雷分布的参数 $\alpha$ ,而话题词频则依赖于参数 $\eta$ .</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/49mBjh6KDL.png?imageslim" alt="mark" /></p>
+
+<p>于是,LDA模型对应的概率分布为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/97HmmlflE7.png?imageslim" alt="mark" /></p>
+
+<p>其中 $p(\Theta_t|\alpha)$ 和 $p(\beta_k|\eta)$ 通常分别设置为以 $\alpha$ 和$\eta$ 为参数的 $K$ 维和 $N$ 维狄利克雷分布，例如</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/A37j105cEK.png?imageslim" alt="mark" /></p>
+
+<p>其中 $\Gamma(\cdot)$ 是 Gamma 函数.显然，$\alpha$ 和 $\eta$ 是模型式(14.41)中待确定的参数.</p>
+
+<p>给定训练数据 $W={w_1,w_2,\cdots,w_T}$ , LDA 的模型参数可通过极大似然法估计，即寻找 $\alpha$ 和 $\eta$ 以最大化对数似然</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/6bebC0lggH.png?imageslim" alt="mark" /></p>
+
+<p>但由于 $p(w_t|\alpha,\eta)$ 不易计算，式(14.43)难以直接求解，因此实践中常采用变分法来求取近似解.</p>
+
+<p>若模型已知，即参数 $\alpha$ 和 $\eta$ 已确定，则根据词频 $w_{t,n}$ 来推断文档集所对应的话题结构(即推断 $\Theta_t$ ,$\beta<em>k$ 和 $z</em>{t,n}$ )可通过求解</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/h5IA1F7kjh.png?imageslim" alt="mark" /></p>
+
+<p>然而由于分母上的 $p(W|\alpha,\eta)$ 难以获取，式(14.44)难以直接求解，因此在实践中常采用吉布斯采样或变分法进行近似推断.</p>
+
+<h1 id="comment">COMMENT</h1>
+
+<p>下面是补充阅读。</p>
+
+<p>概率图模型方面已经有专门的书籍如［Koller and Friedman, 2009］.</p>
+
+<p>［Pearl, 1982］倡导了贝叶斯网的研究，［Pearl, 1988］对这方面的早期研究工 作进行了总结.马尔可夫随机场由［Geman and Geman, 1984］提出.现实应用 中使用的模型经常是贝叶斯网与马尔可夫随机场的结合.隐马尔可夫模型及 其在语音识别中的应用可参阅［Rabiner, 1989］.条件随机场由［Lafferty et al., 2001］提出，更多的内容可参阅［Sutton and McCallum, 2012］.</p>
+
+<p>信念传播算法最早由［Pearl, 1986］作为精确推断技术提出，后来衍生出 多种近似推断算法.对一般的带环图，信念传播算法需在初始化、消息传递 等环节进行调整，由此形成了迭代信念传播算法(Loopy Belief Propagation) ［Murphy et al., 1999］,但其理论性质尚不清楚，这方面的进展可参阅［Mooij and Kappen, 2007; Weiss, 2000］.有些带环图可先用“因子图”(factor graph) ［Kschischang et al., 2001］描述，再转化为因子树(factor tree)进行信念传播.对 任意图结构的信念传播已有一些研究［Lauritzen and Spiegelhalter, 1988］.近来 随着并行计算技术的发展，信念传播的并行加速实现受到关注，例如［Gonzalez et al, 2009］提出Te近似推断的概念并设计出多核并行信念传播算法,其时间 开销随内核数的增加而线性降低.</p>
+
+<p>概率图模型的建模和推断，尤其是变分推断在20世纪90年代中期逐步发 展成熟，［Jordan, 1998］对这个阶段的主要成果进行了总结.关于变分推断的更 多内容可参阅［Wainwright and Jordan, 2008］.</p>
+
+<p>“非参数化”指参数的 数目无领事先指定，是贝 叶斯学习方法的重要发展.</p>
+
+<p>贝叶斯学习参见p.164.</p>
+
+<p>图模型带来的一大好处是使得人们能直观、快速地针对具体任务定义模 型.LDA ［Blei et al., 2003］是这方面的重要代表，由它产生了很多变体,关于这 方面的内容可参阅［Blei, 2012］.概率图模型的一个发展方向是使得模型的结构 能对数据有一定的自适应能力，即“非参数化” (non-parametric)方法，例如层 次化狄利克雷过程模型［Teh et al., 2006］＞无限隐特征模型［Ghahramani and Griffiths, 2006］等.</p>
+
+<p>LSA是SVD在文本数据 上的变体.</p>
+
+<p>参见p.266.</p>
+
+<p>话题模型包含了多种模型,其中有些并不采用贝叶斯学习方法,例如PLSA (概率隐语义分析)［Hofmann, 2001］,它是LSA (隐语义分析)的概率扩展.</p>
+
+<p>蒙特卡罗方法是二十世纪四十年代产生的一类基于概率统计理论、使用 随机数来解决问题的数值计算方法，MCMC是马尔可夫链与蒙特卡罗方法的 结合，最早由［Pearl, 1987］引入贝叶斯网推断.关于MCMC在概率推断中的应 用可参阅［Neal, 1993］,更多关于MCMC的内容可参阅［Andrieu et al., 2003; Gilks et al., 1996］.</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-05</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E7%9F%A9%E5%BD%A2%E8%A6%86%E7%9B%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：矩形覆盖</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/03-%E6%9C%89%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0/">
+            <span class="next-text nav-default">03 有模型学习</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

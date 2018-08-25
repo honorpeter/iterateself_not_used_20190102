@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>22 扩展 Python - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="扩展Python 本章主题 •弓I言/动机 •扩展 Python •创建应用程序代码 •用样板包装你的代码 •编译 •导入并测试 •引用计数 •线程和GIL •相关话题 在本" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/22-%E6%89%A9%E5%B1%95-python/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="22 扩展 Python" />
+<meta property="og:description" content="扩展Python 本章主题 •弓I言/动机 •扩展 Python •创建应用程序代码 •用样板包装你的代码 •编译 •导入并测试 •引用计数 •线程和GIL •相关话题 在本" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/22-%E6%89%A9%E5%B1%95-python/" /><meta property="article:published_time" content="2018-06-26T21:19:46&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:19:46&#43;00:00"/>
+<meta itemprop="name" content="22 扩展 Python">
+<meta itemprop="description" content="扩展Python 本章主题 •弓I言/动机 •扩展 Python •创建应用程序代码 •用样板包装你的代码 •编译 •导入并测试 •引用计数 •线程和GIL •相关话题 在本">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:19:46&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:19:46&#43;00:00" />
+<meta itemprop="wordCount" content="12175">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="22 扩展 Python"/>
+<meta name="twitter:description" content="扩展Python 本章主题 •弓I言/动机 •扩展 Python •创建应用程序代码 •用样板包装你的代码 •编译 •导入并测试 •引用计数 •线程和GIL •相关话题 在本"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">22 扩展 Python</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 12175 words </span>
+        <span class="more-meta"> 25 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#22-1-介绍-动机">22.1 介绍/动机</a></li>
+<li><a href="#22-1-1-什么是扩展">22.1.1 什么是扩展</a>
+<ul>
+<li><a href="#核心笔记-在不同平台上创建扩展">核心笔记：在不同平台上创建扩展</a></li>
+<li><a href="#想了解更多的关于如何在win32上开发扩展的信息-你可以访问如下网页">想了解更多的关于如何在Win32上开发扩展的信息，你可以访问如下网页：</a></li>
+</ul></li>
+<li><a href="#22-1-2为什么要扩展python">22.1.2为什么要扩展Python?</a></li>
+<li><a href="#22-2创建python扩展">22.2创建Python扩展</a></li>
+<li><a href="#22-2-1-创建您的应用程序代码">22.2.1 创建您的应用程序代码</a></li>
+<li><a href="#22-2-2-用样板来包装你的代码">22.2.2 用样板来包装你的代码</a>
+<ul>
+<li><a href="#包含python头文件">包含Python头文件</a></li>
+<li><a href="#增加模块初始化函数void-initmodule">增加模块初始化函数void initModule()</a></li>
+</ul></li>
+<li><a href="#22-2-2-编译">22.2.2 编译</a>
+<ul>
+<li><a href="#创建-setup-py">创建 setup.py</a></li>
+<li><a href="#通过运行setup-py来编译和连接您的代码">通过运行setup.py来编译和连接您的代码</a></li>
+</ul></li>
+<li><a href="#22-2-3-导入和测试">22.2.3 导入和测试</a>
+<ul>
+<li><a href="#从python中导入您的模块">从Python中导入您的模块</a></li>
+<li><a href="#测试功能">测试功能</a></li>
+</ul></li>
+<li><a href="#22-2-5-引用计数">22.2.5 引用计数</a></li>
+<li><a href="#22-2-6线程和全局解释锁-gil">22.2.6线程和全局解释锁(GIL)</a></li>
+<li><a href="#22-3-相关话题">22.3 相关话题</a>
+<ul>
+<li><a href="#swig">SWIG</a></li>
+<li><a href="#pyrex">Pyrex</a></li>
+<li><a href="#psyco">Psyco</a></li>
+<li><a href="#嵌入">嵌入</a></li>
+</ul></li>
+<li><a href="#22-4-练习">22.4 练习</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>扩展Python</p>
+
+<p><img src="07Python38c3160b-3163.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3164.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3165.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3166.jpg" alt="img" /></p>
+
+<p>本章主题</p>
+
+<p>•弓I言/动机 •扩展 Python •创建应用程序代码 •用样板包装你的代码 •编译 •导入并测试 •引用计数 •线程和GIL •相关话题</p>
+
+<p><img src="07Python38c3160b-3167.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3168.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3169.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3170.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3171.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3172.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3173.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3174.png" alt="img" /></p>
+
+<p>在本章中，我们将讨论如何编写扩展代码并将它们的功能整合到Python编程环境中来。首先我 们会给出这样做的原因，然后一步步地教您如何做。应当指出的是，虽然大部分Python的扩展都是 用C语言写的，并且下面的所有样例代码也都是由纯C语言写的，但请放心，这些代码很容易就可 以移植到C++中。</p>
+
+<h3 id="22-1-介绍-动机">22.1 介绍/动机</h3>
+
+<h3 id="22-1-1-什么是扩展">22.1.1 什么是扩展</h3>
+
+<p>一般来说，所有能被整合或导入到其它python脚本的代码，都可以被称为扩展。您可以用纯 Python来写扩展，也可以用C和C++之类的编译型的语言来写扩展（或者也可以用Java给Jython写 扩展，也可以用C#或Visual Basic.NET给IronPython写扩展）。</p>
+
+<p>Python的一大特点就是，扩展和解释器之间的交互方式与普通的Python模块完全一样。Python 在设计之初就考虑到要让模块的导入机制足够抽象。抽象到让使用模块的代码无法了解到模块的具 体实现细节。除非那个程序员在磁盘中搜索这个模块文件，否则，他/她就连这个模块到底是用Python 写的，还是用某种编译语言写的都分辨不了。</p>
+
+<h4 id="核心笔记-在不同平台上创建扩展">核心笔记：在不同平台上创建扩展</h4>
+
+<p>我们要注意的是，如果你曾自己编译过Python解释器，那么，在这样的环境中，扩展一般都是</p>
+
+<p>可以使用的。自己手动编译扩展，和获取扩展的二进制文件是有一些不一样的。虽然自己编译比简</p>
+
+<p>单的下载安装复杂一些，但由此得来的好处就是，你可以自由选择你想使用的Python的版本。</p>
+
+<p>虽然本章中的例子都是在Unix系统中开发的（一般的unix中，都自带编译器）。但只要你能使</p>
+
+<p>用C/C++（或Java）的编译器并且C/C++（或Java）中有Python的开发环境。那唯一的区别只是怎样来</p>
+
+<p><img src="07Python38c3160b-3175.jpg" alt="img" /></p>
+
+<p>编译而已。无论在哪一个平台上，真正起作用的代码都是一样的。如果你在Win32平台上进行开发， 你需要有Visual C++开发环境。Python的发布包中自带了 7.1版本的项目文件。当然，你也可以使 用老版本的VC。</p>
+
+<h4 id="想了解更多的关于如何在win32上开发扩展的信息-你可以访问如下网页">想了解更多的关于如何在Win32上开发扩展的信息，你可以访问如下网页：</h4>
+
+<p><a href="http://docs.python.org/ext/building-on-windows.html">http://docs.python.org/ext/building-on-windows.html</a></p>
+
+<p>警告：就算是相同的架构的两台电脑之间最好也不要互相共享二进制文件。最好是在各自的电</p>
+
+<p>脑上编译Python和扩展。因为，有时就算是编译器或是CPU之间的些许差异，也会导致代码不能正</p>
+
+<p>常工作。</p>
+
+<h3 id="22-1-2为什么要扩展python">22.1.2为什么要扩展Python?</h3>
+
+<p>纵观软件工程的历史，编程语言都不具备可扩展性，你只能使用已有的功能，而不能为语言增</p>
+
+<p>加新功能。现如今的编程环境中，可定制性也是一个很大的卖点。它可以促进代码的复用。TCL和 Python等语言是第一批提供可扩展性的语言。那么，为什么我们会想要扩展像Python这种已经很完 善的语言呢？有以下几点好理由：</p>
+
+<p>•添加/额外的（非Python）功能。扩展Python的一个原因就是出于对一些新功能的需要， 而Python语言的核心部分并没有提供这些功能。这时，通过纯Python代码或者编译扩展都 可以做到。但是有些情况，比如创建新的数据类型或者将Python嵌入到其它已经存在的应</p>
+
+<p>用程序中，则必须得编译。</p>
+
+<p>•性能瓶颈的效率提升。众所周知，由于解释型的语言是在运行时动态的翻译解释代码，这导 致其运行速度比编译型的语言慢。一般说来，把所有代码都放到扩展中，可以提升软件的整 体性能。但有时，由于时间与精力有限，这样做并不划算。通常，先做一个简单的代码性能 测试，看看瓶颈在哪里，然后把瓶颈部分在扩展中实现会是一个比较简单有效的做法。效果 立竿见影不说，而且还不用花费太多的时间与精力。</p>
+
+<p>•保持专有源代码私密。创建扩展的另一个很重要的原因是脚本语言都有一个共同的缺陷，那 就是所有的脚本语言执行的都是源代码，这样一来源代码的保密性便无从谈起了。把一部分 代码从Python转到编译语言就可以保持专有源代码私密。因为，你只要发布二进制文件就 可以了。编译后的文件相对来说，更不容易被反向工程出来。因此，代码能实现保密。尤其 是涉及到特殊的算法，加密方法以及软件安全的时候，这样做就显得非常至关重要了。</p>
+
+<p>另一种对代码保密的方法是只发布预编译后的.pyc文件。这是介于发布源代码（.py文件）和把 代码移植到扩展这两种方法之间的一种较好的折中的方法。</p>
+
+<p><img src="07Python38c3160b-3178.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3179.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3180.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3181.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3182.jpg" alt="img" /></p>
+
+<h3 id="22-2创建python扩展">22.2创建Python扩展</h3>
+
+<p>为Python创建扩展需要三个主要的步骤:</p>
+
+<p>\1.    创建应用程序代码</p>
+
+<p>\2.    利用样板来包装代码</p>
+
+<p>\3.    编译与测试</p>
+
+<p>在这一节中，我们会将这三步逐一介绍给大家。</p>
+
+<h3 id="22-2-1-创建您的应用程序代码">22.2.1 创建您的应用程序代码</h3>
+
+<p>首先，我们要建立的是一个“库”要记住，我们要建立的是将在Python内运行的一个模块。 所以在设计你所需要的函数与对象的时候要注意到，你的C代码要能够很好的与Python的代码进行</p>
+
+<p>双向的交互和数据共享。</p>
+
+<p>然后，写一些测试代码来保障你的代码的正确性。你可以在C代码中放一个mainO函数，使得 你的代码可以被编译并链接成一个可执行文件(而不是一个动态库)，当你运行这个可执行文件时，</p>
+
+<p>瞥程序可以对你的软件库进行回归测试。这种是一种很符合Python风格的做法。</p>
+
+<p>在下面的例子中，我们就将采用这种做法。测试用例分别针对我们想要导出到Python世界的两 个函数。一个是递归求阶乘的函数fac()。另一个reverseO函数实现了一个简单的字符串反转算法，</p>
+
+<p>其主要目的是修改传入的字符串，使其内容完全反转，但不需要申请内存后反着复制的方法。由于</p>
+
+<p>涉及到指针的使用，我们务必要在设计和调试时小心谨慎，以防把问题带入Python。</p>
+
+<p>Example 22.1中所列出的Extestl.c是我们的第一个版本。</p>
+
+<p>代码中，包含了两个函数fac()和reverseO。分别实现了我们刚刚所说的两个功能。fac()接 受一个整数参数并递归计算结果，在退出最后一层调用后最终返回到调用代码中。</p>
+
+<p>最后一段代码是必要的mainO函数。我们在这里面写测试代码，传不同的参数给fac()和 reverseO。有了这个函数，我们就可以了解我们的代码是否能得到正确的结果。</p>
+
+<p>现在，我们就可以编译这段代码了。在大部分有gcc编译器的unix系统中，我们都可以用以下</p>
+
+<p>指令进行编译：</p>
+
+<p>$ gcc Extest1.c -o Extest $</p>
+
+<p>我们可以输入以下命令来运行我们的程序，并得到如下输出：</p>
+
+<p>$ Extest</p>
+
+<p>4! == 24</p>
+
+<p>8! == 40320</p>
+
+<p>12! == 479001600</p>
+
+<p>reversing &lsquo;abcdef&rsquo;， we get &lsquo;fedcba reversing &lsquo;madam&rsquo;， we get &lsquo;madam&rsquo; $</p>
+
+<p>Example 22.1 Pure C Version of Library (Extest1.c) 下面列出了我们想要包装并在Python解释器中使用的c函数的代码，main()是测试函数</p>
+
+<p>1    #include <stdio.h></p>
+
+<p>2    #include <stdlib.h></p>
+
+<p>3    #include <string.h></p>
+
+<p>4</p>
+
+<p><img src="07Python38c3160b-3185.jpg" alt="img" /></p>
+
+<p>5    int fac( int n)</p>
+
+<p>13    register char t， /* tmp */</p>
+
+<p>14    <em>p = s， /</em> fwd */</p>
+
+<p>15    <em>q = (s + (strlen(s)-1)); /</em> bwd */</p>
+
+<p>16</p>
+
+<p>17    while (p &lt; q) /* if p &lt; q */</p>
+
+<p>18    { /* swap &amp; mv ptrs */</p>
+
+<p>19    t = *p;</p>
+
+<p>20    *p++ = *q;</p>
+
+<p>21    *q&ndash; = t;</p>
+
+<p>22    }</p>
+
+<p>23    return s;</p>
+
+<p>24    }</p>
+
+<p>25</p>
+
+<p><img src="07Python38c3160b-3186.jpg" alt="img" /></p>
+
+<p>26    int main()</p>
+
+<p>27    {</p>
+
+<p>28    char s[BUFSIZ];</p>
+
+<p>29    printf(&ldquo;4! == %d\n&rdquo;， fac(4));</p>
+
+<p>30    printf(&ldquo;8! == %d\n&rdquo;， fac(8));</p>
+
+<p>31    printf(&ldquo;12! == %d\n&rdquo;， fac(12));</p>
+
+<p>32    strcpy(s， &ldquo;abcdef&rdquo;);</p>
+
+<p>33    printf(&ldquo;reversing &lsquo;abcdef&rsquo;， we get &lsquo;%s&rsquo;\n&rdquo;， </p>
+
+<p>34    reverse(s));</p>
+
+<p>35    strcpy(s， &ldquo;madam&rdquo;);</p>
+
+<p>36    printf(&ldquo;reversing &lsquo;madam&rsquo;， we get &lsquo;%s&rsquo;\n&rdquo;， </p>
+
+<p>37    reverse(s));</p>
+
+<p>38    return 0;</p>
+
+<p>39    }</p>
+
+<p>我们要再强调一次，你应该尽可能的完善你的代码。因为，在把代码集成到Python中后再来调 试你的核心代码，查找潜在的bug是件很痛苦的事情。也就是说，调试核心代码与调试集成这两件 事应该分开来做。要知道，与Python的接口代码写得越完善，集成的正确性就越容易保证。</p>
+
+<p><img src="07Python38c3160b-3188.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3189.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3190.jpg" alt="img" /></p>
+
+<p>我们的两个函数都只接受一个参数，并返回一个值。这是很标准的情况，与Python集成的时 候应该不会有什么问题。注意，到现在为止，我们所做的都还与Python没什么关系。我们只是简 单地创建了一个C/C++的应用程序而已。</p>
+
+<h3 id="22-2-2-用样板来包装你的代码">22.2.2 用样板来包装你的代码</h3>
+
+<p>整个扩展的实现都是围绕着13.15.1节所说的“包装”这个概念进行的。你的设计要尽可能让 你的实现语言与Python无缝结合。接口的代码被称为“样板”代码，它是你的代码与Python解释 器之间进行交互所必不可少的一部分。</p>
+
+<p>我们的样板主要分为4步：</p>
+
+<p>\1.    包含Python的头文件。</p>
+
+<p>\2.    为每个模块的每一个函数增加一个型如PyObject* Module_func()的包装函数。</p>
+
+<p>\3.    为每个模块增加一个型如PyMethodDef ModuleMethods 口的数组。</p>
+
+<p>\4.    增加模块初始化函数void initModule()</p>
+
+<h4 id="包含python头文件">包含Python头文件</h4>
+
+<p>首先，你要找到Python的头文件在哪，并且确保你的编译器有权限访问它们。在大多数类Unix</p>
+
+<p>的系统里，它们都会在/usr/local/include/python2.x 或/usr/include/python2.x 目录中。其中， &ldquo;2.x&rdquo;是你所使用的Python的版本号。如果你曾编译并安装过Python解释器，那应该不会碰到什么 问题，因为这时，系统一般都会知道你的文件安装在哪。像下面这样在你的代码里加入一行：</p>
+
+<p>#include &ldquo;Python.h&rdquo;</p>
+
+<p>这部分比较简单。接下来再看看怎么在样板中加入其它的部分。</p>
+
+<p>为每个模块的每一个函数增加一个型如PyObject* Module_func()的包装函数。</p>
+
+<p>这一部分最需要技巧。你需要为所有想被Python环境访问的函数都增加一个静态的函数，函数 的返回值类型为PyObject*，函数名前面要加上模块名和一个下划线(_)。</p>
+
+<p>比方说，我们希望在Python中，能够import我们的fac()函数，其所在的模块名为Extest那 么，我们就要创建一个包装函数叫Extest_fac()。在使用这个函数的Python脚本中，使用方法是先 &ldquo;import Extest〃然后调用&rdquo;Extest.fac() 〃(或者先&rdquo;from Extest import fac&rdquo;，然后直接调用 &ldquo;fac()&rdquo;)</p>
+
+<p>包装函数的用处就是先把Python的值传递给C，然后调用我们想要调用的相关函数。当这个函 数完成要返回Python的时候，把函数的计算结果转换成Python的对象，然后返回给Python。</p>
+
+<p>对于fac()函数来说，当客户程序调用Extest.facO的时候，我们的包装函数就会被调用。它 接受一个Python的整数参数，把它转为C的整数，然后调用C的fac()函数，得到一个整型的返回 值，最后把这个返回值转为Python的整型数做为整个函数调用的结果返回回去。(在你头脑中，要 保持一个想法：我们所写的其实就是&rdquo;def fac(n)&ldquo;这段声明的一个代理函数，当代理函数返回的时候， 就像是这个想像中的Python的fac()函数在返回一样。)</p>
+
+<p>那么，你就会问了，怎样才能完成这样的转换呢？答案是，在从Python到C的转换就用 PyArg_Parse*系列函数。在从C转到Python的时候，就用Py_BuildValue()函数</p>
+
+<p>PyArg_Parse系列函数的用法跟C的sscanf函数很像，都接受一个字符串流，并根据一个指定 的格式字符串进行解析，把结果放入到相应的指针所指的变量中去。它们的返回值为1表示解析成 功，返回值为0表示失败。</p>
+
+<p>Py_BuildValue的用法跟sprintf很像，把所有的参数按格式字符串所指定的格式转换成一个 Python的对象。</p>
+
+<p>表22.1罗列了这些函数的概要。</p>
+
+<p>表22.2所列出的转换代码用于在C与Python之间做数据的转换。</p>
+
+<p>这些转换代码出现在格式字符串当中，用于指定各个值的数据类型，以便于在两种语言之间做 转换。注：由于Java的所有数据类型都是类，所以Java的转换类型不一样。Python对象在Java中 所对应的数据类型请参考Jython的相关文档。C#也有同样的问题。</p>
+
+<p>表22.1 Python和C/C++之间的数据转换</p>
+
+<p>函数    描述</p>
+
+<p>Python to C int</p>
+
+<p>PyArg_ParseTuple()    把Python传过来的参数转为C</p>
+
+<p>int</p>
+
+<p>PyArg_ParseTupleAndKeywords()与PyArg_ParseTuple()作用相同，但是同时解析关键字参数</p>
+
+<p>C to Python</p>
+
+<p>PyObject* Py_BuildValue() 把C的数据转为Python的一个对象或一组对象，然后返回之。</p>
+
+<p><img src="07Python38c3160b-3195.jpg" alt="img" /></p>
+
+<p>Table 22.2 Common Codes to Convert Data Between Python and C/C++</p>
+
+<table>
+<thead>
+<tr>
+<th>Format Code</th>
+<th>Python Type</th>
+<th>C/C++ Type</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>s</td>
+<td>str</td>
+<td>char*</td>
+</tr>
+
+<tr>
+<td>z</td>
+<td>str/None</td>
+<td>char*/NULL</td>
+</tr>
+
+<tr>
+<td></td>
+<td>int</td>
+<td>int</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>long</td>
+<td>long</td>
+</tr>
+
+<tr>
+<td>c</td>
+<td>str</td>
+<td>char</td>
+</tr>
+
+<tr>
+<td>d</td>
+<td>float</td>
+<td>double</td>
+</tr>
+
+<tr>
+<td>D</td>
+<td>complex</td>
+<td>Py_Complex*</td>
+</tr>
+
+<tr>
+<td>0</td>
+<td>(any)</td>
+<td>PyObj ect*</td>
+</tr>
+
+<tr>
+<td>S</td>
+<td>str</td>
+<td>PyStringObject</td>
+</tr>
+</tbody>
+</table>
+
+<p><img src="07Python38c3160b-3196.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3197.jpg" alt="img" /></p>
+
+<p>下面是完整的Extest_fac()函数:</p>
+
+<p>static PyObject *</p>
+
+<p>Extest_fac(PyObject *self r PyObject *argo) {</p>
+
+<p>int res；    // parse result</p>
+
+<p>int num；    // arg for fac()</p>
+
+<p>PyObject* retval；    // return value</p>
+
+<p>r es = PyArg_ParseTuple (argo f f, i w f &amp;num)； if (!res)    {    ff TypeError</p>
+
+<p>return NULL;</p>
+
+<p>res = fac(num)；</p>
+
+<p>retval = (PyObject*)Py_BuiIdValue(, res return retval；</p>
+
+<p>首先，我们要解析Python传过来的数据。例子中，我们使用格式字符串〃i&rdquo;，表示我们期望得 到一个整型的变量。如果传进来的的确是一个整型的变量，那就把它保存到num变量中。否则， PyArg_ParseTuple()会返回NULL，同时，我们的函数也返回一个NULL。这时，就会产生一个TypeError 异常，通知客户我们期望传入一个整型变量。</p>
+
+<p><img src="07Python38c3160b-3199.jpg" alt="img" /></p>
+
+<p>然后，我们会调用fac()函数，其参数为num，把返回结果放在res变量中。最后，通过调用 Py_BuildValue()函数，格式字符串为〃i&rdquo;，把结果转为Python的整数类型并返回。这样，我们就 完成了整个调用过程。</p>
+
+<p><img src="07Python38c3160b-3200.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3201.jpg" alt="img" /></p>
+
+<p>事实上，包装函数写得多了之后，你会慢慢的把代码写得越来越短，以减少中间变量的使用， 同时也会增加代码的可读性。我们以Extest_fac()函数为例，把它改写得短小一些，只使用一个变 量 num:</p>
+
+<p>static PyObject *</p>
+
+<p>ExteEt_fac (FYObject *seLf, PyObj ec t *are(j3) { int num；</p>
+
+<p>if ( ! PyArg_ParseTuple (argo ,    , &amp;num))</p>
+
+<p>return NULL;</p>
+
+<p>return (PyObj ect*) Py_Bu i 1 dVa lue (11 i 脚，fac (num.) ) 7</p>
+
+<p>那么reverse怎么实现呢？既然你已经知道怎么返回一个值了，那我们把reverseO的需求稍微 改一下，变成返回两个值。我们将返回一个包含两个字符串的tuple。第一个值是传进来的字符串， 第二个值是反转后的字符串。</p>
+
+<p>我们将把这个函数命名为Extest.doppel()，以示与reverseO函数的区别。把代码包装到 Extest_doppel()函数后，我们得到如下代码：</p>
+
+<p><img src="07Python38c3160b-3202.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3203.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3204.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3205.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3206.jpg" alt="img" /></p>
+
+<p>static PyObject *</p>
+
+<p>Extest_doppel(PyObject *oelfr PyObject *argo) { char *ori g_str；</p>
+
+<p>if ( 2 PyArg_ParseTuple fargsf IWs<em>■ g &amp;orig_str) ) return NULL； return (PyObject</em> ) Py_BuildValue f *&lsquo;sg 11, orig_str, </p>
+
+<p>reverse (s trdup (orig_s tr)))；</p>
+
+<p>}</p>
+
+<p>跟Extest_fac()类似，我们接收一个字符串型的参数，保存到orig_str中。注意，这次，我们 要使用&rdquo;s&rdquo;格式字符串。然后调用strdupO函数把这个字符串复制一份(由于我们要同时返回原始字 符串和反转后的字符串，所以我们需要复制一份)。把新复制的字符串传给reverse函数，我们就得 到了反转后的字符串。</p>
+
+<p>如你所见，我们用&rdquo;ss&rdquo;格式字符串让Py_BuildValue()函数生成了一个含有两个字符串的tuple， 分别放了原始字符串和反转后的字符串。这样就完成所有的工作了吗？很不幸，还没。</p>
+
+<p>我们碰到了 C语言的一个陷阱：内存泄露。即内存被申请了，但没有被释放。就像去图书馆借 了书，但是没有还一样。无论何时，你都应该释放所有你申请的，不再需要的内存。看！我们写的 代码犯了多大的罪过啊。(虽然看上去好像很无辜的样子)</p>
+
+<p>Py_BuildValue()函数生成要返回的Python对象的时候，会把转入的数据复制一份。上例中， 那两个字符串就会被复制出来。问题就在于，我们申请了用于存放第二个字符串的内存，但是，在 退出的时候没有释放它。于是，这片内存就泄露了。正确的做法是：先生成要返回的对象，然后释 放在包装函数中申请的内存。我们必需要这样这样修改我们的代码：</p>
+
+<p><img src="07Python38c3160b-3208.jpg" alt="img" /></p>
+
+<p>static PyObject *</p>
+
+<p>Extest_doppel(PyObject *self， PyObject *args) { char *orig_str; // 原始字符串 char <em>dupe_str; // 反转后的字符串 PyObject</em> retval;</p>
+
+<p>if (!PyArg_ParseTuple(args， &ldquo;s&rdquo;， &amp;orig_str)) return NULL;</p>
+
+<p>retval = (PyObject*)Py_BuildValue(&ldquo;ss&rdquo;， orig_str， \ dupe_str=reverse(strdup(orig_str)));</p>
+
+<p>free(dupe_str); return retval;</p>
+
+<p>}</p>
+
+<p>我们用dupe_str变量指向了新申请的字符串，并依此生成了要返回的对象。然后，我们调用free() 函数释放这个字符串，最后，返回到调用程序。终于，完成了我们要做的事情。</p>
+
+<p><img src="07Python38c3160b-3209.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3210.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3211.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3212.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3213.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3214.jpg" alt="img" /></p>
+
+<p>为每个模块增加一个型如PyMethodDef ModuleMethods 口的数组。</p>
+
+<p>现在，我们已经完成了两个包装函数。我们需要把它们列在某个地方，以便于Python解释器能 够导入并调用它们。这就是ModuleMethods □数组要做的事情。</p>
+
+<p>这个数组由多个数组组成。其中的每一个数组都包含了一个函数的信息。最后放一个NULL数组 表示列表的结束。我们为Extest模块创建一个ExtestMethods □数组：</p>
+
+<p>static PyMethodDef</p>
+
+<p>ExtestMethods[] = {</p>
+
+<p>{ &ldquo;fac&rdquo;， Extest_fac， METH_VARARGS }，</p>
+
+<p>{ &ldquo;doppel&rdquo;， Extest_doppel， METH_VARARGS }，</p>
+
+<p>{ NULL， NULL }，</p>
+
+<p>};</p>
+
+<p>每一个数组都包含了函数在Python中的名字，相应的包装函数的名字以及一个METH_VARARGS 常量。其中， METH_VARARGS 常量表示参数以 tuple 形式传入。如果我 们要使用 PyArg_ParseTupleAndKeywords()函数来分析命名参数的话，我们还需要让这个标志常量与 METH_KEYWORDS常量进行逻辑与运算常量。最后，用两个NULL来结束我们的函数信息列表。</p>
+
+<h4 id="增加模块初始化函数void-initmodule">增加模块初始化函数void initModule()</h4>
+
+<p>所有工作的最后一部分就是模块的初始化函数。这部分代码在模块被导入的时候被解释器调用。 在这段代码中，我们需要调用Py_InitModule()函数，并把模块名和ModuleMethods□数组的名字传 递进去，以便于解释器能正确的调用我们模块中的函数。对Extest模块来说，initExtestO函数应 该是这个样子的：</p>
+
+<p>void initExtest() {</p>
+
+<p>Py_InitModule(&ldquo;Extest&rdquo;， ExtestMethods);</p>
+
+<p>}</p>
+
+<p>这样，所有的包装都已经完成了。我们把以上代码与之前的Extestl.c合并到一个新文件 Extest2.c中。到此为止，我们的开发阶段就已经结束了。</p>
+
+<p>创建扩展的另一种方法是先写包装代码，使用桩函数，测试函数或哑函数。在开发过程中慢慢 的把这些函数用有实际功能的函数替换。这样，你可以确保Python和C之间的接口函数是正确的， 并用它们来测试你的C代码。</p>
+
+<p><img src="07Python38c3160b-3215.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3216.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3217.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3218.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3219.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3220.jpg" alt="img" /></p>
+
+<h3 id="22-2-2-编译">22.2.2 编译</h3>
+
+<p>现在，我们已经到了编译阶段。为了让你的新Python扩展能被创建，你需要把它们与Python 库放在一起编译。现在已经有了一套跨30多个平台的规范，它极大的方便了编写扩展的人。distutils 包被用来编译，安装和分发这些模块，扩展和包。这个模块在Python2.0的时候就已经出现了，并 用于代替1.x版本时的用Makefile来编译扩展的方法。使用distutils包的时候我们可以方便的按 以下步骤来做：</p>
+
+<p>\1.    创建 setup.py</p>
+
+<p>\2.    通过运行setup.py来编译和连接您的代码</p>
+
+<p>\3.    从Python中导入您的模块</p>
+
+<p>\4.    测试功能</p>
+
+<h4 id="创建-setup-py">创建 setup.py</h4>
+
+<p>下一步就是要创建一个setup.py文件。编译最主要的工作由setupO函数来完成。在这个函数 调用之前的所有代码，都是一些预备动作。为了能编译扩展，你要为每一个扩展创建一个Extension 实例，在这里，我们只有一个扩展，所以只要创建一个Extension实例：</p>
+
+<p>Extension(’Extest’，sources=[，Extest2. c，])</p>
+
+<p>第一个参数是(完整的)扩展的名字，如果模块是包的一部分的话，还要加上用&rsquo;.&lsquo;分隔的完整 的包的名字。我们这里的扩展是独立的，所以名字只要写&rdquo;Extest&rdquo;就好了。sources参数是所有源代 码的文件列表。同样，我们也只有一个文件：Extest2.c。</p>
+
+<p>现在，我们可以调用setupO了。setup需要两个参数:一个名字参数表示要编译哪个东西，一 个列表列出要编译的对象。由于我们要编译的是一个扩展，我们把ext_modules参数的值设为扩展 模块的列表。语法如下：</p>
+
+<p>setup(’Extest’， ext_modules=[&hellip;])</p>
+
+<p>例22.2编译脚本(setup.py)</p>
+
+<p>这个脚本会把我们的扩展编译到build/lib.*子目录中。</p>
+
+<p>1    #!/usr/bin/env python</p>
+
+<p>2</p>
+
+<p>3 from distutils.core import setup， Extension</p>
+
+<p>4</p>
+
+<p>5    MOD = &lsquo;Extest&rsquo;</p>
+
+<p>6    setup(name=MOD, ext_modules=[</p>
+
+<p>7    Extension(MOD, sources=[&lsquo;Extest2.c&rsquo;])])</p>
+
+<p>由于我们只有一个模块。我们把我们扩展模块对象的实例化操作放到了 setup()的调用代码中。 模块的名字我们就传预先定义的“常量” MOD:</p>
+
+<p>MOD = &lsquo;Extest&rsquo;</p>
+
+<p>setup(name=MOD, ext_modules=[</p>
+
+<p>Extension(MOD, sources=[&lsquo;Extest2.c&rsquo;])])</p>
+
+<p>setup()函数还有很多选项可以设置。限于篇幅，不能完全罗列。读者可以在本章最后所列的官 方文档中找到setup.py和setup()函数相关的信息。例22.2给出了我们例子所要用的完整的脚本代 码。</p>
+
+<h4 id="通过运行setup-py来编译和连接您的代码">通过运行setup.py来编译和连接您的代码</h4>
+
+<p><img src="07Python38c3160b-3223.jpg" alt="img" /></p>
+
+<p>现在，我们已经有了 setup.py文件。运行setup.py build命令就可以开始编译我们的扩展了。 在我们的Mac机上的输出如下(使用不同版本的Python或是不一样的操作系统时，输出会有一些 不同):</p>
+
+<p><img src="07Python38c3160b-3224.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3225.jpg" alt="img" /></p>
+
+<p>$ python setup.py build running build running build_ext</p>
+
+<p>building &lsquo;Extest&rsquo; extension creating build</p>
+
+<p>creating build/temp.macosx-10.x-fat-2.x</p>
+
+<p>gcc -fno-strict-aliasing -Wno-long-double -no-cpp-</p>
+
+<p>precomp -mno-fused-madd -fno-common -dynamic -DNDEBUG -g</p>
+
+<p>-I/usr/include -I/usr/local/include -I/sw/include -I/ usr/local/include/python2.x -c</p>
+
+<p>Extest2.c -o build/ temp.macosx-10.x-fat-2.x/Extest2.o creating build/lib.macosx-10.x-fat-2.x</p>
+
+<p>gcc -g -bundle -undefined dynamic_lookup -L/usr/lib -L/ usr/local/lib -L/sw/lib -I/usr/include -I/usr/local/ include -I/sw/include build/temp.macosx-10.x-fat-2.x/ Extest2.o -o build/lib.macosx-10.x-fat-2.x/Extest.so</p>
+
+<h3 id="22-2-3-导入和测试">22.2.3 导入和测试</h3>
+
+<h4 id="从python中导入您的模块">从Python中导入您的模块</h4>
+
+<p><img src="07Python38c3160b-3226.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3227.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3228.jpg" alt="img" /></p>
+
+<p>你的扩展会被创建在你运行setup.py脚本所在目录下的build/lib.*目录中。你可以切换到那 个目录中来测试你的模块，或者也可以用以下命令把它安装到你的Python中：</p>
+
+<p>$ python setup.py install</p>
+
+<p>如果安装成功，你会看到：</p>
+
+<p>running install</p>
+
+<p>running build</p>
+
+<p>running build_ext</p>
+
+<p>running install_lib</p>
+
+<p>copying build/lib.macosx-10.x-fat-2.x/Extest.so -&gt; /usr/local/lib/python2.x/site-packages</p>
+
+<p>现在，我们可以在解释器里测试我们的模块了：</p>
+
+<p>&gt;&gt;&gt; import Extest</p>
+
+<p>&gt;&gt;&gt; Extest.fac(5)</p>
+
+<p>120</p>
+
+<p><img src="07Python38c3160b-3230.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; Extest.fac(9)</p>
+
+<p>362880</p>
+
+<p>&gt;&gt;&gt; Extest.doppel(&lsquo;abcdefgh&rsquo;) (&lsquo;abcdefgh&rsquo;, &lsquo;hgfedcba&rsquo;)</p>
+
+<p>&gt;&gt;&gt; Extest.doppel(&ldquo;Madam, I&rsquo;m Adam.&rdquo;) (&ldquo;Madam, I&rsquo;m Adam.&rdquo;, &ldquo;.madA m&rsquo;I ,madaM&rdquo;)</p>
+
+<h4 id="测试功能">测试功能</h4>
+
+<p>我们想要做的最后一件是就是加上一个测试函数。事实上，我们已经写了一个了。就是那个main() 函数。现在，在我们代码中放一个main()函数是一件比较危险的事。因为，一个系统中，只能有一 个main()函数。我们把main()函数改名为test()，加个Extest_test()函数把它包装起来，然后在 ExtestMethods中加入这个函数就不会有这样的问题了。代码如下：</p>
+
+<p>static PyObject *</p>
+
+<p>Extest_test(PyObject *self, PyObject *args) { test();</p>
+
+<p>return (PyObject*)Py_BuildValue(&ldquo;&rdquo;);</p>
+
+<p>}</p>
+
+<p>static PyMethodDef ExtestMethods[] = {</p>
+
+<p>{ &ldquo;fac&rdquo;, Extest_fac, METH_VARARGS },</p>
+
+<p>{ &ldquo;doppel&rdquo;, Extest_doppel, METH_VARARGS } { &ldquo;test&rdquo;, Extest_test, METH_VARARGS },</p>
+
+<p>{ NULL, NULL },</p>
+
+<p>};</p>
+
+<p>Extest_test()模块函数只负责运行test()函数，并返回一个空字符串。Python的None作为返 回值，传给了调用者。现在，我们可以在Python中，调用同样的test()函数了：</p>
+
+<p>&gt;&gt;&gt; Extest.test()</p>
+
+<p>4! == 24</p>
+
+<p>8! == 40320</p>
+
+<p>12! == 479001600</p>
+
+<p>reversing &lsquo;abcdef&rsquo;, we get &lsquo;fedcba&rsquo; reversing &lsquo;madam&rsquo;, we get &lsquo;madam&rsquo;</p>
+
+<p>&gt;&gt;&gt;</p>
+
+<p>在例22.3中，我们给出了 Extest2.c的最终版本。这个版本会输出我们刚才所看到的结果。</p>
+
+<p>在本例中，我们把我们的C代码，和Python相关的代码分开放。一段在上面，一段在下面。</p>
+
+<p>这样可以让代码更具可读性。对于小程序来说，没有任何问题。但在实际应用中，源代码会越 写越大。一部分人就会考虑把他们的包装函数放在另一个源文件中。起个诸如ExtestWrappers.c之 类好记的名字。</p>
+
+<h3 id="22-2-5-引用计数">22.2.5 引用计数</h3>
+
+<p>也许你还记得，Python使用引用计数作为跟踪一个对象是否不再被使用，所占内存是否应该被 回收的手段。它是垃圾回收机制的一部分。当创建扩展时，你必需对如何操作Python对象要格外的 小心。你时时刻刻都要注意是否要改变某个对象的引用计数。</p>
+
+<p>一个对象可能有两类引用。一种是拥有引用，你要对这个对象的引用计数加1，以表示你也拥有 这个对象的所有权。如果这个Python对象是你自己创建的，那这时，你肯定拥有这个对象的所有权。</p>
+
+<p>当你不再需要一个Python对象时，你必须要交出你的所有权，要么把引用计数减1，要么把所 有权交给别人，要么把这个对象存到其它的容器中(tuple, list等)。没有交出所有权就会导致内存</p>
+
+<p>泄露。</p>
+
+<p>你也可以拥有对象的借引用。相对来说，这种方式的责任就小一些。除非是别人在外面把对象</p>
+
+<p>传递给你。否则，不要用任何方式修改对象里的数据。你也不用时刻考虑对象引用计数的问题，只</p>
+
+<p>要你不会在对象的引用计数减为0之后再去使用这个对象。你也可以把借引用对象的引用的数量加1</p>
+
+<p>从而真正的引用这个对象。</p>
+
+<p>例 22.3 C 库的 Python 包装版本(Extest2.c)</p>
+
+<p>1    #include <stdio.h></p>
+
+<p>2    #include <stdlib.h></p>
+
+<p>3    #include <string.h></p>
+
+<p>4</p>
+
+<p>5    int fac(int n)</p>
+
+<p>13    register char t,</p>
+
+<p><img src="07Python38c3160b-3235.jpg" alt="img" /></p>
+
+<p>14    *p = s,</p>
+
+<p>15    *q = (s + (strlen(s) - 1));</p>
+
+<p>16</p>
+
+<p>17    while (s &amp;&amp; (p &lt; q))</p>
+
+<p>28    char s[BUFSIZ];</p>
+
+<p>29    printf(&ldquo;4! == %d\n&rdquo;, fac(4));</p>
+
+<p>30    printf(&ldquo;8! == %d\n&rdquo;, fac(8));</p>
+
+<p>31    printf(&ldquo;12! == %d\n&rdquo;, fac(12));</p>
+
+<p>32    strcpy(s, &ldquo;abcdef&rdquo;);</p>
+
+<p>33    printf(&ldquo;reversing &lsquo;abcdef&rsquo;, we get &lsquo;%s&rsquo;\n&rdquo;, </p>
+
+<p>34    reverse(s));</p>
+
+<p><img src="07Python38c3160b-3236.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3237.jpg" alt="img" /></p>
+
+<p>35    strcpy(s, &ldquo;madam&rdquo;);</p>
+
+<p>36    printf(&ldquo;reversing ’madam’, we get ’%s’\n&rdquo;, </p>
+
+<p>37    reverse(s));</p>
+
+<p>38    return 0;</p>
+
+<p>39    }</p>
+
+<p>40</p>
+
+<p>41    #include &ldquo;Python.h&rdquo;</p>
+
+<p>42</p>
+
+<p>43    static PyObject *</p>
+
+<p>44    Extest_fac(PyObject *self, PyObject *args)</p>
+
+<p>45    {</p>
+
+<p>46    int num;</p>
+
+<p>47    if (!PyArg_ParseTuple(args, &ldquo;i&rdquo;, &amp;num))</p>
+
+<p>48    return NULL;</p>
+
+<p>49    return (PyObject*)Py_BuildValue(&ldquo;i&rdquo;, fac(num));}</p>
+
+<p>50    }</p>
+
+<p>51</p>
+
+<p>52 static PyObject *</p>
+
+<p><img src="07Python38c3160b-3238.jpg" alt="img" /></p>
+
+<p>53    Extest_doppel(PyObject *self, PyObject *args)</p>
+
+<p><img src="07Python38c3160b-3239.jpg" alt="img" /></p>
+
+<p>54    {</p>
+
+<p>55    char *orig_str;</p>
+
+<p>56    char *dupe_str;</p>
+
+<p>57    PyObject* retval;</p>
+
+<p>58</p>
+
+<p>59    if (!PyArg_ParseTuple(args, &ldquo;s&rdquo;, &amp;orig_str))</p>
+
+<p>60    return NULL;</p>
+
+<p>61    retval = (PyObject*)Py_BuildValue(&ldquo;ss&rdquo;, orig_str,</p>
+
+<p>62    dupe_str=reverse(strdup(orig_str)));</p>
+
+<p>63    free(dupe_str);</p>
+
+<p>64    return retval;</p>
+
+<p>73</p>
+
+<p>74    static PyMethodDef</p>
+
+<p><img src="07Python38c3160b-3240.jpg" alt="img" /></p>
+
+<p>75    ExtestMethods[] =</p>
+
+<p>76    {</p>
+
+<p>77    { &ldquo;fac&rdquo;, Extest_fac, METH_VARARGS },</p>
+
+<p>78    { &ldquo;doppel&rdquo;, Extest_doppel, METH_VARARGS },</p>
+
+<p>79    { &ldquo;test&rdquo;, Extest_test, METH_VARARGS },</p>
+
+<p>80    { NULL, NULL },</p>
+
+<p>81 };</p>
+
+<p>82</p>
+
+<p>83    void initExtest()</p>
+
+<p>84    {</p>
+
+<p>85    Py_InitModule(&ldquo;Extest&rdquo;, ExtestMethods);</p>
+
+<p>86    }</p>
+
+<p>Python提供了一对C的宏，可以用来改变Python对象的引用计数。见表22.3。</p>
+
+<p>在上面的Extest_test()函数中，我们创建了一个空字符串的PyObject对象，用以返回None。 或者，你也可以对空对象(PyNone)的引用计数加1，成为PyNone的拥有者，然后直接返回</p>
+
+<p>PyNone。见下例：</p>
+
+<p>表22.3用于Python对象引用计数的宏    _</p>
+
+<p>函数    说明</p>
+
+<p>Py_INCREF(obj)增加对象obj的引用计数 Py_DECREF(obj)减少对象obj的引用计数</p>
+
+<p>static PyObject *</p>
+
+<p>Extest_test(PyObject    , PyObject *args) {</p>
+
+<p>test()；</p>
+
+<p>Py_INCREF(Py_None)； return PyNone；</p>
+
+<p>Py_INCREF()和Py_DECREF()两个函数也有一个先检查对象是否为空的版本，分别为Py_XINCREF()</p>
+
+<p>和 Py_XDECREF()。</p>
+
+<p>我们强烈建议读者阅读Python文档的扩展和嵌入Python部分中关于引用计数的内容。(见附录 中的文档参考部分)</p>
+
+<h3 id="22-2-6线程和全局解释锁-gil">22.2.6线程和全局解释锁(GIL)</h3>
+
+<p>编译扩展的人必须要注意，他们的代码有可能会被运行在一个多线程的Python环境中。早在</p>
+
+<p>18.3.1节，我们就介绍了 Python虚拟机(PVM)和全局解释锁(GIL)。并描述了，在PVM中，任何时候， 同时只会有一个线程被运行。其它线程会被GIL停下来。而且，我们指出调用扩展代码等外部函数 时，代码会被GIL锁住，直到函数返回为止。</p>
+
+<p>前面，我们也提到过一种折衷方案，可以让编写扩展的程序员释放GIL，例如在系统调用前就可 以做到。这是通过将您的代码和线程隔离实现的，这些线程使用了另外的两个C宏 Py_BEGIN_ALLOW_THREADS和Py_END_ALLOW_THREADS保证了运行和非运行时的安全性。由这些宏包裹 的代码将会允许其他线程的运行。</p>
+
+<p>同引用计数宏一样，我们强烈建议你好好看看关于扩展和嵌入Python的文档以及Python/C API</p>
+
+<p>参考手册。</p>
+
+<h3 id="22-3-相关话题">22.3 相关话题</h3>
+
+<h4 id="swig">SWIG</h4>
+
+<p>有一个外部工具叫SWIG，是Simplified Wrapper and Interface Generator的缩写。其作者为 David Beazley，同时也是Python Essential Referenc—书的作者。这个工具可以根据特别注释过</p>
+
+<p>的C/C++头文件生成能给Python，Tcl和Perl使用的包装代码。使用SWIG可以省去你写前面所说 的样板代码的时间。你只要关心怎么用C/C++解决你的实际问题就好了。你所要做的就是按SWIG的</p>
+
+<p>1^-格式编写文件，其余的就都由SWIG来完成。你可以通过下面的网址找到关于SWIG的更多信息。    H</p>
+
+<p><a href="http://swig.org">http://swig.org</a></p>
+
+<h4 id="pyrex">Pyrex</h4>
+
+<p>创建C/C++扩展的一个很明显的坏处是你必须要写C/C++代码。你能利用它们的优点，但更重要 的是，你也会碰到它们的缺点。Pyrex可以让你只取扩展的优点，而完全没有后顾之忧。它是一种更 偏向Python的C语言和Python语言的混合语言。事实上，Pyrex的官方网站上就说“Pyrex是具有 C数据类型的Python “。你只要用Pyrex的语法写代码，然后运行Pyrex编译器去编译源代码。Pyrex 会生成相应的C代码，这些代码可以被编译成普通的扩展。你可以在它的官方网站下载到Pyrex:</p>
+
+<p><a href="http://cosc.canterbury.ac.nz/~greg/python/Pyrex">http://cosc.canterbury.ac.nz/~greg/python/Pyrex</a></p>
+
+<h4 id="psyco">Psyco</h4>
+
+<p>Pyrex免去了我们再去写纯C代码的麻烦。不过，你要去学会它的那一套与众不同的语法。最后， 你的Pyrex代码还是会被转成C的代码。无论你用C/C++，C/C++加上SWIG，还是Pyrex，都是因为 你想要加快你的程序的速度。如果你可以在不改动你的Python代码的同时，又能获得速度的提升， 那该多好啊。</p>
+
+<p>Psyco的理念与其它的方法截然不同。与其改成C的代码，为何不让你已有的Python代码</p>
+
+<p>运行的更快一些呢？</p>
+
+<p>Psyco是一个just-in-time（JIT）编译器，它能在运行时自动把字节码转为本地代码运行。所以， 你只要（在运行时）导入Psyco模块，然后告诉它要开始优化代码就可以了。而不用修改自己的代 码。</p>
+
+<p>Psyco也可以检查你代码各个部分的运行时间，以找出瓶颈所在。你甚至可以打开日志功能，来 查看Psyco在优化你的代码的时候，都做了些什么。你可以访问以下网站获取更多的信息：</p>
+
+<p><a href="http://psyco.sf.net">http://psyco.sf.net</a></p>
+
+<h4 id="嵌入">嵌入</h4>
+
+<p>嵌入是Python的另一功能。与把C代码包装到Python中的扩展相对的，嵌入是把Python解释 器包装到C的程序中。这样做可以给大型的，单一的，要求严格的，私有的并且（或者）极其重要 的应用程序内嵌Python解释器的能力。一旦内嵌了 Python，世界完全不一样了。</p>
+
+<p>Python提供了很多官方文档供写扩展的人参考。</p>
+
+<p>下面是一些与本章相关的Python文档：</p>
+
+<p>扩展与嵌入</p>
+
+<p><a href="http://docs.python.org/ext">http://docs.python.org/ext</a></p>
+
+<p>Python/C API</p>
+
+<p><a href="http://docs.python.org/api">http://docs.python.org/api</a></p>
+
+<p>分发Python模块</p>
+
+<p><a href="http://docs.python.org/dist">http://docs.python.org/dist</a></p>
+
+<h3 id="22-4-练习">22.4 练习</h3>
+
+<p>22-1.扩展Python.编写Python扩展都有些什么好处？</p>
+
+<p>22-2.扩展Python.编写Python扩展都有些什么不好的地方或是危险的地方？</p>
+
+<p>22-3.编写扩展.下载或找到一个C/C++编译器，并写一个小程序（重新）熟悉一下C/C++</p>
+
+<p>编程。找到你的Python所在的目录，并找到Misc/Makefile.pre.in文件。把你刚写的</p>
+
+<p>程序包装到Python当中。按步骤把你的模块编译成动态库，从Python中调用你的模块并</p>
+
+<p>测试一下是否正确。</p>
+
+<p>22-4.把Python移植到C。选几个你在前几章写的代码，并把它们做为模块移植到C/C++ 中。</p>
+
+<p>22-5.包装C代码。找一段你之前写的，想移植到Python的C/C++代码。不要去移植， 把这段代码改成扩展模块。</p>
+
+<p>22-6.编写扩展。在13-3的练习中，你写了一个dollarizeO函数，它能把浮点数转为 前置美元符号，逗号分隔的货币金额字符串。请创建一个扩展，包装dollarizeO函数，</p>
+
+<p>并在模块中增加一个回归测试函数test()。附加题：除了创建C扩展外，再用Pyrex重写 dollarize()函数。</p>
+
+<p>22-7. 扩展和嵌入。扩展和嵌入的区别是什么？</p>
+
+<p><img src="07Python38c3160b-3248.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3249.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3250.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-3251.jpg" alt="img" /></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/21-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">21 数据库编程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/23-%E5%85%B6%E5%AE%83%E8%AF%9D%E9%A2%98/">
+            <span class="next-text nav-default">23 其它话题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

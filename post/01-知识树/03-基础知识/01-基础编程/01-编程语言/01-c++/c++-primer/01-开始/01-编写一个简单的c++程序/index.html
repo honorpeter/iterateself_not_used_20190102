@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 编写一个简单的C&#43;&#43;程序 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="开始 本章将介绍 C&#43;&#43; 的大部分基础内容： 类型 变量 表达式 语句 函数 在这个过程中， 我们会简要介绍如何编译及运行程序。嗯。 在学习完本章并认真完成练习之后，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/01-%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84c&#43;&#43;%E7%A8%8B%E5%BA%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 编写一个简单的C&#43;&#43;程序" />
+<meta property="og:description" content="开始 本章将介绍 C&#43;&#43; 的大部分基础内容： 类型 变量 表达式 语句 函数 在这个过程中， 我们会简要介绍如何编译及运行程序。嗯。 在学习完本章并认真完成练习之后，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/01-%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84c&#43;&#43;%E7%A8%8B%E5%BA%8F/" /><meta property="article:published_time" content="2018-07-10T17:40:59&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-10T17:40:59&#43;00:00"/>
+<meta itemprop="name" content="01 编写一个简单的C&#43;&#43;程序">
+<meta itemprop="description" content="开始 本章将介绍 C&#43;&#43; 的大部分基础内容： 类型 变量 表达式 语句 函数 在这个过程中， 我们会简要介绍如何编译及运行程序。嗯。 在学习完本章并认真完成练习之后，">
+
+
+<meta itemprop="datePublished" content="2018-07-10T17:40:59&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-10T17:40:59&#43;00:00" />
+<meta itemprop="wordCount" content="3420">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 编写一个简单的C&#43;&#43;程序"/>
+<meta name="twitter:description" content="开始 本章将介绍 C&#43;&#43; 的大部分基础内容： 类型 变量 表达式 语句 函数 在这个过程中， 我们会简要介绍如何编译及运行程序。嗯。 在学习完本章并认真完成练习之后，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 编写一个简单的C&#43;&#43;程序</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-10 </span>
+        
+        <span class="more-meta"> 3420 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#开始">开始</a>
+<ul>
+<li><a href="#1-编写一个简单的-c-程序">1 编写一个简单的 C++ 程序</a>
+<ul>
+<li><a href="#1-1-编译-运行程序">1.1 编译、运行程序</a></li>
+<li><a href="#程序源文件命名约定">程序源文件命名约定</a></li>
+<li><a href="#从命令行运行编译器">从命令行运行编译器</a></li>
+<li><a href="#运行gnu或微软编译器">运行GNU或微软编译器</a></li>
+<li><a href="#练习">练习</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="开始">开始</h1>
+
+<p>本章将介绍 C++ 的大部分基础内容：</p>
+
+<ul>
+<li>类型</li>
+<li>变量</li>
+<li>表达式</li>
+<li>语句</li>
+<li>函数</li>
+</ul>
+
+<p>在这个过程中， 我们会简要介绍如何编译及运行程序。<span style="color:red;">嗯。</span></p>
+
+<p>在学习完本章并认真完成练习之后，你将具备编写、编译及运行简单程序的能力。后续章节将假定你已掌握本章中介绍的语言特性，并将更详细地解释这些特性。</p>
+
+<p>学习一门新的程序设计语言的最好方法就是练习编写程序。在本章中，我们将编写一个程序来解决简单的书店问题。</p>
+
+<p>我们的书店保存所有销售记录的档案，每条记录保存了某本书的一次销售的信息(一册或多册)，每条记录包含三个数据项：</p>
+
+<pre><code>0-201-70353-X    4    24.99
+</code></pre>
+
+<ul>
+<li>第一项是书的ISBN号(国际标准书号，一本书的唯一标识)，</li>
+<li>第二项是售出的册数，</li>
+<li>最后一项是书的单价。</li>
+</ul>
+
+<p>有时，书店老板需要查询此档案，计算每本书的销售量、销售额及平均售价，</p>
+
+<p>为了编写这个程序，我们需要使用若干 C++ 的基本特性。而且，我们需要了解如何编译及运行程序。</p>
+
+<p>虽然我们还没有编写这个程序，但显然它必须</p>
+
+<ul>
+<li>定义变量</li>
+<li>进行输入和输出</li>
+<li>使用数据结构保存数据</li>
+<li>检测两条记录是否有相同的ISBN</li>
+<li>包含一个循环来处理销售档案中的每条记录</li>
+</ul>
+
+<p>我们首先介绍如何用 C++ 来解决这些子问题，然后编写书店程序。</p>
+
+<h2 id="1-编写一个简单的-c-程序">1 编写一个简单的 C++ 程序</h2>
+
+<p>每个C++程序都包含一个或多个函数(fiinction)，其中一个必须命名为main。操作系统通过调用 main 来运行 C++ 程序。下面是一个非常简单的 main 函数，它什么也不干，只是返回给操作系统一个值：<span style="color:red;">系统是怎么调用main函数的？而且返回值到底能表示哪些信息？程序崩溃也会返回吗？一定会返回吗？</span></p>
+
+<pre><code class="language-cpp">int main()
+{
+    return 0;
+}
+</code></pre>
+
+<p>一个函数的定义包含四部分：</p>
+
+<ul>
+<li>返回类型 (return type)</li>
+<li>函数名 (function name)</li>
+<li>一个括号包围的形参列表 (parameter list,允许为空)</li>
+<li>以及函数体 (function body)</li>
+</ul>
+
+<p>虽然main 函数在某种程度上比较特殊，但其定义与其他函数是一样的，</p>
+
+<p>在本例中，main的形参列表是空的(()中什么也没有)。章 06 会讨论main的其他形参类型。<span style="color:red;">嗯，一直想弄清楚 main 函数的argv argc 什么的。而且到底有哪些传入的方式？快捷方式是怎么传入参数的？</span></p>
+
+<p>main 函数的返回类型必须为 int，即整数类型。int类型是一种内置类型(built-in type)，即语言自身定义的类型。<span style="color:red;">还有哪些内置类型？</span></p>
+
+<p>函数定义的最后一部分是函数体，它是一个以左花括号(curly brace)开始，以右花括号结朿的语句块(block of statements)：</p>
+
+<pre><code class="language-cpp">{
+  return 0;
+}
+</code></pre>
+
+<p>这个语句块中唯一的一条语句是 return，它结束函数的执行。在本例中，return 还会向调用者返回一个值。当 return 语句包括一个值时，此返回值的类型必须与函数的返回类型相容。在本例中，main 的返回类型是int，而返回值 0 的确是一个 int 类型的值。<span style="color:red;">嗯。</span></p>
+
+<p>请注意，return 语句末尾的分号。在 C++ 中，大多数 C++ 语句以分号表示结束。它们很容易被忽略，但如果忘记了写分号，就会导致莫名其妙的编译错误。<span style="color:red;">嗯。</span></p>
+
+<p>在大多数系统中，main 的返回值被用来指示状态。返回值 0 表明成功，非 0 的返回值的含义由系统定义，通常用来指出错误类型。<span style="color:red;">有哪些错误类型？系统知道这些错误类型之后会做什么？我在返回错误类型之后还可以执行什么吗？</span></p>
+
+<p>上面提到了类型，类型是程序设计最基本的概念之一，在本书中我们会反复遇到它,，一种类型不仅定义了数据元素的内容，还定义了这类数据上可以进行的运算。程序所处理的数据都保存在变量中，而每个变量都有自己的类型。如果一个名为 v 的变量的类型为 T ，我们通常说 “V具有类型T”，或等价的，“V是一个T类型变量”。 <span style="color:red;">每个变量都有自己的类型。</span></p>
+
+<h3 id="1-1-编译-运行程序">1.1 编译、运行程序</h3>
+
+<p>编写好程序后，我们就需要编译它。如何编译程序依赖于你使用的操作系统和编译器。</p>
+
+<p>你所使用的特定编译器的相关使用细节，请查阅参考手册或询问经验丰富的同事。</p>
+
+<p>很多 PC 机上的编译器都具备集成开发环境 (Integrated Developed Environment IDE).</p>
+
+<p>将编译器与其他程序创建和分析工具包装在一起。在开发大型程序时，这类集成环境可能是非常有用的工具，但需要一些时间来学习如何高效地使用它们。学习如何使用这类开发 环境已经超出了本书的范围。</p>
+
+<p>大部分编译器，包括集成 IDE 的编译器，都会提供一个命令行界面。除非你已经了解 IDE，否则你会觉得借助命令行界面开始学习 C++ 还是很容易的。这种学习方式的好处是，可以先将精力集中于 C++ 语言本身(而不是一些开发工具)，而且，一旦你掌握了语言，IDE 通常是很容易学习的。</p>
+
+<h3 id="程序源文件命名约定">程序源文件命名约定</h3>
+
+<p>无论你使用命令行界面或者 IDE ,大多数编译器都要求程序源码存储在一个或多个文件中。程序文件通常被称为源文件(source file)。在大多数系统中，源文件的名字以一个后缀为结尾，后缀是由一个句点后接一个或多个字符组成的。后缀告诉系统这个文件是一个 C++ 程序。不同编译器使用不同的后缀命名约定，最常见的包括 <code>.cc</code>、<code>.cxx</code>、<code>.cpp</code>、<code>.cp</code> 及 <code>.C</code>。<span style="color:red;">源文件本质上就是一个文本文件，只是后缀不是 txt 而已。应该是吧？</span></p>
+
+<h3 id="从命令行运行编译器">从命令行运行编译器</h3>
+
+<p>如果我们正在使用命令行界面，那么通常是在一个控制台窗口内(例如UNIX系统中 的外壳程序窗口或者Windows系统中的命令提示符窗口)编译程序。假定我们的 main 程序保存在文件 progl.cc 中，可以用如下命令来编译它</p>
+
+<pre><code>$ CC progl.cc
+</code></pre>
+
+<p>其中，CC 是编译器程序的名字，$ 是系统提示符。编译器生成一个可执行文件。Windows 系统会将这个可执行文件命名为 <code>progl.exe</code> 。 UNIX系统中的编译器通常将可执行文件命名为 <code>a. out</code>。</p>
+
+<p>为了在Windows系统中运行一个可执行文件，我们需要提供可执行文件的文件名，可以忽略其扩展名.exe:</p>
+
+<pre><code>$ progl
+</code></pre>
+
+<p>在一些系统中，即使文件就在当前目录或文件夹中，你也必须显式指出文件的位置。在此情况下，我们可以键入：<span style="color:blue;">是这样吗？什么系统会这样？怪不得我看到的都是带 ./ 很少直接写程序的名字的。不是斜杠吗？怎么是反斜杠？linux上是斜杠。</span></p>
+
+<pre><code>$ .\progl
+</code></pre>
+
+<p><code>.</code> 后跟一个反斜线指出该文件在当前目录中。</p>
+
+<p>为了在UNIX系统中运行一个可执行文件，我们需要使用全文件名，包括文件扩展名：<span style="color:red;">这个如果不带 <code>./</code> 的话在centos里会不行，会说：<code>-bash: a.out: command not found</code> ,必须要使用 <code>./a.cout</code> 才行。</span></p>
+
+<pre><code>$ a.out
+</code></pre>
+
+<p>如果需要指定文件位置，需要用一个后跟一个斜线来指出可执行文件位于当前目录中：</p>
+
+<pre><code>$ ./a.out
+</code></pre>
+
+<p>访问 main 的返回值的方法依赖于系统。在 UNIX 和 Windows 系统中，执行完一个程序后，都可以通过 echo 命令获得其返回值。</p>
+
+<p>在UNIX系统中，通过如下命令获得状态：<span style="color:red;">这个我试了下的确是会输出0，但是为什么呢？echo到底是怎么用的？</span></p>
+
+<pre><code>$ echo $?
+</code></pre>
+
+<p>在Windows系统中查看状态可键入：</p>
+
+<pre><code>$ echo %ERRORLEVEL%
+</code></pre>
+
+<blockquote>
+<h3 id="运行gnu或微软编译器">运行GNU或微软编译器</h3>
+
+<p>在不同操作和编译器系统中，运行C++编译器的命令也各不相同。最常用的编译器是 GNU 编译器和微软 Visual Studio 编译器。默认情况下，运行 GNU 编译器的命令是 g++:</p>
+
+<pre><code>$ g++ -o progl progl.cc
+</code></pre>
+
+<p>此处，<code>$</code>是系统提示符。<code>-o progl</code>是编译器参数，指定了可执行文件的文件名。在不同的操作系统中，此命令生成一个名为 <code>progl</code> 或 <code>progl.exe</code> 的可执行文件，在 UNIX 系统中，可执行文件没有后缀；在 Windows 系统中，后缀为.exet。如果省略了 <code>-o progl</code> 参数，在UNIX系统中编译器会生成一个名为 <code>a.out</code> 的可执行文件，在 Windows 系统 中则会生成一个名为 <code>a.exe</code> 的可执行文件（注意：根据使用的GNU编译器的版本，你 可能需要指定-std=c++0x参数来打开对C++11的支持）。<span style="color:red;">这个要怎么打开？</span></p>
+
+<p>运行微软Visual Studio 2010编译器的命令为 cl :<span style="color:red;">好像从来没有手动使用过这个</span></p>
+
+<pre><code>C:\Users\me\Programs&gt; cl /EHsc progl.cpp
+</code></pre>
+
+<p>此处，<code>C:\Users\me\Programs&gt;</code> 系统提示符，<code>\Users\me\Programs</code> 是当前目录名（即当前文件夹命令 <code>cl</code> 调用编译器，<code>/EHsc</code> 是编译器选项，用来打开标准异常处理。微软编译器会自动生成一个可执行文件，其名字与第一个源文件名对应<span style="color:red;"> 嗯，这个地方还是不一样的。</span>。可执行文件的文件名与源文件名相同，后缀为 <code>.exe</code> 。在此例中，可执行大件的文件名为 <code>progl.exe</code> 。</p>
+
+<p>编译器通常都包含一些选项，能对有问题的程序结构发出警告。打开这些选项通常是一个好习惯。我们习惯在 GNU 编译器中使用 <code>-Wall</code> 选项，在微软编译器中则使用 <code>/W4</code> 。<span style="color:red;">嗯，还有哪些选项？这个在写 makefile 的时候都会用到，还是要好好总结下。</span></p>
+
+<p>更详细的信息请查阅你使用的编译器的参考手册。<span style="color:red;">嗯，肯定要总结下的，因为 VS 对应复杂结构的大型项目还是有点不方便的，自己会编译的话使用 make 还是有用的。</span></p>
+</blockquote>
+
+<h3 id="练习">练习</h3>
+
+<p>练习1.1:查阅你使用的编译器的文档，确定它所使用的文件命名约定。编译并运行上面的main程序。</p>
+
+<p>练习1.2:改写程序，让它返回 -1。返回值-1通常被当作程序错误的标识。重新编译并 运行你的程序，观察你的系统如何处理main返回的错误标识。<span style="color:red;">为什么使用centos 的 g++ 编译出的返回 -1 的 a.out 运行的时候什么也没有提示？而且运行后再运行 echo $? 的结果是 255 ？</span></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-10</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/03-%E6%B3%A8%E9%87%8A%E7%AE%80%E4%BB%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 注释简介</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/linux/linux-centos-%E6%9F%A5%E7%9C%8B%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC/">
+            <span class="next-text nav-default">Linux CentOS 查看软件版本</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

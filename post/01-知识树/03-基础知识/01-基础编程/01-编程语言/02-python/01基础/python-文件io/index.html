@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python 文件IO - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-03 10:24:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/03/python-io/ slug: python-io title: Python 文件I/O wordpress_id: 4998 categories: - 随想与反思 [mathjax] REFERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 TODO aaa MOTIVE aaa Python 文件I/O 本章只讲述所有基本的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/python-%E6%96%87%E4%BB%B6io/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Python 文件IO" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-03 10:24:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/03/python-io/ slug: python-io title: Python 文件I/O wordpress_id: 4998 categories: - 随想与反思 [mathjax] REFERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 TODO aaa MOTIVE aaa Python 文件I/O 本章只讲述所有基本的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/python-%E6%96%87%E4%BB%B6io/" /><meta property="article:published_time" content="2018-06-11T08:14:42&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:42&#43;00:00"/>
+<meta itemprop="name" content="Python 文件IO">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-03 10:24:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/03/python-io/ slug: python-io title: Python 文件I/O wordpress_id: 4998 categories: - 随想与反思 [mathjax] REFERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 TODO aaa MOTIVE aaa Python 文件I/O 本章只讲述所有基本的">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:42&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:42&#43;00:00" />
+<meta itemprop="wordCount" content="3902">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python 文件IO"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-03 10:24:08&#43;00:00 layout: post link: http://106.15.37.116/2018/05/03/python-io/ slug: python-io title: Python 文件I/O wordpress_id: 4998 categories: - 随想与反思 [mathjax] REFERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 TODO aaa MOTIVE aaa Python 文件I/O 本章只讲述所有基本的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python 文件IO</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 3902 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#随想与反思">- 随想与反思</a></li>
+</ul></li>
+<li><a href="#reference">REFERENCE</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#motive">MOTIVE</a>
+<ul>
+<li><a href="#python-文件i-o">Python 文件I/O</a></li>
+<li><a href="#打印到屏幕">打印到屏幕</a></li>
+<li><a href="#读取键盘输入">读取键盘输入</a>
+<ul>
+<li><a href="#raw-input函数">raw_input函数</a></li>
+<li><a href="#input函数">input函数</a></li>
+</ul></li>
+<li><a href="#打开和关闭文件">打开和关闭文件</a>
+<ul>
+<li><a href="#open函数">open函数</a></li>
+</ul></li>
+<li><a href="#file对象的属性">File对象的属性</a>
+<ul>
+<li><a href="#close-方法">Close()方法</a></li>
+<li><a href="#write-方法">Write()方法</a></li>
+<li><a href="#read-方法">read()方法</a></li>
+</ul></li>
+<li><a href="#重命名和删除文件">重命名和删除文件</a>
+<ul>
+<li><a href="#remove-方法">remove()方法</a></li>
+</ul></li>
+<li><a href="#python里的目录">Python里的目录：</a>
+<ul>
+<li><a href="#mkdir-方法">mkdir()方法</a></li>
+<li><a href="#chdir-方法">chdir()方法</a></li>
+<li><a href="#rmdir-方法">rmdir()方法</a></li>
+</ul></li>
+<li><a href="#文件-目录相关的方法">文件、目录相关的方法</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-03 10:24:08+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/03/python-io/">http://106.15.37.116/2018/05/03/python-io/</a>
+slug: python-io
+title: Python 文件I/O
+wordpress_id: 4998
+categories:</p>
+
+<h2 id="随想与反思">- 随想与反思</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<h1 id="reference">REFERENCE</h1>
+
+<ol>
+<li><p><a href="https://www.w3cschool.cn/python/">python基础教程 w3cschool</a></p></li>
+
+<li><p><a href="http://www.runoob.com/python3/python3-tutorial.html">Python 3 教程 菜鸟教程</a></p></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h2 id="python-文件i-o">Python 文件I/O</h2>
+
+<p>本章只讲述所有基本的的I/O函数，更多函数请参考Python标准文档。</p>
+
+<h2 id="打印到屏幕">打印到屏幕</h2>
+
+<p>最简单的输出方法是用print语句，你可以给它传递零个或多个用逗号隔开的表达式。此函数把你传递的表达式转换成一个字符串表达式，并将结果写到标准输出如下：</p>
+
+<pre><code>#!/usr/bin/python
+
+print &quot;Python is really a great language,&quot;, &quot;isn't it?&quot;;
+</code></pre>
+
+<p>你的标准屏幕上会产生以下结果：</p>
+
+<pre><code>Python is really a great language, isn't it?
+</code></pre>
+
+<h2 id="读取键盘输入">读取键盘输入</h2>
+
+<p>Python提供了两个内置函数从标准输入读入一行文本，默认的标准输入是键盘。如下：</p>
+
+<ul>
+<li><p>raw_input</p></li>
+
+<li><p>input</p></li>
+</ul>
+
+<h3 id="raw-input函数">raw_input函数</h3>
+
+<p>raw_input([prompt]) 函数从标准输入读取一个行，并返回一个字符串（去掉结尾的换行符）：</p>
+
+<pre><code>#!/usr/bin/python
+# -*- coding: UTF-8 -*- 
+ 
+str = raw_input(&quot;请输入：&quot;);
+print &quot;你输入的内容是: &quot;, str
+</code></pre>
+
+<p>这将提示你输入任意字符串，然后在屏幕上显示相同的字符串。当我输入&rdquo;Hello Python！&rdquo;，它的输出如下：</p>
+
+<pre><code>请输入：Hello Python！
+你输入的内容是:  Hello Python！
+</code></pre>
+
+<h3 id="input函数">input函数</h3>
+
+<p>input([prompt]) 函数和raw_input([prompt]) 函数基本可以互换，但是input会假设你的输入是一个有效的Python表达式，并返回运算结果。</p>
+
+<pre><code>#!/usr/bin/python
+
+str = input(&quot;Enter your input: &quot;);
+print &quot;Received input is : &quot;, str
+</code></pre>
+
+<p>这会产生如下的对应着输入的结果：</p>
+
+<pre><code>Enter your input: [x*5 for x in range(2,10,2)]
+Recieved input is :  [10, 20, 30, 40]
+</code></pre>
+
+<h2 id="打开和关闭文件">打开和关闭文件</h2>
+
+<p>到现在为止，你已经可以向标准输入和输出进行读写。现在，来看看怎么读写实际的数据文件。</p>
+
+<p>Python提供了必要的函数和方法进行默认情况下的文件基本操作。你可以用file对象做大部分的文件操作。</p>
+
+<h3 id="open函数">open函数</h3>
+
+<p>你必须先用Python内置的open()函数打开一个文件，创建一个file对象，相关的辅助方法才可以调用它进行读写。</p>
+
+<p>语法：</p>
+
+<pre><code>file object = open(file_name [, access_mode][, buffering])
+</code></pre>
+
+<p>各个参数的细节如下：</p>
+
+<ul>
+<li><p>file_name：file_name变量是一个包含了你要访问的文件名称的字符串值。</p></li>
+
+<li><p>access_mode：access_mode决定了打开文件的模式：只读，写入，追加等。所有可取值见如下的完全列表。这个参数是非强制的，默认文件访问模式为只读&reg;。</p></li>
+
+<li><p>buffering:如果buffering的值被设为0，就不会有寄存。如果buffering的值取1，访问文件时会寄存行。如果将buffering的值设为大于1的整数，表明了这就是的寄存区的缓冲大小。如果取负值，寄存区的缓冲大小则为系统默认。</p></li>
+</ul>
+
+<p>不同模式打开文件的完全列表：
+<table class="reference     " >
+<tbody >
+<tr >
+模式
+描述
+</tr>
+<tr ></p>
+
+<p><td >r
+</td></p>
+
+<p><td >以只读方式打开文件。文件的指针将会放在文件的开头。这是默认模式。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >rb
+</td></p>
+
+<p><td >以二进制格式打开一个文件用于只读。文件指针将会放在文件的开头。这是默认模式。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >r+
+</td></p>
+
+<p><td >打开一个文件用于读写。文件指针将会放在文件的开头。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >rb+
+</td></p>
+
+<p><td >以二进制格式打开一个文件用于读写。文件指针将会放在文件的开头。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >w
+</td></p>
+
+<p><td >打开一个文件只用于写入。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >wb
+</td></p>
+
+<p><td >以二进制格式打开一个文件只用于写入。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >w+
+</td></p>
+
+<p><td >打开一个文件用于读写。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >wb+
+</td></p>
+
+<p><td >以二进制格式打开一个文件用于读写。如果该文件已存在则将其覆盖。如果该文件不存在，创建新文件。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >a
+</td></p>
+
+<p><td >打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >ab
+</td></p>
+
+<p><td >以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。也就是说，新的内容将会被写入到已有内容之后。如果该文件不存在，创建新文件进行写入。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >a+
+</td></p>
+
+<p><td >打开一个文件用于读写。如果该文件已存在，文件指针将会放在文件的结尾。文件打开时会是追加模式。如果该文件不存在，创建新文件用于读写。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >ab+
+</td></p>
+
+<p><td >以二进制格式打开一个文件用于追加。如果该文件已存在，文件指针将会放在文件的结尾。如果该文件不存在，创建新文件用于读写。
+</td>
+</tr>
+</tbody>
+</table></p>
+
+<h2 id="file对象的属性">File对象的属性</h2>
+
+<p>一个文件被打开后，你有一个file对象，你可以得到有关该文件的各种信息。</p>
+
+<p>以下是和file对象相关的所有属性的列表：
+<table class="reference" >
+<tbody >
+<tr >
+属性
+描述
+</tr>
+<tr ></p>
+
+<p><td >file.closed
+</td></p>
+
+<p><td >如果文件已被关闭返回true，否则返回false。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >file.mode
+</td></p>
+
+<p><td >返回被打开文件的访问模式。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >file.name
+</td></p>
+
+<p><td >返回文件的名称。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >file.softspace
+</td></p>
+
+<p><td >如果用print输出后，必须跟一个空格符，则返回false。否则返回true。
+</td>
+</tr>
+</tbody>
+</table>
+如下实例：</p>
+
+<pre><code>#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+ 
+# 打开一个文件
+fo = open(&quot;foo.txt&quot;, &quot;wb&quot;)
+print &quot;文件名: &quot;, fo.name
+print &quot;是否已关闭 : &quot;, fo.closed
+print &quot;访问模式 : &quot;, fo.mode
+print &quot;末尾是否强制加空格 : &quot;, fo.softspace
+</code></pre>
+
+<p>以上实例输出结果：</p>
+
+<pre><code>文件名:  foo.txt
+是否已关闭 :  False
+访问模式 :  wb
+末尾是否强制加空格 :  0
+</code></pre>
+
+<h3 id="close-方法">Close()方法</h3>
+
+<p>File对象的close（）方法刷新缓冲区里任何还没写入的信息，并关闭该文件，这之后便不能再进行写入。</p>
+
+<p>当一个文件对象的引用被重新指定给另一个文件时，Python会关闭之前的文件。用close（）方法关闭文件是一个很好的习惯。</p>
+
+<p>语法：</p>
+
+<pre><code>fileObject.close();
+</code></pre>
+
+<p>例子：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# 打开一个文件
+fo = open(&quot;foo.txt&quot;, &quot;wb&quot;)
+print &quot;文件名: &quot;, fo.name
+
+# 关闭打开的文件
+fo.close()
+</code></pre>
+
+<p>以上实例输出结果：</p>
+
+<pre><code>文件名:  foo.txt
+</code></pre>
+
+<p>读写文件：</p>
+
+<p>file对象提供了一系列方法，能让我们的文件访问更轻松。来看看如何使用read()和write()方法来读取和写入文件。</p>
+
+<h3 id="write-方法">Write()方法</h3>
+
+<p>Write()方法可将任何字符串写入一个打开的文件。需要重点注意的是，Python字符串可以是二进制数据，而不是仅仅是文字。</p>
+
+<p>Write()方法不在字符串的结尾不添加换行符(&rsquo;\n&rsquo;)：</p>
+
+<p>语法：</p>
+
+<pre><code>fileObject.write(string);
+</code></pre>
+
+<p>在这里，被传递的参数是要写入到已打开文件的内容。</p>
+
+<p>例子：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# 打开一个文件
+fo = open(&quot;/tmp/foo.txt&quot;, &quot;wb&quot;)
+fo.write( &quot;Python is a great language.\nYeah its great!!\n&quot;);
+
+# 关闭打开的文件
+fo.close()#!/usr/bin/python
+</code></pre>
+
+<p>上述方法会创建foo.txt文件，并将收到的内容写入该文件，并最终关闭文件。如果你打开这个文件，将看到以下内容:</p>
+
+<pre><code>Python is a great language.
+Yeah its great!!
+</code></pre>
+
+<h3 id="read-方法">read()方法</h3>
+
+<p>read（）方法从一个打开的文件中读取一个字符串。需要重点注意的是，Python字符串可以是二进制数据，而不是仅仅是文字。</p>
+
+<p>语法：</p>
+
+<pre><code>fileObject.read([count]);
+</code></pre>
+
+<p>在这里，被传递的参数是要从已打开文件中读取的字节计数。该方法从文件的开头开始读入，如果没有传入count，它会尝试尽可能多地读取更多的内容，很可能是直到文件的末尾。</p>
+
+<p>例子：</p>
+
+<p>就用我们上面创建的文件foo.txt。</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# 打开一个文件
+fo = open(&quot;/tmp/foo.txt&quot;, &quot;r+&quot;)
+str = fo.read(10);
+print &quot;读取的字符串是: &quot;, str
+# 关闭打开的文件
+fo.close()
+</code></pre>
+
+<p>以上实例输出结果：</p>
+
+<pre><code>读取的字符串是:  Python is
+</code></pre>
+
+<p>文件位置：</p>
+
+<p>tell()方法告诉你文件内的当前位置；换句话说，下一次的读写会发生在文件开头这么多字节之后：</p>
+
+<p>seek（offset [,from]）方法改变当前文件的位置。Offset变量表示要移动的字节数。From变量指定开始移动字节的参考位置。</p>
+
+<p>如果from被设为0，这意味着将文件的开头作为移动字节的参考位置。如果设为1，则使用当前的位置作为参考位置。如果它被设为2，那么该文件的末尾将作为参考位置。</p>
+
+<p>例子：</p>
+
+<p>就用我们上面创建的文件foo.txt。</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# 打开一个文件
+fo = open(&quot;/tmp/foo.txt&quot;, &quot;r+&quot;)
+str = fo.read(10);
+print &quot;读取的字符串是: &quot;, str
+
+# 查找当前位置
+position = fo.tell();
+print &quot;当前文件位置: &quot;, position
+
+# 把指针再次重新定位到文件开头
+position = fo.seek(0, 0);
+str = fo.read(10);
+print &quot;重新读取字符串: &quot;, str
+# 关闭打开的文件
+fo.close()
+</code></pre>
+
+<p>以上实例输出结果：</p>
+
+<pre><code>读取的字符串是:  Python is
+当前文件位置:  10
+重新读取字符串:  Python is
+</code></pre>
+
+<h2 id="重命名和删除文件">重命名和删除文件</h2>
+
+<p>Python的os模块提供了帮你执行文件处理操作的方法，比如重命名和删除文件。</p>
+
+<p>要使用这个模块，你必须先导入它，然后可以调用相关的各种功能。</p>
+
+<p>rename()方法：</p>
+
+<p>rename()方法需要两个参数，当前的文件名和新文件名。</p>
+
+<p>语法：</p>
+
+<pre><code>os.rename(current_file_name, new_file_name)
+</code></pre>
+
+<p>例子：</p>
+
+<p>下例将重命名一个已经存在的文件test1.txt。</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+import os
+
+# 重命名文件test1.txt到test2.txt。
+os.rename( &quot;test1.txt&quot;, &quot;test2.txt&quot; )
+</code></pre>
+
+<h3 id="remove-方法">remove()方法</h3>
+
+<p>你可以用remove()方法删除文件，需要提供要删除的文件名作为参数。</p>
+
+<p>语法：</p>
+
+<pre><code>os.remove(file_name)
+</code></pre>
+
+<p>例子：</p>
+
+<p>下例将删除一个已经存在的文件test2.txt。</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+import os
+
+# 删除一个已经存在的文件test2.txt
+os.remove(&quot;text2.txt&quot;)
+</code></pre>
+
+<h2 id="python里的目录">Python里的目录：</h2>
+
+<p>所有文件都包含在各个不同的目录下，不过Python也能轻松处理。os模块有许多方法能帮你创建，删除和更改目录。</p>
+
+<h3 id="mkdir-方法">mkdir()方法</h3>
+
+<p>可以使用os模块的mkdir()方法在当前目录下创建新的目录们。你需要提供一个包含了要创建的目录名称的参数。</p>
+
+<p>语法：</p>
+
+<pre><code>os.mkdir(&quot;newdir&quot;)
+</code></pre>
+
+<p>例子：</p>
+
+<p>下例将在当前目录下创建一个新目录test。</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+import os
+
+# 创建目录test
+os.mkdir(&quot;test&quot;)
+</code></pre>
+
+<h3 id="chdir-方法">chdir()方法</h3>
+
+<p>可以用chdir()方法来改变当前的目录。chdir()方法需要的一个参数是你想设成当前目录的目录名称。</p>
+
+<p>语法：</p>
+
+<pre><code>os.chdir(&quot;newdir&quot;)
+</code></pre>
+
+<p>例子：</p>
+
+<p>下例将进入&rdquo;/home/newdir&rdquo;目录。</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+import os
+
+# 将当前目录改为&quot;/home/newdir&quot;
+os.chdir(&quot;/home/newdir&quot;)
+</code></pre>
+
+<p>getcwd()方法：</p>
+
+<p>getcwd()方法显示当前的工作目录。</p>
+
+<p>语法：</p>
+
+<pre><code>os.getcwd()
+</code></pre>
+
+<p>例子：</p>
+
+<p>下例给出当前目录：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+import os
+
+# 给出当前的目录
+os.getcwd()
+</code></pre>
+
+<h3 id="rmdir-方法">rmdir()方法</h3>
+
+<p>rmdir()方法删除目录，目录名称以参数传递。</p>
+
+<p>在删除这个目录之前，它的所有内容应该先被清除。</p>
+
+<p>语法：</p>
+
+<pre><code>os.rmdir('dirname')
+</code></pre>
+
+<p>例子：</p>
+
+<p>以下是删除&rdquo; /tmp/test&rdquo;目录的例子。目录的完全合规的名称必须被给出，否则会在当前目录下搜索该目录。</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+import os
+
+# 删除”/tmp/test”目录
+os.rmdir( &quot;/tmp/test&quot;  )
+</code></pre>
+
+<h2 id="文件-目录相关的方法">文件、目录相关的方法</h2>
+
+<p>三个重要的方法来源能对Windows和Unix操作系统上的文件及目录进行一个广泛且实用的处理及操控，如下：</p>
+
+<ul>
+<li><p>File 对象方法: file对象提供了操作文件的一系列方法。</p></li>
+
+<li><p>OS 对象方法: 提供了处理文件及目录的一系列方法。</p></li>
+</ul>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/python-%E6%95%B0%E5%AD%97/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Python 数字</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/python-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4/">
+            <span class="next-text nav-default">Python 日期和时间</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

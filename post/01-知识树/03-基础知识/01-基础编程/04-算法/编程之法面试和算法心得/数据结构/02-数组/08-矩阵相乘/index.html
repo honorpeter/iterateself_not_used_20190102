@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>08 矩阵相乘 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="矩阵相乘 题目描述 请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。 分析与解法 根据wikipedia上的介绍：两个矩阵的乘法仅当第一个矩阵" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/02-%E6%95%B0%E7%BB%84/08-%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="08 矩阵相乘" />
+<meta property="og:description" content="矩阵相乘 题目描述 请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。 分析与解法 根据wikipedia上的介绍：两个矩阵的乘法仅当第一个矩阵" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/02-%E6%95%B0%E7%BB%84/08-%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98/" /><meta property="article:published_time" content="2018-08-03T14:17:44&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T14:17:44&#43;00:00"/>
+<meta itemprop="name" content="08 矩阵相乘">
+<meta itemprop="description" content="矩阵相乘 题目描述 请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。 分析与解法 根据wikipedia上的介绍：两个矩阵的乘法仅当第一个矩阵">
+
+
+<meta itemprop="datePublished" content="2018-08-03T14:17:44&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T14:17:44&#43;00:00" />
+<meta itemprop="wordCount" content="1233">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="08 矩阵相乘"/>
+<meta name="twitter:description" content="矩阵相乘 题目描述 请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。 分析与解法 根据wikipedia上的介绍：两个矩阵的乘法仅当第一个矩阵"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">08 矩阵相乘</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 1233 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#矩阵相乘">矩阵相乘</a>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+<li><a href="#分析与解法">分析与解法</a>
+<ul>
+<li><a href="#解法一-暴力解法">解法一、暴力解法</a></li>
+<li><a href="#解法二-strassen算法">解法二、Strassen算法</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="矩阵相乘">矩阵相乘</h1>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>请编程实现矩阵乘法，并考虑当矩阵规模较大时的优化方法。</p>
+
+<h2 id="分析与解法">分析与解法</h2>
+
+<p>根据wikipedia上的介绍：两个矩阵的乘法仅当第一个矩阵A的行数和另一个矩阵B的列数相等时才能定义。如A是m×n矩阵，B是n×p矩阵，它们的乘积AB是一个m×p矩阵，它的一个元素其中 1 ≤ i ≤ m, 1 ≤ j ≤ p。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/DfDjE4k9EK.png?imageslim" alt="mark" /></p>
+
+<p>值得一提的是，矩阵乘法满足结合律和分配率，但并不满足交换律，如下图所示的这个例子，两个矩阵交换相乘后，结果变了：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/5Gce2cFDc4.png?imageslim" alt="mark" /></p>
+
+<p>下面咱们来具体解决这个矩阵相乘的问题。</p>
+
+<h3 id="解法一-暴力解法">解法一、暴力解法</h3>
+
+<p>其实，通过前面的分析，我们已经很明显的看出，两个具有相同维数的矩阵相乘，其复杂度为O(n^3)，参考代码如下：</p>
+
+<pre><code class="language-cpp">//矩阵乘法，3个for循环搞定
+void MulMatrix(int** matrixA, int** matrixB, int** matrixC)
+{
+    for(int i = 0; i &lt; 2; ++i)
+    {
+        for(int j = 0; j &lt; 2; ++j)
+        {
+            matrixC[i][j] = 0;
+            for(int k = 0; k &lt; 2; ++k)
+            {
+                matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
+            }
+        }
+    }
+}
+</code></pre>
+
+<h3 id="解法二-strassen算法">解法二、Strassen算法</h3>
+
+<p>在解法一中，我们用了3个for循环搞定矩阵乘法，但当两个矩阵的维度变得很大时，O（n^3）的时间复杂度将会变得很大，于是，我们需要找到一种更优的解法。</p>
+
+<p>一般说来，当数据量一大时，我们往往会把大的数据分割成小的数据，各个分别处理。遵此思路，如果丢给我们一个很大的两个矩阵呢，是否可以考虑分治的方法循序渐进处理各个小矩阵的相乘，因为我们知道一个矩阵是可以分成更多小的矩阵的。</p>
+
+<p>如下图，当给定一个两个二维矩阵A B时：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/LD4A1AGcbA.png?imageslim" alt="mark" /></p>
+
+<p>这两个矩阵A B相乘时，我们发现在相乘的过程中，有8次乘法运算，4次加法运算：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/3hJ7C6k16i.png?imageslim" alt="mark" /></p>
+
+<p>矩阵乘法的复杂度主要就是体现在相乘上，而多一两次的加法并不会让复杂度上升太多。故此，我们思考，是否可以让矩阵乘法的运算过程中乘法的运算次数减少，从而达到降低矩阵乘法的复杂度呢？答案是肯定的。</p>
+
+<p>1969年，德国的一位数学家Strassen证明O(N^3)的解法并不是矩阵乘法的最优算法，他做了一系列工作使得最终的时间复杂度降低到了O(n^2.80)。</p>
+
+<p>他是怎么做到的呢？还是用上文A B两个矩阵相乘的例子，他定义了7个变量：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/5AB2mkfEik.png?imageslim" alt="mark" /></p>
+
+<p>如此，Strassen算法的流程如下：</p>
+
+<ul>
+<li>两个矩阵A B相乘时，将A, B, C分成相等大小的方块矩阵：</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/55aA0FkHCe.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>可以看出C是这么得来的：</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/7FhJ1H3hlb.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>现在定义7个新矩阵（*读者可以思考下，这7个新矩阵是如何想到的*）：</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/DE66bAJb5m.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>而最后的结果矩阵C 可以通过组合上述7个新矩阵得到：</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/ckH8DJB3lg.png?imageslim" alt="mark" /></p>
+
+<p>表面上看，Strassen算法仅仅比通用矩阵相乘算法好一点，因为通用矩阵相乘算法时间复杂度是 $n^3=n^{\log_28}$ ，而Strassen算法复杂度只是
+$O(n^{\log_27})=O(n^{2.807})$。但随着n的变大，比如当 $n &gt;&gt; 100$ 时，Strassen算法是比通用矩阵相乘算法变得更有效率。</p>
+
+<p>如下图所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/Jk6dhdIJmK.png?imageslim" alt="mark" /></p>
+
+<p>根据wikipedia上的介绍，后来，Coppersmith–Winograd 算法把 N* N大小的矩阵乘法的时间复杂度降低到了：$O(n^{2.375477})$，而2010年，Andrew Stothers再度把复杂度降低到了 $O(n^{2.3736})$ ，一年后的2011年，Virginia Williams把复杂度最终定格为：$O(n^{2.3727})$ 。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/01-%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/08-bloom-filter/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">08 Bloom filter</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%AE%97%E6%B3%95/">
+            <span class="next-text nav-default">海量数据算法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

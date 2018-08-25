@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>C&#43;&#43; 字符串数组与字符串指针 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="字符串数组与字符串指针 TODO 还是再深入理解下。 在C语言中，对字符串的操作主要有两种方式， 一是使用字符数组，char str[] 二是使用字符指针。 那么二者有" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="C&#43;&#43; 字符串数组与字符串指针" />
+<meta property="og:description" content="字符串数组与字符串指针 TODO 还是再深入理解下。 在C语言中，对字符串的操作主要有两种方式， 一是使用字符数组，char str[] 二是使用字符指针。 那么二者有" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%95%B0%E7%BB%84%E4%B8%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/" /><meta property="article:published_time" content="2018-08-05T19:12:49&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-05T19:12:49&#43;00:00"/>
+<meta itemprop="name" content="C&#43;&#43; 字符串数组与字符串指针">
+<meta itemprop="description" content="字符串数组与字符串指针 TODO 还是再深入理解下。 在C语言中，对字符串的操作主要有两种方式， 一是使用字符数组，char str[] 二是使用字符指针。 那么二者有">
+
+
+<meta itemprop="datePublished" content="2018-08-05T19:12:49&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-05T19:12:49&#43;00:00" />
+<meta itemprop="wordCount" content="1688">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="C&#43;&#43; 字符串数组与字符串指针"/>
+<meta name="twitter:description" content="字符串数组与字符串指针 TODO 还是再深入理解下。 在C语言中，对字符串的操作主要有两种方式， 一是使用字符数组，char str[] 二是使用字符指针。 那么二者有"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">C&#43;&#43; 字符串数组与字符串指针</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-05 </span>
+        
+        <span class="more-meta"> 1688 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#字符串数组与字符串指针">字符串数组与字符串指针</a>
+<ul>
+<li>
+<ul>
+<li><a href="#一-字符数组">一、字符数组</a></li>
+<li><a href="#二-字符指针">二、字符指针</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="字符串数组与字符串指针">字符串数组与字符串指针</h1>
+
+<p>TODO</p>
+
+<ul>
+<li>还是再深入理解下。</li>
+</ul>
+
+<p>在C语言中，对字符串的操作主要有两种方式，</p>
+
+<p>一是使用字符数组，<code>char str[]</code>
+二是使用字符指针。</p>
+
+<p>那么二者有什么区别呢？下面将分述二者的使用，最后进行比较。</p>
+
+<h3 id="一-字符数组">一、字符数组</h3>
+
+<p>​使用<code>char str[]</code>定义一个字符数组<code>str</code>，中括号内可以写上数字表示数组大小，也可以不写。如果不写数字，则必须为字符数组提供初始值，以便编译器进行内存分配。</p>
+
+<p>可以使用字符串字面值(string literal)来初始化字符数组，也可使用字符字面值(character literal)初始化，如：</p>
+
+<pre><code class="language-cpp">char str1[10]=&quot;Hello&quot;;
+char str2[]=&quot;World&quot;;
+char str3[]={'H','e','l','l','o'};
+</code></pre>
+
+<p>只能对字符数组元素的赋值，而不能用赋值语句对整个数组赋值，如：</p>
+
+<pre><code class="language-cpp">char str4[10];
+str4={'H','e','l','l','o'};    // 错误
+str4=&quot;Hello&quot;;                  // 错误
+str4[0]='H';str4[1]='e';str4[2]='l';str4[3]='l';str4[4]='o';   // 正确
+</code></pre>
+
+<p>可以使用循环将字符数组中的字符一个一个输出，也可以使用 <code>cout&lt;&lt;str1</code> 直接输出整个数组。</p>
+
+<p>需要注意的是，上述代码中 <code>str1</code> 和 <code>str2</code> 是C风格字符串，而<code>str3</code>不是。C 风格字符串，是指以<code>\0</code>结尾的字符数组。C++为了兼容C，而保留了C中字符串的使用方法。</p>
+
+<p><code>str1</code>和<code>str2</code>使用字符串字面值进行初始化，字符串字面值使用<code>\0</code>表示字符串结束。因此<code>str2</code>长度为6，需要将<code>\0</code>计算在内。使用<code>strlen</code>函数，计算的是字符串的实际长度，不包含<code>\0</code>。<span style="color:red;">这些不统一真的会令人觉得麻烦，还是说有什么深意？确认下。</span></p>
+
+<p>而<code>str3</code>则不一样，它没有<code>\0</code>作为结束标志，因而不是C风格字符串，使用<code>cout&lt;&lt;str3</code>可能会出现意想不到的结果。</p>
+
+<h3 id="二-字符指针">二、字符指针</h3>
+
+<p>可以使用 <code>char *str</code> 指向一个字符串。如：</p>
+
+<pre><code class="language-cpp">char *ptr=&quot;C++&quot;;
+char strArr[]=&quot;C++&quot;;
+char *ptr2=strArr;
+</code></pre>
+
+<p>使用<code>cout&lt;&lt;ptr</code>即可输出整个字符串，而使用<code>cout&lt;&lt;*ptr</code>则输出字符串的首字符。</p>
+
+<p>字符指针也可指向 C 风格字符串，如<code>ptr</code>就是指向的C风格字符串。如果让<code>ptr</code>指向上节中的<code>str3</code>，输出<code>ptr</code>会出现同样的意想不到的结果。毕竟数组名其实就是一种指针。</p>
+
+<p>三、区别</p>
+
+<p>前面简单介绍了一下两种操作字符串的方法，这部分进行比较，是本文的重点。如下代码：</p>
+
+<pre><code class="language-cpp">char s[]=&quot;abc&quot;;
+char *ptr=&quot;abc&quot;;
+cout&lt;&lt;s&lt;&lt;endl;               // abc
+cout&lt;&lt;*s&lt;&lt;endl;              // a
+cout&lt;&lt;&amp;s&lt;&lt;endl;              // 地址
+cout&lt;&lt;(s+1)&lt;&lt;endl;           // bc
+cout&lt;&lt;*(s+1)&lt;&lt;endl;          // b
+cout&lt;&lt;&amp;s[1]&lt;&lt;endl&lt;&lt;endl;     // a
+cout&lt;&lt;ptr&lt;&lt;endl;             // abc
+cout&lt;&lt;*ptr&lt;&lt;endl;            // a
+cout&lt;&lt;&amp;ptr&lt;&lt;endl;            // 地址
+cout&lt;&lt;(ptr+1)&lt;&lt;endl;         // bc
+cout&lt;&lt;*(ptr+1)&lt;&lt;endl;        // b
+cout&lt;&lt;&amp;ptr[1]&lt;&lt;endl;         // a
+</code></pre>
+
+<p>这些代码应该能够说明<code>char s[]</code>和<code>char *ptr</code>之间的相似点了。它们都是指向字符串的指针。</p>
+
+<p>下面说二者的不同之处。如下一段代码：</p>
+
+<pre><code class="language-cpp">char ss[]=&quot;C++&quot;;
+ss[0]='c';                  // 合法
+char *p=&quot;C++&quot;;
+p[0]='c';                   // 合法但不正确
+</code></pre>
+
+<p>该段代码在 VS2010 下编译可以通过，但是运行时程序会停止工作，为什么呢？原因在于<code>p[0]='c'</code>这一语句。该语句试图修改<code>p</code>指向的字符串的首个字符，出现了错误。</p>
+
+<p>原因在于两种方式对字符数组操作的机制不同。使用<code>char *p=&quot;C++&quot;</code>语句后，编译器在内存的文字常量区分配一块内存，保存<code>&quot;C++&quot;&quot;</code>这一字符串字面值，然后在栈上分配内存保存<code>p</code>，<code>p</code>的内容为<code>&quot;C++&quot;</code>的地址。<code>p[0]='c'</code>试图修改常量<code>&quot;C++&quot;</code>，程序当然就会崩溃了。而<code>char ss[]=&quot;C++&quot;</code>语句，定义了一个数组，编译器为其在栈上分配了内存空间，因而可以进行修改操作。</p>
+
+<p>因此，可以总结如下：</p>
+
+<ul>
+<li><p><code>char ss[]</code>定义了一个数组，<code>ss</code>可认为是一个常指针，<code>ss</code>不可改变，但<code>ss</code>指向的内容可以发生改变。</p></li>
+
+<li><p><code>char *p</code>定义了一个可变指针，<code>p</code>可以指向其它对象。但对于<code>char *p=&quot;abc&quot;</code>这样的情况，<code>p</code>指向的是常量，故内容不能改变。</p></li>
+</ul>
+
+<p>如下代码进一步说明<code>char ss[]</code>和<code>char *p</code>的区别：</p>
+
+<pre><code class="language-cpp">char *strA()
+{
+    char str[]=&quot;Hello&quot;;
+​    return str;
+}
+</code></pre>
+
+<p>调用该函数，不一定能够得到正确的结果。因为<code>str</code>定义了一个局部数据，是局部变量，存在于函数<code>strA</code>中的栈帧中。当函数调用完成后，栈帧恢复到函数<code>strA</code>调用前的状态，临时空间被重置，为函数分配的栈空间被收回，<code>str</code>所指向的地址也就不存在了。</p>
+
+<p>将上述代码修改：</p>
+
+<pre><code class="language-cpp">char *strA()
+{
+​    char *str=&quot;Hello&quot;;
+​    return str;
+}
+</code></pre>
+
+<p>该函数能够正常运行，因为<code>str</code>指向的字符串字面值被保存在只读的数据段，是全局的，当函数调用完成后，<code>str</code>指向的地址未发生变化。<span style="color:red;">厉害。再深入理解下。</span></p>
+
+<p>综上，可以看出使用<code>char []</code>较容易出错，可能出现不确定的结果。C++提供的<code>string</code>类相比之下，要安全的多了。</p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://blog.csdn.net/qq_35212671/article/details/53440439">字符串数组 和 字符串指针 的区别</a></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-05</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">C&#43;&#43; 内存分配</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/02-%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/01-%E5%9F%BA%E6%9C%AC%E5%86%85%E7%BD%AE%E7%B1%BB%E5%9E%8B/">
+            <span class="next-text nav-default">01 基本内置类型</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>DL 卷积神经网络基本部件 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="ORIGINAL 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 卷积神经网络基本 在了解了深度卷积神 一些重要部件(或模 从原始数据(raw d 2.1 深度学习的一个重 表示学习(re" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E6%9C%AC%E9%83%A8%E4%BB%B6/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="DL 卷积神经网络基本部件" />
+<meta property="og:description" content="ORIGINAL 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 卷积神经网络基本 在了解了深度卷积神 一些重要部件(或模 从原始数据(raw d 2.1 深度学习的一个重 表示学习(re" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E6%9C%AC%E9%83%A8%E4%BB%B6/" /><meta property="article:published_time" content="2018-06-12T22:19:15&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-12T22:19:15&#43;00:00"/>
+<meta itemprop="name" content="DL 卷积神经网络基本部件">
+<meta itemprop="description" content="ORIGINAL 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 卷积神经网络基本 在了解了深度卷积神 一些重要部件(或模 从原始数据(raw d 2.1 深度学习的一个重 表示学习(re">
+
+
+<meta itemprop="datePublished" content="2018-06-12T22:19:15&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-12T22:19:15&#43;00:00" />
+<meta itemprop="wordCount" content="6698">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DL 卷积神经网络基本部件"/>
+<meta name="twitter:description" content="ORIGINAL 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 卷积神经网络基本 在了解了深度卷积神 一些重要部件(或模 从原始数据(raw d 2.1 深度学习的一个重 表示学习(re"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">DL 卷积神经网络基本部件</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-12 </span>
+        
+        <span class="more-meta"> 6698 words </span>
+        <span class="more-meta"> 14 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li>《解析卷积神经网络》魏秀参</li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p>卷积神经网络基本</p>
+
+<p>在了解了深度卷积神</p>
+
+<p>一些重要部件(或模</p>
+
+<p>从原始数据(raw d</p>
+
+<p>2.1</p>
+
+<p>深度学习的一个重 表示学习(represe: 学习算 selectio</p>
+
+<p>假设样</p>
+
+<p>学习时</p>
+
+<p>难为无</p>
+
+<p>端到端</p>
+
+<p>1勺</p>
+
+<p>使得卷积神经网络可以直接</p>
+
+<p>终任务。</p>
+
+<p>(end-to-end manner),属 深度学习区别于其他机器</p>
+
+<p>其他机器学习算法，如特征选择算法(feature 〔法、集成学习(ensemble learning)算法等，均 在此基础上设计具体的机器学习算法。在深度</p>
+
+<p>使用人工特征(hand-crafted feature),但“巧妇</p>
+
+<p>征的优劣往往很大程度决定了最终的任务精度。</p>
+
+<p>习分支-特征工程(feature engineering)。特</p>
+
+<p>tation learning)是一个广泛的概念，并不特指深度学习。实际上在深度学 I于表示学习的研究，如“词包”模型(bag-of-word model)和浅层自动编 □ders)等。</p>
+
+<p>征工程在数据挖掘的工业界应用以及计算机视觉应用中都是深度学习时代之前</p>
+
+<p>非常重要和关键的环节。</p>
+
+<p>特别是计算机视觉领域，在深度学习之前，针对图像、视频等对象的表</p>
+
+<p>示可谓“百花齐放、百家争鸣”。仅拿图像表示(image representation)举 例，从表示范围可将其分为全局特征描述子(global descriptor)和局部特征 (local descriptor)，而单说局部特征描述子就有数十种之多，如SIFT [62]、</p>
+
+<p>PCA-SIFT [48]、 SURF [2]、HOG [13]、 steerable filters [18]&hellip;&hellip;同时，不同局</p>
+
+<p>部描述子擅长的任务又不尽相同，一些适用于边缘检测、一些适用于纹理识 别，这便使得实际应用中挑选合适的特征描述子成为一件令人头疼的麻烦 事。对此，甚至有研究者于2004年在相关领域国际顶级期刊TPAMI (IEEE Transactions on Pattern Recognition and Machine Intelligence)上发表实验性 综述 “A Performance Evaluation of Local Descriptors” [66]来系统性的理解不 同局部特征描述子的作用，至今已获得近8000次引用。而在深度学习普及之 后，人工特征已逐渐被表示学习根据任务自动需求“学到”的特征表示所取代5。</p>
+
+<p>更重要的是，过去解决一个人工智能问题(以图像识别为例)往往通过分 治法将其分解为预处理、特征提取与选择、分类器设计等若干步骤。分治法的 动机是将图像识别的母问题分解为简单、可控且清晰的若干小的子问题。不过 分步解决子问题时，尽管可在子问题上得到最优解，但子问题上的最优并不意 味着就能得到全局问题的最后解。对此，深度学习则为我们提供了另一种范式 (paradigm)即“端到端”学习方式，整个学习流程并不进行人为的子问题划分， 而是完全交给深度学习模型直接学习从原始输入到期望输出的映射。相比分治 策略，“端到端”的学习方式具有协同增效的优势，有更大可能获得全局最优解。</p>
+
+<p>如图2.1所示，对深度模型而言，其输人数据是未经任何人为加工的原始样 本形式，后续则是堆叠在输入层上的众多操作层。这些操作层整体可看作一个 复杂的函数fcNN,最终损失函数由数据损失(data loss)和模型参数的正则化</p>
+
+<p>职参始为下</p>
+
+<p>re行原射 。 {进从映用 失型为据作 损模象数的</p>
+
+<p>组传接随/</p>
+
+<p>同向直}成</p>
+
+<p>的 。^I&rsquo;B本本</p>
+
+<p>模各而为个</p>
+
+<p>度rn”，射各</p>
+
+<p>失可 5 务 损程尨做 终过陆耐 最隊餅目</p>
+
+<p>在S觸即</p>
+
+<p>则的1,—</p>
+
+<p>对抽</p>
+
+<p>o</p>
+
+<p>n</p>
+
+<p>o</p>
+
+<p>a</p>
+
+<p>iz</p>
+
+<p>a</p>
+
+<p>gu</p>
+
+<p>re</p>
+
+<p>失</p>
+
+<p>损</p>
+
+<p>卯</p>
+
+<p>正</p>
+
+<p>原始数据</p>
+
+<p>(xi,yi)</p>
+
+<p>n标凼数</p>
+
+<p>数据损5</p>
+
+<p>图。</p>
+
+<p>2.2网络符号定义
+同上一章类似[89],在此用三维张量x1 G RHlxWlxDl表示卷积神经网络第l 层的输人，用三元组(i1 ,j1,d1)来指示该张量对应第i1行，第j1列，第d1通 道(channel)位置的元素，其中 0 S i1 &lt; H1, 0 &lt; j1 &lt; W1, 0 &lt; d1 &lt; D1,如图 2.2所示。不过，一般在工程实践中，由于采用了 mini-batch训练策略，网络第 l层输人通常是一个四维张量，即x1 G RHlxWlxDxN，其中N为mini-batch 每一批的样本数。</p>
+
+<p>以N = 1为例，x1经过第l层操作处理后可得x1+1,为了后面章节书写方便, 特将此简写为y以作为第l层对应的输出，即y = x1+1 g RHl+1xW:+〜以十1。</p>
+
+<p>图2+2:卷积</p>
+
+<p>2.3卷积层
+卷积层(convolution layer)是卷积神经网络中的基础操作，甚至在网络最后起 分类作用的全连接层在工程实现时也是由卷积操作替代的。</p>
+
+<p>2.3.1什么是卷积？</p>
+
+<p>卷积运算实际是分析数学中的一种运算方式，在卷积神经网络中通常是仅涉及 离散卷积的情形。下面以 dl =1的情形为例介绍二维场景的卷积操作。</p>
+
+<p>假设输人图像(输人数据)为如图2.3中右侧的5 x 5矩阵，其对应的卷积核 (亦称卷积参数，convolution kernel 或 convolution filter)为一■个 3 x 3 的矩阵。 同时，假定卷积操作时每做一次卷积，卷积核移动一个像素位置，即卷积步长 (stride)为 1。</p>
+
+<p>第一次卷积操作从图像(0,0)像素开始，由卷积核中参数与对应位置图像像 素逐位相乘后累加作为一次卷积操作结果，即 1x 1+2x 0+3x 1+6x 0+</p>
+
+<p>7 x 1 + 8 x 0 + 9 x 1 + 8 x 0 + 7 x 1 = 1+ 3 + 7 +9 + 7 = 27,如图 2.4a所示。 类似地，在步长为1时，如图2.4b至图2.4d所示，卷积核按照步长大小在输人 图像上从左至右自上而下依次将卷积操作进行下去，最终输出 3 x 3 大小的卷 积特征，同时该结果将作为下一层操作的输人。</p>
+
+<p>与之类似，若三维情形下的卷积层l的输人张量为x1 G RHlxWl-Dl，该层 卷积核为f1 e RHxWxDl。三维输人时卷积操作实际只是将二维卷积扩展到了 对应位置的所有通道上(即D&rsquo;1)，最终将一次卷积处理的所有HWD1个元素</p>
+
+<p>2.3.卷积层</p>
+
+<p>1</p>
+
+<p>0</p>
+
+<p>1</p>
+
+<p>0</p>
+
+<p>1</p>
+
+<p>0</p>
+
+<p>1</p>
+
+<p>0</p>
+
+<p>1</p>
+
+<p>卷积核</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>4</p>
+
+<p>5</p>
+
+<p>6</p>
+
+<p>7</p>
+
+<p>8</p>
+
+<p>9</p>
+
+<p>0</p>
+
+<p>9</p>
+
+<p>8</p>
+
+<p>7</p>
+
+<p>6</p>
+
+<p>5</p>
+
+<p>4</p>
+
+<p>3</p>
+
+<p>2</p>
+
+<p>1</p>
+
+<p>0</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>4</p>
+
+<p>5</p>
+
+<p>图2.3:二维场景下的卷积核与输人数据。图左为一个3 x 3的卷积核，图右为 5x5的输人数据。</p>
+
+<p>求和作为该位置卷积结果。如图2.5所示。</p>
+
+<p>进一步地，若类似f1这样的卷积核有D个，则在同一个位置上可得到</p>
+
+<p>1 X 1 x 1 x D维度的卷积输出，而D即为第l +1层特征x1+1的通道数D1+1。 形式化的卷积操作可表示为：</p>
+
+<p>yil+1,j</p>
+
+<p>1+i,jl+1+j,dl</p>
+
+<p>(2+1)</p>
+
+<p>其中， (il+1,jl+1) 为卷</p>
+
+<p>(2+2) (2+3)</p>
+
+<p>l+1</p>
+
+<p>需指出的是，式2+1中的fi,j,di,d可视作学习到的权重(weight),可以发现该 项权重对不同位置的所有输人都是相同的，这便是卷积层“权值共享”(weight sharing)特性。除此之外，通常还会在yii+i,ji+i,d上加人偏置项(bias term) bd。在误差反向传播时可针对该层权重和偏置项分别设置随机梯度下降的学习 率。当然根据实际问题需要，也可以将某层偏置项设置为全0,或将学习率设置 为0,以起到固定该层偏置或权重的作用。此外，卷积操作中有两个重要的超参 数(hyper parameters):卷积核大小(filter size)和卷积步长(stride)。合适的 超参数设置会对最终模型带来理想的性能提升，详细内容请参见第11.1节内容。</p>
+
+<dl>
+<dt>(a)第一次卷积操作及得到的卷积特征</dt>
+</dl>
+
+<p>:b)第二次卷积操作及得到的卷积特征。</p>
+
+<dl>
+<dt>&copy;第三次卷积操作及得到的卷积特征</dt>
+</dl>
+
+<p>:d)第九次卷积操作及得到的卷积特征。</p>
+
+<p>图2+4:卷积操作示例。</p>
+
+<p>2.3.2</p>
+
+<p>可以看出卷积是一种局部操作,通过一定大小的卷积核作用于局部图像区域获 得图像的局部信息。本节以三种边缘卷积核(亦可称为滤波器)来说明卷积神 经网络中卷积操作的作用。如图2.6,我们在原图上分别作用整体边缘滤波器、 横向边缘滤波器和纵向边缘滤波器，这三种滤波器(卷积核)分别为式2.4中的</p>
+
+<p>0 -40</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>1</p>
+
+<p>1</p>
+
+<p>0</p>
+
+<p>-1</p>
+
+<p>-4 16 -4</p>
+
+<p>，Kh =</p>
+
+<p>0</p>
+
+<p>0</p>
+
+<p>0</p>
+
+<p>，Kv =</p>
+
+<p>2</p>
+
+<p>0</p>
+
+<p>-2</p>
+
+<p>0 -40</p>
+
+<p>-1</p>
+
+<p>-2</p>
+
+<p>-1</p>
+
+<p>1</p>
+
+<p>0</p>
+
+<p>-1</p>
+
+<p>(2+4)</p>
+
+<p>试想，若原图像素(x,y)处可能存在物体边缘，则其四周(x- 1,y), (x +1,y), (x,y - 1), (x,y +1)处像素值应与(x,y)处有显著差异。此时，如作用以整体 边缘滤波器Ke,可消除四周像素值差异小的图像区域而保留显著差异区域，以</p>
+
+<p>2.4.汇合层</p>
+
+<p>图2+5:三维场景下的卷积核与输人数据。图左卷积核大小为3 x 4 x 3,图右为 在该位置卷积操作后得到的 1 x 1 x 1 的输出结果。</p>
+
+<p>此可检测出物体边缘信息。同理，类似Kh和Kv6的横向、纵向边缘滤波器可 分别保留横向、纵向的边缘信息。</p>
+
+<p>事实上,卷积网络中的卷积核参数是通过网络训练学出的,除了可以学到类 似的横向、纵向边缘滤波器,还可以学到任意角度的边缘滤波器。当然,不仅 如此，检测颜色、形状、纹理等等众多基本模式(pattern)的滤波器(卷积核) 都可以包含在一个足够复杂的深层卷积神经网络中。通过“组合” 7这些滤波器 卷积核)以及随着网络后续操作的进行,基本而一般的模式会逐渐被抽象为具 有高层语义的“概念”表示,并以此对应到具体的样本类别。颇有“盲人摸象” 后,将各自结果集大成之意。</p>
+
+<p>2.4汇合层
+本节讨论第l层操作为汇合(pooling) 8时的情况。通常使用的汇合操作为平 均值汇合(average-pooling)和最大值汇合(max-pooling),需要指出的是, 同卷积层操作不同，汇合层不包含需要学习的参数。使用时仅需指定汇合类 型(average或max等)、汇合操作的核大小(kernel size)和汇合操作的步长</p>
+
+<p>(a)原图。</p>
+
+<p>&copy;横向边缘滤波器K</p>
+
+<p>(stride</p>
+
+<p>2.4.1什么是汇合？</p>
+
+<p>遵循上一节的记号，第l层汇合核可表示为P1 G RHxWxDl。平均值(最大值)</p>
+
+<p>汇合在每次操作时,将汇合核覆盖区域中所有值的平均值(最大值)作为汇合</p>
+
+<p>结果，即：</p>
+
+<p>y? xil+1 xH+i,jl+1 xW+j,dl .</p>
+
+<p>0&lt;i&lt;H,0&lt;j&lt;W</p>
+
+<p>(2.5)</p>
+
+<p>(2.6)</p>
+
+<p>yiw，ji+&rsquo;d = 0&lt;i&lt;maxj&lt;wxii+1 xh+i,jl+1 xW+j,dl ,</p>
+
+<p>其中，0 S V+1 &lt; H*1, 0 g 夕十1 &lt; W*1, 0 g d &lt; Dl+i = Dl。</p>
+
+<p>图2.7为2 x 2大小、步长为1的最大值汇合操作示例。</p>
+
+<p>除了最常用的上述两种汇合操作外，随机汇合(stochastic-pooling) [95]则</p>
+
+<p>介于二者之间。随机汇合操作非常简单，只需对输人数据中的元素按照一定概</p>
+
+<p>率值大小随机选择，并不像最大值汇合那样永远只取那个最大值元素。对随机</p>
+
+<p>2.4.汇合层</p>
+
+<p>(a)第一次汇合操作及得到的汇合特征。</p>
+
+<p>图2+7:最大值汇合操作示例</p>
+
+<p>汇合而言，元素值大的响应(activation)被选中的概率也大，反之易然。可以 说,在全局意义上,随机汇合与平均值汇合近似；在局部意义上,则服从最大 值汇合的准则。</p>
+
+<p>2.4.2汇合操作的作用</p>
+
+<p>在上图的例子中可以发现,汇合操作后的结果相比其输人降小了,其实汇合操 作实际上就是一种“降采样”(down-sampling)操作。另一方面，汇合也看成 是一个用P■范数(p-norm) 9作为非线性映射的“卷积”操作，特别的，当p趋 近正无穷时就是最常见的最大值汇合。</p>
+
+<p>汇合层的引人是仿照人的视觉系统对视觉输人对象进行降维(降采样)和抽</p>
+
+<p>象。在卷积神经网络过去的工作中,研究者普遍认为汇合层有如下三种功效：</p>
+
+<ol>
+<li>特征不变性(feature invariant)。汇合操作使模型更关注是否存在某些特 征而不是特征具体的位置。可看作是一种很强的先验,使特征学习包含某</li>
+</ol>
+
+<p>种程度自由度,能容忍一些特征微小的位移。</p>
+
+<ol>
+<li>特征降维。由于汇合操作的降采样作用，汇合结果中的一个元素对应于原 输人数据的一个子区域(sub-region),因此汇合相当于在空间范围内做了 维度约减(spatially dimension reduction),从而使模型可以抽取更广范 围的特征。同时减小了下一层输人大小,进而减小计算量和参数个数。</li>
+</ol>
+
+<p>3.在一定程度防止过拟合(overfitting),更方便优化</p>
+
+<p>不过,汇合操作并不是卷积神经网络必须的元件或操作。近期,德国著名高校 弗赖堡大学(University of Freiburg)的研究者提出用一种特殊的卷积操作(即, “stride convolutional layer”)来代替汇合层实现降采样，进而钩建一个只含卷 积操作的网络(all convolution nets)，其实验结果显示这种改造的网络可以达 到、甚至超过传统卷积神经网络(卷积层汇合层交替)的分类精度［77］。</p>
+
+<p>2.5激活函数
+激活函数(activation function)层又称非线性映射(non-linearity mapping)层, 顾名思义,激活函数的引人为的是增加整个网络的表达能力(即非线性)。否则, 若干线性操作层的堆叠仍然只能起到线性映射的作用,无法形成复杂的函数。 在实际使用中,有多达十几种激活函数可供选择,有关激活函数选择和对比的 详细内容请参见第8章。本节以Sigmoid型激活函数和ReLU函数为例，介绍 涉及激活函数的若干基本概念和问题。</p>
+
+<p>直观上,激活函数模拟了生物神经元特性：接受一组输人信号并产生输出。 在神经科学中,生物神经元通常有一个阈值,当神经元所获得的输人信号累积 效果超过了该阈值,神经元就被激活而处于兴奋状态；否则处于抑制状态。在 人工神经网络中，因Sigmoid型函数可以模拟这一生物过程，从而在神经网络</p>
+
+<p>发展历史进程中曾处于相当重要的地位。</p>
+
+<p>(j(x)=</p>
+
+<p>1</p>
+
+<p>1 + exp(-x)</p>
+
+<p>(2+7)</p>
+
+<p>其函数形状如图2.8a所示。很明显能看出，经过Sigmoid型函数作用后，输出 响应的值域被压缩到［0,1］之间，而0对应了生物神经元的“抑制状态”，1则 恰好对应了 “兴奋状态”。不过再深人的观察还能发现在Sigmoid函数两端，对 于大于5 (或小于-5)的值无论多大(或多小)都会压缩到1 (或0)。如此便 带来一个严重问题，即梯度的“饱和效应”(saturation effect)。对照Sigmoid 型函数的梯度图(图2.8b),大于5 (或小于-5)部分的梯度接近0,这会导致</p>
+
+<p>2.5.激活函数</p>
+
+<p>在误差反向传播过程中导数处于该区域的误差将很难甚至根本无法传递至前层，</p>
+
+<p>进而导致整个网络无法训练（导数为0将无法更新网络参数）。此外，在参数</p>
+
+<p>初始化的时候还需特别注意，要避免初始化参数直接将输出值域带人这一区域：</p>
+
+<p>一种可能的情形是当初始化参数过大时，将直接引发梯度饱和效应而无法训练。</p>
+
+<p>（a） Sigmoid 型函数 （b） Sigmoid 型</p>
+
+<p>图2+8: Sigmoid型函数及其函数梯度</p>
+
+<p>为了避免梯度饱和效应的发生，Nair和Hinton于2010年将修正线性单元 （Rectified Linear Unit,简称ReLU）引人神经网络［69］。ReLU函数是目前深 度卷积神经网络中最为常用的激活函数之一。另外，根据ReLU函数改进的其 他激活函数也展示出更好的性能（请参见第8章内容）。</p>
+
+<p>ReLU函数实际上是一个分段函数，其定义为：</p>
+
+<p>0 if x &lt; 0</p>
+
+<p>(2+8)</p>
+
+<p>(2+9)</p>
+
+<p>由图2+9可见，ReLU函数的梯度在x》0时为1,反之为0。对x》0部 分完全消除了 Sigmoid型函数的梯度饱和效应。同时，在实验中还发现相比 Sigmoid型函数，ReLU函数有助于随机梯度下降方法收敛，收敛速度约快6 倍左右［52］。正是由于ReLU函数的这些优质特性，ReLU函数已成为目前卷 积神经网络及其他深度学习模型（如递归神经网络RNN等）激活函数的首选</p>
+
+<p>图2+9: ReLU函数及其函数梯度</p>
+
+<p>2.6全连接层
+全连接层（fully connected layers）在整个卷积神经网络中起到“分类器”的作 用。如果说卷积层、汇合层和激活函数层等操作是将原始数据映射到隐层特征 空间的话，全连接层则起到将学到的特征表示映射到样本的标记空间的作用。 在实际使用中，全连接层可由卷积操作实现：对前层是全连接的全连接层可以 转化为卷积核为1x 1的卷积；而前层是卷积层的全连接层可以转化为卷积核 为h x w的全局卷积，h和w分别为前层卷积输出结果的高和宽。以经典的 VGG-16 [74]网络模型10为例，对于224 x 224 x 3的图像输人，最后一层卷积 层（指VGG-16中的Pools）可得输出为7 x 7 x 512的特征张量，若后层是一 层含4096个神经元的全连接层时，则可用卷积核为7 x 7 x 512 x 4096的全局 卷积来实现这一全连接运算过程,其中该卷积核具体参数如下：</p>
+
+<p>1 % The first fully connected layer</p>
+
+<p>2 filter_size = 7; padding = 0; stride = 1;</p>
+
+<p>3 D_in = 512; D_out = 4096;</p>
+
+<p>经过此卷积操作后可得1x1x4096的输出。如需再次叠加一个含2048个神 经元的全连接层,可设定以下参数的卷积层操作。</p>
+
+<p>2.7.目标函数</p>
+
+<p>1 % The second fully connected layer</p>
+
+<p>2 filter_size = 1; padding = 0; stride = 1;</p>
+
+<p>3 D_in = 4096; D_out = 2048;</p>
+
+<p>2.7目标函数
+刚才提到全连接层是将网络特征映射到样本的标记空间做出预测，目标函数的</p>
+
+<p>作用则用来衡量该预测值与真实样本标记之间的误差。在当下的卷积神经网络 中，交叉熵损失函数和12损失函数分别是分类问题和回归问题中最为常用的目 标函数。同时，越来越多针对不同问题特性的目标函数被提出供选择。详细内 容请参见本书第9章内容。</p>
+
+<p>2.8小结
+§ 本章介绍了深度学习中的关键思想——“端到端”学习方式；</p>
+
+<p>§ 介绍了卷积神经网络的基本部件：卷积操作、汇合操作、激活函数（非线</p>
+
+<p>性映射）、全连接层和目标函数。整个卷积神经网络通过这些基本部件的</p>
+
+<p>“有机组合”即可实现将原始数据映射到高层语义、进而得到样本预测标</p>
+
+<p>记的功能。下一章将介绍卷积神经网络结构中的几个重要概念以及如何对</p>
+
+<p>这些部件进行“有机组合”。</p>
+
+<p>上一章内</p>
+
+<p>连接层和</p>
+
+<p>“纸上学来</p>
+
+<p>能呢？本</p>
+
+<p>神经网络</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E5%8E%8B%E7%BC%A9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">DL 卷积神经网络的压缩</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+            <span class="next-text nav-default">DL 卷积神经网络基础</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

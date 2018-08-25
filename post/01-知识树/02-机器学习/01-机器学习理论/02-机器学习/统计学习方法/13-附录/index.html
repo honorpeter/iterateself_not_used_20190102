@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>13 附录 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="附录A梯度下降法 梯度下降法(gradientdescent)或最速下降法(steepestdescent)是求解无約 束最优化问题的一种最常用" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/13-%E9%99%84%E5%BD%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="13 附录" />
+<meta property="og:description" content="附录A梯度下降法 梯度下降法(gradientdescent)或最速下降法(steepestdescent)是求解无約 束最优化问题的一种最常用" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/13-%E9%99%84%E5%BD%95/" /><meta property="article:published_time" content="2018-06-26T19:21:59&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:21:59&#43;00:00"/>
+<meta itemprop="name" content="13 附录">
+<meta itemprop="description" content="附录A梯度下降法 梯度下降法(gradientdescent)或最速下降法(steepestdescent)是求解无約 束最优化问题的一种最常用">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:21:59&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:21:59&#43;00:00" />
+<meta itemprop="wordCount" content="8159">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="13 附录"/>
+<meta name="twitter:description" content="附录A梯度下降法 梯度下降法(gradientdescent)或最速下降法(steepestdescent)是求解无約 束最优化问题的一种最常用"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">13 附录</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 8159 words </span>
+        <span class="more-meta"> 17 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#附录a梯度下降法">附录A梯度下降法</a></li>
+<li><a href="#附录b牛顿法和拟牛顿法">附录B牛顿法和拟牛顿法</a></li>
+<li><a href="#附录c拉格朗日对偶性">附录C拉格朗日对偶性</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h5 id="附录a梯度下降法">附录A梯度下降法</h5>
+
+<p>梯度下降法(gradientdescent)或最速下降法(steepestdescent)是求解无約 束最优化问题的一种最常用的方法，有实现简单的优点.梯度下降法是迭代算 法，每一步需要求解目标函数的梯度向量.</p>
+
+<p>假设/CO是R”上具有一阶连续偏导数的函数.要求解的无约束最优化问</p>
+
+<p>题是</p>
+
+<p>min /(x)</p>
+
+<p>(A.1)</p>
+
+<p>Z表示目标函数/(x)的极小点.</p>
+
+<p>梯度下降法是一种迭代算法.选取适当的初值不断迭代，更新x的值， 进行目标函数的极小化，直到收敛.由于负梯度方向是使函数值下降最快的方向， 在迭代的每一步，以负梯度方向更新*的值，从而达到减少函数值的目的.</p>
+
+<p>由于/(幻具有一阶连续偏导数，若第*次迭代值为，则可将/(x)在，附 近进行一阶泰勒展开：</p>
+
+<p>，(x) =，(x(«) + giT(x-，))    (A.2)</p>
+
+<p>这里，= g(xw) = ▽/(xW)为 /(X)在    的梯度.</p>
+
+<p>求出第it+1次迭代值，+1&gt;:</p>
+
+<p>(A.3)</p>
+
+<p>其中，凡是搜索方向，取负梯度方向^=-V/(jcw)，人是步长，由一维搜索确 定，即人使得</p>
+
+<p>/(xw +^pj = nun ,(xw + Ip J    (A.4)</p>
+
+<p>梯度下降法算法如下：</p>
+
+<p>算法A.1 (梯度下降法)</p>
+
+<p>输入：目标函数/⑻，梯度函数g(;t) = V/(x)，计算精度e;</p>
+
+<p>输出:/(x)的极小点X*.</p>
+
+<p>⑴取初始值xweR”，置是=0</p>
+
+<p>(2)    计算/(/，</p>
+
+<p>(3)    计算梯度g<em>=g(xw)，当||gt||&lt;f时，停止迭代，令x</em>=xw:否则， 令几=1(^)，求々，使</p>
+
+<h5 id="附录b牛顿法和拟牛顿法">附录B牛顿法和拟牛顿法</h5>
+
+<p>牛顿法(Newton method)和拟牛顿法(quasi Newton method)也是求解无约 束最优化问题的常用方法，有收敛速度快的优点.牛顿法是迭代算法，每一步需 要求解目标函数的海赛矩阵的逆矩阵，计算比较复杂.拟牛顿法通过正定矩阵近 似海赛矩阵的逆矩阵或海赛矩阵，简化了这一计算过程.</p>
+
+<p>1.牛顿法</p>
+
+<p>考虑无约束最优化问题</p>
+
+<p>nun /(x)    (B.1)</p>
+
+<p>其中x为目标函数的极小点.</p>
+
+<p>假设/CO具有二阶连续偏导数，若第A次迭代值为Xw，则可将/CO在 附近进行二阶泰勒展开：</p>
+
+<p>/(x) = /(xw) + g；(x-xw )+~(x-xw)T H(xwXx-xW)    (B.2)</p>
+
+<p>这里，&amp;=•?(#) = ▽/(#)是/(X)的梯度向量在点#的值，//(#)是的 海赛矩阵(Hesse matrix)</p>
+
+<p>&rdquo;(x)</p>
+
+<p>(B.3)</p>
+
+<p>在点#的值.函数/CO有极值的必要条件是在极值点处一阶导数为0,即梯度 向量为0.特别是当丑(/，是正定矩阵时，函数/co的极值为极小值.</p>
+
+<p>牛顿法利用极小点的必要条件</p>
+
+<p>其中/ft=H(xw).这样，式(B.5)成为</p>
+
+<p>gt+//t(x<i+,>-xw) = 0</p>
+
+<table>
+<thead>
+<tr>
+<th>因此，</th>
+<th></th>
+<th>x(t+n =xw-H；lgk</th>
+<th>(B.8)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>或者</td>
+<td></td>
+<td>/i+I)=x(«+p*</td>
+<td>(B.9)</td>
+</tr>
+
+<tr>
+<td>其中，</td>
+<td></td>
+<td>HkPk=~8k</td>
+<td>(B.10)</td>
+</tr>
+
+<tr>
+<td>用式(B.8)作为迭代公式的算法就是牛顿法.算法B.1 (牛顿法)输入：目标函数/C0，梯度g(x) = V/(x),海赛矩阵精度要求。</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>输出：/(X)的极小点X*.</p>
+
+<p>(1)    取初始点，)，置fc = o</p>
+
+<p>(2)    计算=g(xw)</p>
+
+<p>(3)    若||g<em>||&lt;e,则停止计算，得近似解x</em>=xw</p>
+
+<p>(4)    计算均=H(xw),并求a</p>
+
+<p>Hkpk=—gt</p>
+
+<p>(5)    置</p>
+
+<p>(6)    置* =女 + 1,转(2).    ■</p>
+
+<p>步骤(4)求凡，pk=-H^gk,要求Hf,计算比较复杂，所以有其他改进</p>
+
+<p>的方法.</p>
+
+<p>2.拟牛顿法的思路</p>
+
+<p>在牛顿法的迭代中，需要计算海赛矩阵的逆矩阵7T1，这一计算比较复杂，考 虑用一个《阶矩阵g* =g(；vw)来近似代替//卩1二/rW、.这就是拟牛顿法的基 本想法.</p>
+
+<p>先看牛顿法迭代中海赛矩阵满足的条件.首先，满足以下关系.在 式(B.6)中取* =，+1)，即得</p>
+
+<p>(B.11)</p>
+
+<p>记h =‘广&amp;，式=^+1&gt;-沪，则</p>
+
+<p>yk=HkSk    (B.12)</p>
+
+<p>式(B.12)或式(B.13)称为拟牛顿条件.</p>
+
+<p>如果是正定的(T^1也是正定的)，那么可以保证牛顿法搜索方向几是下</p>
+
+<p>降方向.这是因为搜索方向是由式(B.8)有</p>
+
+<p>x = x(t) + Xpk = xw - ^H^gk    (B.14)</p>
+
+<p>所以/(x)在的泰勒展开式(B.2)可以近似写成：</p>
+
+<p>/(x) = /(xw)-lgtT//；1gi    (B.15)</p>
+
+<p>因巧1正定，故有&gt;0 .当2为一个充分小的正数时，总有/(x)&lt;, 也就是说P*是下降方向.</p>
+
+<p>拟牛顿法将G<em>作为仔</em>-1的近似，要求矩阵G*满足同样的条件.首先，每次 迭代矩阵是正定的.同时，满足下面的拟牛顿条件：</p>
+
+<p>G^yk=5k    (B.16)</p>
+
+<p>按照拟牛顿条件选择G*作为好/的近似或选择尽作为巧的近似的算法称 为拟牛顿法.</p>
+
+<p>按照拟牛顿条件，在每次迭代中可以选择更新矩阵G*+1 :</p>
+
+<p>GM=Gk+hGk    (B.17)</p>
+
+<p>这种选择有一定的灵活性，因此有多种具体实现方法.下面介绍Broyden类拟牛 顿法.</p>
+
+<p>\3. DFP ( Davidon-Fletcher-Powell)算法(DFP algorithm )</p>
+
+<p>DFP算法选择Gi+1的方法是，假设每一步迭代中矩阵是由q加上两个附 加项构成的，即</p>
+
+<table>
+<thead>
+<tr>
+<th>GM=Gk+Pk+Qk</th>
+<th>(B.18)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>其中巧，a是待定矩阵.这时，</td>
+<td></td>
+</tr>
+
+<tr>
+<td>+Pkyk+Qkyl[</td>
+<td>(B.19)</td>
+</tr>
+
+<tr>
+<td>为使满足拟牛顿条件，可使G和込满足：</td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>(B.20)</td>
+</tr>
+
+<tr>
+<td>Qkyk=-Gicyk</td>
+<td>(B.21)</td>
+</tr>
+</tbody>
+</table>
+
+<p>事实上，不难找出这样的巧和込，例如取</p>
+
+<p>这样就可得到矩阵(7*+1的迭代公式:</p>
+
+<p>,sksi</p>
+
+<p>y!Gkyk</p>
+
+<p>(B.22)</p>
+
+<p>(B.23)</p>
+
+<p>G*+1 =Gk +</p>
+
+<p>GtykyrkGk</p>
+
+<p>ylGkyt</p>
+
+<p>(B.24)</p>
+
+<p>称为DFP算法.</p>
+
+<p>可以证明，如果初始矩阵G。是正定的，则迭代过程中的每个矩阵G*都是正 定的.</p>
+
+<p>DFP算法如下：</p>
+
+<p>算法B.2 (DFP算法)</p>
+
+<p>输入：目标函数/⑻，梯度g(;c) = V/⑻，精度要求 输出：/CO的极小点X.</p>
+
+<p>(1)选定初始点xw，取为正定对称矩阵，置女=0 ⑵计算沁=g(；cw).若||私||&lt;£，则停止计算，得近似解否则</p>
+
+<p>转(3)</p>
+
+<p>C3) ipk=-Gkgk</p>
+
+<p>(4)    一维搜索：求4使得</p>
+
+<p>,(xw +^p*) = nun/(xw +Apt)</p>
+
+<p>(5)    置 x1*+1)=jcw+々A</p>
+
+<p>(6)    计算g<em>+,=g(，+1&gt;),若||g</em>+1||&lt;£,则停止计算，得近似解Z=#+1); 否则，按式(B.23)算出(7*+1</p>
+
+<p>(7)    置灸=* + 1，转(3).    ■</p>
+
+<p>\4. BFGS ( Broyden-Fletcher-Goldfarb -Shanno)算法(BFGS algorithm ) BFGS算法是最流行的拟牛顿算法.</p>
+
+<p>可以考虑用64逼近海赛矩阵的逆矩阵/T1，也可以考虑用巧逼近海赛矩阵 这时，相应的拟牛顿条件是</p>
+
+<p>BMSk=yt    (B.25)</p>
+
+<p>可以用同样的方法得到另一迭代公式.首先令</p>
+
+<p>B^=Bi+Pi+Qk</p>
+
+<p>考虑使Pt和込满足:</p>
+
+<p>= Bksk + pksk + QA</p>
+
+<p>(B.27)</p>
+
+<p>pk8k=yk</p>
+
+<p>QA=-BA</p>
+
+<p>(B.28)</p>
+
+<p>(B.29)</p>
+
+<p>找出适合条件的和込，得到BFGS算法矩阵尽+|的迭代公式:</p>
+
+<p>BM=Bk +</p>
+
+<p>BkS肩 Bk</p>
+
+<p>(B.30)</p>
+
+<p>可以证明，如果初始矩阵S。是正定的，则迭代过程中的每个矩阵尽都是正 定的.</p>
+
+<p>下面写出BFGS拟牛顿算法.</p>
+
+<p>算法B.3 (BFGS算法)</p>
+
+<p>输入：目标函数/(x), g(x) = V/(x),精度要求 输出：/(x)的极小点/.</p>
+
+<p>(1)    选定初始点取5。为正定对称矩阵，置女=0</p>
+
+<p>(2)    计算g*=g(xw).若||gt||&lt;£，则停止计算，得近似解:否则 转⑶</p>
+
+<p>(3)    由 Bkpk = -g* 求出</p>
+
+<p>(4)    一维搜索：求&amp;使得</p>
+
+<p>\5. Broyden 类算法(Broyden’s algorithm )</p>
+
+<p>我们可以从BFGS算法矩阵私的迭代公式(B.30)得到BFGS算法关于的迭 代公式.事实上，若记Q =5；&rsquo;, Gm =B二，那么对式(B.30)两次应用Sherman-Morrison 公式①即得</p>
+
+<p>①Sherman-Morrison公式1假设Z是n阶可逆矩阵，a, v是n维向量，且j + l/vT也是可逆矩阵，则</p>
+
+<p>(^+«vT)-&rsquo;</p>
+
+<p>称为BFGS算法关于G*的迭代公式.</p>
+
+<p>由DFP算法的迭代公式(B.23)得到的记作GDn&rsquo;，由BFGS算法Gt的 迭代公式(B.31)得到的G*+1记作Gotqs，它们都满足方程拟牛顿条件式，所以它 们的线性组合</p>
+
+<p>Gk+l= aGDrv +(1-a)GBFGS    (B.32)</p>
+
+<p>也满足拟牛顿条件式，而且是正定的.其中名1.这样就得到了一类拟牛顿 法，称为Broyden类算法.</p>
+
+<h5 id="附录c拉格朗日对偶性">附录C拉格朗日对偶性</h5>
+
+<p>在约束最优化问题中，常常利用拉格朗日对偶性(Lagrange duality)将原始 问题转换为对偶问题，通过解对偶问题而得到原始问题的解.该方法应用在许多 统计学习方法中，例如，最大熵模型与支持向量机.这里简要叙述拉格朗日对偶 性的主要概念和结果.</p>
+
+<p>1.原始问题</p>
+
+<p>假设/(JC)，c/x),    是定义在R”上的连续可微函数.考虑约束最优化问题</p>
+
+<p>因为若某个*•使约束c,⑻&gt;0，则可令a,    若某个J•使A»0 ,则可令我</p>
+
+<p>復队(X) +oo :而将其余各,外均取为0.</p>
+
+<p>反地，如果x满足约束条件式(C.2)和式(C.3)，则由式(C.5)和式(C.4)可 知,40c) = /(x).因此，</p>
+
+<p>..,f/(x), :v满足原始问题約束 仲)=1+00，其他</p>
+
+<p>(C.7)</p>
+
+<p>所以如果考虑极小化问题</p>
+
+<p>min^,(x) = min max.oL(x,a,j3)    (C.8)</p>
+
+<p>它是与原始最优化问题(C.1)〜(C.3)等价的，即它们有相同的解.问题 称为广义拉格朗日函数的极小极大问题.这样一来，就把原</p>
+
+<p>始最优化问题表示为广义拉格朗日函数的极小极大问题.为了方便，定义原始问 题的最优值</p>
+
+<p>p&rsquo; =min0p(x)</p>
+
+<p>称为原始问题的值.</p>
+
+<p>2.对偶问题 定义</p>
+
+<p>0D (a,fi) = TmaL(x,a,J3) 再考虑极大化* (a, /?) =    i(x，a,勿，即</p>
+
+<p>(C11)</p>
+
+<p>问题^灼称为广义拉格朗日函数的极大极小问题. 可以将广义拉格朗日函数的极大极小问题表示为约束最优化问题:</p>
+
+<p>m^.0D (a,/3) = max. min L(x，a，j3)</p>
+
+<p>s.t. af &gt;0，i = i,2，&hellip;，k</p>
+
+<p>称为原始问题的对偶问题.定义对偶问题的最优值</p>
+
+<p>称为对偶问题的值.</p>
+
+<p>(C.9)</p>
+
+<p>(C.10)</p>
+
+<p>(C.12)</p>
+
+<p>(C.13)</p>
+
+<p>(C.14)</p>
+
+<p>3.原始问题和对偶问题的关系 下面讨论原始问题和对偶问题的关系.</p>
+
+<p>定理C.1若原始问题和对偶问题都有最优值，则</p>
+
+<p>d. = max^minL{x,min i^a^L(x，a,奶=p.</p>
+
+<p>证明由式(C.12)和式(C.5),对任意的《，彡和*，有</p>
+
+<p>OD{a,p) = minZ,(x,«r,/7)^ L{x,a,fi)    maiioL(x,a,JT) = 0p(x)</p>
+
+<p>即</p>
+
+<p>物，加物)</p>
+
+<p>由于原始问题和对偶问题均有最优值，所以，</p>
+
+<p>maxo^D(a,^)^ min^p(x)</p>
+
+<p>d* = maxomin£(x,a,)ff) min maxoZ(x,a,^) = p*</p>
+
+<p>(C.15)</p>
+
+<p>(C.16)</p>
+
+<p>(C.17)</p>
+
+<p>(C.18)</p>
+
+<p>(C.19)</p>
+
+<p>推论C.l设x<em>和a</em>,，分别是原始问题(C.1)〜(C.3)和对偶问题(C.12)〜 (C.13)的可行解，并且&rsquo;=//，则Z和分别是原始问题和对偶问题的最 优解.</p>
+
+<p>在某些条件下，原始问题和对偶问题的最优值相等，d&rsquo;=p.这时可以用解 对偶问题替代解原始问题.下面以定理的形式叙述有关的重要结论而不予证明.</p>
+
+<p>定理C.2考虑原始问题(C.1)〜(C.3)和对偶问题(C.12) - (C.13).假设函 数/(X)和c,.00是凸函数，是仿射函数；并且假设不等式约束qCc)是严格 可行的，即存在<em>，对所有f有c,•⑻＜0,则存在;使Z是原始问题的 解，a</em>,，是对偶问题的解，并且</p>
+
+<p>p&rdquo; =d&rsquo; =L(x<em>,a</em>,y9*)    (C.20)</p>
+
+<p>定理C.3对原始问题(C.1)〜(C.3)和对偶问题(C.12)〜(C.13)，假设函数 /(x)和c,(x)是凸函数，久(x)是仿射函数，并且不等式约束以幻是严格可行的， 则Z和a*,^分别是原始问题和对偶问题的解的充分必要条件是/，《•，，满足 下面的 Karush-Kuhn-Tucker (KKT)条件：</p>
+
+<p>VxL(x&rsquo;,a,j3&rsquo;) = 0    (C.21)</p>
+
+<p>▽aL(/,a.，,) = 0    (C.22)</p>
+
+<p>▽於(x.，a.，,) = 0    (C.23)</p>
+
+<p>a;c&rsquo;(x” = O，f = l，U    (C.24)</p>
+
+<p>cXx*)&lt;0,    i = l,2,-,k    (C.25)</p>
+
+<p>a；^0,    i=l,2,&ndash;,k    (C.26)</p>
+
+<p>f&gt;j(x&rsquo;) = O    7 = 1,2,-,/    (C.27)</p>
+
+<p>特别指出，式(C.24)称为KKT的对偶互补条件.由此条件可知：若&lt;&gt;0, 则 c,(Z) = O.</p>
+
+<p>奥卡姆剃刀(Occam&rsquo;s razor) 14</p>
+
+<p>半监餐学习(semi-supervised learning) 2 贝叶斯估计(Bayesian estimation〉47，51 比特(bit) 60</p>
+
+<p>边(edge) 191</p>
+
+<p>标注(tagging) 20</p>
+
+<p>不完全数据(incomplete-data) 157</p>
+
+<p>参数空间(parameter space) 6</p>
+
+<p>残差(residual) 148</p>
+
+<p>测试集(test set) 14</p>
+
+<p>测试数据(test data) 2, 4</p>
+
+<p>测试误差(test error) 10</p>
+
+<p>策略(strategy) 2</p>
+
+<p>成对马尔可夫性(pairwise Markov property ) 191 词性标注(part of speech tagging) 21</p>
+
+<p>代价函数(costftmction〉7，65</p>
+
+<p>代理损失函数(surrogate loss function) 115，213</p>
+
+<p>带符号的距离(signeddistance) 98</p>
+
+<p>单元(cell) 38, 47</p>
+
+<p>动态规划 &lt; dynamic programming) 184</p>
+
+<p>对偶算法(dual algorithm) 103 , 226</p>
+
+<p>对偶问题(dual problem) 103，226</p>
+
+<p>对数几率(log odds) 78</p>
+
+<p>对数似然损失函数(log-likelihood loss fimction) 7</p>
+
+<p>对数损失函数(logarithmic loss fonction) 7</p>
+
+<p>对数线性模型(log linear model) 88, 196</p>
+
+<p>多数表决规则(majority voting rule) 40</p>
+
+<p>多项逻辑斯诸回归模型(multi-nominal logistic regression model) 79 多项式核函数(polynomial kernel function〉122</p>
+
+<p>二项逻辑斯滴回归模型(binomial logistic regression model) 78</p>
+
+<p>罚项(penalty term) 9，13</p>
+
+<p>泛化能力(generalization ability) 11，15</p>
+
+<p>泛化误差(generalization error) 15</p>
+
+<p>泛化误差上界(generalization error bound) 15</p>
+
+<p>非监督学习(unsupervised learning) 2</p>
+
+<p>非线性支持向量机(non-linear support vector machine) 95, 1.23 分类(classification) 18 分类器(classifier) 18</p>
+
+<p>分类与回妇树(classification and regression tree, CART) 67 分离超平面(separatinghypeiplane) 26 风险函数(risk fbnction) 8</p>
+
+<p>改进的迭代尺度法(improved iterative scaling, US) 88, 90, 202 概率近似正确(probably approximately correct, PAC) 137 概率图模型(probabilistic graphical model) 191 概率无向图模型(probabilistic undirected graphical model) 191, 193 感知机(perceptron) 25</p>
+
+<p>髙斯核函数(Gaussian kernel fimction) 122</p>
+
+<p>髙斯混合模型(Gaussian mixture model) 162</p>
+
+<p>根结点(root node) 63</p>
+
+<p>估计误差(estimation error) 40</p>
+
+<p>观测变量(observablevariable) 155</p>
+
+<p>观测序列(observation sequence) 171</p>
+
+<p>广义拉格朗日函数(generalized Lagrange fimction) 225 广义期望极大(generalized expectation maximization, GEM) 166 规范化因子(normalization factor) 193</p>
+
+<p>过拟合(over-fitting) 9, 11</p>
+
+<p>海赛矩阵(Hesse matrix) 219</p>
+
+<p>函数间賜(functional margin) 97</p>
+
+<p>合页损失函数(hinge loss fimction) 114</p>
+
+<p>核方法(kernel method) 95</p>
+
+<p>核函数(kernel fimction) 95，116</p>
+
+<p>核技巧(kernel trick) 95, 115, 118</p>
+
+<p>互信息(mutual information) 61</p>
+
+<p>划分(partition) 41，56</p>
+
+<p>回归(regression) 21</p>
+
+<p>基尼指数(Gini index) 68</p>
+
+<p>极大-极大算法 &lt;maximization-maximization algoriflim) 166 极大似然估计(maximum likelihood estimation) 9 几何间隔(geometric margin) 97，98 几率(odds) 78</p>
+
+<p>加法模型(additive model) 144</p>
+
+<p>假设空间(hypothesis space) 2，5，6</p>
+
+<p>间踊(margin) 102</p>
+
+<p>监哲学习(supervised learning) 2，3</p>
+
+<p>剪枝(pruning) 65</p>
+
+<p>交叉验证(cross validation) 14</p>
+
+<p>结点(node) 55，191</p>
+
+<p>结构风险最小化(structural risk minimization, SRM) 9 解码(decoding) 174 近似误差(approximation error) 40 经验风险(empirical risk) 8</p>
+
+<p>经驗风险最小化(empirical risk minimization, ERM) 8</p>
+
+<p>经验炳(empirical entropy) 61</p>
+
+<p>经验损失(empirical loss) 8</p>
+
+<p>经检条件炳(empirical conditional entropy) 6+1</p>
+
+<p>精确率(precision) 19</p>
+
+<p>径向基函数(radial b郎is function) 122</p>
+
+<p>局部马尔可夫性(local Markov property) 191</p>
+
+<p>决策函数(decision function) 5</p>
+
+<p>决策树(decision tree) 55</p>
+
+<p>决策树桩(decision stump) 147</p>
+
+<p>绝对损失函数(absolute loss function) 7</p>
+
+<p>拉格朗日乘子(Lagrange multiplier) 103</p>
+
+<p>拉格朗日对偶性(Lagrange duality) 225</p>
+
+<p>拉格朗日函数(Lagrange function) 103</p>
+
+<p>拉普拉斯平滑(Laplace smoothing) 51</p>
+
+<p>类(class) 18</p>
+
+<p>类标记(class label) 38, 47</p>
+
+<p>留 _交叉验证(leave-one-out cross validation ) 15 逻辑斯缔分布(logistic distribution) 77</p>
+
+<p>逻辑斯谛回妇(logistic regression) 77</p>
+
+<p>马尔可夫随机场(Markov random field) 193 曼哈顿距离(Manhattan distance) 39 模型(model) 2</p>
+
+<p>模型选择(model selection〉11</p>
+
+<p>内部结点(internal node) 55</p>
+
+<p>纳特(nat) 60</p>
+
+<p>拟牛顿法(quasi Newton method) 91, 205, 219 牛顿法(Newton method) 91, 205, 219</p>
+
+<p>欧氏距薄(Euclideandistance) 39</p>
+
+<p>判别方法(discriminative approach) 17</p>
+
+<p>判别模型(discriminative model) 18</p>
+
+<p>偏置(bias) 25</p>
+
+<p>平方损失函数(quadratic loss fimction) 7</p>
+
+<p>评价准则(evaluation criterion) 2</p>
+
+<p>朴素贝叶斯(naive Bayes) 47</p>
+
+<p>朴素贝叶斯算法(n^Tve Bayes algorithm) 50</p>
+
+<p>期望极大算法(EM 算法)(expectationmaximization algorithm) 155，157, 162，183</p>
+
+<p>期望损失(expected loss) 8</p>
+
+<p>前向分步算法(forward stagewise algorithm) 144</p>
+
+<p>前向-后向算法(forward-backward algorithm) 175</p>
+
+<p>潜在变量(latent variable〉155</p>
+
+<p>强化学习(reinforcement learning) 2</p>
+
+<p>强可学习(strongly learnable) 137</p>
+
+<p>切分变量(splittingvariable) 68</p>
+
+<p>切分点(splitting point) 68</p>
+
+<p>全局马尔可夫性(global Markov property) 191</p>
+
+<p>权值(wei^it) 25</p>
+
+<p>权值向量(weight vector) 25</p>
+
+<p>软间踊最大化(soft margin maximization) 95 弱可学习(weakly learaable) 137</p>
+
+<p>摘(entropy) 60</p>
+
+<p>生成方法(generative approach) 17 生成模型(generative model) 18 实例(instance) 4 势函数(potential function) 194 输出空间(output space) 4 输入交间(input space) 4 数据(data) 1</p>
+
+<p>算法(algorithm) 2</p>
+
+<p>随机梯度下降法(stochastic gradient descent) 28 损失函数(loss function) 1, 65</p>
+
+<p>特异点(outlier) 108</p>
+
+<p>特征函数(feature function〉82</p>
+
+<p>特征空间(feature space) 4</p>
+
+<p>特征向量(feature vector) 4</p>
+
+<p>梯度提升(gradient boosting) 151</p>
+
+<p>梯度下降法(gradientdescent) 217</p>
+
+<p>提升(boosting) 137</p>
+
+<p>提升树(boosting tree) 137，147</p>
+
+<p>提早停止(earlystopping) 213</p>
+
+<p>条件摘 &lt; conditional entropy) 61</p>
+
+<p>条件随机场(conditional random field. CRF) 191 &gt; 194 统计机器学习(statistical machine learning) 1 统计学习(statistical learning) 1 统计学习方法(statistical learning method) 3 统计学习理论(statistical learning theory) 3 统计学习应用(application of statistical learning ) 3 凸二次规划(convex quadratic programming) 95, 100, 109 图(graph) 191</p>
+
+<p>团(clique〉193</p>
+
+<p>完全数据(complete-data) 157</p>
+
+<p>维特比算法(Viterbi algorithm) 184, 207</p>
+
+<p>文本分类(text classification) 20</p>
+
+<p>误差率(error rate) 10</p>
+
+<p>希尔伯特空间(Hilbert space) 118</p>
+
+<p>线性分类模型(linear classification model) 25</p>
+
+<p>线性分类群(linear classifier〉25</p>
+
+<p>线性可分数据集(linearly separable data set) 26</p>
+
+<p>线性可分支持向量机(linear support vector machine in linearly separable case) 95，106 线性链(linear chain) 191</p>
+
+<p>线性链条件随机场(linear chain conditional random field) 191&gt; 194</p>
+
+<p>线性扫描(linear scan〉41</p>
+
+<p>线性支持向量机(linear support vector machine) 95» 106, 109</p>
+
+<p>信息増益(information gain〉59，61</p>
+
+<p>信息增益比(information gain ratio) 63</p>
+
+<p>序列最小最优化(sequential minimal optimization, SMO) 124</p>
+
+<p>学习率(learning rate) 28</p>
+
+<p>训练集(training set) 14</p>
+
+<p>训练数据(training data) 2. 4</p>
+
+<p>训练误差(training error) 10</p>
+
+<p>验证集(validation set) 14</p>
+
+<p>叶结点(leafnode) 55</p>
+
+<p>因子分解(fectorization) 193</p>
+
+<p>隐变量(hidden variable) 155</p>
+
+<p>隐马尔可夫模型(hiddenMarkovmodel, HMM) 171</p>
+
+<p>硬间隔最大化(hard margin maximization) 95, 99</p>
+
+<p>有向边(directed edge) 55</p>
+
+<p>余弦相似度(cosine similarity) 123</p>
+
+<p>预测(prediction) 5, 18</p>
+
+<p>原始问题(primal problem) 103 , 225</p>
+
+<p>再生核希尔伯特空间(reproducing kernel Hilbert space, RKHS) 120 召回率(recall) 19</p>
+
+<p>正定核函数(positive definite kernel function) 118</p>
+
+<p>正则化(regularization) 13</p>
+
+<p>正则化项(rcgularizer) 9, 13</p>
+
+<p>支持向量(support vector) 102, 107</p>
+
+<p>支持向量机(support vector machines I SVM) 95</p>
+
+<p>指示函数(indicator function) 10</p>
+
+<p>指数损失函数(exponential loss fiinction) 145</p>
+
+<p>中位数(median) 41</p>
+
+<p>状态序列(state sequence) 171</p>
+
+<p>准确率(accuracy) 10，19</p>
+
+<p>字符串核函数(string kernel function) 122</p>
+
+<p>最大后验概率估计(maximum posterior probability estimation, MAP) 9</p>
+
+<p>最大间隔法(maximum margin method) 100</p>
+
+<p>最大熵模型(maximum entropy model) 77，80，83</p>
+
+<p>最大团(maximal clique) 193</p>
+
+<p>最速下降法(steepest descent) 217</p>
+
+<p>最小二乘法(least squares) 22</p>
+
+<p>最小二乘回归树(least squares regression tree) 69 0-1 损失函数(&lt;M loss function) 7</p>
+
+<p>AdaBoost 算法(AdaBoost algorithm) 137, 138</p>
+
+<p>Baum-Welch 算法(Baum-Welch algorithm) 183</p>
+
+<p>BFGS 算法(Broyden-Fletcher-Goldfarb-Shanno algorithm, BFGS algorithm) 222 Broyden 类算法(Broyden’s algorithm) 223 C4.5 算法(C4.5 algorithm) 65</p>
+
+<p>DFP 算法(Davidon-Fletcher-Powell algorithm, DFP algorithm) 221</p>
+
+<p>EM 算法(EM algorithm) 157, 162, 183</p>
+
+<p>Z7 函数(尸fiinction) 166</p>
+
+<p>Gram 矩阵(Gram matrix) 34，119</p>
+
+<p>ID3 算法(ID3 algorithm) 63</p>
+
+<p>Jensen 不等式(Jensen inequality) 159</p>
+
+<p>fa/树(fe/tree) 41</p>
+
+<p>KKT (Karush-Kuhn-Tucker)条件(KKT (Karush-Kuhn-Tucker) conditions) 125, 227 女近邻法(仑-nearest neighbor, jfc-NN) 37 L\ 范数(£! norm) 14</p>
+
+<p>上2 范数(Zz norm〉14</p>
+
+<p>Lp距离(Lp distance) 38</p>
+
+<p>Minkowski 距离(Minkowski distance) 38</p>
+
+<p>2 函数(Q function) 158</p>
+
+<p>S 形曲线(sigmoid curve) 77</p>
+
+<p>S&rdquo;折交叉验证 &lt; 5-fold cross validation ) 15</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/12-%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">12 统计学习方法总结</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/09-%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/">
+            <span class="next-text nav-default">09 进程关系</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

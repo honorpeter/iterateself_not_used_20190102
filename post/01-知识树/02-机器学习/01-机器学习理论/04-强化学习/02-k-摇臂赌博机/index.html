@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 K-摇臂赌博机 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="K-摇臂赌博机 1 探索与利用 与一般监督学习不同，强化学习任务的最终奖赏是在多步动作之后才能观察到，这里我们不妨先考虑比较简单的情形：最大化单步" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/02-k-%E6%91%87%E8%87%82%E8%B5%8C%E5%8D%9A%E6%9C%BA/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 K-摇臂赌博机" />
+<meta property="og:description" content="K-摇臂赌博机 1 探索与利用 与一般监督学习不同，强化学习任务的最终奖赏是在多步动作之后才能观察到，这里我们不妨先考虑比较简单的情形：最大化单步" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/02-k-%E6%91%87%E8%87%82%E8%B5%8C%E5%8D%9A%E6%9C%BA/" /><meta property="article:published_time" content="2018-07-01T20:47:01&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-01T20:47:01&#43;00:00"/>
+<meta itemprop="name" content="02 K-摇臂赌博机">
+<meta itemprop="description" content="K-摇臂赌博机 1 探索与利用 与一般监督学习不同，强化学习任务的最终奖赏是在多步动作之后才能观察到，这里我们不妨先考虑比较简单的情形：最大化单步">
+
+
+<meta itemprop="datePublished" content="2018-07-01T20:47:01&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-01T20:47:01&#43;00:00" />
+<meta itemprop="wordCount" content="2088">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 K-摇臂赌博机"/>
+<meta name="twitter:description" content="K-摇臂赌博机 1 探索与利用 与一般监督学习不同，强化学习任务的最终奖赏是在多步动作之后才能观察到，这里我们不妨先考虑比较简单的情形：最大化单步"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 K-摇臂赌博机</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-01 </span>
+        
+        <span class="more-meta"> 2088 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-探索与利用">1 探索与利用</a></li>
+<li><a href="#epsilon-贪心">$\epsilon$-贪心</a></li>
+<li><a href="#3-softmax">3 Softmax</a></li>
+</ul></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>K-摇臂赌博机</p>
+
+<h2 id="1-探索与利用">1 探索与利用</h2>
+
+<p>与一般监督学习不同，强化学习任务的最终奖赏是在多步动作之后才能观察到，这里我们不妨先考虑比较简单的情形：最大化单步奖赏，即仅考虑一步操作.需注意的是，即便在这样的简化情形下，强化学习仍与监督学习有显著不同，因为机器需通过尝试来发现各个动作产生的结果，而没有训练数据告诉机器应当做哪个动作。<span style="color:red;">是的。</span></p>
+
+<p>欲最大化单步奖赏需考虑两个方面：</p>
+
+<ul>
+<li>一是需知道每个动作带来的奖赏，</li>
+<li>二 是要执行奖赏最大的动作</li>
+</ul>
+
+<p>若每个动作对应的奖赏是一个确定值，那么尝试一遍所有的动作便能找出奖赏最大的动作。然而，更一般的情形是，一个动作的奖赏值是来自于一个概率分布，仅通过一次尝试并不能确切地获得平均奖赏值。<span style="color:red;">是这样。</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/3HEj6F4DC5.png?imageslim" alt="mark" /></p>
+
+<p>实际上，单步强化学习任务对应了一个理论模型，即 “K-摇臂赌博机”（K-armed bandit）.如图16.3所示，K-摇臂赌博机有K个摇臂，赌徒在投入一个硬币后可选择按下其中一个摇臂，每个摇臂以一定的概率吐出硬币，但这个概率赌徒并不知道。赌徒的目标是通过一定的策略最大化自己的奖赏，即获得最多的硬币.</p>
+
+<p>若仅为获知每个摇臂的期望奖赏，则可采用 “仅探索”（exploration-only）法：将所有的尝试机会平均分配给每个摇臂（即轮流按下每个摇臂），最后以每个摇臂各自的平均吐币概率作为其奖赏期望的近似估计。</p>
+
+<p>若仅为执行奖赏最大的动作，则可采用“仅利用”（exploitation-only）法：按卞目前最优的（即至目前为止平均奖赏最大的)摇臂，若有多个摇臂同为最优，则从中随机选取一个。</p>
+
+<p>显然，“仅探索” 法能很好地估计每个摇臂的奖赏，却会失去很多选择最优摇 臂的机会；“仅利用” 法则相反，它没有很好地估计摇臂期望奖赏，很可能经常选不到最优摇臂。因此，这两种方法都难以使最终的累积奖赏最大化。<span style="color:red;">是的。</span></p>
+
+<p>事实上，“探索”(即估计摇臂的优劣)和“利用”(即选择当前最优摇臂)这两者是矛盾的，因为尝试次数(即总投币数)有限，加强了一方则会自然削弱另一方，<span style="color:red;">是呀。</span>这就是强化学习所面临的“探索-利用窘境” (Exploration-Exploitation dilemma)。显然，欲累积奖赏最大，则必须在探索与利用之间达成较好的折中.</p>
+
+<h2 id="epsilon-贪心">$\epsilon$-贪心</h2>
+
+<p>$\epsilon$-贪心法基于一个概率来对探索和利用进行折中：每次尝试时，以 $\epsilon$ 的概率进行探索，即以均匀概率随机选取一个摇臂；以 $1-\epsilon$ 的概率进行利用，即选择当前平均奖赏最高的摇臂(若有多个，则随机选取一个)。</p>
+
+<p>令 $Q(k)$ 记录摇臂 $k$ 的平均奖赏.若摇臂 $k$ 被尝试了$n$次，得到的奖赏为  $v_1,v_2,\cdots,v_n$ ，则平均奖赏为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/i2eaHA49e8.png?imageslim" alt="mark" /></p>
+
+<p>若直接根据式(16.1)计算平均奖赏，则需记录 $n$ 个奖赏值。显然，更高效的做法是对均值进行増量式计算，即每尝试一次就立即更新 $Q(k)$ 。不妨用下标来表示尝试的次数，初始时 $Q<em>0(k) = 0$ 。对于任意的 $n\geq 1$ ,若第 $n-1$ 次尝试后的平均奖赏为 $Q</em>{n-1}(k)$ ,则在经过第$n$次尝试获得奖赏$v_n$ 后，平均奖赏应更新为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/84eg9aaicb.png?imageslim" alt="mark" /></p>
+
+<p>这样,无论摇臂被尝试多少次都仅需记录两个值：已尝试次数 $n-1$ 和最近平均 奖赏 $Q_{n-1}(k)$ 。$\epsilon$-贪心算法描述如图16.4所示.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/3kLdjCiJ34.png?imageslim" alt="mark" /></p>
+
+<p>若摇臂奖赏的不确定性较大，例如概率分布较宽时，则需更多的探索，此时 需要较大的 $\epsilon$ 值;若摇臂的不确定性较小，例如概率分布较集中时，则少量的尝 试就能很好地近似真实奖赏，此时需要的 $\epsilon$ 较小.通常令 $\epsilon$ 取一个较小的常数， 如 0.1 或 0.01。然而，若尝试次数非常大，那么在一段时间后，摇臂的奖赏都能 很好地近似出来，不再需要探索，这种情形下可让 $\epsilon$ 随着尝试次数的增加而逐渐减小，例如令 $\epsilon=1/\sqrt{t}$</p>
+
+<h2 id="3-softmax">3 Softmax</h2>
+
+<p>Softmax 算法基于当前已知的摇臂平均奖赏来对探索和利用进行折中。若各摇臂的平均奖赏相当，则选取各摇臂的概率也相当；若某些摇臂的平均奖赏明显高于其他摇臂，则它们被选取的概率也明显更高.</p>
+
+<p>Softmax 算法中摇臂概率的分配是基于 Boltzmann 分布</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/Ekfi1hKHId.png?imageslim" alt="mark" /></p>
+
+<p>其中， $Q(i)$ 记录当前摇臂的平均奖赏；$\tau&gt;0$ 称为“温度”，$\tau&gt;0$ 越小则平均奖赏高的摇臂被选取的概率越高。$\tau&gt;0$ 趋于0时 Softmax 将趋于 “仅利用” ，$\tau&gt;0$ 趋于无穷大时 Softmax 则将趋于 “仅探索”。</p>
+
+<p>Softmax算法描述如图16.5所示.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/63Ig065chl.png?imageslim" alt="mark" /></p>
+
+<p>$\epsilon$-贪心算法与 Softmax 算法孰优孰劣，主要取决于具体应用.为了更直观 地观察它们的差别，考虑一个简单的例子：假定 2-摇臂赌博机的摇臂 1 以 0.4 的概率返回奖赏 1 ，以 0.6 的概率返回奖赏 0 ; 摇臂 2 以 0.2 的概率返回奖赏 1，以 0.8 的概率返回奖赏 0 。图 16.6 显示了不同算法在不同参数下的平均累积奖赏，其中每条曲线对应于重复 1000 次实验的平均结果。可以看出，Softmax (T = 0.01) 的曲线与 “仅利用” 的曲线几乎重合.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/G64EdbD6DA.png?imageslim" alt="mark" /></p>
+
+<p>对于离散状态空间、离散动作空间上的多步强化学习任务，一种直接的办法是将每个状态上动作的选择看作一个摇臂赌博机问题，用强化学习任务的累积奖赏来代替 K-摇臂赌博机算法中的奖赏函数，即可将赌博机算法用于每个状态：对每个状态分别记录各动作的尝试次数、当前平均累积奖赏等信息，基于赌博机算法选择要尝试的动作。</p>
+
+<p>然而这样的做法有很多局限，因为它没有考虑强化学习任务马尔可夫决策过程的结构。在16.3节将会看到，若能有效考虑马尔可夫决策过程的特性，则可有更聪明的办法。</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/03-%E6%9C%89%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 有模型学习</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/01-%E4%BB%BB%E5%8A%A1%E4%B8%8E%E5%A5%96%E8%B5%8F/">
+            <span class="next-text nav-default">01 任务与奖赏</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

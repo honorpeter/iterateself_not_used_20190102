@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>08 用 bisect 来管理已排序的序列 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2.8用bisect来管理已排序的序列 bisect模块包含两个主要函数，bisect和insort，两个函数都利用二分查找算法来在 有序序列中" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/08-%E7%94%A8-bisect-%E6%9D%A5%E7%AE%A1%E7%90%86%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E5%BA%8F%E5%88%97/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="08 用 bisect 来管理已排序的序列" />
+<meta property="og:description" content="2.8用bisect来管理已排序的序列 bisect模块包含两个主要函数，bisect和insort，两个函数都利用二分查找算法来在 有序序列中" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/08-%E7%94%A8-bisect-%E6%9D%A5%E7%AE%A1%E7%90%86%E5%B7%B2%E6%8E%92%E5%BA%8F%E7%9A%84%E5%BA%8F%E5%88%97/" /><meta property="article:published_time" content="2018-07-11T15:00:14&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-11T15:00:14&#43;00:00"/>
+<meta itemprop="name" content="08 用 bisect 来管理已排序的序列">
+<meta itemprop="description" content="2.8用bisect来管理已排序的序列 bisect模块包含两个主要函数，bisect和insort，两个函数都利用二分查找算法来在 有序序列中">
+
+
+<meta itemprop="datePublished" content="2018-07-11T15:00:14&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-11T15:00:14&#43;00:00" />
+<meta itemprop="wordCount" content="1804">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="08 用 bisect 来管理已排序的序列"/>
+<meta name="twitter:description" content="2.8用bisect来管理已排序的序列 bisect模块包含两个主要函数，bisect和insort，两个函数都利用二分查找算法来在 有序序列中"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">08 用 bisect 来管理已排序的序列</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-11 </span>
+        
+        <span class="more-meta"> 1804 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#2-8用bisect来管理已排序的序列">2.8用bisect来管理已排序的序列</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h3 id="2-8用bisect来管理已排序的序列">2.8用bisect来管理已排序的序列</h3>
+
+<p>bisect模块包含两个主要函数，bisect和insort，两个函数都利用二分查找算法来在</p>
+
+<p>有序序列中查找或插入元素。</p>
+
+<p>2.8.1用bisect来搜索</p>
+
+<p>bisect(haystack, needle)在 haystack (干草操)里搜索 needle (针)的位置，该 位置满足的条件是，把 needle 插入这个位置之后， haystack 还能保持升序。也就是在 说这个函数返回的位置前面的值，都小于或等于 needle 的值。其中 haystack 必须是一 个有序的序列。你可以先用bisect(haystack, needle)查找位置index，再用 haystack.insert(index, needle) 来插入新值。但你也可用 insort 来一步到位，并 且后者的速度更快一些。</p>
+
+<p>Python的高产贡献者Raymond Hettinger写了 一个排序集合模块、</p>
+
+<p>(<a href="http://code.activestate.com/recipes/577197-sortedcollection/">http://code.activestate.com/recipes/577197-sortedcollection/</a>) ，模块里集成了 bisect</p>
+
+<p>功能，但是比独立的 bisect 更易用。</p>
+
+<p>向我们展示了 bisect 返回的不同位置值。这段</p>
+
+<p>示例 2-17 利用几个精心挑选的 needle， 代码的输出结果显示在图 2-4 中。</p>
+
+<p>示例 2-17 在有序序列中用 bisect 查找某个元素的插入位置</p>
+
+<p>import bisect import sys</p>
+
+<p>HAYSTACK = [1, 4, 5, 6, 8, 12, 15, 20, 21, 23, 23, 26, 29, 30] NEEDLES = [0, 1, 2, 5, 8, 10, 22, 23, 29, 30, 31]</p>
+
+<p>ROW_FMT = &lsquo;{0:2d} @ {1:2d}    {2}{0:&lt;2d}&rsquo;</p>
+
+<p>def demo(bisect_fn):</p>
+
+<p>for needle in reversed(NEEDLES):</p>
+
+<p>position = bisect_fn(HAYSTACK, needle) O offset = position * &lsquo;    |&rsquo;    ©</p>
+
+<p>print(ROW_FMT.format(needle, position, offset)) ©</p>
+
+<p>if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>if sys.argv[-1] == &lsquo;left&rsquo;: © bisect_fn = bisect.bisect_left</p>
+
+<p>else:</p>
+
+<p>bisect_fn = bisect.bisect print(&lsquo;DEMO:&lsquo;, bisect_fn.<strong>name</strong>) ❺</p>
+
+<p>print(&lsquo;haystack -&gt;&rsquo;, &lsquo; &lsquo;.join(&rsquo;%2d&rsquo; % n for n in HAYSTACK)) demo(bisect_fn)</p>
+
+<p>❶ 用特定的 bisect 函数来计算元素应该出现的位置。</p>
+
+<p>❷利用该位置来算出需要几个分隔符号。</p>
+
+<p>❸ 把元素和其应该出现的位置打印出来。</p>
+
+<p>❹ 根据命令上最后一个参数来选用 bisect 函数。</p>
+
+<p>❺ 把选定的函数在抬头打印出来</p>
+
+<p>图 2-4：用 bisect 函数时示例 2-17 的输出。每一行以 needle @ position (元素及 其应该插入的位置)开始，然后展示了该元素在原序列中的物理位置</p>
+
+<p>bisect 的表现可以从两个方面来调教。</p>
+
+<p>首先可以用它的两个可选参数一lo和hi——来缩小搜寻的范围。lo的默认值是0，hi 的默认值是序列的长度，即 len() 作用于该序列的返回值。</p>
+
+<p>其次， bisect 函数其实是 bisect_right 函数的别名，后者还有个姊妹函数叫 bisect_left。它们的区别在于，bisect_left返回的插入位置是原序列中跟被插入元 素相等的元素的位置，也就是新元素会被放置于它相等的元素的前面，而 bisect_right 返回的则是跟它相等的元素之后的位置。这个细微的差别可能对于整数序列来讲没什么 用，但是对于那些值相等但是形式不同的数据类型来讲，结果就不一样了。比如说虽然 1 == 1.0 的返回值是 True， 1 和 1.0 其实是两个不同的元素。图 2-5 显示的是用 bisect_left 来运行上述示例的结果。</p>
+
+<p>02-array-seq/ $ python3 bi.sect_demo.py left DEMO: bisect_left</p>
+
+<table>
+<thead>
+<tr>
+<th>haystack -&gt;</th>
+<th>1</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>8 12 15 20 21 23 23 26 29 30</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>31 @ 14</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>1    1    1    1    1    1    1    1    1    131</td>
+</tr>
+
+<tr>
+<td>30 @ 13</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>1    1    1    1    1    1    1    1    130</td>
+</tr>
+
+<tr>
+<td>29 @ 12</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>1    1    1    1    1    1    1    129</td>
+</tr>
+
+<tr>
+<td>23 @ 9</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>1    1    1    1    123</td>
+</tr>
+
+<tr>
+<td>22 @ 9</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>1 1 1 1 122</td>
+</tr>
+
+<tr>
+<td>10 @ 5</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>110</td>
+</tr>
+
+<tr>
+<td>8 @ 4</td>
+<td></td>
+<td></td>
+<td></td>
+<td>18</td>
+<td></td>
+</tr>
+
+<tr>
+<td>5 @    2</td>
+<td></td>
+<td>15</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>2 @ 1</td>
+<td>12</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>1 @ 0 1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>0 @ 0 0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>2-5：用 bisect_left 运行示例 2-17 得到的结果(跟图 2-4 对比可以发现，值</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>1、8、23、29 和 30 的插入位置变成了原序列中这些值的前面)</p>
+
+<p>bisect 可以用来建立一个用数字作为索引的查询表格，比如说把分数和成绩 8 对应起 来，见示例 2-18。</p>
+
+<p>8成绩指的是在美国大学中普遍使用的A~F字母成绩，A表示优秀，F表示不及格。一译者注 示例 2-18 根据一个分数，找到它所对应的成绩</p>
+
+<p>&gt;&gt;&gt; def grade(score, breakpoints=[60, 70, 80, 90], grades=&lsquo;FDCBA&rsquo;): &hellip;    i = bisect.bisect(breakpoints, score)</p>
+
+<p>&hellip;    return grades[i]</p>
+
+<p>&gt;&gt;&gt; [grade(score) for score in [33, 99, 77, 70, 89, 90, 100]]</p>
+
+<p>[&lsquo;F&rsquo;, &lsquo;A&rsquo;, &lsquo;C&rsquo;, &lsquo;C&rsquo;, &lsquo;B&rsquo;, &lsquo;A&rsquo;, &lsquo;A&rsquo;]</p>
+
+<p>示例 2-18 里的代码来自 bisect 模块的文档 (<a href="https://docs.python.org/3/library/bisect.html">https://docs.python+org/3/library/bisect+html</a>)。文档里列举了一些利用 bisect 的函数，</p>
+
+<p>它们可以在很长的有序序列中作为 index 的替代，用来更快地查找一个元素的位置。</p>
+
+<p>这些函数不但可以用于查找，还可以用来向序列中插入新元素，下面就来看看它们的用</p>
+
+<p>法。</p>
+
+<p>2.8.2 用bisect.insort插入新元素</p>
+
+<p>排序很耗时，因此在得到一个有序序列之后，我们最好能够保持它的有</p>
+
+<p>序。 bisect.insort 就是为了这个而存在的。</p>
+
+<p>insort(seq, item) 把变量 item 插入到序列 seq 中，并能保持 seq 的升序顺序。详见 示例 2-19 和它在图 2-6 里的输出。</p>
+
+<p>示例 2-19 insort 可以保持有序序列的顺序</p>
+
+<p>import bisect import random SIZE=7</p>
+
+<p>random.seed(1729)</p>
+
+<p>my_list = []</p>
+
+<p>for i in range(SIZE):</p>
+
+<p>new_item = random.randrange(SIZE*2) bisect.insort(my_list, new_item) print(&lsquo;%2d -&gt;&rsquo; % new_item, my_list)</p>
+
+<p>02-array-seq/ $ python3 bisect_insort.py</p>
+
+<table>
+<thead>
+<tr>
+<th>10</th>
+<th>-&gt;</th>
+<th>[10]</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>-&gt;</td>
+<td>[0,</td>
+<td>10]</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>-&gt;</td>
+<td>[0,</td>
+<td>6，</td>
+<td>10]</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>-&gt;</td>
+<td>[0,</td>
+<td>6，</td>
+<td>8,</td>
+<td>10]</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>◊</td>
+<td>[0，</td>
+<td>6，</td>
+<td>7,</td>
+<td>8,</td>
+<td>10]</td>
+<td></td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>-&gt;</td>
+<td>E0,</td>
+<td>2,</td>
+<td>6，</td>
+<td>7,</td>
+<td>8,</td>
+<td>10]</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>-&gt;</td>
+<td>[0,</td>
+<td>2,</td>
+<td>6，</td>
+<td>乙</td>
+<td>8,</td>
+<td>10， 10]</td>
+</tr>
+</tbody>
+</table>
+
+<p>图 2-6：示例 2-19 的输出</p>
+
+<p>insort 跟 bisect 一样，有 lo 和 hi 两个可选参数用来控制查找的范围。它也有个变体 叫insort_left，这个变体在背后用的是bisect_left。</p>
+
+<p>目前所提到的内容都不仅仅是对列表或者元组有效，还可以应用于几乎所有的序列类型 上。有时候因为列表实在是太方便了，所以 Python 程序员可能会过度使用它，反正我知 道我犯过这个毛病。而如果你只需要处理数字列表的话，数组可能是个更好的选择。下面 就来讨论一些可以替换列表的数据结构。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/07-list.sort-%E6%96%B9%E6%B3%95%E5%92%8C%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0-sorted/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">07 list.sort 方法和内置函数 sorted</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/00-%E4%BB%8B%E7%BB%8D/00-%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default">00 介绍</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

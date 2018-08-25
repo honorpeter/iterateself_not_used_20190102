@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 初识输入输出 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2 初识输入输出 C&#43;&#43;语言并未定义任何输入输出（IO）语句，取而代之，包含了一个全面的标准库 （standard library）来提供 IO 机制（以" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/02-%E5%88%9D%E8%AF%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 初识输入输出" />
+<meta property="og:description" content="2 初识输入输出 C&#43;&#43;语言并未定义任何输入输出（IO）语句，取而代之，包含了一个全面的标准库 （standard library）来提供 IO 机制（以" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/02-%E5%88%9D%E8%AF%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA/" /><meta property="article:published_time" content="2018-08-03T17:52:17&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T17:52:17&#43;00:00"/>
+<meta itemprop="name" content="02 初识输入输出">
+<meta itemprop="description" content="2 初识输入输出 C&#43;&#43;语言并未定义任何输入输出（IO）语句，取而代之，包含了一个全面的标准库 （standard library）来提供 IO 机制（以">
+
+
+<meta itemprop="datePublished" content="2018-08-03T17:52:17&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T17:52:17&#43;00:00" />
+<meta itemprop="wordCount" content="3122">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 初识输入输出"/>
+<meta name="twitter:description" content="2 初识输入输出 C&#43;&#43;语言并未定义任何输入输出（IO）语句，取而代之，包含了一个全面的标准库 （standard library）来提供 IO 机制（以"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 初识输入输出</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 3122 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#2-初识输入输出">2 初识输入输出</a>
+<ul>
+<li><a href="#标准输入输出对象">标准输入输出对象</a></li>
+<li><a href="#一个使用-io-库的程序">一个使用 IO 库的程序</a></li>
+<li><a href="#向流写入数据">向流写入数据</a></li>
+<li><a href="#使用标准库中的名字">使用标准库中的名字</a></li>
+<li><a href="#从流读取数据">从流读取数据</a></li>
+<li><a href="#完成程序">完成程序</a></li>
+<li><a href="#练习">练习</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="2-初识输入输出">2 初识输入输出</h2>
+
+<p>C++语言并未定义任何输入输出（IO）语句，取而代之，包含了一个全面的标准库 （standard library）来提供 IO 机制（以及很多其他设施）。对于很多用途，包括本书中的示例来说，我们只需了解 IO 库中一部分基本概念和操作。<span style="color:red;">什么意思？C++里面是没有自带IO语句的吗？嗯，好像是这样，使用的 cout printf 什么的都是 std 的。</span></p>
+
+<p>本书中的很多示例都使用了 iostream 库。iostream 库包含两个基础类型 istream 和 ostream，分别表示输入流和输出流。一个流就是一个字符序列，是从 IO 设备读出或写入 IO 设备的，术语“流” （stream）想要表达的是，随着时间的推移，字符是顺序生成或消耗的。<span style="color:red;">一直想知道这个流底层是怎么实现的？是一个序列吗？</span></p>
+
+<h3 id="标准输入输出对象">标准输入输出对象</h3>
+
+<p>标准库定义了 4 个 IO 对象。为了处理输入，我们使用一个名为 <code>cin</code> （发音为see-in）的 istream 类型的对象。这个对象也被称为标准输入（standard input）。对于输出，我们使用一个名为<code>cout</code> （发音为see-out）的 ostream 类型的对象。此对象也被称为标准输出（standard output）。标准库还定义了其他两个 ostream 对象，名为<code>cerr</code>和<code>clog</code> （发音分别为see-err和see-log）。我们通常用<code>cerr</code>来输出警告和错误消息，因此它也被称为标准错误（standard error）.，而<code>clog</code>用来输出程序运行时的一般性信息。<span style="color:red;">一直想知道这个cerr和clog到底使用在什么时候？我好像基本没有使用过这两个。</span></p>
+
+<p>系统通常将程序所运行的窗口与这些对象关联起来。因此，当我们读取<code>cin</code>,数据将从程序正在运行的窗口读入，当我们向<code>cout</code>、<code>cerr</code>和<code>clog</code>写入数据时，将会写到同一个窗口。<span style="color:red;">cerr 和 clog 也会写到当前的窗口吗？</span></p>
+
+<h3 id="一个使用-io-库的程序">一个使用 IO 库的程序</h3>
+
+<p>在书店程序中，我们需要将多条记录合并成单一的汇总记录。作为一个相关的，但更简单的问题，我们先来看一下如何将两个数相加。通过使用 IO 库，我们可以扩展 main 程序，使之能提示用户输入两个数，然后输出它们的和：</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt;&quot;Enter two numbers:&quot; &lt;&lt; std::endl;
+    int v1 = 0, v2 = 0;
+    std::cin &gt;&gt; v1 &gt;&gt; v2;
+    std::cout &lt;&lt; &quot;The sum of &quot;&lt;&lt; v1 &lt;&lt; &quot; and &quot; &lt;&lt; v2 &lt;&lt; &quot; is &quot;&lt;&lt; v1+v2 &lt;&lt; std::endl;
+    return 0;
+}
+</code></pre>
+
+<p>这个程序开始时在用户屏幕打印</p>
+
+<pre><code>Enter two numbers:
+</code></pre>
+
+<p>然后等待用户输入。如果用户键入</p>
+
+<pre><code>3 7
+</code></pre>
+
+<p>然后键入一个回车，则程序产生如下输出:</p>
+
+<pre><code>The sum of 3 and 7 is 10
+</code></pre>
+
+<p>程序的第一行</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+</code></pre>
+
+<p>告诉编译器我们想要使用<code>iostream</code>库。尖括号中的名字（本例中是iostream）指出了一个头文件（header）。每个使用标准库设施的程序都必须包含相关的头文件。<code>#include</code>指令和头文件的名字必须写在同一行中。通常情况下，<code>#include</code>指令必须出现在所有函数之外。<span style="color:red;">嗯，通常情况下，那么特殊情况有哪些？</span>我们一般将一个程序的所有<code>#include</code>指令都放在源文件的开始位置。</p>
+
+<h3 id="向流写入数据">向流写入数据</h3>
+
+<p>main的函数体的第一条语句执行了一个表达式（expression）。在C++中，一个表达式产生一个计算结果，它由一个或多个运算对象和（通常是）一个运算符组成。这条语句中的表达式使用了输出运算符（&lt;&lt;）在标准输出上打印消息：</p>
+
+<pre><code>std::cout &lt;&lt;&quot;Enter two numbers:&quot; &lt;&lt; std::endl;
+</code></pre>
+
+<p><code>&lt;&lt;</code>运算符接受两个运算对象：左侧的运算对象必须是一个 ostream 对象，右侧的运算对象是要打印的值。此运算符将给定的值写到给定的 ostream 对象中。输出运算符的计算结果就是其左侧运算对象。即，计算结果就是我们写入给定值的那个 ostream 对象。</p>
+
+<p>我们的输出语句使用了两次<code>&lt;&lt;</code>运算符。因为此运算符返回其左侧的运算对象，因此第一个运算符的结果成为了第二个运算符的左侧运算对象。<span style="color:red;">嗯，这样连着用的原因，以前我不是很明确这个。</span>这样，我们就可以将输出请求连接起来。因此，我们的表达式等价于</p>
+
+<pre><code>(std::cout &lt;&lt;&quot;Enter two numbers:&quot; )&lt;&lt; std::endl;
+</code></pre>
+
+<p>链中每个运算符的左侧运算对象都是相同的，在本例中是 <code>std::cout</code> 。我们也可以用两条语句生成相同的输出：</p>
+
+<pre><code>std::cout &lt;&lt;&quot;Enter two numbers:&quot;;
+std::cout &lt;&lt; std::endl;
+</code></pre>
+
+<p>第一个输出运算符给用户打印一条消息。这个消息是一个字符串字面值常量（string literal），是用一对双引号包围的字符序列。在双引号之间的文本被打印到标准输出。</p>
+
+<p>第二个运算符打印<code>endl</code>,这是一个被称为操纵符（manipulator）的特殊值。写入 <code>endl</code> 的效果是结束当前行，并将与设备关联的缓冲区（buffer）中的内容刷到设备中。缓冲刷新操作可以保证到目前为止程序所产生的所有输出都真正写入输出流中，而不是仅停留在内存中等待写入流。<span style="color:red;">这个地方总是感觉特别厉害和神秘，到底这个过程是怎样的呢？是怎么实现的呢？</span></p>
+
+<p><strong>注意：程序员常常在调试时添加打印语句。这类语句应该保证 “一直” 刷新流。否则，如果程序崩溃，输出可能还留在缓冲区中，从而导致关于程序崩溃位置的错误推断。</strong><span style="color:red;">嗯，是这样。</span></p>
+
+<h3 id="使用标准库中的名字">使用标准库中的名字</h3>
+
+<p>细心的读者可能会注意到这个程序使用了 <code>std::cout</code> 和 <code>std::endl</code>,而不是直接 的<code>cout</code>和<code>endl</code>。前缀<code>std::</code>指出名字<code>cout</code>和<code>endl</code>是定义在名为<code>std</code>的命名空间 (namespace)中的。命名空间可以帮助我们避免不经意的名字定义冲突，以及使用库中相同名字导致的冲突。标准库定义的所有名字都在命名空间<code>std</code>中。</p>
+
+<p>通过命名空间使用标准库有一个副作用：当使用标准库中的一个名字时，必须显式说明我们想使用来自命名空间std中的名字。例如，需要写出<code>std::cout</code>,通过使用作用域运算符(::)来指出我们想使用定义在命名空间<code>std</code>中的名字<code>cout</code>。 章 03 将给出一个更简单的访问标准库中名字的方法。<span style="color:red;">嗯。</span></p>
+
+<h3 id="从流读取数据">从流读取数据</h3>
+
+<p>在提示用户输入数据之后，接下来我们希望读入用户的输入。首先定义两个名为 v1 和 v2 的变量(variable)来保存输入：</p>
+
+<pre><code class="language-cpp">int v1 = 0, v2 = 0;
+</code></pre>
+
+<p>我们将这两个变量定义为<code>int</code>类型，<code>int</code>是一种内置类型，用来表示整数。还将它们初始化(initialize)为0。初始化一个变量，就是在变量创建的同吋为它赋予一个值。</p>
+
+<p>下一条语句是</p>
+
+<pre><code class="language-cpp">std::cin &gt;&gt; vl &gt;&gt; v2;
+</code></pre>
+
+<p>它读入输入数据。输入运算符(&gt;&gt;)与输出运算符类似，它接受一个 istream 作为其左侧运算对象，接受一个对象作为其右侧运算对象。它从给定的 istream 读入数据，并存入给定对象中。与输出运算符类似，输入运算符返回其左侧运算对象作为其计算结果。因此，此表达式等价于</p>
+
+<pre><code class="language-cpp">(std::cin &gt;&gt; v1) &gt;&gt; v2;
+</code></pre>
+
+<p>由于此运算符返回其左侧运算对象，因此我们可以将一系列输入请求合并到单一语句中。</p>
+
+<p>本例中的输入操作从 <code>std::cin</code> 读入两个值，并将第一个值存入vl,将第二个值存入V2。</p>
+
+<p>换句话说，它与下面两条语句的执行结果是一样的：<span style="color:red;">嗯，是的，这个解决了我很久以前的疑惑，我一直想知道，为什么程序知道我是输入的两个数字？现在才知道，他每接收到一个数字，会返回左侧的运算对象，然后接受下一个数字。嗯。</span></p>
+
+<pre><code class="language-cpp">std::cin &gt;&gt; vl; std::cin &gt;&gt; v2;
+</code></pre>
+
+<h3 id="完成程序">完成程序</h3>
+
+<p>剩下的就是打印计算结果了：</p>
+
+<pre><code class="language-cpp">std::cout &lt;&lt; &quot;The sum of &quot;&lt;&lt; v1 &lt;&lt; &quot; and &quot; &lt;&lt; v2 &lt;&lt; &quot; is &quot;&lt;&lt; v1+v2 &lt;&lt; std::endl;
+</code></pre>
+
+<p>这条语句虽然比提示用户输入的打印语句更长，但原理上是一样的，它将每个运算对象打印在标准输出上。本例一个有意思的地方在于，运算对象并不都是相同类型的值。某些运算对象是字符串字面值常量，例如 &ldquo;The sum of&rdquo; 。其他运算对象则是int值，如 v1、 v2 以及算术表达式 v1+v2 的计算结果。标准库定义了不同版本的输入输出运算符，來处理这些不同类型的运算对象。<span style="color:red;">嗯，这就是为什么可以统一使用 <code>&lt;&lt;</code> 来处理不同的类型的运算对象的原因。</span></p>
+
+<h3 id="练习">练习</h3>
+
+<p>练习1.3:编写程序，在标准输出上打印 Hello, World。</p>
+
+<p>练习1.4:我们的程序使用加法运算符<code>+</code>来将两个数相加。编写程序使用乘法运算符<code>*</code>, 来打印两个数的积。</p>
+
+<p>练习1.5:我们将所有输出操作放在一条很长的语句中。重写程序，将每个运算对象的打印操作放在一条独立的语句中。</p>
+
+<p>练习1.6:解释下面程序片段是否合法。</p>
+
+<pre><code class="language-cpp">std: :cout &lt;&lt; &quot;The sum of &quot; &lt;&lt; vl;
+            &lt;&lt; &quot; and &quot; &lt;&lt; v2;
+            &lt;&lt; &quot; is &quot; &lt;&lt; vl + v2 &lt;&lt; std::endl;
+</code></pre>
+
+<p>如果程序是合法的，它输出什么？如果程序不合法，原因何在？应该如何修正？不合法，前面两行末尾使用 <code>;</code> 隔开了整行。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-primer/01-%E5%BC%80%E5%A7%8B/04-%E6%8E%A7%E5%88%B6%E6%B5%81/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 控制流</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-cstringstringchar%E6%8C%87%E9%92%88/">
+            <span class="next-text nav-default">C&#43;&#43; cstring、string、char指针</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

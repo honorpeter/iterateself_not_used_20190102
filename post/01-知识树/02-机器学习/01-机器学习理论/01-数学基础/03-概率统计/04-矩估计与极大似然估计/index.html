@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 矩估计与极大似然估计 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="矩估计与极大似然估计 REF： 七月在线 深度学习 缘由： 对据估计和极大似然估计进行总结。 矩是moment，用m表示？ (P(A\mid B)) 中的|读作given。 估计" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/04-%E7%9F%A9%E4%BC%B0%E8%AE%A1%E4%B8%8E%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 矩估计与极大似然估计" />
+<meta property="og:description" content="矩估计与极大似然估计 REF： 七月在线 深度学习 缘由： 对据估计和极大似然估计进行总结。 矩是moment，用m表示？ (P(A\mid B)) 中的|读作given。 估计" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/04-%E7%9F%A9%E4%BC%B0%E8%AE%A1%E4%B8%8E%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="04 矩估计与极大似然估计">
+<meta itemprop="description" content="矩估计与极大似然估计 REF： 七月在线 深度学习 缘由： 对据估计和极大似然估计进行总结。 矩是moment，用m表示？ (P(A\mid B)) 中的|读作given。 估计">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="3995">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 矩估计与极大似然估计"/>
+<meta name="twitter:description" content="矩估计与极大似然估计 REF： 七月在线 深度学习 缘由： 对据估计和极大似然估计进行总结。 矩是moment，用m表示？ (P(A\mid B)) 中的|读作given。 估计"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 矩估计与极大似然估计</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 3995 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#矩估计与极大似然估计">矩估计与极大似然估计</a></li>
+<li><a href="#ref">REF：</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#样本">样本</a>
+<ul>
+<li><a href="#样本的统计量">样本的统计量</a></li>
+<li><a href="#样本的原点矩和中心矩">样本的原点矩和中心矩</a>
+<ul>
+<li><a href="#随机变量的矩和样本的矩有什么关系">随机变量的矩和样本的矩有什么关系？</a></li>
+</ul></li>
+<li><a href="#参数估计">参数估计</a></li>
+</ul></li>
+<li><a href="#矩估计">矩估计</a>
+<ul>
+<li><a href="#矩估计-1">矩估计：</a></li>
+<li><a href="#矩估计的结论">矩估计的结论：</a></li>
+<li><a href="#几个矩估计的计算">几个矩估计的计算</a>
+<ul>
+<li><a href="#正态分布的矩估计">正态分布的矩估计：</a></li>
+<li><a href="#均匀分布的矩估计">均匀分布的矩估计：</a></li>
+<li><a href="#两点分布的矩估计"> 两点分布的矩估计：</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#极大似然估计">极大似然估计</a>
+<ul>
+<li><a href="#我们从贝叶斯公式开始思考">我们从贝叶斯公式开始思考</a></li>
+<li><a href="#极大似然估计-mle">极大似然估计  MLE</a></li>
+<li><a href="#极大似然估计的具体实践操作">极大似然估计的具体实践操作</a></li>
+<li><a href="#一个抛硬币的例子">一个抛硬币的例子</a></li>
+<li><a href="#正态分布的极大似然估计">正态分布的极大似然估计：</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="矩估计与极大似然估计">矩估计与极大似然估计</h1>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 深度学习</li>
+</ol>
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对据估计和极大似然估计进行总结。</p>
+
+<p><strong>矩是moment，用m表示？</strong></p>
+
+<p><strong>(P(A\mid B)) 中的|读作given。</strong></p>
+
+<p>估计量一般加上一个帽子 (\hat{\theta})</p>
+
+<h1 id="样本">样本</h1>
+
+<h2 id="样本的统计量">样本的统计量</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/KH8DcBFiDD.png?imageslim" alt="mark" /></p>
+
+<p><strong>之所以这里的样本方差是除以n-1的，是因为当减去平均值的时候，自由度降了一个变成n-1（这个只是感性理解的解释，不是真正的解释），真正的解释是什么？</strong></p>
+
+<p>如果只有一个样本的时候呢？那么我们只能认为这个分布就是一个严格等于我们样本值的一个无变化的分布。<strong>？没明白</strong></p>
+
+<p><strong>注意：只有真真正正的求样本的方差的时候才会除以n-1，实际上别的地方都是除以n的，就比如据估计里面样本的方差也是除以n的，因为据估计是从样本的中心矩那边来的。而样本的中心矩那里是除以n的</strong></p>
+
+<p>注意，之前给定的是整个系统的随机变量，现在给出的是给定n个样本的时候的均值和方差。</p>
+
+<p><strong>为什么是除以n-1的？为什么这个可以无偏？</strong></p>
+
+<h2 id="样本的原点矩和中心矩">样本的原点矩和中心矩</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/kcaKcaiIJ3.png?imageslim" alt="mark" /></p>
+
+<p><strong>注意这个地方是除以n的，这个地方的原点矩和中心矩都是除以n的，这就是为什么下面的矩估计也是除以n的，因为从这而来。</strong></p>
+
+<h3 id="随机变量的矩和样本的矩有什么关系">随机变量的矩和样本的矩有什么关系？</h3>
+
+<p>假设总体服从某参数为(\theta) (存在但未知，有可能是值或者向量)的分布，从总体中抽出一组样本(X_1,X_2,\cdots ,X_n) ，假定这些样本独立的，而且是同分布的，如何估计参数(\theta)？</p>
+
+<p>可以通过(X_1,X_2,\cdots ,X_n)方便的计算出样本的k阶矩，然后假设样本的k阶矩等于总体的k阶矩，这样就可以建立一个方程，通过这个方程可估计出总体的参数。</p>
+
+<h2 id="参数估计">参数估计</h2>
+
+<p>已知一个随机变量的分布函数 (X\sim f_{\theta }(x))，其中(\theta =(\theta_1,\cdots ,\theta_k)) 为未知参数。现在有样本(X_1,\cdots ,X_n)。</p>
+
+<p>那么我们怎么利用样本对分布函数中的参数(\theta)进行估计呢？</p>
+
+<ul>
+<li><p>点估计: 用样本的一个函数 (T(X_1,\cdots ,X_n )) 去估计(g(\theta ))，给样本估计一个点，你可以说这个点的精确度是多少</p></li>
+
+<li><p>区间估计: 用一个区间去估计(g(\theta ))，估计一个点，说出精确度是多少，你就利用这个精确度画出一个区间，你说在这个区间内发生的概率是99%以上，这个就是区间估计。其实核心的还是点估计。<strong>有例子吗？</strong></p></li>
+</ul>
+
+<h1 id="矩估计">矩估计</h1>
+
+<p>据估计也是一种点估计。</p>
+
+<h2 id="矩估计-1">矩估计：</h2>
+
+<p>设总体的均值为(\mu)，方差(\sigma^2)，（(\mu)和(\sigma)未知，待求），则由原点矩表达式：</p>
+
+<p>[\left{\begin{align<em>}E(X)&amp;=\mu\E(X^2)&amp;=Var(X)+[E(X)]^2=\sigma^2+\mu^2\end{align</em>}\right.]</p>
+
+<p>根据该总体的一组样本，求得原点矩：</p>
+
+<p>[\left{\begin{align<em>}A<em>1=\frac{1}{n}\sum</em>{i=1}^{n}X_i\A<em>2=\frac{1}{n}\sum</em>{i=1}^{n}X_i^2\end{align</em>}\right.]</p>
+
+<h2 id="矩估计的结论">矩估计的结论：</h2>
+
+<p>也就是说我给定样本的时候，就可以根据样本的均值去估计总体的均值，用样本的伪方差去估计总体的方差。<strong>注意这个地方是伪方差。因为除以的是n不是n-1。用方差不行吗？</strong></p>
+
+<p>根据各自的中心矩相等，计算得到：</p>
+
+<p>[\left{\begin{align<em>}\mu &amp;=\overline{X}\ \sigma^2 &amp;=\frac{1}{n}\sum_{i=1}^{n}X<em>i^2-\overline{X}^2=\frac{1}{n}\sum</em>{i=1}^{n}(X_i-\overline{X})^2\end{align</em>}\right.]</p>
+
+<p>由于是根据样本求得的估计结果，根据记号习惯，写作：</p>
+
+<p>[\left{\begin{align<em>}\hat{\mu} &amp;=\overline{X}\ \hat{\sigma}^2 &amp;=\frac{1}{n}\sum_{i=1}^{n}(X_i-\overline{X})^2\end{align</em>}\right.]</p>
+
+<p>这个就是矩估计的结论，据估计的内容大体上就是这么多。</p>
+
+<p><strong>由于从中心矩而来，除以的是n而不是n-1 ，因此是有偏的，比如正态分布，方差偏小，会更趋近于均值。</strong></p>
+
+<p>估计出来的均值和方差上面都有个hat。</p>
+
+<h2 id="几个矩估计的计算">几个矩估计的计算</h2>
+
+<h3 id="正态分布的矩估计">正态分布的矩估计：</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CJ97lA2Kic.png?imageslim" alt="mark" /></p>
+
+<h3 id="均匀分布的矩估计">均匀分布的矩估计：</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/kKK4F9G16C.png?imageslim" alt="mark" /></p>
+
+<p>这个地方，可见如果你有n个样本，想知道n个样本的可能的均匀分布的上线和下限，就可以这么求。</p>
+
+<h3 id="两点分布的矩估计"> 两点分布的矩估计：</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2mmjhikhIJ.png?imageslim" alt="mark" /></p>
+
+<h1 id="极大似然估计">极大似然估计</h1>
+
+<p>我们拿到手m个样本，既然这m个样本拿到手了，那么存在即合理，背后有存在的合理性。也就是说也许有一些参数来控制这些样本能够出现并且如果某一套参数使得这些样本出现的概率时最大的，那么说这套参数就是我们想要得到的。因为或许这套参数就是最有可能接近于真实的情况的。</p>
+
+<p>极大似然估计也是一个点估计</p>
+
+<h2 id="我们从贝叶斯公式开始思考">我们从贝叶斯公式开始思考</h2>
+
+<p><strong>感觉这一段讲的有些迷糊 看一下权威资料是什么样的</strong></p>
+
+<p>首先，给定一些样本D，然后我们已经猜测生成这个样本的系统满足的一个规律或者结论是：(A_1,A_2,\cdots A_n)这些都是系统可能满足的规律，比如，系统是(y=\theta x)，那么样本可能就是：(1,1),(2,2),(3,3)等，然后我们猜测的结论是什么呢？就是(\theta)等于1、2、3、4等等。</p>
+
+<p>然后我们想知道(\theta)应该是几？而且并不知道(y=\theta x)</p>
+
+<p>那么我们可以这样：</p>
+
+<p>[\begin{align<em>}max\, P(A_i\mid D)&amp;=max\frac{P(D\mid A_i)P(A_i)}{P(D)}\&amp;=max(P(D\mid A_i)P(A_i))\&amp;\rightarrow P(D\mid A_i)\end{align</em>}]</p>
+
+<p>从而得到：</p>
+
+<p>[max\,P(A_i\mid D)\rightarrow max\,P(D\mid A_i)]</p>
+
+<p>说明一下这个式子，</p>
+
+<ul>
+<li><p>这个地方的(max\,P(A_i\mid D))的意思是：在给定D的时候(A_i)出先的概率最大的那个。<strong>还是不是特别清楚，这个式子书上是这么写的吗？ 对照权威资料看下这个最大似然函数是怎么得到的？真的是从贝叶斯这过来的吗？</strong></p></li>
+
+<li><p>第一步是贝叶斯公式。</p></li>
+
+<li><p>第二步是因为给定样本对于任何的(A_i)，(P(D))都是常数。<strong>没明白？为什么是常数？</strong></p></li>
+
+<li><p>第三部是因为我们假设(P(A_i))这个先验概率，这个先验概率是相等或者说近似的，所以可以把它扔了。<strong>没明白？为什么是相等的？</strong></p></li>
+</ul>
+
+<p>得出的结论的意义是：</p>
+
+<p>拿到一组样本，如何估计样本背后的总体的参数呢？总体的参数可能取(\theta_1,\theta_2,\cdots ,\theta_n)这些参数，都有可能取到，可能参数为\theta_i的时候得到这个数据的概率是最大的，那么我们就求出这个(\theta_i)，把这个(\theta_i)作为总体的参数。</p>
+
+<h2 id="极大似然估计-mle">极大似然估计  MLE</h2>
+
+<p>Maximum Likelihood Estimation</p>
+
+<p>设总体分布为(f(x,\theta))，(X_1,X_2,\cdots X_n)为该总体采样得到的样本，因为(X_1,X_2,\cdots X_n)独立同分布，于是他们的联合概率密度函数为：<strong>嗯如果x,y,z是独立的，那么P(xyz)=P(x)P(y)P(z)。但是还是为什么要相乘？为什么 求出的相乘的这个函数的极大值对应的(\theta)就是可以使D出现的概率最大的(\theta)？没有道理把？联合概率密度的极大值为什么时D最大概率出现的时候？什么是联合概率密度函数？相乘起来是一个整个样本的似然函数。</strong></p>
+
+<p>[L(x_1,x_2,\cdots ,x_n;\theta_1,\theta_2,\cdots \theta<em>k)=\prod</em>{i=1}^{n}f(x_i;\theta_1,\theta_2,\cdots \theta_k)]</p>
+
+<p>这里，\theta 已经被看作固定但未知的参数；反过来，因为样本已经存在，可以看成(x_1,x_2,\cdots ,x_n)是固定的，是已知的，因此这个时候(L(x,\theta))可以看成是关于(\theta)的函数，这个函数就是似然函数。而这里面只有(\theta)是参数。</p>
+
+<p>这样我们就可以通过各种各样的方法求这个函数的极大值（求驻点可以用牛顿法，或者梯度法等等），求出的那个极大值对应的(\theta)值就是我们想要得到的东西。</p>
+
+<p>而这种方法就是极大似然估计。</p>
+
+<p>似然函数不是概率，但是很类似于概率，当(\theta )给定的时候，它是概率密度。当(x)给定，(\theta )变化的时候，他就类似于在表示，在这个观测值(x)的条件下，参数等于(\theta )的可能性（<strong>不是概率</strong>）。起个名字叫做似然函数。<strong>嗯，厉害，在合格观测值x的条件下，参数等于(\theta )的可能性。厉害。但是还是没明白这个有什么作用？</strong></p>
+
+<p>实际上这个是有可能是局部最优解的，但是在指数族这个框架下极值就是最大值。</p>
+
+<p><strong>感觉还是有点不透彻。</strong></p>
+
+<h2 id="极大似然估计的具体实践操作">极大似然估计的具体实践操作</h2>
+
+<p>在实践中，由于求导数的需要，往往将似然函数取对数，得到对数似然函数；若对数似然函数可导，可通过求导的方式，解下列方程组，得到驻点，然后分析该驻点是极大值点</p>
+
+<p>[log\,L(\theta_1,\theta_2,\cdots \theta<em>k)=\sum</em>{i=1}^{n}log\,f(x_i;\theta_1,\theta_2,\cdots ,\theta_k)]</p>
+
+<p>[\frac{\partial L(\theta)}{\partial \theta_i}=0,\;i=1,2,\cdots ,k]</p>
+
+<p><strong>到底是怎么求的？想知道一个切实的例子到底是怎么计算的？</strong></p>
+
+<h2 id="一个抛硬币的例子">一个抛硬币的例子</h2>
+
+<p>找出与样本的分布最接近的概率分布模型。</p>
+
+<p>简单的例子：10次抛硬币的结果是：正正反正正正反反正正，假设p是每次抛硬币结果为正的概率。则：得到这样的实验结果的概率是：</p>
+
+<p>[\begin{align<em>}P&amp;=pp(1-p)ppp(1-p)(1-p)pp\&amp;=p^7(1-p)^3\end{align</em>}]</p>
+
+<p>我现在想做什么呢？想知道p取多少的时候，可以使P的值最大。
+因为为什么呢？因为我现在手里的样本就是这些，我虽然不知道p的概率使多少，但是我知道，不管p是多少，P，也就是现在的这些样本出现的概率，应该是一个比较大的概率，就是假如说，抛10次得到了很多的序列，但是我现在只得到了这么一个序列，说明这么一个序列就比别的序列出现的概率要大。所以，我虽然不知道p是多少，但是我只要使P最大就可以。
+这种想法就是极大似然估计的想法。感觉这个名字与这个想法完全不搭，基本上看到名字根本想不出它想要表达什么。</p>
+
+<p>目标函数：</p>
+
+<p>[max\,P=\underset{0\leq p\leq 1}{max}p^7(1-p)^3]</p>
+
+<p>最优解是：p=0.7 思考，如何求解？</p>
+
+<p>一般形式：</p>
+
+<p>[L<em>{\overline{p}}=\prod</em>{x} p(x)^{\overline{p(x)} }]</p>
+
+<p>(p(x))模型是估计的概率分布，(\overline{p(x)})是实验的结果的分布。</p>
+
+<p>先取对数，再求导就可以求出p。</p>
+
+<p><strong>嗯，这个例子还是易于理解的。</strong></p>
+
+<h2 id="正态分布的极大似然估计">正态分布的极大似然估计：</h2>
+
+<p>给定一组样本(X_1,X_2,\cdots X_n)，已知它们来自于高斯分布(N(\mu,\sigma))，试估计参数(\mu,\sigma)。</p>
+
+<p>之前的抛硬币使两点分布，现在用高斯分布。同样可以使用极大似然估计的方法：</p>
+
+<p>首先我们知道高斯分布的概率密度函数：</p>
+
+<p>[f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2} }]</p>
+
+<p>讲(X_i)的样本值(x_i)带入，得到：</p>
+
+<p>[L(x)=\prod_{i=1}^{n}\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^2} }]</p>
+
+<p>求对数可得：</p>
+
+<p>[\begin{align<em>}l(x)&amp;=log\prod_{i} \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x<em>i-\mu)^2}{2\sigma^2} }\&amp;=\sum</em>{i} log\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x<em>i-\mu)^2}{2\sigma^2} }\&amp;=(\sum</em>{i}log\frac{1}{\sqrt{2\pi}\sigma})+(\sum_{i} -\frac{(x<em>i-\mu)^2}{2\sigma^2})\&amp;=-\frac{n}{2}log(2\pi \sigma^2)-\frac{1}{2\sigma^2}\sum</em>{i} (x_i-\mu)^2\end{align</em>}]</p>
+
+<p>而对于这个函数，可以对(\mu)，(\sigma)分别进行求偏导，很容易得到如下式子：</p>
+
+<p>[\mu=\frac{1}{n}\sum_{i} x_i]</p>
+
+<p>[\sigma^2=\frac{1}{n}\sum_{i} (x_i-\mu)^2]</p>
+
+<p>而这个，就是通过极大似然估计估计出来的正态分布的参数的最终结果。可以看到上述的结论和矩估计的结果是一致的，并且意义非常直观：用样本的均值作为这个高斯分布的均值，样本的<strong>伪方差</strong>作为高斯分布的方差。注：这个地方再次注意下，经典意义下的方差，分母是n-1；在似然估计的方法中，求的方差是n。</p>
+
+<p>该结论将在EM(期望最大化算法)、GMM高斯混合模型中将继续使用。 <strong>EM算法是什么？GMM高斯混合模型是什么？现在正在看这部分的，看完之后吧这个关于最大似然估计的知识重新梳理一下。</strong></p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p>方舟指数分布的概率密度函数(f(x)=\lambda e^{-\lambda x})，猜测相对应的幂分布的概率密度函数，查阅关于幂率函数的相关文献。</p>
+
+<p>[f(x)=ax^{-r} ,\; a,r为正常数]</p>
+
+<p><strong>上面这个幂律分布和长尾分布在推荐系统中会用到，这个再看下应该添加到那里。</strong></p>
+
+<p>一些参考资料</p>
+
+<p>概率统计部分建议参考中科大统计系张卫平老师的课程材料, 每一章节比较简明容易阅读：</p>
+
+<ul>
+<li><p><a href="http://staff.ustc.edu.cn/~zwp/teach/Math-Stat/,lec(14,15">http://staff.ustc.edu.cn/~zwp/teach/Math-Stat/,lec(14,15</a>)</p></li>
+
+<li><p><a href="http://staff.ustc.edu.cn/~zwp/teach/Prob-Stat/,lec(4,5,6,7,8">http://staff.ustc.edu.cn/~zwp/teach/Prob-Stat/,lec(4,5,6,7,8</a>)</p></li>
+</ul>
+
+<p>作业</p>
+
+<ul>
+<li><p>一个贝叶斯后验估计的例子  <a href="https://ask.julyedu.com/question/7190">https://ask.julyedu.com/question/7190</a></p></li>
+
+<li><p>一个关于 EM 算法的介绍  <a href="https://ask.julyedu.com/question/7287">https://ask.julyedu.com/question/7287</a></p></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/06-%E8%81%9A%E7%B1%BB/04-%E5%8E%9F%E5%9E%8B%E8%81%9A%E7%B1%BB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 原型聚类</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/04-%E8%BF%9E%E7%BB%AD%E4%B8%8E%E7%BC%BA%E5%A4%B1%E5%80%BC/">
+            <span class="next-text nav-default">04 连续与缺失值</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

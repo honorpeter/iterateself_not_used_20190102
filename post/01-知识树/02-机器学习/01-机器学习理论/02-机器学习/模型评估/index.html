@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>模型评估 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="模型评估 TODO 重要的指标要单独拿出来，比如到底是什么意义？与别的指标的关系？正常情况下大概是多少？对模型的参数有什么指导意义？怎么画？怎么编程实" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="模型评估" />
+<meta property="og:description" content="模型评估 TODO 重要的指标要单独拿出来，比如到底是什么意义？与别的指标的关系？正常情况下大概是多少？对模型的参数有什么指导意义？怎么画？怎么编程实" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0/" /><meta property="article:published_time" content="2018-08-01T18:32:30&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T18:32:30&#43;00:00"/>
+<meta itemprop="name" content="模型评估">
+<meta itemprop="description" content="模型评估 TODO 重要的指标要单独拿出来，比如到底是什么意义？与别的指标的关系？正常情况下大概是多少？对模型的参数有什么指导意义？怎么画？怎么编程实">
+
+
+<meta itemprop="datePublished" content="2018-08-01T18:32:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T18:32:30&#43;00:00" />
+<meta itemprop="wordCount" content="1710">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="模型评估"/>
+<meta name="twitter:description" content="模型评估 TODO 重要的指标要单独拿出来，比如到底是什么意义？与别的指标的关系？正常情况下大概是多少？对模型的参数有什么指导意义？怎么画？怎么编程实"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">模型评估</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 1710 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#模型评估">模型评估</a></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#评价指标">评价指标</a></li>
+<li><a href="#常用的评价指标有">常用的评价指标有</a></li>
+<li><a href="#比较检验">比较检验</a></li>
+<li><a href="#偏差与方差">偏差与方差</a></li>
+<li><a href="#ref">REF</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="模型评估">模型评估</h1>
+
+<p>TODO</p>
+
+<ul>
+<li><strong>重要的指标要单独拿出来，比如到底是什么意义？与别的指标的关系？正常情况下大概是多少？对模型的参数有什么指导意义？怎么画？怎么编程实现求这个指标？对于不同的模型这个指标分别应该怎么求？等等，还是有很多要清楚的，不是单单几句话就结束了</strong></li>
+<li><strong>再看看，用自己的话复述一遍。</strong></li>
+<li><strong>有些问题需要查找解决掉，并总结。</strong></li>
+<li><strong>为什么将比较检验和偏差方差单独拿出来了？</strong></li>
+<li><strong>我看Tensorflow里面好像有很多的评价指标，要看看那个是重要的。想知道指标冲突的时候选那个？</strong></li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>我看Tensorflow里面好像有很多的评价指标，要看看那个是重要的。想知道指标冲突的时候选那个？</li>
+</ul>
+
+<h1 id="评价指标">评价指标</h1>
+
+<p>机器学习算法那的最终目的是为了生成一个模型，模型的好坏需要一些指标来评估。</p>
+
+<p>评价指标（也称性能度量）是评估机器学习泛化能力的标准，不同的指标往往会导致不同的评判结果。并且，不同的机器学习任务也有着不同的评价指标。</p>
+
+<h1 id="常用的评价指标有">常用的评价指标有</h1>
+
+<ul>
+<li><p>错误率：分类错误的样本数占样本总数的比例。</p></li>
+
+<li><p>准确率（精度）：分类正确的样本数占样本总数的比例。在很多情况下，准确率是一个欠佳或具有误导性的指标，比如在不同类型错误具有不同代价时（典型为分类不平衡，即正类别或负类别极其罕见）。</p></li>
+
+<li><p>对数损失函数（置信度）：(log_loss=-\frac{1}{N}\sum_{i=1}^{N}y_i log p_i + (1-y_i)log(1-p_i))，其中 y_iy​i​​ 是指第 ii 个样本所属的真实类别（0 或者 1），而( p_i)表示第 (i)个样本属于类别 1 的概率。</p></li>
+
+<li><p>查准率和查全率：查准率是指分类器分类正确的正样本（True Positive，TP）的个数占该分类器所有分类为正样本个数（TP+FP (false positive)）的比例；而查全率是指分类器分类正确的正样本个数（TP）占所有的正样本个数（TP+FN (false negative)）的比例。这两者通常是一对矛盾的变量，查准率高时，查全率往往偏低。</p></li>
+
+<li><p>F1 度量：基于查准率和查全率的调和平均定义， (F1=\frac{2PR}{P+R})，(F1_\beta=\frac{(1+\beta^2)PR}{\beta^2P+R})，其中( \beta)是查全率对查准率的相对重要性。</p></li>
+
+<li><p>受试者工作特征（Receiver Operating Characteristic，ROC）：ROC 曲线描述真正例率（TPR）与假正例率（FPR）的关系。在比较 ROC 时，需要比较 ROC 曲线下面的面积（Area Under ROC Curve，AUC），<strong>AUC 越大，分类效果越好。没怎么理解ROC和AUC，AUC会与F1冲突吗？ROC只能用在二分类场景里面吗？需要补充下。单纯的罗列跟本知不知道在说什么。</strong></p></li>
+
+<li><p>代价敏感错误率：用于非均等代价的情景，根据任务的领域知识设定代价矩阵，计算的错误率称为代价敏感错误率；而对应的 ROC 曲线叫代价曲线。</p></li>
+</ul>
+
+<h1 id="比较检验">比较检验</h1>
+
+<p>机器学习中，性能比较是比较复杂的</p>
+
+<ul>
+<li><p>我们希望比较的是泛化性能，而实际中只能得到测试集上的性能，两者的结果未必相同</p></li>
+
+<li><p>测试集上的性能跟测试集本身的选择有很大关系</p></li>
+
+<li><p>很多机器学习算法本身有一定的随机性，即便用相同参数运行在同一个测试集上，多次的运行的结果也有可能不同</p></li>
+</ul>
+
+<p>所以，我们需要运用统计假设检验（hypothesis test）得到模型的泛化性能是否在统计意义上较优。常用的方法包括：<strong>什么是统计假设检验？这些方法又是什么？</strong></p>
+
+<ul>
+<li><p>二项检验</p></li>
+
+<li><p>t 检验</p></li>
+
+<li><p>交叉验证 t 检验</p></li>
+
+<li><p>McNemar 检验</p></li>
+
+<li><p>Friedman 检验</p></li>
+
+<li><p>Nemenyi 后续检验</p></li>
+</ul>
+
+<h1 id="偏差与方差">偏差与方差</h1>
+
+<p>泛化误差可以分解为偏差、方差与噪声之和，偏差-方差分解（bias-variance decomposition）是解释泛化性能的重要工具。<strong>怎么分解的？</strong></p>
+
+<ul>
+<li><p>偏差度量了算法的期望预测与真实结果的偏离程度。</p></li>
+
+<li><p>方差度量了同样大小训练集变动导致的性能变化。</p></li>
+
+<li><p>噪声涉及问题本身的难度。</p></li>
+</ul>
+
+<p>所以，泛化性能是由学习算法的能力、数据的充分性以及学习任务本身的难度共同决定的。</p>
+
+<p>但偏差与方差是有冲突的，即偏差-方差窘境（bias-variance dilemma）。在训练程度不足时，学习器拟合程度不强，训练数据的扰动不足以产生显著变化，此时偏差主导泛化错误率。随着训练程度加深，学习器拟合能力增强，训练数据的扰动逐渐可以被学习器学到，方差逐渐主导泛化错误率。如果继续加深训练，则有可能发生过拟合。</p>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li><a href="https://feisky.xyz/machine-learning/basic/evaluation.html">模型评估</a></li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">数组：链表中环的入口结点</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%A8%A1%E5%9E%8B%E8%81%9A%E7%B1%BB/">
+            <span class="next-text nav-default">模型聚类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

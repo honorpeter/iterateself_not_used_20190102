@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 列表推导和生成器表达式 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2.2 列表推导和生成器表达式 列表推导是构建列表(list)的快捷方式，而生成器表达式则可以用来创建其他任何类型的序列。如果你的代码里并不经常使用" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/02-%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 列表推导和生成器表达式" />
+<meta property="og:description" content="2.2 列表推导和生成器表达式 列表推导是构建列表(list)的快捷方式，而生成器表达式则可以用来创建其他任何类型的序列。如果你的代码里并不经常使用" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/02-%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F/" /><meta property="article:published_time" content="2018-07-11T16:49:13&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-11T16:49:13&#43;00:00"/>
+<meta itemprop="name" content="02 列表推导和生成器表达式">
+<meta itemprop="description" content="2.2 列表推导和生成器表达式 列表推导是构建列表(list)的快捷方式，而生成器表达式则可以用来创建其他任何类型的序列。如果你的代码里并不经常使用">
+
+
+<meta itemprop="datePublished" content="2018-07-11T16:49:13&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-11T16:49:13&#43;00:00" />
+<meta itemprop="wordCount" content="2860">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 列表推导和生成器表达式"/>
+<meta name="twitter:description" content="2.2 列表推导和生成器表达式 列表推导是构建列表(list)的快捷方式，而生成器表达式则可以用来创建其他任何类型的序列。如果你的代码里并不经常使用"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 列表推导和生成器表达式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-11 </span>
+        
+        <span class="more-meta"> 2860 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#2-2-列表推导和生成器表达式">2.2 列表推导和生成器表达式</a>
+<ul>
+<li><a href="#2-1-列表推导和可读性">2.1 列表推导和可读性</a></li>
+<li><a href="#2-2-列表推导同-filter-和-map-的比较">2.2 列表推导同 filter 和 map 的比较</a></li>
+<li><a href="#2-3-笛卡儿积">2.3 笛卡儿积</a></li>
+<li><a href="#2-4-生成器表达式">2.4 生成器表达式</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="2-2-列表推导和生成器表达式">2.2 列表推导和生成器表达式</h2>
+
+<p>列表推导是构建列表(list)的快捷方式，而生成器表达式则可以用来创建其他任何类型的序列。如果你的代码里并不经常使用它们，那么很可能你错过了许多写出可读性更好且更高效的代码的机会。</p>
+
+<p>如果你对我说的“更具可读性”持怀疑态度的话，别急着下结论，我马上就能说服你。</p>
+
+<blockquote>
+<p>很多Python程序员都把列表推导(list comprehension) 简称为 listcomps ，生成式表达器(generator expression) 则称为 genexps。我有时也会这么用。</p>
+</blockquote>
+
+<h3 id="2-1-列表推导和可读性">2.1 列表推导和可读性</h3>
+
+<p>先来个小测试，你觉得示例 2-1 和示例 2-2 中的代码，哪个更容易读懂？</p>
+
+<p>示例 2-1 把一个字符串变成 Unicode 码位的列表 <span style="color:red;"><code>ord</code> 是什么？</span></p>
+
+<pre><code class="language-python">&gt;&gt;&gt; symbols = '$^£¥€«'
+&gt;&gt;&gt; codes = []
+&gt;&gt;&gt; for symbol in symbols:
+...     codes.append(ord(symbol))
+...
+&gt;&gt;&gt; codes
+[36, 162, 163, 165, 8364, 164]
+</code></pre>
+
+<p>示例 2-2 把字符串变成 Unicode 码位的另外一种写法</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; symbols = '$^£¥€«'
+&gt;&gt;&gt; codes = [ord(symbol) for symbol in symbols]
+&gt;&gt;&gt; codes
+[36, 162, 163, 165, 8364, 164]
+</code></pre>
+
+<p>虽说任何学过一点 Python 的人应该都能看懂示例 2-1，但是我觉得如果学会了列表推导的话，示例 2-2 读起来更方便，因为这段代码的功能从字面上就能轻松地看出来。</p>
+
+<p>for 循环可以胜任很多任务：遍历一个序列以求得总数或挑出某个特定的元素、用来计算总和或是平均数，还有其他任何你想做的事情。在示例 2-1 的代码里，它被用来新建一个列表。</p>
+
+<p>另一方面，列表推导也可能被滥用。以前看到过有的 Python 代码用列表推导来重复获取一个函数的副作用。通常的原则是，只用列表推导来创建新的列表，并且尽量保持简短。如果列表推导的代码超过了两行，你可能就要考虑是不是得用 for 循环重写了。就跟写 文章一样，并没有什么硬性的规则，这个度得你自己把握。<span style="color:red;">嗯。</span></p>
+
+<blockquote>
+<p>句法提示</p>
+
+<p>Python 会忽略代码里 <code>[]</code>、<code>{}</code> 和 <code>()</code> 中的换行，因此如果你的代码里有多行的列表、列表推导、生成器表达式、字典这一类的，可以省略不太好看的续行符 \。</p>
+</blockquote>
+
+<p>列表推导不会再有变量泄漏的问题</p>
+
+<p>Python 2.x 中，在列表推导中 for 关键词之后的赋值操作可能会影响列表推导上下文 中的同名变量。像下面这个 Python 2.7 控制台对话：</p>
+
+<pre><code>Python 2.7.6 (default, Mar 22 2014, 22:59:38)
+[GCC 4.8.2] on linux2
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; x = 'my precious'
+&gt;&gt;&gt; dummy = [x for x in 'ABC']
+&gt;&gt;&gt; x
+'C'
+</code></pre>
+
+<p>如你所见， x 原本的值被取代了，<span style="color:red;">嗯，是这样。</span>但是这种情况在 Python 3 中是不会出现的。</p>
+
+<p>列表推导、生成器表达式，以及同它们很相似的集合（set）推导和字典（dict）推导，在 Python 3 中都有了自己的局部作用域，就像函数似的。表达式内部的变量和赋值只在局部起作用，表达式的上下文里的同名变量还可以被正常引用，局部变量并不会影响到它们。</p>
+
+<p>这是Python 3代码：</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; x = 'ABC'
+&gt;&gt;&gt; dummy = [ord(x) for x in x]
+&gt;&gt;&gt; x
+'ABC'
+&gt;&gt;&gt; dummy &amp;
+[65, 66, 67]
+&gt;&gt;&gt;
+</code></pre>
+
+<p>可见，x 的值被保留了。列表推导也创建了正确的列表。<span style="color:red;">嗯，这个的确不错，2 与 3 在这个地方是不同的。</span></p>
+
+<p>列表推导可以帮助我们把一个序列或是其他可迭代类型中的元素过滤或是加工，然后再新建一个列表。 Python 内置的 filter 和 map 函数组合起来也能达到这一效果，但是可读性上打了不小的折扣。<span style="color:red;">filter 和 map 怎么组合实现？</span></p>
+
+<h3 id="2-2-列表推导同-filter-和-map-的比较">2.2 列表推导同 filter 和 map 的比较</h3>
+
+<p>filter 和 map 合起来能做的事情，列表推导也可以做，而且还不需要借助难以理解和阅读的 lambda 表达式。详见示例 2-3。</p>
+
+<p>示例 2-3 用列表推导和 map/filter 组合来创建同样的表单</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; symbols = '$夺£¥€n'
+&gt;&gt;&gt; beyond_ascii = [ord(s) for s in symbols if ord(s) &gt; 127]
+&gt;&gt;&gt; beyond_ascii
+[162, 163, 165, 8364, 164]
+&gt;&gt;&gt; beyond_ascii = list(filter(lambda c: c &gt; 127, map(ord, symbols)))
+&gt;&gt;&gt; beyond_ascii
+[162, 163, 165, 8364, 164]
+</code></pre>
+
+<p><span style="color:red;">酷，这个filter 和 map 的组合使用也挺酷的。感觉对于 filter 和 map 也要好好总结下。</span></p>
+
+<p>我原以为 map/filter 组合起来用要比列表推导快一些， Alex Martelli 却说不一定可以比较一下：</p>
+
+<pre><code class="language-python">import timeit
+
+TIMES = 10000
+
+SETUP = &quot;&quot;&quot;
+symbols = '$¢£¥€¤'
+def non_ascii(c):
+    return c &gt; 127
+&quot;&quot;&quot;
+
+def clock(label, cmd):
+    res = timeit.repeat(cmd, setup=SETUP, number=TIMES)
+    print(label, *('{:.3f}'.format(x) for x in res))
+
+clock('listcomp        :', '[ord(s) for s in symbols if ord(s) &gt; 127]')
+clock('listcomp + func :', '[ord(s) for s in symbols if non_ascii(ord(s))]')
+clock('filter + lambda :', 'list(filter(lambda c: c &gt; 127, map(ord, symbols)))')
+clock('filter + func   :', 'list(filter(non_ascii, map(ord, symbols)))')
+</code></pre>
+
+<p>结果如下：</p>
+
+<pre><code>listcomp        : 0.035 0.031 0.028
+listcomp + func : 0.041 0.039 0.039
+filter + lambda : 0.039 0.034 0.054
+filter + func   : 0.038 0.038 0.032
+</code></pre>
+
+<p><span style="color:red;">上面代码中的<code>*('{:.3f}'.format(x) for x in res)</code>的星号是什么意思？</span></p>
+
+<p>第5章会更详细地讨论map和filter。<span style="color:red;">嗯。</span>下面就来看看如何用列表推导来计算笛卡儿积：两个或以上的列表中的元素对构成元组，这些元组构成的列表就是笛卡儿积。</p>
+
+<h3 id="2-3-笛卡儿积">2.3 笛卡儿积</h3>
+
+<p>如前所述，用列表推导可以生成两个或以上的可迭代类型的笛卡儿积。笛卡儿积是一个列表，列表里的元素是由输入的可迭代类型的元素对构成的元组，因此笛卡儿积列表的长度等于输入变量的长度的乘积，如图 2-2 所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180711/Fb6e0A05ef.png?imageslim" alt="mark" /></p>
+
+<p>如果你需要一个列表，列表里是 3 种不同尺寸的 T 恤衫，每个尺寸都有 2 个颜色，示例 2-4 用列表推导算出了这个列表，列表里有 6 种组合。</p>
+
+<p>示例 2-4 使用列表推导计算笛卡儿积</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; colors  = ['black', 'white']
+&gt;&gt;&gt; sizes =  ['S', 'M', 'L']
+&gt;&gt;&gt; tshirts  = [(color, size) for  color in colors for size in sizes]
+&gt;&gt;&gt; tshirts
+[('black','S'), ('black', 'M'), ('black', 'L'),('white', 'S'),('white', 'M'), ('white', 'L')]
+&gt;&gt;&gt; for color in colors:
+...    for size in sizes:
+...         print((color, size))
+('black', 'S')
+('black', 'M')
+('black', 'L')
+('white', 'S')
+('white', 'M')
+('white', 'L')
+ &gt;&gt;&gt; tshirts = [(color, size) for size in sizes for color in colors]
+ &gt;&gt;&gt; tshirts
+ [('black','S'), ('white', 'S'),('black','M'),('white', 'M'),
+ ('black','L'),('white', 'L')]
+</code></pre>
+
+<p>可见，如果想依照先尺码后颜色的顺序来排列，只需要调整从句的顺序就行。</p>
+
+<p>在第 1 章的示例 1-1 中，有下面这样一段程序，它的作用是生成一个按花色分组的 52 张牌的列表，其中每个花色各有 13 张不同点数的牌。</p>
+
+<pre><code class="language-python">self._cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
+</code></pre>
+
+<p>列表推导的作用只有一个：生成列表。如果想生成其他类型的序列，生成器表达式就派上了用场。下一节就是对生成器表达式的一个简单介绍，其中可以看到如何用它生成列表以外的序列类型。<span style="color:red;">嗯。</span></p>
+
+<h3 id="2-4-生成器表达式">2.4 生成器表达式</h3>
+
+<p>虽然也可以用列表推导来初始化元组、数组或其他序列类型，但是生成器表达式是更好的选择。这是因为生成器表达式背后遵守了迭代器协议，可以逐个地产出元素，而不是先建立一个完整的列表，然后再把这个列表传递到某个构造函数里。前面那种方式显然能够节省内存。<span style="color:red;">嗯，是的。</span></p>
+
+<p>生成器表达式的语法跟列表推导差不多，只不过把方括号换成圆括号而已。<span style="color:red;">好吧</span></p>
+
+<p>示例 2-5 展示了如何用生成器表达式建立元组和数组。</p>
+
+<p>示例2-5用生成器表达式初始化元组和数组</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; symbols = '$夺£¥€«■
+&gt;&gt;&gt; tuple(ord(symbol) for symbol in symbols)
+(36, 162, 163, 165, 8364, 164)
+&gt;&gt;&gt; import array
+&gt;&gt;&gt; array.array('I', (ord(symbol) for symbol in symbols))
+array('I', [36, 162, 163, 165, 8364, 164])
+</code></pre>
+
+<p><span style="color:red;">默认的生成器生成的是一个list 吗？还是一个tuple？看上面的代码感觉默认是一个list？</span></p>
+
+<p>可见，如果生成器表达式是一个函数调用过程中的唯一参数，那么不需要额外再用括号把它围起来。</p>
+
+<p>array 的构造方法需要两个参数，因此括号是必需的。 array 构造方法的第一个参数指定了数组中数字的存储方式。 2.9.1 节中有更多关于数组的详细讨论。<span style="color:red;">这句没看懂，什么叫指定了数组中数字的存储方式？</span></p>
+
+<p>示例 2-6 则是利用生成器表达式实现了一个笛卡儿积，用以打印出上文中我们提到过的 T 恤衫的 2 种颜色和 3 种尺码的所有组合。与示例 2-4 不同的是，用到生成器表达式之后，内存里不会留下一个有 6 个组合的列表，因为生成器表达式会在每次 for 循环运行时才 生成一个组合。如果要计算两个各有 1000 个元素的列表的笛卡儿积，生成器表达式就可以帮忙省掉运行 for 循环的开销，即一个含有 100 万个元素的列表。<span style="color:red;">嗯，这个时候生成器的厉害就体现出来了。省了列表推导式需要的存储空间。</span></p>
+
+<p>示例 2-6 使用生成器表达式计算笛卡儿积</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; colors = ['black', 'white']
+&gt;&gt;&gt; sizes = ['S', 'M', 'L']
+&gt;&gt;&gt; for tshirt in ('%s %s' % (c, s) for c in colors for s in sizes):
+...       print(tshirt)
+black S
+black M
+black L
+white S
+white M
+white L
+</code></pre>
+
+<p>生成器表达式逐个产出元素，从来不会一次性产出一个含有 6 个 T 恤样式的列表。<span style="color:red;">嗯。</span></p>
+
+<p>第 14 章会专门讲到生成器的工作原理。这里只是简单看看如何用生成器来初始化除列表之外的序列，以及如何用它来避免额外的内存占用。<span style="color:red;">嗯。</span></p>
+
+<p>接下来看看Python中的另外一个很重要的序列类型：元组(tuple)。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/03-%E5%85%83%E7%BB%84%E4%B8%8D%E4%BB%85%E4%BB%85%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84%E5%88%97%E8%A1%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 元组不仅仅是不可变的列表</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/01-%E5%86%85%E7%BD%AE%E5%BA%8F%E5%88%97%E7%B1%BB%E5%9E%8B%E6%A6%82%E8%A7%88/">
+            <span class="next-text nav-default">01 内置序列类型概览</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

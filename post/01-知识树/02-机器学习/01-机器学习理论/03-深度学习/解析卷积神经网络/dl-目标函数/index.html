@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>DL 目标函数 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 目标函数 深度网络 通过样本 学习。本 务中的一 其搭配使 解)，正 关正则项 误差反向传播指导网络参数学习与表示 和回归" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="DL 目标函数" />
+<meta property="og:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 目标函数 深度网络 通过样本 学习。本 务中的一 其搭配使 解)，正 关正则项 误差反向传播指导网络参数学习与表示 和回归" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0/" /><meta property="article:published_time" content="2018-06-26T19:32:03&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:32:03&#43;00:00"/>
+<meta itemprop="name" content="DL 目标函数">
+<meta itemprop="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 目标函数 深度网络 通过样本 学习。本 务中的一 其搭配使 解)，正 关正则项 误差反向传播指导网络参数学习与表示 和回归">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:32:03&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:32:03&#43;00:00" />
+<meta itemprop="wordCount" content="3956">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DL 目标函数"/>
+<meta name="twitter:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 目标函数 深度网络 通过样本 学习。本 务中的一 其搭配使 解)，正 关正则项 误差反向传播指导网络参数学习与表示 和回归"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">DL 目标函数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 3956 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《解析卷积神经网络》魏秀参</li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p>目标函数</p>
+
+<p>深度网络</p>
+
+<p>通过样本</p>
+
+<p>学习。本</p>
+
+<p>务中的一</p>
+
+<p>其搭配使</p>
+
+<p>解)，正</p>
+
+<p>关正则项</p>
+
+<p>误差反向传播指导网络参数学习与表示 和回归(regression)这两类经典预测任 问题需求选择使用合适的目标函数或将</p>
+
+<p>或达到其他训练目标(如希望得到稀疏</p>
+
+<p>加人目标函数中一起指导模型训练。有</p>
+
+<p>“网络正则化”。</p>
+
+<p>的目标函数</p>
+
+<p>类任务共N个训练样本，针对网络最后分类层第i个样本的输人特征 霉对应的真实标记为yi € {1，2，+ + +，C},另h = (hi, h2，+ + +，hc)T为网 &amp;输出，即样本i的预测结果，其中C为分类任务类别数。</p>
+
+<p>i数，亦称“损失函数”(loss function)或“代价函数” (cost function)。</p>
+
+<p>9.1.分类任务的目标函数</p>
+
+<p>9.1.1交叉熵损失函数</p>
+
+<p>交叉摘(cross entropy)损失函数又称Softmax损失函数，是目前卷积神经网 络中最常用的分类目标函数。其形式为：</p>
+
+<p>Lcross entropy loss = Lsoftmax loss</p>
+
+<p>即通过指数化变换使网络输出 h 转换为概率</p>
+
+<p>9.1.2合页损失函数</p>
+
+<p>在支持向量机中被广泛使用的合页损失函数(hinge loss)有时也会作为目标函 数在神经网络模型中使用：</p>
+
+<p>hinge loss —</p>
+
+<p>i=1</p>
+
+<p>需指出的是，一般情况的分类任务中交叉熵损失函数的分类效果略优于合页损</p>
+
+<p>失函数的分类效果。</p>
+
+<p>9.1.3坡道损失函数</p>
+
+<p>对支持向量机有一定了解的读者应该知道合页损失函数的设计理念，即“对错</p>
+
+<p>误越大的样本施加越严重的惩罚”。可是这一损失函数对噪声的抵抗能力较差。</p>
+
+<p>试想，若某样本标记本身错误或该样本本身是离群点(outlier),则由于错分导 致该样本分类误差会变得很大，如此便会影响整个分类超平面的学习，从而降 低模型泛化能力。非凸损失函数的引人则很好地解决了这个问题。</p>
+
+<p>其中，坡道损失函数(ramp loss function)和Tukey’s biweight损失函数分 别是分类任务和回归任务中非凸损失函数的代表。由于它们针对噪声数据和 离群点具备良好的抗噪特性，因此也常被称为“鲁棒损失函数” (robust loss functions)。这类损失函数的共同特点是在分类(回归)误差较大区域进行了 截断”，使得较大的误差不再大程度影响整个误差函数。但是，这类函数因其 非凸(non-convex)的性质使得在传统机器学习优化中过于繁杂，甚至有时根 本无法进行。不过，“这点”非凸性质放在神经网络模型优化中实属“小巫见大</p>
+
+<p>巫”——整个网络模型本身就是个巨大的非凸函数，得益于神经网络模型的训</p>
+
+<p>练机制使得此类非凸优化不再成为难题。</p>
+
+<p>坡道损失函数［10］ (ramp loss)的定义为：</p>
+
+<p>i=</p>
+
+<p>(9+3)</p>
+
+<p>(9+4)</p>
+
+<p>其中，s指定了 “截断点”的位置。由于坡道损失函数实则在s处“截断”的 合页损失函数，因此坡道损失函数也被称为“截断合页损失函数” (truncated hinge loss function)。图9+1展示了合页损失函数和坡道损失函数。很明显，坡 道损失函数是非凸的，图中其截断点在3 = -0.5处。不过细心的读者或许会提 出“坡道损失函数在x = 1和x = s两处是不可导的，这该如何进行误差的反 向传播啊？”。不要着急，其实真实情况下并不要求必须满足严格的数学上的连 续，因为计算机内部的浮点计算并不会得到完全导数落在“尖点”的非常情况， 最多只会落在“尖点”附近。若导数值在这两个“尖点”附近，仅需给出对应的 导数值即可，因此数学上的“尖点”不可导并不影响实际使用。对于“截断点” s的设置，根据文献［91］的理论推导，s取值最好根据分类任务的类别数C而</p>
+
+<p>定，</p>
+
+<p>图9+1:合页损失函数(蓝色虚线)与坡道损失函数(红色实线)。</p>
+
+<p>以上提到的交叉熵损失函数、合页损失函数和坡道损失函数只是简单衡量了</p>
+
+<p>9.1.分类任务的目标函数</p>
+
+<p>模型预测值与样本真实标记之间的误差从而指导训练过程，它们并没有显式的</p>
+
+<p>将特征判别性学习考虑到整个网络训练中。对此，为了进一步提高学习到的特</p>
+
+<p>征表示的判别性，近来研究者们基于交叉熵损失函数设计了一些新型损失函数，</p>
+
+<p>如大间隔交叉摘损失函数(large-margin softmax loss)、中心损失函数(center loss)。这些损失函数考虑了增大类间距离，减小类内差异等不同要素，进一步 提升了网络学习特征的判别能力。</p>
+
+<p>9.1.4大间隔交叉熵损失函数</p>
+
+<p>上面提到的网络输出结果h实际上是全连接层参数W与该层特征向量xi的 内积，即h = WTXi (为表达简洁式中未体现偏置项b)。因此传统的交叉摘损 失函数(Softmax损失函数)还可表示为：</p>
+
+<p>其中，WT为W第i列参数值。同时，根据内积定义，式9.5可变换为：</p>
+
+<p>Lsoftma:</p>
+
+<p>| COS(&yi;)</p>
+
+<p>HXi|| COS(0j )    +    ⑺上)</p>
+
+<p>式中的0j (0 S f n)为向量WT和Xi的夹角。</p>
+
+<p>以二分类为例，对隶属于第1个类别的某样本Xi而言，为分类正确传统交叉</p>
+
+<p>熵损失函数需迫使学到的参数满足：WTxi &gt; WTxi，亦即||Wi||||xi|| cos(0i) &gt; IIWJIIIx』cos(02)。大间隔交叉熵损失函数(large-margin softmax loss function) [58]为使特征更具分辨能力则在此基础上要求二者差异需更大，即引人 m “拉大”二者差距，这便是“大间隔”名称的由来。||Wi||||xi|| cos(m0i) &gt; ||W2||||xi|| cos(02) (0 &lt; Oi &lt;    )。式中m为正整数，起到控制间隔大小的作</p>
+
+<p>用， m 越大，类间间隔越大，反之易然。特别地，当 m =1时，大间隔交叉熵 损失函数即退化为传统交叉熵损失函数。</p>
+
+<p>Oi) &gt; ||Wi||||xi||</p>
+
+<p>cos(mOi) &gt; ||W2||||xi|| cos(O2) +</p>
+
+<p>(9+7)</p>
+
+<p>可以发现，上式不仅满足传统交叉熵损失函数的约束，在确保分类正确的同时增 大了不同类别间分类的置信度，有助进一步提升特征分辨能力(discriminative ability )。</p>
+
+<p>大间隔交叉熵损失函数［58］的定义为：</p>
+
+<p>Llarge—margin softmax loss</p>
+
+<p>(9+8)</p>
+
+<p>比较可发现，上式与式9.6的区别仅在于将第i类分类间隔“拉大” 了：由 cos(‘)变为桃，)。其中:</p>
+
+<p>梢=</p>
+
+<p>(9.9)</p>
+
+<p>式中dw只需满足“单调递减”条件，且D(m) = coS(m)。为简化网络前向 和反向运算，文献［58］推荐了一种具体的4(0)函数形式如下：</p>
+
+<p>^k, 0 G</p>
+
+<p>kn (k + 1)n</p>
+
+<p>mm</p>
+
+<p>(9.10)</p>
+
+<p>式中k为整数，且满足kG ［0,m-1］。</p>
+
+<p>图9.2的示意图直观的对比了二分类情形下Wi的模和W2的模在“等</p>
+
+<p>于”、“大于”和“小于”三种不同关系下的决策边界［58］。可直观发现，大间隔 交叉熵损失函数扩大了类间距离，由于它不仅要求分类正确且要求分开的类需 保持较大间隔，使得训练目标相比传统交叉熵损失函数更困难。训练目标变困 难后带来的一个额外好处便是可以起到防止模型过拟合的作用。由是，在分类 性能方面，大间隔交叉熵函数要优于交叉熵损失函数和合页损失函数。</p>
+
+<p>9.1.5中心损失函数</p>
+
+<p>大间隔交叉熵损失函数主要考虑増大类间距离。而中心损失函数(center loss function) ［87］则在考虑类间距离的同时还将一些注意力放在减小类内差异上。 中心损失函数的定义为：</p>
+
+<p>center loss ——</p>
+
+<p>2lZllxi -cy』</p>
+
+<p>yil 2 ,</p>
+
+<p>(9+11)</p>
+
+<p>i=1</p>
+
+<p>9.1.分类任务的目标函数</p>
+
+<p>图9+2:二分类情形下，Wi的模和W2的模不同关系时，传统交叉熵损失函数 （左图）和大间隔交叉熵损失函数（右图）决策边界对比［58］。</p>
+
+<p>其中cyi为第yi类所有深度特征的均值（“中心”），故名“中心损失函数”。直 观上，式9.11迫使所有隶属于yi类的样本与之中心不要距离过远，否则将增大 惩罚。在实际使用时，由于中心损失函数本身考虑类内差异，所以中心损失函 数应与其他主要考虑类间距离的损失函数配合使用，如交叉熵损失函数，这样 网络最终目标函数形式可表示为：</p>
+
+<p>loss 十 ALcenter loss (ohx,yain)</p>
+
+<p>ehyi</p>
+
+<p>iN-b</p>
+
+<p>(9+12)</p>
+
+<p>jC ehj</p>
+
+<p>tji=o1n</p>
+
+<p>十 2 二 llxi - cy』</p>
+
+<p>(9.13)</p>
+
+<p>i=1</p>
+
+<p>『项，A越大则类内差异占整个目标函数较大比</p>
+
+<p>图9+3展示了不同A取值对分类结果的影响［87］,其分类任务为“0”至“9</p>
+
+<p>共10个手写字符识别任务2。图中不同颜色的“簇”表示了不同类别手写字符 (“0”至“9”)。可明显发现，在中心损失函数占比重较大时，簇更加集中，说明</p>
+
+<p>类内差异明显减小。另外需要指出的是，类内差异减小的同时也使得特征具备</p>
+
+<p>更强的判别能力(图9.3(a)-(d)簇的间隔越来越大，即类别区分性越来越大)。</p>
+
+<p>在分类性能方面，中心损失函数搭配传统交叉熵损失函数要优于只使用交叉熵</p>
+
+<p>损失函数作为目标函数的网络模型，特别是在人脸识别问题上可有较大性能提 升［87］。</p>
+
+<p>图9.3:中心损失函数示意［87］。随A增大，中心损失函数在整个目标函数中占 比重增加、类内差异减小、特征分辨能力增强。</p>
+
+<p>9.2回归任务的目标函数
+在上一节的分类问题中，样本真实标记实际对应了一条独热向量(one hot vector):对样本i，该向量在％处为1表征该样本的真实隶属类别，而其余 C-1维均为0。而在本节讨论的回归任务中，样本真实标记同样对应一条向量， 但与分类任务真实标记的区别在于，回归任务真实标记的每一维为实数，而非 二值(0或1)。</p>
+
+<p>数据集为MNIST，可访问如下链接下载数据：<a href="http://yann.lecun.com/exdb/mnist/">http://yann.lecun.com/exdb/mnist/</a></p>
+
+<p>9.2.回归任务的目标函数</p>
+
+<p>在介绍不同回归任务目标函数前，首先介绍一个回归问题的基本概念：残差</p>
+
+<p>或称为预测误差，用于衡量模型预测值与真实标记的靠近程度。假设回归问题</p>
+
+<p>中对应于第i个输人特征xi的真实标记为y^ = (yi,y2,.. + ,yM)T, M为标记 向量总维度，则it即表示样本i上网络回归预测值(yi与其真实标记在第t</p>
+
+<p>维的预测误差(亦称残差)：</p>
+
+<p>it = yt - yt +    (9.14)</p>
+
+<p>9.2.1 li损失函数</p>
+
+<p>常用的两种回归问题损失函数为li和12损失函数。对N个样本的li损失函 数定义如下：</p>
+
+<p>Li&rsquo;</p>
+
+<p>loss ——</p>
+
+<p>9.2.2 l2损失函数</p>
+
+<p>类似地，对 N 个样本的 l2 损失函数定义如下：</p>
+
+<p>在实际使用中， li 与 l2 损失函数在回归精度上几乎相差无几，不过在一些情 况下12损失函数可能会略优于li [98],同时收敛速度方面l2损失函数也略快 于li损失函数。两者的函数示意图如图9.4a和图9.4b所示。</p>
+
+<p>9.2.3 Tukey’s biweight 损失函数</p>
+
+<p>同分类任务中提到的坡道损失函数一样，Tukey’s biweight损失函数[3]也是一 类非凸损失函数,可克服在回归任务中的离群点或样本噪声对整体回归模型的 干扰和影响,是回归任务中的一种鲁棒损失函数,其定义如下：</p>
+
+<p>NM</p>
+
+<p>EE</p>
+
+<p>i=i t=i</p>
+
+<p>1</p>
+
+<p>if |itl</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E7%BD%91%E7%BB%9C%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">DL 网络参数初始化</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/00-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D/dl-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%9C%AA%E6%9D%A5%E4%BC%9A%E6%80%8E%E6%A0%B7/">
+            <span class="next-text nav-default">DL 深度学习的未来会怎样？</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

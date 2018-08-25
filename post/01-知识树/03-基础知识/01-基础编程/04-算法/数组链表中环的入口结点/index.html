@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>数组：链表中环的入口结点 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="数组：链表中环的入口结点 ORIGINAL CodingInterviews 题目 题目描述 一个链表中包含环，请找出该链表的环的入口结点。 题目解答 双指针法 假设链表长度为 N，那么第 N 链接到了第 k" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="数组：链表中环的入口结点" />
+<meta property="og:description" content="数组：链表中环的入口结点 ORIGINAL CodingInterviews 题目 题目描述 一个链表中包含环，请找出该链表的环的入口结点。 题目解答 双指针法 假设链表长度为 N，那么第 N 链接到了第 k" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E6%95%B0%E7%BB%84%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9/" /><meta property="article:published_time" content="2018-08-01T18:33:07&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T18:33:07&#43;00:00"/>
+<meta itemprop="name" content="数组：链表中环的入口结点">
+<meta itemprop="description" content="数组：链表中环的入口结点 ORIGINAL CodingInterviews 题目 题目描述 一个链表中包含环，请找出该链表的环的入口结点。 题目解答 双指针法 假设链表长度为 N，那么第 N 链接到了第 k">
+
+
+<meta itemprop="datePublished" content="2018-08-01T18:33:07&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T18:33:07&#43;00:00" />
+<meta itemprop="wordCount" content="1345">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="数组：链表中环的入口结点"/>
+<meta name="twitter:description" content="数组：链表中环的入口结点 ORIGINAL CodingInterviews 题目 题目描述 一个链表中包含环，请找出该链表的环的入口结点。 题目解答 双指针法 假设链表长度为 N，那么第 N 链接到了第 k"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">数组：链表中环的入口结点</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 1345 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#数组-链表中环的入口结点">数组：链表中环的入口结点</a></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#双指针法">双指针法</a></li>
+<li><a href="#断链法">断链法</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="数组-链表中环的入口结点">数组：链表中环的入口结点</h1>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ul>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>一个链表中包含环，请找出该链表的环的入口结点。</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="双指针法">双指针法</h2>
+
+<p>假设链表长度为 N，那么第 N 链接到了第 k 个节点形成了环，即我们需要查找到倒数第 N-K+1 个节点，那么环中就有 N-K+1 个节点，这时候我们定义两个指针 (P_1) 和 (P_2) 指向链表的头部，指针(P_1) 先在链表中向前移动 n-k+1 步，到达第 n-k+2 个节点，然后两个指针同步向前移动，当 (P_2) 走了K-1步到达环的入口的时候，指针 (P_1) 正好走了N+1步，到达了环的入口，即两个指针会相遇在环的入口处。</p>
+
+<p>那么我们剩下的问题就是如何得到环中节点的数目?</p>
+
+<p>我们可以使用一快一慢两个指针（比如慢指针一次走一步，慢指针一次走两步），如果走的过程中发现快指针追上了慢指针，说明遇见了环，而且相遇的位置一定在环内，考虑一下环内，从任何一个节点出现再回到这个节点的距离就是环的长度，于是我们可以进一步移动慢指针，快指针原地不动，当慢指针再次回到相遇位置时，正好在环内走了一圈，从而我们通过计数就可以获取到环的长度。</p>
+
+<ul>
+<li><p>第一步，找环中相汇点。分别用 p1， p2 指向链表头部，p1每次走一步，p2 每次走二步，直到 p1==p2 找到在环中的相汇点。</p></li>
+
+<li><p>第二步，找环的长度。从环中的相汇点开始，p2 不动，p1 前移，当再次相遇时，p1 刚好绕环一周，其移动即为环的长度 K 。</p></li>
+
+<li><p>第三步, 求环的起点，转换为求环的倒数第 N-K 个节点，则两指针 left 和 right 均指向起始，right先走 K 步，然后两个指针开始同步移动，当两个指针再次相遇时，right 刚好绕环一周回到起点，left 则刚好走到了起点位置。</p>
+
+<p>#include <iostream>
+using namespace std;</p>
+
+<p>struct ListNode {
+    int val;
+    struct ListNode *next;
+};</p>
+
+<p>#define SLOW_STEP   1
+#define FAST_STEP   2</p>
+
+<p>class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead) {
+        //  找到环中的某个节点
+        ListNode* meetingNode = HasCycle(pHead);
+        if (meetingNode == NULL) {
+            return NULL;
+        }
+        cout &lt;&lt; &ldquo;find a node in cycle, value = &rdquo; &lt;&lt; meetingNode-&gt;val &lt;&lt; endl;</p>
+
+<pre><code>    //  获得链表中环路的长度
+    int cycleLength = GetCycleLength(meetingNode);
+    cout &lt;&lt; &quot;cycle length = &quot; &lt;&lt; cycleLength &lt;&lt; endl;
+
+    //  使用双指针来寻找环的入口
+    ListNode *leftNode = pHead;
+    ListNode *rightNode = pHead;
+    rightNode = NextNode(rightNode, cycleLength);//  右指针先往前走n步
+    while (leftNode != rightNode) {
+        leftNode = leftNode-&gt;next;
+        rightNode = rightNode-&gt;next;
+    }
+    //相等的时候就是环得入口
+    return leftNode;
+}
+
+//检查是不是有环
+ListNode* HasCycle(ListNode *pHead) {
+    if (pHead == NULL) {
+        return NULL;
+    }
+    ListNode *pSlow = pHead-&gt;next;
+    ListNode *pFast = pSlow-&gt;next;
+    while (pSlow != NULL &amp;&amp; pFast != NULL) {
+        if (pFast == pSlow) {
+            return pSlow;
+        }
+        pSlow = NextNode(pSlow, SLOW_STEP);
+        pFast = NextNode(pFast, FAST_STEP);
+    }
+    return NULL;
+}
+//向后走几步
+ListNode* NextNode(ListNode *node, int step) {
+    for (int i = 0; i &lt; step &amp;&amp; node != NULL; i++) {
+        node = node-&gt;next;
+    }
+    return node;
+}
+
+
+//获取链表中环的长度
+int GetCycleLength(ListNode *node) {
+    int length = 0;
+    if (node == NULL) {
+        return length;
+    }
+    //环内从任何一个节点往后走再回到这个节点的距离就是环的长度
+    ListNode *currNode = node;
+    ListNode *stepNode = node-&gt;next;
+    for (length = 1;; length++) {
+        if (stepNode == currNode) {
+            return length;
+        }
+        stepNode = stepNode-&gt;next;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>};</p>
+
+<p>int main() {
+    ListNode list[6];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = &amp;list[4];
+    list[4].val = 5;
+    list[4].next = &amp;list[5];
+    list[5].val = 6;
+    list[5].next = &amp;list[2];</p>
+
+<pre><code>Solution solu;
+cout &lt;&lt;&quot;entry node value = &quot;&lt;&lt; solu.EntryNodeOfLoop(list)-&gt;val &lt;&lt; endl;
+
+return 0;
+</code></pre>
+
+<p>}</p></li>
+</ul>
+
+<p>输出：</p>
+
+<pre><code>find a node in cycle, value = 5
+cycle length = 4
+entry node value = 3
+</code></pre>
+
+<p><strong>还是很清晰的。</strong></p>
+
+<h2 id="断链法">断链法</h2>
+
+<p>使用两个指针，一个在前面，另一个紧邻着这个指针，在后面。 两个指针同时向前移动，每移动一次，前面的指针的 next 指向NULL。 也就是说把访问过的节点都断开，这样最后到达的那个节点一定是尾节点的下一个， 也就是循环的第一个。到这结束。</p>
+
+<p>这个方法的时间复杂度为 (O(n))，还是不错的，但是它会修改链表的指向。<strong>因此，感觉这个一般不会用到吧？除非复制了整个链表。</strong></p>
+
+<p>代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+};
+
+
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead) {
+        if (pHead == NULL|| pHead-&gt;next == NULL) {
+            return NULL;
+        }
+        ListNode* previous = pHead;
+        ListNode* current = pHead-&gt;next;
+        while (current != NULL) {
+            previous-&gt;next = NULL;
+            previous = current;
+            current = current-&gt;next;
+        }
+        return previous;
+    }
+};
+
+int main() {
+    ListNode list[6];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = &amp;list[4];
+    list[4].val = 5;
+    list[4].next = &amp;list[5];
+    list[5].val = 6;
+    list[5].next = &amp;list[2];
+
+    Solution solu;
+    cout &lt;&lt;&quot;entry node value = &quot;&lt;&lt; solu.EntryNodeOfLoop(list)-&gt;val &lt;&lt; endl;
+
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>entry node value = 3
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7/%E6%B5%81%E8%AE%A1%E7%AE%97/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">流计算</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0/">
+            <span class="next-text nav-default">模型评估</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

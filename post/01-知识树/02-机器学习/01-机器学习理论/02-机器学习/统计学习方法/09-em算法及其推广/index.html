@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>09 EM算法及其推广 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第9章EM算法及其推广 EM算法是一种迭代算法，1977年由Dempster等人总结提出，用十甘有隐 变量(hidden variable)的概率" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/09-em%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E6%8E%A8%E5%B9%BF/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="09 EM算法及其推广" />
+<meta property="og:description" content="第9章EM算法及其推广 EM算法是一种迭代算法，1977年由Dempster等人总结提出，用十甘有隐 变量(hidden variable)的概率" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/09-em%E7%AE%97%E6%B3%95%E5%8F%8A%E5%85%B6%E6%8E%A8%E5%B9%BF/" /><meta property="article:published_time" content="2018-06-26T19:22:02&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:22:02&#43;00:00"/>
+<meta itemprop="name" content="09 EM算法及其推广">
+<meta itemprop="description" content="第9章EM算法及其推广 EM算法是一种迭代算法，1977年由Dempster等人总结提出，用十甘有隐 变量(hidden variable)的概率">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:22:02&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:22:02&#43;00:00" />
+<meta itemprop="wordCount" content="8932">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="09 EM算法及其推广"/>
+<meta name="twitter:description" content="第9章EM算法及其推广 EM算法是一种迭代算法，1977年由Dempster等人总结提出，用十甘有隐 变量(hidden variable)的概率"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">09 EM算法及其推广</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 8932 words </span>
+        <span class="more-meta"> 18 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#第9章em算法及其推广">第9章EM算法及其推广</a>
+<ul>
+<li><a href="#9-1-em算法的引入">9.1 EM算法的引入</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#wr-i-y">_wr(i-，y-</a>
+<ul>
+<li>
+<ul>
+<li><a href="#t-i-o">t(i-O</a></li>
+<li><a href="#9-2-em算法的收敛性">9.2 EM算法的收敛性</a></li>
+<li><a href="#9-3-em算法在高斯混合模型学习中的应用">9.3 EM算法在高斯混合模型学习中的应用</a></li>
+</ul></li>
+<li><a href="#nn-mo-j-i">=nn[Mo,j i^*)]</a></li>
+<li><a href="#m-1">M &gt;1</a></li>
+<li><a href="#式中-nk-zw-ar">式中，nk    * Zw*=Ar-</a>
+<ul>
+<li><a href="#9-4-em算法的推广">9.4 EM算法的推广</a></li>
+<li><a href="#本章概要">本章概要</a></li>
+<li><a href="#继续阅读">继续阅读</a></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h5 id="第9章em算法及其推广">第9章EM算法及其推广</h5>
+
+<p>EM算法是一种迭代算法，1977年由Dempster等人总结提出，用十甘有隐 变量(hidden variable)的概率模型参数的极大似然估计，或极大后验概率估计. EM算法的每次迭代由两步组成：E步，求期望(expectation); M步，求极大 (maximization).所以这一算法称为期望极大算法(expectation maximization algorithm),简称EM算法.本章首先叙述EM算法，然后讨论EM算法的收敛性： 作为EM算法的应用，介绍髙斯混合模型的学习；最后叙述EM算法的推广—— GEM算法.</p>
+
+<h6 id="9-1-em算法的引入">9.1 EM算法的引入</h6>
+
+<p>概率模运有时既含有观测变量(observable variable),又含有隐变量或潜在变 量(latent variable).如果概率模型的变量都是观测变量，那么给定数据，可以直 接用极大似然估计法，或贝叶斯估计法估计模型参数.但是，当模型含有隐变量 时，就不能简单地使用这些估计方法.EM算法就是含有隐变量的概率模型参数 的极大似然估计法，或极大后验概率估计法.我们仅讨论极大似然估计，极大后 验概率估计与其类似.</p>
+
+<p>9.1.1 EM 算法</p>
+
+<p>首先介绍一个使用EM算法的例子.</p>
+
+<p>例9.1 (三硬币模型)假设有3枚硬币，分别记作A, B，C.这些硬币正面 出现的概率分别是疋，p和分.进行如下掷硬币试验：先掷硬币A，根据其结果 选出硬币B或硬币C,正面选硬币B,反面选硬币C;然后掷选出的硬币，掷硬币 的结果，出现正面记作1，出现反面记作0:独立地重复《次试验(这里，《 = 10)， 观测结果如下：</p>
+
+<p>1，1，0，1，0,0，1，0，1，1</p>
+
+<p>假设只能观测到掷硬币的结果，不能观测掷硬币的过程.问如何估计三硬币正面 出现的概率，即三硬币模型的参数.</p>
+
+<p>解三硬币模型可以写作</p>
+
+<p>P{y\e)=\e)=^P{z\e)P{y\z,0}</p>
+
+<p>=npW- py-y + (1 _ jr)qy(y- q)&lsquo;-y    (9.1)</p>
+
+<p>这里，随机变量是观测变量，表示一次试验观测的结果是1或0;随机变量z 是隐变量，表示未观测到的掷硬币A的结果：0 =    是模型参数.这一模</p>
+
+<p>型是以上数据的生成模型.注意，随机变量jv的数据可以观测，随机变量z的数 据不可观测.</p>
+
+<p>将观测数据表示为r = («，••■,1；)T,未观测数据表示为Z = (ZPZ2，…，Za)T, 则观测数据的似然函数为</p>
+
+<p>P(y\0) = ^P(.Z\0)P(X\Z,0)    (9.2)</p>
+
+<p>Z</p>
+
+<p>即</p>
+
+<p>P(Y\0) = fjpry (1 - p)1^ +(1-疋)(1 - q)^}</p>
+
+<p>(9.3)</p>
+
+<p>/=&gt;</p>
+
+<p>考虑求模型参数0 =    幻的极大似然估计，即</p>
+
+<p>0 = aig max log P(Y i 0}</p>
+
+<p>(9.4)</p>
+
+<p>这个问题没有解析解，只有通过迭代的方法求解.EM算法就是可以用于求解 这个问题的一种迭代算法.下面给出针对以上问题的EM算法，其推导过程省略.</p>
+
+<p>EM算法首先选取参数的初值，记作沪然后通过下面的 步骤迭代计算参数的估计值，直至收敛为止.第f次迭代参数的估计值为</p>
+
+<p>EM算法的第扞1次迭代如下.</p>
+
+<p>E步：计算在模型参数下观测数据J；.来自掷硬币B的概率</p>
+
+<h4 id="wr-i-y">_wr(i-，y-</h4>
+
+<p>w (1 _ ,)&lsquo;-々+(1 -龙《)(，)广(1-</p>
+
+<p>M步：计算模型参数的新估计值</p>
+
+<p>n 7=1</p>
+
+<p>j=i</p>
+
+<h6 id="t-i-o">t(i-O</h6>
+
+<p>gd+n -    _</p>
+
+<p>(9.6)</p>
+
+<p>(9.7)</p>
+
+<p>(9.8)</p>
+
+<p>进行数字计算.假设模型参数的初值取为</p>
+
+<p>#)=0.5, pm=0.5, qm=0.5</p>
+
+<p>由式(9.5)，对巧=1与乃=0均有0.5.</p>
+
+<p>利用迭代公式(9.6)〜(9.8),得到</p>
+
+<p>?ra)=0.5, p(l)=0.6, qm =0.6</p>
+
+<p>由式(9.5),</p>
+
+<p>Af)=0.5, 7 = 1,2,-.10</p>
+
+<p>继续迭代，得</p>
+
+<p>=0.5, pm =0.6 , qm=Q.6</p>
+
+<p>于是得到模型参数6的极大似然估计，</p>
+
+<p># = 0.5 , p = 0.6 » 夺= 0.6</p>
+
+<p>冗=0.5表示硬币A是均匀的，这一结果容易理解.</p>
+
+<p>如果取初值；r(a) =0.4, pm =0.6，=0.7，那么得到的模型参数的极大似 然估计是彦= 0.4064，p = 0.5368, ? = 0.6432.这就是说，EM算法与初值的选 择有关，选择不同的初值可能得到不同的参数估计值.    ■</p>
+
+<p>—般地，用r表示观测随机变量的数据，z表示隐随机变量的数据.r和z 连在一起称为完全数据(complete-data),观测数据r又称为不完全数据 (incomplete-data).假设给定观测数据I7,其概率分布是P(F|的，其中&lt;9是需要 估计的模型参数，那么不完全数据y的似然函数是p(y|的，对数似然函数 £(的=iogp(r|的；假设y和z的联合概率分布是p(y,z\0),那么完全数据的对 数似然函数是iogp(y，z |的.</p>
+
+<p>EM算法通过迭代求£(6») = logP(/|&lt;9)的极大似然估计.每次迭代包含两步： E步，求期望；M步，求极大化.下面来介绍EM算法.</p>
+
+<p>算法9.1 (EM算法)</p>
+
+<p>输入：观测变量数据F，隐变量数据Z,联合分布P(r，Z|&lt;9)，条件分布 P(Z\Y,^；</p>
+
+<p>输出：模型参数沒.</p>
+
+<p>(1)    选择参数的初值(9^，开始迭代；</p>
+
+<p>(2)    E步：记W为第z•次迭代参数6•的估计值，在第f + 1次迭代的E步，计算</p>
+
+<p>0(^^°) = Ez[logP(Y,Z\ff)\ Y,^]</p>
+
+<p>= ^logP(r,Z| 0)P(Z\ r,^°)    (9.9)</p>
+
+<p>这里，P(z IY,^)是在给定观测数据y和当前的参数估计於&gt; 下隐变量数据Z的 条件概率分布；</p>
+
+<p>(3 ) M步：求使2(氏沪))极大化的0，确定第i +1次迭代的参数的估计值妒+u 沪+|) =argmax Q(0, ^°)    (9.10)</p>
+
+<p>(4)重复第(2)步和第(3)步，直到收敛.    ■</p>
+
+<p>式(9.9)的函数0(&lt;9,沪))是EM算法的核心，称为0函数(0 function).</p>
+
+<p>定义9.1 (e函数)完全数据的对数似然函数logP(y,Z|6&gt;)关于在给定观测</p>
+
+<p>数据r和当前参数^«下对未观测数据2的条件概率分布P(z I y,^0)的期望称 为2函数，即</p>
+
+<p>e(^,^(0) = Ez<a href="9.11">loSP(Y,Z\0)\ Y,^</a></p>
+
+<p>下面关于EM算法作几点说明：</p>
+
+<p>步骤(1)参数的初值可以任意选择，但需注意EM算法对初值是敏感的. 步骤(2) E步求2(氏沪&gt;).2函数式中Z是未观测数据，7是观测数据•注</p>
+
+<p>意，00?，分f))的第1个变元表示要极大化的参数，第2个变元表示参数的当前估 计值.每次迭代实际在求0函数及其极大.</p>
+
+<p>步骤(3 ) M步求Q(d, 6^ )的极大化，得到沪+1&gt;，完成一次迭代W 4沪+1&gt;. 后面将证明每次迭代使似然函数增大或达到局部极值.</p>
+
+<p>步骤(4)给出停止迭代的条件，一般是对较小的正数£pf2,若满足 || 沪+1)-妒 ||&lt;&amp; 或 |1⑽，妒)-Q(.0(n,0in)\&lt;£2</p>
+
+<p>则停止迭代.</p>
+
+<p>9.1.2 EM算法的导出</p>
+
+<p>上面叙述了 EM算法.为什么EM算法能近似实现对观测数据的极大似然估 计呢？下面通过近似求解观测数据的对数似然函数的极大化问题来导出EM算 法，由此可以清楚地看出EM算法的作用.</p>
+
+<p>我们面对一个含有隐变量的概率模型，目标是极大化观测数据(不完全数据) r关于参数的对数似然函数，即极大化</p>
+
+<p>L(0) = logP(Z|^) =</p>
+
+<p>z</p>
+
+<p>(9.12)</p>
+
+<p>= iogfyp(y|z^)p(z|^</p>
+
+<p>注意到这一极大化的主要困难是式(9.12)中有未观测数据并有包含和(或积分) 的对数.</p>
+
+<p>事实上，EM算法是通过迭代逐步近似极大化Z(6»)的.假设在第/次迭代后 的估计值是沪&gt;.我们希望新估计值0能使Z(的增加，即£(的&gt;£(&lt;?«),并逐步</p>
+
+<p>达到极大僮.为此，考虑两者的差： Z(^)-Z(^(o) =</p>
+
+<p>、?p(y\z,e)p{z\e)yiogp(y|(9w)</p>
+
+<p>利用Jensen不等式(Jensen inequality〉得到其下界：</p>
+
+<p>■ - z(W)=iog(jp(r    - iogp(j^«)</p>
+
+<p>_ iogp(r，)</p>
+
+<p>= yp(z|r,^)iog-p&lt;nzj)^^)</p>
+
+<p>V    P(Z\Y,^W\0^)</p>
+
+<p>令</p>
+
+<p>峨咋 i(ew)+£p(z| y,»(‘&gt;gp(fzO芯 gf,)    (9.13)</p>
+
+<p>则</p>
+
+<p>L ⑼各 B{fi，，、、    (9.14)</p>
+
+<p>即函数5(氏W)是£(的的一个下界，而且由式(9.13)可知，</p>
+
+<p>=    (9.15)</p>
+
+<p>因此，任何可以使5(况沪》)增大的沒，也可以使£(的增大.为了使1(的有尽可 能大的增长，选择分*+1)使5(么妒)达到极大，即</p>
+
+<p>沪+1&gt;=argn^xS(/9,妒))    (9.16)</p>
+
+<p>现在求#+|)的表达式.省去对0的极大化而言是常数的项，由式(9.16)、式(9.13) 及式(9.10)，有</p>
+
+<p>r:叫，卜，+?松时，賴嚴詞</p>
+
+<p>=argmax^P(Zl F,0w)log(P(y | Z,0)P(Z|0))&lsquo;]</p>
+
+<p>=argmax^P(Z| Y,0w&rsquo;)logP(Y,Z\0&rsquo;)^</p>
+
+<p>=argmaxg(沒，沒(0)</p>
+
+<p>式(9.17)等价于EM算法的一次迭代，即求0函数及其极大化.EM算法是通过</p>
+
+<p>不断求解下界的极大化逼近求解对数似然函数极大化的算法•</p>
+
+<p>图9.1给出EM算法的直观解释.图中上方曲线为£(6&gt;)，下方曲线为</p>
+
+<p>B(0,0W).由式(9.14)，5    为对数似然函数1(的的下界.由式(9.15)，两个</p>
+
+<p>函数在点&lt;9 =俨处相等.由式(9.16)和式(9.17), EM算法找到下一个点W+1)使 函数SW(i))极大化，也使函数0W(i))极大化.这时由于，函 数5(况妒)的增加，保证对数似然函数i(的在每次迭代中也是增加的.EM算法 在点决/+1)重新计算2函数值，进行下一次迭代.在这个过程中，对数似然函数 L｛9)不断增大.从图可以推断出EM算法不能保证找到全局最优值.</p>
+
+<p>9.1.3 EM算法在非监督学习中的应用</p>
+
+<p>监督学习是由训练数据学习条件概率分布 P(F|幻或决策函数y=/OQ作为模型，用于分类、回归、标注等任务.这时训 练数据中的每个样本点由输入和输出对组成.</p>
+
+<p>有时训练数据只有输入没有对应的输出｛以,，)，^^.)，…，^#.)｝，从这样的数 据学习模型称为非监督学习问题.EM算法可以用于生成模型的非监督学习.生 成模型由联合概率分布PGT，y)表示，可以认为非监督学习训练数据是联合概率 分布产生的数据.又为观测数据，r为未观测数据.</p>
+
+<h6 id="9-2-em算法的收敛性">9.2 EM算法的收敛性</h6>
+
+<p>EM算法提供一种近似计算含有隐变量概率模型的极大似然估计的方法.EM 算法的最大优点是简单性和普适性.我们很自然地要问：EM算法得到的估计序 列是否收敛？如果收敛，是否收敛到全局最大值或局部极大值？下面给出关于 EM算法收敛性的两个定理.</p>
+
+<p>定理9.1设/VI的为观测数据的似然函数，俨(f = l，2,…)为EM算法得到 的参数估计序列，…)为对应的似然函数序列，则p(r|W)是单 调递增的，即</p>
+
+<p>p(y|^+,)&gt;&gt;p(r|^(,))    (9.18)</p>
+
+<p>证明由于</p>
+
+<p>尸(嘲=</p>
+
+<p>尸(y，z|g) P(Z\Y,ff)</p>
+
+<p>取对数有</p>
+
+<p>由式(9.11)</p>
+
+<p>iogp(y I 的=iogP(Y,z\ff)~ iogp(z| Y,e)</p>
+
+<p>Q(e,ew)=2；iogp(y,z| e)p{z\ y,0w)</p>
+
+<p>z</p>
+
+<p>W,&lt;?(，)) = ^l0gP(Z| Y,e)P(Z\ Y,0W) z</p>
+
+<p>于是对数似然函数可以写成</p>
+
+<p>iogp(y|&lt;9)=Q(e,^</p>
+
+<p>(9.19)</p>
+
+<p>(9.20)</p>
+
+<p>在式(9.20)中分别取沒为少f)和沪+1&gt;并相减，有 iogp(y| 妒+1)) - iogp(y| 0W)</p>
+
+<p>=[e(^,+l),^°)-    -    (9.2i)</p>
+
+<p>为证式(9.18),只需证式(9.21)右端是非负的.式(9.21)右端的第1项，由 于6»(&lsquo;+1)使Q(0,^y达到极大，所以有</p>
+
+<p>) - 0(沪)，妒)彡 0    (9.22)</p>
+
+<p>其第2项，由式(9.19)可得:</p>
+
+<p>这里的不等号由Jensen不等式得到.</p>
+
+<p>尸(z!y，g⑽))</p>
+
+<p>尸(Z! V)) J</p>
+
+<p>^log</p>
+
+<p>P(z|y,&lt;9(0)</p>
+
+<p>=iogp(z|y,^i+l))=o</p>
+
+<p>(9.23)</p>
+
+<p>由式(9.22)和式(9.23)即知式(9.21)右端是非负的.    ■</p>
+
+<p>定理9.2设Z(£0 = logP(F|6»)为观测数据的对数似然函数，=</p>
+
+<p>为EM算法得到的参数估计序列，(» = 1,2,-)为对应的对数似然函数序列.</p>
+
+<p>(1)    如果P(y|的有上界，则Z⑺(*))=吨/^|沪))收敛到某一值1；;</p>
+
+<p>(2)    在函数0(<9，的与Z(的满足一定条件下，由EM算法得到的参数估计序 列沪> 的收敛值矿是£(的的稳定点.</p>
+
+<p>证明(1)由£(灼的单调性及P(y|的的有界性立即得到.</p>
+
+<p>(2)证明从略，参阅文献[6].    ■</p>
+
+<p>定理9.2关于函数0(况的与L(0)的条件在大多数情况下都是满足的.EM算 法的收敛性包含关于对数似然函数序列£(^°)的收敛性和关于参数估计序列於&gt; 的收敛性两层意思，前者并不蕴涵后者.此外，定理只能保证参数估计序列收敛 到对数似然函数序列的稳定点，不能保证收敛到极大值点.所以在应用中，初值 的选择变得非常重要，常用的办法是选取几个不同的初值进行迭代，然后对得到 的各个估计值加以比较，从中选择最好的.</p>
+
+<h6 id="9-3-em算法在高斯混合模型学习中的应用">9.3 EM算法在高斯混合模型学习中的应用</h6>
+
+<p>EM算法的一个重要应用是髙斯混合模型的参数估计.髙斯混合模型应用广 泛，在许多情况下，EM算法是学习髙斯混合模型(Gaussian misture model)的有 效方法.</p>
+
+<p>93.1高斯混合模型</p>
+
+<p>定义9.2 (高斯混合模型)髙斯混合模型是指具有如下形式的概率分布模型： P(y\^ = Xak&lt;^y\0k)    (9.24)</p>
+
+<p>*=i</p>
+
+<p>其中，珥是系数，ak^Q, Xak=l；兴y|么)是高斯分布密度，0,吻»</p>
+
+<p>*=i</p>
+
+<p>-穿)    ⑽</p>
+
+<p>称为第*个分模型.</p>
+
+<p>一般混合模型可以由任意概率分布密度代替式(9.25)中的髙斯分布密度，我 们只介绍最常用的髙斯混合模型.</p>
+
+<p>9.3.2高斯混合模型参数估计的EM算法</p>
+
+<p>假设观测数据…，.外由髙斯混合模型生成，</p>
+
+<p>p(y\e)=^a^yW    (9.26)</p>
+
+<p>*=i</p>
+
+<p>其中，沒= («i，a2，…，％此氏，…A).我们用EM算法估计髙斯混合模型的参数权.</p>
+
+<p>1.明确隐变量，写出完全数据的对数似然函数</p>
+
+<p>可以设想观测数据&amp;，J = l，2,…，况，是这样产生的：首先依概率珥选择第 k个髙斯分布分模型0aI色)：然后依第个分模型的概率分布＜KyW生成观测 数据巧.这时观测数据＞7, 7=1,2,…，JV，是已知的；反映观测数据人来自第女 个分模型的数据是未知的，fc = l，2,…，尺，以隐变量表示，其定义如下：</p>
+
+<p>= fl,    第_/个观测来自第*个分模型</p>
+
+<p>^&ldquo;{o, 否则</p>
+
+<p>; = 1,2，.&ldquo;，JV: k = l,2,-,K    (9.27)</p>
+
+<p>/#是0-1随机变量.</p>
+
+<p>有了观测数据 及未观测数据&amp; ,那么完全数据是</p>
+
+<p>于是，可以写出完全数据的似然函数：</p>
+
+<p>P(y,r\o&rsquo;)= YlP(yj，rji：rj2,…，rJK\6</p>
+
+<p>7=1</p>
+
+<p>kn    rjt</p>
+
+<h5 id="nn-mo-j-i">=nn[Mo,j i^*)]</h5>
+
+<h5 id="m-1">M &gt;1</h5>
+
+<h5 id="式中-nk-zw-ar">式中，nk    * Zw*=Ar-</h5>
+
+<p>y-i    k=</p>
+
+<p>那么，完全数据的对数似然函数为 log/V，Zl的=2X loga*    log(</p>
+
+<p>-loga*-</p>
+
+<p>(9.28)</p>
+
+<p>\2. EM算法的E步：确定G函数</p>
+
+<p>Q(0,^) = E[\ogP(y，r\0)\y,^]</p>
+
+<p>= E\t,nk +Ez#pog •</p>
+
+<p>-logtr* -</p>
+
+<p>-11</p>
+
+<p>= ZlL(£Jy<em>)loSa</em> +Z(£Z/J lQg -7z=</p>
+
+<p>这里需要计算£(z#| y,0),记为么.</p>
+
+<p>?#=^(z#|y^)=p(zA=i]j^)</p>
+
+<p>尸(?&gt;=i，巧I的</p>
+
+<p>i=l</p>
+
+<p>_尸(巧1?&gt;=1，戰^=11的</p>
+
+<p>Zp^Iza=i,Wz#=1|6»)</p>
+
+<p>*=1</p>
+
+<p>&mdash;，7 = 1,2, &ndash;,M k = l,2,- -,K</p>
+
+<p>i-l</p>
+
+<p>7Jk是在当前模型参数下第y个观测数据来自第/t个分模型的概率，称为分模型女 对观测数据A的响应度.</p>
+
+<p>N</p>
+
+<p>将^ = £〜及R = ^ErJk代入式(9.28)即得 7=1</p>
+
+<p>e(^^°) = E/I<em>1°8a</em> +^&amp;flog(去)-l0ga*    -Ai)2J (9.29)</p>
+
+<p>3.确定EM算法的M步</p>
+
+<p>迭代的M步是求函数!3(0，於))对0的极大值，即求新~轮迭代的模型参数： 6»(/+1)=argmaxe(0,^f))</p>
+
+<p>用A , ＜及咚，A = l，2，&rdquo;•，尤，表示tf(w＞的各参数.求成，巧只需将式(9.29) 分别对从，＜ 求偏导数并令其为0,即可得到；求么是在fat=l条件下求偏 导数并令其为0得到的.结果如下：</p>
+
+<p>N</p>
+
+<p>Zw</p>
+
+<p>A=^4?——，k = l,2f-,K    (9.30)</p>
+
+<p>&gt;1</p>
+
+<p>N</p>
+
+<p>^l=J=L-^&ndash;k = l,2,-,K    (9.31)</p>
+
+<p>名=贵=乂，k = l,2,&mdash;,K    (9.32)</p>
+
+<p>重复以上计算，直到对数似然函数值不再有明显的变化为止.</p>
+
+<p>现将估计髙斯混合模型参数的EM算法总结如下：</p>
+
+<p>算法9.2 (高斯混合模型参数估计的EM算法)</p>
+
+<p>输入：观测数据乃，凡，…，:以，髙斯混合模型；</p>
+
+<p>输出：髙斯混合模型参数.</p>
+
+<p>(1)    取参数的初始值开始迭代</p>
+
+<p>(2)    E步：依据当前模型参数，计算分模型it对观测数据巧的响应度</p>
+
+<p>7Jk =~k-,    J = l,2,&mdash;,N-, k = \,2,- -,K</p>
+
+<p>(3)M步：计算新一轮迭代的模型参数</p>
+
+<p>N</p>
+
+<p>Ew</p>
+
+<p>A =~^i-» k = l,2,&mdash;,K</p>
+
+<p>- a)2</p>
+
+<p>ZZz*</p>
+
+<p>k = l,2,-,K</p>
+
+<p>ak=^-,    k=l,2,-,K</p>
+
+<p>(4)重复第(2)步和第(3)步，直到收敛.</p>
+
+<h6 id="9-4-em算法的推广">9.4 EM算法的推广</h6>
+
+<p>EM算法还可以解释为F函数(Ffunction)的极大-极大算法(maximization-maximization algorithm).基于这个解释有若干变形与推广，如广义期望极大 (generalized expectation maximization, GEM)算法.下面予以介绍.</p>
+
+<p>9.4.1尸函数的极大-极大算法 首先引进F函数并讨论其性质.</p>
+
+<p>定义(F函数)假设隐变量数据Z的概率分布为戶(Z)，定义分布P与 参数沒的函数戶，的如下：</p>
+
+<p>F(P,^) = Ef[\ogP(Y,Z\ 0)] + H(P)    (9.33)</p>
+
+<p>称为F函数.式中H(P) = -Ef, !ogP(Z)是分布P(Z)的熵.</p>
+
+<p>在定义9.3中，通常假设P(y，Z|的是夕的连续函数，因而F(戶，的是P和沒的 连续函数.函数F(户，的还有以下重要性质：</p>
+
+<p>引理9.1对于固定的存在唯一的分布总极大化F(戶，的，这时&amp;由下式 给出：</p>
+
+<p>Pe{Z) = P(Z\Yt0)    (9.34)</p>
+
+<p>并且巧随权连续变化.</p>
+
+<p>证明对于固定的沒，可以求得使F(户，的达到极大的分布戶6(2).为此，引 进拉格朗日乘子2,拉格朗日函数为</p>
+
+<p>L = E-P log 尸(r，Z\0)-EP log 戶(2) +    (9.35)</p>
+
+<p>将其对戶求偏导数，</p>
+
+<p>g^j = log P(K,Z|^)-log P{Z)-1-2 令偏导数等于0,得出</p>
+
+<p>义=logP(y,Z|6»)- log 芎(Z)-1 由此推出A (Z)与P(Y, ZI的成比例</p>
+
+<p>p(y,z\e)^e+x</p>
+
+<p>to</p>
+
+<p>再从约束条件=1得式(9.34).</p>
+
+<p>由假设P(Y,Z |的是沒的连续函数，得到巧是没的连续函数.    ■</p>
+
+<p>引理9.2若巧(Z) = P(Zf)，则</p>
+
+<p>F(P,0) = \oSP(Y\0)    (9.36)</p>
+
+<p>证明作为习题，留给读者.</p>
+
+<p>由以上引理，可以得到关于EM算法用F函数的极大-极大算法的解释.</p>
+
+<p>定理9J设1(的= logP(y|的为观测数据的对数似然函数，俨，f = l,2,…，</p>
+
+<p>为EM算法得到的参数估计序列，函数F(A的由式(9.33)定义.如果F(户，的在戶* 和矿有局部极大值，那么£(的也在矿有局部极大值.类似地，如果F(户，的在r 和矿达到全局最大值，那么L⑼也在矿达到全局最大值.</p>
+
+<p>证明由引理9.1和引理9.2可知，M的= iogP(r|的：厂仿,的对任意夕成 立.特别地，对于使F(戶，的达到极大的参数矿，有</p>
+
+<p>L(0&rsquo;) = F(Ptr,^) = F(P&rsquo;,ff,)    (9.37)</p>
+
+<p>为了证明矿是£(的的极大点，需要证明不存在接近矿的点矿使1(矿<em>)&gt;£(矿). 假如存在这样的点矿</em>,那么应有F(#M，f*)&gt;F(尹，女)，这里户但因&amp; 是随沒连续变化的，戶“应接近尹，这与尹和矿是F(戶，的的局部极大点的假设 矛盾.</p>
+
+<p>类似可以证明关于全局最大值的结论.    ■</p>
+
+<p>定理9.4 EM算法的一次迭代可由F函数的极大-极大算法实现.</p>
+
+<p>设W为第f次迭代参数没的估计，P为第i次迭代函数戶的估计.在第&lt;• +1</p>
+
+<p>次迭代的两步为</p>
+
+<p>(1)    对固定的妒\求户&lt;+1)使F(户，沪^极大化：</p>
+
+<p>(2)    对固定的戶(i+1&gt;：求#+1&gt;使F(戶°+1)，的极大化.</p>
+
+<p>证明(1)由引理9.1,对于固定的^«,</p>
+
+<p>PiM\Z) = P^(Z) = P(Z\Y,^)</p>
+
+<p>使尺足沪”极大化.此时，</p>
+
+<p>f 〜的=£戸[iogP(y,z|^)]+斤(戸)</p>
+
+<p>=[log 尸(y，z 16&gt;)p(z| r,^°)+h(尹,+1))</p>
+
+<p>7.</p>
+
+<p>由0(^,^°)的定义式(9.11)有</p>
+
+<p>F(PiM\ff) = e( W)) + 7/(^,+1))</p>
+
+<p>(2)固定P°+1&gt;,求沪+|)使厂(？°+|)，的极大化.得到</p>
+
+<p>= aigmax.F(P(M),d) = argm严 0(沒&gt;0)</p>
+
+<p>通过以上两步完成了 EM算法的一次迭代.由此可知，由EM算法与尸函数的极 大-极大算法得到的参数估计序列少0，f = l,2,…，是一致的.    ■</p>
+
+<p>这样，就有EM算法的推广.</p>
+
+<p>9.4.2 GEM 算法</p>
+
+<p>算法9.3 (GEM算法1)</p>
+
+<p>输入：观测数据，尸函数；</p>
+
+<p>输出：模型参数.</p>
+
+<p>(1)    初始化参数开始迭代</p>
+
+<p>(2)    第Z + 1次迭代，第1步:记妒为参数的估计值，胂为函数P的估计.求 使P极大化F(戶，</p>
+
+<p>(3)    第2步：求妒+1&gt;使^(户极大化</p>
+
+<p>(4)    重复(2)和(3)，直到收敛.    ■</p>
+
+<p>在GEM算法1中，有时求0(况W)的极大化是很困难的.下面介绍的GEM</p>
+
+<p>算法2和GEM算法3并不是直接求沪+1)使达到极大的0，而是找一个 沪+1)使得0(沪+1)，沪.</p>
+
+<p>算法9.4 (GEM算法2)</p>
+
+<p>输入：观测数据，0函数；</p>
+
+<p>输出：模型参数.</p>
+
+<p>(1)    初始化参数开始迭代</p>
+
+<p>(2)    第f + 1次迭代，第1步：记^w为参数的估计值，计算</p>
+
+<p>Q(0,0W)=£z[iogP(y,z|(9)| y,0(o]</p>
+
+<p>= ^P{Z\Y,e^)\ogP{Y,Z\ff)</p>
+
+<p>(3)第2步：求分&rsquo;+1&gt;使</p>
+
+<p>e(^i+i)&gt;o)&gt;e(^°,^°)</p>
+
+<p>(4)重复(2)和(3),直到收敛.    ■</p>
+
+<p>当参数0的维数为d (d&gt;2)时，可采用~种特殊的GEM算法，它将EM</p>
+
+<p>算法的M步分解为次条件极大化，每次只改变参数向量的一个分量，其余分 量不改变.</p>
+
+<p>算法9.5 (GEM算法3)</p>
+
+<p>输入：观测数据，0函数；</p>
+
+<p>输出：模型参数.</p>
+
+<p>(1)    初始化参数，=(6T，6f，•••,#&gt;)，开始迭代</p>
+
+<p>(2)    第f+1次迭代，第1步:记妒=(时0，却)，…，巧))为参数0 =汝,色,…，么) 的估计值，计算</p>
+
+<p>Q(W) = Ez[\OgP{Y,Z\0)\ Y,0W]</p>
+
+<p>= ^P(Z|y,6»w)logP(y,Z|6&gt;)</p>
+
+<p>z</p>
+
+<p>(3)    第2步：进行&lt;/次条件极大化：</p>
+
+<p>首先，在保持不变的条件下求使，沪达到极大的&lt;+1);</p>
+
+<p>然后，在今=碎|+1)，0j=^, &lt;/ = 3,4，&rdquo;必的条件下求使2(沒，於))达到极大</p>
+
+<p>的磅i+1〉；</p>
+
+<p>如此继续，经过£/次条件极大化，得到#+1&gt;«+1)，咚+1&gt;，…，巧+1&gt;)使得</p>
+
+<p>(4)    重复(2)和⑶，直到收敛.    ■</p>
+
+<h6 id="本章概要">本章概要</h6>
+
+<p>I. EM算法是含有隐变量的概率模型极大似然估计或极大后验概率估计的迭 代算法.含有隐变量的概率模型的数据表示为p(y，zi的.这里，y是观测变量的 数据，Z是隐变量的数据，0是模型参数.EM算法通过迭代求解观测数据的对 数似然函数L(0) = logP(F|0)的极大化，实现极大似然估计.每次迭代包括两步： E步，求期望，即求logP(y，Z|灼关于)的期望：</p>
+
+<p>=^iogP(y,z| e)p(z\ r&gt;°) z</p>
+
+<p>称为2函数，这里少G是参数的现估计值；M步，求极大，即极大化g函数得 到参数的新估计值：</p>
+
+<p>^+I)=argmaxe(^^(0)</p>
+
+<p>在构建具体的EM算法时，重要的是定义0函数.每次迭代中，EM算法通 过极大化0函数来增大对数似然函数Z(的.</p>
+
+<p>\2. EM算法在每次迭代后均提髙观测数据的似然函数值，即</p>
+
+<p>在一般条件下EM算法是收敛的，但不能保证收敛到全局最优.</p>
+
+<p>\3.    EM算法应用极其广泛，主要应用于含有隐变量的概率模型的学习.髙斯 混合模型的参数估计是EM算法的一个重要应用，下一章将要介绍的隐马尔可夫 模型的非监督学习也是EM算法的一个重要应用.</p>
+
+<p>\4.    EM算法还可以解释为f函数的极大-极大算法.EM算法有许多变形， 如GEM算法.GEM算法的特点是每次迭代增加F函数值（并不一定是极大化F 函数），从而増加似然函数值.</p>
+
+<h6 id="继续阅读">继续阅读</h6>
+
+<p>EM算法由Dempster等人总结提出[1].类似的算法之前已被提出，如Baum 与Welch算法，但是都没有EM算法那么广泛.EM算法的介绍可参见文献[2〜4]. EM算法收敛性定理的有关证明见文献[5]. GEM是由Neal与Hinton提出的[6].</p>
+
+<p>习 题</p>
+
+<p>9.1如例9.1的三硬币模型.假设观测数据不变，试选择不同的初值，例如，；=</p>
+
+<p>0.46, p（0）=0.55, 9w=0.67,求模型参数沒= （;r,p，g）的极大似然估计.</p>
+
+<p>9.2证明引理9.2.</p>
+
+<p>9.3已知观测数据</p>
+
+<p>-67, -48, 6, 8, 14, 16, 23, 24, 28, 29, 41, 49, 56, 60, 75</p>
+
+<p>试估计两个分量的髙斯混合模型的5个参数.</p>
+
+<p>9.4 EM算法可以用到朴素贝叶斯法的非监督学习.试写出其算法.</p>
+
+<h6 id="参考文献">参考文献</h6>
+
+<p>[1]    Dempster AP, Laird NM, Rubin DB. Maximum-likelihood from incomplete data via the EM algorithm. J. Royal Statist. Soc. Ser. B., 1977, 39</p>
+
+<p>[2]    Hastie T, Tibshirani R, Friedman J. The Elements of Statistical Learning: Data Mining, Inference, and Prediction. Springcr-Verlag, 2001（中译本:统计学习基础•&rdquo;一数据挖掘、推理与预測.范 明，柴玉梅，昝红英等译.北京：电子工业出版社，2004）</p>
+
+<p>[3]    McLachlan Q Krishnan T. The EM Algorithm and Extensions. New Yoric John Wley &amp; Sons, 1996</p>
+
+<p>[4]    茆诗松，王静龙，濮晓龙.麻等数理统计.北京：髙等教育出版社；海登堡：斯普林格出 版社，1998</p>
+
+<p>[5]    Wu CEL On the convergence properties of the EM algorithm. The Annals of Statistics, 1983, 11:95-103</p>
+
+<p>[6]    Radford N, Geoffrey H, Jordan MI. A view of the EM algorithm that justifies incremental, sparse, and other variants. In: Learning in Graphical Models. Cambridge, MA: MIT Press, 1999, 355-368</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/08-%E6%8F%90%E5%8D%87%E6%96%B9%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">08 提升方法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95/10-%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B/">
+            <span class="next-text nav-default">10 隐马尔可夫模型</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

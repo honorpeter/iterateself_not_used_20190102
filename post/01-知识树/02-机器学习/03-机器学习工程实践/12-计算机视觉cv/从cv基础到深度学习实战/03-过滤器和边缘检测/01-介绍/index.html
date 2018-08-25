@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 介绍 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="过滤器和边缘检测 Spatial Filters &amp;amp; frequency 空间滤波，频率滤波。 Linear &amp;amp; Non-linear Filtering Edge Detection 边缘检测 Canny, Sobel, Laplace 频率滤波这里没有讲，主要讲了空间滤波。其实滤波算法 这节课讲的算法，是我" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/03-%E8%BF%87%E6%BB%A4%E5%99%A8%E5%92%8C%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B/01-%E4%BB%8B%E7%BB%8D/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 介绍" />
+<meta property="og:description" content="过滤器和边缘检测 Spatial Filters &amp; frequency 空间滤波，频率滤波。 Linear &amp; Non-linear Filtering Edge Detection 边缘检测 Canny, Sobel, Laplace 频率滤波这里没有讲，主要讲了空间滤波。其实滤波算法 这节课讲的算法，是我" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/03-%E8%BF%87%E6%BB%A4%E5%99%A8%E5%92%8C%E8%BE%B9%E7%BC%98%E6%A3%80%E6%B5%8B/01-%E4%BB%8B%E7%BB%8D/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="01 介绍">
+<meta itemprop="description" content="过滤器和边缘检测 Spatial Filters &amp; frequency 空间滤波，频率滤波。 Linear &amp; Non-linear Filtering Edge Detection 边缘检测 Canny, Sobel, Laplace 频率滤波这里没有讲，主要讲了空间滤波。其实滤波算法 这节课讲的算法，是我">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="2487">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 介绍"/>
+<meta name="twitter:description" content="过滤器和边缘检测 Spatial Filters &amp; frequency 空间滤波，频率滤波。 Linear &amp; Non-linear Filtering Edge Detection 边缘检测 Canny, Sobel, Laplace 频率滤波这里没有讲，主要讲了空间滤波。其实滤波算法 这节课讲的算法，是我"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 介绍</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 2487 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#过滤器和边缘检测">过滤器和边缘检测</a></li>
+<li><a href="#2d-filtering">2D filtering</a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="过滤器和边缘检测">过滤器和边缘检测</h2>
+
+<ul>
+<li>Spatial Filters &amp; frequency 空间滤波，频率滤波。
+
+<ul>
+<li>Linear &amp; Non-linear Filtering</li>
+</ul></li>
+<li>Edge Detection 边缘检测
+
+<ul>
+<li>Canny, Sobel, Laplace</li>
+</ul></li>
+</ul>
+
+<p>频率滤波这里没有讲，主要讲了空间滤波。其实滤波算法</p>
+
+<p>这节课讲的算法，是我们拿到一副图像之后的最基本的操作。是必须做的，没有选择的。</p>
+
+<p>后面我们会介绍两个项目</p>
+
+<ul>
+<li>Project: Number plate recognition using SVM and NN
+
+<ul>
+<li>Machine learning: SVM (&amp; Neural network)</li>
+</ul></li>
+</ul>
+
+<p>我们在获取图像的时候，每个环节都有可能引入噪声：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/k6Je347dhI.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/elm5L12kLL.png?imageslim" alt="mark" /></p>
+
+<p>Images contain noise :
+- sources sensor quality,
+- light fluctuations,
+- quantization effects</p>
+
+<p>大致上这些噪声，可能因为传感器质量，光照，质量。</p>
+
+<p>在图像处理中，我们把图像复原、去燥 称为图像滤波，是我们拿到图像之后的第一步操作。</p>
+
+<p>噪声有：加性噪声，与信号的关系相加的，不管有没有信号，都有噪声。乘性噪声，这个是由于传输的时候，由于信号不理想，与信号的关系是相乘的，信号存在，这个乘性噪声才存在。</p>
+
+<p>一般，我们把加性的噪声看做系统的背景噪声。乘性看成是系统的变性噪声，比如多普勒，非线性噪声。这部分我们就不展开了。</p>
+
+<p>常说的白噪声：就是功率在整个频域内分布的。高斯噪声就是高斯型的。</p>
+
+<h2 id="2d-filtering">2D filtering</h2>
+
+<p>对于一维来说：我们可以求平均。
+对于二维，同样有这样的滑动平均的窗口：</p>
+
+<p>Gray image == 2D matrix -&gt; f(x,y)</p>
+
+<p>Box Filter
+What does it do?
+- Replaces each pixel with an average of its neighborhood
+- Achieve smoothing effect (remove sharp features)</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/i7HFafD6Ah.png?imageslim" alt="mark" /></p>
+
+<p>滑动平均窗口</p>
+
+<p>下面我们举个例子：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/G9gDAffahC.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/iGAb9jifmF.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/HfKef4cidK.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/k7Dkif5baL.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/e3I6Jhc1al.png?imageslim" alt="mark" /></p>
+
+<p>$$h[m,n]=\sum_{k,l}^{}g[k,l]f[m+k,n+l]$$</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/8LAH5fldCl.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，我们滤波后拿到了一个比原图像稍微小的一个图像。</p>
+
+<p>这就是 Box fileter 。</p>
+
+<p>我们看看在实际的图像上滤波之后：Smoothing with box filter Cross-correlation 互相关</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/DFgbm8gD4g.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，上面的右边的图感觉不是很平滑，这个在频域里面解释一下，我们是用的矩形框来滤波，一个门限滤波器，他在频域里面是一个 sink 函数，也就是在高频的时候是有跳跃的，也就是说并不是一个真正的低通滤波器，在高频的时候是有通过的。所以滤波之后会有这样的效果。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/GEflfLBge1.png?imageslim" alt="mark" /></p>
+
+<p>在 opencv 中，这种滑动平均的两种实现方式：Blur() 和 boxFilter()</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/2J1Iimh0dj.png?imageslim" alt="mark" /></p>
+
+<p>在官方文档中，他说两种方式是相同的，但是实际上是有一点不同的，boxFilter 是可以不用归一化的，而 Blur 是一定归一化的。</p>
+
+<p>下面我们介绍一下真正的低通滤波器。<span style="color:red;">没讲吧？讲高斯滤波器的时候讲了。</span></p>
+
+<p>下面我们讲一下卷积：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/H2DidDb0fD.png?imageslim" alt="mark" /></p>
+
+<p>可见，卷积和我们上面提到的滑动平均并不一样，式子中是 m-k 而不是加。但是，对于我们这种对称的 filter 来说，是没有影响的。</p>
+
+<p><span style="color:red;">听老师讲到这个地方的时候，我震惊了，这个开始的 <code>10*1</code> 的 1 是从 g 的右下角拿过来的，而不是左上角。为什么呢？因为 是 m-k 所以是从右下角拿1，然后 <code>11*1</code> 的 1 也是最后一行的倒数第二个 1， 没明白？</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/lGJl041fA2.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/EeAJAhjm73.png?imageslim" alt="mark" /></p>
+
+<p>总结一下：</p>
+
+<p>Filtering vs. Convolution</p>
+
+<p>2d filtering
+- h=filter2(g,f); or h=imfilter(f,g);
+- $$h[m,n]=\sum_{k,l}^{}g[k,l]f[m+k,n+l]$$</p>
+
+<p>2d convolution
+- h=conv2(g,f);
+- $$h[m,n]=\sum_{k,l}^{}g[k,l]f[m-k,n-l]$$</p>
+
+<p>注：上面式子中的 g 是 filter ，f 是 image。</p>
+
+<p>对于这种对称的 filter ，滤波和卷积是相等的，但是对于不对称的 filter 来说是不相等的。<span style="color:red;">还是没有很理解。</span></p>
+
+<p>刚我们讲的滤波器有些不是很平滑，现在，我们开始讲 高斯滤波器：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/AjgcKgK0lG.png?imageslim" alt="mark" /></p>
+
+<p>高斯滤波器是一个真正的低通滤波器，在对于高频是完全阻断的。</p>
+
+<p>高斯滤波器的公式是要牢记的：</p>
+
+<p>$$G_{\sigma}=\frac{1}{2\pi\sigma^2}e^{-\frac{(x^2+y^2)}{2\sigma^2} }$$</p>
+
+<p>注意这个公式，在一维的时候 $2\pi\sigma^2$ 是有根号的。</p>
+
+<p>高斯滤波器效果如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/8dgaffCBCI.png?imageslim" alt="mark" /></p>
+
+<p>box filter 效果如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/1AJb7I41II.png?imageslim" alt="mark" /></p>
+
+<p>可见，高斯滤波器拿到的图像是非常平滑的。</p>
+
+<p>高斯滤波器的使用方法：</p>
+
+<p>Practical matters
+- Matlab: H=fspecial(&lsquo;gaussian&rsquo;,7,1)
+creates a 7x7 Gaussian filter with variance 1
+- OpenCV: filter2D()
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/9IACg6LbaE.png?imageslim" alt="mark" /></p>
+
+<p>我们说的相关和卷积运算都是一种线性的运算，而且都是时不变的。</p>
+
+<p>这样的性质就可以在使用多个滤波器计算的时候进行加速：
+当我们用两个滤波器的时候，我们可以先对两个滤波器做运算，然后再对图像做运算，这样可以加速对于图像进行处理。</p>
+
+<p>对于这种线性滤波器，交换律和结合律都是常用的，比如 A*B  可以变成 B*A
+还有一些微分运算：</p>
+
+<p>$\frac{\partial}{\partial x}(f*g)=\frac{\partial f}{\partia l x}*g$
+一个图像滤波之后在 X 方向的梯度，就等于先对这个图像求偏导，然后在滤波。也等于对这个滤波器求梯度，然后相乘，这样计算量又减少了。<span style="color:red;">好吧。</span></p>
+
+<p>大家对这个线性时不变系统有个印象。</p>
+
+<p>下面讲一个非线性的滤波器：中值滤波器</p>
+
+<p>What advantage does median filtering have
+over Gaussian filtering?
+– Robustness to outliers</p>
+
+<p>他对于这种椒盐噪声</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/46l8D45633.png?imageslim" alt="mark" /></p>
+
+<p>可见，如果使用的是均值滤波器，可以看到这个异常值对于处理后的图像还是有影响的，但是对于中值滤波器，是完全没有影响的。</p>
+
+<p>中值滤波器到底是什么样的呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/C6bmJLDlcb.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/455hH4d58d.png?imageslim" alt="mark" /></p>
+
+<p>看一下中值滤波器对于椒盐噪声的图像的处理：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/7jLHcDJf3E.png?imageslim" alt="mark" /></p>
+
+<p>MATLAB: medfilt2(image, [h w])</p>
+
+<p>可以发现大部分的椒盐噪声都被过滤掉了。</p>
+
+<p>总结一下：</p>
+
+<p>其实还是有很多非线性滤波器的，但是这里没有提。
+还有一个叫做双边滤波器 bilateral  filter，它非常好用，它是一种保边的滤波器，不但滤除噪声，还保证了边缘的陡峭性，它有一个弊端，太慢了，因此很难再实时的系统中使用，但是在线下完全可以采用这个滤波器。它原理不难，是两种滤波器的组合。
+还有自使用中值滤波器等等。</p>
+
+<p>Image filtering: compute function of local neighborhood at each position</p>
+
+<p>之前我们讲了图像的滤波，使用每个位置周围像素进行某种运算，他在这几种情况下使用的比较多：</p>
+
+<p>Really important!
+- Enhance images
+    - Denoise, resize, increase contrast, etc.
+- Extract information from images
+    - Texture, edges, distinctive points, etc.
+- Detect patterns 检测某种模式
+    - Template matching （eg. DIC/DSCM DIC是数字图像相关，DSCM 是数字散斑相关方法。）<a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/template_matching/template_matching.html">http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/template_matching/template_matching.html</a> 他实现的过程就是拿着小图片进行滑动，对于每一个 square 的小区域进行相关运算，在整幅图像中找到相关位置最亮的就是相关性最大的，就是这个模板的出处。关于相关运算的方法， 网页中也有，比如欧氏距离，比如归一化自相关的等（CV_TM_CCOEFF_NORMED 这个是光照条件不同的时候需要去掉一些光照的影响）。这个方法还是比较简单的，但是运算量与具体的方法有关，比如归一化自相关的运算量还是很大的。</p>
+
+<p>由于对于对称的 filter 来说，corr 和 cov 是相等的，因此我们后面不区分相关性和卷积。</p>
+
+<p>上面之所以提了 DSCM 数字散斑相关方法是想让大家知道，我们做图像处理不仅仅局限于人工智能，在工业中的很多应用都是需要我们的方法的。</p>
+
+<p>关于 DIC 老师讲了这个例子：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/7ciaIJjBcC.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/dH74DljIha.png?imageslim" alt="mark" /></p>
+
+<p>它是做得刚体的形变的，比如说，一个刚体，我们给表面喷洒一些散斑，然后在它受力的过程中一直拍摄这个表面的形变，通过我们对图像做相关运算，可以算出这个物体的表面的位移以及应变场等。 这个是在力学中的一个非常典型的应用。它的试验设备是什么样的呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/IJD103ICl1.png?imageslim" alt="mark" /></p>
+
+<p>可见是一个双目摄像头，上面有两个灯。</p>
+
+<p>设计的这种数字散斑相关方法，里面都用的归一化自相关，因为它对于这种光照的影响是很小的，而且，这些测量都是亚像素的，精度非常高的。后面我们会讲一下 亚像素测量的问题。</p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/01-k%E8%BF%91%E9%82%BB-knn/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 K近邻 KNN</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/01-%E4%BB%A5%E6%96%87%E6%9C%AC%E6%A0%BC%E5%BC%8F%E8%AF%BB%E5%8F%96%E5%92%8C%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE/">
+            <span class="next-text nav-default">01 以文本格式读取和写入数据</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

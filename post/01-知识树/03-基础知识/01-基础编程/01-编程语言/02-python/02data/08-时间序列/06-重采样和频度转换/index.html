@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 重采样和频度转换 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="11.6 Resampling and Frequency Conversion（重采样和频度转换） 重采样（Resampling）指的是把时间序列的频度变为另一个频度的过程。把高频度的数据变为" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/06-%E9%87%8D%E9%87%87%E6%A0%B7%E5%92%8C%E9%A2%91%E5%BA%A6%E8%BD%AC%E6%8D%A2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 重采样和频度转换" />
+<meta property="og:description" content="11.6 Resampling and Frequency Conversion（重采样和频度转换） 重采样（Resampling）指的是把时间序列的频度变为另一个频度的过程。把高频度的数据变为" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/06-%E9%87%8D%E9%87%87%E6%A0%B7%E5%92%8C%E9%A2%91%E5%BA%A6%E8%BD%AC%E6%8D%A2/" /><meta property="article:published_time" content="2018-08-03T11:34:42&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:34:42&#43;00:00"/>
+<meta itemprop="name" content="06 重采样和频度转换">
+<meta itemprop="description" content="11.6 Resampling and Frequency Conversion（重采样和频度转换） 重采样（Resampling）指的是把时间序列的频度变为另一个频度的过程。把高频度的数据变为">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:34:42&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:34:42&#43;00:00" />
+<meta itemprop="wordCount" content="2452">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 重采样和频度转换"/>
+<meta name="twitter:description" content="11.6 Resampling and Frequency Conversion（重采样和频度转换） 重采样（Resampling）指的是把时间序列的频度变为另一个频度的过程。把高频度的数据变为"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 重采样和频度转换</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 2452 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#11-6-resampling-and-frequency-conversion-重采样和频度转换">11.6 Resampling and Frequency Conversion（重采样和频度转换）</a></li>
+<li><a href="#1-downsampling-降采样">1 Downsampling（降采样）</a>
+<ul>
+<li>
+<ul>
+<li><a href="#open-high-low-close-ohlc-resampling-股价图重取样">Open-High-Low-Close (OHLC) resampling（股价图重取样）</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#2-upsampling-and-interpolation-增采样和插值">2 Upsampling and Interpolation（增采样和插值）</a></li>
+<li><a href="#3-resampling-with-periods-对周期进行重采样">3 Resampling with Periods（对周期进行重采样）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="11-6-resampling-and-frequency-conversion-重采样和频度转换">11.6 Resampling and Frequency Conversion（重采样和频度转换）</h1>
+
+<p>重采样（Resampling）指的是把时间序列的频度变为另一个频度的过程。把高频度的数据变为低频度叫做降采样（downsampling），把低频度变为高频度叫做增采样（upsampling）。并不是所有的重采样都会落入上面这几个类型，例如，把W-WED（weekly on Wednesday）变为W-FRI，既不属于降采样，也不属于增采样。</p>
+
+<p>pandas对象自带resampe方法，用于所有的频度变化。resample有一个和groupby类似的API；我们可以用resample来对数据进行分组，然后调用聚合函数（aggregation function）:</p>
+
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+</code></pre>
+
+<pre><code class="language-python">rng = pd.date_range('2000-01-01', periods=100, freq='D')
+</code></pre>
+
+<pre><code class="language-python">ts = pd.Series(np.random.randn(len(rng)), index=rng)
+ts
+</code></pre>
+
+<pre><code>2000-01-01    0.141136
+2000-01-02    0.955511
+2000-01-03   -0.334537
+2000-01-04    0.927611
+2000-01-05    0.522567
+2000-01-06    0.843023
+2000-01-07    0.108661
+2000-01-08    0.805668
+2000-01-09   -0.470524
+2000-01-10    1.162150
+2000-01-11   -0.754087
+2000-01-12   -1.846421
+2000-01-13   -0.322607
+2000-01-14    0.769992
+2000-01-15   -0.596838
+2000-01-16    0.865629
+2000-01-17   -0.394363
+2000-01-18    1.050334
+2000-01-19    0.203739
+2000-01-20    0.112178
+2000-01-21   -1.858528
+2000-01-22    0.921361
+2000-01-23   -1.034003
+2000-01-24   -0.319369
+2000-01-25    0.626385
+2000-01-26    2.319831
+2000-01-27    0.640064
+2000-01-28    0.762187
+2000-01-29   -0.053246
+2000-01-30    0.500993
+                ...
+2000-03-11   -1.036658
+2000-03-12    0.569500
+2000-03-13   -0.279623
+2000-03-14   -1.593708
+2000-03-15   -1.552634
+2000-03-16    0.983931
+2000-03-17    0.269289
+2000-03-18    0.870814
+2000-03-19    1.642178
+2000-03-20   -0.109097
+2000-03-21   -1.891613
+2000-03-22   -1.867747
+2000-03-23   -0.173888
+2000-03-24    0.879418
+2000-03-25    0.814583
+2000-03-26   -1.683395
+2000-03-27   -0.141228
+2000-03-28    0.392206
+2000-03-29   -1.288983
+2000-03-30    1.052897
+2000-03-31   -0.297663
+2000-04-01    1.050265
+2000-04-02   -0.072390
+2000-04-03    1.482098
+2000-04-04   -0.276297
+2000-04-05    0.686525
+2000-04-06    1.368484
+2000-04-07    0.294756
+2000-04-08    1.237246
+2000-04-09    1.372567
+Freq: D, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">ts.resample('M').mean()
+</code></pre>
+
+<pre><code>2000-01-31   -0.207554
+2000-02-29    0.299003
+2000-03-31   -0.095402
+2000-04-30   -0.146846
+Freq: M, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">ts.resample('M', kind='period').mean()
+</code></pre>
+
+<pre><code>2000-01    0.210165
+2000-02   -0.051811
+2000-03   -0.131131
+2000-04    0.793695
+Freq: M, dtype: float64
+</code></pre>
+
+<p>resample是一个灵活且高效的方法，可以用于处理大量的时间序列。下面是一些相关的选项：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/LHm0CLe703.png?imageslim" alt="mark" /></p>
+
+<h1 id="1-downsampling-降采样">1 Downsampling（降采样）</h1>
+
+<p>把数据聚合为规律、低频度是一个很普通的时间序列任务。用于处理的数据不必是有固定频度的；我们想要设定的频度会定义箱界（bin edges），根据bin edges会把时间序列分割为多个片段，然后进行聚合。例如，转换为月度，比如&rsquo;M&rsquo;或&rsquo;BM&rsquo;，我们需要把数据以月为间隔进行切割。每一个间隔都是半开放的（half-open）；一个数据点只能属于一个间隔，所有间隔的合集，构成整个时间范围（time frame）。当使用resample去降采样数据的时候，有很多事情需要考虑：</p>
+
+<ul>
+<li>在每个间隔里，哪一边要闭合</li>
+<li>怎样对每一个聚合的bin贴标签，可以使用间隔的开始或结束</li>
+</ul>
+
+<p>为了演示一下，下面用一个一分钟的数据来举例：</p>
+
+<pre><code class="language-python">rng = pd.date_range('2000-01-01', periods=12, freq='T')
+</code></pre>
+
+<pre><code class="language-python">ts = pd.Series(np.arange(12), index=rng)
+ts
+</code></pre>
+
+<pre><code>2000-01-01 00:00:00     0
+2000-01-01 00:01:00     1
+2000-01-01 00:02:00     2
+2000-01-01 00:03:00     3
+2000-01-01 00:04:00     4
+2000-01-01 00:05:00     5
+2000-01-01 00:06:00     6
+2000-01-01 00:07:00     7
+2000-01-01 00:08:00     8
+2000-01-01 00:09:00     9
+2000-01-01 00:10:00    10
+2000-01-01 00:11:00    11
+Freq: T, dtype: int64
+</code></pre>
+
+<p>假设我们想要按5分钟一个数据块来进行聚合，然后对每一个组计算总和：</p>
+
+<pre><code class="language-python">ts.resample('5min', closed='right').sum()
+</code></pre>
+
+<pre><code>1999-12-31 23:55:00     0
+2000-01-01 00:00:00    15
+2000-01-01 00:05:00    40
+2000-01-01 00:10:00    11
+Freq: 5T, dtype: int64
+</code></pre>
+
+<p>我们传入的频度定义了每个bin的边界按5分钟递增。默认，bin的左边界是闭合的，所以<code>00:00</code>值是属于<code>00:00</code>到<code>00:05</code>间隔的。设定closed=&lsquo;right&rsquo;，会让间隔的右边闭合：</p>
+
+<pre><code class="language-python">ts.resample('5min', closed='right').sum()
+</code></pre>
+
+<pre><code>1999-12-31 23:55:00     0
+2000-01-01 00:00:00    15
+2000-01-01 00:05:00    40
+2000-01-01 00:10:00    11
+Freq: 5T, dtype: int64
+</code></pre>
+
+<p>默认，每一个bin的左边的时间戳，会被用来作为结果里时间序列的标签。通过设置label=&lsquo;right&rsquo;，我们可以使用bin右边的时间戳来作为标签：</p>
+
+<pre><code class="language-python">ts.resample('5min', closed='right', label='right').sum()
+</code></pre>
+
+<pre><code>2000-01-01 00:00:00     0
+2000-01-01 00:05:00    15
+2000-01-01 00:10:00    40
+2000-01-01 00:15:00    11
+Freq: 5T, dtype: int64
+</code></pre>
+
+<p>可以看下图方便理解：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/C53e3CCkDb.png?imageslim" alt="mark" /></p>
+
+<p>最后，我们可能想要对结果的索引进行位移，比如在右边界减少一秒。想要实现的话，传递一个字符串或日期偏移给loffset：</p>
+
+<pre><code class="language-python">ts.resample('5min', closed='right',
+            label='right', loffset='-1s').sum()
+</code></pre>
+
+<pre><code>1999-12-31 23:59:59     0
+2000-01-01 00:04:59    15
+2000-01-01 00:09:59    40
+2000-01-01 00:14:59    11
+Freq: 5T, dtype: int64
+</code></pre>
+
+<p>我们也可以使用shift方法来实现上面loffset的效果。</p>
+
+<h3 id="open-high-low-close-ohlc-resampling-股价图重取样">Open-High-Low-Close (OHLC) resampling（股价图重取样）</h3>
+
+<blockquote>
+<p>Open-High-Low-Close: 开盘-盘高-盘低-收盘图；股票图；股价图</p>
+</blockquote>
+
+<p>在经济界，一个比较流行的用法，是对时间序列进行聚合，计算每一个桶（bucket）里的四个值：first（open），last（close），maximum（high），minimal（low），即开盘-收盘-盘高-盘低，四个值。使用ohlc聚合函数可以得到这四个聚合结果：</p>
+
+<pre><code class="language-python">ts.resample('5min').ohlc()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>open</th>
+      <th>high</th>
+      <th>low</th>
+      <th>close</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000-01-01 00:00:00</th>
+      <td>0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>2000-01-01 00:05:00</th>
+      <td>5</td>
+      <td>9</td>
+      <td>5</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>2000-01-01 00:10:00</th>
+      <td>10</td>
+      <td>11</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="2-upsampling-and-interpolation-增采样和插值">2 Upsampling and Interpolation（增采样和插值）</h1>
+
+<p>把一个低频度转换为高频度，是不需要进行聚合的。下面是一个有周数据的DataFrame：</p>
+
+<pre><code class="language-python">frame = pd.DataFrame(np.random.randn(2, 4),
+                     index=pd.date_range('1/1/2000', periods=2,
+                                         freq='W-WED'),
+                     columns=['Colorado', 'Texas', 'New York', 'Ohio'])
+frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000-01-05</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-12</th>
+      <td>-1.125212</td>
+      <td>-0.824337</td>
+      <td>0.803721</td>
+      <td>-0.672660</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>当我们对这个数据进行聚合的的时候，每个组只有一个值，以及gap（间隔）之间的缺失值。在不使用任何聚合函数的情况下，我们使用asfreq方法将其转换为高频度：</p>
+
+<pre><code class="language-python">df_daily = frame.resample('D').asfreq()
+df_daily
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000-01-05</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-06</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-07</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-08</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-09</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-10</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-11</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-12</th>
+      <td>-1.125212</td>
+      <td>-0.824337</td>
+      <td>0.803721</td>
+      <td>-0.672660</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>假设我们想要用每周的值来填写非周三的部分。这种方法叫做填充（filling）或插值（interpolation），可以使用fillna或reindex方法来实现重采样：</p>
+
+<pre><code class="language-python">frame.resample('D').ffill()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000-01-05</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-06</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-07</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-08</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-09</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-10</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-11</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-12</th>
+      <td>-1.125212</td>
+      <td>-0.824337</td>
+      <td>0.803721</td>
+      <td>-0.672660</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>我们可以选择只对一部分的周期进行填写：</p>
+
+<pre><code class="language-python">frame.resample('D').ffill(limit=2)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000-01-05</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-06</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-07</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-08</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-09</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-10</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-11</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2000-01-12</th>
+      <td>-1.125212</td>
+      <td>-0.824337</td>
+      <td>0.803721</td>
+      <td>-0.672660</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>注意，新的日期索引不能与旧的有重叠：</p>
+
+<pre><code class="language-python">frame.resample('W-THU').ffill()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000-01-06</th>
+      <td>0.138355</td>
+      <td>1.881517</td>
+      <td>0.655367</td>
+      <td>1.496932</td>
+    </tr>
+    <tr>
+      <th>2000-01-13</th>
+      <td>-1.125212</td>
+      <td>-0.824337</td>
+      <td>0.803721</td>
+      <td>-0.672660</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="3-resampling-with-periods-对周期进行重采样">3 Resampling with Periods（对周期进行重采样）</h1>
+
+<p>对周期的索引进行重采样的过程，与之前时间戳的方法相似：</p>
+
+<pre><code class="language-python">frame = pd.DataFrame(np.random.randn(24, 4),
+                     index=pd.period_range('1-2000', '12-2001',
+                                           freq='M'),
+                     columns=['Colorado', 'Texas', 'New York', 'Ohio'])
+frame[:5]
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000-01</th>
+      <td>1.451095</td>
+      <td>0.236027</td>
+      <td>-1.114785</td>
+      <td>1.245450</td>
+    </tr>
+    <tr>
+      <th>2000-02</th>
+      <td>1.720449</td>
+      <td>-0.724853</td>
+      <td>-1.870676</td>
+      <td>1.089338</td>
+    </tr>
+    <tr>
+      <th>2000-03</th>
+      <td>0.411774</td>
+      <td>-0.785979</td>
+      <td>1.749024</td>
+      <td>0.164739</td>
+    </tr>
+    <tr>
+      <th>2000-04</th>
+      <td>-1.549051</td>
+      <td>-0.050722</td>
+      <td>0.002775</td>
+      <td>-1.606657</td>
+    </tr>
+    <tr>
+      <th>2000-05</th>
+      <td>1.011998</td>
+      <td>0.149377</td>
+      <td>-1.608262</td>
+      <td>0.992927</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">annual_frame = frame.resample('A-DEC').mean()
+annual_frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>增采样需要考虑的要多一些，比如在重采样前，选择哪一个时间跨度作为结束，就像asfreq方法那样。convertion参数默认是&rsquo;start&rsquo;，但也能用&rsquo;end&rsquo;：</p>
+
+<pre><code class="language-python"># Q-DEC: Quarterly, year ending in December
+annual_frame.resample('Q-DEC').ffill()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000Q1</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2000Q2</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2000Q3</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2000Q4</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q1</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+    <tr>
+      <th>2001Q2</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+    <tr>
+      <th>2001Q3</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+    <tr>
+      <th>2001Q4</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">annual_frame.resample('Q-DEC', convention='end').ffill()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000Q4</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q1</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q2</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q3</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q4</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>增采样和降采样的规则更严格一些：</p>
+
+<ul>
+<li>降采样中，目标频度必须是原频度的子周期（subperiod）</li>
+<li>增采样中，目标频度必须是原频度的母周期（superperiod）</li>
+</ul>
+
+<p>如果不满足上面的规则，会报错。主要会影响到季度，年度，周度频度；例如，用Q-MAR定义的时间跨度只与A-MAR, A-JUN, A-SEP, A-DEC进行对齐（line up with）：</p>
+
+<pre><code class="language-python">annual_frame.resample('Q-MAR').ffill()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Colorado</th>
+      <th>Texas</th>
+      <th>New York</th>
+      <th>Ohio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2000Q4</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q1</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q2</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q3</th>
+      <td>0.208662</td>
+      <td>-0.109971</td>
+      <td>-0.233464</td>
+      <td>0.138465</td>
+    </tr>
+    <tr>
+      <th>2001Q4</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+    <tr>
+      <th>2002Q1</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+    <tr>
+      <th>2002Q2</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+    <tr>
+      <th>2002Q3</th>
+      <td>-0.401946</td>
+      <td>0.368050</td>
+      <td>-0.209196</td>
+      <td>-0.155851</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/11-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90/03-1880%E5%B9%B4%E8%87%B32010%E5%B9%B4%E7%BE%8E%E5%9B%BD%E5%A9%B4%E5%84%BF%E5%A7%93%E5%90%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 1880年至2010年美国婴儿姓名</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/05-%E5%91%A8%E6%9C%9F%E5%92%8C%E5%91%A8%E6%9C%9F%E8%BF%90%E7%AE%97/">
+            <span class="next-text nav-default">05 周期和周期运算</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

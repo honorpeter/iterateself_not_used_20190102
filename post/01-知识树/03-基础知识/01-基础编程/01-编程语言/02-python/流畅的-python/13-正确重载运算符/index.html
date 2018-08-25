@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>13 正确重载运算符 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第 13 章 正确重载运算符 有些事情让我不安，比如运算符重载。我决定不支持运算符重载，这完全是个人选 择，因为我见过太多 C&#43;&#43; 程序员滥用它。1 ——Jame" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/13-%E6%AD%A3%E7%A1%AE%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="13 正确重载运算符" />
+<meta property="og:description" content="第 13 章 正确重载运算符 有些事情让我不安，比如运算符重载。我决定不支持运算符重载，这完全是个人选 择，因为我见过太多 C&#43;&#43; 程序员滥用它。1 ——Jame" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/13-%E6%AD%A3%E7%A1%AE%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E7%AC%A6/" /><meta property="article:published_time" content="2018-06-26T21:37:46&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:37:46&#43;00:00"/>
+<meta itemprop="name" content="13 正确重载运算符">
+<meta itemprop="description" content="第 13 章 正确重载运算符 有些事情让我不安，比如运算符重载。我决定不支持运算符重载，这完全是个人选 择，因为我见过太多 C&#43;&#43; 程序员滥用它。1 ——Jame">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:37:46&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:37:46&#43;00:00" />
+<meta itemprop="wordCount" content="15067">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="13 正确重载运算符"/>
+<meta name="twitter:description" content="第 13 章 正确重载运算符 有些事情让我不安，比如运算符重载。我决定不支持运算符重载，这完全是个人选 择，因为我见过太多 C&#43;&#43; 程序员滥用它。1 ——Jame"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">13 正确重载运算符</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 15067 words </span>
+        <span class="more-meta"> 31 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#第-13-章-正确重载运算符">第 13 章 正确重载运算符</a>
+<ul>
+<li><a href="#13-1-运算符重载基础">13.1 运算符重载基础</a></li>
+<li><a href="#13-2-元运算符">13.2 —元运算符</a></li>
+<li><a href="#13-3-重载向量加法运算符">13.3 重载向量加法运算符+</a></li>
+<li><a href="#13-4-重载标量乘法运算符">13.4 重载标量乘法运算符*</a>
+<ul>
+<li><a href="#示例13-11-vector-v7-py-增加-运算符方法">示例13-11 vector_v7.py:增加*运算符方法</a></li>
+<li><a href="#❶-为了检查类型-导入-numbers-模块">❶ 为了检查类型，导入 numbers 模块。</a></li>
+<li><a href="#❸否则-返回notimplemented-让python尝试在scalar操作数上调用-rmul-方">❸否则，返回NotImplemented，让Python尝试在scalar操作数上调用<strong>rmul</strong>方</a></li>
+<li><a href="#❹这里-rmul-方法只需执行self-scalar-委托给-mul-方法">❹这里，<strong>rmul</strong>方法只需执行self * scalar，委托给<strong>mul</strong>方法。</a></li>
+<li><a href="#通过实现-和-1-bookmark15-我们讲解了编写中缀运算符最常用的模式-和-1-bookmark15-用的技术对表-13-1-中列出的所有运算符都适用-就地运算符在-13-6-节讨论">通过实现 + 和 <a href="#bookmark15">1</a>，我们讲解了编写中缀运算符最常用的模式。 + 和 <a href="#bookmark15">1</a> 用的技术对表 13-1 中列出的所有运算符都适用（就地运算符在 13.6 节讨论）。</a></li>
+</ul></li>
+<li><a href="#13-5-众多比较运算符">13.5 众多比较运算符</a>
+<ul>
+<li><a href="#这个方法的行为如示例-13-12-所示">这个方法的行为如示例 13-12 所示。</a></li>
+<li><a href="#示例13-12-vector实例与vector实例-vector2d实例和元组比较">示例13-12 Vector实例与Vector实例、Vector2d实例和元组比较</a></li>
+<li><a href="#❶-两个具有相同数值分量的-vector-实例是相等的">❶ 两个具有相同数值分量的 Vector 实例是相等的。</a></li>
+<li><a href="#❸-vector-实例的分量与元组或其他任何可迭代对象的元素相等-那么对象也相等">❸ Vector 实例的分量与元组或其他任何可迭代对象的元素相等，那么对象也相等。</a></li>
+<li><a href="#如果存在多种可能-不要猜测">如果存在多种可能，不要猜测。</a></li>
+<li><a href="#对操作数过度宽容可能导致令人惊讶的结果-而程序员讨厌惊喜">对操作数过度宽容可能导致令人惊讶的结果，而程序员讨厌惊喜。</a></li>
+<li><a href="#示例-13-13-vector-v8-py-改进-vector-类的-eq-方法">示例 13-13 vector_v8+py：改进 Vector 类的 <strong>eq</strong> 方法</a></li>
+</ul></li>
+<li><a href="#13-6-增量赋值运算符">13.6 增量赋值运算符</a></li>
+<li><a href="#13-7-本章小结">13.7 本章小结</a></li>
+<li><a href="#13-8-延伸阅读">13.8 延伸阅读</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="第-13-章-正确重载运算符">第 13 章 正确重载运算符</h2>
+
+<p>有些事情让我不安，比如运算符重载。我决定不支持运算符重载，这完全是个人选 择，因为我见过太多 C++ 程序员滥用它。1</p>
+
+<p>——James Gosling Java 之父</p>
+
+<p>I1摘自 “The C Family of Languages: Interview with Dennis Ritchie, Bjarne Stroustrup, and James Gosling”一文</p>
+
+<p>(<a href="http://www.gotw.ca/publications/c_family_interview.htm">http://www+gotw+ca/publications/c_family_interview+htm</a>)。</p>
+
+<p>运算符重载的作用是让用户定义的对象使用中缀运算符(如 + 和 |)或一元运算符(如 -和 ~)。说得宽泛一些，在 Python 中，函数调用(())、属性访问(.)和元素访问 / 切 片([])也是运算符，不过本章只讨论一元运算符和中缀运算符。</p>
+
+<p>在 1+2+1 节，我们为 Vector 类简略实现了几个运算符。示例 1-2 中的 <strong>add</strong> 和 <strong>mul</strong> 方法是为了展示如何使用特殊方法重载运算符，不过有些小问题被我们忽视 了。此外，在示例 9-2 中，我们定义的 Vector2d.<strong>eq</strong> 方法认为 Vector(3, 4) == [3, 4]是真的(True)，这可能并不合理。本章会解决这些问题。</p>
+
+<p>在接下来的几节，我们将讨论：</p>
+
+<p>• Python如何处理中缀运算符中不同类型的操作数 •使用鸭子类型或显式类型检查处理不同类型的操作数 •中缀运算符如何表明自己无法处理操作数 •众多比较运算符(如==、＞、＜ =，等等)的特殊行为 •增量赋值运算符(如+=)的默认处理方式和重载方式</p>
+
+<h3 id="13-1-运算符重载基础">13.1 运算符重载基础</h3>
+
+<p>在某些圈子中，运算符重载的名声并不好。这个语言特性可能（己经）被滥用，让程序员</p>
+
+<p>困惑，导致缺陷和意料之外的性能瓶颈。但是，如果使用得当， API 会变得好用，代码会</p>
+
+<p>变得易于阅读。 Python 施加了一些限制，做好了灵活性、可用性和安全性方面的平衡：</p>
+
+<p>•不能重载内置类型的运算符 •不能新建运算符，只能重载现有的</p>
+
+<p>•某些运算符不能重载-is、and、or和not （不过位运算符&amp;、|和~可以）</p>
+
+<p>第 10 章己经为 Vector 定义了一个中缀运算符，即 ==，这个运算符由 <strong>eq</strong> 方法支 持。本章将改进 <strong>eq</strong> 方法的实现，更好地处理不是 Vector 实例的操作数。然而，在 运算符重载方面，众多比较运算符（==、 !=、 &gt;、 &lt;、 &gt;=、 &lt;=）是特例，因此我们首先将 在 Vector 中重载四个算术运算符：一元运算符 - 和 +，以及中缀运算符 + 和 *。 先从最简单的入手：一元运算符。</p>
+
+<h3 id="13-2-元运算符">13.2 —元运算符</h3>
+
+<p>在 Python 语言参考手册中，“6+5+ Unary arithmetic and bitwise operations”一节</p>
+
+<p><a href="https://docs.python.org/3/reference/expressions.html%23unary-arithmetic-and-bitwise-operations">2</a><a href="https://docs.python.org/3/reference/expressions.html%23unary-arithmetic-and-bitwise-operations"> </a><a href="https://docs.python.org/3/reference/expressions.html%23unary-arithmetic-and-bitwise-operations">(https://docs+python+org/3/reference/expressions+html#unary-arithmetic-and-bitwise-</a>operations)列出了三个一元运算符。下面是这三个运算符和对应的特殊方法。</p>
+
+<p>2现有版本是6+6节，而不是6+5节。——编者注</p>
+
+<p>-(<strong>neg</strong>)</p>
+
+<p>一元取负算术运算符。如果 x 是 -2，那么 -x == 2。</p>
+
+<p>+(<strong>pos</strong>)</p>
+
+<p>一元取正算术运算符。通常，X == +X，但也有一些例外。如果好奇，请阅读“X和 +x 何时不相等”附注栏。</p>
+
+<p>~(<strong>invert</strong>)</p>
+
+<p>对整数按位取反，定义为~X == -(x+1)。如果x是2，那么~x == -3。</p>
+
+<p>Python语言参考手册中的“Data Model” 一章</p>
+
+<p>(<a href="https://docs.python.org/3/reference/datamodel.html%23object.__neg__"> </a><a href="https://docs.python.org/3/reference/datamodel.html%23object.__neg__">https://docs+python+org/3/reference/datamodel+html#object+<strong>neg</strong></a> )还把内置的 abs(&hellip;) 函数列为一元运算符。它对应的特殊方法是 <strong>abs</strong>，从 1+2+1 节起已经见过多次。</p>
+
+<p>支持一元运算符很简单，只需实现相应的特殊方法。这些特殊方法只有一个参 数，self。然后，使用符合所在类的逻辑实现。不过，要遵守运算符的一个基本规则：</p>
+
+<p>始终返回一个新对象。也就是说，不能修改self，要创建并返回合适类型的新实例。</p>
+
+<p>对 - 和 + 来说，结果可能是与 self 同属一类的实例。多数时候， + 最好返回 self 的副 本。 abs(&hellip;) 的结果应该是一个标量。但是对 ~ 来说，很难说什么结果是合理的，因为 可能不是处理整数的位，例如在 ORM 中， SQL WHERE 子句应该返回反集。</p>
+
+<p>如前所述，我们将为第 10 章定义的 Vector 类实现几个新运算符。示例 13-1 列出了示例 10-16 实现的 <strong>abs</strong> 方法，以及新增加的 <strong>neg</strong> 和 <strong>pos</strong> 一元运算符方法。</p>
+
+<p>示例13-1 vector_v6+py：把一元运算符-和+添加到示例10-16中</p>
+
+<p>def <strong>abs</strong>(self):</p>
+
+<p>return math.sqrt(sum(X * X for X in self))</p>
+
+<p>def <strong>neg</strong>(self):</p>
+
+<p>return Vector(-x for x in self) O</p>
+
+<p>def <strong>pos</strong>(self):</p>
+
+<p>return Vector(self) &amp;</p>
+
+<p>❶为了计算-v，构建一个新Vector实例，把self的每个分量都取反。</p>
+
+<p>❷为了计算+v，构建一个新Vector实例，传入self的各个分量。</p>
+
+<p>还记得吗？ Vector 实例是可迭代的对象，而且 Vector.<strong>init</strong> 的参数是一个可迭代 对象，因此 <strong>neg</strong> 和 <strong>pos</strong> 的实现短小精悍。</p>
+
+<p>我们不打算实现 <strong>invert</strong> 方法，因此如果用户在 Vector 实例上尝试计算 ~v， Python 会抛出TypeError，而且输出明确的错误消息，“bad operand type for unary ~: &lsquo;Vector&rsquo;”。</p>
+
+<p>下述附注栏讨论一个奇怪的问题，能增长你的 + 一元运算符知识。接下来的重要话题 是：重载向量加法运算符 +（见 13.3 节）。</p>
+
+<p>x 和 +x 何时不相等</p>
+
+<p>每个人都觉得x == +x，而且在Python中，几乎所有情况下都是这样。但是，我在 标准库中找到两例 x != +x 的情况。</p>
+
+<p>第一例与 decimal.Decimal 类有关。如果 x 是 Decimal 实例，在算术运算的上下 文中创建，然后在不同的上下文中计算+x，那么x != +x。例如，x所在的上下文 使用某个精度，而计算 +x 时，精度变了，如示例 13-2 所示。</p>
+
+<p>示例 13-2 算术运算上下文的精度变化可能导致 x 不等于 +x</p>
+
+<p>&gt;&gt;&gt; import decimal</p>
+
+<p>&gt;&gt;&gt; ctx = decimal.getcontext() O &gt;&gt;&gt; ctx.prec = 40    ©</p>
+
+<p>&gt;&gt;&gt; one_third = decimal.Decimal(&lsquo;1&rsquo;) / decimal.Decimal(&lsquo;3&rsquo;) ©</p>
+
+<p>&gt;&gt;&gt; one_third &amp;</p>
+
+<p>Decimal(&lsquo;0.3333333333333333333333333333333333333333&rsquo;)</p>
+
+<p>&gt;&gt;&gt; one_third == +one_third ❺</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; ctx.prec = 28    ©</p>
+
+<p>&gt;&gt;&gt; one_third == +one_third False</p>
+
+<p>&gt;&gt;&gt; +one_third ©</p>
+
+<p>Decimal(&lsquo;0.3333333333333333333333333333&rsquo;)</p>
+
+<p>❶ 获取当前全局算术运算的上下文引用。</p>
+
+<p>❷ 把算术运算上下文的精度设为 40。</p>
+
+<p>❸ 使用当前精度计算 1/3。</p>
+
+<p>❹ 查看结果，小数点后有 40 个数字。</p>
+
+<p>❺ one_third == +one_third 返回 True。</p>
+
+<p>❻ 把精度降低为 28，这是 Python 3.4 为 Decimal 算术运算设定的默认精度。</p>
+
+<p>❼ 现在， one_third == +one_third 返回 False。</p>
+
+<p>❽查看+one_third，小数点后有28个数字。</p>
+
+<p>虽然每个 +one_third 表达式都会使用 one_third 的值创建一个新 Decimal 实例， 但是会使用当前算术运算上下文的精度。</p>
+
+<p>x != +x 的第二例在 collections.Counter 的文档中 (<a href="https://docs.python.org/3/library/collections.html%23collections.Counter">https://docs.python.org/3/library/collections.html#collections.Counter</a>) 。 Counter 类实</p>
+
+<p>现了几个算术运算符，例如中缀运算符 +，作用是把两个 Counter 实例的计数器加 在一起。然而，从实用角度出发， Counter 相加时，负值和零值计数会从结果中剔 除。而一元运算符+等同于加上一个空Counter，因此它产生一个新的Counter且 仅保留大于零的计数器。见示例 13-3。</p>
+
+<p>器示3例 13-3 一元运算符 + 得到一个新 Counter 实例，但是没有零值和负值计数</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; ct = Counter( &gt;&gt;&gt; ct</th>
+<th>abracadabra</th>
+<th>)</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Counter({</td>
+<td>&lsquo;a&rsquo;</td>
+<td>5,</td>
+<td>r&rsquo;:</td>
+<td>2, &lsquo;b&rsquo;:</td>
+<td>2,</td>
+<td>d&rsquo;</td>
+<td>1, &lsquo;c&rsquo;:</td>
+<td>1})</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; ct[&lsquo;r</td>
+<td>&rsquo;]</td>
+<td>-3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; ct[&rsquo;d</td>
+<td>&rsquo;]</td>
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; ct</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Counter({</td>
+<td>&lsquo;a&rsquo;</td>
+<td>5,</td>
+<td>b&rsquo;:</td>
+<td>2, &lsquo;c&rsquo;:</td>
+<td>1,</td>
+<td>d&rsquo;</td>
+<td>0, &lsquo;r&rsquo;:</td>
+<td>-3})</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; +ct</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Counter({</td>
+<td>&lsquo;a&rsquo;</td>
+<td>5,</td>
+<td>b&rsquo;:</td>
+<td>2, &lsquo;c&rsquo;:</td>
+<td>1})</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>下面回归正题。</p>
+
+<h3 id="13-3-重载向量加法运算符">13.3 重载向量加法运算符+</h3>
+
+<p><img src="08414584Python-66.jpg" alt="img" /></p>
+
+<p>Vector 类是序列类型，按照“Data Model”一章中的“3.3.6. Emulating container types”一节（<a href="https://docs.python.org/3/reference/datamodel.html%23emulating-container-types%ef%bc%89%e6%89%80%e8%af%b4%ef%bc%8c%e5%ba%8f%e5%88%97%e5%ba%94%e8%af%a5%e6%94%af%e6%8c%81+%e8%bf%90%e7%ae%97%e7%ac%a6%ef%bc%88%e7%94%a8%e4%ba%8e%e6%8b%bc%e6%8e%a5%ef%bc%89%ef%bc%8c%e4%bb%a5%e5%8f%8a*%e8%bf%90%e7%ae%97%e7%ac%a6%ef%bc%88%e7%94%a8%e4%ba%8e%e9%87%8d%e5%a4%8d%e5%a4%8d">https://docs.python.org/3/reference/datamodel.html#emulating-container-types</a><a href="https://docs.python.org/3/reference/datamodel.html%23emulating-container-types%ef%bc%89%e6%89%80%e8%af%b4%ef%bc%8c%e5%ba%8f%e5%88%97%e5%ba%94%e8%af%a5%e6%94%af%e6%8c%81+%e8%bf%90%e7%ae%97%e7%ac%a6%ef%bc%88%e7%94%a8%e4%ba%8e%e6%8b%bc%e6%8e%a5%ef%bc%89%ef%bc%8c%e4%bb%a5%e5%8f%8a*%e8%bf%90%e7%ae%97%e7%ac%a6%ef%bc%88%e7%94%a8%e4%ba%8e%e9%87%8d%e5%a4%8d%e5%a4%8d">）所说，序列应该支持+运算符（用于拼接），以及*运算符（用于重复复</a> 制）。然而，我们将使用向量数学运算实现 + 和 * 运算符。这么做更难一些，但是 对 Vector 类型来说更有意义。</p>
+
+<p>两个欧几里得向量加在一起得到的是一个新向量，它的各个分量是两个向量中相应的分量</p>
+
+<p>之和。比如说：</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; v2 = Vector([6, 7, 8])</p>
+
+<p>&gt;&gt;&gt; v1 + v2</p>
+
+<p>Vector([9.0, 11.0, 13.0])</p>
+
+<p>&gt;&gt;&gt; v1 + v2 == Vector([3+6, 4+7, 5+8])</p>
+
+<p>True</p>
+
+<p>如果尝试把两个不同长度的 Vector 实例加在一起会怎样？此时可以抛出错误，但是根据 实际运用情况（例如信息检索），最好使用零填充较短的那个向量。我们想要的效果是这 样：</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5, 6])</p>
+
+<p>&gt;&gt;&gt; v3 = Vector([1, 2])</p>
+
+<p>&gt;&gt;&gt; v1 + v3</p>
+
+<p>Vector([4.0, 6.0, 5.0, 6.0])</p>
+
+<p>确定这些基本的要求之后， <strong>add</strong> 方法的实现短小精悍，如示例 13-4 所示。 示例 13-4 Vector.<strong>add</strong> 方法，第 1 版</p>
+
+<p>#在Vector类中定义</p>
+
+<p>def <strong>add</strong>(self, other):</p>
+
+<p>pairs = itertools.zip_longest(self, other, fillvalue=0.0) # O return Vector(a + b for a, b in pairs) # ©</p>
+
+<p>❶ pairs 是个生成器，它会生成 （a, b） 形式的元组，其中 a 来自 self， b 来自 other。如果self和other的长度不同，使用fillvalue填充较短的那个可迭代对</p>
+
+<p>象。</p>
+
+<p>❷ 构建一个新 Vector 实例，使用生成器表达式计算 pairs 中各个元素的和。</p>
+
+<p>注意， <strong>add</strong> 返回一个新 Vector 实例，而没有影响 self 或 other。</p>
+
+<p>实现一元运算符和中缀运算符的特殊方法一定不能修改操作数。使用这些运 算符的表达式期待结果是新对象。只有增量赋值表达式可能会修改第一个操作数 ( self )，参见 13.6 节。</p>
+
+<p>示例 13-4 中的实现方式可以把 Vector 加到 Vector2d 上，还可以把 Vector 加到元组或 任何生成数字的可迭代对象上，如示例 13-5 所示。</p>
+
+<p>示例 13-5 第 1 版 Vector.<strong>add</strong> 方法也支持 Vector 之外的对象</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; v1 + (10, 20, 30)</p>
+
+<p>Vector([13.0, 24.0, 35.0])</p>
+
+<p>&gt;&gt;&gt; from vector2d_v3 import Vector2d &gt;&gt;&gt; v2d = Vector2d(1, 2)</p>
+
+<p>&gt;&gt;&gt; v1 + v2d Vector([4.0, 6.0, 5.0])</p>
+
+<p>示例 13-5 中的两个加法都能如我们所期待的那样计算，这是因为 <strong>add</strong> 使用了 zip_longest(&hellip;)，它能处理任何可迭代对象，而且构建新 Vector 实例的生成器表达 式仅仅是把zip_longest(&hellip;)生成的值对相加(a + b)，因此可以使用任何生成数 字元素的可迭代对象。</p>
+
+<p>然而，如果对调操作数(见示例 13-6)，混合类型的加法就会失败。</p>
+
+<p>示例 13-6 如果左操作数是 Vector 之外的对象，第一版 Vector.<strong>add</strong> 方法无 法处理</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([3, 4, 5])</p>
+
+<p>&gt;&gt;&gt; (10, 20, 30) + v1 Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in <module></p>
+
+<p>TypeError: can only concatenate tuple (not &ldquo;Vector&rdquo;) to tuple &gt;&gt;&gt; from vector2d_v3 import Vector2d &gt;&gt;&gt; v2d = Vector2d(1, 2)</p>
+
+<p>&gt;&gt;&gt; v2d + v1</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in <module></p>
+
+<p>TypeError: unsupported operand type(s) for +: &lsquo;Vector2d&rsquo; and &lsquo;Vector</p>
+
+<p>为了支持涉及不同类型的运算， Python 为中缀运算符特殊方法提供了特殊的分派机制。对 表达式 a + b 来说，解释器会执行以下几步操作(见图 13-1)。</p>
+
+<p>⑴如果a有<strong>add</strong>方法，而且返回值不是NotImplemented，调用a.<strong>add</strong>(b)，</p>
+
+<p>然后返回结果。</p>
+
+<p>(2)如果a没有<strong>add</strong>方法，或者调用<strong>add</strong>方法返回NotImplemented，检查b 有没有<strong>radd</strong>方法，如果有，而且没有返回NotImplemented，调用</p>
+
+<p>b.<strong>radd</strong>(a)，然后返回结果。</p>
+
+<p>(3)如果b没有<strong>radd</strong>方法，或者调用<strong>radd</strong>方法返回NotImplemented，抛出 TypeError，并在错误消息中指明操作数类型不支持。</p>
+
+<p>图 13-1：使用 <strong>add</strong> 和 <strong>radd</strong> 计算 a + b 的流程图</p>
+
+<p><strong>radd</strong>是<strong>add</strong>的“反射” (reflected)版本或“反向” (reversed)版本。我喜欢把它</p>
+
+<p>叫作“反向”特殊方法。 4 本书的三位技术审校， Alex、Anna 和 Leo 告诉我，他们喜欢称之 为“右向”(right)特殊方法，因为他们在右操作数上调用。不管你喜欢哪个以“r”开头的单 词，<strong>radd</strong>和<strong>rsub</strong>等类似方法中的“r”就是这个意思。</p>
+
+<p>4这两个术语在 Python 文档中都使用过。“Data Model”一章（<a href="https://docs.python.org/3/reference/datamodel.html">https://docs+python+org/3/reference/datamodelhtml</a>）用的 是“reflected” （反射），而 numbers 模块文档的“9+1+2+2+ Implementing the arithmetic operations”一节</p>
+
+<p>（<a href="https://docs.python.org/3/library/numbers.html%23implementing-the-arithmetic-operations">https://docs+python+ org/3/library/numbers+html# implementing-the-arithmetic-operations</a> ）用的是“forward” （正向）方法 和“reverse”（反向）方法。我觉得后者更好，因为“正向”和“反向”明确指出了方向，而“反射”就没这种效果。</p>
+
+<p>因此，为了让示例 13-6 中的混合类型加法能正确计算，我们要实现 Vector.<strong>radd</strong> 方法。这是一种后备机制，如果左操作数没有实现 <strong>add</strong> 方法，或者实现了，但是返</p>
+
+<p>回 NotImplemented 表明它不知道如何处理右操作数，那么 Python 会调用 <strong>radd</strong> 方</p>
+
+<p>法。</p>
+
+<p>别把 NotImplemented 和 NotImplementedError 搞混了。前者是特殊的单</p>
+
+<p>例值，如果中缀运算符特殊方法不能处理给定的操作数，那么要把它返回</p>
+
+<p>(return)给解释器。而NotImplementedError是一种异常，抽象类中的占位方</p>
+
+<p>法把它抛出(raise)，提醒子类必须覆盖。</p>
+
+<p>最简可用的 <strong>radd</strong> 实现如示例 13-7 所示。</p>
+
+<p>示例 13-7 Vector.<strong>add</strong> 和 <strong>radd</strong> 方法</p>
+
+<p>#在Vector类中定义</p>
+
+<p>def <strong>add</strong>(self, other): # O</p>
+
+<p>pairs = itertools.zip_longest(self, other, fillvalue=0.0) return Vector(a + b for a, b in pairs)</p>
+
+<p>def <strong>radd</strong>(self, other): # © return self + other</p>
+
+<p>❶ <strong>add</strong> 方法与示例 13-4 中一样，没有变化；这里列出，是因为 <strong>radd</strong> 要用它。</p>
+
+<p>❷ <strong>radd</strong> 直接委托 <strong>add</strong>。</p>
+
+<p><strong>radd</strong> 通常就这么简单：直接调用适当的运算符，在这里就是委托 <strong>add</strong>。任何可 交换的运算符都能这么做。处理数字和向量时， + 可以交换，但是拼接序列时不行。</p>
+
+<p>示例 13-4 中的方法可以处理 Vector 对象或任何具有数值元素的可迭代对象，例如 Vector2d 实例、整数元组或浮点数数组。但是，如果提供的对象不可迭代，那么 <strong>add</strong> 就无法处理，而且提供的错误消息不是很有用，如示例 13-8 所示。</p>
+
+<p>示例 13-8 Vector.<strong>add</strong> 方法的操作数要是可迭代对象</p>
+
+<p>&gt;&gt;&gt; v1 + 1</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in <module></p>
+
+<p>File &ldquo;vector_v6.py&rdquo;, line 328, in <strong>add</strong> pairs = itertools.zip_longest(self, other, fillvalue=0.0)</p>
+
+<p>TypeError: zip longest argument #2 must support iteration</p>
+
+<p>如果一个操作数是可迭代对象，但是它的元素不能与 Vector 中的浮点数元素相加，给出 的消息也没什么用。如示例 13-9 所示。</p>
+
+<p>示例 13-9 Vector.<strong>add</strong> 方法的操作数应是可迭代的数值对象</p>
+
+<p>示例 13-8 和示例 13-9 揭露的问题比晦涩难懂的错误消息严重：如果由于类型不兼容而导</p>
+
+<p>致运算符特殊方法无法返回有效的结果，那么应该返回NotImplemented，而不是抛出 TypeError。返回NotImplemented时，另一个操作数所属的类型还有机会执行运算，</p>
+
+<p>即 Python 会尝试调用反向方法。</p>
+
+<p>为了遵守鸭子类型精神，我们不能测试 other 操作数的类型，或者它的元素的类型。我 们要捕获异常，然后返回NotImplemented。如果解释器还未反转操作数，那么它将尝试 去做。如果反向方法返回NotImplemented，那么Python会抛出TypeError，并返回一 个标准的错误消息，例如“unsupported operand type(s) for +: Vector and str” 。</p>
+
+<p>示例 13-10 是实现 Vector 加法的特殊方法的最终版。</p>
+
+<p>示例13-10 vector_v6.py： +运算符方法，添加到vector_v5.py (见示例10-16)中</p>
+
+<p>def <strong>add</strong>(self, other): try:</p>
+
+<p>pairs = itertools.zip_longest(self, other, fillvalue=0.0) return Vector(a + b for a, b in pairs) except TypeError:</p>
+
+<p>return NotImplemented</p>
+
+<p>def <strong>radd</strong>(self, other): return self + other</p>
+
+<p>如果中缀运算符方法抛出异常，就终止了运算符分派机制。对TypeError 来说，通常最好将其捕获，然后返回NotImplemented。这样，解释器会尝试调用反 向运算符方法，如果操作数是不同的类型，对调之后，反向运算符方法可能会正确计 算。</p>
+
+<p>至此，我们编写了 <strong>add</strong> 和 <strong>radd</strong> 方法，安全重载了 + 运算符。接下来实现另一 个中缀运算符： *。</p>
+
+<h3 id="13-4-重载标量乘法运算符">13.4 重载标量乘法运算符*</h3>
+
+<p>Vector([1, 2, 3]) * x是什么意思？如果x是数字，就是计算标量积(scalar product)，结果是一个新Vector实例，各个分量都会乘以x-这也叫元素级乘法</p>
+
+<p>( elementwise multiplication)。</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([1, 2, 3]) &gt;&gt;&gt; v1 * 10</p>
+
+<p>Vector([10.0, 20.0, 30.0]) &gt;&gt;&gt; 11 * v1</p>
+
+<p>Vector([11.0, 22.0, 33.0])</p>
+
+<p>涉及Vector操作数的积还有一种，叫两个向量的点积(dot product);如果把一个向量 看作1x#矩阵，把另一个向量看作於1矩阵，那么就是矩阵乘法。NumPy等库目前的做 法是，不重载这两种意义的 *，只用 * 计算标量积。例如，在 NumPy 中，点积使用</p>
+
+<p>numpy.dot() 函数计算。 5</p>
+
+<p>5从Python 3+5起，@记号可以用作中缀点积运算符。详情参见“Python 3+5新引入的中缀运算符@”附注栏。</p>
+
+<p>回到标量积的话题。我们依然先实现最简可用的 <strong>mul</strong> 和 <strong>rmul</strong> 方法：</p>
+
+<p>#在Vector类中定义</p>
+
+<p>def <strong>mul</strong>(self, scalar):</p>
+
+<p>return Vector(n * scalar for n in self)</p>
+
+<p>def <strong>rmul</strong>(self, scalar): return self * scalar</p>
+
+<p>这两个方法确实可用，但是提供不兼容的操作数时会出问题。 scalar 参数的值要是数 字，与浮点数相乘得到的积是另一个浮点数(因为 Vector 类在内部使用浮点数数组)。 因此，不能使用复数，但可以是 int、bool(int 的子类)，甚至</p>
+
+<p>fractions.Fraction 实例等标量。</p>
+
+<p>我们可以像示例 13-10 那样，采用鸭子类型技术，在 <strong>mul</strong> 方法中捕获 TypeError。</p>
+
+<p>但是，这个问题有个更易于理解的方式，而且也更合理：白鹅类型。我们将使用</p>
+
+<p>isinstance() 检查 scalar 的类型，但是不硬编码具体的类型，而是检查</p>
+
+<p>numbers.Real 抽象基类。这个抽象基类涵盖了我们所需的全部类型，而且还支持以后声 明为 numbers.Real 抽象基类的真实子类或虚拟子类的数值类型。示例 13-11 展示了白</p>
+
+<p>鹅类型的实际运用——显式检查抽象类型。完整的代码清单参见本书的代码仓库。</p>
+
+<p>你可能还记得11+6节说过，decimal.Decimal没有把自己注册为 numbers.Real 的虚拟子类。因此， Vector 类不会处理 decimal.Decimal 数字。</p>
+
+<h4 id="示例13-11-vector-v7-py-增加-运算符方法">示例13-11 vector_v7.py:增加*运算符方法</h4>
+
+<p>from array import array import reprlib import math import functools import operator import itertools import numbers # O</p>
+
+<p>class Vector:</p>
+
+<p>typecode = &rsquo;d&rsquo;</p>
+
+<p>def <strong>init</strong>(self, components):</p>
+
+<p>self._components = array(self.typecode, components)</p>
+
+<p>#    排版需要，省略了很多方法</p>
+
+<p>#    参见 https: //github.com/fluentpython/example-code 中的 vector_v7.py</p>
+
+<p>def <strong>mul</strong>(self, scalar):</p>
+
+<p>if isinstance(scalar, numbers.Real):    # ©</p>
+
+<p>return Vector(n * scalar for n in self) else: # ©</p>
+
+<p>return NotImplemented</p>
+
+<p>def <strong>rmul</strong>(self, scalar): return self * scalar # o</p>
+
+<h4 id="❶-为了检查类型-导入-numbers-模块">❶ 为了检查类型，导入 numbers 模块。</h4>
+
+<p>❷ 如果 scalar 是 numbers.Real 某个子类的实例，用分量的乘积创建一个新 Vector 实 例。</p>
+
+<h4 id="❸否则-返回notimplemented-让python尝试在scalar操作数上调用-rmul-方">❸否则，返回NotImplemented，让Python尝试在scalar操作数上调用<strong>rmul</strong>方</h4>
+
+<p>法。</p>
+
+<h4 id="❹这里-rmul-方法只需执行self-scalar-委托给-mul-方法">❹这里，<strong>rmul</strong>方法只需执行self * scalar，委托给<strong>mul</strong>方法。</h4>
+
+<p>有了示例 13-11 中的代码之后，我们可以拿 Vector 实例乘以常规的标量值和不那么寻常 的数字类型了：</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([1.0, 2.0, 3.0])</p>
+
+<p>&gt;&gt;&gt; 14 * v1</p>
+
+<p>Vector([14.0, 28.0, 42.0])</p>
+
+<p>&gt;&gt;&gt; v1 * True</p>
+
+<p>Vector([1.0, 2.0, 3.0])</p>
+
+<p>&gt;&gt;&gt; from fractions import Fraction &gt;&gt;&gt; v1 * Fraction(1, 3)</p>
+
+<p>Vector([0.3333333333333333, 0.6666666666666666, 1.0])</p>
+
+<h4 id="通过实现-和-1-bookmark15-我们讲解了编写中缀运算符最常用的模式-和-1-bookmark15-用的技术对表-13-1-中列出的所有运算符都适用-就地运算符在-13-6-节讨论">通过实现 + 和 <a href="#bookmark15">1</a>，我们讲解了编写中缀运算符最常用的模式。 + 和 <a href="#bookmark15">1</a> 用的技术对表 13-1 中列出的所有运算符都适用（就地运算符在 13.6 节讨论）。</h4>
+
+<p>表13-1：中缀运算符方法的名称（就地运算符用于增量赋值；比较运算符在表13-2</p>
+
+<p>中）</p>
+
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>正向方法</th>
+<th>反向方法</th>
+<th>就地方法</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>+</td>
+<td><strong>add</strong></td>
+<td><strong>radd</strong></td>
+<td><strong>iadd</strong></td>
+<td>加法或拼接</td>
+</tr>
+
+<tr>
+<td>-</td>
+<td><strong>sub</strong></td>
+<td><strong>rsub</strong></td>
+<td><strong>isub</strong></td>
+<td>减法</td>
+</tr>
+
+<tr>
+<td>*</td>
+<td><strong>mul</strong></td>
+<td><strong>rmul</strong></td>
+<td><strong>imul</strong></td>
+<td>乘法或重复复制</td>
+</tr>
+
+<tr>
+<td>/</td>
+<td><strong>truediv</strong></td>
+<td><strong>rtruediv</strong></td>
+<td><strong>itruediv</strong></td>
+<td>除法</td>
+</tr>
+
+<tr>
+<td>//</td>
+<td><strong>floordiv</strong></td>
+<td><strong>rfloordiv</strong></td>
+<td><strong>ifloordiv</strong></td>
+<td>整除</td>
+</tr>
+
+<tr>
+<td>%</td>
+<td><strong>mod</strong></td>
+<td><strong>rmod</strong></td>
+<td><strong>imod</strong></td>
+<td>取模</td>
+</tr>
+
+<tr>
+<td>divmod()</td>
+<td><strong>divmod</strong></td>
+<td><strong>rdivmod</strong></td>
+<td><strong>idivmod</strong></td>
+<td>返回由整除的商和模数组成的元组</td>
+</tr>
+
+<tr>
+<td>**，pow()</td>
+<td><strong>pow</strong></td>
+<td><strong>rpow</strong></td>
+<td><strong>ipow</strong></td>
+<td>取幂<a href="#bookmark15">1</a></td>
+</tr>
+
+<tr>
+<td>@</td>
+<td><strong>matmul</strong></td>
+<td><strong>rmatmul</strong></td>
+<td><strong>imatmul</strong></td>
+<td>矩阵乘法#</td>
+</tr>
+
+<tr>
+<td>&amp;</td>
+<td><strong>and</strong></td>
+<td><strong>rand</strong></td>
+<td><strong>iand</strong></td>
+<td>位与</td>
+</tr>
+
+<tr>
+<td>|</td>
+<td><strong>or</strong></td>
+<td><strong>ror</strong></td>
+<td><strong>ior</strong></td>
+<td>位或</td>
+</tr>
+
+<tr>
+<td>八</td>
+<td><strong>xor</strong></td>
+<td><strong>rxor</strong></td>
+<td><strong>ixor</strong></td>
+<td>位异或</td>
+</tr>
+
+<tr>
+<td>&lt;&lt;</td>
+<td><strong>lshift</strong></td>
+<td><strong>rlshift</strong></td>
+<td><strong>ilshift</strong></td>
+<td>按位左移</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;</td>
+<td><strong>rshift</strong></td>
+<td><strong>rrshift</strong></td>
+<td><strong>irshift</strong></td>
+<td>按位右移</td>
+</tr>
+</tbody>
+</table>
+
+<p># Python 3.5 新引入的。</p>
+
+<p>众多比较运算符也是一类中缀运算符，但是规则稍有不同。我们将在下一节讨论众多比较</p>
+
+<p>运算符。</p>
+
+<p>下述附注栏介绍了 Python 3.5（写作本书时尚未发布 6）引入的 @ 运算符，选读。</p>
+
+<p>6现已发布。一编者注</p>
+
+<p>Python 3.5 新引入的中缀运算符 @</p>
+
+<p>Python 3.4 没有为点积提供中缀运算符。不过，写作本书时， Python 3.5 的 pre-alpha 版实现了 “PEP 465 — A dedicated infix operator for matrix</p>
+
+<p>multiplication” （ <a href="https://www.python.org/dev/peps/pep-0465/">https://www.python.org/dev/peps/pep-0465/</a> ） ，提供了点积所需的 @ 记 号（例如， a @ b 是 a 和 b 的点积）。 @ 运算符由特殊方法</p>
+
+<p><strong>matmul</strong>、<strong>rmatmul</strong> 和 <strong>imatmul</strong> 提供支持，名称取自“matrix</p>
+
+<p>multiplication” （矩阵乘法） 。目前，标准库还没用到这些方法，但是 Python 3.5 的解 释器能识别，因此 NumPy 团队（以及我们自己）可以在用户定义的类型中支持 @ 运 算符。 Python 解析器也做了修改，能处理中缀运算符 @（在 Python 3.4 中， a @ b 是 一种句法错误）。</p>
+
+<p>为了体验一下，我从源码编译了 Python 3.5，然后为 Vector 实现了点积运算符 @，还</p>
+
+<p>做了测试。</p>
+
+<p>下面是我做的最简单的测试：</p>
+
+<p>&gt;&gt;&gt; va = Vector([1, 2, 3])</p>
+
+<p>&gt;&gt;&gt; vz = Vector([5, 6, 7])</p>
+
+<p>&gt;&gt;&gt; va @ vz == 38.0 # 1*5 + 2*6 + 3*7</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; [10, 20, 30] @ vz</p>
+
+<p>380.0</p>
+
+<p>&gt;&gt;&gt; va @ 3</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>TypeError: unsupported operand type(s) for @: &lsquo;Vector&rsquo; and &lsquo;int</p>
+
+<p>下面是相应特殊方法的代码：</p>
+
+<p>完整的源码在本书代码仓库(<a href="https://github.com/fluentpython/example-code">https://github+com/fluentpython/example-code</a>)里的 vector_py3_5+py 文件中。</p>
+
+<p>记得要在 Python 3+5 中测试，否则会导致 SyntaxError ！</p>
+
+<h3 id="13-5-众多比较运算符">13.5 众多比较运算符</h3>
+
+<p>Python 解释器对众多比较运算符(==、!=、＞、＜、＞=、＜=)的处理与前文类似，不过在 两个方面有重大区别。</p>
+
+<p>•正向和反向调用使用的是同一系列方法。这方面的规则如表13-2所示。例如，对== 来说，正向和反向调用都是 <strong>eq</strong> 方法，只是把参数对调了；而正向的 <strong>gt</strong> 方 法调用的是反向的 <strong>lt</strong> 方法，并把参数对调。</p>
+
+<p>•对==和！=来说，如果反向调用失败，Python会比较对象的ID，而不抛出 TypeError。</p>
+
+<p>表13-2:众多比较运算符：正向方法返回NotImplemented的话，调用反向方法</p>
+
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>中缀运算符</th>
+<th>正向方法调用</th>
+<th>反向方法调用</th>
+<th>后备机制</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>相等性</td>
+<td>a == b</td>
+<td>a.<strong>eq</strong>(b)</td>
+<td>b.<strong>eq</strong>(a)</td>
+<td>返回 id(a) == id(b)</td>
+</tr>
+
+<tr>
+<td></td>
+<td>a != b</td>
+<td>a.<strong>ne</strong>(b)</td>
+<td>b.<strong>ne</strong>(a)</td>
+<td>返回 not (a == b)</td>
+</tr>
+
+<tr>
+<td>排序</td>
+<td>a &gt; b</td>
+<td>a.<strong>gt</strong>(b)</td>
+<td>b.<strong>lt</strong>(a)</td>
+<td>抛出 TypeError</td>
+</tr>
+
+<tr>
+<td></td>
+<td>a &lt; b</td>
+<td>a.<strong>lt</strong>(b)</td>
+<td>b.<strong>gt</strong>(a)</td>
+<td>抛出 TypeError</td>
+</tr>
+
+<tr>
+<td></td>
+<td>a &gt;= b</td>
+<td>a.<strong>ge</strong>(b)</td>
+<td>b.<strong>le</strong>(a)</td>
+<td>抛出 TypeError</td>
+</tr>
+
+<tr>
+<td></td>
+<td>a &lt;= b</td>
+<td>a.<strong>le</strong>(b)</td>
+<td>b.<strong>ge</strong>(a)</td>
+<td>抛出 T ypeEmon</td>
+</tr>
+</tbody>
+</table>
+
+<p>Python 3的新行为</p>
+
+<p>Python 2 之后的比较运算符后备机制都变了。对于 <strong>ne</strong>，现在 Python 3 返回结果 是对_eq__结果的取反。对于排序比较运算符，Python 3抛出TypeError，并把错 误消息设为&rsquo;unorderable types: int() ＜ tuple()•。在 Python2 中，这些比较</p>
+
+<p>的结果很怪异，会考虑对象的类型和ID，而且无规律可循。然而，比较整数和元组 确实没有意义，因此此时抛出 TypeError 是这门语言的一大进步。</p>
+
+<p>了解这些规则之后，我们来分析并改进 Vector.<strong>eq</strong> 方法的行为。这个方法在 vector_v5.py 中是这样定义的：</p>
+
+<p>class Vector:</p>
+
+<p># 省略了很多行</p>
+
+<p>def <strong>eq</strong>(self, other):</p>
+
+<p>return (len(self) == len(other) and</p>
+
+<p>all(a == b for a, b in zip(self, other)))</p>
+
+<h4 id="这个方法的行为如示例-13-12-所示">这个方法的行为如示例 13-12 所示。</h4>
+
+<h4 id="示例13-12-vector实例与vector实例-vector2d实例和元组比较">示例13-12 Vector实例与Vector实例、Vector2d实例和元组比较</h4>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; va =</th>
+<th>Vector([1.0, 2.0, 3.0])</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;&gt;&gt; vb =</td>
+<td>Vector(range(1, 4))</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; va =</td>
+<td>vb # O</td>
+</tr>
+
+<tr>
+<td>True</td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; vc =</td>
+<td>Vector([1, 2])</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; from</td>
+<td>vector2d_v3 import Vector2d</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; v2d</td>
+<td>Vector2d(1, 2)</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; vc =</td>
+<td>=v2d # &amp;</td>
+</tr>
+
+<tr>
+<td>True</td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; t3 =</td>
+<td>(1, 2, 3)</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; va =</td>
+<td>=t3 # &amp;</td>
+</tr>
+
+<tr>
+<td>True</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="❶-两个具有相同数值分量的-vector-实例是相等的">❶ 两个具有相同数值分量的 Vector 实例是相等的。</h4>
+
+<p>❷ 如果 Vector 实例的分量与 Vector2d 实例的分量都相等，那么两个实例相等。 7</p>
+
+<p>7实际运行时会抛出异常:TypeError: object of type &lsquo;Vector2d&rsquo; has no len()，因为 Vector2d 没有实现 <strong>len</strong>特殊方法。如果改为vc == set(v2d)就会返回True。-编者注</p>
+
+<h4 id="❸-vector-实例的分量与元组或其他任何可迭代对象的元素相等-那么对象也相等">❸ Vector 实例的分量与元组或其他任何可迭代对象的元素相等，那么对象也相等。</h4>
+
+<p>示例 13-12 中的最后一个结果可能不是很理想。我对这一点没有强制规则，要由应用上下 文决定。不过， “Python 之禅”说道：</p>
+
+<h4 id="如果存在多种可能-不要猜测">如果存在多种可能，不要猜测。</h4>
+
+<h4 id="对操作数过度宽容可能导致令人惊讶的结果-而程序员讨厌惊喜">对操作数过度宽容可能导致令人惊讶的结果，而程序员讨厌惊喜。</h4>
+
+<p>从Python自身来找线索，我们发现[1,2] == (1, 2)的结果是False。因此，我们要保 守一点，做些类型检查。如果第二个操作数是 Vector 实例(或者 Vector 子类的实 例)，那么就使用<strong>eq</strong>方法的当前逻辑。否则，返回NotImplemented，让Python处</p>
+
+<p>理。参见示例 13-13。</p>
+
+<h4 id="示例-13-13-vector-v8-py-改进-vector-类的-eq-方法">示例 13-13 vector_v8+py：改进 Vector 类的 <strong>eq</strong> 方法</h4>
+
+<p>else:</p>
+
+<p>return NotImplemented ©</p>
+
+<p>❶ 如果 other 操作数是 Vector 实例(或者 Vector 子类的实例)，那就像之前那样比 较。</p>
+
+<p>❷ 否则，返回 NotImplemented。</p>
+
+<p>如果使用示例 13-13 中的新版 Vector.<strong>eq</strong> 方法运行示例 13-12 中的测试，得到的结 果如示例 13-14 所示。</p>
+
+<p>示例 13-14 与示例 13-12 一样的测试：最后一个结果变了</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt; va =</th>
+<th>Vector([1.0, 2.0, 3.0])</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;&gt;&gt; vb =</td>
+<td>Vector(range(1, 4))</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; va =</td>
+<td>vb # O</td>
+</tr>
+
+<tr>
+<td>True</td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; vc =</td>
+<td>Vector([1, 2])</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; from</td>
+<td>vector2d_v3 import Vector2d</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; v2d</td>
+<td>Vector2d(1, 2)</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; vc =</td>
+<td>v2d # ©</td>
+</tr>
+
+<tr>
+<td>True</td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; t3 =</td>
+<td>(1, 2, 3)</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt; va =</td>
+<td>t3 # ©</td>
+</tr>
+
+<tr>
+<td>False</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>❶ 结果与之前一样，与预期相符。</p>
+
+<p>❷ 结果与之前一样，但是为什么呢？稍后解释。 8</p>
+
+<p>8这次不抛出异常，而是返回True。请参阅前一个编者注。 编者注</p>
+
+<p>❸结果不同了，这才是我们想要的。但是为什么会这样？请往下读+ + + + + +</p>
+
+<p>在示例 13-14 中的三个结果里，第一个没变，但是后两个变了，这是因为示例 13-13 中的</p>
+
+<p><strong>eq</strong> 方法返回了 NotImplemented。 Vector 实例与 Vector2d 实例比较时，具体步骤 如下。</p>
+
+<p>(1)    为了计算 vc == v2d， Python 调用 Vector.<strong>eq</strong>(vc, v2d)。</p>
+
+<p>(2)    经 Vector.<strong>eq</strong>(vc, v2d) 确认， v2d 不是 Vector 实例，因此返回</p>
+
+<p>NotImplemented。</p>
+
+<p>(3)    Python 得到 NotImplemented 结果，尝试调用 Vector2d.<strong>eq</strong>(v2d, vc)。</p>
+
+<p>(4)    Vector2d.<strong>eq</strong>(v2d, vc) 把两个操作数都变成元组，然后比较，结果是</p>
+
+<p>True(Vector2d.<strong>eq</strong> 方法的代码在示例 9-9 中)。</p>
+
+<p>在示例 13-14 中， Vector 实例和元组比较时，具体步骤如下。</p>
+
+<p>(1)    为了计算 va == t3， Python 调用 Vector.<strong>eq</strong>(va, t3)。</p>
+
+<p>(2)    经 Vector.<strong>eq</strong>(va, t3) 确认， t3 不是 Vector 实例，因此返回</p>
+
+<p>NotImplemented。</p>
+
+<p>(3)    Python 得到 NotImplemented 结果，尝试调用 tuple.<strong>eq</strong>(t3, va)。</p>
+
+<p>(4)    tuple.<strong>eq</strong>(t3, va) 不知道 Vector 是什么，因此返回 NotImplemented。</p>
+
+<p>(5)    对==来说，如果反向调用返回NotImplemented，Python会比较对象的ID，作最后</p>
+
+<p>一搏。</p>
+
+<p>那么 != 运算符呢？我们不用实现它，因为从 object 继承的 <strong>ne</strong> 方法的后备行为满 足了我们的需求：定义了 <strong>eq</strong> 方法，而且它不返回 NotImplemented， <strong>ne</strong> 会对 <strong>eq</strong> 返回的结果取反。</p>
+
+<p>也就是说，对示例 13-14 中的对象来说，使用 != 运算符比较的结果是一致的：</p>
+
+<p>&gt;&gt;&gt; va != vb</p>
+
+<p>False</p>
+
+<p>&gt;&gt;&gt; vc != v2d</p>
+
+<p>False</p>
+
+<p>&gt;&gt;&gt; va != (1, 2, 3)</p>
+
+<p>True</p>
+
+<p>从 object 中继承的 <strong>ne</strong> 方法，运作方式与下述代码类似，不过原版是用 C 语言实现 的： 9</p>
+
+<p>9object.<strong>eq</strong> 和 object.<strong>ne</strong> 的逻辑在 object_richcompare 函数中，位于 CPython 源码的 Objects/typeobject.c</p>
+
+<p>文件(<a href="https://hg.python.org/cpython/file/c0e311e010fc/Objects/typeobject.c">https://hg.python. org/cpython/file/c0e311e010fc/Objects/typeobject.c </a>)中。</p>
+
+<p>def <strong>ne</strong>(self, other): eq_result = self == other if eq_result is NotImplemented:</p>
+
+<p>return NotImplemented else:</p>
+
+<p>return not eq_result</p>
+
+<p>Python 3 文档的缺陷</p>
+
+<p>10</p>
+
+<p>写作本书时，众多比较方法的文档(<a href="https://docs.python+org/3/reference/datamodel">https://docs.python+org/3/reference/datamodel</a>. html)说：“x==y成立不代表x!=y不成立。据此，如果定义<em>eq</em>()方法，也要 定义 <strong>ne</strong>() 方法，这样运算符的行为才能符合预期。 ”对 Python 2 来说，确实是 这样。但对 Python 3 而言，这不是好的建议，因为从 object 类继承的 <strong>ne</strong> 实现 够用了，几乎不用重载。Guido在他写的“What&rsquo;s New in Python 3.0”一文</p>
+
+<p>(<a href="https://docs.python.org/3/whatsnew/3.0.html%23operators-and-special-methods">https://docs+python+org/3/whatsnew/3+0+html#operators-and-special-methods</a>)中说明了 这个新行为，在“Operators And Special Methods”一节中。文档的这个缺陷在issue 4395 (<a href="http://bugs.python.org/issue4395">http://bugs+python+org/issue4395</a>)中做了记录。</p>
+
+<p>10这个缺陷现在已经修正了。——编者注</p>
+
+<p>讨论完重要的中缀运算符重载之后，下面换一类运算符：增量赋值运算符。</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>pow的第三个参数modulo是可选的：pow（a, b, modulo），直接调用特殊方法时也支持这个参数（如</p>
+
+<p>a.<strong>pow</strong>（b, modulo））。</p>
+
+<p>class Vector:</p>
+
+<p># 排版需要，省略了很多方法</p>
+
+<p>def <strong>matmul</strong>(self, other): try:</p>
+
+<p>return sum(a * b for a, b in zip(self, other)) except TypeError:</p>
+
+<p>return NotImplemented</p>
+
+<p>def <strong>rmatmul</strong>(self, other): return self @ other</p>
+
+<h3 id="13-6-增量赋值运算符">13.6 增量赋值运算符</h3>
+
+<p>Vector 类已经支持增量赋值运算符 += 和 *= 了，如示例 13-15 所示。</p>
+
+<p>示例 13-15 增量赋值不会修改不可变目标，而是新建实例，然后重新绑定</p>
+
+<p>&gt;&gt;&gt; v1 = Vector([1, 2, 3])</p>
+
+<p>&gt;&gt;&gt; v1_alias = v1 # O &gt;&gt;&gt; id(v1) # ©</p>
+
+<p>4302860128</p>
+
+<p>&gt;&gt;&gt; v1 += Vector([4, 5, 6])    # ©</p>
+
+<p>&gt;&gt;&gt; v1 # ©</p>
+
+<p>Vector([5.0, 7.0, 9.0])</p>
+
+<p>&gt;&gt;&gt; id(v1) # ©</p>
+
+<p>4302859904</p>
+
+<p>&gt;&gt;&gt; v1_alias # ©</p>
+
+<p>Vector([1.0, 2.0, 3.0])</p>
+
+<p>&gt;&gt;&gt; v1 *= 11    # &amp;</p>
+
+<p>&gt;&gt;&gt; v1 # ©</p>
+
+<p>Vector([55.0, 77.0, 99.0])</p>
+
+<p>&gt;&gt;&gt; id(v1)</p>
+
+<p>4302858336</p>
+
+<p>❶ 复制一份，供后面审查 Vector([1, 2, 3]) 对象。</p>
+
+<p>❷ 记住一开始绑定给 v1 的 Vector 实例的 ID。</p>
+
+<p>❸ 增量加法运算。</p>
+
+<p>❹ 结果与预期相符 ++</p>
+
+<p>❺ ++ 但是创建了新的 Vector 实例。</p>
+
+<p>❻审查v1_alias，确认原来的Vector实例没被修改。</p>
+
+<p>❼ 增量乘法运算。</p>
+
+<p>❽ 同样，结果与预期相符，但是创建了新的 Vector 实例。</p>
+
+<p>如果一个类没有实现表13-1列出的就地运算符，增量赋值运算符只是语法糖：a += b的</p>
+
+<p>作用与 a = a + b 完全一样。对不可变类型来说，这是预期的行为，而且，如果定义了 <strong>add</strong> 方法的话，不用编写额外的代码， += 就能使用。</p>
+
+<p>然而，如果实现了就地运算符方法，例如 <strong>iadd</strong>，计算 a += b 的结果时会调用就地</p>
+
+<p>运算符方法。这种运算符的名称表明，它们会就地修改左操作数，而不会创建新对象作为</p>
+
+<p>结果。</p>
+
+<p><img src="08414584Python-68.jpg" alt="img" /></p>
+
+<p>不可变类型，如Vector类，一定不能实现就地特殊方法。这是明显的事</p>
+
+<p>实，不过还是值得提出来。</p>
+
+<p>为了展示如何实现就地运算符，我们将扩展示例 11-12 中的 BingoCage 类，实现 <strong>add</strong> 和 <strong>iadd</strong> 方法。</p>
+
+<p>我们把子类命名为AddableBingoCage。示例13-16是我们想让+运算符具有的行为。 示例 13-16 使用 + 运算符新建 AddableBingoCage 实例</p>
+
+<p>&gt;&gt;&gt; vowels = &lsquo;AEIOU&rsquo;</p>
+
+<p>&gt;&gt;&gt; globe = AddableBingoCage(vowels) O</p>
+
+<p>&gt;&gt;&gt; globe.inspect()</p>
+
+<p>(&lsquo;A&rsquo;, &lsquo;E&rsquo;, &lsquo;I&rsquo;, &lsquo;O&rsquo;, &lsquo;U&rsquo;)</p>
+
+<p>&gt;&gt;&gt; globe.pick() in vowels ©</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; len(globe.inspect())    ©</p>
+
+<p>4</p>
+
+<p>&gt;&gt;&gt; globe2 = AddableBingoCage(&lsquo;XYZ&rsquo;)    ©</p>
+
+<p>&gt;&gt;&gt; globe3 = globe + globe2 &gt;&gt;&gt; len(globe3.inspect())❺</p>
+
+<p>7</p>
+
+<p>&gt;&gt;&gt; void = globe + [10, 20] ©</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>TypeError: unsupported operand type(s) for +: &lsquo;AddableBingoCage&rsquo; and &lsquo;list</p>
+
+<p>❶使用5个元素（vowels中的各个字母）创建一个globe实例。</p>
+
+<p>❷ 从中取出一个元素，确认它在 vowels 中。</p>
+
+<p>❸ 确认 globe 的元素数量减少到 4 个了。</p>
+
+<p>❹ 创建第二个实例，它有 3 个元素。</p>
+
+<p>❺ 把前两个实例加在一起，创建第 3 个实例。这个实例有 7 个元素。</p>
+
+<p>❻AddableBingoCage实例无法与列表相加，抛出TypeError。那个错误消息是</p>
+
+<p><strong>add</strong> 方法返回 NotImplemented 时 Python 解释器输出的。</p>
+
+<p>AddableBingoCage 是可变的，实现 <strong>iadd</strong> 方法后的行为如示例 13-17 所示。</p>
+
+<p>示例 13-17 可以使用 += 运算符载入现有的 AddableBingoCage 实例（接续示例</p>
+
+<p>13-16）</p>
+
+<p>&gt;&gt;&gt; globe_orig = globe O &gt;&gt;&gt; len(globe.inspect()) ©</p>
+
+<p>4</p>
+
+<p>&gt;&gt;&gt; globe += globe2 ©</p>
+
+<p>&gt;&gt;&gt; len(globe.inspect()) 7</p>
+
+<p>&gt;&gt;&gt; globe += [&rsquo;M&rsquo;, &lsquo;N&rsquo;]    &amp;</p>
+
+<p>&gt;&gt;&gt; len(globe.inspect())</p>
+
+<p>9</p>
+
+<p>&gt;&gt;&gt; globe is globe_orig ❺</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; globe += 1 ©</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>TypeError: right operand in += must be &lsquo;AddableBingoCage&rsquo; or an iterable</p>
+
+<p>❶ 复制一份，供后面检查对象的标识。</p>
+
+<p>❷ 现在 globe 有 4 个元素。</p>
+
+<p>❸ AddableBingoCage 实例可以从同属一类的其他实例那里接受元素。</p>
+
+<p>❹ += 的右操作数也可以是任何可迭代对象。</p>
+
+<p>❺ 在这个示例中， globe 始终指代 globe_orig 对象。</p>
+
+<p>❻ AddableBingoCage 实例不能与非可迭代对象相加，错误消息会指明原因。</p>
+
+<p>注意，与 + 相比， += 运算符对第二个操作数更宽容。 + 运算符的两个操作数必须是相同</p>
+
+<p>类型(这里是AddableBingoCage)，如若不然，结果的类型可能让人摸不着头脑。而 += 的情况更明确，因为就地修改左操作数，所以结果的类型是确定的。</p>
+
+<p><img src="08414584Python-69.jpg" alt="img" /></p>
+
+<p>通过观察内置list类型的工作方式，我确定了要对+和+=的行为做什么限 制。 my_list + x 只能用于把两个列表加到一起，而 my_list += x 可以使用右边 可迭代对象 x 中的元素扩展左边的列表。 list.extend() 的行为也是这样的，它的 参数可以是任何可迭代对象。</p>
+
+<p>我们明确了 AddableBingoCage 的行为，下面来看实现方式，如示例 13-18 所示。</p>
+
+<p>示例 13-18 bingoaddable.py： AddableBingoCage 扩展 BingoCage，支持 + 和+=</p>
+
+<p>import itertools O</p>
+
+<p>from tombola import Tombola</p>
+
+<p>from bingo import BingoCage</p>
+
+<p>class AddableBingoCage(BingoCage): ©</p>
+
+<p>def <strong>add</strong>(self, other):</p>
+
+<p>if isinstance(other, Tombola): ©</p>
+
+<p>return AddableBingoCage(self.inspect() + other.inspect()) © else:</p>
+
+<p>return NotImplemented def <strong>iadd</strong>(self, other):</p>
+
+<p>if isinstance(other, Tombola):</p>
+
+<p>other_iterable = other.inspect() ©</p>
+
+<p>else:</p>
+
+<p>try:</p>
+
+<p>other_iterable = iter(other) except TypeError: ©</p>
+
+<p>self_cls = type(self).<strong>name</strong></p>
+
+<p>msg = &ldquo;right operand in += must be {!r} or an iterable&rdquo; raise TypeError(msg.format(self_cls))</p>
+
+<p>self.load(other_iterable) &amp;</p>
+
+<p>return self © <a href="#bookmark2">1</a> <a href="#bookmark3">2</a></p>
+
+<p>放弃，抛出TypeError，因为无法处理b。</p>
+
+<p>胃一般来说，如果中缀运算符的正向方法（如__mul_）只处理与self属于同 一类型的操作数，那就无需实现对应的反向方法（如 <strong>rmul</strong>），因为按照定义， 反向方法是为了处理类型不同的操作数。</p>
+
+<p>我们对 Python 运算符重载的讨论到此结束。</p>
+
+<h3 id="13-7-本章小结">13.7 本章小结</h3>
+
+<p>本章首先说明了 Python 对运算符重载施加的一些限制：禁止重载内置类型的运算符，而</p>
+
+<p>且限于重载现有的运算符，不过有几个例外(is、and、or、not)。</p>
+
+<p>随后，本章讲解了如何重载一元运算符，并实现了 <strong>neg</strong> 和 <strong>pos</strong> 方法。接着重载 中缀运算符，首先是 +，它由 <strong>add</strong> 方法提供支持。我们得知，一元运算符和中缀运 算符的结果应该是新对象，并且绝不能修改操作数。为了支持其他类型，我们返回特殊的</p>
+
+<p>NotImplemented 值(不是异常)，让解释器尝试对调操作数，然后调用运算符的反向特 殊方法(如 <strong>radd</strong> )。图 13-1 中的流程图概述了 Python 处理中缀运算符的算法。</p>
+
+<p>如果操作数的类型不同，我们要检测出不能处理的操作数。本章使用两种方式处理这个问 题：一种是鸭子类型，直接尝试执行运算，如果有问题，捕获 TypeError 异常；另一种</p>
+
+<p>是显式使用 isinstance 测试， <strong>mul</strong> 方法就是这么做的。这两种方式各有优缺点： 鸭子类型更灵活，但是显式检查更能预知结果。如果选择使用isinstance，要小心，不 能测试具体类，而要测试 numbers.Real 抽象基类，例如 isinstance(scalar, numbers.Real)。这在灵活性和安全性之间做了很好的折中，因为当前或未来由用户定 义的类型可以声明为抽象基类的真实子类或虚拟子类，详情参见第 11 章。</p>
+
+<p>接下来的话题是众多比较运算符。我们通过 <strong>eq</strong> 方法实现了 ==，而且发现 Python 在 object 基类中通过 <strong>ne</strong> 方法为 != 提供了便利的实现。 Python 处理这些运算符的方式 与 &gt;、 &lt;、 &gt;= 和 &lt;= 稍有不同，具体而言是选择反向方法的逻辑不同，此外 Python 还会特 别处理==和！=的后备机制：从不抛出错误，因为Python会比较对象的ID，作最后一 搏。</p>
+
+<p>最后一节专门讨论了增量赋值运算符。我们发现， Python 处理这种运算符的方式是把它们 当作常规的运算符加上赋值操作，即 a += b 其实会当成 a = a + b 处理。这样会始终 创建新对象，因此可变类型和不可变类型都能用。对可变对象来说，可以实现就地特殊方 法，例如支持 += 的 <strong>iadd</strong> 方法，然后修改左操作数的值。为了举例说明，我们把不 可变的 Vector 类放到一边，为 BingoCage 的子类实现了 += 运算符，它会把元素添加到 随机选号池中，这与内置的 list 类型把 += 当成 list.extend() 方法的快捷方式类似。 在实现的过程中，我们得知在可接受的类型方面， + 应该比 += 严格。对序列类型来说， + 通常要求两个操作数属于同一类型，而 += 的右操作数往往可以是任何可迭代对象。</p>
+
+<h3 id="13-8-延伸阅读">13.8 延伸阅读</h3>
+
+<p>在 Python 编程中，运算符重载经常使用 isinstance 做测试。一般来说，库应该利用动</p>
+
+<p>态类型（提高灵活性），避免显式测试类型，而是直接尝试操作，然后处理异常，这样只</p>
+
+<p>要对象支持所需的操作即可，而不必一定是某种类型。但是， Python 抽象基类允许一种更 为严格的鸭子类型， Alex Martelli 称之为“白鹅类型”，编写重载运算符的代码时经常能用 到。因此，如果你跳过了第 11 章，一定要去读读。</p>
+
+<p>运算符特殊方法的主要参考资料是“Data Model” 一章 （<a href="https://docs.python.org/3/reference/datamodel.html">https://docs+python+org/3/reference/datamodel+html</a>）。这是权威资料，不过如“Python 3 文</p>
+
+<p>档的缺陷”所述，现在有个明显的缺陷， 12 即建议“如果定义 <strong>eq</strong>（） 方法，同时也要定 义 <strong>ne</strong>（） 方法”。实际上，在 Python 3 中，继承自 object 类的 <strong>ne</strong> 方法能满足绝 大多数需求，因此一般很少实现 <strong>ne</strong> 方法。 Python 标准库中 numbers 模块文档 的“9.1.2.2+ Implementing the arithmetic operations” 一节</p>
+
+<p>（<a href="https://docs.python.org/3/library/numbers.html%23implementing-the-arithmetic-operations">https://docs+python+org/3/library/numbers+html#implementing-the-arithmetic-operations</a>）也值</p>
+
+<p>得一读。</p>
+
+<p>12这个缺陷现在已经修正了。一编者注</p>
+
+<p>与之相关的一个技术是泛函数，由 Python 3 的 @singledispatch 装饰器支持（参见 7.8.2 节）。在 David Beazley 与 Brian K. Jones 的著作《Python Cookbook （第 3 版）中文版》</p>
+
+<p>中， “9.20 通过函数注解来实现方法重载”秘笈使用一些高级元编程（涉及元类）通过函数 注解实现了基于类型的分派。Martelli、Ravenscroft与Ascher的《Python Cookbook （第2 版）中文版》一书有个有趣的诀窍（2.13 节， Erik Max Francis 提供），展示了如何重载 &lt;&lt; 运算符，在 Python 中模仿 C++ 的 iostream 句法。这两本书中还有一些其他关于运算 符重载的示例，我只提了两个重要的诀窍。</p>
+
+<p>functools.total_ordering函数是个类装饰器（Python 2.7及以上版本可用），它能为</p>
+
+<p>只定义了几个比较运算符的类自动生成全部比较运算符。请参阅 functools 模块的文档 （<a href="https://docs.python.org/3/library/functools.html%23functools.total_ordering">https://docs.python.org/3/library/functools.html#functools.total_ordering</a>） 。</p>
+
+<p>如果你对动态类型语言的运算符方法分派机制感兴趣，推荐阅读两篇具有重大意义的论</p>
+
+<p>文：Dan Ingalls （Smalltalk 团队的创始成员）写的“A Simple Technique for Handling Multiple Polymorphism” （<a href="https://wiki.illinois.edu//wiki/download/attachments/273416327/ingalls.pdf">https://wiki.illinois.edu//wiki/download/attachments/273416327/ingalls.pdf</a>） ， 以及 Kurt J. Hebel 与 Ralph Johnson（Johnson 是《设计模式：可复用面向对象软件的基 础》的作者之一，因此出了名）合写的“Arithmetic and Double Dispatching in Smalltalk-80” （<a href="https://wiki.illinois.edu//wiki/download/attachments/273416327/double-dispatch.pdf">https://wiki.illinois.edu//wiki/download/attachments/273416327/double-dispatch.pdf</a>） 。</p>
+
+<p>这两篇论文深入分析了动态类型语言（如Smalltalk、Python和Ruby）的多态。</p>
+
+<p>Python 没有使用这两篇论文中所述的双重分配处理运算符。 Python 使用的正向运算符和反 向运算符更便于用户定义的类支持双重分派，但是这种方式需要解释器做些特殊处理。与 之相比，经典的双重分派是一般性的技术， Python 和任何面向对象语言都能使用，而且不 止适用于中缀运算符。其实， Ingalls、 Hebel 和 Johnson 描述双重分派使用的示例完全不 同。</p>
+
+<p>本章开篇引用的那段话，以及“杂谈”中引用的两段话，均出自“The C Family of Languages: Interview with Dennis Ritchie, Bjarne Stroustrup, and James Gosling”一文</p>
+
+<p>( <a href="http://www.gotw.ca/publications/c_family_interview.htm">http : //www.gotw.ca/publicati ons/c_family_interview.htm</a> ) ，刊登于 Java Report, 5(7), July 2000 和 C++ Report, 12(7), July/August 2000 上。如果你对编程语言设计感兴趣，那么这篇 文章非常值得一读。</p>
+
+<p>杂谈</p>
+
+<p>运算符重载的优缺点</p>
+
+<p>如本章开头引用的那段话所述， James Gosling 决定不让 Java 支持运算符重载。在那</p>
+
+<p>次访谈中(“The C Family of Languages: Interview with Dennis Ritchie, Bjarne Stroustrup, and James Gosling”， <a href="http://www.gotw.ca/publications/c_family_interview.htm">http://www.gotw.ca/publications/c_family_interview.htm</a>) ，他说：</p>
+
+<p>大约 20% 到 30% 的人觉得运算符重载是罪恶之源；有些人对运算符的重载惹怒 了很多人，因为他们使用 + 做列表插入，导致生活一团糟。这类问题大都源于 一个事实：世界上有成千上万个运算符，但是只有少数几个适合重载。因此，我</p>
+
+<p>们要挑选，但是有时所作的决定违背直觉。</p>
+
+<p>Guido van Rossum 为运算符重载采取了一种折中方式：不放任用户随意创建运算符，</p>
+
+<p>如 &lt;=&gt; 或 :-)，这样防止了用户对运算符的异想天开，而且能让 Python 解析器保持</p>
+
+<p>简单。此外， Python 还禁止重载内置类型的运算符，这个限制也能增强可读性和可预</p>
+
+<p>知的性能。</p>
+
+<p>Gosling 接着说道：</p>
+
+<p>社区中约有 10% 的人能正确地使用和真正关心运算符重载，对这些人来说，运</p>
+
+<p>算符重载是极其重要的。这部分人几乎专门处理数字，在这一领域中，为了符合 人类的直觉，表示法特别重要，因为他们进入这一领域时，直觉中已经知道 +</p>
+
+<p>的意思，他们知道“a + b”中的a和b可以是复数、矩阵或其他合理的东西。</p>
+
+<p>表示法方面的问题不能低估。下面以金融领域为例说明。在 Python 中，可以使用下</p>
+
+<p>述公式计算复利：</p>
+
+<p>interest = principal * ((1 + rate) ** periods - 1)</p>
+
+<p>不管涉及什么数字类型，这种表示法都成立。因此，如果是做重要的金融工作，你要</p>
+
+<p>确保periods是整数，rate、interest和principal是精确的数字(Python中 decimal.Decimal 类的实例)，这样上述公式就能完好运行。</p>
+
+<p>但是在Java中，如果把float换成精度不定的BigDecimal，就无法再使用中缀运 算符，因为中缀运算符只支持基本类型。在 Java 中，支持 BigDecimal 数字的公式</p>
+
+<p>要这样写：</p>
+
+<p>BigDecimal interest = principal.multiply(BigDecimal.ONE.add(rate) .pow(periods).subtract(BigDecimal.ONE));</p>
+
+<p>显然，使用中缀运算符的公式更易读，至少对大多数人来说如此。 13 为了让中缀运 算符表示法支持非基本类型，运算符必须能重载。 Python 是门高级语言，易于使用， 支持运算符重载可能就是它这些年在科学计算领域得到广泛使用的主要原因。</p>
+
+<p>当然，语言不支持运算符重载也有好处。对极为重视性能和安全的低级系统语言而 言，这无疑是正确的决定。新近出现的Go语言在这方面效仿了 Java，它不支持运算 符重载。</p>
+
+<p>但是，重载的运算符，如果使用得当，的确能让代码更易于阅读和编写。对现代的高</p>
+
+<p>级语言来说，这是个好功能。</p>
+
+<p>惰性计算一瞥</p>
+
+<p>如果仔细看示例 13-9 中的调用跟踪，会发现生成器表达式做惰性计算的证据。示例 13-19 再次列出那些调用跟踪，不过加上了一些标注。</p>
+
+<p>示例 13-19 与示例 13-9 一样</p>
+
+<p>&gt;&gt;&gt; v1 + &lsquo;ABC&rsquo;</p>
+
+<p>Traceback (most recent call last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in <module></p>
+
+<p>File &ldquo;vector_v6.py&rdquo;, line 329, in <strong>add</strong></p>
+
+<p>return Vector(a + b for a, b in pairs) # O</p>
+
+<p>File &ldquo;vector_v6.py&rdquo;, line 243, in <strong>init</strong> self._components = array(self.typecode, components) # ©</p>
+
+<p>File &ldquo;vector_v6.py&rdquo;, line 329, in <genexpr> return Vector(a + b for a, b in pairs) # ©</p>
+
+<p>TypeError: unsupported operand type(s) for +: &lsquo;float&rsquo; and &lsquo;str&rsquo;</p>
+
+<p>❶ Vector 调用的 components 参数是一个生成器表达式。这一步没问题。</p>
+
+<p>❷ components 生成器表达式传给 array 构造方法。在这里， Python 尝试迭代生成 器表达式，因此会计算第一个元素a + b。这里抛出了 TypeError。</p>
+
+<p>❸ 异常向上冒泡，到达 Vector 构造方法调用，在这里报告出来。 这表明，生成器表达式在最后时刻才会计算，而不是在源码中定义它的位置计算。</p>
+
+<p>与之相比，如果像 Vector([a + b for a, b in pairs]) 这样调用 Vector 构造</p>
+
+<p>方法，那么这里就会抛出异常，因为列表推导会尝试构建一个列表，以便作为参数传 给 Vector() 调用。此时，根本不会触及 Vector.<strong>init</strong> 的定义体。</p>
+
+<p>第 14 章会详细讨论生成器表达式，但是我不想让示例中偶然出现的惰性计算迹象漏 过去。</p>
+
+<p>I13我的朋友 Mario Domenech Goulart，CHICKEN Scheme 编译器(<a href="http://www.call-cc.org">http://www.call-cc.org</a>)的核心开发者，可能不会同意</p>
+
+<p>这一说法。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/12-%E7%BB%A7%E6%89%BF%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">12 继承的优缺点</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/10-%E5%BA%8F%E5%88%97%E7%9A%84%E4%BF%AE%E6%94%B9%E6%95%A3%E5%88%97%E5%92%8C%E5%88%87%E7%89%87/">
+            <span class="next-text nav-default">10 序列的修改、散列和切片</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

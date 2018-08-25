@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>LDA2 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="LDA REF 七月在线 机器学习 MOTIVE 把LDA总结一下，注意这个LDA是 Linear Discriminant Analysis 知识前提 熵的定义式等概念。 决策树学习的生成算法。 实对称阵不同特征值的特征向量正" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/lda2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="LDA2" />
+<meta property="og:description" content="LDA REF 七月在线 机器学习 MOTIVE 把LDA总结一下，注意这个LDA是 Linear Discriminant Analysis 知识前提 熵的定义式等概念。 决策树学习的生成算法。 实对称阵不同特征值的特征向量正" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/lda2/" /><meta property="article:published_time" content="2018-08-01T23:30:21&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T23:30:21&#43;00:00"/>
+<meta itemprop="name" content="LDA2">
+<meta itemprop="description" content="LDA REF 七月在线 机器学习 MOTIVE 把LDA总结一下，注意这个LDA是 Linear Discriminant Analysis 知识前提 熵的定义式等概念。 决策树学习的生成算法。 实对称阵不同特征值的特征向量正">
+
+
+<meta itemprop="datePublished" content="2018-08-01T23:30:21&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T23:30:21&#43;00:00" />
+<meta itemprop="wordCount" content="1453">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LDA2"/>
+<meta name="twitter:description" content="LDA REF 七月在线 机器学习 MOTIVE 把LDA总结一下，注意这个LDA是 Linear Discriminant Analysis 知识前提 熵的定义式等概念。 决策树学习的生成算法。 实对称阵不同特征值的特征向量正"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">LDA2</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 1453 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#lda">LDA</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+<li><a href="#motive">MOTIVE</a>
+<ul>
+<li><a href="#知识前提">知识前提</a></li>
+</ul></li>
+<li><a href="#lda介绍">LDA介绍</a></li>
+<li><a href="#lda-1">LDA</a>
+<ul>
+<li><a href="#lda的思路">LDA的思路</a></li>
+<li><a href="#我们先来看一下类内均值和方差">我们先来看一下类内均值和方差</a></li>
+<li><a href="#fisher判别准则">Fisher判别准则</a></li>
+<li><a href="#现在开始求目标函数取最大值的时候的w值">现在开始求目标函数取最大值的时候的w值</a></li>
+<li><a href="#fisher-判别投影向量公式">Fisher 判别投影向量公式</a></li>
+<li><a href="#lda与分类">LDA与分类</a></li>
+<li><a href="#代码如下">代码如下：</a></li>
+<li><a href="#lda特点">LDA特点：</a></li>
+</ul></li>
+<li><a href="#lda与pca">LDA与PCA</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="lda">LDA</h1>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>把LDA总结一下，注意这个LDA是 Linear Discriminant Analysis</li>
+</ul>
+
+<h2 id="知识前提">知识前提</h2>
+
+<ul>
+<li>熵的定义式等概念。</li>
+<li>决策树学习的生成算法。</li>
+<li><a href="http://106.15.37.116/2018/03/31/ai-linear-algebra-matrix-transformation-and-eigenvalues/#i-8">实对称阵不同特征值的特征向量正交</a></li>
+<li>伪逆</li>
+</ul>
+
+<h1 id="lda介绍">LDA介绍</h1>
+
+<p>Linear Discriminant Analysis</p>
+
+<p>LDA 线性判别分析，这个是一个中看不中用，但是又必须说的</p>
+
+<h1 id="lda-1">LDA</h1>
+
+<p>线性判别分析 Linear Discriminant Analysis</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/EAEd9Ad6Bl.png?imageslim" alt="mark" /></p>
+
+<p>今天我们讲的是线性判别准则 LDA，而后面在主题模型那里还有一个LDA，那个是一个生成模型，这个是判别模型。要区分开。</p>
+
+<p><strong>刚看到上面的SVM的时候，我突然想到了怪不得之前说SVM是hingeloss，而softmax是MaxEnt。这个是之前在深度学习中提到的，在学过SVM之后，我才知道为什么SVM叫做hingeloss</strong></p>
+
+<h2 id="lda的思路">LDA的思路</h2>
+
+<p>假定两类数据线性可分，即：存在一个超平面，将两类数据分开。则：存在某旋转向量，将两类数据投影到1维，并且可分。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ICDAFh5k1b.png?imageslim" alt="mark" /></p>
+
+<p>嗯，如果是完全线性可分的，那么在一维上也是可以线性可分的。</p>
+
+<p>现在的问题就是，如何样本旋转之后，能够保证在低维上线性可分呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AaKKaH8G5F.png?imageslim" alt="mark" /></p>
+
+<p>我们就来算一下投影的方向： w是一个列向量，所以y是个一维的数。</p>
+
+<p>如果能够得到 y 之后，能够方便进行分类，那么就OK了，所以关键是怎么找到这么一个 w</p>
+
+<h2 id="我们先来看一下类内均值和方差">我们先来看一下类内均值和方差</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0Kmk1hg2GF.png?imageslim" alt="mark" /></p>
+
+<p>松散度其实跟方差是差不多的，就差一个系数。离散度除以n就是样本的方差。</p>
+
+<p>第一个式子是投影之前的类内均值。</p>
+
+<p>第二个式子是投影之后的类内均值，m1和m2是两个值。</p>
+
+<p>第三个式子是松散度，但是yi是什么？是这个 <img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/85llIAKh0L.png?imageslim" alt="mark" /></p>
+
+<p>那么现在我们需要做什么呢？我们想使它投影之后两堆的散度尽可能的小，但是呢，投影之后的类内均值尽可能的大。</p>
+
+<p>那么我们就得到了一个目标函数：我们想让这个目标函数越大越好</p>
+
+<h2 id="fisher判别准则">Fisher判别准则</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/JDif72FelA.png?imageslim" alt="mark" /></p>
+
+<p>解释一下上面的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kHcGHIdC5A.png?imageslim" alt="mark" />是一个列向量乘以一个行向量得到一个矩阵。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j48GE74db0.png?imageslim" alt="mark" /></p>
+
+<p>这个之所以能成立，是因为括号里面都只是数而已。</p>
+
+<p>这样的转化就把w暴露出来了</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fLB6LDH61i.png?imageslim" alt="mark" />这个最后的这个转置多了，打错了的。</p>
+
+<p>之所以<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8h8ckca0f9.png?imageslim" alt="mark" />这个的上面是平方是因为想让他量纲一样。</p>
+
+<p>这个<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ib5JBbIK3G.png?imageslim" alt="mark" />的推导没有写</p>
+
+<p>最后得到如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/269Bhk6hFH.png?imageslim" alt="mark" /></p>
+
+<p>这里面的 $S_w$ , $S_b$ 都是可以计算出来的。</p>
+
+<p>其实：</p>
+
+<ul>
+<li>(S_b)是类内的散列值 Within-class scatter matrix。</li>
+<li>(S_w)是类间的散列值 Between-class scatter。</li>
+</ul>
+
+<h2 id="现在开始求目标函数取最大值的时候的w值">现在开始求目标函数取最大值的时候的w值</h2>
+
+<p>先求偏导：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/h3bGeKJlBk.png?imageslim" alt="mark" /></p>
+
+<p>之所以<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LcGDEIf3eJ.png?imageslim" alt="mark" /> 等于<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c7llL0bK12.png?imageslim" alt="mark" />是因为之前学习过xAx对x求偏导是2Ax。再确认下。应该是矩阵那块的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ikl416CmKf.png?imageslim" alt="mark" />因为括号里面的是两个数，所以，括号外面的是同方向的。</p>
+
+<h2 id="fisher-判别投影向量公式">Fisher 判别投影向量公式</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/cBi0G9EG1l.png?imageslim" alt="mark" /></p>
+
+<p>这个<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/dfA1dLbLCI.png?imageslim" alt="mark" />之所以成立是因为<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9I9G718eE0.png?imageslim" alt="mark" />是一个数。</p>
+
+<p>这时候我们就得到了w的方向。即投影的方向</p>
+
+<h2 id="lda与分类">LDA与分类</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i167elEl3j.png?imageslim" alt="mark" /></p>
+
+<p>所以这个就是LDA 线性判别准则带来的很漂亮的结论。</p>
+
+<h2 id="代码如下">代码如下：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/caJjeLE0h4.png?imageslim" alt="mark" /></p>
+
+<p>分类step1：极大似然估计：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/82KHCHHe7D.png?imageslim" alt="mark" /></p>
+
+<p>分类step2：误判率准则</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/gl63mKg7JJ.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b9jF5kK8hh.png?imageslim" alt="mark" /></p>
+
+<p>使用LDA将样本投影到平面上：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jgKA6B5eD4.png?imageslim" alt="mark" /></p>
+
+<h2 id="lda特点">LDA特点：</h2>
+
+<p>LDA 是一个很好的结论，但是对于现在的分类问题而言没有这么强的实践意义。因为由LDA的计算公式看出，LDA是强依赖均值的。如果类别之间的均值相差不大或者需要方差等高阶矩来分类，效果一般。</p>
+
+<p>若均值无法有效代表概率分布，LDA效果一般。LDA适用于类别是高斯分布的分类。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5ggCm1EbI7.png?imageslim" alt="mark" /></p>
+
+<p>有各种各样的情况不太适合于分类</p>
+
+<p>另外一个中看不中用的原因是：</p>
+
+<p>LDA与线性回归的关系：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kEj4c919Hh.png?imageslim" alt="mark" /></p>
+
+<p>什么叫<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GBIHl2gbD2.png?imageslim" alt="mark" />？</p>
+
+<p>但是线性回归是不太适合做分类的，logistic回归是没问题的，但是线性回归是不合适的。所以这套LDA知道就可以。那么为什么要介绍呢？因为历史上出现过。好多时候会提到，比如面试什么的。并且主题模型的LDA在实践中还是有用的。<strong>主体模型的LDA与这个地方的LDA有什么关系吗？</strong></p>
+
+<p>更重要的是，如果我们的数据没有给定标记的时候，能不能仍然进行分类呢？</p>
+
+<h1 id="lda与pca">LDA与PCA</h1>
+
+<ul>
+<li>LDA：分类性能最好的方向</li>
+<li>PCA：样本点投影具有最大方差的方向</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d4CH9ikjH6.png?imageslim" alt="mark" /></p>
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/ridge-%E5%9B%9E%E5%BD%92/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Ridge 回归</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/docker/docker/">
+            <span class="next-text nav-default">Docker</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

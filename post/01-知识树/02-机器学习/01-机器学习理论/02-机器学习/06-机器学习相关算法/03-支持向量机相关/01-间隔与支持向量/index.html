@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 间隔与支持向量 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="间隔与支持向量 TODO - 出发点，想用一个超平面来划分样本集 给定的训练样本集 $D={(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m)},y_i\in {-1,&#43;1}$ ，分类学习最基本的想法就是基于训练集 $D$ 在样本空间中找到一个划分超平" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/01-%E9%97%B4%E9%9A%94%E4%B8%8E%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 间隔与支持向量" />
+<meta property="og:description" content="间隔与支持向量 TODO - 出发点，想用一个超平面来划分样本集 给定的训练样本集 $D={(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m)},y_i\in {-1,&#43;1}$ ，分类学习最基本的想法就是基于训练集 $D$ 在样本空间中找到一个划分超平" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/01-%E9%97%B4%E9%9A%94%E4%B8%8E%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F/" /><meta property="article:published_time" content="2018-08-01T16:15:12&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T16:15:12&#43;00:00"/>
+<meta itemprop="name" content="01 间隔与支持向量">
+<meta itemprop="description" content="间隔与支持向量 TODO - 出发点，想用一个超平面来划分样本集 给定的训练样本集 $D={(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m)},y_i\in {-1,&#43;1}$ ，分类学习最基本的想法就是基于训练集 $D$ 在样本空间中找到一个划分超平">
+
+
+<meta itemprop="datePublished" content="2018-08-01T16:15:12&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T16:15:12&#43;00:00" />
+<meta itemprop="wordCount" content="1011">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 间隔与支持向量"/>
+<meta name="twitter:description" content="间隔与支持向量 TODO - 出发点，想用一个超平面来划分样本集 给定的训练样本集 $D={(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m)},y_i\in {-1,&#43;1}$ ，分类学习最基本的想法就是基于训练集 $D$ 在样本空间中找到一个划分超平"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 间隔与支持向量</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 1011 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#间隔与支持向量">间隔与支持向量</a>
+<ul>
+<li><a href="#出发点-想用一个超平面来划分样本集">出发点，想用一个超平面来划分样本集</a></li>
+<li><a href="#划分超平面的表示">划分超平面的表示</a></li>
+<li><a href="#支持向量与间隔">支持向量与间隔</a></li>
+<li><a href="#最中间的超平面就是具有最大间隔的超平面">最中间的超平面就是具有最大间隔的超平面</a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="间隔与支持向量">间隔与支持向量</h1>
+
+<p>TODO</p>
+
+<p>-</p>
+
+<h2 id="出发点-想用一个超平面来划分样本集">出发点，想用一个超平面来划分样本集</h2>
+
+<p>给定的训练样本集 $D={(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m)},y_i\in {-1,+1}$ ，分类学习最基本的想法就是基于训练集 $D$ 在样本空间中找到一个划分超平面，将不同类别的样本分开。<span style="color:red;">为什么是 +1 和 -1？</span></p>
+
+<p>但是，实际上能够将训练样本分开的划分超平面可能有很多，如下图所示，我们选择哪一个最好呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180627/JaDCGAjhfh.png?imageslim" alt="mark" /></p>
+
+<p>直观上看，我们应该去找位于两类训练样本的所谓 “正中间” 的划分超平面，因为这样的超平面看起来对训练样本局部扰动的 “容忍” 性最好。也就是说，这样的分类结果应该是最鲁棒的，泛化能力最强的。</p>
+
+<p>OK，到这里，我们就想问了，什么是所谓的 “正中间” ？怎么衡量？怎么求出这个 “正中间”？</p>
+
+<h2 id="划分超平面的表示">划分超平面的表示</h2>
+
+<p>我们先看下对于这个划分超平面的描述。</p>
+
+<p>实际上，在样本空间中，划分超平面可通过如下线性方程来描述：</p>
+
+<p>$$w^Tx+b=0$$</p>
+
+<p>其中:</p>
+
+<ul>
+<li>$\mathbb{w}=(w_1;w_2;\cdots w_d)$ 为法向量，决定了超平面的方向。</li>
+<li>$b$ 为位移项，决定了超平面与原点之间的距离。</li>
+</ul>
+
+<p>显然，一个划分超平面是可以被法向量 $w$ 和位移 $b$ 确定的，<span style="color:red;">是这么回事。</span>我们可以把这个超平面记为 $(w,b)$ 。</p>
+
+<p>这样，样本空间中任意点 $x$ 到超平面 $(w,b)$ 的距离表示为：</p>
+
+<p>$$r=\frac{|w^Tx+b|}{||w||}$$</p>
+
+<p><span style="color:red;">上面这个式子是不是漏了什么步骤，要添加一下。</span></p>
+
+<h2 id="支持向量与间隔">支持向量与间隔</h2>
+
+<p>假设超平面 $(w,b)$ 能将训练样本正确分类，即对于 $(x_i,y_i)\in D$ ，若 $y_i=+1$，则有 $w^Tx_i+b&gt;0$ ；若 $y_i=-1$ ，则有 $w^Tx_i+b<0$ 。令：<span style="color:red;">这一段中的 若 则有 不是很明白？</span></p>
+
+<p>$$\left{\begin{matrix} w^Tx_i+b\geqslant +1&amp;y_i=+1 \ w^Tx_i+b\leqslant -1&amp;y_i=-1 \end{matrix}\right.$$</p>
+
+<p><span style="color:red;">上面这个式子是不是抄错了？$w^Tx_i+b$ 到底是与 0 比还是与 1 比较？</span></p>
+
+<p>可见，对于上面这个式子来说，距离超平面最近的这几个训练样本点使得等号成立。</p>
+
+<p>由于每个样本点对应一个特征向量，因此，这几个使得取等号的样本点就称为支持向量 (support vector)。从下图可以看出就是这三个被画了圆圈的点。 <span style="color:red;">嗯，这就是支持向量。</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180627/h9jKJD4J15.png?imageslim" alt="mark" /></p>
+
+<p>然后，我们就把两个异类支持向量到超平面的距离的和 $\gamma=\frac{2}{||w||}$ 定义为间隔(margin)。</p>
+
+<h2 id="最中间的超平面就是具有最大间隔的超平面">最中间的超平面就是具有最大间隔的超平面</h2>
+
+<p>OK，这时候，我们想找到一个最中间的超平面，也就是想要找到具有最大间隔 (maximum margin) 的划分超平面，也就是想找到这样：</p>
+
+<p>$$\begin{align<em>} &amp;\underset{w,b}{max}\; \frac{2}{||w||}\ &amp; s.t.\; y_i(w^Tx_i+b)\geqslant 1,i=1,2,\cdots ,m \end{align</em>}$$</p>
+
+<p><span style="color:red;">这个 $\frac{2}{||w||}$ 是哪里来的？</span></p>
+
+<p>即在满足 $y_i(w^Tx_i+b)\geqslant 1$ 的条件下，使得 $\gamma$ 最大的 $w$ 和 $b$ 。<span style="color:red;">拿来的 $\gamma$ ？是不是漏掉了什么？</span></p>
+
+<p>也就是说：</p>
+
+<p>$$\begin{align<em>} &amp;\underset{w,b}{min}\; \frac{1}{2}||w||^2\ &amp; s.t.\; y_i(w^Tx_i+b)\geqslant 1,i=1,2,\cdots ,m \end{align</em>}$$</p>
+
+<p>这个，就是支持向量机 (Support Vector Machine，简称 SVM ) 的基本型。<span style="color:red;">嗯，从前面走下来，看起来还是很有道理的。</span></p>
+
+<p>注：上面这个式子看起来这个最小仅与 $w$ 有关, 但是事实上 $b$ 通过约束隐式地影响着 $w$ 的取值，进而对间隔产生影响。<span style="color:red;">嗯，是的</span></p>
+
+<p><span style="color:red;">感觉在这里中断的有点突兀，看看能不能把后面一节接到这里来。</span></p>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-01</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E6%B8%B8%E6%88%8Fai/alphago/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Alphago</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/03-%E5%89%AA%E6%9E%9D%E5%A4%84%E7%90%86/">
+            <span class="next-text nav-default">03 剪枝处理</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

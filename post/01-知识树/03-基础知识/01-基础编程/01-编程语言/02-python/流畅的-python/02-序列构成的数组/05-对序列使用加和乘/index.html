@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 对序列使用加和乘 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2.5 对序列使用&#43;和* Python 程序员会默认序列是支持 &#43; 和 * 操作的。通常 &#43; 号两侧的序列由相同类型的数据 所构成，在拼接的过程中，两个被操作的序列都不会被修" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/05-%E5%AF%B9%E5%BA%8F%E5%88%97%E4%BD%BF%E7%94%A8%E5%8A%A0%E5%92%8C%E4%B9%98/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 对序列使用加和乘" />
+<meta property="og:description" content="2.5 对序列使用&#43;和* Python 程序员会默认序列是支持 &#43; 和 * 操作的。通常 &#43; 号两侧的序列由相同类型的数据 所构成，在拼接的过程中，两个被操作的序列都不会被修" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/05-%E5%AF%B9%E5%BA%8F%E5%88%97%E4%BD%BF%E7%94%A8%E5%8A%A0%E5%92%8C%E4%B9%98/" /><meta property="article:published_time" content="2018-07-11T15:00:15&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-11T15:00:15&#43;00:00"/>
+<meta itemprop="name" content="05 对序列使用加和乘">
+<meta itemprop="description" content="2.5 对序列使用&#43;和* Python 程序员会默认序列是支持 &#43; 和 * 操作的。通常 &#43; 号两侧的序列由相同类型的数据 所构成，在拼接的过程中，两个被操作的序列都不会被修">
+
+
+<meta itemprop="datePublished" content="2018-07-11T15:00:15&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-11T15:00:15&#43;00:00" />
+<meta itemprop="wordCount" content="1178">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 对序列使用加和乘"/>
+<meta name="twitter:description" content="2.5 对序列使用&#43;和* Python 程序员会默认序列是支持 &#43; 和 * 操作的。通常 &#43; 号两侧的序列由相同类型的数据 所构成，在拼接的过程中，两个被操作的序列都不会被修"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 对序列使用加和乘</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-11 </span>
+        
+        <span class="more-meta"> 1178 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#2-5-对序列使用-和">2.5 对序列使用+和*</a>
+<ul>
+<li><a href="#把第1行第2列的元素标记为x-再打印出这个列表">©把第1行第2列的元素标记为X，再打印出这个列表。</a></li>
+<li><a href="#o外面的列表其实包含3个指向同一个列表的引用-当我们不做修改的时候-看起来都-还好">O外面的列表其实包含3个指向同一个列表的引用。当我们不做修改的时候，看起来都 还好。</a></li>
+<li><a href="#o-追加同一个行对象-row-3-次到游戏板-board">O 追加同一个行对象( row) 3 次到游戏板( board)。</a></li>
+<li><a href="#o每次迭代中都新建了一个列表-作为新的一行-row-追加到游戏板-board">O每次迭代中都新建了一个列表，作为新的一行(row)追加到游戏板(board)。</a></li>
+<li><a href="#正如我们所期待的-只有第-2-行的元素被修改">© 正如我们所期待的，只有第 2 行的元素被修改。</a></li>
+<li><a href="#如果你觉得这一节里所说的问题及其对应的解决方法都有点云里雾里-没关">如果你觉得这一节里所说的问题及其对应的解决方法都有点云里雾里，没关</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h3 id="2-5-对序列使用-和">2.5 对序列使用+和*</h3>
+
+<p>Python 程序员会默认序列是支持 + 和 * 操作的。通常 + 号两侧的序列由相同类型的数据 所构成，在拼接的过程中，两个被操作的序列都不会被修改， Python 会新建一个包含同样 类型数据的序列来作为拼接的结果。</p>
+
+<p>如果想要把一个序列复制几份然后再拼接起来，更快捷的做法是把这个序列乘以一个整</p>
+
+<p>数。同样，这个操作会产生一个新序列：</p>
+
+<p>&gt;&gt;&gt; l = [1, 2, 3]</p>
+
+<p>&gt;&gt;&gt; l * 5</p>
+
+<p>[1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3] &gt;&gt;&gt; 5 * &lsquo;abcd&rsquo;</p>
+
+<p>&lsquo;abcdabcdabcdabcdabcd&rsquo;</p>
+
+<ul>
+<li>和 * 都遵循这个规律，不修改原有的操作对象，而是构建一个全新的序列。</li>
+</ul>
+
+<p>如果在a * n这个语句中，序列a里的元素是对其他可变对象的引用的话，</p>
+
+<p>你就需要格外注意了，因为这个式子的结果可能会出乎意料。比如，你想用</p>
+
+<p>my_list = [[]] * 3 来初始化一个由列表组成的列表，但是你得到的列表里包含</p>
+
+<p>的 3 个元素其实是 3 个引用，而且这 3 个引用指向的都是同一个列表。这可能不是你 想要的效果。</p>
+
+<p>下面来看看如何用 * 来初始化一个由列表组成的列表。</p>
+
+<p>建立由列表组成的列表</p>
+
+<p>有时我们会需要初始化一个嵌套着几个列表的列表，譬如一个列表可能需要用来存放不同 的学生名单，或者是一个井字游戏板 3 上的一行方块。想要达成这些目的，最好的选择是 使用列表推导，见示例 2-12。</p>
+
+<p>3又称过三关，是一种在3x3的方块矩阵上进行的游戏。一译者注</p>
+
+<p>示例 2-12 一个包含 3 个列表的列表，嵌套的 3 个列表各自有 3 个元素来代表井字 游戏的一行方块</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt;</th>
+<th>board = [[&rsquo;_&lsquo;] * 3 for i</th>
+<th>in range(3)]</th>
+<th>O</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>board</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>[[&rsquo;</td>
+<td>&rsquo;, &lsquo;<em>&rsquo;, &lsquo;</em>&rsquo;], [&rsquo;<em>&rsquo;, &lsquo;</em>&rsquo;,</td>
+<td>&lsquo;<em>&rsquo;], [&rsquo;</em>&rsquo;, &lsquo;</td>
+<td>_&lsquo;, &lsquo;</td>
+<td>_&lsquo;]]</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>board[1][2] = &lsquo;X&rsquo; ©</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>board</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>[[&rsquo;</td>
+<td>&rsquo;, &ldquo;, &ldquo;], [&ldquo;, &ldquo;,</td>
+<td>&lsquo;X&rsquo;], [&ldquo;, &lsquo;</td>
+<td>&rsquo;, &lsquo;</td>
+<td>&rsquo;]]</td>
+</tr>
+</tbody>
+</table>
+
+<p>O 建立一个包含 3 个列表的列表，被包含的 3 个列表各自有 3 个元素。打印出这个嵌套</p>
+
+<p>列表。</p>
+
+<h4 id="把第1行第2列的元素标记为x-再打印出这个列表">©把第1行第2列的元素标记为X，再打印出这个列表。</h4>
+
+<p>示例 2-13 展示了另一个方法，这个方法看上去是个诱人的捷径，但实际上它是错的。</p>
+
+<p>示例 2-13 含有 3 个指向同一对象的引用的列表是毫无用处的</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt;</th>
+<th>weird</th>
+<th>board = [[&rsquo;</th>
+<th>&rsquo;] * 3] *</th>
+<th>3 O</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>weird</td>
+<td>board</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>[[&rsquo;</td>
+<td>&rsquo;, &lsquo;_&rsquo;</td>
+<td>, &lsquo;<em>&rsquo;], [&rsquo;</em></td>
+<td>, &lsquo;<em>&rsquo;, &lsquo;</em>&lsquo;</td>
+<td>], [&rsquo;_&lsquo;, &lsquo;</td>
+<td><em>&rsquo;, &lsquo;</em>&rsquo;]]</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>weird</td>
+<td>board[1][2]</td>
+<td>= &lsquo;O&rsquo; ©</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>weird</td>
+<td>board</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>[[&rsquo;</td>
+<td>&rsquo;, &lsquo;</td>
+<td>, &lsquo;O&rsquo;], [&rsquo;</td>
+<td>, &ldquo;, &lsquo;O&rsquo;</td>
+<td>], [&ldquo;, &lsquo;</td>
+<td>&rsquo;, &lsquo;O&rsquo;]]</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="o外面的列表其实包含3个指向同一个列表的引用-当我们不做修改的时候-看起来都-还好">O外面的列表其实包含3个指向同一个列表的引用。当我们不做修改的时候，看起来都 还好。</h4>
+
+<p>© 一旦我们试图标记第 1 行第 2 列的元素，就立马暴露了列表内的 3 个引用指向同一个 对象的事实。</p>
+
+<p>示例 2-13 犯的错误本质上跟下面的代码犯的错误一样：</p>
+
+<p>row=[&rsquo;_&lsquo;] * 3 board = [] for i in range(3): board.append(row) O</p>
+
+<h4 id="o-追加同一个行对象-row-3-次到游戏板-board">O 追加同一个行对象( row) 3 次到游戏板( board)。</h4>
+
+<p>相反，示例 2-12 中的方法等同于这样做：</p>
+
+<table>
+<thead>
+<tr>
+<th>&gt;&gt;&gt;</th>
+<th>board = []</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>for i in range(3):</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>row=[&rsquo;_&lsquo;] * 3 # O board.append(row)</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>board</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>[[&rsquo;</td>
+<td>&rsquo;, &lsquo;<em>&rsquo;, &lsquo;</em>&rsquo;], [&rsquo;<em>&rsquo;, &lsquo;</em>&rsquo;, &lsquo;</td>
+<td>_&lsquo;],</td>
+<td>[&rsquo;_&lsquo;, &lsquo;</td>
+<td>_&lsquo;, &lsquo;</td>
+<td>_&lsquo;]]</td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>board[2][0] = &lsquo;X&rsquo;</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>&gt;&gt;&gt;</td>
+<td>board # ©</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>[[&rsquo;</td>
+<td>&rsquo;, &ldquo;, &ldquo;], [&ldquo;, &ldquo;, &lsquo;</td>
+<td>&rsquo;],</td>
+<td>[&lsquo;X&rsquo;, &lsquo;</td>
+<td>&rsquo;, &lsquo;</td>
+<td>&rsquo;]]</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="o每次迭代中都新建了一个列表-作为新的一行-row-追加到游戏板-board">O每次迭代中都新建了一个列表，作为新的一行(row)追加到游戏板(board)。</h4>
+
+<h4 id="正如我们所期待的-只有第-2-行的元素被修改">© 正如我们所期待的，只有第 2 行的元素被修改。</h4>
+
+<h4 id="如果你觉得这一节里所说的问题及其对应的解决方法都有点云里雾里-没关">如果你觉得这一节里所说的问题及其对应的解决方法都有点云里雾里，没关</h4>
+
+<p>系。第 8 章里我们会详细说明引用和可变对象背后的原理和陷阱。</p>
+
+<p>我们一直在说 + 和 *，但是别忘了我们还有 += 和 *=。随着目标序列的可变性的变化，这</p>
+
+<p>个两个运算符的结果也大相径庭。下一节就来详细讨论。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/04-%E5%88%87%E7%89%87/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 切片</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/06-%E5%BA%8F%E5%88%97%E7%9A%84%E5%A2%9E%E9%87%8F%E8%B5%8B%E5%80%BC/">
+            <span class="next-text nav-default">06 序列的增量赋值</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

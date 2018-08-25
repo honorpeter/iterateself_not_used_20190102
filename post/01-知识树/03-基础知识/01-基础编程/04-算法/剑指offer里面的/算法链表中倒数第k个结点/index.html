@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：链表中倒数第k个结点 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-16 01:10:49&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9&amp;rsquo; title: 算法：链表中倒数第k个结点 wordpress_id: 5813 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E7%BB%93%E7%82%B9/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：链表中倒数第k个结点" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-16 01:10:49&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9&rsquo; title: 算法：链表中倒数第k个结点 wordpress_id: 5813 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E7%BB%93%E7%82%B9/" /><meta property="article:published_time" content="2018-06-11T08:14:51&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:51&#43;00:00"/>
+<meta itemprop="name" content="算法：链表中倒数第k个结点">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-16 01:10:49&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9&rsquo; title: 算法：链表中倒数第k个结点 wordpress_id: 5813 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:51&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:51&#43;00:00" />
+<meta itemprop="wordCount" content="972">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：链表中倒数第k个结点"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-16 01:10:49&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9&rsquo; title: 算法：链表中倒数第k个结点 wordpress_id: 5813 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：链表中倒数第k个结点</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 972 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#not-add">- NOT_ADD</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#两趟遍历">两趟遍历</a></li>
+<li><a href="#双指针法">双指针法</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-16 01:10:49+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9/">http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e9%93%be%e8%a1%a8%e4%b8%ad%e5%80%92%e6%95%b0%e7%ac%ack%e4%b8%aa%e7%bb%93%e7%82%b9&rsquo;
+title: 算法：链表中倒数第k个结点
+wordpress_id: 5813
+categories:
+- 随想与反思
+tags:</p>
+
+<h2 id="not-add">- NOT_ADD</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li></li>
+</ol>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>输入一个链表，输出该链表中倒数第k个结点。</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="两趟遍历">两趟遍历</h2>
+
+<p>看到这个题目，最简单的就是：两趟遍历，第一趟先求出 list 的长度 length ，然后进而 length - k 得到倒数第 k 个节点的位置。第二次遍历就得到了这个结点。</p>
+
+<h2 id="双指针法">双指针法</h2>
+
+<p>当然，之前看过类似的题目会知道有另外一个更加高效的方法：<strong>双指针法</strong> ：</p>
+
+<p>就是有两个指针 right 和 left，指针 right 先向前走K步，然后 left 和 right 一起走，此时两个指针差别K步，那么当 right 走到链表尾部的时候，left指向的就是倒数第 K 个节点。</p>
+
+<p>当然，这中间还是要注意几点的：</p>
+
+<ul>
+<li><p>链表可能为 NULL</p></li>
+
+<li><p>链表长度可能没有 K 个</p>
+
+<p>#include <iostream>
+#include <vector></p>
+
+<p>using namespace std;</p>
+
+<p>struct ListNode {
+    int val;
+    struct ListNode *next;</p>
+
+<p>};</p>
+
+<p>class Solution {
+public:
+    ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+        //判断是不是NULL
+        if (pListHead == NULL) {
+            return NULL;
+        }</p>
+
+<pre><code>    unsigned int i = 0;
+    ListNode *right = pListHead;
+
+    //  right指针先向前走K步
+    while (i &lt; k &amp;&amp; right != NULL) {
+        cout &lt;&lt; &quot;index  = &quot; &lt;&lt; i &lt;&lt; &quot;, value = &quot; &lt;&lt; right-&gt;val &lt;&lt; endl;
+        right = right-&gt;next;
+        i++;
+    }
+    //判断这时right是不是NULL
+    if (right == NULL &amp;&amp; i &lt; k) {
+        cout &lt;&lt; &quot;the list length = &quot; &lt;&lt; i &lt;&lt; &quot; &lt; &quot; &lt;&lt; k &lt;&lt; endl;
+        return NULL;
+    }
+
+    //两个指针一起走
+    ListNode *left = pListHead;
+    while (right != NULL) {
+        cout &lt;&lt; &quot;index  = &quot; &lt;&lt; i++ &lt;&lt; &quot;, value = &quot; &lt;&lt; right-&gt;val &lt;&lt; endl;
+        left = left-&gt;next;
+        right = right-&gt;next;
+    }
+    return left;
+}
+</code></pre>
+
+<p>};</p>
+
+<p>int main() {
+    //初始化listNode
+    ListNode list[4];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = NULL;</p>
+
+<pre><code>Solution solu;
+ListNode* node_k = solu.FindKthToTail(list, 3);
+cout &lt;&lt; node_k-&gt;val &lt;&lt; endl;
+return 0;
+</code></pre>
+
+<p>}</p></li>
+</ul>
+
+<p>输出：</p>
+
+<pre><code>index  = 0, value = 1
+index  = 1, value = 2
+index  = 2, value = 3
+index  = 3, value = 4
+2
+</code></pre>
+
+<p>当然，类似的，也可以第一个指针 right 先向前走 K-1 步，然后 left 和 right 一起走，此时两个指针差别 K-1 步，那么当 right 走到链表尾部的前一个结点时候的，left指向的就是倒数第K个节点。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+
+};
+class Solution {
+public:
+    ListNode* FindKthToTail(ListNode* pListHead, unsigned int k) {
+        //判断是不是NULL
+        if (pListHead == NULL) {
+            return NULL;
+        }
+
+
+        unsigned int i = 0;
+        ListNode *right = pListHead;
+
+        //  right指针先向前走K-1步
+        while (i &lt; k - 1 &amp;&amp; right != NULL) {
+            cout &lt;&lt; &quot;index  = &quot; &lt;&lt; i &lt;&lt; &quot;, value = &quot; &lt;&lt; right-&gt;val &lt;&lt; endl;
+            right = right-&gt;next;
+            i++;
+        }
+        //判断这时right是不是NULL
+        if (right == NULL) {
+            cout &lt;&lt; &quot;the list length = &quot; &lt;&lt; i &lt;&lt; &quot; &lt; &quot; &lt;&lt; k &lt;&lt; endl;
+            return NULL;
+        }
+
+        //两个指针一起走
+        ListNode *left = pListHead;
+        while (right-&gt;next != NULL) {
+            cout &lt;&lt; &quot;index  = &quot; &lt;&lt; i++ &lt;&lt; &quot;, value = &quot; &lt;&lt; right-&gt;val &lt;&lt; endl;
+            left = left-&gt;next;
+            right = right-&gt;next;
+        }
+        return left;
+    }
+};
+
+
+int main() {
+    //初始化listNode
+    ListNode list[4];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = NULL;
+
+    Solution solu;
+    ListNode* node_k = solu.FindKthToTail(list, 3);
+    cout &lt;&lt; node_k-&gt;val &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>index  = 0, value = 1
+index  = 1, value = 2
+index  = 2, value = 3
+2
+</code></pre>
+
+<p>这两个其实是类似的，只是 right 指针走的位置不同。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E8%B0%83%E6%95%B4%E6%95%B0%E7%BB%84%E9%A1%BA%E5%BA%8F%E4%BD%BF%E5%A5%87%E6%95%B0%E4%BD%8D%E4%BA%8E%E5%81%B6%E6%95%B0%E5%89%8D%E9%9D%A2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：调整数组顺序使奇数位于偶数前面</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97/">
+            <span class="next-text nav-default">C&#43;&#43; 风格指南</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

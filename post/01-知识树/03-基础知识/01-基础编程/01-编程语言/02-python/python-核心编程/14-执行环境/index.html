@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>14 执行环境 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="执行环境 本章主题 •可调用对象 •代码对象 •语句和内置函数 •执行其他程序 •终止执行 •各类操作系统接口 •相关模块 在python中有多种运行外部程序" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/14-%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="14 执行环境" />
+<meta property="og:description" content="执行环境 本章主题 •可调用对象 •代码对象 •语句和内置函数 •执行其他程序 •终止执行 •各类操作系统接口 •相关模块 在python中有多种运行外部程序" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/14-%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83/" /><meta property="article:published_time" content="2018-06-26T21:19:50&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:19:50&#43;00:00"/>
+<meta itemprop="name" content="14 执行环境">
+<meta itemprop="description" content="执行环境 本章主题 •可调用对象 •代码对象 •语句和内置函数 •执行其他程序 •终止执行 •各类操作系统接口 •相关模块 在python中有多种运行外部程序">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:19:50&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:19:50&#43;00:00" />
+<meta itemprop="wordCount" content="23396">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="14 执行环境"/>
+<meta name="twitter:description" content="执行环境 本章主题 •可调用对象 •代码对象 •语句和内置函数 •执行其他程序 •终止执行 •各类操作系统接口 •相关模块 在python中有多种运行外部程序"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">14 执行环境</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 23396 words </span>
+        <span class="more-meta"> 47 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#14-1-可调用对象">14.1 可调用对象</a></li>
+<li><a href="#14-1-1函数">14.1.1函数</a>
+<ul>
+<li><a href="#内建函数-bifs">内建函数（BIFs）</a></li>
+<li><a href="#用户定义的函数-udf">用户定义的函数（UDF）</a></li>
+</ul></li>
+<li><a href="#14-1-2方法">14.1.2方法</a>
+<ul>
+<li><a href="#内建方法-bims">内建方法(BIMs)</a></li>
+</ul></li>
+<li><a href="#14-1-3类">14.1.3类</a></li>
+<li><a href="#14-1-4类的实例">14.1.4类的实例</a></li>
+<li><a href="#14-2代码对象">14.2代码对象</a></li>
+<li><a href="#14-3可执行的对象声明和内建函数">14.3可执行的对象声明和内建函数</a></li>
+<li><a href="#14-3-1-callable">14.3.1 callable()</a></li>
+<li><a href="#14-3-2-compile">14.3.2 compile()</a>
+<ul>
+<li><a href="#可求值表达式">可求值表达式</a></li>
+<li><a href="#单一可执行语句">单一可执行语句</a></li>
+</ul></li>
+<li><a href="#14-3-3-eval">14.3.3 eval()</a></li>
+<li><a href="#14-3-4-exec">14.3.4 exec</a></li>
+<li><a href="#14-3-可执行对象语句和内建函数">14.3 可执行对象语句和内建函数</a></li>
+<li><a href="#14-3-5-input">14.3.5 input()</a></li>
+<li><a href="#14-3-6使用python在运行时生成和执行python代码">14.3.6使用Python在运行时生成和执行Python代码</a>
+<ul>
+<li><a href="#lines-27-30">Lines 27-30</a></li>
+<li><a href="#lines-32-36">Lines 32-36</a></li>
+<li><a href="#lines-38-39">Lines 38-39</a></li>
+<li><a href="#line-41">Line 41</a></li>
+<li><a href="#lines-43-44">Lines 43-44</a></li>
+<li><a href="#lines-52-54">Lines 52-54</a></li>
+<li><a href="#lines-56-61">Lines 56-61</a></li>
+<li><a href="#lines-63-64">Lines 63-64</a></li>
+<li><a href="#有条件地执行代码">有条件地执行代码</a></li>
+<li><a href="#lines-1-8">Lines 1-8</a></li>
+<li><a href="#lines-10-16">Lines 10-16</a></li>
+<li><a href="#lines-18-29">Lines 18-29</a></li>
+</ul></li>
+<li><a href="#14-4执行其他-python-程序">14.4执行其他（Python）程序</a></li>
+<li><a href="#14-4-1-导入">14.4.1 导入</a></li>
+<li><a href="#14-4-2-execfile">14.4.2 execfile()</a></li>
+<li><a href="#14-4-3-将模块作为脚本执行">14.4.3 将模块作为脚本执行</a></li>
+<li><a href="#14-5执行其他-非python-程序">14.5执行其他（非Python）程序</a></li>
+<li><a href="#14-5-1-os-system">14.5.1 os.system()</a></li>
+<li><a href="#14-5-2-os-popen">14.5.2 os.popen()</a></li>
+<li><a href="#14-5-3-os-fork-os-exec-os-wait">14.5.3 os.fork(), os.exec<em>(),os.wait</em>()</a></li>
+<li><a href="#14-5-4-os-spawn">14.5.4    os.spawn*()</a></li>
+<li><a href="#14-5-5-subprocess-模块">14.5.5    subprocess 模块</a>
+<ul>
+<li><a href="#替换-os-system">替换 os.system()</a></li>
+<li><a href="#取代-os-popen">取代 os.popen()</a></li>
+</ul></li>
+<li><a href="#14-5-6相关函数">14.5.6相关函数</a></li>
+<li><a href="#14-6受限执行">14.6受限执行</a></li>
+<li><a href="#14-6结束执行">14.6结束执行</a></li>
+<li><a href="#14-7-1-sys-exit-and-systemexit">14.7.1 sys.exit() and SystemExit</a></li>
+<li><a href="#14-7-2-sys-exitfunc">14.7.2 sys.exitfunc()</a></li>
+<li><a href="#14-7-3-os-exit-function-os-exit-函数">14.7.3 os._exit() Function os._exit() 函数</a></li>
+<li><a href="#14-7-4-os-kill-function">14.7.4 os.kill() Function</a></li>
+<li><a href="#14-8-各种操作系统接口">14.8 各种操作系统接口</a></li>
+<li><a href="#14-9相关模块">14.9相关模块</a></li>
+<li><a href="#14-10-练习">14.10 练习</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>执行环境</p>
+
+<p><img src="07Python38c3160b-1954.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1955.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1956.jpg" alt="img" /></p>
+
+<p>本章主题</p>
+
+<p>•可调用对象 •代码对象 •语句和内置函数 •执行其他程序 •终止执行 •各类操作系统接口 •相关模块</p>
+
+<p><img src="07Python38c3160b-1957.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1958.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1959.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1960.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1961.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1962.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1963.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1964.png" alt="img" /></p>
+
+<p>在python中有多种运行外部程序的方法，比如，运行操作系统命令或另外的python脚本，或</p>
+
+<p>执行一个磁盘上的文件，或通过网络来运行文件。这完全取决于你想要干什么。有些特定的执行场</p>
+
+<p>景包括：</p>
+
+<p>•在当前脚本继续运行</p>
+
+<p>•创建和管理子进程</p>
+
+<p>•执行外部命令或程序</p>
+
+<p>•执行需要输入的命令</p>
+
+<p>•通过网络来调用命令</p>
+
+<p>•执行命令来创建需要处理的输出</p>
+
+<p>•执行其他的Python脚本</p>
+
+<p>•执行一系列动态生成的Python语句</p>
+
+<p>•导入Python模块（和执行它顶层的代码）</p>
+
+<p>python中，内建和外部模块都可以提供上述各种功能。程序员得根据实现的需要，从这些模块 中选择合适的处理方法。本章将对python执行环境进行全面的描述，但不会涉及如何启动python</p>
+
+<p>解释器和不同的命令行选项。读者可以从第二章中查阅到相关信息。</p>
+
+<p>我们的python执行环境之旅从可调用对象开始，接着是代码对象，然后去看看什么样的python 语句和内建函数适合支持我们需要的功能。执行其他程序的能力不仅大大增强了 python脚本的威力， 也节约了资源，因为重复实现这些代码肯定是不合逻辑的，更是浪费时间和人力。python给当前脚 本环境提供了许多执行程序或者外部命令的机制，我们将介绍下最普遍的几个命令。接下来，我们</p>
+
+<p><img src="07Python38c3160b-1965.jpg" alt="img" /></p>
+
+<p>对python的受限执行环境作一个简短的概况，最后，介绍下各种终止执行的方法（而不是让程序正</p>
+
+<p>常完成）。就从可调用对象开始我们的旅程吧。</p>
+
+<h3 id="14-1-可调用对象">14.1 可调用对象</h3>
+
+<p>许多的python对象都是我们所说的可调用的，即是任何能通过函数操作符“（）”来调用的对象。 要调用可调用对象，函数操作符得紧跟在可调用对象之后。比方说，用“fooO”来调用函数〃foo〃。 可调用对象可以通过函数式编程接口来进行调用，如apply（），filter（），map（），以及reduceO，这 四个接口我们都在11章讨论过了。Python有4种可调用对象：函数，方法，类，以及一些类的实例。 记住这些对象的任何引用或者别名都是可调用的。</p>
+
+<h3 id="14-1-1函数">14.1.1函数</h3>
+
+<p>我们介绍的第一种可调用的对象是函数。python有3种不同类型函数对象。第一种是内建函数。</p>
+
+<h4 id="内建函数-bifs">内建函数（BIFs）</h4>
+
+<p>BIF是用c/c++写的，编译过后放入python解释器，然后把它们作为第一（内建）名字空间的 H 一部分加载进系统。如前面章节所提到的，这些函数在块里，并作为<strong>builtins</strong>模一</p>
+
+<p>块导入到解释器中。</p>
+
+<p>表14.1 内建函数属性</p>
+
+<p>BIF 属性</p>
+
+<p>bif.<strong>doc</strong> bif.<strong>name</strong> bif.<strong>self</strong> bif.__module</p>
+
+<p>描述</p>
+
+<p>文档字符串（或None） 字符串类型的文档名字 设置为None （保留给built-in方法） 存放bif定义的模块名字（或None）</p>
+
+<p>BIF有基础类型属性，其中一些独特的属性已列在表14.1中 你可以用dir（）列出函数的所有属性：</p>
+
+<p>&gt;&gt;&gt; dir(type)</p>
+
+<p>[&rsquo;<strong>call</strong>&lsquo;， &lsquo;<strong>class</strong>&lsquo;， &lsquo;<strong>cmp</strong>&lsquo;， &lsquo;<strong>delattr</strong>&lsquo;， &lsquo;<strong>doc &lsquo;</strong>getattribute<strong>&lsquo;， &lsquo;</strong>hash<strong>&lsquo;， &lsquo;</strong>init<strong>&lsquo;， &lsquo;</strong>module<strong>&lsquo;， &lsquo;</strong>name<strong>&lsquo;， &lsquo;</strong>new<strong>&lsquo;， &lsquo;</strong>reduce<strong>&lsquo;， &lsquo;</strong>reduce_ex__&lsquo;，</p>
+
+<p>&lsquo;<strong>repr</strong>&lsquo;， &lsquo;<strong>self</strong>&lsquo;， &lsquo;<strong>setattr</strong>&lsquo;， &lsquo;<strong>str</strong>&rsquo;]</p>
+
+<p>从内部机制来看，因为BIFs和内建方法（B頂s）属于相同的类型，所以对BIF或者B頂调用type（） 的结果是：</p>
+
+<p>&gt;&gt;&gt; type（dir）</p>
+
+<p><type 'builtin_function_or_method'></p>
+
+<p>注意这不能应用于工厂函数，因为type（）正好会返回产生对象的类型:</p>
+
+<p>&gt;&gt;&gt; type（int）</p>
+
+<p><type 'type'></p>
+
+<p>&gt;&gt;&gt; type（type）</p>
+
+<p><type 'type'></p>
+
+<h4 id="用户定义的函数-udf">用户定义的函数（UDF）</h4>
+
+<p>UDF （User-Defined Function，用户定义的函数）通常是用python写的，定义在模块的最高级， 因此会作为全局名字空间的一部分（一旦创建好内建名字空间）装载到系统中。函数也可在其他的函 数体内定义，并且由于在2.2中嵌套作用域的改进，我们现在可以对多重嵌套作用域中的属性进行 访问。可以用func_closure属性来钩住在其他地方定义的属性。</p>
+
+<p>表14.2 用户自定义函数属性</p>
+
+<p>UDF属性 udf.<strong>doc_ udf.</strong>name</p>
+
+<p>udf.func_code</p>
+
+<p>udf.func_defaults</p>
+
+<p>udf.func_globals</p>
+
+<p>udf.func_dict</p>
+
+<p>udf.func_doc</p>
+
+<p>udf.func_name</p>
+
+<p>udf.func_closure</p>
+
+<p>描述</p>
+
+<p>文档字符串（也可以用udf.func_doc）</p>
+
+<p>字符串类型的函数名字（也可以用 udf.func_name）</p>
+
+<p>字节编译的代码对象</p>
+
+<p>默认的参数元组</p>
+
+<p>全局名字空间字典；和从函数内部调用globals（x）—样 函数属性的名字空间</p>
+
+<p>（见上面的 udf. <strong>doc</strong>）</p>
+
+<p>（见上面的 udf. <strong>name</strong>）</p>
+
+<p>包含了自由变量的引用的单元对象元组（自用变量在 UDF 中使用，但在别 处定义；参见python ［语言］参考手册）</p>
+
+<p>如同上面的BIFs, UDF也有许多的属性。UDF最让人感兴趣和最特殊的属性都列在下面的表14.2 中</p>
+
+<p>从内部机制来看，用户自定义的函数是“函数“类型的，如在下面的例子中用type（）表明的一</p>
+
+<p>样：</p>
+
+<p><img src="07Python38c3160b-1969.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; def foo(): pass &gt;&gt;&gt; type(foo)</p>
+
+<p><type 'function'></p>
+
+<p>lambda 表达式和用户自定义对函数相比，略有不同。虽然它们也是返回一个函数对象，但是</p>
+
+<p>lambda表达式不是用def语句创建的，而是用lambda关键字：</p>
+
+<p>因为lambda表达式没有给命名绑定的代码提供基础结构，所以要通过函数式编程接口来调用， 或把它们的引用赋值给一个变量，然后就可以直接调用或者再通过函数来调用。变量仅是个别名， 并不是函数对象的名字。</p>
+
+<p>通过lambda来创建函数的对象除了没有命名之外，享有和用户自定义函数相同的属性;<strong>name</strong> 或者func_name属性给定为字符串〃〈lambda〉&rdquo;。使用type()工厂函数，我们来演示下lambda表达式 返回和用户自定义函数相同的函数对象。</p>
+
+<p>〉〉〉 lambdaFunc = lambda x: x * 2 〉〉〉 lambdaFunc(100)</p>
+
+<p>200</p>
+
+<p>〉〉〉 type(lambdaFunc)</p>
+
+<p><img src="07Python38c3160b-1971.jpg" alt="img" /></p>
+
+<p>〈type &lsquo;function&rsquo;〉</p>
+
+<p>在上面的例子中，我们将表达式赋值给一个别名。我们也可以直接在一个lambda表达式上调 用 type():</p>
+
+<p>〉〉〉 type(lambda:1)</p>
+
+<p>〈type &lsquo;function&rsquo;〉</p>
+
+<p>我们快速的来看看UDF名字，使用上面的lambdaFunc和先前小节中的foo():</p>
+
+<p>〉〉〉 foo.<strong>name</strong></p>
+
+<p>&lsquo;foo&rsquo;</p>
+
+<p>〉〉〉 lambdaFunc.<strong>name</strong></p>
+
+<p>&lsquo;〈lambda〉&rsquo;</p>
+
+<p>从11.9小节中我们可以看到，一旦函数声明以后(且函数对象可用)，程序员也可以自定义函 数属性。所有的新属性变成udf._dict_对象的一部分。在本章的稍后内容中，我们将讨论获取含 有 python 代码的字符串并执行该代码。到了本章最后，会有一个组合例子，着重描写函数属性和 python代码(字符串)的动态求值和执行语句。</p>
+
+<p><img src="07Python38c3160b-1972.jpg" alt="img" /></p>
+
+<h3 id="14-1-2方法">14.1.2方法</h3>
+
+<p>在13章，我们研宄了方法。用户自定义方法是被定义为类的一部分的函数。许多python数据 类型，比如列表和字典，也有方法，这些被称为内建方法。为了进一步说明“所有权“的类型，方 法通过对象的名字和句点属性标识进行命名。</p>
+
+<table>
+<thead>
+<tr>
+<th>14.3</th>
+<th>内建方法(B頂)属性</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>BIM属性</td>
+<td>描述</td>
+<td></td>
+</tr>
+
+<tr>
+<td>bim._</td>
+<td>_doc__</td>
+<td>文档字串</td>
+</tr>
+
+<tr>
+<td>bim._</td>
+<td>_name__</td>
+<td>字符串类型的函数名字</td>
+</tr>
+
+<tr>
+<td>bim._</td>
+<td>_self__</td>
+<td>绑定的对象</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="内建方法-bims">内建方法(BIMs)</h4>
+
+<p>在前面的小节中，我们讨论了内建方法与内建函数的类似之处。只有内建类型(BIT)有B頂.正如 你在下面看到的，对于内建方法，type()工厂函数给出了和BIF相同的输出&ndash;注意，我们是如何提 供一个内建对象来访问BIM:</p>
+
+<p>&gt;&gt;&gt; type([]. append)</p>
+
+<p><type 'builtin_function_or_method'></p>
+
+<p>此外，BIM和BIF两者也都享有相同属性。不同之处在于BIM的_self_属性指向一个Python 对象，而BIF指向None。</p>
+
+<p>对于类和实例，都能以该对象为参数，通过内建函数dir()来获得他们的数据和方法属性。这也 可以用在BIM上：</p>
+
+<p>&gt;&gt;&gt; dir([].append)</p>
+
+<p>[&rsquo;<strong>call</strong>&lsquo;， &lsquo;<strong>class</strong>&lsquo;， &lsquo;<strong>cmp</strong>&lsquo;， &lsquo;<strong>delattr</strong>&lsquo;， &lsquo;<strong>doc</strong>&lsquo;，</p>
+
+<p>&lsquo;<strong>getattribute</strong>&lsquo;， &lsquo;<strong>hash</strong>&lsquo;， &lsquo;<strong>init</strong>&lsquo;， &lsquo;<strong>module</strong>&lsquo;，</p>
+
+<p>&lsquo;<strong>name</strong>&lsquo;， &lsquo;<strong>new</strong>&lsquo;， &lsquo;<strong>reduce</strong>&lsquo;， &lsquo;<strong>reduce_ex</strong>&lsquo;，</p>
+
+<p>&lsquo;<strong>repr</strong>&lsquo;， &lsquo;<strong>self</strong>&lsquo;， &lsquo;<strong>setattr</strong>&lsquo;， &lsquo;<strong>str</strong>&rsquo;]</p>
+
+<p>然而，不用多久就会发现，从功能上看，用实际的对象去访问其方法并不是非常有用，如最后 的例子。由于没有引用来保存这个对象，所以它立即被垃圾回收了。你处理这种访问的类型唯一的 用处就是显示BIT有什么方法。</p>
+
+<p>用户定义的方法(UDM)</p>
+
+<p>UDM (User-defined method，用户定义的方法)包含在类定义之中，只是拥有标准函数的包装， 仅有定义它们的类可以使用。如果没有在子类定义中被覆盖掉，也可以通过子类实例来调用它们。 正如在13章解释的那样，UDM与类对象是关联的(非绑定方法)，但是只能通过类的实例来调用(绑 定方法)。无论UDMs是否绑定，所有的UMD都是相同的类型一一“实例方法“，如在下面例子看到 的type()调用：</p>
+
+<p>&gt;&gt;&gt; class C(object): # define class # 定义类</p>
+
+<p>&hellip;def foo(self): pass 林 define UDM 林定义 UDM &gt;&gt;&gt; c = C() # instantiation # 实例化 &gt;&gt;&gt; type&copy; # type of class # 类的类别 <type 'type'></p>
+
+<p>&gt;&gt;&gt; type&copy; # type of instance # 实例的类别 <class '__main__.C'></p>
+
+<p>&gt;&gt;&gt; type(C.foo) # type of unbound method # 非绑定方法的类别 <type 'instancemethod'></p>
+
+<p>&gt;&gt;&gt; type(c.foo) # type of bound method # 绑定方法的类别 <type 'instancemethod'></p>
+
+<p><img src="07Python38c3160b-1976.jpg" alt="img" /></p>
+
+<p>表11.4中展示了 UDM的属性。访问对象本身将会掲示你正在引用一个绑定方法还是非绑定方 法。正如你从下面看到的，绑定的方法揭示了方法绑定到哪一个实例。</p>
+
+<p>&gt;&gt;&gt; C.foo # unbound method object # 非绑定方法对象 <unbound method C.foo></p>
+
+<p>&gt;&gt;&gt;</p>
+
+<p>&gt;&gt;&gt; c.foo # bound method object # 绑定方法对象 <bound method C.foo of <__main__.C object at 0x00B42DD0></p>
+
+<p>&gt;&gt;&gt; c 林 instance foo()&rsquo;s bound to 林 foo(实例被绑定到•</p>
+
+<p>&lt;<strong>main</strong>.C object at 0x00B42DD0&gt;</p>
+
+<p>表14.4 用户自定义属性</p>
+
+<p>UDM属性 udm.<strong>doc</strong> udm.<strong>name</strong> udm.__module udm.im_class</p>
+
+<p>描述</p>
+
+<p>文档字符串(与udm.im_fuc. _doc_相同)</p>
+
+<p>字符串类型的方法名字(与umd.im_func. _name_相同)</p>
+
+<p>定义udm的模块的名字(或none)</p>
+
+<p>方法相关联的类(对于绑定的方法；如果是非绑定，那么为要求udm的类)</p>
+
+<p>udm.im_func    方法的函数对象(见UDFs)</p>
+
+<p>udm.im_self    如果绑定的话为相关膜的实例，如果非绑定位为none</p>
+
+<h3 id="14-1-3类">14.1.3类</h3>
+
+<p>我们可以利用类的可调用性来创建实例。“调用”类的结果便是创建了实例，即大家所知道的实 例化。类有默认构造函数，该函数什么都不做，基本上只有一个pass语句。程序员可以通过实现 <strong>int</strong>()方法，来自定义实例化过程。实例化调用的任何参数都会传入到构造函数里。</p>
+
+<p>〉〉〉 class C(object):</p>
+
+<p>def <strong>init</strong>(self, *args):</p>
+
+<p>print &lsquo;Instantiated with these arguments:\n&rsquo;, args</p>
+
+<p>〉〉〉 c1 = C() # invoking class to instantiate c1</p>
+
+<p>Instantiated with these arguments:</p>
+
+<p>()</p>
+
+<p>〉〉〉 c2 = C(&lsquo;The number of the counting shall be&rsquo;, 3) Instantiated with these arguments:</p>
+
+<p>(&lsquo;The number of the counting shall be&rsquo; 3)</p>
+
+<p>我们已经很熟悉实例化过程以及它是如何完成的，在这里将不再赘述。不过，一个新的问题是 如何让实例能够被调用。</p>
+
+<h3 id="14-1-4类的实例">14.1.4类的实例</h3>
+
+<p>python给类提供了名*_call_的特别方法，该方法允许程序员创建可调用的对象(实例)。默 认情况下，<strong>call</strong>()方法是没有实现的，这意味着大多数实例都是不可调用的。然而，如果在类 定义中覆盖了这个方法，那么这个类的实例就成为可调用的了。调用这样的实例对象等同于调用 <em>call</em>()方法。自然地，任何在实例调用中给出的参数都会被传入到_call()_中。……那么foo() 就和foo.<em>call</em>(foo)的效果相同，这里foo也作为参数出现，因为是对自己的引用，实例将自 动成为每次方法调用的第一个参数。如果<strong><em>call</em></strong>()有参数，比如，(self, arg),那么foo(arg) 就和调用foo.<em>call</em>(foo, arg)—样。这里我们给出一个可调用实例的例子，和前面小节的例子 相似：</p>
+
+<p>〉〉〉 class C(object):</p>
+
+<p>&hellip; def <strong>call</strong>(self, *args):</p>
+
+<p>&hellip; print &ldquo;I&rsquo;m callable! Called with args:\n&rdquo;, args</p>
+
+<p>&gt;&gt;&gt; c =</p>
+
+<p>C()</p>
+
+<p># instantiation # 实例化 &gt;&gt;&gt; c</p>
+
+<p># our instance # 我们的实例</p>
+
+<p>&lt;<strong>main</strong>.C instance at 0x00B42DD0&gt;</p>
+
+<p>&gt;&gt;&gt; callable&copy; # instance is callable #实例是可调用的</p>
+
+<p>True</p>
+
+<p>&gt;&gt;&gt; c() # instance invoked # 调用实例</p>
+
+<p>I&rsquo;m callable! Called with arguments:</p>
+
+<p>()</p>
+
+<p>&gt;&gt;&gt; c(3) # invoked with 1 arg # 呼叫的时候给出一个参数</p>
+
+<p>I&rsquo;m callable! Called with arguments:</p>
+
+<p>(3，)</p>
+
+<p>&gt;&gt;&gt; c(3， &lsquo;no more， no less&rsquo;) # invoked with 2 args # 呼叫的时候给出两个参数 I&rsquo;m callable! Called with arguments:</p>
+
+<p>(3， &lsquo;no more， no less&rsquo;)</p>
+
+<p>记住只有定义类的时候实现7_call_方法，类的实例才能成为可调用的。</p>
+
+<p>Edit By Vheavens</p>
+
+<h3 id="14-2代码对象">14.2代码对象</h3>
+
+<p>可调用的对象是python执行环境里最重要的部分，然而他们只是冰山一角。python语句，赋值， 表达式，甚至还有模块构成了更宏大的场面。这些可执行对象无法像可调用物那样被调用。更确切 地说，这些对象只是构成可执行代码块的拼图的很小一部分，而这些代码块被称为代码对象。</p>
+
+<p>每个可调用物的核心都是代码对象，由语句，赋值，表达式，以及其他可调用物组成。察看一</p>
+
+<p>个模块意味着观察一个较大的、包含了模块中所有代码的对象。然后代码可以分成语句，赋值，表</p>
+
+<p>达式，以及可调用物。可调用物又可以递归分解到下一层，那儿有自己的代码对象。</p>
+
+<p>一般说来，代码对象可以作为函数或者方法调用的一部分来执行，也可用exec语句或内建函数 eval()来执行。从整体上看，一个python模块的代码对象是构成该模块的全部代码。</p>
+
+<p>如果要执行python代码，那么该代码必须先要转换成字节编译的代码(又称字节码)。这才是 真正的代码对象。然而，它们不包含任何关于它们执行环境的信息，这便是可调用物存在的原因， 它被用来包装一个代码对象并提供额外的信息。</p>
+
+<p>还记得前面的小节中UDF的udf.func_code属性吗？呃，想不到吧？那就是代码对象。UDM的</p>
+
+<p>udm.im_func 函数对象又是怎么一回事呢？因为那也是一个函数对象，所以他同样有它自己的 udm.im_func.func_code代码对象。这样的话，你会发现，函数对象仅是代码对象的包装，方法则是 给函数对象的包装。你可以到处看看。当研究到最底层，你会发现便是一个代码对象</p>
+
+<h3 id="14-3可执行的对象声明和内建函数">14.3可执行的对象声明和内建函数</h3>
+
+<p>Python提供了大量的BIF来支持可调用/可执行对象，其中包括exec语句。这些函数帮助程序 员执行代码对象，也可以用内建函数complieO来生成代码对象。</p>
+
+<p>表14.5 可执行对象和内建函数</p>
+
+<p><img src="07Python38c3160b-1983.jpg" alt="img" /></p>
+
+<p>内建函数和语句 callable(obj) compile(string,file, type)</p>
+
+<p>eval(obj, glo- bals locals=locals())</p>
+
+<p>exec obj</p>
+
+<p>input(prompt=&rdquo;</p>
+
+<p>描述</p>
+
+<p>如果obj可调用，返回True，否则返回FALSE 从type类型中创建代码对象；file是代码存放的地方（通常设 为&rdquo;&ldquo;）</p>
+
+<p>globals（）,</p>
+
+<p>对obj进行求值，obj是已编译为代码对象的表达式，或是一个 字符串表达式；可以给出全局或者/和局部的名字空间</p>
+
+<p>执行obj、单一的python语句或者语句的集合，也就是说格式 是代码对象或者字符串；obj也可以是一个文件对象（已经打开的有 效python脚本中）</p>
+
+<p>等同于 eval(raw_input(prompt=”))</p>
+
+<h3 id="14-3-1-callable">14.3.1 callable()</h3>
+
+<p>callableO是一个布尔函数，确定一个对象是否可以通过函数操作符（0）来调用。如果函数可 调用便返回True，否则便是False （对与2.2和较早的版本而言，分别是1和0）。这里有些对象及 其对应的callable返回值</p>
+
+<p>&gt;&gt;&gt; callable(dir) # built-in function # 内建函数 True</p>
+
+<p>&gt;&gt;&gt; callable(1) # integer #整数</p>
+
+<p>False</p>
+
+<p>&gt;&gt;&gt; def foo(): pass</p>
+
+<p>&gt;&gt;&gt; callable(foo) # user-defined function # 用户自定义函数 True</p>
+
+<p>&gt;&gt;&gt; callable(&lsquo;bar&rsquo;) # string #字符串</p>
+
+<p>False</p>
+
+<p>〉〉〉 class C(object): pass</p>
+
+<p>〉〉〉 callable&copy; # class #类</p>
+
+<p>True</p>
+
+<h3 id="14-3-2-compile">14.3.2 compile()</h3>
+
+<p>compileO函数允许程序员在运行时刻迅速生成代码对象，然后就可以用exec语句或者内建函 数eval()来执行这些对象或者对它们进行求值。一个很重要的观点是：exec和eval()都可以执行字 符串格式的Python代码。当执行字符串形式的代码时，每次都必须对这些代码进行字节编译处理。 compileO函数提供了一次性字节代码预编译，以后每次调用的时候，都不用编译了。</p>
+
+<p>compile的三个参数都是必需的，第一参数代表了要编译的python代码。第二个字符串，虽然 是必需的，但通常被置为空串。该参数代表了存放代码对象的文件的名字(字符串类型)。compile的 通常用法是动态生成字符串形式的Python代码，然后生成一个代码对象一一代码显然没有存放在 任何文件。</p>
+
+<p>最后的参数是个字符串，它用来表明代码对象的类型。有三个可能值：</p>
+
+<p>’eval’    可求值的表达式［和eval()—起使用］</p>
+
+<p>’single’    单一可执行语句［和exec —起使用］</p>
+
+<p>’exec’    可执行语句组［和exec —起使用］</p>
+
+<h4 id="可求值表达式">可求值表达式</h4>
+
+<p>〉〉〉 eval_code = compile(’100 + 200’, ’’, ’eval’)</p>
+
+<p>〉〉〉 eval(eval_code)</p>
+
+<p>300</p>
+
+<h4 id="单一可执行语句">单一可执行语句</h4>
+
+<p>〉〉〉 single_code = compile(’print &ldquo;Hello world!&ldquo;’, ’’, ’single’)</p>
+
+<p>〉〉〉 single_code</p>
+
+<p>〈code object ? at 120998, file &ldquo;&rdquo;, line 0〉</p>
+
+<p>〉〉〉 exec single_code</p>
+
+<p>Hello world!</p>
+
+<p>可执行语句组</p>
+
+<p><img src="07Python38c3160b-1987.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1988.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1989.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1990.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; exec_code = compile(&ldquo;&rdquo;&rdquo;</p>
+
+<p>&hellip; req = input(&lsquo;Count how many numbers? &lsquo;)</p>
+
+<p>&hellip; for eachNum in range(req):</p>
+
+<p>&hellip; print eachNum</p>
+
+<p>//////    ，，    ，    7 </p>
+
+<p>&hellip; &ldquo;&rdquo;&ldquo;, &ldquo;, &lsquo;exec&rsquo;)</p>
+
+<p>&gt;&gt;&gt; exec exec_code</p>
+
+<p>Count how many numbers? 6 0 1 2</p>
+
+<p>3</p>
+
+<p>4</p>
+
+<p>5</p>
+
+<p>在最后的例子中，我们第一次看到input()。一直以来，我们都是从raw_input()中读取输入的。 内建函数inputO是我们将在本章稍后讨论的一个快捷函数。</p>
+
+<h3 id="14-3-3-eval">14.3.3 eval()</h3>
+
+<p>eval()对表达式求值，后者可以为字符串或内建函数complieO创建的预编译代码对象。这是</p>
+
+<p>eval()第一个也是最重要的参数&hellip;&hellip;.这便是你想要执行的对象。第二个和第三个参数，都为可选</p>
+
+<p>的，分别代表了全局和局部名字空间中的对象。如果给出这两个参数，globals必须是个字典，locals 可以是任意的映射对象，比如，一个实现了<em>getitem</em>()方法的对象。(在2.4之前，local必须是 一个字典)如果都没给出这两个参数，分别默认为globalsO和localsO返回的对象，如果只传入 了一个全局字典，那么该字典也作为locals传入。好了，我们一起来看看eval():</p>
+
+<p>&gt;&gt;&gt; eval(&lsquo;932&rsquo;)</p>
+
+<p>932</p>
+
+<p>&gt;&gt;&gt; int(&lsquo;932&rsquo;)</p>
+
+<p>932</p>
+
+<p>在这种情况下，eval()和int()都返回相同的结果：整数932。然而，它们采用的方式却不尽相 同。内建函数eval()接收引号内的字符串并把它作为python表达式进行求值。内建函数int()接收 代表整数的字符串并把它转换为整数。这只有在该字符串只由字符串932组成的时候才会成功，而 该字符串作为表达式返回值932， 932也是字符串”932”所代表的整数。当我们用纯字符串表达式 的时候，两者便不再相同了：</p>
+
+<p>&gt;&gt;&gt; eval(&lsquo;100 + 200&rsquo;)</p>
+
+<p>300</p>
+
+<p>&gt;&gt;&gt; int(&lsquo;100 + 200&rsquo;) Traceback (innermost last):</p>
+
+<p>File &ldquo;<stdin>&rdquo;, line 1, in ?</p>
+
+<p>ValueError: invalid literal for int(): 100 + 200</p>
+
+<p>在这种情况下，eval()接收一个字符串并把&rdquo;100+200&rdquo;作为表达式求值，当进行整数加法后，给 出返回值300。而对int()的调用失败了，因为字符串参数不是能代表整数的字符串，因为在字符 串中有非法的文字，即，空格以及“ + ”字符。可以这样理解eval()函数的工作方式：对表达式两端 的引号视而不见，接着假设“如果我是python解释器，我会怎样去观察表达式呢？ ”，换句话说，</p>
+
+<p>如果以交互方式输入相同的表达式，解释器会做出怎么样的反应呢？按下回车后的结果应该和eval() 返回的结果相同。</p>
+
+<h3 id="14-3-4-exec">14.3.4 exec</h3>
+
+<p>和eval()相似，exec语句执行代码对象或字符串形式的python代码。类似地，用compile() 预编译重复代码有助于改善性能，因为在调用时不必经过字节编译处理。exec语句只接受一个参数， 下面便是它的通用语法：</p>
+
+<p>exec obj</p>
+
+<p>被执行的对象(obj)可以只是原始的字符串，比如单一语句或是语句组，它们也可以预编译成 一个代码对象(分别用’single&rsquo;和&rsquo;exec〃参数)。下面的例子中，多个语句作为一个字符串发送给exec：</p>
+
+<p>&gt;&gt;&gt; exec &ldquo;&rdquo;&rdquo;</p>
+
+<p>&hellip; x = 0</p>
+
+<p>&hellip; print &lsquo;x is currently:&lsquo;, x &hellip; while x &lt; 5:</p>
+
+<p>&hellip; x += 1</p>
+
+<p>&hellip; print &lsquo;incrementing x to:&lsquo;, x</p>
+
+<p>x is currently: 0</p>
+
+<p>incrementing x to: 1 incrementing x to: 2 incrementing x to: 3 incrementing x to: 4 incrementing x to: 5</p>
+
+<p>最后, exec 还可以接受有效的 python 文件对象。如果我们用上面的多行代码创建一个叫 xcount.py的文件，那么也可以用下面的方法执行相同的代码</p>
+
+<p><img src="07Python38c3160b-1995.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1996.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1997.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1998.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-1999.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; f = open(’xcount.py’) # open the file</p>
+
+<p>&gt;&gt;&gt; exec f # execute the file</p>
+
+<p>x is currently: 0</p>
+
+<p>incrementing x to: 1</p>
+
+<p>incrementing x to: 2</p>
+
+<p>incrementing x to: 3</p>
+
+<p>incrementing x to: 4</p>
+
+<p>incrementing x to: 5</p>
+
+<p>&gt;&gt;&gt; exec f #尝试再一次执行</p>
+
+<p>&gt;&gt;&gt;    #哦，失败了&hellip;.为什么？</p>
+
+<h3 id="14-3-可执行对象语句和内建函数">14.3 可执行对象语句和内建函数</h3>
+
+<p>注意一旦执行完毕，继续对exec的调用就会失败。呃，并不是真正的失败。。。只是不再做任何 事，这或许让你感到吃惊。事实上，exec已从文件中读取了全部的数据且停留在文件末尾(EOF)。当 用相同文件对象对exec进行调用的时候，便没有可以执行的代码了，所以exec什么都不做，如同 上面看见的行为。我们如何知道它在EOF呢？</p>
+
+<p>我们用文件对象的tell()方法来告诉我们处于文件的何处，然后用os.path.getsizeO来告诉 我们xcount.py脚本有多大。这样你就会发现，两个数字完全一样：</p>
+
+<p>&gt;&gt;&gt; f.tell() # where are we in the file? # 我们在文件的什么地方？</p>
+
+<p>116</p>
+
+<p>&gt;&gt;&gt; f.close() # close the file # 关闭文件</p>
+
+<p>&gt;&gt;&gt; from os.path import getsize</p>
+
+<p>&gt;&gt;&gt; getsize(’xcount.py’) # what is the file size? # 文件有多大？</p>
+
+<p>116</p>
+
+<p>如果想在不关闭和重新打开文件的情况下再次运行它，可以用seek()到文件最开头并再次调用 exec 了。比如，假定我们还没有调用f.close()，那么我们可以这样做：</p>
+
+<p>&gt;&gt;&gt; f.seek(0) # rewind to beginning 倒会文件开头</p>
+
+<p>&gt;&gt;&gt; exec f x is currently: 0</p>
+
+<p>incrementing x to: 1 incrementing x to: 2 incrementing x to: 3 incrementing x to: 4</p>
+
+<p><img src="07Python38c3160b-2000.jpg" alt="img" /></p>
+
+<p>incrementing x to: 5</p>
+
+<p>&gt;&gt;&gt; f.close()</p>
+
+<h3 id="14-3-5-input">14.3.5 input()</h3>
+
+<p>内建函数input()是eval()和raw_input()的组合，等价于eval(raw_input())。类似于 raw_input()，input()有一个可选的参数，该参数代表了给用户的字符串提示。如果不给定参数的 话，该字符串默认为空串。</p>
+
+<p>从功能上看，input不同于raw_input()，因为raw_input()总是以字符串的形式，逐字地返回用 户的输入。inputO履行相同的的任务；而且，它还把输入作为python表达式进行求值。这意味着 inputO返回的数据是对输入表达式求值的结果：一个python对象。</p>
+
+<p>下面的例子会让人更加清楚：当用户输入一个列表时，raw_input()返回一个列表的字符串描绘， 而inputO返回实际的列表：</p>
+
+<p>&gt;&gt;&gt; aString = raw_input(&lsquo;Enter a list: &lsquo;) Enter a list: [ 123， &lsquo;xyz&rsquo;， 45.67 ] &gt;&gt;&gt; aString</p>
+
+<p>&ldquo;[ 123， &lsquo;xyz&rsquo;， 45.67 ]&rdquo;</p>
+
+<p><img src="07Python38c3160b-2002.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; type(aString)</p>
+
+<p><type 'str'></p>
+
+<p>上面用raw_input()运行。正如你看见的，每样东西都是字符串。现在来看看当用inputO的时 候会发生什么：</p>
+
+<p>&gt;&gt;&gt; aList = input(&lsquo;Enter a list: &lsquo;) Enter a list: [ 123， &lsquo;xyz&rsquo;， 45.67 ]</p>
+
+<p>&gt;&gt;&gt; aList</p>
+
+<p>[123， &lsquo;xyz&rsquo;， 45.67]</p>
+
+<p>&gt;&gt;&gt; type(aList)</p>
+
+<p><type 'list'></p>
+
+<p>虽然用户输入字符串，但是inputO把输入作为python对象来求值并返回表达式的结果。</p>
+
+<h3 id="14-3-6使用python在运行时生成和执行python代码">14.3.6使用Python在运行时生成和执行Python代码</h3>
+
+<p>在这个小节中，我们将看到两个python脚本的例子，这两个例子在运行时刻把python代码作 为字符串并执行。第一个例子更加动态，但第二个突出了函数属性。</p>
+
+<p><img src="07Python38c3160b-2003.jpg" alt="img" /></p>
+
+<p>在运行时生成和执行Python代码</p>
+
+<p>第一个例子是loopmake.py脚本，一个简单的、迅速生成和执行循环的计算机辅助软件工程 (CASE)。它提示用户给出各种参数(比如，循环类型(while或for),迭代的数据类型［数字或序列］), 生成代码字串，并执行它</p>
+
+<p>Example 14.1 动态生成和执行Python代码</p>
+
+<p>(loopmake.py)</p>
+
+<p>1    #!/usr/bin/env python</p>
+
+<p>2</p>
+
+<p>3    dashes = &lsquo;\n&rsquo; + &lsquo;-&rsquo; * 50 # dashed line</p>
+
+<p>4    exec_dict = {</p>
+
+<p>5</p>
+
+<p>门，-2?    //&rdquo; //    1/ n    7</p>
+
+<p>6&rsquo;f&rsquo;: &ldquo;&rdquo;&rdquo; # for loop</p>
+
+<p>7 for %s in %s:</p>
+
+<p>8    print %s</p>
+
+<p>9    &ldquo;&rdquo;&ldquo;,</p>
+
+<p><img src="07Python38c3160b-2005.jpg" alt="img" /></p>
+
+<p>10</p>
+
+<p><img src="07Python38c3160b-2006.jpg" alt="img" /></p>
+
+<p>11    &rsquo;s&rsquo;: &ldquo;&rdquo;&rdquo; # sequence while loop</p>
+
+<p>12    %s = 0</p>
+
+<p>13 %s = %s</p>
+
+<p>14    while %s &lt; len(%s):</p>
+
+<p>15    print %s[%s]</p>
+
+<p>16    %s = %s + 1</p>
+
+<p>17    &ldquo;&rdquo;&ldquo;,</p>
+
+<p>18</p>
+
+<p>19    &lsquo;n&rsquo;: &ldquo;&rdquo;&rdquo; # counting while loop</p>
+
+<p>20    %s = %d</p>
+
+<p>21    while %s &lt; %d:</p>
+
+<p>22    print %s</p>
+
+<p>23    %s = %s + %d</p>
+
+<p>24    &ldquo;&rdquo;&rdquo;</p>
+
+<p>25    }</p>
+
+<p>26</p>
+
+<p>27    def main():</p>
+
+<p>28</p>
+
+<p>29    ltype = raw_input(&lsquo;Loop type? (For/While) &lsquo;)</p>
+
+<p>30    dtype = raw_input(&lsquo;Data type? (Number/Seq) &lsquo;)</p>
+
+<p>31</p>
+
+<p><img src="07Python38c3160b-2007.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2008.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2009.jpg" alt="img" /></p>
+
+<p>32    if dtype == ’n’:</p>
+
+<p>33    start = input(’Starting value? ’)</p>
+
+<p>34    stop = input(’Ending value (non-inclusive)? ’)</p>
+
+<p>35    step = input(’Stepping value? ’)</p>
+
+<p>36    seq = str(range(start, stop, step))</p>
+
+<p>37</p>
+
+<p>38    else:</p>
+
+<p>39    seq = raw_input(’Enter sequence: ’)</p>
+
+<p>40</p>
+
+<p>41    var = raw_input(’Iterative variable name? ’)</p>
+
+<p>42</p>
+
+<p>43    if ltype == ’f’:</p>
+
+<p>44    exec_str = exec_dict[’f’] % (var, seq, var)</p>
+
+<p>45</p>
+
+<p>46    elif ltype == ’w’:</p>
+
+<p>47    if dtype == ’s’:</p>
+
+<p>48    svar = raw_input(’Enter sequence name? ’)</p>
+
+<p>49    exec_str = exec_dict[’s’] % </p>
+
+<p><img src="07Python38c3160b-2010.jpg" alt="img" /></p>
+
+<p>50 (var, svar, seq, var, svar, svar, var, var, var)</p>
+
+<p><img src="07Python38c3160b-2011.jpg" alt="img" /></p>
+
+<p>52    elif dtype == ’n’:</p>
+
+<p>53    exec_str = exec_dict[’n’] % </p>
+
+<p>54    (var, start, var, stop, var, var, var, step)</p>
+
+<p>55</p>
+
+<p>56    print dashes</p>
+
+<p>57    print ’Your custom-generated code:’ + dashes</p>
+
+<p>58    print exec_str + dashes</p>
+
+<p>59    print ’Test execution of the code:’ + dashes</p>
+
+<p>60    exec exec_str</p>
+
+<p>61    print dashes</p>
+
+<p>62</p>
+
+<p>o • _£?    夕    •    ，</p>
+
+<p>63    if <strong>name</strong> == ’<strong>main</strong>’:</p>
+
+<p>64    main()</p>
+
+<p>以下脚本执行的例子</p>
+
+<p>% loopmake.py</p>
+
+<p>Loop type? (For/While) f</p>
+
+<p>Data type? (Number/Sequence) n</p>
+
+<p>Starting value? 0</p>
+
+<p>Ending value (non-inclusive)? 4</p>
+
+<p>Stepping value? 1</p>
+
+<p>Iterative variable name? counter</p>
+
+<p>The custom-generated code for you is: for counter in [0， 1， 2， 3]:</p>
+
+<p>print counter</p>
+
+<p>Test execution of the code: 0</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3 % loopmake.py</p>
+
+<p>Loop type? (For/While) w Data type? (Number/Sequence) n Starting value? 0 Ending value (non-inclusive)? 4 Stepping value? 1 Iterative variable name? counter</p>
+
+<p><img src="07Python38c3160b-2014.jpg" alt="img" /></p>
+
+<p>Your custom-generated code: counter = 0</p>
+
+<p>while counter &lt; 4:</p>
+
+<p>print counter counter = counter + 1</p>
+
+<p>Test execution of the code: 0</p>
+
+<p>1</p>
+
+<p>2</p>
+
+<p>3</p>
+
+<p>% loopmake.py</p>
+
+<p>Loop type? (For/While) f Data type? (Number/Sequence) s</p>
+
+<p>Enter sequence: [932, &lsquo;grail&rsquo;, 3.0, &lsquo;arrrghhh&rsquo;]</p>
+
+<p>Iterative variable name? eachItem</p>
+
+<p>Your custom-generated code: for eachItem in [932, &lsquo;grail&rsquo;, 3.0, &lsquo;arrrghhh&rsquo;]:</p>
+
+<p>print eachItem</p>
+
+<p>Test execution of the code: 932</p>
+
+<p>grail</p>
+
+<p>3.0</p>
+
+<p>arrrghhh % loopmake.py</p>
+
+<p>Loop type? (For/While) w</p>
+
+<p>Data type? (Number/Sequence) s</p>
+
+<p><img src="07Python38c3160b-2017.jpg" alt="img" /></p>
+
+<p>Enter sequence: [932, &lsquo;grail&rsquo;, 3.0, &lsquo;arrrghhh&rsquo;]</p>
+
+<p><img src="07Python38c3160b-2018.jpg" alt="img" /></p>
+
+<p>Iterative variable name? eachIndex Enter sequence name? myList</p>
+
+<p>Your custom-generated code: eachIndex = 0</p>
+
+<p>myList = [932, &lsquo;grail&rsquo;, 3.0, &lsquo;arrrghhh&rsquo;] while eachIndex &lt; len(myList): print myList[eachIndex] eachIndex = eachIndex + 1</p>
+
+<p>Test execution of the code: 932</p>
+
+<p>grail</p>
+
+<p>3.0</p>
+
+<p>arrrghhh</p>
+
+<p>逐行解释</p>
+
+<p>Lines 1-25</p>
+
+<p>在脚本的第一部分，我们设置了两个全局变量。第一个是由一行破折号(即是名字)组成的静</p>
+
+<p>态字符串，第二个则是由用于生成循环的骨架代码组成的字典。for循环的健值是&rsquo;f&rsquo;，用于迭代序 列的while循环的则是〃s&rdquo;，而记数while循环的是&rsquo;n ‘</p>
+
+<h4 id="lines-27-30">Lines 27-30</h4>
+
+<p>这里我们提示用户输入他(她)想要的循环类型和数据类型</p>
+
+<h4 id="lines-32-36">Lines 32-36</h4>
+
+<p>选定数字；合出开始，停止，以及增量值。在这个部分的代码中，第一次引入了内建函数inputO。 我们将在14.3.5小节中看到，inputO和raw_input()相似，因为它提示用户给出字符串输入，但是 不同于raw_input()，input()会把输入当成python表达式来求值，即使用户以字符串的形式输入， 也会返回一个python对象</p>
+
+<h4 id="lines-38-39">Lines 38-39</h4>
+
+<p>选定序列；这里以字符串的形式输入一个序列</p>
+
+<h4 id="line-41">Line 41</h4>
+
+<p>给出用户想要使用的迭代循环变量的名字</p>
+
+<h4 id="lines-43-44">Lines 43-44</h4>
+
+<p>生成添加自定义内容的for循环。</p>
+
+<p>Lines 46-50</p>
+
+<p>生成迭代序列的while循环。</p>
+
+<h4 id="lines-52-54">Lines 52-54</h4>
+
+<p>生成计数的while循环</p>
+
+<h4 id="lines-56-61">Lines 56-61</h4>
+
+<p>输出生成的源代码及其执行后的结果</p>
+
+<h4 id="lines-63-64">Lines 63-64</h4>
+
+<p>当直接调用该模块的时候，执行main()</p>
+
+<p>为了很好地控制脚本的大小，我们从原来的脚本中剔除了所有的注释和错误检测。在本书的web 站点上,都可以找到原来的和修改后的版本。</p>
+
+<p>扩展的版本包括了额外的特性，比如用于字符串输入的不必要的引号，输入数据的默认值，以</p>
+
+<p>及检测无效的返回和标识符；也不允许以关键字和内建名字作为变量名字</p>
+
+<p><img src="07Python38c3160b-2022.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2023.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2024.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2025.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2026.jpg" alt="img" /></p>
+
+<h4 id="有条件地执行代码">有条件地执行代码</h4>
+
+<p>第二个例子着重描写了在第11章〃函数〃引入的函数属性，它是从Python增强提议232(PEP 232)</p>
+
+<p>中的例子得到的灵感。假设你是一位负责质量控制的软件开发者，你鼓励你的工程师将回归测试或</p>
+
+<p>回归指令代码放到主代码中，但又不想让测试代码混合到产品代码中。你可以让工程师创建字符串</p>
+
+<p>形式的测试代码。当你的测试框架执行的时候，它会检测函数是否定义了测试体，如果是的话，(求</p>
+
+<p>值并)执行它。如果不是，便跳过，像通常一样执行。</p>
+
+<p>Example 14.2 Function Attributes (funcAttrs.py)</p>
+
+<p>调用sys.exit()使python解释器退出。exit()的任何整数参数作为退出状态会返回给调用者， 该值默认为0</p>
+
+<p>1    #!/usr/bin/env python</p>
+
+<p>2</p>
+
+<p>3    def foo():</p>
+
+<p><img src="07Python38c3160b-2027.jpg" alt="img" /></p>
+
+<p>4    return True 5</p>
+
+<p><img src="07Python38c3160b-2028.jpg" alt="img" /></p>
+
+<p>6    def bar():</p>
+
+<p>7    &lsquo;bar() does not do much</p>
+
+<p>8    return True</p>
+
+<p>9</p>
+
+<p>10    foo.<strong>doc</strong> = &lsquo;foo() does not do much&rsquo;</p>
+
+<p>11    foo.tester = &ldquo;&rsquo;</p>
+
+<p>12    if foo():</p>
+
+<p>13    print &lsquo;PASSED&rsquo;</p>
+
+<p>14    else:</p>
+
+<p>15    print &lsquo;FAILED&rsquo;</p>
+
+<p>16    &ldquo;&rsquo;</p>
+
+<p>17</p>
+
+<p>18    for eachAttr in dir():</p>
+
+<p>19    obj = eval(eachAttr)</p>
+
+<p>20    if isinstance(obj， type(foo)):</p>
+
+<p>21    if hasattr(obj， &lsquo;<strong>doc</strong>&rsquo;):</p>
+
+<p>22    print &lsquo;\nFunction 〃%s〃 has a doc</p>
+
+<p>string:\n\t%s&rsquo; % (eachAttr， obj.<strong>doc</strong>)</p>
+
+<p>23    if hasattr(obj， &lsquo;tester&rsquo;):</p>
+
+<p>24    print &lsquo;Function 〃%s〃 has a tester&hellip; executing&rsquo;% eachAttr</p>
+
+<p>25    exec obj.tester</p>
+
+<p><img src="07Python38c3160b-2029.jpg" alt="img" /></p>
+
+<p>26    else:</p>
+
+<p>27    print &lsquo;Function &ldquo;%s&rdquo; has no tester&hellip; skipping&rsquo;% eachAttr</p>
+
+<p>28    else:</p>
+
+<p>29    print &lsquo;&ldquo;%s&rdquo; is not a function&rsquo; % eachAttr</p>
+
+<h4 id="lines-1-8">Lines 1-8</h4>
+
+<p>我们在脚本的开始部分定义了 fooO和bar()。两个函数都只是返回True。不同点在于foo()没 有属性而bar()有文档字串。</p>
+
+<h4 id="lines-10-16">Lines 10-16</h4>
+
+<p>使用函数属性，我们给foo()加入了文档字串以及退化或单元测试字符串。注意检测字符串实际 上由python代码组成。</p>
+
+<h4 id="lines-18-29">Lines 18-29</h4>
+
+<p>好了，真正的工作在这里开始。我们从用内建函数dir()迭代现在(即全局)名字空间开始。它 返回的列表包含了所有对象的名字。因为这些都是字符串，我们需要在第19行将它们转化为真正的 python 对象。</p>
+
+<p>除了预期的系统变量，比如，_builtins_，我们还期望显示函数。我们只对函数有兴趣；第 20行的代码让我们跳过了所有遇到的非函数对象。一旦我们知道我们有某个函数，就可以检查它是 否有文档字串，如果有的话，把它显示出来。23-27行表演了魔法。如果函数有检测属性，那么就 执行它，否则告诉用户没有可用的单元测试。最后的几行显示出遇到的非函数对象的名字。执行代 码后，我们得到如下的输出：</p>
+
+<p><img src="07Python38c3160b-2031.jpg" alt="img" /></p>
+
+<p>$ python funcAttr.py</p>
+
+<p>&ldquo;<strong>builtins</strong>&rdquo; is not a function &ldquo;<strong>doc</strong>&rdquo; is not a function &ldquo;<strong>file</strong>&rdquo; is not a function &ldquo;<strong>name</strong>&rdquo; is not a function</p>
+
+<p>Function &ldquo;bar&rdquo; has a doc string:</p>
+
+<p>bar() does not do much</p>
+
+<p>Function &ldquo;bar&rdquo; has no tester&hellip; skipping</p>
+
+<p>Function &ldquo;foo&rdquo; has a doc string:</p>
+
+<p>foo() does not do much</p>
+
+<p>Function &ldquo;foo&rdquo; has a tester&hellip; executing</p>
+
+<p>PASSED</p>
+
+<p><img src="07Python38c3160b-2032.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2033.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2034.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2035.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2036.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2037.jpg" alt="img" /></p>
+
+<h3 id="14-4执行其他-python-程序">14.4执行其他（Python）程序</h3>
+
+<p>当讨论执行其他程序时，我们把它们分类为python程序和其他所有的非python程序，后者包 括了二进制可执行文件或其他脚本语言的源代码。我们先讨论如何运行其他的python程序，然后是 如何用os模块调用外部程序。</p>
+
+<h3 id="14-4-1-导入">14.4.1 导入</h3>
+
+<p>在运行时刻，有很多执行另外python脚本的方法。正如我们先前讨论的，第一次导入模块会执 行模块最高级的代码。不管你是否需要，这就是python导入的行为。提醒，只有属于模块最高级的 代码才是全局变量，全局类，和全局函数声明。</p>
+
+<p>核心笔记：当模块导入后，就执行所有的模块</p>
+
+<p>这只是一个善意的提醒:在先前的第3章和第12章已经谈过了，现在再说一次，当导入python 模块后，就执行所有的模块!当导入python模块后，会执行该模块!当你导入foo模块时候，它运行 所有最高级别的（即没有缩进的）python代码,比如，’main（）&rsquo;。如果foo含有 bar函数的声明， 那么便执行deffoo（..）。再问一次为什么会这样做呢?&hellip;&hellip;由于某些原因，bar必须被识别为foo</p>
+
+<p>模块中一个有效的名字，也就是说bar在foo的名字空间中，其次，解释器要知道它是一个已声明 韻卜的函数，就像本地模块中的任何一个函数。现在我们知道要做什么了，那么如何处理那些不想每次</p>
+
+<p>导入都执行的代码呢？缩进它，并放入if —name__ == &lsquo;<em>main</em>&lsquo;的内部。</p>
+
+<p>跟着应该是一个if语句，它通过检测<strong>name</strong>来确定是否要调用脚本，比如，“if<strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;”。如果相等的话，你的脚本会执行main内代码；否则只是打算导入这个脚本，那么可 以在这个模块内对代码进行测试。</p>
+
+<p>当导入python模块后，会执行该模块！当你导入foo模块时候，它运行所有最高级别的（即没 有缩进的）python代码，……再问一次为什么会这样做呢？……由于某些原因，bar必须被识别 为foo模块中一个有效的名字，也就是说bar在foo的名字空间中，其次，解释器要知道它是一个 已声明的函数，就像本地模块中的任何一个函数。现在我们知道要做什么了，那么如何处理那些不 想每次导入都执行的代码呢？缩进它，并放入if <strong>name</strong> == <strong>main</strong>’的内部。</p>
+
+<p># import1.py</p>
+
+<p>print &lsquo;loaded import1&rsquo;</p>
+
+<p>import import2</p>
+
+<p>达里是import2.py的内容:</p>
+
+<p># import2.py</p>
+
+<p>print &lsquo;loaded import2&rsquo;</p>
+
+<p>这是当我们导入import1时的输出</p>
+
+<p>&gt;&gt;&gt; import import1 loaded import1 loaded import2 &gt;&gt;&gt;</p>
+
+<p>根据建议检测<strong>name</strong>值的迂回工作法，我们改变了 import1.py和import2.py里的代码，这</p>
+
+<p>样的情况就不会发生了</p>
+
+<p>这里是修改后的import.py版本：</p>
+
+<p>#    import1.py</p>
+
+<p>import import2</p>
+
+<p>•    ，    •夕</p>
+
+<p>if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;:</p>
+
+<p>print &lsquo;loaded import1&rsquo;</p>
+
+<p>接着是import2.py的代码，以相同的方式修改:</p>
+
+<p><img src="07Python38c3160b-2040.jpg" alt="img" /></p>
+
+<p>#    import2.py</p>
+
+<p><img src="07Python38c3160b-2041.jpg" alt="img" /></p>
+
+<p>•    ，    •夕</p>
+
+<p>if <strong>name</strong> == &lsquo;<strong>main</strong>&lsquo;</p>
+
+<p>print &lsquo;loaded import2&rsquo;</p>
+
+<p>当从python中导入import1的时候，我们不再会得到任何输出</p>
+
+<p>&gt;&gt;&gt; import import1 &gt;&gt;&gt;</p>
+
+<p>这不意味着在任何的情况下，都该这样编写代码。在某些情况中，你可能想要显示输出来确定</p>
+
+<p>输入模块。这取决于你自身的情况。我们的目标是提供实效的编程例子来屏蔽副作用。</p>
+
+<p>Edit By Vheavens</p>
+
+<h3 id="14-4-2-execfile">14.4.2 execfile()</h3>
+
+<p>显然，导入模块不是从另外的python脚本中执行python脚本最可取的方法。那也就不是导入 过程。导入模块的副作用是导致最高级代码运行。</p>
+
+<p>这章一开始，我们描述了如何通过文件对象，使用exec语句来读取python脚本的内容并执行。 下面的代码给出了例子：</p>
+
+<p><img src="07Python38c3160b-2042.jpg" alt="img" /></p>
+
+<p>f = open(filename, &lsquo;r&rsquo;) exec f f.close()</p>
+
+<p>这3行可以调用execfileO来换掉:</p>
+
+<p>execfile(filename)</p>
+
+<p>虽然上述代码执行了一个模块，但是仅可以在现有的执行环境下运行(比如，它自己的全局和 局部的名字空间)。在某些情况下，可能需要用不同全局和局部的名字空间集合，而不是默认的集合 来执行模块。execfileO函数的语法非常类似于eval()函数的。</p>
+
+<p>execfile(filename, globals=globals(), locals=locals())</p>
+
+<p>类似eval()，globals和locals都是可选的，如果不提供参数值的话，默认为执行环境的名字 空间。如果只给定globals，那么locals默认和globals相同。如果提供locals值的话，它可以是 任何映射对象［一个定义/覆盖了<strong>getitem</strong>()的对象］。在在2.4之前，locals必须是一个字典。 注意：(在修改的时候)小心局部名字空间。比较安全的做法是传入一个虚假的〃locals〃字典并检查 是否有副作用。execfileO不保证不会修改局部名字空间。见python库参考手册对execfileO的解 释</p>
+
+<h3 id="14-4-3-将模块作为脚本执行">14.4.3 将模块作为脚本执行</h3>
+
+<p>python2.4里加入了一个新的命令行选项(或开关)，允许从shell或DOS提示符，直接把模块 作为脚本来执行。当以脚本的方式来书写你的模块的时候，执行它们是很容易的。你可以使用命令 行从你的工作目录调用你的脚本。</p>
+
+<p>$ myScript.py # or $ python myScript.py</p>
+
+<p>如果模块是标准库的一部分，安装在site-packages里，或者仅仅是包里面的模块，处理这样 的模块就不是那么容易了，尤其是它们共享了已存在的同名python模块。举例来说，你想运行免费 的python web服务器，以便创建和测试你自己的web页面和CGI脚本。</p>
+
+<p>你将必须在命令行敲入如下的东西：</p>
+
+<p>$ python /usr/local/lib/python2x/CGIHTTPServer.py</p>
+
+<p>Serving HTTP on 0.0.0.0 port 8000 &hellip;</p>
+
+<p>这是段很长的命令，如果它是第三方的，你不得不深入到site-packages去找到它真正定位的</p>
+
+<p>地方。如果没给出完全的路径名，可以从命令行运行一个模块，并让python的导入机制为我们做这</p>
+
+<p>种跑腿工作吗？答案是肯定的。我们可以用python -c命令行开关:</p>
+
+<p>$ python -c 〃import CGIHTTPServer; CGIHTTPServer.test()〃</p>
+
+<p>该选项允许你指定你想要运行的python语句。虽然它可以这样工作，但问题是<strong>name</strong>模块不</p>
+
+<p>是‘<strong>main</strong>&rsquo;&hellip;&hellip;..而是你正在使用的模块。（需要的话，你可以参阅前面的 3.4.1 小节复习</p>
+
+<p>_name_）在最后一行，解释器通过import装载了你的模块，并不是它当作脚本。因为如此，所有 在if <em>name</em> == ’_main_’之下的代码是不会执行的，所以你不得不手动地调用模块的test（） 函数，就如同前面我们所做的一样。所以我们想同时要两者的优点——能够在类库中执行作为脚本 的模块而不是作为导入的模块。这就是-m参数的动机。现在可以像这样运行脚本：</p>
+
+<p>$ python -m CGIHTTPServer</p>
+
+<p>这是不小的改进。尽管如此，还没有完全如预想那样实现特性。所以在python2.5中，-m开关 有了更多的兼容性。从2.5开始，你可以用相同的参数来运行包内或需要特别加载的模块，比如zip 文件里的模块，这是在2.3加入的特性（12.5.7小节，396页）。python2.4只让你执行标准的库模 块。所以初始版本的-m选项是不能运行特殊的模块如PyCHecker（python的lint），或其他的 profiler （注意这些是装载和运行其他模块的模块）。但是2.5版本解决了这个问题。</p>
+
+<h3 id="14-5执行其他-非python-程序">14.5执行其他（非Python）程序</h3>
+
+<p>在python程序里我们也可以执行非python程序。这些程序包括了二进制可执行文件，其他的 shell脚本等等。所有的要求只是一个有效的执行环境，比如，允许文件访问和执行，脚本文件必须 能访问它们的解释器（perl, bash,等等），二进制必须是可访问的（和本地机器的构架兼容）</p>
+
+<p>最终，程序员必须考虑python脚本是否必须和其他将要执行的程序通信。有些程序需要输入， 而有的程序返回输出以及执行完成时的错误代码，也许有的两者都做。针对不同的环境，python提 供了各种执行非python程序的方法。在本节讨论的所有函数都可以在os模块中找到。在表14.6中， 我们做了总结（我们会对那些只适合特定平台的函数进行标注），作为对本节剩余部分的介绍。</p>
+
+<p>Table 14.6执行外部程序的os模块函数 （u只对unix有效，w只对windows有效）</p>
+
+<p>os模块函数 system(cmd)</p>
+
+<p>fork()</p>
+
+<p>描述</p>
+
+<p>执行程序cmd （字符串），等待程序结束，返回退出代码（windows下， 始终为0）</p>
+
+<p>创建一个和父进程并行的子进程［通常来说和exec*（）—起使用］;返回两 次&hellip;.一次给父进程一次给子进程</p>
+
+<p>execl(file,</p>
+
+<p>arg0,arg1,&hellip;）用参数列表argO, arg1等等执行文件</p>
+
+<p>execv(file, arglist) 除了使用参数向量列表，其他的和execl()相同</p>
+
+<p>execle(file, arg0,arg1,&hellip; env)和 execl 相同，但提供了环境变量字典 env</p>
+
+<p>execve(file,arglist, env)除了带有参数向量列表，其他的和execleO相同</p>
+
+<p>execlp(cmd, arg0,arg1,&hellip;)于execl()相同，但是在用户的搜索路径下搜索完全的文件路径 名</p>
+
+<p>execvp(cmd, arglist) 除了带有参数向量列表，与execlpO相同</p>
+
+<p>Table 14.6执行外部程序的os模块函数(续表)(u只对unix有效，w只对windows有效)</p>
+
+<p>startfileb(path)</p>
+
+<p>os模块函数    描述</p>
+
+<p>execlpe(cmd, arg0, arg1,. execvpe(cmd,arglist, env) spawn*a(mode, file, args[, env])</p>
+
+<p>wait()</p>
+
+<p>waitpid(pid,options)</p>
+
+<p>和execlp相同，但提供了环境变量字典env 和execvp相同，但提供了环境变量字典env spawn*()家族在一个新的进程中执行路径，args作为 参数，也许还有环境变量的字典env;模式(mode)是 个显示不同操作模式的魔术。</p>
+
+<p>等待子进程完成［通常和fock和exec*()—起使用］©</p>
+
+<p>等待指定的子进程完成［通常和fock和exec*()—起使用］©</p>
+
+<p>env)</p>
+
+<p>popen(cmd, mode=&lsquo;r&rsquo;,buffering=-1)</p>
+
+<p>执行字符串cmd，返回一个类文件对象作为运行程 序通信句柄，默认为读取模式和默认系统缓冲 用关联的应用程序执行路径 W</p>
+
+<p>a. spawn<em>()函数命名与exec</em>()相似(两个家族都有8个成员)；spawnvO和spawnveO在 python 1.5.2 加入，其他的六个 spawn*()函数在 python 1.6 加入；spawnlp(), spawnlpe(), spawnvp()和 spawnvpeO 只适用于 unix 平台。</p>
+
+<p>b.    python2.0是加入的</p>
+
+<p>随着越来越接近软件的操作系统层面，你就会发现执行跨平台程序(甚至是python脚本)的一 致性开始有些不确定了。上面我们提到在这个小节中描述的程序在 os 模块中。事实上，有多个 os 模块。比如说，基于Unix衍生系统(例如Linux,MacOS X, Solaris,BSD等等)的模块是posix模 块，windows的是nt (无论你现在用的是哪个版本的windows;dos用户有dos模块)，旧的macOS为 mac模块。不用担心，当你调用import os的时候，python会装载正确的模块。你不需要直接导入 特定的操作系统模块。</p>
+
+<p>在我们看看每个模块函数之前，对于python2.4或者更新版本的用户，这里有个subprocess模 块，可以作为上面所有函数很好的替代品。我们本章稍后部分演示如何使用这些函数，然后在最后 给出subprocess.Popen类和subprocess.callO函数的等价使用方法。</p>
+
+<h3 id="14-5-1-os-system">14.5.1 os.system()</h3>
+
+<p><img src="07Python38c3160b-2049.jpg" alt="img" /></p>
+
+<p>我们列表中的第一个函数是systemO, 一个非常简单的函数，接收字符串形式的系统命令并执 行它。当执行命令的时候，python的运行是挂起的。当我们的执行完成之后，将会以systemO的返 回值形式给出退出状态，python的执行也会继续。</p>
+
+<p>systemO保留了现有的标准文件，包括标准的输出，意味着执行任何的命令和程序显示输出都 会传到标准输出上。这里要当心，因为特定应用程序比如公共网关接口(CGI)如果将除了有效的超 文本标示语言(HTML)字符串之外的输出，经过标准输出发送回客户端，会引起web浏览器错误。 systemO通常和不会产生输出的命令一起使用，其中的一些命令包括了压缩或转换文件的程序，挂 载磁盘到系统的程序，或其他执行特定任务的命令&mdash;通过退出状态显示成功或失败而不是通过输入 和/或输出通信。通常的约定是利用退出状态，0表示成功，非零表示其他类型的错误。</p>
+
+<p>为了给出一个例子，我们执行了两个从交互解释器中获取程序输入的命令，这样你便可以观察 system()是如何工作的</p>
+
+<p>&gt;&gt;&gt; import os</p>
+
+<p>&gt;&gt;&gt; result = os.system(’cat /etc/motd’) Have a lot of fun&hellip; &gt;&gt;&gt; result 0</p>
+
+<p>&gt;&gt;&gt; result = os.system(’uname -a’)</p>
+
+<p><img src="07Python38c3160b-2051.jpg" alt="img" /></p>
+
+<p>Linux solo 2.2.13 #1 Mon Nov 8 15:08:22 CET 1999 i586 unknown &gt;&gt;&gt; result 0</p>
+
+<p>可以看到两个命令的输出和它们执行的退出状态，我们将其保存到result变量中。下面是一个 执行dos命令的例子：</p>
+
+<p>&gt;» import os</p>
+
+<p>&gt;» result = os . systemt 1 dir 9 )</p>
+
+<p>Volume in drive C has no label</p>
+
+<p>Volume Serial Number is 43D1-6C8A</p>
+
+<p>Directory of C : \WINDOWS\TEMP</p>
+
+<p>.    <DIR>    01-08-98    8:39a</p>
+
+<p>..    01-08-98    8:39a</p>
+
+<p>0 file(s)    0 bytes</p>
+
+<p>2 dir(s)    572,588,032 bytes free</p>
+
+<p>»&gt; result</p>
+
+<h3 id="14-5-2-os-popen">14.5.2 os.popen()</h3>
+
+<p><img src="07Python38c3160b-2052.jpg" alt="img" /></p>
+
+<p>popen()函数是文件对象和systemO函数的结合。它工作方式和systemO相同，但它可以建立 一个指向那个程序的单向连接，然后如访问文件一样访问这个程序。如果程序要求输入，那么你要 用&rsquo;w&rsquo;模式写入那个命令来调用popenO。你发送给程序的数据会通过标准输入接收到。同样地，’r&rsquo; 模式允许spawn命令，那么当它写入标准输出的时候，你就可以通过类文件句柄使用熟悉的file对 象的read*()方法来读取输入。就像对于文件，当使用完毕以后，你应当closeO连接。在上面其中 一个使用systemO的例子中，我们调用了 unix程序uname来来给我们提供机器和使用的操作系统的 相关信息。该命令产生了一行输出，并直接写到屏幕上。。如果想要把该字符串读入变量中并执行内 部操作或者把它存储到日志文件中，我们可以使用popenO。实际上，代码如下所示：</p>
+
+<p>&gt;&gt;&gt; import os</p>
+
+<p>&gt;&gt;&gt; f = os.popen(&lsquo;uname -a&rsquo;)</p>
+
+<p>&gt;&gt;&gt; data = f.readline()</p>
+
+<p>&gt;&gt;&gt; f.close()</p>
+
+<p>&gt;&gt;&gt; print data,</p>
+
+<p>Linux solo 2.2.13 #1 Mon Nov 8 15:08:22 CET 1999 i586 unknown</p>
+
+<p>如你所见，popen()返回一个类文件对象；注意readlineO,往往，保留输入文本行尾的newline 字符。</p>
+
+<h3 id="14-5-3-os-fork-os-exec-os-wait">14.5.3 os.fork(), os.exec<em>(),os.wait</em>()</h3>
+
+<p>在这个小节中，我们不会对操作系统理论做详尽的介绍，只是稍稍地介绍一下进程(process)。 fork()采用称为进程的单一执行流程控制，如果你喜欢的话，可称之为创建“岔路口”。有趣的事情 发生了：用户系统同时接管了两个fork——也就是说让用户拥有了两个连续且并行的程序。(不用说， 它们运行的是同一个程序，因为两个进程都是紧跟在fork()调用后的下一行代码开始执行的)。调用 fork()的原始进程称为父进程，而作为该调用结果新创建的进程则称为子进程。当子进程返回的时 候，其返回值永远是0;当父进程返回时，其返回值永远是子进程的进程标识符(又称进程ID,或PID)</p>
+
+<p>(这样父进程就可以监控所有的子进程了)PID也是唯一可以区分他们的方式！我们提到了两个进程 会在调用fork()后立刻运行。因为代码是相同的，如果没有其他的动作，我们将会看到同样的执行 结果。而这通常不是我们想要的结果。创建另外一个进程的主要目的是为了运行其他程序，所以我 们必须在父进程和子进程返回时采取分流措施。正如上面我们所说，它们的PID是不同的，而这正 是我们区分它们的方法。</p>
+
+<p>对于那些有进程管理经验的人来说，接下来的这段代码是再熟悉不过了。但是，如果你是新手</p>
+
+<p>的话，一开始就弄懂它是如何工作的可能就有点困难了，但是一旦你懂了，就会体会到其中的奥妙。</p>
+
+<p>ret = os.fork() # spawn 2 processes, both return #产生两个进程，都返回 if ret == 0:    林 child returns with PID of 0 #子进程返回的PID是 0</p>
+
+<p>child_suite # child code #子进程的代码</p>
+
+<p>else:    # parent returns with child’s PID #父进程返回是子进程的PID</p>
+
+<p>parent_suite # parent code #父进程的代码</p>
+
+<p>在代码第一行便调用了 fork()。现在子进程和父进程同时在运行。子进程本身有虚拟内存地址 空间的拷贝，以及一份父进程地址空间的原样拷贝。——是的，两者几乎都是相同的。fork()返回 两次，意味着父进程和子进程都返回了。你或许会问，如果它们两个同时返回，如何区分两者呢？ 当父亲返回的时候，会带有进程的PID。而当子进程返回的时候，其返回值为0。这就是区分两个进 程的方法。</p>
+
+<p>利用if-else语句，我们能给子进程(比如，if子句)和父进程(else子句)指定各自的执行 代码。在子进程的代码中，我们可以调用任何exec*()函数来运行完全不同的程序，或者同一个程序 中的其他的函数(只要子进程和父进程用不同的路径执行)。普遍做法是让子进程做所有的脏活，而 父进程耐心等来子进程完成任务，或继续执行，稍后再来检查子进程是否正常结束。</p>
+
+<p>所有的exec*()函数装载文件或者命令，并用参数列表(分别给出或作为参数列表的一部分)来 执行它。如果适用的话，也可以给命令提供环境变量字典。这些变量普遍用于给程序提供对当前执 行环境的精确描述。其中一些著名的变量包括用户的名字，搜索路径，现在的shell，终端类型，本 地化语言，机器类型，操作系统名字等等。</p>
+
+<p><img src="07Python38c3160b-2056.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2057.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2058.jpg" alt="img" /></p>
+
+<p>所有版本的exec<em>()都会用给定文件作为现在要执行的程序取代当前(子)进程的Python解释 器。和systemO不一样，对于Python来说没有返回值(因为Python已经被替代了)。如果因为某 种原因，程序不能执行，那么exec</em>()就会失败，进而导致引发异常。</p>
+
+<p>接下来的代码在子进程中开始了一个称为“xbill&rdquo;的可爱小巧的游戏，而父进程继续运行Python 解释器。因为子进程从不返回，所以无需去顾虑调用exec*()后的子进程代码。注意该命令也是参数 列表中的必须的第一个参数。</p>
+
+<p>ret = os.fork()</p>
+
+<p>if ret == 0:    # child code #子进程代码</p>
+
+<p>execvp(’xbill’, [’xbill’])</p>
+
+<p>else:    # parent code #父进程代码 os.wait()</p>
+
+<p>在这段代码中，还可以看到对waitO的调用。当子进程执行完毕，需要它们的父进程进行扫 尾工作。这个任务，称为”收获孩子”(reaping a child)，可以用wati<em>()函数完成。紧跟在fork() 之后，父进程可以等待子进程完成并在那进行扫尾。父进程也可以继续运行，稍后再扫尾，同样也 是用wait</em>()函数中的一个。</p>
+
+<p>不管父进程选择了那个方法，该工作都必须进行。当子进程完成执行，还没有被收获的时候，</p>
+
+<p>它进入了闲置状态，变成了著名的僵尸进程。在系统中，应该尽量把僵尸进程的数目降到最少，因</p>
+
+<p>为在这种状态下的子进程仍保留着在存活时期分配给它们的系统资源，而这些资源只能在父进程收</p>
+
+<p>获它们之后才能释放掉。</p>
+
+<p>调用wait()会挂起执行(比如，waits)，直到子进程(其他的子进程)正常执行完毕或通过 信号终止。wait()将会收获子进程，释放所有的资源。如果子进程已经完成，那么wait()只是进行 些收获的过程。waitpidO具有和wait()相同的的功能，但是多了一个参数PID (指定要等待子进 程的进程标识符)，以及选项(通常是零或用‘OR’组成的可选标志集合)</p>
+
+<h3 id="14-5-4-os-spawn">14.5.4    os.spawn*()</h3>
+
+<p>函数spawn<em>()家族和fork，exec</em>()相似，因为它们在新进程中执行命令；然而，你不需要分 别调用两个函数来创建进程，并让这个进程执行命令。你只需调用一次spawn<em>()家族。由于其简单 性，你放弃了“跟踪”父进程和子进程执行的能力；该模型类似于在线程中启动函数。还有点不同 的是你必须知道传入spawn</em>()的魔法模式参数。在其他的操作系统中(尤其是嵌入式实时操作系统 [RTOS])，spawn<em>()比fork()快很多。不是这种情况的操作系统通常使用写实拷贝(copy-on-write) 技术。参阅python库参考手册来获得更多spanw</em>()的资料。各种spanw*()家族成员是在1.5和1.6</p>
+
+<p>(含1.6)之间加入的。</p>
+
+<h3 id="14-5-5-subprocess-模块">14.5.5    subprocess 模块</h3>
+
+<p>在python2.3出来之后，一些关于popen5模块的工作开始展开。一开始该命名继承了先前 popen*()函数的传统，但是并没有延续下来，该模块最终被命名为subproess，其中一个类叫Popen， 集中了我们在这章讨论的大部分面向进程的函数。同样也有名为call()的便捷函数，可以轻易地取 代了 os.systemO。在python2.4中，subprocess初次登场。下面就是演示该模块的例子：</p>
+
+<h4 id="替换-os-system">替换 os.system()</h4>
+
+<p>Linux上的例子：</p>
+
+<p>&gt;&gt;&gt; from subprocess import call</p>
+
+<p>&gt;&gt;&gt; import os</p>
+
+<p>&gt;&gt;&gt; res = call((&lsquo;cat&rsquo;, &lsquo;/etc/motd&rsquo;))</p>
+
+<p>Linux starship 2.4.18-1-686 #4 Sat Nov 29 10:18:26 EST 2003 i686 GNU/Linux &gt;&gt;&gt; res 0</p>
+
+<p><img src="07Python38c3160b-2062.jpg" alt="img" /></p>
+
+<p>Win32例子</p>
+
+<p>&gt;» res = call (( &lsquo; dir1, r11 c : Windows\ temp 1 ) , shell=True) Volume in drive C has no label.</p>
+
+<p>Volume Serial Number is F4C9-1C38</p>
+
+<p>Directory of c : \windows\temp</p>
+
+<table>
+<thead>
+<tr>
+<th>03/11/2006</th>
+<th>02:08</th>
+<th>AM</th>
+<th><DIR></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>03/11/2006</td>
+<td>02:08</td>
+<td>AM</td>
+<td><DIR></td>
+<td></td>
+</tr>
+
+<tr>
+<td>02/21/2006</td>
+<td>08:45</td>
+<td>PM</td>
+<td>8 51</td>
+<td>install.log</td>
+</tr>
+
+<tr>
+<td>02/21/2006</td>
+<td>07:02</td>
+<td>PM</td>
+<td>444</td>
+<td>tim^&gt;. txt</td>
+</tr>
+
+<tr>
+<td></td>
+<td>2</td>
+<td>File(s]</td>
+<td>i    1,295</td>
+<td>bytes</td>
+</tr>
+
+<tr>
+<td></td>
+<td>3</td>
+<td>Dir(s)</td>
+<td>55,001,104,384</td>
+<td>bytes free</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="取代-os-popen">取代 os.popen()</h4>
+
+<p>创建Popen()实例的语法只比调用os.popen()函数复杂了一点</p>
+
+<p>&gt;&gt;&gt; from subprocess import Popen, PIPE</p>
+
+<p>&gt;&gt;&gt; f = Popen((&lsquo;uname&rsquo;, &lsquo;-a&rsquo;), stdout=PIPE).stdout &gt;&gt;&gt; data = f.readline()</p>
+
+<p><img src="07Python38c3160b-2063.jpg" alt="img" /></p>
+
+<p>&gt;&gt;&gt; f.close()</p>
+
+<p>&gt;&gt;&gt; print data,</p>
+
+<p>Linux starship 2.4.18-1-686 #4 Sat Nov 29 10:18:26 EST 2003 i686</p>
+
+<p>GNU/Linux</p>
+
+<p>&gt;&gt;&gt; f = Popen(&lsquo;who&rsquo;, stdout=PIPE).stdout</p>
+
+<p>&gt;&gt;&gt; data = [ eachLine.strip() for eachLine in f ]</p>
+
+<p>&gt;&gt;&gt; f.close()</p>
+
+<p>&gt;&gt;&gt; for eachLine in data:</p>
+
+<p>&hellip; print eachLine</p>
+
+<table>
+<thead>
+<tr>
+<th>wesc</th>
+<th>console</th>
+<th>Mar</th>
+<th>11</th>
+<th>12 344</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>wesc</td>
+<td>ttypl</td>
+<td>Mar</td>
+<td>11</td>
+<td>16:29</td>
+<td></td>
+</tr>
+
+<tr>
+<td>wesc</td>
+<td>ttyp2</td>
+<td>Mar</td>
+<td>11</td>
+<td>16 s 40</td>
+<td>(192.168.1.37)</td>
+</tr>
+
+<tr>
+<td>wesc</td>
+<td>ttyp3</td>
+<td>Mar</td>
+<td>11</td>
+<td>16:49</td>
+<td>(192.168.1.37)</td>
+</tr>
+
+<tr>
+<td>wesc</td>
+<td>ttyp4</td>
+<td>Mar</td>
+<td>11</td>
+<td>17:51</td>
+<td>(192.168.1.34)</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="14-5-6相关函数">14.5.6相关函数</h3>
+
+<p>表14.7列出了可以执行上述任务的函数(及其模块)</p>
+
+<p><img src="07Python38c3160b-2064.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2065.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2066.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2067.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2068.jpg" alt="img" /></p>
+
+<p>表14.7 各种文件执行函数</p>
+
+<p>文件对象 属性 os/popen2.popen2a()</p>
+
+<p>os/popen2.popen3a()</p>
+
+<p>os/popen2.popen4b()</p>
+
+<p>commands.getoutput()</p>
+
+<p>subprocess.callc()</p>
+
+<p>描述</p>
+
+<p>执行文件，打开文件，从新创建的运行程序读取(stdout)，或者向 该程序写(stdin)</p>
+
+<p>执行文件，打开文件，从新创建的运行程序读取(stdout和stder)， 或者向该程序写(stdin)</p>
+
+<p>执行文件，打开文件，从新创建的运行程序读取(结合stdout， stdout)，或者向该程序写(stdin)</p>
+
+<p>在子进程中执行文件，以字符串返回所有的输出®</p>
+
+<p>创建subprocess的便捷函数。Popen等待命令完成，然后返回状 态代码;与os.systemO类似，但是是较灵活的替代方案</p>
+
+<p>a.    python2.0版新加入</p>
+
+<p>b.    python2.0时加入到os和popen2模块中</p>
+
+<p>c.    python2.4 时加入</p>
+
+<h3 id="14-6受限执行">14.6受限执行</h3>
+
+<p>在python历史某个时期内，存在着使用了 rexec和bastion模块的限制执行的概念。第一个 模块允许沙盒(sandbox)中的执行代码修改内建对象。第二个模块用来过滤属性和包装你的类。然 而，由于一个显著的缺点和弥补安全漏洞的困难，这些模块便被废弃了。那些维护使用了这些模块 的老代码的人员可能会用到这两个模块的文档。</p>
+
+<h3 id="14-6结束执行">14.6结束执行</h3>
+
+<p>当程序运行完成，所有模块最高级的语句执行完毕后退出，我们便称这是干净的执行。可能有 很多情况，需要从python提前退出，比如某种致命错误，或是不满足继续执行的条件的时候。</p>
+
+<p>在python中，有各种应对错误的方法。其中之一便是通过异常和异常处理。另外一个方法便是 建造一个“清扫器”方法，这样便可以把代码的主要部分放在if语句里，在没有错误的情况下执行， 因而可以让错误的情况“正常地“终结。然而，有时也需要在退出调用程序的时候，返回错误代码 以表明发生何种事件。</p>
+
+<h3 id="14-7-1-sys-exit-and-systemexit">14.7.1 sys.exit() and SystemExit</h3>
+
+<p><img src="07Python38c3160b-2070.jpg" alt="img" /></p>
+
+<p>立即退出程序并返回调用程序的主要方式是sys模块中的exit()函数。sys.exitO的语法为:</p>
+
+<p>sys.exit(status=0)</p>
+
+<p>当调用sys.exit()时，就会引发systemExit()异常。除非对异常进行监控(在一个try语句和 合适的except子句中)，异常通常是不会被捕捉到或处理的，解释器会用给定的状态参数退出，如 果没有给出的话，该参数默认为0。System Exit是唯一不看作错误的异常。它仅仅表示要退出python 的愿望。</p>
+
+<p>sys.exit()经常用在命令调用的中途发现错误之后，比如，如果参数不正确，无效，或者参数 数目不正确。下面的例子14.4(args.py)仅仅是一个测试脚本，在正确执行之前需要给出确定数目 的参数。</p>
+
+<p>执行这个脚本我们得到如下输出：</p>
+
+<p>$ args.py</p>
+
+<p>At least 2 arguments required (incl. cmd name). usage: args.py arg1 arg2 [arg3&hellip; ]</p>
+
+<p><img src="07Python38c3160b-2072.jpg" alt="img" /></p>
+
+<p>$ args.py XXX</p>
+
+<p><img src="07Python38c3160b-2073.jpg" alt="img" /></p>
+
+<p>At least 2 arguments required (incl. cmd name). usage: args.py arg1 arg2 [arg3&hellip; ] $ args.py 123 abc number of args entered: 3</p>
+
+<p>args (incl. cmd name) were: [&lsquo;args.py&rsquo;, &lsquo;123&rsquo;, &lsquo;abc&rsquo;]</p>
+
+<p>$ args.py -x -2 foo number of args entered: 4</p>
+
+<p>args (incl. cmd name) were: [&lsquo;args.py&rsquo;, &lsquo;-x&rsquo;, &lsquo;-2&rsquo;,</p>
+
+<p>&lsquo;foo&rsquo;]</p>
+
+<p>Example 14.4 Exiting Immediately (args.py) 立即退出 (args.py)</p>
+
+<p>调用sys.exit()使python解释器退出。exit()的任何整数参数都会以退出状态返回给调用者， 该值默认为0；</p>
+
+<p>1    #!/usr/bin/env python</p>
+
+<p>2</p>
+
+<p>3    import sys</p>
+
+<p>4</p>
+
+<p>5    def usage():</p>
+
+<p>6    print &lsquo;At least 2 arguments (incl. cmd name).&rsquo;</p>
+
+<p>7    print &lsquo;usage: args.py arg1 arg2 [arg3&hellip; ]&rsquo;</p>
+
+<p><img src="07Python38c3160b-2074.jpg" alt="img" /></p>
+
+<p>8    sys.exit(1)</p>
+
+<p>9</p>
+
+<p>10    argc = len(sys.argv)</p>
+
+<p>11    if argc &lt; 3:</p>
+
+<p>12    usage()</p>
+
+<p>13    print &ldquo;number of args entered:&ldquo;, argc</p>
+
+<p>14    print &ldquo;args (incl. cmd name) were:&ldquo;, sys.argv</p>
+
+<p>许多命令行驱动的程序在进行之前，用脚本的核心功能测试了输入的有效性。如果验证失败， 那么便调用usage()函数去告知用户什么样的问题会导致这个错误，并&rdquo;提示&rdquo;用户如何才能正确地调 用脚本。</p>
+
+<h3 id="14-7-2-sys-exitfunc">14.7.2 sys.exitfunc()</h3>
+
+<p>sys.exitfuncO默认是不可用的，但你可以改写它以提供额外的功能。当调用了 sys.exitO并 在解释器退出之前，就会用到这个函数了。这个函数不带任何参数的，所以你创建的函数也应该是 无参的。</p>
+
+<p>如果sys.exitfunc已经被先前定义的exit函数覆盖了，最好的方法是把这段代码作为你exit() 函数的一部分来执行。一般说来，exit函数用于执行某些类型的关闭活动，比如关闭文件和网络连</p>
+
+<p>H接，最好用于完成维护任务，比如释放先前保留的系统资源。</p>
+
+<p>下面的例子介绍了如何设置exit()函数，如果已经被设置了，则确保执行该函数：</p>
+
+<p>import sys</p>
+
+<p>prev_exit_func = getattr(sys, ’exitfunc’, None)</p>
+
+<p>def my_exit_func(old_exit = prev_exit_func):</p>
+
+<p># :</p>
+
+<p>#    perform cleanup 进行清理</p>
+
+<p>#    :</p>
+
+<p>if old_exit is not None and callable(old_exit):</p>
+
+<p>old_exit()</p>
+
+<p>sys.exitfunc = my_exit_func</p>
+
+<p>在清理执行以后，我们执行了老的exit()函数。getattrO调用只是检查了先前的exitfunc()</p>
+
+<p>是否已经定义。如果没有，那么prev_exit_func赋值为None,否则，prev_exit_func变成exit函</p>
+
+<p>数新的别名，然后作为参数传入我们的新exit函数，my_exit_func。</p>
+
+<p>对getattr()的调用可以这样写：</p>
+
+<p>if hasattr(sys, &lsquo;exitfunc&rsquo;):</p>
+
+<p>prev_exit_func = sys.exitfunc # getattr(sys, &lsquo;exitfunc&rsquo;)</p>
+
+<p>else:</p>
+
+<p>prev_exit_func = None</p>
+
+<h3 id="14-7-3-os-exit-function-os-exit-函数">14.7.3 os._exit() Function os._exit() 函数</h3>
+
+<p>os模块的_exit()函数不应该在一般应用中使用。(平台相关，只适用特定的平台，比如基于Unix 的平台，以及Win32平台)。其语法为：</p>
+
+<p>os._exit(status)</p>
+
+<p>这个函数提供的功能与sys.exitO和sys.exitfuncO相反，根本不执行任何清理便立即退出 python。与sys.exitO不同，状态参数是必需的。通过sys.exitO退出是退出解释器的首选方法。</p>
+
+<h3 id="14-7-4-os-kill-function">14.7.4 os.kill() Function</h3>
+
+<p>os模块的kill()函数模拟传统的unix函数来发送信号给进程。kill()参数是进程标识数(PID) 和你想要发送到进程的信号。发送的典型信号为SIGINT, SIGQUIT,或更彻底地，SIGKILL,来使进程 终结。</p>
+
+<h3 id="14-8-各种操作系统接口">14.8 各种操作系统接口</h3>
+
+<p>在一章中，我们已看到各种通过os模块和操作系统进行交互的方法。我们看到的大多数函数都 是处理文件或外部进程执行。这里有些 方法允许对现在的用户和进程有较特殊的动作，我们将简要 地看看。表14.8中描述的大部分函数只在posix系统上工作，除非标明了适用于Windows环境。</p>
+
+<p>Table 14.8 各种os模块属性</p>
+
+<p>os 模块属性 uname() getuid()/setuid(uid) getpid()/getppid() getgid()/setgid(gid)</p>
+
+<p>描述</p>
+
+<p>获得系统信息(主机名，操作系统版本，补丁级别 获取八设置现在进程的真正的用户ID 获取真正的现在/父进程ID(PID) ® 获取八设置现在进程的群组ID</p>
+
+<p>系统构架等等)</p>
+
+<p><img src="07Python38c3160b-2078.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2079.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2080.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2081.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2082.jpg" alt="img" /></p>
+
+<p>getsid()/setsid()获取会话ID(SID)或创建和返回新的SID。</p>
+
+<p>umask(mask)    投置现在的数字unmask，同时返回先前的那个(mask用于文件许可</p>
+
+<p>getenv(ev)/</p>
+
+<p>putenv(ev, value), environ</p>
+
+<p>geteuid()/setegid() getegid()/setegid() getpgid(pid)/ setpgid(pid, pgrp)</p>
+
+<p>getlogin()</p>
+
+<p>times()</p>
+
+<p>strerror(code)</p>
+
+<p>getloadavg()a</p>
+
+<p>获取和设置环境变量ev的值；os.envion属性是描述当前所有环境变量 的字典®</p>
+
+<p>获取八设置当前进程的有效用户ID(GID)</p>
+
+<p>获取八设置当前进程的有效组ID(GID)</p>
+
+<p>获取和设置进程GID进程PID;对于get,如果pid为0,便返回现在进 程的进程GID</p>
+
+<p>返回运行现在进程的用户登录 返回各种进程时期的元组®</p>
+
+<p>返回和错误代码对应的错误信息</p>
+
+<p>返回代表在过去1，5，15分钟内的系统平均负载值的元组。</p>
+
+<p>a. python2.3 时加入</p>
+
+<p><img src="07Python38c3160b-2084.jpg" alt="img" /></p>
+
+<p>表14.9</p>
+
+<p>模块</p>
+
+<p>atexita</p>
+
+<p>popen2</p>
+
+<p>commands</p>
+
+<p>getopt</p>
+
+<p>site</p>
+
+<p>platformb</p>
+
+<p>subprocessc</p>
+
+<p>执行环境相关模块。</p>
+
+<p>描述</p>
+
+<p>注册当python解释器退出时候的执行句柄</p>
+
+<p>提供额外的在os.popen之上的功能：(提供通过标准文件和其他的进程交互 的能力；对于python2.4和更新的版本，使用subpross)</p>
+
+<p>提供额外的在os.system之上的功能：把所有的程序输出保存在返回的 字符串中(与输出到屏幕的相反)；对于python2.4和更新的版本，使 用 subpross©</p>
+
+<p>在这样的应用程序中的处理选项和命令行参数 处理site-specific模块或包</p>
+
+<p>底层平台和架构的属性</p>
+
+<p>管理(计划替代旧的函数和模块，比如 os.system()， os.spawn<em>()， os.popen</em>()， popen2.<em>, command.</em>)</p>
+
+<p>a.    python2.0 时加入</p>
+
+<p>b.    python2.3 时加入</p>
+
+<p>c.    python2.4 时加入</p>
+
+<h3 id="14-9相关模块">14.9相关模块</h3>
+
+<p><img src="07Python38c3160b-2085.jpg" alt="img" /></p>
+
+<p>在表14.9中，除了 os和sys模块，你还可以找到与这章执行环境主题相关的模块列表。</p>
+
+<h3 id="14-10-练习">14.10 练习</h3>
+
+<p>14-1.可调用对象。说出python中的可调用对象。exec语句和内建函数eval()有什么不同？</p>
+
+<p>14-2. input()和 raw.inputO。内建函数 raw_input()和 input()有什么不同？</p>
+
+<p>14-3.执行环境。创建运行其他python脚本的python脚本</p>
+
+<p>14-4. os.systemO。选择熟悉的系统命令，该命令执行任务时不需要输入，也不输出到屏幕 或根本不输出任何东西。调用os.systemO运行程序</p>
+
+<p>附加题：你的解决方案移植到subprocess.call()</p>
+
+<p>14-5. commands.getoutput().用 commands.getoutput()解决前面的问题</p>
+
+<p>14-6.    popenO家族。选择熟悉的系统命令，该命令从标准输入获得文本，操作或输出数据。</p>
+
+<p>使用os.popenO与程序进行通信。输出到哪儿呢？使用popen2.popen2()代替。</p>
+
+<p>14-7.    subprocess模块。把先前问题的解决方案移植到subprocess模块。</p>
+
+<p>14-8. exit函数。设^—个在程序退出时的函数。安装到sys.exitfuncO，运行程序，演 示你exit函数确实被调用了。</p>
+
+<p>14-9. shells。创建shell (操作系统接口)程序。给出接受操作系统命令的命令行接口(任</p>
+
+<p>意平台)</p>
+
+<p>附加题1:支持管道(见os模块中的dup()，dub2()，和pipe()函数)。管道过程允许进程的标 准输入连接到另一个进程的标准输入。</p>
+
+<p>附加题2:用括号支持逆序的管道，给shell 一个函数式编程接口。换句话说，支持更加函数 式风格如&hellip;sort(grep(ps -ef， root)， -n， +1)，而不是 ps -ef | grep root | sort -n +1&hellip; 这样的命令</p>
+
+<p>14-10. fork()/exec<em>()和 spawn</em>()的比较.使用 fork()_exec<em>()对和 spawn</em>()家族函数有什 么不同？那一组的功能更强？</p>
+
+<p>14-11•生成和执行python代码。用funcAttrs.py脚本(例14.4)加入测试代码到已有程序的</p>
+
+<p><img src="07Python38c3160b-2088.jpg" alt="img" /></p>
+
+<p>函数中。创建一个测试框架，每次遇到你特殊的函数属性，它都会运行你的测试代码。</p>
+
+<p><img src="07Python38c3160b-2090.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2091.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2092.jpg" alt="img" /></p>
+
+<p>正则表达式</p>
+
+<p><img src="07Python38c3160b-2093.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2094.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2095.jpg" alt="img" /></p>
+
+<p>本章主题</p>
+
+<p>•弓I言/动机 •特别的字符和符号 •正则表达式与Python • re模块</p>
+
+<p><img src="07Python38c3160b-2096.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2097.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2098.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2099.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2100.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2101.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2102.jpg" alt="img" /></p>
+
+<p><img src="07Python38c3160b-2103.png" alt="img" /></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/13-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">13 面向对象编程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/python-%E6%A0%B8%E5%BF%83%E7%BC%96%E7%A8%8B/15-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+            <span class="next-text nav-default">15 正则表达式</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

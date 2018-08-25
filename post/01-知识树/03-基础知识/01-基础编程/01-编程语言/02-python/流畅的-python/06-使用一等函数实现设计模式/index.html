@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 使用一等函数实现设计模式 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第 6 章 使用一等函数实现设计模式 符合模式并不表示做得对。 1 ——Ral p h Johnson 经典的《设计模式：可复用面向对象软件的基础》的作者之一 I1出自 2014 年 11" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/06-%E4%BD%BF%E7%94%A8%E4%B8%80%E7%AD%89%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 使用一等函数实现设计模式" />
+<meta property="og:description" content="第 6 章 使用一等函数实现设计模式 符合模式并不表示做得对。 1 ——Ral p h Johnson 经典的《设计模式：可复用面向对象软件的基础》的作者之一 I1出自 2014 年 11" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/06-%E4%BD%BF%E7%94%A8%E4%B8%80%E7%AD%89%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" /><meta property="article:published_time" content="2018-06-26T21:32:37&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T21:32:37&#43;00:00"/>
+<meta itemprop="name" content="06 使用一等函数实现设计模式">
+<meta itemprop="description" content="第 6 章 使用一等函数实现设计模式 符合模式并不表示做得对。 1 ——Ral p h Johnson 经典的《设计模式：可复用面向对象软件的基础》的作者之一 I1出自 2014 年 11">
+
+
+<meta itemprop="datePublished" content="2018-06-26T21:32:37&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T21:32:37&#43;00:00" />
+<meta itemprop="wordCount" content="8537">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 使用一等函数实现设计模式"/>
+<meta name="twitter:description" content="第 6 章 使用一等函数实现设计模式 符合模式并不表示做得对。 1 ——Ral p h Johnson 经典的《设计模式：可复用面向对象软件的基础》的作者之一 I1出自 2014 年 11"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 使用一等函数实现设计模式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 8537 words </span>
+        <span class="more-meta"> 18 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#第-6-章-使用一等函数实现设计模式">第 6 章 使用一等函数实现设计模式</a>
+<ul>
+<li><a href="#6-1-案例分析-重构-策略-模式">6.1    案例分析：重构“策略”模式</a>
+<ul>
+<li><a href="#注意-在示例6-1中-我把promotion定义为抽象基类-abstract-base-class-abc-这么做是为了使用-abstractmethod-装饰器-从而明确表明所用的模式">注意，在示例6-1中，我把Promotion定义为抽象基类(Abstract Base Class， ABC)， 这么做是为了使用 @abstractmethod 装饰器，从而明确表明所用的模式。</a></li>
+<li><a href="#在python3-4中-声明抽象基类最简单的方式是子类化abc-abc-我在示例6-1-中就是这么做的-从-python-3-0-到-python-3-3-必须在-class-语句中使用">在Python3.4中，声明抽象基类最简单的方式是子类化abc.ABC。我在示例6-1 中就是这么做的。从 Python 3.0 到 Python 3.3，必须在 class 语句中使用</a></li>
+<li><a href="#示例6-2是一些doctest-在某个实现了上述规则的模块中演示和验证相关操作">示例6-2是一些doctest，在某个实现了上述规则的模块中演示和验证相关操作。</a></li>
+<li><a href="#❶两个顾客-joe的积分是0-ann的积分是1100">❶两个顾客：joe的积分是0，ann的积分是1100。</a></li>
+<li><a href="#❷-有三个商品的购物车">❷ 有三个商品的购物车。</a></li>
+<li><a href="#示例-6-1-完全可用-但是利用-python-中作为对象的函数-可以使用更少的代码实现相同的-功能-详情参见下一节">示例 6-1 完全可用，但是利用 Python 中作为对象的函数，可以使用更少的代码实现相同的 功能。详情参见下一节。</a></li>
+<li><a href="#在示例6-1中-每个具体策略都是一个类-而且都只定义了一个方法-即discount-此">在示例6-1中，每个具体策略都是一个类，而且都只定义了一个方法，即discount。此</a></li>
+<li><a href="#❶-计算折扣只需调用-self-promotion-函数">❶ 计算折扣只需调用 self.promotion() 函数。</a></li>
+<li><a href="#❷-没有抽象类">❷ 没有抽象类。</a></li>
+<li><a href="#❸-各个策略都是函数">❸ 各个策略都是函数。</a></li>
+<li><a href="#❶-与示例-6-1-一样的测试固件">❶ 与示例 6-1 一样的测试固件。</a></li>
+<li><a href="#❸-这个测试和下一个测试使用不同的促销函数">❸ 这个测试和下一个测试使用不同的促销函数。</a></li>
+</ul></li>
+<li><a href="#6-2-命令-模式">6.2 “命令”模式</a></li>
+<li><a href="#6-3-本章小结">6.3 本章小结</a></li>
+<li><a href="#6-4-延伸阅读">6.4 延伸阅读</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="第-6-章-使用一等函数实现设计模式">第 6 章 使用一等函数实现设计模式</h2>
+
+<p>符合模式并不表示做得对。 1</p>
+
+<p>——Ral p h Johnson</p>
+
+<p>经典的《设计模式：可复用面向对象软件的基础》的作者之一</p>
+
+<p>I1出自 2014 年 11 月 15 日 Ralph Johnson 在圣保罗大学 IME/CCSL 所做的演讲，“Root Cause Analysis of Some Faults in</p>
+
+<p>Design Patterns”。</p>
+
+<p>虽然设计模式与语言无关，但这并不意味着每一个模式都能在每一门语言中使用。 1996</p>
+
+<p>年，Peter Norvig 在题为“Design Patterns in Dynamic Languages” ( <a href="http://norvig.com/design-patterns/">http://norvig.com/design-patterns/</a><a href="http://norvig.com/design-patterns/">) 的演讲中指出，Gamma等人合著的《设计模式：可复用面向对象软件的基础</a>》 一书中有 23 个模式，其中有 16 个在动态语言中“不见了，或者简化了”(参见第 9 张幻灯 片)。他讨论的是Lisp和Dylan，不过很多相关的动态特性在Python中也能找到。</p>
+
+<p>《设计模式：可复用面向对象软件的基础》的作者在引言中承认，所用的语言决定了哪些</p>
+
+<p>模式可用：</p>
+
+<p>程序设计语言的选择非常重要，它将影响人们理解问题的出发点。我们的设计模式采</p>
+
+<p>用了 Smalltalk 和 C++ 层的语言特性，这个选择实际上决定了哪些机制可以方便地实 现，而哪些则不能。若我们采用过程式语言，可能就要包括诸如“集成”“封装”和“多 态”的设计模式。相应地，一些特殊的面向对象语言可以直接支持我们的某些模式，</p>
+
+<p>例如 CLOS 支持多方法概念，这就减少了访问者模式的必要性。 2</p>
+
+<p>2《设计模式：可复用面向对象软件的基础》第3页。</p>
+
+<p>具体而言， Norvig 建议在有一等函数的语言中重新审视“策略”“命令”“模板方法”和“访问 者”模式。通常，我们可以把这些模式中涉及的某些类的实例替换成简单的函数，从而减 少样板代码。本章将使用函数对象重构“策略”模式，还将讨论一种更简单的方式，用于简 化“命令”模式。</p>
+
+<h3 id="6-1-案例分析-重构-策略-模式">6.1    案例分析：重构“策略”模式</h3>
+
+<p>如果合理利用作为一等对象的函数，某些设计模式可以简化， “策略”模式就是其中一个很 好的例子。本节接下来的内容中将说明“策略”模式，并使用《设计模式：可复用面向对象 软件的基础》一书中所述的“经典”结构实现它。如果你熟悉这个经典模式，可以跳到</p>
+
+<p>6.1.2 节，了解如何使用函数重构代码来有效减少代码行数。</p>
+
+<p>6.1.1    经典的“策略”模式</p>
+
+<p>图 6-1 中的 UML 类图指出了“策略”模式对类的编排。</p>
+
+<p>图 6-1：使用“策略”设计模式处理订单折扣的 UML 类图</p>
+
+<p>《设计模式：可复用面向对象软件的基础》一书是这样概述“策略”模式的：</p>
+
+<p>定义一系列算法，把它们一一封装起来，并且使它们可以相互替换。本模式使得算法</p>
+
+<p>可以独立于使用它的客户而变化。</p>
+
+<p>电商领域有个功能明显可以使用“策略”模式，即根据客户的属性或订单中的商品计算折</p>
+
+<p>扣。</p>
+
+<p>假如一个网店制定了下述折扣规则。</p>
+
+<p>•有1000或以上积分的顾客，每个订单享5°%折扣。</p>
+
+<p>•同一订单中，单个商品的数量达到20个或以上，享10%折扣。</p>
+
+<p>•订单中的不同商品达到10个或以上，享7°%折扣。</p>
+
+<p>简单起见，我们假定一个订单一次只能享用一个折扣。</p>
+
+<p>“策略”模式的 UML 类图见图 6-1，其中涉及下列内容。</p>
+
+<p>上下文</p>
+
+<p>把一些计算委托给实现不同算法的可互换组件，它提供服务。在这个电商示例中，上</p>
+
+<p>下文是Order，它会根据不同的算法计算促销折扣。</p>
+
+<p>策略</p>
+
+<p>实现不同算法的组件共同的接口。在这个示例中，名为 Promotion 的抽象类扮演这 个角色。</p>
+
+<p>具体策略</p>
+
+<p>“策略”的具体子类。 fidelityPromo、 BulkPromo 和 LargeOrderPromo 是这里实现</p>
+
+<p>的三个具体策略。</p>
+
+<p>示例 6-1 实现了图 6-1 中的方案。按照《设计模式：可复用面向对象软件的基础》一书的</p>
+
+<p>说明，具体策略由上下文类的客户选择。在这个示例中，实例化订单之前，系统会以某种 方式选择一种促销折扣策略，然后把它传给 Order 构造方法。具体怎么选择策略，不在</p>
+
+<p>这个模式的职责范围内。</p>
+
+<p>示例 6-1 实现 Order 类，支持插入式折扣策略</p>
+
+<p>from abc import ABC, abstractmethod</p>
+
+<p>from collections import namedtuple</p>
+
+<p>Customer = namedtuple(&lsquo;Customer&rsquo;, &lsquo;name fidelity&rsquo;) class LineItem:</p>
+
+<p>def <strong>init</strong>(self, product, quantity, price): self.product = product self.quantity = quantity self.price = price</p>
+
+<p>def total(self):</p>
+
+<p>return self.price * self.quantity</p>
+
+<p>class Order: # 上下文</p>
+
+<p>self.customer = customer self.cart = list(cart) self.promotion = promotion</p>
+
+<p>def total(self):</p>
+
+<p>if not hasattr(self, &lsquo;__total&rsquo;):</p>
+
+<p>self.<strong>total = sum(item.total() for item in self.cart) return self.</strong>total</p>
+
+<p>def due(self):</p>
+
+<p>if self.promotion is None:</p>
+
+<p>discount = 0 else:</p>
+
+<p>discount = self.promotion.discount(self) return self.total() - discount</p>
+
+<p>def <strong>repr</strong>(self):</p>
+
+<p>fmt = &lsquo;<Order total: {:.2f} due: {:.2f}>&rsquo; return fmt.format(self.total(), self.due())</p>
+
+<p>class Promotion(ABC) : # 策略：抽象基类</p>
+
+<p>@abstractmethod</p>
+
+<p>def discount(self, order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;返回折扣金额(正值) &ldquo;&rdquo;&rdquo;</p>
+
+<p>class FidelityPromo(Promotion): # 第一个具体策略</p>
+
+<p>&rdquo;&ldquo;&ldquo;为积分为 1000或以上的顾客提供 5%折扣 &ldquo;&rdquo;&rdquo; def discount(self, order):</p>
+
+<p>return order.total() * .05 if order.customer.fidelity &gt;= 1000 else 0</p>
+
+<p>class BulkItemPromo(Promotion): # 第二个具体策略</p>
+
+<p>&rdquo;&ldquo;&ldquo;单个商品为20个或以上时提供10%折扣&rdquo;&ldquo;&rdquo;</p>
+
+<p>def discount(self, order): discount = 0 for item in order.cart:</p>
+
+<p>if item.quantity &gt;= 20:</p>
+
+<p>discount += item.total() * .1</p>
+
+<p>return discount</p>
+
+<p>class LargeOrderPromo(Promotion): # 第三个具体策略 &ldquo;&rdquo;&ldquo;订单中的不同商品达到10个或以上时提供7%折扣&rdquo;&ldquo;&rdquo; def discount(self, order):</p>
+
+<p>distinct_items = {item.product for item in order.cart} if len(distinct_items) &gt;= 10:</p>
+
+<p>return order.total() * .07 return 0</p>
+
+<h4 id="注意-在示例6-1中-我把promotion定义为抽象基类-abstract-base-class-abc-这么做是为了使用-abstractmethod-装饰器-从而明确表明所用的模式">注意，在示例6-1中，我把Promotion定义为抽象基类(Abstract Base Class， ABC)， 这么做是为了使用 @abstractmethod 装饰器，从而明确表明所用的模式。</h4>
+
+<p><img src="08414584Python-33.jpg" alt="img" /></p>
+
+<h4 id="在python3-4中-声明抽象基类最简单的方式是子类化abc-abc-我在示例6-1-中就是这么做的-从-python-3-0-到-python-3-3-必须在-class-语句中使用">在Python3.4中，声明抽象基类最简单的方式是子类化abc.ABC。我在示例6-1 中就是这么做的。从 Python 3.0 到 Python 3.3，必须在 class 语句中使用</h4>
+
+<p>metaclass= 关键字(例如， class Promotion(metaclass=ABCMeta):)。</p>
+
+<h4 id="示例6-2是一些doctest-在某个实现了上述规则的模块中演示和验证相关操作">示例6-2是一些doctest，在某个实现了上述规则的模块中演示和验证相关操作。</h4>
+
+<p>示例 6-2 使用不同促销折扣的 Order 类示例</p>
+
+<p>&gt;&gt;&gt; joe = Customer(&lsquo;John Doe&rsquo;, 0) O &gt;&gt;&gt; ann = Customer(&lsquo;Ann Smith&rsquo;, 1100)</p>
+
+<p>&gt;&gt;&gt; cart = [LineItem(&lsquo;banana&rsquo;, 4, .5), &amp;</p>
+
+<p>&hellip;    LineItem(&lsquo;apple&rsquo;, 10, 1.5),</p>
+
+<p>&hellip;    LineItem(&lsquo;watermellon&rsquo;, 5, 5.0)]</p>
+
+<p>&gt;&gt;&gt; Order(joe, cart, FidelityPromo()) ©</p>
+
+<p><Order total: 42.00 due: 42.00></p>
+
+<p>&gt;&gt;&gt; Order(ann, cart, FidelityPromo()) ©</p>
+
+<p><Order total: 42.00 due: 39.90></p>
+
+<p>&gt;&gt;&gt; banana_cart = [LineItem(&lsquo;banana&rsquo;, 30, .5), ❺</p>
+
+<p>&hellip;    LineItem(&lsquo;apple&rsquo;, 10, 1.5)]</p>
+
+<p>&gt;&gt;&gt; Order(joe, banana_cart, BulkItemPromo()) ©</p>
+
+<p><Order total: 30.00 due: 28.50></p>
+
+<p>&gt;&gt;&gt; long_order = [LineItem(str(item_code), 1, 1.0) &amp;</p>
+
+<p>&hellip;    for item_code in range(10)]</p>
+
+<p>&gt;&gt;&gt; Order(joe, long_order, LargeOrderPromo())❻</p>
+
+<p><Order total: 10.00 due: 9.30></p>
+
+<p>&gt;&gt;&gt; Order(joe, cart, LargeOrderPromo())</p>
+
+<p><Order total: 42.00 due: 42.00></p>
+
+<h4 id="❶两个顾客-joe的积分是0-ann的积分是1100">❶两个顾客：joe的积分是0，ann的积分是1100。</h4>
+
+<h4 id="❷-有三个商品的购物车">❷ 有三个商品的购物车。</h4>
+
+<p>❸ fidelityPromo 没给 joe 提供折扣。</p>
+
+<p>❹ ann 得到了 5% 折扣，因为她的积分超过 1000。</p>
+
+<p>❺ banana_cart 中有 30 把香蕉和 10 个苹果。</p>
+
+<p>❻ BulkItemPromo 为 joe 购买的香蕉优惠了 1.50 美元。</p>
+
+<p>❼ long_order 中有 10 个不同的商品，每个商品的价格为 1.00 美元。</p>
+
+<p>❽ LargerOrderPromo 为 joe 的整个订单提供了 7% 折扣。</p>
+
+<h4 id="示例-6-1-完全可用-但是利用-python-中作为对象的函数-可以使用更少的代码实现相同的-功能-详情参见下一节">示例 6-1 完全可用，但是利用 Python 中作为对象的函数，可以使用更少的代码实现相同的 功能。详情参见下一节。</h4>
+
+<p>6.1.2 使用函数实现“策略”模式</p>
+
+<h4 id="在示例6-1中-每个具体策略都是一个类-而且都只定义了一个方法-即discount-此">在示例6-1中，每个具体策略都是一个类，而且都只定义了一个方法，即discount。此</h4>
+
+<p>外，策略实例没有状态（没有实例属性）。你可能会说，它们看起来像是普通的函数——</p>
+
+<p>的确如此。示例 6-3 是对示例 6-1 的重构，把具体策略换成了简单的函数，而且去掉了 Promo 抽象类。</p>
+
+<p>示例 6-3 Order 类和使用函数实现的折扣策略</p>
+
+<p>from collections import namedtuple</p>
+
+<p>Customer = namedtuple(&lsquo;Customer&rsquo;, &lsquo;name fidelity&rsquo;)</p>
+
+<p>class LineItem:</p>
+
+<p>def <strong>init</strong>(self, product, quantity, price): self.product = product self.quantity = quantity self.price = price</p>
+
+<p>def total(self):</p>
+
+<p>return self.price * self.quantity</p>
+
+<p>class Order: # 上下文</p>
+
+<p>def <strong>init</strong>(self, customer, cart, promotion=None): self.customer = customer self.cart = list(cart) self.promotion = promotion</p>
+
+<p>def total(self):</p>
+
+<p>if not hasattr(self, &lsquo;__total&rsquo;):</p>
+
+<p>self.<strong>total = sum(item.total() for item in self.cart) return self.</strong>total</p>
+
+<p>def due(self):</p>
+
+<p>if self.promotion is None:</p>
+
+<p>discount = 0</p>
+
+<p>else:</p>
+
+<p>discount = self.promotion(self) O return self.total() - discount</p>
+
+<p>def <strong>repr</strong>(self):</p>
+
+<p>fmt = &lsquo;<Order total: {:.2f} due: {:.2f}>&rsquo; return fmt.format(self.total(), self.due())</p>
+
+<p>&amp;</p>
+
+<p>def fidelity_promo(order):    ©</p>
+
+<p>&rdquo;&ldquo;&ldquo;为积分为 1000或以上的顾客提供 5%折扣 &ldquo;&rdquo;&rdquo;</p>
+
+<p>return order.total() * .05 if order.customer.fidelity &gt;= 1000 else 0</p>
+
+<p>def bulk_item_promo(order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;单个商品为20个或以上时提供10%折扣&rdquo;&ldquo;&rdquo;</p>
+
+<p>discount = 0</p>
+
+<p>for item in order.cart:</p>
+
+<p>if item.quantity &gt;= 20:</p>
+
+<p>discount += item.total() * .1</p>
+
+<p>return discount def large_order_promo(order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;订单中的不同商品达到 10个或以上时提供 7%折扣 &ldquo;&rdquo;&rdquo;</p>
+
+<p>distinct_items = {item.product for item in order.cart} if len(distinct_items) &gt;= 10:</p>
+
+<p>return order.total() * .07 return 0</p>
+
+<h4 id="❶-计算折扣只需调用-self-promotion-函数">❶ 计算折扣只需调用 self.promotion() 函数。</h4>
+
+<h4 id="❷-没有抽象类">❷ 没有抽象类。</h4>
+
+<h4 id="❸-各个策略都是函数">❸ 各个策略都是函数。</h4>
+
+<p>示例 6-3 中的代码比示例 6-1 少 12 行。不仅如此，新的 Order 类使用起来更简单，如示</p>
+
+<p>例 6-4 中的 doctest 所示。</p>
+
+<p>示例 6-4 使用函数实现的促销折扣的 Order 类示例</p>
+
+<p>&gt;&gt;&gt; joe = Customer(&lsquo;John Doe&rsquo;, 0) O</p>
+
+<p>&gt;&gt;&gt; ann = Customer(&lsquo;Ann Smith&rsquo;, 1100)</p>
+
+<p>&gt;&gt;&gt; cart = [LineItem(&lsquo;banana&rsquo;, 4, .5),</p>
+
+<p>&hellip;    LineItem(&lsquo;apple&rsquo;, 10, 1.5),</p>
+
+<p>&hellip;    LineItem(&lsquo;watermellon&rsquo;, 5, 5.0)]</p>
+
+<p>&gt;&gt;&gt; Order(joe, cart, fidelity_promo) ©</p>
+
+<p><Order total: 42.00 due: 42.00></p>
+
+<p>&gt;&gt;&gt; Order(ann, cart, fidelity_promo)</p>
+
+<p><Order total: 42.00 due: 39.90></p>
+
+<p>&gt;&gt;&gt; banana_cart = [LineItem(&lsquo;banana&rsquo;, 30, .5),</p>
+
+<p>&hellip;    LineItem(&lsquo;apple&rsquo;, 10, 1.5)]</p>
+
+<p>&gt;&gt;&gt; Order(joe, banana_cart, bulk_item_promo) ©</p>
+
+<p><Order total: 30.00 due: 28.50></p>
+
+<p>&gt;&gt;&gt; long_order = [LineItem(str(item_code), 1, 1.0)</p>
+
+<p>&hellip;    for item_code in range(10)]</p>
+
+<p>&gt;&gt;&gt; Order(joe, long_order, large_order_promo)</p>
+
+<p><Order total: 10.00 due: 9.30></p>
+
+<p>&gt;&gt;&gt; Order(joe, cart, large_order_promo)</p>
+
+<p><Order total: 42.00 due: 42.00></p>
+
+<h4 id="❶-与示例-6-1-一样的测试固件">❶ 与示例 6-1 一样的测试固件。</h4>
+
+<p>❷ 为了把折扣策略应用到 Order 实例上，只需把促销函数作为参数传入。</p>
+
+<h4 id="❸-这个测试和下一个测试使用不同的促销函数">❸ 这个测试和下一个测试使用不同的促销函数。</h4>
+
+<p>注意示例 6-4 中的标注：没必要在新建订单时实例化新的促销对象，函数拿来即用。</p>
+
+<p>值得注意的是，《设计模式：可复用面向对象软件的基础》一书的作者指出：“策略对象</p>
+
+<p>通常是很好的享元(flyweight)。”3那本书的另一部分对“享元”下了定义：“享元是可共</p>
+
+<p>享的对象，可以同时在多个上下文中使用。 ”4 共享是推荐的做法，这样不必在每个新的</p>
+
+<p>上下文（这里是 Order 实例）中使用相同的策略时不断新建具体策略对象，从而减少消</p>
+
+<p>耗。因此，为了避免“策略”模式的一个缺点（运行时消耗），《设计模式：可复用面向对</p>
+
+<p>象软件的基础》的作者建议再使用另一个模式。但此时，代码行数和维护成本会不断攀</p>
+
+<p>升。</p>
+
+<p>3《设计模式：可复用面向对象软件的基础》第214页。</p>
+
+<p>4《设计模式：可复用面向对象软件的基础》第129页。</p>
+
+<p>在复杂的情况下，需要具体策略维护内部状态时，可能需要把“策略”和“享元”模式结合起</p>
+
+<p>来。但是，具体策略一般没有内部状态，只是处理上下文中的数据。此时，一定要使用普</p>
+
+<p>通的函数，别去编写只有一个方法的类，再去实现另一个类声明的单函数接口。函数比用 户定义的类的实例轻量，而且无需使用“享元”模式，因为各个策略函数在 Python 编译模 块时只会创建一次。普通的函数也是“可共享的对象，可以同时在多个上下文中使用”。</p>
+
+<p>至此，我们使用函数实现了“策略”模式，由此也出现了其他可能性。假设我们想创建一</p>
+
+<p>个“元策略”，让它为指定的订单选择最佳折扣。接下来的几节会接着重构，利用函数和模</p>
+
+<p>块是对象，使用不同的方式实现这个需求。</p>
+
+<p>6.1.3 选择最佳策略：简单的方式</p>
+
+<p>我们继续使用示例 6-4 中的顾客和购物车，在此基础上添加 3 个测试，如示例 6-5 所示 示例 6-5 best_promo 函数计算所有折扣，并返回额度最大的</p>
+
+<p>&gt;&gt;&gt; Order(joe, long_order, best_promo) O <Order total: 10.00 due: 9.30></p>
+
+<p>&gt;&gt;&gt; Order(joe, banana_cart, best_promo) © <Order total: 30.00 due: 28.50></p>
+
+<p>&gt;&gt;&gt; Order(ann, cart, best_promo) ©</p>
+
+<p><Order total: 42.00 due: 39.90></p>
+
+<p>❶ best_promo 为顾客 joe 选择 larger_order_promo。</p>
+
+<p>❷ 订购大量香蕉时， joe 使用 bulk_item_promo 提供的折扣。</p>
+
+<p>❸ 在一个简单的购物车中， best_promo 为忠实顾客 ann 提供 fidelity_promo 优惠的 折扣。</p>
+
+<p>best_promo 函数的实现特别简单，如示例 6-6 所示。</p>
+
+<p>示例 6-6 best_promo 迭代一个函数列表，并找出折扣额度最大的</p>
+
+<p>❶ promos 列出以函数实现的各个策略。</p>
+
+<p>❷ 与其他几个 *_promo 函数一样， best_promo 函数的参数是一个 Order 实例。</p>
+
+<p>❸ 使用生成器表达式把 order 传给 promos 列表中的各个函数，返回折扣额度最大的那</p>
+
+<p>个函数。</p>
+
+<p>示例 6-6 简单明了， promos 是函数列表。习惯函数是一等对象后，自然而然就会构建那 种数据结构存储函数。</p>
+
+<p>虽然示例 6-6 可用，而且易于阅读，但是有些重复可能会导致不易察觉的缺陷：若想添加 新的促销策略，要定义相应的函数，还要记得把它添加到 promos 列表中；否则，当新促 销函数显式地作为参数传给 Order 时，它是可用的，但是 best_promo 不会考虑它。 继续往下读，了解这个问题的几种解决方案。</p>
+
+<p>6.1.4 找出模块中的全部策略</p>
+
+<p>在 Python 中，模块也是一等对象，而且标准库提供了几个处理模块的函数。 Python 文档</p>
+
+<p>是这样说明内置函数 globals 的。</p>
+
+<p>globals()</p>
+
+<p>返回一个字典，表示当前的全局符号表。这个符号表始终针对当前模块(对函数或方</p>
+
+<p>法来说，是指定义它们的模块，而不是调用它们的模块)。</p>
+
+<p>示例 6-7 使用 globals 函数帮助 best_promo 自动找到其他可用的 *_promo 函数，过程 有点曲折。</p>
+
+<p>示例 6-7 内省模块的全局命名空间，构建 promos 列表</p>
+
+<p>promos = [globals()[name] for name in globals() O if name.endswith(&rsquo;_promo&rsquo;) &amp; and name != &lsquo;best_promo&rsquo;] ©</p>
+
+<p>def best_promo(order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;选择可用的最佳折扣</p>
+
+<p>return max(promo(order) for promo in promos) ©</p>
+
+<p>❶ 迭代 globals() 返回字典中的各个 name。 ❷ 只选择以 _promo 结尾的名称。</p>
+
+<p>❸ 过滤掉 best_promo 自身，防止无限递归。</p>
+
+<p>❹ best_promo 内部的代码没有变化。</p>
+
+<p>收集所有可用促销的另一种方法是，在一个单独的模块中保存所有策略函数，把 best_promo 排除在外。</p>
+
+<p>在示例 6-8 中，最大的变化是内省名为 promotions 的独立模块，构建策略函数列表。注 意，示例 6-8 要导入 promotions 模块，以及提供高阶内省函数的 inspect 模块（简单 起见，这里没有给出导入语句，因为导入语句一般放在文件顶部）。</p>
+
+<p>示例 6-8 内省单独的 promotions 模块，构建 promos 列表</p>
+
+<p>promos = [func for name, func in</p>
+
+<p>inspect.getmembers(promotions, inspect.isfunction)]</p>
+
+<p>def best_promo(order):</p>
+
+<p>&rdquo;&ldquo;&ldquo;选择可用的最佳折扣</p>
+
+<p>return max(promo(order) for promo in promos)</p>
+
+<p>inspect.getmembers 函数用于获取对象（这里是 promotions 模块）的属性，第二个</p>
+
+<p>参数是可选的判断条件（一个布尔值函数）。我们使用的是inspect.isfunction，只</p>
+
+<p>获取模块中的函数。</p>
+
+<p>不管怎么命名策略函数，示例 6-8 都可用；唯一重要的是， promotions 模块只能包含计 算订单折扣的函数。当然，这是对代码的隐性假设。如果有人在 promotions 模块中使用 不同的签名定义函数，那么 best_promo 函数尝试将其应用到订单上时会出错。</p>
+
+<p>我们可以添加更为严格的测试，审查传给实例的参数，进一步过滤函数。示例 6-8 的目的 不是提供完善的方案，而是强调模块内省的一种用途。</p>
+
+<p>动态收集促销折扣函数更为显式的一种方案是使用简单的装饰器。第 7 章讨论函数装饰器 时会使用其他方式实现这个电商“策略”模式示例。</p>
+
+<p>下一节讨论“命令”模式。这个设计模式也常使用单方法类实现，同样也可以换成普通的函</p>
+
+<p>数。</p>
+
+<h3 id="6-2-命令-模式">6.2 “命令”模式</h3>
+
+<p>“命令”设计模式也可以通过把函数作为参数传递而简化。这一模式对类的编排如图 6-2 所</p>
+
+<p>示。</p>
+
+<p>图 6-2：菜单驱动的文本编辑器的 UML 类图，使用“命令”设计模式实现。各个命令可 以有不同的接收者（实现操作的对象）。对 PasteCommand 来说，接收者是</p>
+
+<p>Document。对OpenCommand来说，接收者是应用程序</p>
+
+<p>“命令”模式的目的是解耦调用操作的对象（调用者）和提供实现的对象（接收者）。在</p>
+
+<p>《设计模式：可复用面向对象软件的基础》所举的示例中，调用者是图形应用程序中的菜</p>
+
+<p>单项，而接收者是被编辑的文档或应用程序自身。</p>
+
+<p>这个模式的做法是，在二者之间放一个 Command 对象，让它实现只有一个方法 （execute）的接口，调用接收者中的方法执行所需的操作。这样，调用者无需了解接收 者的接口，而且不同的接收者可以适应不同的 Command 子类。调用者有一个具体的命 令，通过调用 execute 方法执行。注意，图 6-2 中的 MacroCommand 可能保存一系列命 令，它的 execute（） 方法会在各个命令上调用相同的方法。</p>
+
+<p>Gamma 等人说过：“命令模式是回调机制的面向对象替代品。 ”问题是，我们需要回调机 制的面向对象替代品吗？有时确实需要，但并非始终需要。</p>
+
+<p>我们可以不为调用者提供一个 Command 实例，而是给它一个函数。此时，调用者不用调</p>
+
+<p>用command.execute()，直接调用command()即可。MacroCommand可以实现成定义了</p>
+
+<p><strong>call</strong> 方法的类。这样， MacroCommand 的实例就是可调用对象，各自维护着一个函 数列表，供以后调用，如示例 6-9 所示。</p>
+
+<p>示例 6-9 MacroCommand 的各个实例都在内部存储着命令列表</p>
+
+<p>class MacroCommand:</p>
+
+<p>&rdquo;&ldquo;&ldquo;一个执行一组命令的命令 &ldquo;&rdquo;&rdquo;</p>
+
+<p>def <strong>init</strong>(self, commands):</p>
+
+<p>self.commands = list(commands) # O</p>
+
+<p>def <strong>call</strong>(self):</p>
+
+<p>for command in self.commands: # &amp; command()</p>
+
+<p>❶ 使用 commands 参数构建一个列表，这样能确保参数是可迭代对象，还能在各个</p>
+
+<p>MacroCommand 实例中保存各个命令引用的副本。</p>
+
+<p>❷ 调用 MacroCommand 实例时， self.commands 中的各个命令依序执行。</p>
+
+<p>复杂的“命令”模式(如支持撤销操作)可能需要更多，而不仅是简单的回调函数。即便如</p>
+
+<p>此，也可以考虑使用 Python 提供的几个替代品。</p>
+
+<p>•像示例6-9中MacroCommand那样的可调用实例，可以保存任何所需的状态，而且除 了 <strong>call</strong> 之外还可以提供其他方法。</p>
+
+<p>•可以使用闭包在调用之间保存函数的内部状态。</p>
+
+<p>使用一等函数对“命令”模式的重新审视到此结束。站在一定高度上看，这里采用的方式</p>
+
+<p>与“策略”模式所用的类似：把实现单方法接口的类的实例替换成可调用对象。毕竟，每个 Python 可调用对象都实现了单方法接口，这个方法就是 <strong>call</strong>。</p>
+
+<h3 id="6-3-本章小结">6.3 本章小结</h3>
+
+<p>经典的《设计模式：可复用面向对象软件的基础》一书出版几年后， Peter Norvig 指 出， “在 Lisp 或 Dylan 中， 23 个设计模式中有 16 个的实现方式比 C++ 中更简单，而且能</p>
+
+<p>保持同等质量，至少各个模式的某些用途如此”（Norvig的“Design Patterns in Dynamic Languages”演讲，第 9 张幻灯片，<a href="http://www.norvig.com/design-patterns/index.htm">http://www.norvig.com/design-patterns/index.htm</a>）。Python 有些动态特性与 Lisp 和 Dylan 一样，尤其是本书这一部分着重讨论的一等函数。</p>
+
+<p>本章开头引用的那句话是 Ralph Johnson 在纪念《设计模式：可复用面向对象软件的基</p>
+
+<p>础》原书出版 20 周年的活动上所说的，他指出这本书的缺点之一是： “过多强调设计模式 的结果，而没有细说过程。 ”5 本章从“策略”模式开始，使用一等函数简化了实现方式。</p>
+
+<p>5与本章开头引用的那句话同出一处：2014年11月15日Johnson在IME-USP所做的演讲，“Root Cause Analysis of</p>
+
+<p>Some Faults in Design Patterns”。</p>
+
+<p>很多情况下，在 Python 中使用函数或可调用对象实现回调更自然，这比模仿 Gamma、 Helm、Johnson 和 Vlissides 在书中所述的“策略”或“命令”模式要好。本章对“策略”模式的</p>
+
+<p>重构和对“命令”模式的讨论是为了通过示例说明一个更为常见的做法：有时，设计模式或</p>
+
+<p>API要求组件实现单方法接口，而那个方法的名称很宽泛，例如“execute”“run”或“dolt”。</p>
+
+<p>在 Python 中，这些模式或 API 通常可以使用一等函数或其他可调用的对象实现，从而减</p>
+
+<p>少样板代码。</p>
+
+<p>Peter Norvig 那次设计模式演讲想表达的观点是， “命令”和“策略”模式（以及“模板方</p>
+
+<p>法”和“访问者”模式）可以使用一等函数实现，这样更简单，甚至“不见了”，至少对这些</p>
+
+<p>模式的某些用途来说是如此。</p>
+
+<h3 id="6-4-延伸阅读">6.4 延伸阅读</h3>
+
+<p>结束对“策略”模式的讨论时，我建议使用函数装饰器改进示例 6-8。本章还多次提到了闭 包。装饰器和闭包是第 7 章的话题。那一章首先重构本章的电商示例，使用装饰器注册可 用的促销方式。</p>
+
+<p>《Pyhon Cookbook （第 3 版）中文版》（David Beazley 和 Brian K. Jones 著）的“8.21 实现</p>
+
+<p>访问者模式”使用优雅的方式实现了“访问者”模式，其中的 NodeVisitor 类把方法当作一 等对象处理。</p>
+
+<p>在设计模式方面， Python 程序员的阅读选择没有其他语言多。</p>
+
+<p>据我所知，截至 2014 年 6 月， Learning Python Design Patterns （Gennadiy Zlobin 著，</p>
+
+<p>Packt 出版社）是唯一一本专门针对 Python 设计模式的书。不过 Zlobin 这本书特别薄</p>
+
+<p>（ 100 页），只涵盖了 23 种设计模式中的 8 种。</p>
+
+<p>《Python高级编程》（Tarek Ziad^著）是市面上最好的Python中级书，第14章“有用的设</p>
+
+<p>计模式”从 Python 程序员的视角介绍了 7 种经典模式。</p>
+
+<p>Alex Martelli 做过几次关于 Python 设计模式的演讲。他在 EuroPython 2011 上的演讲有视 频（<a href="http://pyvideo.org/europython-2011/python-design-patterns.html">http://pyvideo.org/europyhon-2011/pyhon-design-patterns.html</a>），他的个人网站中有一 些幻灯片（<a href="http://www.aleax.it/gdd_pydp.pdf">http://www+aleax+it/gdd_pydp+pdf</a>）。这些年，我找到了不同的幻灯片和视频， 长短不一，因此要仔细搜索他的名字和“Python Design Patterns”这些词。</p>
+
+<p>2008年左右，《Java编程思想》的作者Bruce Eckel开始写一本题为Python 3 Patterns, Recipes and Idioms 的书（<a href="http://www.mindviewinc.com/Books/Python3Patterns/Index.php">http:&ldquo;www+mindviewinc.com/Books/Pyhon3Patterns/Index+php</a>）。</p>
+
+<p>这本书有很多贡献者，领头人是Eckel，但是六年过去了，依然没有写完，看样子是流产 了（写作本书时，仓库的最后一次改动是在两年前 6）。</p>
+
+<p>6至本书中文版出版时，仓库的最后一次改动是在2015年8月4日。——编者注</p>
+
+<p>用Java写的设计模式书很多，其中我最喜欢的一本是《Head First设计模式》（Eric Freeman、Bert Bates、Kathy Sierra 和 Elisabeth Robson 著）。这本书讲解了 23 个经典模式 中的 16 个。如果你喜欢 Head First 系列丛书的古怪风格，而且想了解这个主题，你会喜 欢这本书的。不过，它是围绕 Java 讲解的。</p>
+
+<p>如果想换个新鲜的角度，从支持鸭子类型和一等函数的动态语言入手，《Ruby设计模 式》（Russ Olsen著）一书有很多见解也适用于Python。虽然Python和Ruby在句法上有 很多区别，但是二者在语义方面很接近，比 Java 或 C++ 接近。</p>
+
+<p>在“Design Patterns in Dynamic Languages” （<a href="http://norvig.com/design-patterns/）这一演讲中，">http://norvig.com/design-patterns/）这一演讲中，</a> Peter Norvig 展示了如何使用一等函数（和其他动态特性）简化几个经典的设计模式，或 者根本不需要使用设计模式。</p>
+
+<p>当然，如果你想认真研究这个话题， Gamma 等人写的《设计模式：可复用面向对象软件 的基础》一书是必读的。光是“引言”就值回书钱了。人们经常引用这本书中的两个设计原 则：“对接口编程，而不是对实现编程”和“优先使用对象组合，而不是类继承”。</p>
+
+<p>杂谈</p>
+
+<p>Python 拥有一等函数和一等类型， Norvig 声称，这些特性对 23 个模式中的 16 个有影</p>
+
+<p>口向（“Design Patterns in Dynamic Languages”，第 10 张幻灯片，<a href="http://norvig.com/design-patterns/%ef%bc%89%e3%80%82%e8%af%bb%e5%88%b0%e4%b8%8b%e4%b8%80%e7%ab%a0%e4%bd%a0%e4%bc%9a%e5%8f%91%e7%8e%b0%ef%bc%8cPython%e8%bf%98%e6%9c%89%e6%b3%9b%e5%87%bd%e6%95%b0%ef%bc%887.8.2%e8%8a%82%ef%bc%89%e3%80%82%e6%b3%9b%e5%87%bd%e6%95%b0%e4%b8%8eCLOS">http://norvig.com/design-patterns/</a><a href="http://norvig.com/design-patterns/%ef%bc%89%e3%80%82%e8%af%bb%e5%88%b0%e4%b8%8b%e4%b8%80%e7%ab%a0%e4%bd%a0%e4%bc%9a%e5%8f%91%e7%8e%b0%ef%bc%8cPython%e8%bf%98%e6%9c%89%e6%b3%9b%e5%87%bd%e6%95%b0%ef%bc%887.8.2%e8%8a%82%ef%bc%89%e3%80%82%e6%b3%9b%e5%87%bd%e6%95%b0%e4%b8%8eCLOS">）。读到下一章你会发现，Python还有泛函数（7.8.2节）。泛函数与CLOS</a> 中的多方法（multimethod）类似，Gamma等人建议使用多方法以一种简单的方式实 现经典的“访问者”模式。Norvig却说，多方法能简化“生成器” （Builder）模式（第 10 张幻灯片）。可见，设计模式与语言特性无法精确对应。</p>
+
+<p>世界各地的课堂经常使用 Java 示例讲解设计模式。我不止一次听学生说过，他们以 为设计模式在任何语言中都有用。事实证明，在 Gamma 等人合著的那本书中，尽管 大部分使用C++代码说明（少数使用Smalltalk），但是23个“经典的”设计模式都能 很好地在“经典的”Java中运用。然而，这并不意味着所有模式都能一成不变地在任何</p>
+
+<p>语言中运用。那本书的作者在开头就明确表明了， “一些特殊的面向对象语言可以直 接支持我们的某些模式”（完整的引用见本章开头）。</p>
+
+<p>与 Java、C++ 或 Ruby 相比， Python 设计模式方面的书籍都很薄。延伸阅读中提到的 Learning Python Design Patterns （ Gennadiy Zlobin 著）在 2013 年 11 月才出版。而 《Ruby设计模式》（Russ Olsen著）在2007年就出版了，而且有384页，比Zlobin</p>
+
+<p>的那本书多出 284 页。</p>
+
+<p>如今， Python 在学术界越来越流行，希望以后会有更多以这门语言讲解设计模式的书 籍。此外， Java 8 引入了方法引用和匿名函数，这些广受期盼的特性有可能为 Java 催生新的模式实现方式——要知道，语言会进化，因此运用经典设计模式的方式必定</p>
+
+<p>要随之进化。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/05-%E4%B8%80%E7%AD%89%E5%87%BD%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 一等函数</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/07-%E5%87%BD%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8%E5%92%8C%E9%97%AD%E5%8C%85/">
+            <span class="next-text nav-default">07 函数装饰器和闭包</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>k-means - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="k-means ORIGINAL 对k-means 进行总结 掌握K-means聚类的思路和使用条件 K-means 是一个最广泛的聚类方法 K-means算法介绍 也是别的聚类的方法的基础。 arg" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/06-%E8%81%9A%E7%B1%BB/k-means/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="k-means" />
+<meta property="og:description" content="k-means ORIGINAL 对k-means 进行总结 掌握K-means聚类的思路和使用条件 K-means 是一个最广泛的聚类方法 K-means算法介绍 也是别的聚类的方法的基础。 arg" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/06-%E8%81%9A%E7%B1%BB/k-means/" /><meta property="article:published_time" content="2018-08-12T20:11:45&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:11:45&#43;00:00"/>
+<meta itemprop="name" content="k-means">
+<meta itemprop="description" content="k-means ORIGINAL 对k-means 进行总结 掌握K-means聚类的思路和使用条件 K-means 是一个最广泛的聚类方法 K-means算法介绍 也是别的聚类的方法的基础。 arg">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:11:45&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:11:45&#43;00:00" />
+<meta itemprop="wordCount" content="893">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="k-means"/>
+<meta name="twitter:description" content="k-means ORIGINAL 对k-means 进行总结 掌握K-means聚类的思路和使用条件 K-means 是一个最广泛的聚类方法 K-means算法介绍 也是别的聚类的方法的基础。 arg"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">k-means</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 893 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#k-means">k-means</a></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#k-means-是一个最广泛的聚类方法">K-means 是一个最广泛的聚类方法</a>
+<ul>
+<li><a href="#k-means算法介绍">K-means算法介绍</a></li>
+<li><a href="#代码如下">代码如下</a></li>
+<li><a href="#k-means过程">K-means过程</a></li>
+<li><a href="#k-means是初值敏感的">K-means是初值敏感的</a></li>
+<li><a href="#k-means-无法处理异常点">K-means 无法处理异常点</a></li>
+<li><a href="#使用二分-k均值聚类来避免初值敏感">使用二分 k均值聚类来避免初值敏感</a></li>
+<li><a href="#k-means适用范围">K-Means适用范围</a></li>
+<li><a href="#k-means聚类方法总结">K-means聚类方法总结</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="k-means">k-means</h1>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ul>
+<li>对k-means 进行总结</li>
+<li>掌握K-means聚类的思路和使用条件</li>
+</ul>
+
+<h1 id="k-means-是一个最广泛的聚类方法">K-means 是一个最广泛的聚类方法</h1>
+
+<h2 id="k-means算法介绍">K-means算法介绍</h2>
+
+<p>也是别的聚类的方法的基础。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1E9mB39AJm.png?imageslim" alt="mark" /></p>
+
+<p><strong>arg min 这种式子还是没怎么明白？每次都要遍历多有的样本点吗？簇中心变化率是什么？</strong></p>
+
+<h2 id="代码如下">代码如下</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CIAFD0HDgL.png?imageslim" alt="mark" /></p>
+
+<h2 id="k-means过程">K-means过程</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2al4j6CFaD.png?imageslim" alt="mark" /></p>
+
+<p>K-means本质上做的是一个均方误差的梯度下降。可以这么理解。</p>
+
+<h2 id="k-means是初值敏感的">K-means是初值敏感的</h2>
+
+<p>因为它是贪心的，所以它的初值是敏感的：所以它做聚类结束的那个点，仅仅是局部最优，不是全局最优：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jkKmHemBlJ.png?imageslim" alt="mark" /></p>
+
+<p>所以有些时候，我们会重复很多次，随机选初始点进行聚类，最后把几次的结果比较一下，那个好选那个。<strong>有什么更好的方法吗？</strong></p>
+
+<h2 id="k-means-无法处理异常点">K-means 无法处理异常点</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jcflFhmd7H.png?imageslim" alt="mark" /></p>
+
+<p><strong>上面提到的 K 中值聚类经常用吗？</strong></p>
+
+<h2 id="使用二分-k均值聚类来避免初值敏感">使用二分 k均值聚类来避免初值敏感</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AD2d3IJc1j.png?imageslim" alt="mark" /></p>
+
+<p>我可以算一下各自簇的均方误差，如果我发现，又一个簇的均方误差特别大，总是将不了，那么我就强制把这个簇分成两类，然后再选择某两个簇中心最近的合成一类。这样就又合成了一个类，这样就可以得到第二幅图。<strong>厉害了。</strong></p>
+
+<p>所以这是一个一定程度避免均值敏感的一种思路，即做二分。<strong>代码怎么实现呢？</strong></p>
+
+<h2 id="k-means适用范围">K-Means适用范围</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bck9fLgJdA.png?imageslim" alt="mark" /></p>
+
+<p>可见4类和6类，有时候真的无法判断出那个好。所以聚类里面有时候不太方便判断那个是好的，没有一个好的指标 。</p>
+
+<p>而右下角的图，可以看出，虽然想让它分5类，但是这5个类别分得有些奇怪。</p>
+
+<p>可见，类圆形的，凸的，类高斯分布的 就可以分得很不错，这种右下角的分叉的就不是很合理。<strong>为什么是类似高斯分布的时候？</strong></p>
+
+<h2 id="k-means聚类方法总结">K-means聚类方法总结</h2>
+
+<p>优点：</p>
+
+<ul>
+<li>是解决聚类问题的一种经典算法，简单、快速</li>
+<li>对处理大数据集，该算法保持可伸缩性和高效率</li>
+<li>当簇近似为高斯分布时，它的效果较好。<strong>是因为是 GMM 模型的一个特例，所以才对高斯分布情况支持好吗？</strong></li>
+</ul>
+
+<p>缺点</p>
+
+<ul>
+<li>在簇的平均值可被定义的情况下才能使用，可能不适于某些应用。<strong>是的，簇的平均值无法被定义的时候的确不能使用。</strong></li>
+<li>必须事先给出k(要生成的簇的数目)，而且对初值敏感，对于不同的初始值，可能会导致不同结果。</li>
+<li>不适合于发现非凸形状的簇或者大小差别很大的簇</li>
+<li>对躁声和孤立点数据敏感</li>
+</ul>
+
+<p>因此，可以作为其他聚类方法的基础算法，如谱聚类</p>
+
+<p>** 怎么判断簇是不是近似于高斯分布？如果不是高斯分布，那么用什么来聚类？**</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">贝叶斯网络</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%A2%AF%E5%BA%A6%E7%88%86%E7%82%B8%E5%92%8C%E6%A2%AF%E5%BA%A6%E6%B6%88%E5%A4%B1/">
+            <span class="next-text nav-default">梯度爆炸和梯度消失</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

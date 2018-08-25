@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 案例2：文本相似度 advance - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="刚刚的方法做了一些显而易见的 feature。 关键词搜索（进阶版） Kaggle竞赛题：https://www.kaggle.com/c/hom" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/04-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B1%BB%E9%97%AE%E9%A2%98/05-%E6%A1%88%E4%BE%8B2%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6-advance/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 案例2：文本相似度 advance" />
+<meta property="og:description" content="刚刚的方法做了一些显而易见的 feature。 关键词搜索（进阶版） Kaggle竞赛题：https://www.kaggle.com/c/hom" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/04-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B1%BB%E9%97%AE%E9%A2%98/05-%E6%A1%88%E4%BE%8B2%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6-advance/" /><meta property="article:published_time" content="2018-07-24T18:32:50&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-24T18:32:50&#43;00:00"/>
+<meta itemprop="name" content="05 案例2：文本相似度 advance">
+<meta itemprop="description" content="刚刚的方法做了一些显而易见的 feature。 关键词搜索（进阶版） Kaggle竞赛题：https://www.kaggle.com/c/hom">
+
+
+<meta itemprop="datePublished" content="2018-07-24T18:32:50&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-24T18:32:50&#43;00:00" />
+<meta itemprop="wordCount" content="4633">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 案例2：文本相似度 advance"/>
+<meta name="twitter:description" content="刚刚的方法做了一些显而易见的 feature。 关键词搜索（进阶版） Kaggle竞赛题：https://www.kaggle.com/c/hom"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 案例2：文本相似度 advance</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-24 </span>
+        
+        <span class="more-meta"> 4633 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#关键词搜索-进阶版">关键词搜索（进阶版）</a>
+<ul>
+<li><a href="#step-3-进阶版文本特征">Step 3: 进阶版文本特征</a>
+<ul>
+<li>
+<ul>
+<li><a href="#levenshtein">Levenshtein</a></li>
+<li><a href="#tf-idf">TF-iDF</a></li>
+<li><a href="#word2vec">Word2Vec</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#step-4-重塑训练-测试集">Step 4: 重塑训练/测试集</a>
+<ul>
+<li>
+<ul>
+<li><a href="#分开训练和测试集">分开训练和测试集</a></li>
+<li><a href="#记录下测试集的id">记录下测试集的id</a></li>
+<li><a href="#分离出y-train">分离出y_train</a></li>
+<li><a href="#把原集中的label给删去">把原集中的label给删去</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#step-5-建立模型">Step 5: 建立模型</a></li>
+<li><a href="#step-6-上传结果">Step 6: 上传结果</a></li>
+<li><a href="#总结">总结：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>刚刚的方法做了一些显而易见的 feature。</p>
+
+<h1 id="关键词搜索-进阶版">关键词搜索（进阶版）</h1>
+
+<p>Kaggle竞赛题：<a href="https://www.kaggle.com/c/home-depot-product-search-relevance">https://www.kaggle.com/c/home-depot-product-search-relevance</a></p>
+
+<p>鉴于课件里已经完整的show了NLTK在各个NLP处理上的用法，我这里就不再重复使用了。</p>
+
+<p>本篇的教程里会尽量用点不一样的库，让大家感受一下Python NLP领域各个库的优缺点。</p>
+
+<p>同时，</p>
+
+<p>在进阶版故事中，我们将讨论除了一些显而易见的“自制feature”之外，更加牛x的算法：</p>
+
+<ul>
+<li><p>String Distance</p></li>
+
+<li><p>TF-iDF</p></li>
+
+<li><p>Word2Vec（具体原理会在下堂课继续）</p></li>
+</ul>
+
+<p>注意，前面的预处理部分维持不变（懒得折腾。。预处理这事儿 要玩儿可以玩儿一年。。）</p>
+
+<p>前面两大步骤都是一样的。</p>
+
+<h2 id="step-3-进阶版文本特征">Step 3: 进阶版文本特征</h2>
+
+<p>这里我们讨论几个有点逼格的文本特征算法：</p>
+
+<h4 id="levenshtein">Levenshtein</h4>
+
+<p>使用 Levenshtein 很直观，直接调用 python 标准库即可</p>
+
+<pre><code class="language-python">import Levenshtein
+
+Levenshtein.ratio('hello', 'hello world')
+</code></pre>
+
+<pre><code>0.625
+</code></pre>
+
+<p>Levenshtein 距离，就是左边这个 str 需要经过多少次修改才能变成右边这个 str ，然后再除以左边这个str 的长度。</p>
+
+<p>好的，接下来我们把 search_term 和 product_title 进行比较：</p>
+
+<pre><code class="language-python">df_all['dist_in_title'] = df_all.apply(lambda x:Levenshtein.ratio(x['search_term'],x['product_title']), axis=1)
+</code></pre>
+
+<p>同理，对产品介绍进行比较：</p>
+
+<pre><code class="language-python">df_all['dist_in_desc'] = df_all.apply(lambda x:Levenshtein.ratio(x['search_term'],x['product_description']), axis=1)
+</code></pre>
+
+<h4 id="tf-idf">TF-iDF</h4>
+
+<p><span style="color:red;">这部分听得还是有点云里雾里，对于 tf-idf ，我之前理解它是对于每个文本来说的，里面的单词占所有文本中的单词的比例，而且，大家都有的单词就去掉，然后，剩下的占比比较大的单词就代表了这个文本。这个理解有问题吗？</span></p>
+
+<p>TF-iDF 稍微复杂点儿，因为它涉及到一个需要提前把所有文本计算统计一下的过程。</p>
+
+<p>我们首先搞一个新的 column，叫 all_texts, 里面是所有的 texts。（我并没有算上 search term, 因为他们不是一个结构完整的句子，可能会影响 tfidf的学习）。为了防止句子格式不完整，我们也强制给他们加上句号。<span style="color:red;">为什么不算上 search term ？为什么需要加上句号？</span></p>
+
+<p><em>注意：这里我们最严谨的做法是把 train/test 先分开，然后只在 train 上做 tfidf 的学习，并在 test 上直接转化。然而由于我不想把整个文章顺序打乱（因为本来 train/test 分开的步骤在最后），因为我希望大家看的时候可以跟简单版教程有很好的结构对照，所以我直接 tfidf 用在全部的语料集上。如果想安慰自己的话，你可以这么考虑：我们的算法虽然看到了 test 的文本内容，但是没有 test 的 label 。可以姑且认为 test 的文本内容本身也就是可见的。并且，这种行为在 kaggle 的竞赛中并没有被禁止，很多竞赛的 kernel 提交算法都有这问题，所以我们姑且先不 care 。但是我个人非常不赞同这么做。同学们如果自己在线下做实验的时候，希望可以做到严谨。不要cheating哦~</em><span style="color:red;">嗯，但是这个看到 test 集的已知数据的方法是一种 cheating吗？</span></p>
+
+<pre><code class="language-python">df_all['all_texts']=df_all['product_title'] + ' . ' + df_all['product_description'] + ' . '
+</code></pre>
+
+<p>搞完之后，长这样：</p>
+
+<pre><code class="language-python">df_all['all_texts'][:5]
+</code></pre>
+
+<pre><code>0    simpson strong-ti 12-gaug angl . not onli do a...
+1    simpson strong-ti 12-gaug angl . not onli do a...
+2    behr premium textur deckov 1-gal. #sc-141 tugb...
+3    delta vero 1-handl shower onli faucet trim kit...
+4    delta vero 1-handl shower onli faucet trim kit...
+Name: all_texts, dtype: object
+</code></pre>
+
+<p>然后，我们取出所有的单字，做成一个我们的单词字典：</p>
+
+<p>基本版教程这里我们用 gensim，为了更加细致的分解 TFIDF 的步骤动作；（其实 sklearn 本身也有更加简单好用的 tfidf 模型，可以一步完成，详情见第二课 stock news 。）</p>
+
+<p>Tokenize可以用各家或者各种方法，就是把长长的 string 变成 list of tokens 。包括 NLTK，SKLEARN 都有自家的解决方案。或者你自己直接用 str 自带的 split() 方法，也是一种 tokenize。只要记住，你这里用什么，那么之后你的文本处理都得用什么。</p>
+
+<pre><code class="language-python">from gensim.utils import tokenize
+from gensim.corpora.dictionary import Dictionary
+dictionary = Dictionary(list(tokenize(x, errors='ignore')) for x in df_all['all_texts'].values)
+print(dictionary)
+</code></pre>
+
+<pre><code>Dictionary(221877 unique tokens: ['fontain', 'extrusion', 'shiftingbreak', 'unfold', 'fibersdesign']...)
+</code></pre>
+
+<p>楼上可见，我们得到了 221877 个单词的大词典。我们以此准备出一个语料库。
+因为语料库一般都很大，所以我建议我们做语料的时候都用个 iterator 来实现。<span style="color:red;">嗯。</span></p>
+
+<p>于是我们写一个类(class)：</p>
+
+<p>这个类所做的事情也很简单，就是扫便我们所有的语料，并且转化成简单的单词的个数计算。（Bag-of-Words）</p>
+
+<pre><code class="language-python">class MyCorpus(object):
+    def __iter__(self):
+        for x in df_all['all_texts'].values:
+            yield dictionary.doc2bow(list(tokenize(x, errors='ignore')))
+
+# 这里这么折腾一下，仅仅是为了内存friendly。面对大量corpus数据时，你直接存成一个list，会使得整个运行变得很慢。
+# 所以我们搞成这样，一次只输出一组。但本质上依旧长得跟 [['sentence', '1'], ['sentence', '2'], ...]一样
+
+corpus = MyCorpus()
+</code></pre>
+
+<p>有了我们标准形式的语料库，我们于是就可以 init 我们的 TFIDFmodel 了。</p>
+
+<p>这里做的事情，就是把已经变成 BoW 向量的数组，做一次 TFIDF 的计算。详情参见课件。</p>
+
+<pre><code class="language-python">from gensim.models.tfidfmodel import TfidfModel
+tfidf = TfidfModel(corpus)
+</code></pre>
+
+<p>好，这下我们看看一个普通的句子放过来长什么样子：</p>
+
+<pre><code class="language-python">tfidf[dictionary.doc2bow(list(tokenize('hello world, good morning', errors='ignore')))]
+</code></pre>
+
+<pre><code>[(985, 0.2947139124944075),
+ (3430, 0.28760732706613895),
+ (33767, 0.6587176730120703),
+ (35249, 0.6296957697663794)]
+</code></pre>
+
+<p>我们做 tf-idf ，实际上这个 vector 的长度是整个 dict 的长度，上面之所以显示了 4 个，是因为大部分是 0 。</p>
+
+<p>怎么判断两个句子的相似度呢？</p>
+
+<p>这里有个trick，因为我们得到的 tfidf 只是『有这个字，就有这个值』，并不是一个全部值。</p>
+
+<p>也就是说，两个 matrix 可能 size 是完全不一样的。</p>
+
+<p>想用 cosine 计算的同学就会问了，两个 matrix 的 size 都不 fix，怎么办？</p>
+
+<p>咦，这里就注意咯。他们的 size 其实是一样的。只是把全部是 0 的那部分给省略了。</p>
+
+<p>于是，我们只要拿其中一个作为 index。扩展开全部的 matrixsize，另一个带入，就可以计算了。</p>
+
+<pre><code class="language-python">from gensim.similarities import MatrixSimilarity
+
+# 先把刚刚那句话包装成一个方法
+def to_tfidf(text):
+    res = tfidf[dictionary.doc2bow(list(tokenize(text, errors='ignore')))]
+    return res
+
+# 然后，我们创造一个cosine similarity的比较方法
+def cos_sim(text1, text2):
+    tfidf1 = to_tfidf(text1)
+    tfidf2 = to_tfidf(text2)
+    index = MatrixSimilarity([tfidf1],num_features=len(dictionary))
+    sim = index[tfidf2]
+    # 本来 sim 输出是一个 array，我们不需要一个 array 来表示，
+    # 所以我们直接 cast 成一个float
+    return float(sim[0])
+</code></pre>
+
+<p>来，我们可以做个测试：</p>
+
+<pre><code class="language-python">text1 = 'hello world'
+text2 = 'hello from the other side'
+cos_sim(text1, text2)
+</code></pre>
+
+<pre><code>0.8566456437110901
+</code></pre>
+
+<p>好，万事俱备，我们现在就只需要把我们的column都转化成tfidf计算出来的相似度了：</p>
+
+<p>因为 sim 的结果是一个 np array，所以我们用&rsquo;[0]&lsquo;取里面那个唯一值就行了</p>
+
+<pre><code class="language-python">df_all['tfidf_cos_sim_in_title'] = df_all.apply(lambda x: cos_sim(x['search_term'], x['product_title']), axis=1)
+</code></pre>
+
+<p>我们来看看长什么样子：</p>
+
+<pre><code class="language-python">df_all['tfidf_cos_sim_in_title'][:5]
+</code></pre>
+
+<pre><code>0    0.274539
+1    0.000000
+2    0.000000
+3    0.133577
+4    0.397320
+Name: tfidf_cos_sim_in_title, dtype: float64
+</code></pre>
+
+<p>同理，</p>
+
+<pre><code class="language-python">df_all['tfidf_cos_sim_in_desc'] = df_all.apply(lambda x: cos_sim(x['search_term'], x['product_description']), axis=1)
+</code></pre>
+
+<p>至此，我们又有了两个高质量的 features。</p>
+
+<h4 id="word2vec">Word2Vec</h4>
+
+<p>最后，我们的大杀器 w2v 登场了。</p>
+
+<p>最好的情况呢，其实是你在另一个地方用非常大非常完备的语料库做好 w2v 的 training，再跑到这个任务上来直接输出 vector。具体可以参照官网上谷歌新闻语料的一个大大的 w2v 模型。可下载，以后用。<span style="color:red;">嗯。其实这个就是迁移学习的方法。中文有这方面的语料库吗？</span></p>
+
+<p>我们这里，用个轻量级的解决方案，那就是直接在我们的文本上学习。（跟 tfidf 玩法差不多）</p>
+
+<p>然而，w2v 和 tfidf 有个很大的不同。对于 tfidf 而言，只需要知道一整段 text 中包含了哪些 word 元素就行了。其他都不用 care。</p>
+
+<p>但是w2v要考虑到句子层级的split，以及语境前后的考虑。</p>
+
+<p>所以，刚刚 tfidf 的 corpus 不能直接被这里使用。在这里，我们需要把句子/文字都给分类好。</p>
+
+<p>这里，我们再玩儿一个NLP的杀器：NLTK。</p>
+
+<pre><code class="language-python">import nltk
+# nltk也是自带一个强大的句子分割器。
+tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
+</code></pre>
+
+<p>这个 punkt 就可以把句子分隔开，也叫做 tokenizer。<span style="color:red;">嗯，不错。</span></p>
+
+<p>我们看看效果</p>
+
+<pre><code class="language-python">tokenizer.tokenize(df_all['all_texts'].values[0])
+</code></pre>
+
+<pre><code>['simpson strong-ti 12-gaug angl .',
+ 'not onli do angl make joint stronger, they also provid more consistent, straight corners.',
+ 'simpson strong-ti offer a wide varieti of angl in various size and thick to handl light-duti job or project where a structur connect is needed.',
+ 'some can be bent (skewed) to match the project.',
+ 'for outdoor project or those where moistur is present, use our zmax zinc-coat connectors, which provid extra resist against corros (look for a &quot;z&quot; at the end of the model number).versatil connector for various 90 connect and home repair projectsstrong than angl nail or screw fasten alonehelp ensur joint are consist straight and strongdimensions: 3 in.',
+ 'x 3 in.',
+ 'x 1-1/2 in.mad from 12-gaug steelgalvan for extra corros resistanceinstal with 10d common nail or #9 x 1-1/2 in.',
+ 'strong-driv sd screw . ']
+</code></pre>
+
+<p>依照这个方法，我们先把长文本搞成 list of 句子，再把句子变成 list of 单词：</p>
+
+<pre><code class="language-python">sentences = [tokenizer.tokenize(x) for x in df_all['all_texts'].values]
+</code></pre>
+
+<p>其实这些 sentences 不需要这些层级关系，他们都是平级的，所以：</p>
+
+<p>我们把 list of lists 给 flatten 了。</p>
+
+<pre><code class="language-python">sentences = [y for x in sentences for y in x]
+</code></pre>
+
+<p>这下我们可以看到，一共1998321个句子。</p>
+
+<pre><code class="language-python">len(sentences)
+</code></pre>
+
+<pre><code>1998321
+</code></pre>
+
+<p>接着，我们把句子里的单词给分好。这事儿我们还是可以用刚刚 Gensim的 tokenizer</p>
+
+<p>这里我们用 nltk 的 word_tokenizer 来试试</p>
+
+<pre><code class="language-python">from nltk.tokenize import word_tokenize
+w2v_corpus = [word_tokenize(x) for x in sentences]
+</code></pre>
+
+<p>注：这个地方如果是中文，那么使用 jieba 来分词。</p>
+
+<p>好，这下我们训练 model</p>
+
+<pre><code class="language-python">from gensim.models.word2vec import Word2Vec
+
+model = Word2Vec(w2v_corpus, size=128, window=5, min_count=5, workers=4)
+</code></pre>
+
+<p>这时候，每个单词都可以像查找字典一样，读出他们的 w2v 坐标了：</p>
+
+<pre><code class="language-python">model['right']
+</code></pre>
+
+<pre><code>array([ 4.74717617,  2.64686418,  0.35502195,  0.80881947, -2.7076602 ,
+       -1.64652073, -2.27783561, -0.92420739, -0.14867701,  5.74324369,
+       -0.7946381 ,  4.2346034 ,  0.85286433,  2.52050495, -0.73137748,
+        1.9509604 , -1.75785506, -0.81137753,  1.03638244, -1.19456983,
+       -0.23727451, -2.1338408 , -0.28541893, -2.99906659, -3.9443922 ,
+        3.45797253, -1.05518758,  2.46135116, -2.20839262, -1.80382502,
+        4.74548674,  1.45839429,  1.89756656, -0.03712106,  1.1392957 ,
+       -0.28602245, -0.8830694 , -0.23989263,  1.52211082, -3.42239022,
+        0.01539903,  0.87455851,  0.25244436, -1.04864109, -2.5990386 ,
+       -0.72978145,  3.70196033,  1.23104656,  1.96894944,  0.28224495,
+       -2.56046462, -1.574512  , -2.20811892,  2.57060266, -2.39487839,
+       -2.57700634,  2.41890597,  0.75820315, -2.01431084, -2.13502717,
+       -0.1664609 , -0.10223585, -0.93037611,  4.34696054, -0.88387358,
+       -4.04143572, -0.76093572, -4.64342451,  5.51188993,  1.15895557,
+        0.04778517, -2.19732451,  2.58349681,  0.30812854, -0.05851545,
+        0.14742707,  2.65333915, -3.49614239, -0.04863766, -2.16823196,
+       -0.75142419,  4.91761446, -0.76077127, -1.32876885,  2.45301771,
+       -1.47275043,  0.42842156,  0.99622703, -0.10033795,  1.29662645,
+       -2.37165427, -1.56022704, -2.82586884, -0.85700899,  2.06937575,
+        1.59914327,  1.34667575,  3.50663733, -0.44751605,  2.495821  ,
+       -0.80405504,  1.46751213, -2.97747278,  1.59027314,  1.04117584,
+       -3.76480174,  2.03447819,  2.54762697,  0.32881331, -3.20821214,
+        2.40063143, -0.48981774, -0.83241153,  1.22963691,  1.81204796,
+       -0.20612268, -0.78395975, -0.48303336, -1.06597555, -0.19221658,
+       -0.07359049,  2.20414066,  1.43124104, -0.65005296, -1.06764543,
+       -0.60594636,  1.24271679, -3.92345881], dtype=float32)
+</code></pre>
+
+<p>跟 TFiDF 一样，我们可以把 textual 的 column 都转化为 w2v 坐标</p>
+
+<p>这里不一样的是，TFiDF 是针对每个句子都可以有的，而 w2v 是针对每个单词的。<span style="color:red;">嗯，他们的层级不一样。</span></p>
+
+<p>所以我们要有个综合考虑的 idea：</p>
+
+<p>平均化一个句子的 w2v 向量，算作整个 text 的平均 vector：平均化是一个弱化的处理方式，会丢失很多的信息量，还可以把句子里面的word2vec 一字排开，排成一个矩阵，不满的用 0 补上，然后就可以计算着两个矩阵的相似度。</p>
+
+<p>我们写一个方法来实现：</p>
+
+<pre><code class="language-python"># 先拿到全部的vocabulary
+vocab = model.vocab
+
+# 得到任意text的vector
+def get_vector(text):
+    # 建立一个全是0的array
+    res =np.zeros([128])
+    count = 0
+    for word in word_tokenize(text):
+        if word in vocab:
+            res += model[word]
+            count += 1
+    return res/count
+</code></pre>
+
+<p>我们可以试试：</p>
+
+<pre><code class="language-python">print(get_vector('life is like a box of chocolate'))
+</code></pre>
+
+<pre><code>[ 0.463416    0.97560888  0.10863534 -0.82696981  1.41277812  0.79170082
+  0.0978372  -0.68150822  0.99790255 -0.44159976  1.00841724 -0.43905148
+  0.21946578  1.01400004 -1.97788476 -0.24557593 -1.13167921 -0.22579467
+ -0.48376473  0.41615273  0.67180802  0.53008292  0.52145608 -1.9788011
+  1.42492926 -0.18045649 -0.65986957 -0.93241019  1.1279408   0.06740171
+  0.40830285  0.79715398 -0.84070924  0.35409186  0.29476608 -0.01593437
+ -0.2836557  -0.27918024  1.09351952 -0.34930461  2.4379538   0.60693575
+ -0.42956293  1.8092562  -0.43648594 -0.58754889 -1.25327353 -0.65632194
+  1.29220566  0.52857347  0.08685846  0.04752858 -0.59915119 -0.00281862
+ -0.99020389 -0.82765476  0.16989418  1.01381083 -0.0428756   0.98613351
+ -1.3658159  -1.43513804 -0.75343464 -0.09422477  0.07967508 -0.87333807
+  0.36081878 -0.81233797  0.2529      1.28962335  1.31695796 -1.45198588
+  1.3620293   0.11232918 -0.21050634 -0.27940779 -0.13681145 -1.03338094
+  0.07509582  0.46833945  0.00504241  1.29592314  0.38266217  1.22406197
+  0.49212121 -0.04775342 -0.78706613  0.15082838 -1.38598437  0.85031726
+ -1.25327267 -0.74126085  0.19504826 -1.05701404 -0.18221375 -1.85480102
+  0.10107571  1.40432313 -1.16039764 -0.56544506  0.47745609  0.47314491
+ -0.52448719 -0.36235778  1.88896974 -0.16886154 -0.01455577 -1.06299005
+  0.18107549 -0.74452799 -2.65968527  0.5563812  -0.17996723  0.65088516
+ -0.25565534 -1.15591651  0.46034975 -1.45567893 -0.11601611 -0.49641909
+  1.75690769 -0.28630929 -1.34841273  1.24394214  0.26161586 -0.05742724
+ -0.83873362 -0.8819646 ]
+</code></pre>
+
+<p>好，同理，我们需要计算两个 text 的平均 w2v 的 cosine similarity</p>
+
+<pre><code class="language-python">from scipy import spatial
+# 这里，我们再玩儿个新的方法，用scipy的spatial
+
+def w2v_cos_sim(text1, text2):
+    try:
+        w2v1 = get_vector(text1)
+        w2v2 = get_vector(text2)
+        sim = 1 - spatial.distance.cosine(w2v1, w2v2)
+        return float(sim)
+    except:
+        return float(0)
+# 这里加个try exception，以防我们得到的vector是个[0,0,0,...]
+</code></pre>
+
+<p>报错可能是因为除以 0，也就是整个句子都是 0，那么输出 0 就行，即两个句子毫无相似度。</p>
+
+<pre><code class="language-python">w2v_cos_sim('hello world', 'hello from the other side')
+</code></pre>
+
+<pre><code>0.2397940355621142
+</code></pre>
+
+<p>跟刚刚TFIDF一样，我们计算一下 search term 在 product title 和 product description 中的 cosine similarity</p>
+
+<pre><code class="language-python">df_all['w2v_cos_sim_in_title'] = df_all.apply(lambda x: w2v_cos_sim(x['search_term'], x['product_title']), axis=1)
+df_all['w2v_cos_sim_in_desc'] = df_all.apply(lambda x: w2v_cos_sim(x['search_term'], x['product_description']), axis=1)
+</code></pre>
+
+<p>又多了两个优质的特征。</p>
+
+<pre><code class="language-python">df_all.head(5)
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>id</th>
+<th>product_title</th>
+<th>product_uid</th>
+<th>relevance</th>
+<th>search_term</th>
+<th>product_description</th>
+<th>dist_in_title</th>
+<th>dist_in_desc</th>
+<th>all_texts</th>
+<th>tfidf_cos_sim_in_title</th>
+<th>tfidf_cos_sim_in_desc</th>
+<th>w2v_cos_sim_in_title</th>
+<th>w2v_cos_sim_in_desc</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>2</td>
+<td>simpson strong-ti 12-gaug angl</td>
+<td>100001</td>
+<td>3.00</td>
+<td>angl bracket</td>
+<td>not onli do angl make joint stronger, they als&hellip;</td>
+<td>0.190476</td>
+<td>0.030418</td>
+<td>simpson strong-ti 12-gaug angl . not onli do a&hellip;</td>
+<td>0.274539</td>
+<td>0.182836</td>
+<td>0.482381</td>
+<td>0.425223</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>3</td>
+<td>simpson strong-ti 12-gaug angl</td>
+<td>100001</td>
+<td>2.50</td>
+<td>l bracket</td>
+<td>not onli do angl make joint stronger, they als&hellip;</td>
+<td>0.153846</td>
+<td>0.022901</td>
+<td>simpson strong-ti 12-gaug angl . not onli do a&hellip;</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.322772</td>
+<td>0.110944</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>9</td>
+<td>behr premium textur deckov 1-gal. #sc-141 tugb&hellip;</td>
+<td>100002</td>
+<td>3.00</td>
+<td>deck over</td>
+<td>behr premium textur deckov is an innov solid c&hellip;</td>
+<td>0.175000</td>
+<td>0.017875</td>
+<td>behr premium textur deckov 1-gal. #sc-141 tugb&hellip;</td>
+<td>0.000000</td>
+<td>0.053455</td>
+<td>0.307271</td>
+<td>0.445303</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>16</td>
+<td>delta vero 1-handl shower onli faucet trim kit&hellip;</td>
+<td>100005</td>
+<td>2.33</td>
+<td>rain shower head</td>
+<td>updat your bathroom with the delta vero single&hellip;</td>
+<td>0.326087</td>
+<td>0.048632</td>
+<td>delta vero 1-handl shower onli faucet trim kit&hellip;</td>
+<td>0.133577</td>
+<td>0.043712</td>
+<td>0.532707</td>
+<td>0.465209</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>17</td>
+<td>delta vero 1-handl shower onli faucet trim kit&hellip;</td>
+<td>100005</td>
+<td>2.67</td>
+<td>shower onli faucet</td>
+<td>updat your bathroom with the delta vero single&hellip;</td>
+<td>0.382979</td>
+<td>0.054545</td>
+<td>delta vero 1-handl shower onli faucet trim kit&hellip;</td>
+<td>0.397320</td>
+<td>0.098485</td>
+<td>0.726722</td>
+<td>0.486046</td>
+</tr>
+</tbody>
+</table>
+
+<p>搞完之后，我们把不能被『机器学习模型』处理的 column 给 drop 掉</p>
+
+<pre><code class="language-python">df_all = df_all.drop(['search_term','product_title','product_description','all_texts'],axis=1)
+</code></pre>
+
+<h2 id="step-4-重塑训练-测试集">Step 4: 重塑训练/测试集</h2>
+
+<p>舒淇说得好，要把之前脱下的衣服再一件件穿回来</p>
+
+<p>数据处理也是如此，搞完一圈预处理之后，我们让数据重回原本的样貌</p>
+
+<h4 id="分开训练和测试集">分开训练和测试集</h4>
+
+<pre><code class="language-python">df_train = df_all.loc[df_train.index]
+df_test = df_all.loc[df_test.index]
+</code></pre>
+
+<h4 id="记录下测试集的id">记录下测试集的id</h4>
+
+<p>留着上传的时候 能对的上号</p>
+
+<pre><code class="language-python">test_ids = df_test['id']
+</code></pre>
+
+<h4 id="分离出y-train">分离出y_train</h4>
+
+<pre><code class="language-python">y_train = df_train['relevance'].values
+</code></pre>
+
+<h4 id="把原集中的label给删去">把原集中的label给删去</h4>
+
+<p>否则就是cheating了</p>
+
+<pre><code class="language-python">X_train = df_train.drop(['id','relevance'],axis=1).values
+X_test = df_test.drop(['id','relevance'],axis=1).values
+</code></pre>
+
+<h2 id="step-5-建立模型">Step 5: 建立模型</h2>
+
+<p>我们用个最简单的模型：</p>
+
+<pre><code class="language-python">from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import cross_val_score
+</code></pre>
+
+<p>用CV结果保证公正客观性；并调试不同的alpha值</p>
+
+<pre><code class="language-python">params = [1,3,5,6,7,8,9,10]
+test_scores = []
+for param in params:
+    clf = RandomForestRegressor(n_estimators=30, max_depth=param)
+    test_score = np.sqrt(-cross_val_score(clf, X_train, y_train, cv=5, scoring='neg_mean_squared_error'))
+    test_scores.append(np.mean(test_score))
+</code></pre>
+
+<p>画个图来看看：</p>
+
+<pre><code class="language-python">import matplotlib.pyplot as plt
+%matplotlib inline
+plt.plot(params, test_scores)
+plt.title(&quot;Param vs CV Error&quot;);
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180724/5JGK3eIKi1.png?imageslim" alt="mark" /></p>
+
+<p>大概 9 的时候达到了最优解。直观的来看 可能跟前文的差别不大。</p>
+
+<p>但是同学们可以试试其他不同的算法，就可以对比出差距了。</p>
+
+<p><span style="color:red;">嗯，可以试试一些 ensemble </span></p>
+
+<h2 id="step-6-上传结果">Step 6: 上传结果</h2>
+
+<p>用我们测试出的最优解建立模型，并跑跑测试集</p>
+
+<pre><code class="language-python">rf = RandomForestRegressor(n_estimators=30, max_depth=6)
+</code></pre>
+
+<pre><code class="language-python">rf.fit(X_train, y_train)
+</code></pre>
+
+<pre><code>RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=6,
+           max_features='auto', max_leaf_nodes=None,
+           min_impurity_split=1e-07, min_samples_leaf=1,
+           min_samples_split=2, min_weight_fraction_leaf=0.0,
+           n_estimators=30, n_jobs=1, oob_score=False, random_state=None,
+           verbose=0, warm_start=False)
+</code></pre>
+
+<pre><code class="language-python">y_pred = rf.predict(X_test)
+</code></pre>
+
+<p>把拿到的结果，放进PD，做成CSV上传：</p>
+
+<pre><code class="language-python">pd.DataFrame({&quot;id&quot;: test_ids, &quot;relevance&quot;: y_pred}).to_csv('submission.csv',index=False)
+</code></pre>
+
+<h2 id="总结">总结：</h2>
+
+<p>这一篇教程中，用了稍微复杂的方法教大家加入更多高质量的features。</p>
+
+<p>同学们可以尝试修改/调试/升级的部分是：</p>
+
+<ol>
+<li><p><strong>更多的特征</strong>: Deep Learning 的大重点就是黑盒机制。所以，其实我们刚刚得到的 tfidf 或者 w2v vector 可以就不做任何处理塞进我们的 X 里面去。然后我们使用更加深度的学习模型来训练它。这样，我们的算法可以“看见”更加原始的信息。假设他们比人脑好的话，他们就可以作出更好的 predictions。<span style="color:red;">第六课会讲</span></p></li>
+
+<li><p><strong>更好的回归模型</strong>: 根据之前的课讲的Ensemble方法，把分类器提升到极致。</p></li>
+</ol>
+
+<p>在 kaggle 上大部分展示出来的方法都是非黑盒的，因为要展示自己牛B，脑洞大，想出很多的牛逼的特征。但是论效果 DL 会更好一些。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-24</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/04-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B1%BB%E9%97%AE%E9%A2%98/01-%E6%A6%82%E8%BF%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 概述</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/04-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B1%BB%E9%97%AE%E9%A2%98/04-%E6%A1%88%E4%BE%8B2%E6%96%87%E6%9C%AC%E7%9B%B8%E4%BC%BC%E5%BA%A6/">
+            <span class="next-text nav-default">04 案例2：文本相似度</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

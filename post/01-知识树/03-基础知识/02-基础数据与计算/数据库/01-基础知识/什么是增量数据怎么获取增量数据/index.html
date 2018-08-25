@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>什么是增量数据？怎么获取增量数据？ - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="[TOC] TODO 还是没明白，没清楚 缘由 看到书上说： 每天用户将当日的增量数据流入数据库中，通过调度系统启动机器学习的离线训练。 有几个问题： 什么是增量数据，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/%E6%95%B0%E6%8D%AE%E5%BA%93/01-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E4%BB%80%E4%B9%88%E6%98%AF%E5%A2%9E%E9%87%8F%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E8%8E%B7%E5%8F%96%E5%A2%9E%E9%87%8F%E6%95%B0%E6%8D%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="什么是增量数据？怎么获取增量数据？" />
+<meta property="og:description" content="[TOC] TODO 还是没明白，没清楚 缘由 看到书上说： 每天用户将当日的增量数据流入数据库中，通过调度系统启动机器学习的离线训练。 有几个问题： 什么是增量数据，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/%E6%95%B0%E6%8D%AE%E5%BA%93/01-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E4%BB%80%E4%B9%88%E6%98%AF%E5%A2%9E%E9%87%8F%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E8%8E%B7%E5%8F%96%E5%A2%9E%E9%87%8F%E6%95%B0%E6%8D%AE/" /><meta property="article:published_time" content="2018-06-12T12:58:19&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-12T12:58:19&#43;00:00"/>
+<meta itemprop="name" content="什么是增量数据？怎么获取增量数据？">
+<meta itemprop="description" content="[TOC] TODO 还是没明白，没清楚 缘由 看到书上说： 每天用户将当日的增量数据流入数据库中，通过调度系统启动机器学习的离线训练。 有几个问题： 什么是增量数据，">
+
+
+<meta itemprop="datePublished" content="2018-06-12T12:58:19&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-12T12:58:19&#43;00:00" />
+<meta itemprop="wordCount" content="1014">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="什么是增量数据？怎么获取增量数据？"/>
+<meta name="twitter:description" content="[TOC] TODO 还是没明白，没清楚 缘由 看到书上说： 每天用户将当日的增量数据流入数据库中，通过调度系统启动机器学习的离线训练。 有几个问题： 什么是增量数据，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">什么是增量数据？怎么获取增量数据？</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-12 </span>
+        
+        <span class="more-meta"> 1014 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#缘由">缘由</a></li>
+<li><a href="#问题解答">问题解答</a>
+<ul>
+<li><a href="#1-什么是增量数据">1.什么是增量数据？</a></li>
+<li><a href="#2-怎样获取增量数据">2.怎样获取增量数据？</a></li>
+<li><a href="#3-增量数据是怎么流到数据库里面的">3.增量数据是怎么流到数据库里面的？</a></li>
+<li><a href="#4-具体要怎么做才能获得增量数据-有什么例子吗">4.具体要怎么做才能获得增量数据？有什么例子吗？</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>[TOC]</p>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><strong>还是没明白，没清楚</strong></li>
+</ul>
+
+<h1 id="缘由">缘由</h1>
+
+<p>看到书上说：</p>
+
+<blockquote>
+<p>每天用户将当日的增量数据流入数据库中，通过调度系统启动机器学习的离线训练。</p>
+</blockquote>
+
+<p>有几个问题：</p>
+
+<ul>
+<li><strong>什么是增量数据，怎么获取增量数据？增量数据是怎么流到数据库里面的？具体是怎么操作的？用的什么工具？</strong></li>
+</ul>
+
+<h1 id="问题解答">问题解答</h1>
+
+<h2 id="1-什么是增量数据">1.什么是增量数据？</h2>
+
+<p>全量数据就是表中所有的数据，增量数据是上次导出之后的新数据</p>
+
+<h2 id="2-怎样获取增量数据">2.怎样获取增量数据？</h2>
+
+<p>a.触发器：在要抽取的表上建立需要的触发器，一般要建立插入、修改、删除三个触发器，每当源表中的数据发生变化，就被相应的触发器将变化的数据写入一个临时表，抽取线程从临时表中抽取数据，临时表中抽取过的数据被标记或删除。触发器方式的优点是数据抽取的性能较高，缺点是要求业务表建立触发器，对业务系统有一定的影响。</p>
+
+<p>b.时间戳：它是一种基于快照比较的变化数据捕获方式，在源表上增加一个时间戳字段，系统中更新修改表数据的时候，同时修改时间戳字段的值。当进行数据抽取时，通过比较系统时间与时间戳字段的值来决定抽取哪些数据。有的数据库的时间戳支持自动更新，即表的其它字段的数据发生改变时，自动更新时间戳字段的值。有的数据库不支持时间戳的自动更新，这就要求业务系统在更新业务数据时，手工更新时间戳字段。同触发器方式一样，时间戳方式的性能也比较好，数据抽取相对清楚简单，但对业务系统也有很大的倾入性（加入额外的时间戳字段），特别是对不支持时间戳的自动更新的数据库，还要求业务系统进行额外的更新时间戳操作。另外，无法捕获对时间戳以前数据的delete和update操作,在数据准确性上受到了一定的限制。</p>
+
+<p>c.全表比对：典型的全表比对的方式是采用MD5校验码。ETL工具事先为要抽取的表建立一个结构类似的MD5临时表，该临时表记录源表主键以及根据所有字段的数据计算出来的MD5校验码。每次进行数据抽取时，对源表和MD5临时表进行MD5校验码的比对，从而决定源表中的数据是新增、修改还是删除，同时更新MD5校验码。MD5方式的优点是对源系统的倾入性较小（仅需要建立一个MD5临时表），但缺点也是显而易见的，与触发器和时间戳方式中的主动通知不同，MD5方式是被动的进行全表数据的比对，性能较差。当表中没有主键或唯一列且含有重复记录时，MD5方式的准确性较差。</p>
+
+<p>d.日志对比：通过分析数据库自身的日志来判断变化的数据。</p>
+
+<p>此段转自：<a href="http://blog.csdn.net/superskk6/article/details/7410218">获取增量数据的几种方式</a></p>
+
+<h2 id="3-增量数据是怎么流到数据库里面的">3.增量数据是怎么流到数据库里面的？</h2>
+
+<h2 id="4-具体要怎么做才能获得增量数据-有什么例子吗">4.具体要怎么做才能获得增量数据？有什么例子吗？</h2>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01%E5%9F%BA%E7%A1%80/celery/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Celery</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/02-%E4%B8%AA%E4%BA%BA%E8%BF%AD%E4%BB%A3/02-%E4%B8%AA%E4%BA%BA/03-%E8%A1%8C%E4%B8%BA%E4%B9%A0%E6%83%AF/%E5%8F%8D%E6%80%9D/">
+            <span class="next-text nav-default">反思</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

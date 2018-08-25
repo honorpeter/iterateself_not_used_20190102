@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>支持向量机 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="支持向量机 TODO 后面的老师讲的代码没有看，要再看下，先把之前的SVM的知识在补充一下，而且，讲的代码是JS的，最好能找个Python的看下。 从S" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="支持向量机" />
+<meta property="og:description" content="支持向量机 TODO 后面的老师讲的代码没有看，要再看下，先把之前的SVM的知识在补充一下，而且，讲的代码是JS的，最好能找个Python的看下。 从S" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" /><meta property="article:published_time" content="2018-08-12T20:05:51&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:05:51&#43;00:00"/>
+<meta itemprop="name" content="支持向量机">
+<meta itemprop="description" content="支持向量机 TODO 后面的老师讲的代码没有看，要再看下，先把之前的SVM的知识在补充一下，而且，讲的代码是JS的，最好能找个Python的看下。 从S">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:05:51&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:05:51&#43;00:00" />
+<meta itemprop="wordCount" content="4296">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="支持向量机"/>
+<meta name="twitter:description" content="支持向量机 TODO 后面的老师讲的代码没有看，要再看下，先把之前的SVM的知识在补充一下，而且，讲的代码是JS的，最好能找个Python的看下。 从S"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">支持向量机</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 4296 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#支持向量机">支持向量机</a></li>
+<li><a href="#缘由">缘由</a></li>
+<li><a href="#先说一下svm的重点和思路">先说一下SVM的重点和思路</a></li>
+<li><a href="#为什么寻找最大间隔">为什么寻找最大间隔？</a>
+<ul>
+<li><a href="#最大间隔">最大间隔</a></li>
+<li><a href="#引入-核函数-解决线性不可分">引入&rdquo;核函数&rdquo;，解决线性不可分</a></li>
+</ul></li>
+<li><a href="#首先我们准备一些数学知识">首先我们准备一些数学知识：</a>
+<ul>
+<li><a href="#先定义一个平面">先定义一个平面：</a></li>
+<li><a href="#再看一下两个平行平面的距离">再看一下两个平行平面的距离：</a></li>
+</ul></li>
+<li><a href="#svm-对应线性可分的数据">SVM 对应线性可分的数据</a>
+<ul>
+<li><a href="#想对线性可分的数据进行分类">想对线性可分的数据进行分类</a></li>
+<li><a href="#首先想知道这个分割超平面大概是什么样子的">首先想知道这个分割超平面大概是什么样子的</a></li>
+<li><a href="#ok-开始计算最大间隔">OK，开始计算最大间隔</a></li>
+<li><a href="#ok-现在我们总结一下我们的目标和约束条件">OK，现在我们总结一下我们的目标和约束条件</a></li>
+<li><a href="#ok-怎么求解上面这个问题呢">OK，怎么求解上面这个问题呢？</a></li>
+<li><a href="#使用-lagrange-乘子法解决这个问题">使用 Lagrange 乘子法解决这个问题</a></li>
+</ul></li>
+<li><a href="#svm-对应线性不可分的数据">SVM 对应线性不可分的数据</a>
+<ul>
+<li><a href="#不是线性可分的时候怎么办呢">不是线性可分的时候怎么办呢？</a></li>
+<li><a href="#继续使用-lagrange-乘子法">继续使用 Lagrange 乘子法</a></li>
+</ul></li>
+<li><a href="#核函数">核函数</a>
+<ul>
+<li><a href="#什么是核函数">什么是核函数？</a></li>
+<li><a href="#可以通过核函数提升特征维度">可以通过核函数提升特征维度</a></li>
+<li><a href="#常用的核函数">常用的核函数：</a></li>
+<li><a href="#smo算法">SMO算法：</a></li>
+</ul></li>
+<li><a href="#我们再回头看一下之前的线性svm">我们再回头看一下之前的线性SVM</a>
+<ul>
+<li><a href="#损失函数和惩罚项">损失函数和惩罚项</a></li>
+<li><a href="#类似的还有">类似的还有：</a></li>
+</ul></li>
+<li><a href="#svm扩展">SVM扩展</a></li>
+<li><a href="#svm算法特点">SVM算法特点</a>
+<ul>
+<li><a href="#ref">REF：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="支持向量机">支持向量机</h1>
+
+<p>TODO</p>
+
+<ul>
+<li><strong>后面的老师讲的代码没有看，要再看下，先把之前的SVM的知识在补充一下，而且，讲的代码是JS的，最好能找个Python的看下。</strong></li>
+<li><strong>从SVM扩展来看还是由很多没有讲，而且代码的实现也没有讲</strong></li>
+</ul>
+
+<h1 id="缘由">缘由</h1>
+
+<p>对SVM进行总结。</p>
+
+<p>$W^T$ 即W的转置，读作：W transfer。</p>
+
+<p>s.t. 是subject to的所写，意思是：满足于如下条件</p>
+
+<h1 id="先说一下svm的重点和思路">先说一下SVM的重点和思路</h1>
+
+<p>SVM的最重要的两点内容：</p>
+
+<h1 id="为什么寻找最大间隔">为什么寻找最大间隔？</h1>
+
+<ol>
+<li>直觉上是安全的</li>
+<li>如果我们在边界的位置发生了一个小错误（它在垂直方向上被颠倒），这给我们最小的错误分类机会。</li>
+<li>CV（Computer Vision 计算机视觉 - 这缩写看着可怕）很容易，因为该模型对任何非支持向量数据点的去除是免疫的。什么叫是免疫的？</li>
+<li>有一些理论，这是一件好事。</li>
+<li>通常它的工作非常好。</li>
+</ol>
+
+<p>这里摘自地址：<a href="http://slideplayer.com/slide/8610144">http://slideplayer.com/slide/8610144</a> (第12条信息) 看看有没有更权威的解释</p>
+
+<h2 id="最大间隔">最大间隔</h2>
+
+<p>最大&rdquo;间隔&rdquo;的方法，寻找支撑向量。</p>
+
+<p>从hard margin 到 soft margin</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/A9J5c4d1K5.png?imageslim" alt="mark" /></p>
+
+<p>最大间隔是一种思路，使SVM具备不错的泛化能力的一种不错的思路。</p>
+
+<h2 id="引入-核函数-解决线性不可分">引入&rdquo;核函数&rdquo;，解决线性不可分</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2lHH7eC84c.png?imageslim" alt="mark" /></p>
+
+<p>然后就是要学习核技巧 kernel trick，以及怎么引入核函数，来使得从线性不可分到线性可分。</p>
+
+<h1 id="首先我们准备一些数学知识">首先我们准备一些数学知识：</h1>
+
+<h2 id="先定义一个平面">先定义一个平面：</h2>
+
+<p>(R^3) 空间里，一个平面可以由平面上一个点 (P_0) ，以及一个垂直平面的方向W向量确定</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hgBlibB9dg.png?imageslim" alt="mark" /></p>
+
+<p>任意取平面上一个点P，从原点到P，P_0，做两个向量x,x0，由于W垂直平面的关系可以得到如下定义：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8GdBJEk7lF.png?imageslim" alt="mark" /></p>
+
+<p>红框框出来的式子中，x 向量就是指的平面上的任意一点对应的向量。所以，这个平面可以用wx+b来表示。<strong>利害。没想到平面的公式还可以这么推出来。</strong></p>
+
+<h2 id="再看一下两个平行平面的距离">再看一下两个平行平面的距离：</h2>
+
+<p>在平面I上任意指定一个点x_1，我们按照w方向找到了x_2，x_2-x_1垂直于两个平面</p>
+
+<p>我们设定 x2-x1=tw，因为x2-x1方向就是w，不过长度需要重新计算，因此两个平面的距离为|tw|</p>
+
+<p>按下一页计算可以得到，使用b来表示的两个平面的距离公式</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fk2bbkl40b.png?imageslim" alt="mark" /></p>
+
+<p>那么这个tw怎么计算呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hiE6Fa41Fg.png?imageslim" alt="mark" /></p>
+
+<p><strong>利害，还是很清晰的，推到出来两个平行平面之间的距离。</strong></p>
+
+<p>即：已经知道，平面可以用Wx+b=0来表示，两个平行平面之间的距离计算可以用 W 和 b 来计算。</p>
+
+<p>我们之前 已经学习了凸优化，因此现在吧凸优化与这个结合起来。</p>
+
+<h1 id="svm-对应线性可分的数据">SVM 对应线性可分的数据</h1>
+
+<h2 id="想对线性可分的数据进行分类">想对线性可分的数据进行分类</h2>
+
+<p>线性可分的情况又叫做，hard-margin linear SVM。</p>
+
+<p>为了使我后面公式推导方便，我把我的正样本和负样本的 label 值设定为+1和-1，然后我想找一个距离我的正样本和负样本的距离最大的平面。</p>
+
+<p>注：这个+1和-1的设定是 SVM 里面所特有的。因为别的机器学习算法里面一般是0或1。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/22063k5g9G.png?imageslim" alt="mark" /></p>
+
+<p>那么我们怎么找到这条分割线呢？<strong>什么叫间隔最大？什么是正负样本之间的间隔？中心点距离？最近的两点间？</strong></p>
+
+<h2 id="首先想知道这个分割超平面大概是什么样子的">首先想知道这个分割超平面大概是什么样子的</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8539AihEg8.png?imageslim" alt="mark" /></p>
+
+<ol>
+<li><p>先固定w的方向，对正样本来说，可以找到一个平面 (wx+b<em>{+1}=0) ，并且满足所有样本都在线的一侧。同样对负样本也可以在相同的方向，找到另外一个平面 (wx+b</em>{-1}=0) 。</p></li>
+
+<li><p>将 (wx+b<em>{+1}=0)  和 (wx+b</em>{-1}=0)  式子左右两边同时乘以或除以某个数，使最终满足 (b<em>{+1}-b</em>{-1}=2)，此时可以取 (b=b<em>{+1}-b</em>{-1}-1) 。就得到图中的三个平面。</p></li>
+
+<li><p>中间的平面可以用来预测新数据。</p></li>
+</ol>
+
+<p>也就是说，只要W的方向是固定的，那么我一定能找到一个在这个方向上的 W，使得 (b<em>{+1}-b</em>{-1}=2) ，那么这个时候，如果 (b=b<em>{+1}-b</em>{-1}-1) ，那么这个 Wx+b=0 就是中间的分割超平面 hyperplane。</p>
+
+<h2 id="ok-开始计算最大间隔">OK，开始计算最大间隔</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Cceh6DH84A.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/je3kbhm03H.png?imageslim" alt="mark" /></p>
+
+<p>可以计算出这两个平行的超平面之间的距离。</p>
+
+<p>而我们想要的是什么呢？我们想要这个分割超平面能够尽可能的将样本分割开来，也就是想要最大化(\frac{2}{||w||})，同时也等价于最小化：(\frac{1}{2}||w||^2)，之所以写成平方是为了计算简单。</p>
+
+<h2 id="ok-现在我们总结一下我们的目标和约束条件">OK，现在我们总结一下我们的目标和约束条件</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j8mBgLhEGh.png?imageslim" alt="mark" />
+所以：</p>
+
+<ul>
+<li><p>最小化 (\frac{1}{2}||w||^2)</p></li>
+
+<li><p>约束条件：(y_i(w^Tx_i+b)≥1)</p></li>
+</ul>
+
+<p>之所以约束条件可以写成：(y_i(w^Tx_i+b)≥1)  是因为之前我们规定正样本是+1，负样本是-1。i 是样本的编号。</p>
+
+<h2 id="ok-怎么求解上面这个问题呢">OK，怎么求解上面这个问题呢？</h2>
+
+<p>我们第一个想到的当然是Lagrange乘子法。因为这个在含有约束条件的求极值问题上经常用到。</p>
+
+<p>但是呢，这其实也是一个二次凸优化问题，因此也可以直接使用 QP 软件求解 w 和 b 。但是，如果用二次规划解决的话有几个问题：<strong>什么是QP软件？怎么使用的？</strong></p>
+
+<ul>
+<li><p>当 x 的维度很大的时候，二次凸优化问题解起来不是很高效，</p></li>
+
+<li><p>如果只是这么求的话，那么没有办法引入我们后面说的核函数。那样SVM就只能解一些线性可分的问题了。</p></li>
+</ul>
+
+<p>因此，我们还是使用Lagrange乘子法。</p>
+
+<h2 id="使用-lagrange-乘子法解决这个问题">使用 Lagrange 乘子法解决这个问题</h2>
+
+<p>也即求对偶问题的方法。</p>
+
+<p>我们先构造拉格朗日乘子</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/BJ80G1eG9E.png?imageslim" alt="mark" /></p>
+
+<p>原问题是极小极大，对偶问题是极大极小：<strong>这个Lagrange方法还是要再熟悉一遍。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AFaB0L4Jba.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/14JAG3GIh2.png?imageslim" alt="mark" /></p>
+
+<p>对 L(w,b,a) 分别对 w，b求偏导，令其为0：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/C7aiaLjFBE.png?imageslim" alt="mark" /></p>
+
+<p>注意：这里的x是向量，y是标量，求出来的 w 还是一个向量 。对b求导得到了一个关于a的约束条件。</p>
+
+<p>有了这两个式子，我们可以化简之前的 Lagrange 函数：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DIeJbFfaAl.png?imageslim" alt="mark" /></p>
+
+<p><strong>嗯 还是很清楚的，但是一般不都是因为求偏导为0得到的方程带入到约束条件里面吗？为什么这个地方把它带入到 Lagrange 函数里面了？要明确下是不是经常带入到约束条件中？</strong></p>
+
+<p>OK，我们把我们的问题重新整理下：为什么这个时候开始求极大值了？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/C7CAJ5clgk.png?imageslim" alt="mark" /></p>
+
+<p>利害了，又可以转换成一个Lagrange函数，</p>
+
+<p>不过，我们先做一下总结，把问题重新定义一边：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HcbIkE9kk9.png?imageslim" alt="mark" /></p>
+
+<p>如果我们根据左边的目标和约束条件求出了(\alpha)，那么我们就可以求出w&rsquo;和b&rsquo;，（这个w&rsquo;就是之前的Lagrange函数的对w求偏导时候得到的w的满足的方程）。同时也就可以知道这个超平面的方程了。<strong>为什么(\alpha_j\neq 0)?</strong></p>
+
+<p>OK，重新理解下问题</p>
+
+<p>原问题是求解w，其维度和x是一致的，现在求解α，其维度和样本数目一致的，改变了求解问题的维度。<strong>这一点有什么好处吗？</strong></p>
+
+<p>观察最优化目标函数，包含样本x的计算只有点积的形式，方便我们引入核函数。核函数也只能在对偶问题形式下才能引入。<strong>为什么能方便引入核函数？通过核函数把样本的维度提高？怎么做到的？为什么扩展到高纬度，就有可能线性可分了？</strong></p>
+
+<p><strong>而且为什么到这里这个问题就解决完了？</strong></p>
+
+<h1 id="svm-对应线性不可分的数据">SVM 对应线性不可分的数据</h1>
+
+<h2 id="不是线性可分的时候怎么办呢">不是线性可分的时候怎么办呢？</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FfCKKGH3dg.png?imageslim" alt="mark" /></p>
+
+<p>当数据不是线性可分的时候，怎么做呢？</p>
+
+<p>在没办法完全可分的情况。我们可以允许过这条线一些。但是不能过太多，也就是所有分错的总和一定要小一些。这个C是人为指定的权重参数，但是是多少呢？</p>
+
+<p>我们可以引入松弛变量 ζ ，所以目标与约束变为：</p>
+
+<ul>
+<li><p>最小化(\frac{1}{2}\left | w \right |^2+C\sum_{i=1}^{n}\zeta_i)</p></li>
+
+<li><p>满足约束条件 (y_i(w^tx+b)≥1-ζ_i)，(ζ_i≥0)</p></li>
+</ul>
+
+<h2 id="继续使用-lagrange-乘子法">继续使用 Lagrange 乘子法</h2>
+
+<p>对偶问题形式：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7gD3c2jLc8.png?imageslim" alt="mark" /></p>
+
+<p>求解极大极小问题，首先求偏导w，b，ζ，并且带入L</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ie9la1el0f.png?imageslim" alt="mark" /></p>
+
+<p>带入后化简为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AGlC49Id6D.png?imageslim" alt="mark" /></p>
+
+<p>可见，这个与之前的线性可分的那个是一样，但是约束条件变了：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/36L5D2ALD1.png?imageslim" alt="mark" /></p>
+
+<p>我们只需要求解(\alpha_i)就可以。</p>
+
+<p>重新定义后如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jj5giFmkfm.png?imageslim" alt="mark" /></p>
+
+<p><strong>为什么到这个地方就没有了？最小化的这个式子怎么求的？</strong></p>
+
+<h1 id="核函数">核函数</h1>
+
+<h2 id="什么是核函数">什么是核函数？</h2>
+
+<p>在 Logistic 回归里面，有一种处理非线性的问题的方法：比如是有x1,x2两个特征，然后，我增加x1^2，x2^2，x1x2这三个维度，就提升了原来的数据的维度，由两维的提升为5维的，这样的方法就叫做维度提升函数。<strong>这个Logistic里面有讲到过吗？就是这样简单的添加几个维度就行吗？</strong></p>
+
+<p>对于SVM问题也应用这个维度提升函数，即使我们用维度提升函数，但是在计算我们最优化问题的时候还是只用到了我们维度提升函数的内积。所以，我可以先设计一个维度提升函数，但是只需要知道函数的内积就可以了 (k(x_i,x_j) = R^N×R^N-&gt;R) 。跳过微度提升函数，而直接求得函数内积的这样一个函数叫做核函数。<strong>？还是没明白？到底讲的什么？</strong></p>
+
+<p>如果要设计自己的核函数的时候，就要满足Mercer条件，否则无法使用QP来求解。<strong>什么是Mercer条件？为什么不满足这个条件就无法使用QP来求解？怎么设计自己的核函数？</strong></p>
+
+<p>将 (x_i^Tx_j) 计算替换为 (k(x_i,x_j)) ，点积也被称为线性核。</p>
+
+<h2 id="可以通过核函数提升特征维度">可以通过核函数提升特征维度</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0Dh5HKc2K9.png?imageslim" alt="mark" /></p>
+
+<p>提升维度，使得样本更加容易线性可分。当然并不是说一定线性可分。</p>
+
+<h2 id="常用的核函数">常用的核函数：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fCfeC1KmFg.png?imageslim" alt="mark" /></p>
+
+<p>第四个核函数，q很高的话，维度的提升就很大。</p>
+
+<p><strong>但是这些核函数到底使用那个呢？难道一个一个试出来？</strong></p>
+
+<p>在用了核函数之后，也可以使用标准低QP软件进行求解。<strong>为什么？</strong></p>
+
+<p>《机器学习实战》中说：最流行的核函数：径向基函数(radial basis function)，径向基函数的高斯版本，其具体的公式为： <strong>要确认下。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6bHlK4A0bC.png?imageslim" alt="mark" /></p>
+
+<p>特别的核函数，高斯核：<strong>还需要在了解下高斯核。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Hkh9C2aLG8.png?imageslim" alt="mark" /></p>
+
+<h2 id="smo算法">SMO算法：</h2>
+
+<p>除了使用标准的QP软件进行求解，还由一些更快速的解法。常用的就是这个SMO，它的思想就是在约束条件下选取一对(\alpha)。<strong>什么是SMO算法？</strong></p>
+
+<ul>
+<li><p>SMO用途：用于训练 SVM</p></li>
+
+<li><p>SMO目标：求出一系列 alpha 和 b,一旦求出 alpha，就很容易计算出权重向量 w 并得到分隔超平面。</p></li>
+
+<li><p>SMO思想：是将大优化问题分解为多个小优化问题来求解的。</p></li>
+
+<li><p>SMO原理：每次循环选择两个 alpha 进行优化处理，一旦找出一对合适的 alpha，那么就增大一个同时减少一个。</p>
+
+<ul>
+<li><p>这里指的合适必须要符合一定的条件</p>
+
+<ol>
+<li><p>这两个 alpha 必须要在间隔边界之外</p></li>
+
+<li><p>这两个 alpha 还没有进行过区间化处理或者不在边界上。</p></li>
+</ol></li>
+
+<li><p>之所以要同时改变2个 alpha；原因是我们有一个约束条件：(\sum_{i=1}^{m} a_i·label_i=0)；如果只是修改一个 alpha，很可能导致约束条件失效。</p></li>
+</ul></li>
+</ul>
+
+<p><strong>SMO也需要系统的总结</strong></p>
+
+<h1 id="我们再回头看一下之前的线性svm">我们再回头看一下之前的线性SVM</h1>
+
+<h2 id="损失函数和惩罚项">损失函数和惩罚项</h2>
+
+<p>不用核的线性SVM也是很常用的，因为最大间隔这个方式本身就已经由很好的泛化能力。因此，线性SVM在很多场合都是非常常用的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/je3eHdK0GI.png?imageslim" alt="mark" /></p>
+
+<p>没想到可以这么化，penalty是什么意思？为什么前面是hingeloss？因为大于0的时候，是有值的，小于0的时候就取0 了。<strong>厉害了</strong>，</p>
+
+<p>把前面的loss叫做合页损失，把后面的叫做惩罚项。<strong>为什么叫做惩罚项？</strong></p>
+
+<p>于是我们就可以把线性的SVM归类到一个损失函数和一个模型复杂度的惩罚项这样一个框架里面。<strong>厉害了。</strong></p>
+
+<h2 id="类似的还有">类似的还有：</h2>
+
+<p><strong>这些都要了解下。需要补充</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/gbbDlLEHLG.png?imageslim" alt="mark" /></p>
+
+<h1 id="svm扩展">SVM扩展</h1>
+
+<ul>
+<li>多问类的SVM算法</li>
+<li>SVR：支持向量回归问题</li>
+<li>基于SVM的Novelty detection</li>
+<li>支持向量聚类算法</li>
+<li>SVM分类的概率输出</li>
+</ul>
+
+<p><strong>怎么处理多分类？</strong></p>
+
+<p><strong>这个扩展项里面的都没有讲。要自己补充进来。都需要掌握。</strong></p>
+
+<h1 id="svm算法特点">SVM算法特点</h1>
+
+<p>优点：</p>
+
+<ul>
+<li>泛化（由具体的、个别的扩大为一般的，就是说：模型训练完后的新样本）错误率低，</li>
+<li>计算开销不大，</li>
+<li>结果易理解。</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>对参数调节和核函数的选择敏感，</li>
+<li>原始分类器不加修改仅适合于处理二分类问题。</li>
+</ul>
+
+<p>使用数据类型：
+* 数值型和标称型数据。</p>
+
+<h2 id="ref">REF：</h2>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/04-%E8%BD%AF%E9%97%B4%E9%9A%94%E4%B8%8E%E6%AD%A3%E5%88%99%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 软间隔与正则化</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/roc/">
+            <span class="next-text nav-default">ROC</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

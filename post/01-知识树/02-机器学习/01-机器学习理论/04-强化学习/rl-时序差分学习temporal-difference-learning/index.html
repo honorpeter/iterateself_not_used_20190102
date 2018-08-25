@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>RL 时序差分学习(Temporal-Difference Learning) - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="RL 时序差分学习(Temporal-Difference Learning) REF 强化学习读书笔记 - 06~07 - 时序差分学习(Temporal-Difference Learning) TODO aaa INTRODUCTION" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E5%AD%A6%E4%B9%A0temporal-difference-learning/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="RL 时序差分学习(Temporal-Difference Learning)" />
+<meta property="og:description" content="RL 时序差分学习(Temporal-Difference Learning) REF 强化学习读书笔记 - 06~07 - 时序差分学习(Temporal-Difference Learning) TODO aaa INTRODUCTION" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E5%AD%A6%E4%B9%A0temporal-difference-learning/" /><meta property="article:published_time" content="2018-08-12T20:24:58&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:24:58&#43;00:00"/>
+<meta itemprop="name" content="RL 时序差分学习(Temporal-Difference Learning)">
+<meta itemprop="description" content="RL 时序差分学习(Temporal-Difference Learning) REF 强化学习读书笔记 - 06~07 - 时序差分学习(Temporal-Difference Learning) TODO aaa INTRODUCTION">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:24:58&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:24:58&#43;00:00" />
+<meta itemprop="wordCount" content="2871">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RL 时序差分学习(Temporal-Difference Learning)"/>
+<meta name="twitter:description" content="RL 时序差分学习(Temporal-Difference Learning) REF 强化学习读书笔记 - 06~07 - 时序差分学习(Temporal-Difference Learning) TODO aaa INTRODUCTION"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">RL 时序差分学习(Temporal-Difference Learning)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 2871 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#rl-时序差分学习-temporal-difference-learning">RL 时序差分学习(Temporal-Difference Learning)</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+<li><a href="#强化学习读书笔记-06-07-时序差分学习-temporal-difference-learning-http-www-cnblogs-com-steven-yang-p-6516818-html"><a href="http://www.cnblogs.com/steven-yang/p/6516818.html">强化学习读书笔记 - 06~07 - 时序差分学习(Temporal-Difference Learning)</a></a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a>
+<ul>
+<li><a href="#时序差分学习简话">时序差分学习简话</a></li>
+<li><a href="#时序差分学习方法">时序差分学习方法</a></li>
+<li><a href="#策略状态价值-v-pi-的时序差分学习方法">策略状态价值(v_{\pi})的时序差分学习方法</a></li>
+<li><a href="#策略行动价值-q-pi-的on-policy时序差分学习方法-sarsa">策略行动价值(q_{\pi})的on-policy时序差分学习方法: Sarsa</a></li>
+<li><a href="#策略行动价值-q-pi-的off-policy时序差分学习方法-q-learning">策略行动价值(q_{\pi})的off-policy时序差分学习方法: Q-learning</a></li>
+<li><a href="#double-q-learning">Double Q-learning</a></li>
+<li><a href="#策略行动价值-q-pi-的off-policy时序差分学习方法-by-importance-sampling-sarsa">策略行动价值(q_{\pi})的off-policy时序差分学习方法(by importance sampling): Sarsa</a>
+<ul>
+<li><a href="#expected-sarsa">Expected Sarsa</a></li>
+</ul></li>
+<li><a href="#策略行动价值-q-pi-的off-policy时序差分学习方法-不带importance-sampling-tree-backup-algorithm">策略行动价值(q_{\pi})的off-policy时序差分学习方法(不带importance sampling): Tree Backup Algorithm</a></li>
+<li><a href="#策略行动价值-q-pi-的off-policy时序差分学习方法-q-sigma">策略行动价值(q_{\pi})的off-policy时序差分学习方法: (Q(\sigma))</a></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#参照">参照</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="rl-时序差分学习-temporal-difference-learning">RL 时序差分学习(Temporal-Difference Learning)</h1>
+
+<h2 id="ref">REF</h2>
+
+<h1 id="强化学习读书笔记-06-07-时序差分学习-temporal-difference-learning-http-www-cnblogs-com-steven-yang-p-6516818-html"><a href="http://www.cnblogs.com/steven-yang/p/6516818.html">强化学习读书笔记 - 06~07 - 时序差分学习(Temporal-Difference Learning)</a></h1>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p>学习笔记：</p>
+
+<p><a href="https://webdocs.cs.ualberta.ca/~sutton/book/">Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G. Barto c 2014, 2015, 2016</a></p>
+
+<p>数学符号看不懂的，先看看这里：</p>
+
+<ul>
+<li><a href="http://www.cnblogs.com/steven-yang/p/6481772.html">强化学习读书笔记 - 00 - 术语和数学符号</a></li>
+</ul>
+
+<h2 id="时序差分学习简话">时序差分学习简话</h2>
+
+<p>时序差分学习结合了动态规划和蒙特卡洛方法，是强化学习的核心思想。</p>
+
+<blockquote>
+
+>
+> 时序差分这个词不好理解。改为当时差分学习比较形象一些 - 表示通过当前的差分数据来学习。
+>
+>
+</blockquote>
+
+<p>蒙特卡洛的方法是模拟（或者经历）一段情节，在情节结束后，根据情节上各个状态的价值，来估计状态价值。</p>
+
+<p>时序差分学习是模拟（或者经历）一段情节，每行动一步（或者几步），根据新状态的价值，然后估计执行前的状态价值。</p>
+
+<p>可以认为蒙特卡洛的方法是最大步数的时序差分学习。</p>
+
+<p>本章只考虑单步的时序差分学习。多步的时序差分学习在下一章讲解。</p>
+
+<p><strong>数学表示</strong></p>
+
+<p>根据我们已经知道的知识：如果可以计算出策略价值（(\pi)状态价值(v<em>{\pi}(s))，或者行动价值(q</em>{\pi(s, a)})），就可以优化策略。</p>
+
+<p>在蒙特卡洛方法中，计算策略的价值，需要完成一个情节(episode)，通过情节的目标价值(G_t)来计算状态的价值。其公式：</p>
+
+<p><em>Formula MonteCarlo</em></p>
+
+<p>[
+V(S_t) \gets V(S_t) + \alpha \delta_t <br />
+\delta_t = [G_t - V(S_t)] <br />
+where <br />
+\delta_t \text{ - Monte Carlo error} <br />
+\alpha \text{ - learning step size}
+]</p>
+
+<p>时序差分的思想是通过下一个状态的价值计算状态的价值，形成一个迭代公式（又）：</p>
+
+<p><em>Formula TD(0)</em></p>
+
+<p>[
+V(S_t) \gets V(S_t) + \alpha \delta_t <br />
+\delta<em>t = [R</em>{t+1} + \gamma\ V(S_{t+1} - V(S_t)] <br />
+where <br />
+\delta_t \text{ - TD error} <br />
+\alpha \text{ - learning step size} <br />
+\gamma \text{ - reward discount rate}
+]</p>
+
+<blockquote>
+
+>
+> 注：书上提出TD error并不精确，而Monte Carlo error是精确地。需要了解，在此并不拗述。
+>
+>
+</blockquote>
+
+<h2 id="时序差分学习方法">时序差分学习方法</h2>
+
+<p>本章介绍的是时序差分学习的单步学习方法。多步学习方法在下一章介绍。</p>
+
+<ul>
+<li><p>策略状态价值(v_{\pi})的时序差分学习方法(单步\多步)</p></li>
+
+<li><p>策略行动价值(q_{\pi})的on-policy时序差分学习方法: Sarsa(单步\多步)</p></li>
+
+<li><p>策略行动价值(q_{\pi})的off-policy时序差分学习方法: Q-learning(单步)</p></li>
+
+<li><p>Double Q-learning(单步)</p></li>
+
+<li><p>策略行动价值(q_{\pi})的off-policy时序差分学习方法(带importance sampling): Sarsa(多步)</p></li>
+
+<li><p>策略行动价值(q_{\pi})的off-policy时序差分学习方法(不带importance sampling): Tree Backup Algorithm(多步)</p></li>
+
+<li><p>策略行动价值(q_{\pi})的off-policy时序差分学习方法: (Q(\sigma))(多步)</p></li>
+</ul>
+
+<h2 id="策略状态价值-v-pi-的时序差分学习方法">策略状态价值(v_{\pi})的时序差分学习方法</h2>
+
+<p><strong>单步时序差分学习方法TD(0)</strong></p>
+
+<ul>
+<li>流程图</li>
+</ul>
+
+<p>Reinforcement Learning - TD0Reinforcement Learning - TD0sSs_1S&rsquo;s-&gt;s_1 A  RvV(S)s-&gt;vv_1V(S&rsquo;)s_1-&gt;v_1v-&gt;v_1R</p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Initialize \(V(s)\) arbitrarily \(\forall s \in \mathcal{S}^+\)
+
+Repeat (for each episode):
+
+  Initialize \(\mathcal{S}\)
+
+  Repeat (for each step of episode):
+
+   \(A \gets\) action given by \(\pi\) for \(S\)
+
+   Take action \(A\), observe \(R, S'\)
+
+   \(V(S) \gets V(S) + \alpha [R + \gamma V(S') - V(S)]\)
+
+   \(S \gets S'\)
+
+  Until S is terminal
+>
+>
+</blockquote>
+
+<p><strong>多步时序差分学习方法</strong></p>
+
+<ul>
+<li>流程图</li>
+</ul>
+
+<p>Reinforcement Learning - TD nReinforcement Learning - TD nsSs_1&hellip;s-&gt;s_1 A0  RkvV(S)s-&gt;vs_2Sns_1-&gt;s_2 An-1  Rnv_1V(&hellip;)s_1-&gt;v_1v_2V(Sn)s_2-&gt;v_2v-&gt;v_1Rkv_1-&gt;v_2Rn</p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Input: the policy \(\pi\) to be evaluated
+
+Initialize \(V(s)\) arbitrarily \(\forall s \in \mathcal{S}\)
+
+Parameters: step size \(\alpha \in (0, 1]\), a positive integer \(n\)
+
+All store and access operations (for \(S_t\) and \(R_t\)) can take their index mod \(n\)
+>
+>
+
+>
+> Repeat (for each episode):
+
+  Initialize and store \(S_0 \ne terminal\)
+
+  \(T \gets \infty\)
+
+  For \(t = 0,1,2,\cdots\):
+
+   If \(t < T\), then:
+
+    Take an action according to \(\pi(\dot \ | S_t)\)
+
+    Observe and store the next reward as \(R_{t+1}\) and the next state as \(S_{t+1}\)
+
+    If \(S_{t+1}\) is terminal, then \(T \gets t+1\)
+
+   \(\tau \gets t - n + 1 \ \) (\(\tau\) is the time whose state's estimate is being updated)
+
+   If \(\tau \ge 0\):
+
+    \(G \gets \sum_{i = \tau + 1}^{min(\tau + n, T)} \gamma^{i-\tau-1}R_i\)
+
+    if \(\tau + n \le T\) then: \(G \gets G + \gamma^{n}V(S_{\tau + n}) \qquad \qquad (G_{\tau}^{(n)})\)
+
+    \(V(S_{\tau}) \gets V(S_{\tau}) + \alpha [G - V(S_{\tau})]\)
+
+  Until \(\tau = T - 1\)
+>
+>
+</blockquote>
+
+<p>这里要理解(V(S_0))是由(V(S_0), V(S_1), \dots, V(S_n))计算所得；(V(S_1))是由(V(S_1), V(S<em>1), \dots, V(S</em>{n+1}))。</p>
+
+<h2 id="策略行动价值-q-pi-的on-policy时序差分学习方法-sarsa">策略行动价值(q_{\pi})的on-policy时序差分学习方法: Sarsa</h2>
+
+<p><strong>单步时序差分学习方法</strong></p>
+
+<ul>
+<li>流程图</li>
+</ul>
+
+<p>Reinforcement Learning - TD SarsaReinforcement Learning - TD SarsasSs_1S&rsquo;s-&gt;s_1 A  RqQ(S, A)s-&gt;qq_1Q(S&rsquo;, A&rsquo;)s_1-&gt;q_1q-&gt;q_1R</p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Initialize \(Q(s, a), \forall s \in \mathcal{S}, a \in \mathcal{A}(s)\) arbitrarily, and \(Q(terminal, \dot \ ) = 0\)
+
+Repeat (for each episode):
+
+  Initialize \(\mathcal{S}\)
+
+  Choose \(A\) from \(S\) using policy derived from \(Q\) (e.g. \(\epsilon-greedy\))
+
+  Repeat (for each step of episode):
+
+   Take action \(A\), observe \(R, S'\)
+
+   Choose \(A'\) from \(S'\) using policy derived from \(Q\) (e.g. \(\epsilon-greedy\))
+
+   \(Q(S, A) \gets Q(S, A) + \alpha [R + \gamma Q(S', A') - Q(S, A)]\)
+
+   \(S \gets S'; A \gets A';\)
+
+  Until S is terminal
+>
+>
+</blockquote>
+
+<p><strong>多步时序差分学习方法</strong></p>
+
+<ul>
+<li>流程图</li>
+</ul>
+
+<p>Reinforcement Learning - TD SarsaReinforcement Learning - TD SarsasSs_1&hellip;s-&gt;s_1 A  RkqQ(S, A)s-&gt;qs_2Sns_1-&gt;s_2An-1Rnq_1Q(&hellip;)s_1-&gt;q_1q_2Q(Sn, An)s_2-&gt;q_2q-&gt;q_1Rkq_1-&gt;q_2Rn</p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Initialize \(Q(s, a)\) arbitrarily \(\forall s \in \mathcal{S}^, \forall a in \mathcal{A}\)
+
+Initialize \(\pi\) to be \(\epsilon\)-greedy with respect to Q, or to a fixed given policy
+
+Parameters: step size \(\alpha \in (0, 1]\),
+
+  small \(\epsilon > 0\)
+
+  a positive integer \(n\)
+
+All store and access operations (for \(S_t\) and \(R_t\)) can take their index mod \(n\)
+>
+>
+
+>
+> Repeat (for each episode):
+
+  Initialize and store \(S_0 \ne terminal\)
+
+  Select and store an action \(A_0 \sim \pi(\dot \ | S_0)\)
+
+  \(T \gets \infty\)
+
+  For \(t = 0,1,2,\cdots\):
+
+   If \(t < T\), then:
+
+    Take an action \(A_t\)
+
+    Observe and store the next reward as \(R_{t+1}\) and the next state as \(S_{t+1}\)
+
+    If \(S_{t+1}\) is terminal, then:
+
+     \(T \gets t+1\)
+
+    Else:
+
+     Select and store an action \(A_{t+1} \sim \pi(\dot \ | S_{t+1})\)
+
+   \(\tau \gets t - n + 1 \ \) (\(\tau\) is the time whose state's estimate is being updated)
+
+   If \(\tau \ge 0\):
+
+    \(G \gets \sum_{i = \tau + 1}^{min(\tau + n, T)} \gamma^{i-\tau-1}R_i\)
+
+    if \(\tau + n \le T\) then: \(G \gets G + \gamma^{n} Q(S_{\tau + n}, A_{\tau + n}) \qquad \qquad (G_{\tau}^{(n)})\)
+
+    \(Q(S_{\tau}, A_{\tau}) \gets Q(S_{\tau}, A_{\tau}) + \alpha [G - Q(S_{\tau}, A_{\tau})]\)
+
+    If {\pi} is being learned, then ensure that \(\pi(\dot \ | S_{\tau})\) is \(\epsilon\)-greedy wrt Q
+
+  Until \(\tau = T - 1\)
+>
+>
+</blockquote>
+
+<h2 id="策略行动价值-q-pi-的off-policy时序差分学习方法-q-learning">策略行动价值(q_{\pi})的off-policy时序差分学习方法: Q-learning</h2>
+
+<p>Q-learning 算法（Watkins, 1989）是一个突破性的算法。这里利用了这个公式进行off-policy学习。</p>
+
+<p>[
+Q(S_t, A_t) \gets Q(S_t, A<em>t) + \alpha [R</em>{t+1} + \gamma \underset{a}{max} \ Q(S_{t+1}, a) - Q(S_t, A_t)]
+]</p>
+
+<p><strong>单步时序差分学习方法</strong></p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Initialize \(Q(s, a), \forall s \in \mathcal{S}, a \in \mathcal{A}(s)\) arbitrarily, and \(Q(terminal, \dot \ ) = 0\)
+
+Repeat (for each episode):
+
+  Initialize \(\mathcal{S}\)
+
+  Choose \(A\) from \(S\) using policy derived from \(Q\) (e.g. \(\epsilon-greedy\))
+
+  Repeat (for each step of episode):
+
+   Take action \(A\), observe \(R, S'\)
+
+   \(Q(S, A) \gets Q(S, A) + \alpha [R + \gamma \underset{a}{max} \ Q(S‘, a) - Q(S, A)]\)
+
+   \(S \gets S';\)
+
+  Until S is terminal
+>
+>
+</blockquote>
+
+<ul>
+<li>Q-learning使用了max，会引起一个最大化偏差(Maximization Bias)问题。</li>
+</ul>
+
+<p>具体说明，请看书上的Example <strong>6.</strong>7。**</p>
+
+<p>使用Double Q-learning可以消除这个问题。</p>
+
+<h2 id="double-q-learning">Double Q-learning</h2>
+
+<p><strong>单步时序差分学习方法</strong></p>
+
+<blockquote>
+
+>
+> Initialize \(Q_1(s, a)\) and \(Q_2(s, a), \forall s \in \mathcal{S}, a \in \mathcal{A}(s)\) arbitrarily
+
+Initialize \(Q_1(terminal, \dot \ ) = Q_2(terminal, \dot \ ) = 0\)
+
+Repeat (for each episode):
+
+  Initialize \(\mathcal{S}\)
+
+  Repeat (for each step of episode):
+
+   Choose \(A\) from \(S\) using policy derived from \(Q_1\) and \(Q_2\) (e.g. \(\epsilon-greedy\))
+
+   Take action \(A\), observe \(R, S'\)
+
+   With 0.5 probability:
+
+    \(Q_1(S, A) \gets Q_1(S, A) + \alpha [R + \gamma Q_2(S', \underset{a}{argmax} \ Q_1(S', a)) - Q_1(S, A)]\)
+
+   Else:
+
+    \(Q_2(S, A) \gets Q_2(S, A) + \alpha [R + \gamma Q_1(S', \underset{a}{argmax} \ Q_2(S', a)) - Q_2(S, A)]\)
+
+   \(S \gets S';\)
+
+  Until S is terminal
+>
+>
+</blockquote>
+
+<h2 id="策略行动价值-q-pi-的off-policy时序差分学习方法-by-importance-sampling-sarsa">策略行动价值(q_{\pi})的off-policy时序差分学习方法(by importance sampling): Sarsa</h2>
+
+<p>考虑到重要样本，把(\rho)带入到Sarsa算法中，形成一个off-policy的方法。</p>
+
+<p>(\rho) - 重要样本比率(importance sampling ratio)</p>
+
+<p>[
+\rho \gets \prod_{i = \tau + 1}^{min(\tau + n - 1, T -1 )} \frac{\pi(A_t|S_t)}{\mu(A_t|S<em>t)} \qquad \qquad (\rho</em>{\tau+n}^{(\tau+1)})
+]</p>
+
+<p><strong>多步时序差分学习方法</strong></p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Input: behavior policy \mu such that \(\mu(a|s) > 0，\forall s \in \mathcal{S}, a \in \mathcal{A}\)
+
+Initialize \(Q(s，a)\) arbitrarily \(\forall s \in \mathcal{S}^, \forall a in \mathcal{A}\)
+
+Initialize \(\pi\) to be \(\epsilon\)-greedy with respect to Q, or to a fixed given policy
+
+Parameters: step size \(\alpha \in (0, 1]\),
+
+  small \(\epsilon > 0\)
+
+  a positive integer \(n\)
+
+All store and access operations (for \(S_t\) and \(R_t\)) can take their index mod \(n\)
+>
+>
+
+>
+> Repeat (for each episode):
+
+  Initialize and store \(S_0 \ne terminal\)
+
+  Select and store an action \(A_0 \sim \mu(\dot \ | S_0)\)
+
+  \(T \gets \infty\)
+
+  For \(t = 0,1,2,\cdots\):
+
+   If \(t < T\), then:
+
+    Take an action \(A_t\)
+
+    Observe and store the next reward as \(R_{t+1}\) and the next state as \(S_{t+1}\)
+
+    If \(S_{t+1}\) is terminal, then:
+
+     \(T \gets t+1\)
+
+    Else:
+
+     Select and store an action \(A_{t+1} \sim \pi(\dot \ | S_{t+1})\)
+
+   \(\tau \gets t - n + 1 \ \) (\(\tau\) is the time whose state's estimate is being updated)
+
+   If \(\tau \ge 0\):
+
+    \(\rho \gets \prod_{i = \tau + 1}^{min(\tau + n - 1, T -1 )} \frac{\pi(A_t|S_t)}{\mu(A_t|S_t)} \qquad \qquad (\rho_{\tau+n}^{(\tau+1)})\)
+
+    \(G \gets \sum_{i = \tau + 1}^{min(\tau + n, T)} \gamma^{i-\tau-1}R_i\)
+
+    if \(\tau + n \le T\) then: \(G \gets G + \gamma^{n} Q(S_{\tau + n}, A_{\tau + n}) \qquad \qquad (G_{\tau}^{(n)})\)
+
+    \(Q(S_{\tau}, A_{\tau}) \gets Q(S_{\tau}, A_{\tau}) + \alpha \rho [G - Q(S_{\tau}, A_{\tau})]\)
+
+    If {\pi} is being learned, then ensure that \(\pi(\dot \ | S_{\tau})\) is \(\epsilon\)-greedy wrt Q
+
+  Until \(\tau = T - 1\)
+>
+>
+</blockquote>
+
+<h3 id="expected-sarsa">Expected Sarsa</h3>
+
+<ul>
+<li>流程图</li>
+</ul>
+
+<p>Reinforcement Learning - TD Expected SarsaReinforcement Learning - TD Expected SarsasSs_1&hellip;s-&gt;s_1 A  RkqQ(S, A)s-&gt;qs_2Sns_1-&gt;s_2An-1Rnq_1Q(&hellip;)s_1-&gt;q_1q_2sum(pi(a|Sn) * Q(Sn, a))s_2-&gt;q_2q-&gt;q_1Rkq_1-&gt;q_2Rn</p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<p>略。</p>
+
+<h2 id="策略行动价值-q-pi-的off-policy时序差分学习方法-不带importance-sampling-tree-backup-algorithm">策略行动价值(q_{\pi})的off-policy时序差分学习方法(不带importance sampling): Tree Backup Algorithm</h2>
+
+<p>Tree Backup Algorithm的思想是每步都求行动价值的期望值。</p>
+
+<p>求行动价值的期望值意味着对所有可能的行动(a)都评估一次。</p>
+
+<p><strong>多步时序差分学习方法</strong></p>
+
+<ul>
+<li>流程图</li>
+</ul>
+
+<p>Reinforcement Learning - TD Tree BackupReinforcement Learning - TD Tree BackupsSs_1&hellip;s-&gt;s_1 A  RkqQ(S, A)s-&gt;qs_2Sns_1-&gt;s_2An-1Rnq_1sum(pi(a|&hellip;) * Q(&hellip;, a))s_1-&gt;q_1q_2sum(pi(a|Sn) * Q(Sn, a))s_2-&gt;q_2q-&gt;q_1Rkq_1-&gt;q_2Rn</p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Initialize \(Q(s，a)\) arbitrarily \(\forall s \in \mathcal{S}^, \forall a in \mathcal{A}\)
+
+Initialize \(\pi\) to be \(\epsilon\)-greedy with respect to Q, or to a fixed given policy
+
+Parameters: step size \(\alpha \in (0, 1]\),
+
+  small \(\epsilon > 0\)
+
+  a positive integer \(n\)
+
+All store and access operations (for \(S_t\) and \(R_t\)) can take their index mod \(n\)
+>
+>
+
+>
+> Repeat (for each episode):
+
+  Initialize and store \(S_0 \ne terminal\)
+
+  Select and store an action \(A_0 \sim \pi(\dot \ | S_0)\)
+
+  \(Q_0 \gets Q(S_0, A_0)\)
+
+  \(T \gets \infty\)
+
+  For \(t = 0,1,2,\cdots\):
+
+   If \(t < T\), then:
+
+    Take an action \(A_t\)
+
+    Observe and store the next reward as \(R_{t+1}\) and the next state as \(S_{t+1}\)
+
+    If \(S_{t+1}\) is terminal, then:
+
+     \(T \gets t+1\)
+
+     \(\delta_t \gets R - Q_t\)
+
+    Else:
+
+     \(\delta_t \gets R + \gamma \sum_a \pi(a|S_{t+1})Q(S_{t+1},a) - Q_t\)
+
+     Select arbitrarily and store an action as \(A_{t+1}\)
+
+     \(Q_{t+1} \gets Q(S_{t+1},A_{t+1})\)
+
+     \(\pi_{t+1} \gets \pi(S_{t+1},A_{t+1})\)
+
+   \(\tau \gets t - n + 1 \ \) (\(\tau\) is the time whose state's estimate is being updated)
+
+   If \(\tau \ge 0\):
+
+    \(E \gets 1\)
+
+    \(G \gets Q_{\tau}\)
+
+    For \(k=\tau, \dots, min(\tau + n - 1, T - 1):\)
+
+     \(G \gets\ G + E \delta_k\)
+
+     \(E \gets\ \gamma E \pi_{k+1}\)
+
+    \(Q(S_{\tau}, A_{\tau}) \gets Q(S_{\tau}, A_{\tau}) + \alpha [G - Q(S_{\tau}, A_{\tau})]\)
+
+    If {\pi} is being learned, then ensure that \(\pi(a | S_{\tau})\) is \(\epsilon\)-greedy wrt \(Q(S_{\tau},\dot \ )\)
+
+  Until \(\tau = T - 1\)
+>
+>
+</blockquote>
+
+<h2 id="策略行动价值-q-pi-的off-policy时序差分学习方法-q-sigma">策略行动价值(q_{\pi})的off-policy时序差分学习方法: (Q(\sigma))</h2>
+
+<p>(Q(\sigma))结合了Sarsa(importance sampling), Expected Sarsa, Tree Backup算法，并考虑了重要样本。</p>
+
+<p>当(\sigma = 1)时，使用了重要样本的Sarsa算法。</p>
+
+<p>当(\sigma = 0)时，使用了Tree Backup的行动期望值算法。</p>
+
+<p><strong>多步时序差分学习方法</strong></p>
+
+<ul>
+<li>流程图</li>
+</ul>
+
+<p>Reinforcement Learning - TD Q(sigma)Reinforcement Learning - TD Q(sigma)sSs_1&hellip;s-&gt;s_1 A  R.qQ(S, A)s-&gt;qs_2&hellip;s_1-&gt;s_2A.R.q_1Q(&hellip;)s_1-&gt;q_1sigma = 1s_3&hellip;s_2-&gt;s_3A.R.q_2sum(pi(a|&hellip;) * Q(&hellip;,a))s_2-&gt;q_2sigma = 0s_4Sns_3-&gt;s_4An-1Rnq_3Q(&hellip;)s_3-&gt;q_3sigma = 1q_4sum(pi(a|Sn) * Q(Sn,a))s_4-&gt;q_4sigma = 0q-&gt;q_1R.q_1-&gt;q_2R.q_2-&gt;q_3R.q_3-&gt;q_4Rn</p>
+
+<ul>
+<li>算法描述</li>
+</ul>
+
+<blockquote>
+
+>
+> Input: behavior policy \mu such that \(\mu(a|s) > 0，\forall s \in \mathcal{S}, a \in \mathcal{A}\)
+
+Initialize \(Q(s，a)\) arbitrarily \forall s \in \mathcal{S}^, \forall a in \mathcal{A}$
+
+Initialize \(\pi\) to be \(\epsilon\)-greedy with respect to Q, or to a fixed given policy
+
+Parameters: step size \(\alpha \in (0, 1]\),
+
+  small \(\epsilon > 0\)
+
+  a positive integer \(n\)
+
+All store and access operations (for \(S_t\) and \(R_t\)) can take their index mod \(n\)
+>
+>
+
+>
+> Repeat (for each episode):
+
+  Initialize and store \(S_0 \ne terminal\)
+
+  Select and store an action \(A_0 \sim \mu(\dot \ | S_0)\)
+
+  \(Q_0 \gets Q(S_0, A_0)\)
+
+  \(T \gets \infty\)
+
+  For \(t = 0,1,2,\cdots\):
+
+   If \(t < T\), then:
+
+    Take an action \(A_t\)
+
+    Observe and store the next reward as \(R_{t+1}\) and the next state as \(S_{t+1}\)
+
+    If \(S_{t+1}\) is terminal, then:
+
+     \(T \gets t+1\)
+
+     \(\delta_t \gets R - Q_t\)
+
+    Else:
+
+     Select and store an action as \(A_{t+1} \sim \mu(\dot \ |S_{t+1})\)
+
+     Select and store \(\sigma_{t+1})\)
+
+     \(Q_{t+1} \gets Q(S_{t+1},A_{t+1})\)
+
+     \(\delta_t \gets R + \gamma \sigma_{t+1} Q_{t+1} + \gamma (1 - \sigma_{t+1})\sum_a \pi(a|S_{t+1})Q(S_{t+1},a) - Q_t\)
+
+     \(\pi_{t+1} \gets \pi(S_{t+1},A_{t+1})\)
+
+     \(\rho_{t+1} \gets \frac{\pi(A_{t+1}|S_{t+1})}{\mu(A_{t+1}|S_{t+1})}\)
+
+   \(\tau \gets t - n + 1 \ \) (\(\tau\) is the time whose state's estimate is being updated)
+
+   If \(\tau \ge 0\):
+
+    \(\rho \gets 1\)
+
+    \(E \gets 1\)
+
+    \(G \gets Q_{\tau}\)
+
+    For \(k=\tau, \dots, min(\tau + n - 1, T - 1):\)
+
+     \(G \gets\ G + E \delta_k\)
+
+     \(E \gets\ \gamma E [(1 - \sigma_{k+1})\pi_{k+1} + \sigma_{k+1}]\)
+
+     \(\rho \gets\ \rho(1 - \sigma_{k} + \sigma_{k}\tau_{k})\)
+
+    \(Q(S_{\tau}, A_{\tau}) \gets Q(S_{\tau}, A_{\tau}) + \alpha \rho [G - Q(S_{\tau}, A_{\tau})]\)
+
+    If \({\pi}\) is being learned, then ensure that \(\pi(a | S_{\tau})\) is \(\epsilon\)-greedy wrt \(Q(S_{\tau},\dot \ )\)
+
+  Until \(\tau = T - 1\)
+>
+>
+</blockquote>
+
+<h2 id="总结">总结</h2>
+
+<p>时序差分学习方法的限制：学习步数内，可获得奖赏信息。</p>
+
+<p>比如，国际象棋的每一步，是否可以计算出一个奖赏信息？如果使用蒙特卡洛方法，模拟到游戏结束，肯定是可以获得一个奖赏结果的。</p>
+
+<h2 id="参照">参照</h2>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">深度学习网络训练</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%BF%83%E7%90%86%E5%AD%A6/">
+            <span class="next-text nav-default">RL 心理学</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

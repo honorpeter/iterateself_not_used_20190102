@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ai概率统计(4)-期望 方差 协方差 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-04-06 00:04:49&#43;00:00 layout: post link: http://106.15.37.116/2018/04/06/ai-probability-statistics-expected-variance-covariance/ slug: ai-probability-statistics-expected-variance-covariance title: ai概率统计(4)-期望 方差 协方差 wordpress_id: 3414 categories: - 随想与反思 tags: - &amp;lsquo;@todo&amp;rsquo; - &amp;lsquo;@want_to_know&amp;rsquo; [mathjax] 缘由： 对期望，方差，协方差进行总结。 期望： 期望的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/ai%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A14-%E6%9C%9F%E6%9C%9B-%E6%96%B9%E5%B7%AE-%E5%8D%8F%E6%96%B9%E5%B7%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="ai概率统计(4)-期望 方差 协方差" />
+<meta property="og:description" content="author: evo comments: true date: 2018-04-06 00:04:49&#43;00:00 layout: post link: http://106.15.37.116/2018/04/06/ai-probability-statistics-expected-variance-covariance/ slug: ai-probability-statistics-expected-variance-covariance title: ai概率统计(4)-期望 方差 协方差 wordpress_id: 3414 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] 缘由： 对期望，方差，协方差进行总结。 期望： 期望的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/ai%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A14-%E6%9C%9F%E6%9C%9B-%E6%96%B9%E5%B7%AE-%E5%8D%8F%E6%96%B9%E5%B7%AE/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="ai概率统计(4)-期望 方差 协方差">
+<meta itemprop="description" content="author: evo comments: true date: 2018-04-06 00:04:49&#43;00:00 layout: post link: http://106.15.37.116/2018/04/06/ai-probability-statistics-expected-variance-covariance/ slug: ai-probability-statistics-expected-variance-covariance title: ai概率统计(4)-期望 方差 协方差 wordpress_id: 3414 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] 缘由： 对期望，方差，协方差进行总结。 期望： 期望的">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="1673">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ai概率统计(4)-期望 方差 协方差"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-04-06 00:04:49&#43;00:00 layout: post link: http://106.15.37.116/2018/04/06/ai-probability-statistics-expected-variance-covariance/ slug: ai-probability-statistics-expected-variance-covariance title: ai概率统计(4)-期望 方差 协方差 wordpress_id: 3414 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - &lsquo;@want_to_know&rsquo; [mathjax] 缘由： 对期望，方差，协方差进行总结。 期望： 期望的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">ai概率统计(4)-期望 方差 协方差</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 1673 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#want-to-know">- &lsquo;@want_to_know&rsquo;</a></li>
+</ul></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#期望">期望：</a>
+<ul>
+<li><a href="#期望的概念">期望的概念：</a></li>
+<li><a href="#期望的性质">期望的性质：</a></li>
+<li><a href="#一道题目">一道题目：</a></li>
+</ul></li>
+<li><a href="#2-方差">2.方差</a></li>
+<li><a href="#3-协方差">3.协方差</a>
+<ul>
+<li><a href="#协方差的定义与性质">协方差的定义与性质</a></li>
+<li><a href="#协方差和独立-不相关">协方差和独立、不相关</a></li>
+<li><a href="#协方差的意义">协方差的意义：</a></li>
+<li><a href="#协方差的上界">协方差的上界</a></li>
+<li><a href="#再谈独立与不相关">再谈独立与不相关</a></li>
+<li><a href="#相关系数">相关系数：</a></li>
+<li><a href="#协方差矩阵">协方差矩阵</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+<li><a href="#ref">REF：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-04-06 00:04:49+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/04/06/ai-probability-statistics-expected-variance-covariance/">http://106.15.37.116/2018/04/06/ai-probability-statistics-expected-variance-covariance/</a>
+slug: ai-probability-statistics-expected-variance-covariance
+title: ai概率统计(4)-期望 方差 协方差
+wordpress_id: 3414
+categories:
+- 随想与反思
+tags:
+- &lsquo;@todo&rsquo;</p>
+
+<h2 id="want-to-know">- &lsquo;@want_to_know&rsquo;</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对期望，方差，协方差进行总结。</p>
+
+<h1 id="期望">期望：</h1>
+
+<h2 id="期望的概念">期望的概念：</h2>
+
+<ul>
+<li><p>离散值：(E(x)=\sum_{i} x_ip_i)</p></li>
+
+<li><p>连续型：(E(X)=\int_{-\infty}^{\infty}xf(x)dx)</p></li>
+</ul>
+
+<p>即：概率加权下的&rdquo;平均值&rdquo;。E 即 expection</p>
+
+<h2 id="期望的性质">期望的性质：</h2>
+
+<p>无条件成立：</p>
+
+<ul>
+<li><p>(E(kX)=kE(x))</p></li>
+
+<li><p>(E(X+Y)=E(x)+E(Y)) 注意，这个是无条件成立的，没有独立或者不相关的要求。</p></li>
+</ul>
+
+<p>若X和Y相互 <strong>独立</strong>：</p>
+
+<ul>
+<li>(E(XY)=E(X)E(Y)) <strong>一直没明白XY的乘积是什么？是对应点进行乘积吗？乘积的期望是什么？</strong></li>
+</ul>
+
+<p>反之不成立，实际上如果(E(XY)=E(X)E(Y))，只能说明X和Y不相关</p>
+
+<p><strong>不相关与独立的区别是什么？非常想知道？</strong></p>
+
+<h2 id="一道题目">一道题目：</h2>
+
+<p>从1,2,3,&hellip;&hellip;,98,99,2015这100个数中任意选择若干个数(可能为0个数)求异或，试求异或的期望值。</p>
+
+<p>解答：</p>
+
+<p>首先，对于任何一个二进制位：取奇数个1异或后会得到1，取偶数个1异或后会得到0，可见异或值与取0的个数无关，只与1的个数有关。</p>
+
+<p>给定的最大数(2015=(11111011111)_2) ，共11位</p>
+
+<p>针对每一位分别计算，考虑第 i 位(X_i)，假定给定的100个数中第 i 位一共有 N 个 1，M 个 0，某次采样取到的 1 的个数为 k 。则有：</p>
+
+<p>[E(P{X<em>i=1})=\frac{2^m\cdot \sum</em>{k\in odd} C<em>n^k}{2^{m+n} }=\frac{\sum</em>{k\in odd} C_n^k}{2^n}=\frac{1}{2}]</p>
+
+<p><strong>这个式子的前半部分没大明白？</strong></p>
+
+<p><strong>为什么这个地方是1/2？奇数和偶数对应的和是1/2？为什么？后半段的式子之所以等于1/2是因为之前在讲二项式展开定理的时候，奇数的和偶数的 (C_n^k) 是相等的，而且加起来等于 (2^n) 。</strong></p>
+
+<p><strong>取到的1的个数是k，那么总个数不用管吗？为什么这个地方是这样的？ 求和是对谁求和？(2^m)是什么？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IC3KB2ALeA.png?imageslim" alt="mark" /></p>
+
+<p><strong>这里使用E(x+y)=E(x)+E(y) 来将累加和提取到外面</strong></p>
+
+<p><strong>这个例子没大看明白，真的是这样的吗？要自己动手试下。</strong></p>
+
+<p>模拟如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/caEe1f4Fid.png?imageslim" alt="mark" /></p>
+
+<h1 id="2-方差">2.方差</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GfC41FdL9d.png?imageslim" alt="mark" /></p>
+
+<h1 id="3-协方差">3.协方差</h1>
+
+<h2 id="协方差的定义与性质">协方差的定义与性质</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/i6HI53BhKm.png?imageslim" alt="mark" /></p>
+
+<h2 id="协方差和独立-不相关">协方差和独立、不相关</h2>
+
+<p>X和Y独立时( E(XY)=E(X)E(Y))，而 (Cov(X,Y)=E(XY)-E(X)E(Y))，因此，当X和Y独立时，(Cov(X,Y)=0)</p>
+
+<p>但X和Y独立这个前提太强，因此我们定义：若Cov(X,Y)=0，称X和Y不相关。<strong>注意，不相关的定时是从协方差这个地方来的。</strong></p>
+
+<p><strong>独立与不相关的定义区别：独立是联合概率的期望等于每个的期望的乘积，相关是二者的协方差为0。</strong></p>
+
+<h2 id="协方差的意义">协方差的意义：</h2>
+
+<p>协方差是两个随机变量具有相同方向变化趋势的度量：</p>
+
+<ul>
+<li><p>若Cov(X,Y)&gt;0，它们的变化趋势相同</p></li>
+
+<li><p>若Cov(X,Y)&lt;0，它们的变化趋势相反</p></li>
+
+<li><p>若Cov(X,Y)=0，称X和Y不相关。</p></li>
+</ul>
+
+<h2 id="协方差的上界">协方差的上界</h2>
+
+<p>两个随机变量的协方差，是否有上界？</p>
+
+<ul>
+<li><p>(若\,Var(X)=\sigma_1^2\; Var(Y)=\sigma_2^2)</p></li>
+
+<li><p>(则\,\mid Cov(X,Y)\mid \leq \sigma_1\sigma_2)</p></li>
+</ul>
+
+<p>注意，上述当且仅当X和Y之间有线性关系时，等号成立。这个时候时最相关的。</p>
+
+<h2 id="再谈独立与不相关">再谈独立与不相关</h2>
+
+<p>因为上述定理的保证，使得“不相关”事实上即“线性独立”。即：若X与Y不相关，说明X与Y之间没有线性关系(但有可能存在其他函数关系)，不能保证X和Y相互独立。<strong>不相关不代表没有关系，只是没有线性关系，这个说法对吗？比如一个二次函数与x是不是相关的？还想跟多了解下独立与不相关</strong></p>
+
+<p>注意，有个特殊的，对于二维正态随机变量，X与Y不相关等价于X与Y相互独立。<strong>在了解下这个是怎么互推的。</strong></p>
+
+<h2 id="相关系数">相关系数：</h2>
+
+<p>定义：</p>
+
+<p>[\rho_{XY}=\frac{Cov(X,Y)}{\sqrt{Var(X)Var(Y)} }]</p>
+
+<p>由协方差上界定理可知 (\mid \rho\mid\leq 1)。而且当且仅当X与Y有线性关系时，等号成立</p>
+
+<p>容易看到，相关系数相当于是标准尺度下的协方差。上面关于协方差与XY相互关系的结论，完全适用于相关系数和XY的相互关系。</p>
+
+<h2 id="协方差矩阵">协方差矩阵</h2>
+
+<p>对于n维随机向量((X_1,X_2,\cdots X_n))，任意两个随机变量(X_i)和(X_j)都可以得到一个协方差，从而形成一个(n*n)的矩阵，显然，协方差矩阵是对称阵。<strong>对称阵会带来很多的好处，比如对称阵可以求出不同的特征值和特征向量，对称阵的特征向量是正交的。</strong></p>
+
+<p>[c_{ij}=E{[X_i=E(X_i)]\left\lfloor X_j-E(X_j) \right\rfloor}=Cov(X_i,X_j)]</p>
+
+<p>[C= \begin{bmatrix} c<em>{11}&amp; c</em>{12} &amp; \cdots &amp; c<em>{1n}\ c</em>{21}&amp; c<em>{22} &amp; \cdots &amp; c</em>{2n}\ \vdots &amp; \vdots &amp;\ddots &amp;\vdots \ c<em>{n1}&amp; c</em>{n2} &amp;\cdots &amp; c_{nn} \end{bmatrix}]</p>
+
+<p>协方差矩阵在降维处理和主成分分析中会用到，<strong>怎么用的？</strong></p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>还需要再整理下。</strong></p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">RL 马尔科夫决策过程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E9%9D%99%E6%80%81%E5%9B%BE%E5%83%8F%E9%A2%86%E5%9F%9F/16-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/cv-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB-neural-style/">
+            <span class="next-text nav-default">cv 风格迁移 Neural Style</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

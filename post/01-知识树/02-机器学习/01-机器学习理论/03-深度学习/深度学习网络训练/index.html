@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>深度学习网络训练 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="深度学习网络训练 训练网络的一些技巧 训练技巧对深度学习来说是非常重要的，作为一门实验性质很强的科学，同样的网络结构使用不同的训练方法训练，结果" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="深度学习网络训练" />
+<meta property="og:description" content="深度学习网络训练 训练网络的一些技巧 训练技巧对深度学习来说是非常重要的，作为一门实验性质很强的科学，同样的网络结构使用不同的训练方法训练，结果" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%AE%AD%E7%BB%83/" /><meta property="article:published_time" content="2018-08-12T20:26:26&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:26:26&#43;00:00"/>
+<meta itemprop="name" content="深度学习网络训练">
+<meta itemprop="description" content="深度学习网络训练 训练网络的一些技巧 训练技巧对深度学习来说是非常重要的，作为一门实验性质很强的科学，同样的网络结构使用不同的训练方法训练，结果">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:26:26&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:26:26&#43;00:00" />
+<meta itemprop="wordCount" content="1970">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="深度学习网络训练"/>
+<meta name="twitter:description" content="深度学习网络训练 训练网络的一些技巧 训练技巧对深度学习来说是非常重要的，作为一门实验性质很强的科学，同样的网络结构使用不同的训练方法训练，结果"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">深度学习网络训练</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1970 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#深度学习网络训练">深度学习网络训练</a></li>
+<li><a href="#参数初始化">参数初始化</a></li>
+<li><a href="#数据预处理方式">数据预处理方式</a></li>
+<li><a href="#训练技巧">训练技巧</a></li>
+<li><a href="#ensemble">Ensemble</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="深度学习网络训练">深度学习网络训练</h1>
+
+<p>训练网络的一些技巧</p>
+
+<p>训练技巧对深度学习来说是非常重要的，作为一门实验性质很强的科学，同样的网络结构使用不同的训练方法训练，结果可能会有很大的差异。这里我总结了近一年来的炼丹心得，分享给大家，也欢迎大家补充指正。</p>
+
+<h1 id="参数初始化">参数初始化</h1>
+
+<p>下面几种方式,随便选一个,结果基本都差不多。但是一定要做。否则可能会减慢收敛速度，影响收敛结果，甚至造成Nan等一系列问题。
+n_in为网络的输入大小，n_out为网络的输出大小，n为n_in或(n_in+n_out)*0.5
+Xavier初始法论文：<a href="https://link.zhihu.com/?target=http%3A//jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf">http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf</a>
+He初始化论文：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1502.01852">https://arxiv.org/abs/1502.01852</a></p>
+
+<ul>
+<li><p>uniform均匀分布初始化：
+w = np.random.uniform(low=-scale, high=scale, size=[n_in,n_out])</p>
+
+<ul>
+<li>Xavier初始法，适用于普通激活函数(tanh,sigmoid)：scale = np.sqrt(3/n)</li>
+<li>He初始化，适用于ReLU：scale = np.sqrt(6/n)</li>
+</ul></li>
+
+<li><p>normal高斯分布初始化：
+w = np.random.randn(n_in,n_out) * stdev # stdev为高斯分布的标准差，均值设为0</p>
+
+<ul>
+<li><p>Xavier初始法，适用于普通激活函数 (tanh,sigmoid)：stdev = np.sqrt(n)</p></li>
+
+<li><p>He初始化，适用于ReLU：stdev = np.sqrt(2/n)</p></li>
+</ul></li>
+
+<li><p>svd初始化：对RNN有比较好的效果。参考论文：<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1312.6120">https://arxiv.org/abs/1312.6120</a></p></li>
+</ul>
+
+<h1 id="数据预处理方式">数据预处理方式</h1>
+
+<ul>
+<li><p>zero-center ,这个挺常用的.
+X -= np.mean(X, axis = 0) # zero-center
+X /= np.std(X, axis = 0) # normalize</p></li>
+
+<li><p>PCA whitening,这个用的比较少.</p></li>
+</ul>
+
+<h1 id="训练技巧">训练技巧</h1>
+
+<ul>
+<li><p>要做梯度归一化,即算出来的梯度除以minibatch size</p></li>
+
+<li><p>clip c(梯度裁剪): 限制最大梯度,其实是value = sqrt(w1^2+w2^2….),如果value超过了阈值,就算一个衰减系系数,让value的值等于阈值: 5,10,15</p></li>
+
+<li><p>dropout对小数据防止过拟合有很好的效果,值一般设为0.5,小数据上dropout+sgd在我的大部分实验中，效果提升都非常明显.因此可能的话，建议一定要尝试一下。 dropout的位置比较有讲究, 对于RNN,建议放到输入-&gt;RNN与RNN-&gt;输出的位置.关于RNN如何用dropout,可以参考这篇论文:<a href="https://link.zhihu.com/?target=http%3A//arxiv.org/abs/1409.2329">http://arxiv.org/abs/1409.2329</a></p></li>
+
+<li><p>adam,adadelta等,在小数据上,我这里实验的效果不如sgd, sgd收敛速度会慢一些，但是最终收敛后的结果，一般都比较好。如果使用sgd的话,可以选择从1.0或者0.1的学习率开始,隔一段时间,在验证集上检查一下,如果cost没有下降,就对学习率减半. 我看过很多论文都这么搞,我自己实验的结果也很好. 当然,也可以先用ada系列先跑,最后快收敛的时候,更换成sgd继续训练.同样也会有提升.据说adadelta一般在分类问题上效果比较好，adam在生成问题上效果比较好。</p></li>
+
+<li><p>除了gate之类的地方,需要把输出限制成0-1之外,尽量不要用sigmoid,可以用tanh或者relu之类的激活函数.1. sigmoid函数在-4到4的区间里，才有较大的梯度。之外的区间，梯度接近0，很容易造成梯度消失问题。2. 输入0均值，sigmoid函数的输出不是0均值的。</p></li>
+
+<li><p>rnn的dim和embdding size,一般从128上下开始调整. batch size,一般从128左右开始调整.batch size合适最重要,并不是越大越好.</p></li>
+
+<li><p>word2vec初始化,在小数据上,不仅可以有效提高收敛速度,也可以可以提高结果.</p></li>
+
+<li><p>尽量对数据做shuffle</p></li>
+
+<li><p>LSTM 的forget gate的bias,用1.0或者更大的值做初始化,可以取得更好的结果,来自这篇论文:<a href="https://link.zhihu.com/?target=http%3A//jmlr.org/proceedings/papers/v37/jozefowicz15.pdf">http://jmlr.org/proceedings/papers/v37/jozefowicz15.pdf</a>, 我这里实验设成1.0,可以提高收敛速度.实际使用中,不同的任务,可能需要尝试不同的值.</p></li>
+
+<li><p>Batch Normalization据说可以提升效果，不过我没有尝试过，建议作为最后提升模型的手段，参考论文：Accelerating Deep Network Training by Reducing Internal Covariate Shift</p></li>
+
+<li><p>如果你的模型包含全连接层（MLP），并且输入和输出大小一样，可以考虑将MLP替换成Highway Network,我尝试对结果有一点提升，建议作为最后提升模型的手段，原理很简单，就是给输出加了一个gate来控制信息的流动，详细介绍请参考论文: <a href="https://link.zhihu.com/?target=http%3A//arxiv.org/abs/1505.00387">http://arxiv.org/abs/1505.00387</a></p></li>
+
+<li><p>来自@张馨宇的技巧：一轮加正则，一轮不加正则，反复进行。</p></li>
+</ul>
+
+<h1 id="ensemble">Ensemble</h1>
+
+<p>Ensemble是论文刷结果的终极核武器,深度学习中一般有以下几种方式</p>
+
+<ul>
+<li>同样的参数,不同的初始化方式</li>
+<li>不同的参数,通过cross-validation,选取最好的几组</li>
+<li>同样的参数,模型训练的不同阶段，即不同迭代次数的模型。</li>
+<li>不同的模型,进行线性融合. 例如RNN和传统模型.</li>
+</ul>
+
+<p>TODO</p>
+
+<ul>
+<li>没怎么细看，要过一遍，实践之后再对它进行总结和更新。</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%BD%91%E7%BB%9C%E8%B0%83%E5%8F%82/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">深度学习网络调参</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E6%97%B6%E5%BA%8F%E5%B7%AE%E5%88%86%E5%AD%A6%E4%B9%A0temporal-difference-learning/">
+            <span class="next-text nav-default">RL 时序差分学习(Temporal-Difference Learning)</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

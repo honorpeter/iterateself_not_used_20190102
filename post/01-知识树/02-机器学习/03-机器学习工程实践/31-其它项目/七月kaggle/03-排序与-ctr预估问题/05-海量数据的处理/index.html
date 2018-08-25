@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 海量数据的处理 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="借助于大规模的工具 比如 Spark Spark MLlib - Spark’s machine learning (ML) library. - Goal is to make ML scalable and easy - Includes common learning algorithms and utilities, like classification, regression, clustering, collaborative filtering, dimensionality reduction - Includes lower-level optimization primitives and higher level pipeline APIs - Divided into two packages - Spark.mllib: original API built" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/05-%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%84%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 海量数据的处理" />
+<meta property="og:description" content="借助于大规模的工具 比如 Spark Spark MLlib - Spark’s machine learning (ML) library. - Goal is to make ML scalable and easy - Includes common learning algorithms and utilities, like classification, regression, clustering, collaborative filtering, dimensionality reduction - Includes lower-level optimization primitives and higher level pipeline APIs - Divided into two packages - Spark.mllib: original API built" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/05-%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%84%E7%90%86/" /><meta property="article:published_time" content="2018-07-22T17:30:05&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-22T17:30:05&#43;00:00"/>
+<meta itemprop="name" content="05 海量数据的处理">
+<meta itemprop="description" content="借助于大规模的工具 比如 Spark Spark MLlib - Spark’s machine learning (ML) library. - Goal is to make ML scalable and easy - Includes common learning algorithms and utilities, like classification, regression, clustering, collaborative filtering, dimensionality reduction - Includes lower-level optimization primitives and higher level pipeline APIs - Divided into two packages - Spark.mllib: original API built">
+
+
+<meta itemprop="datePublished" content="2018-07-22T17:30:05&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-22T17:30:05&#43;00:00" />
+<meta itemprop="wordCount" content="701">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 海量数据的处理"/>
+<meta name="twitter:description" content="借助于大规模的工具 比如 Spark Spark MLlib - Spark’s machine learning (ML) library. - Goal is to make ML scalable and easy - Includes common learning algorithms and utilities, like classification, regression, clustering, collaborative filtering, dimensionality reduction - Includes lower-level optimization primitives and higher level pipeline APIs - Divided into two packages - Spark.mllib: original API built"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 海量数据的处理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-22 </span>
+        
+        <span class="more-meta"> 701 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>借助于大规模的工具</p>
+
+<p>比如 Spark</p>
+
+<p>Spark MLlib
+- Spark’s machine learning (ML) library.
+- Goal is to make ML scalable and easy
+- Includes common learning algorithms and utilities, like classification, regression, clustering, collaborative filtering, dimensionality reduction
+- Includes lower-level optimization primitives and higher level pipeline APIs
+- Divided into two packages
+      - Spark.mllib: original API built on top of RDDs
+      - Spark.ml: provides higher level API built on top of DataFrames for constructing ML pipelines</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/ig4c17BggE.png?imageslim" alt="mark" /></p>
+
+<p>Spark MLlib 可以用来建模，他提供了一个类似于流程的东西 ML pipeline，</p>
+
+<p>ML pipelines for complex ML workflows</p>
+
+<ul>
+<li>DataFrame: Equivalent to a relational table in Spark SQL</li>
+<li>Transformer: An algorithm that transforms one DataFrame into anothe</li>
+<li>Estimator: An algorithm that can be fit on a DataFrame to produce a Transformer</li>
+<li>Pipeline: Chains multiple transformers and estimators to produce a ML workflow</li>
+<li>Parameter: Common API for specifying parameters</li>
+</ul>
+
+<p>spark sql 里面也可以读出来一个 dataframe
+Transformer 可以对 DataFrame 做一些数据的预处理</p>
+
+<p>一个 pipeline 大概是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/CAfb1cbD2D.png?imageslim" alt="mark" /></p>
+
+<p>我们大概看一下：ML pipeline for Click Through Rate Prediction</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/65IBkBd1f6.png?imageslim" alt="mark" /></p>
+
+<p>stringindexer 实际上就是给这个类别一些下标，然后 OneHotEncoder 就对这些类别进行编码</p>
+
+<p>看起来和 sklearn 非常像，但是这个是在集群上跑。</p>
+
+<p>因为对scala 不熟，因此使用的是 pyspark，</p>
+
+<p>Step 1 - Parse Data into Spark SQL DataFrames</p>
+
+<ul>
+<li>Spark SQL converts a RDD of Row objects into a DataFrame</li>
+<li>Rows are constructed by passing key/value pairs where keys define the column names of the table</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/9im8iA3CEA.png?imageslim" alt="mark" /></p>
+
+<p>把读进来的每一行用逗号进行分割。</p>
+
+<p>Step 2 – Feature Transformer using StringIndexer</p>
+
+<ul>
+<li>Encodes a string column to a column of indices</li>
+<li>Indices are from 0 to max number of distinct string values,
+ordered by frequencies</li>
+<li>If column is numeric, cast it to string and index string values</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/gK41HehkF8.png?imageslim" alt="mark" /></p>
+
+<p>它是按照频次的高低依次进行编码</p>
+
+<p>工业界 scala 和 pyspark 都会用，但是最新的功能基本上都是 scala 的，目前所有的模型 比如 LR 和GBDT 的这些 pyspark 都有。
+因此可以用 pyspark。</p>
+
+<p>XGBoost 也有分布式的。</p>
+
+<p>Step 3 - Feature Transformer using One Hot Encoding</p>
+
+<ul>
+<li>Maps a column of label indices to a column of binary vectors</li>
+<li>Allows algorithms which expect continuous features, to use categorical features</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/h39mGbBlb3.png?imageslim" alt="mark" /></p>
+
+<p>上面这个图，可以看出 做 One-hot encoding 的时候，不是每个类别都给一个feature 的，这里就只给了两个feature，<span style="color:red;">这样不会有问题吗？</span></p>
+
+<p>Step 4 – Feature Selector using Vector Assembler</p>
+
+<ul>
+<li>Transformer that combines a given list of columns into a single vector column</li>
+<li>Useful for combining raw features and features generated by different feature transformers into a single feature vector</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/9CfdiHD99h.png?imageslim" alt="mark" /></p>
+
+<p>Vector Assembler 就把全面所有处理完的这些列拼在一起，得到最终的feature 。</p>
+
+<p>Step 5 – Train a model using Estimator Logistic Regression</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/4f5Bjcdj46.png?imageslim" alt="mark" /></p>
+
+<p>Parameter Tuning using CrossValidator or TrainValidationSplit</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/K35EAfFb2C.png?imageslim" alt="mark" /></p>
+
+<p>下面这段没有讲：</p>
+
+<p>Some alternatives:</p>
+
+<ul>
+<li>Use Hashed features instead of OHE</li>
+<li>Use Log loss evaluation or ROC to evaluate Logistic Regression</li>
+<li>Perform feature selection</li>
+<li>Use Naïve Bayes or other binary classification algorithms</li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-22</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/07-%E4%BD%BF%E7%94%A8%E5%88%AB%E7%9A%84%E4%B8%80%E4%BA%9B%E6%A8%A1%E5%9E%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">07 使用别的一些模型</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/03-%E6%A1%88%E4%BE%8B1%E4%BD%BF%E7%94%A8-pandas-%E5%A4%84%E7%90%86/">
+            <span class="next-text nav-default">03 案例1：使用 pandas 处理</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

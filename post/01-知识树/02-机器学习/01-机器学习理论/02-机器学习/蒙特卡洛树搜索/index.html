@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>蒙特卡洛树搜索 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="蒙特卡洛树搜索 REF 蒙特卡洛树搜索 wiki TODO wiki上提到了蒙特卡洛树在很多棋盘游戏上的应用，要总结进来。 Alphago 是怎么把蒙特卡洛树应用起来的？ 使用代码怎么" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%A0%91%E6%90%9C%E7%B4%A2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="蒙特卡洛树搜索" />
+<meta property="og:description" content="蒙特卡洛树搜索 REF 蒙特卡洛树搜索 wiki TODO wiki上提到了蒙特卡洛树在很多棋盘游戏上的应用，要总结进来。 Alphago 是怎么把蒙特卡洛树应用起来的？ 使用代码怎么" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%A0%91%E6%90%9C%E7%B4%A2/" /><meta property="article:published_time" content="2018-08-21T18:16:48&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:48&#43;00:00"/>
+<meta itemprop="name" content="蒙特卡洛树搜索">
+<meta itemprop="description" content="蒙特卡洛树搜索 REF 蒙特卡洛树搜索 wiki TODO wiki上提到了蒙特卡洛树在很多棋盘游戏上的应用，要总结进来。 Alphago 是怎么把蒙特卡洛树应用起来的？ 使用代码怎么">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:48&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:48&#43;00:00" />
+<meta itemprop="wordCount" content="1003">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="蒙特卡洛树搜索"/>
+<meta name="twitter:description" content="蒙特卡洛树搜索 REF 蒙特卡洛树搜索 wiki TODO wiki上提到了蒙特卡洛树在很多棋盘游戏上的应用，要总结进来。 Alphago 是怎么把蒙特卡洛树应用起来的？ 使用代码怎么"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">蒙特卡洛树搜索</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 1003 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#蒙特卡洛树搜索">蒙特卡洛树搜索</a></li>
+<li><a href="#ref">REF</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#蒙特卡洛树搜索是什么">蒙特卡洛树搜索是什么？</a></li>
+<li><a href="#蒙特卡洛树的搜索原理">蒙特卡洛树的搜索原理：</a></li>
+<li><a href="#探索与利用">探索与利用</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="蒙特卡洛树搜索">蒙特卡洛树搜索</h1>
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li><a href="https://zh.wikipedia.org/wiki/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%A0%91%E6%90%9C%E7%B4%A2">蒙特卡洛树搜索 wiki</a></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><p><strong>wiki上提到了蒙特卡洛树在很多棋盘游戏上的应用，要总结进来。</strong></p></li>
+
+<li><p><strong>Alphago 是怎么把蒙特卡洛树应用起来的？</strong></p></li>
+
+<li><p><strong>使用代码怎么实现？需要补充</strong></p></li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li><p>看书的时候提到了：Alphago验证了深度学习和蒙特卡洛搜索算法的实践性。才想起来，这个蒙特卡洛搜索算法好像没有总结，到底是什么？为什么这么利害？是基于什么的？</p></li>
+
+<li><p>没怎么理解</p></li>
+</ul>
+
+<h1 id="蒙特卡洛树搜索是什么">蒙特卡洛树搜索是什么？</h1>
+
+<p>蒙特卡洛树搜索（英语：Monte Carlo tree search；简称：MCTS）是一种用于某些决策过程的启发式搜索算法，最引人注目的是在游戏中的使用。一个主要例子是电脑围棋程序[1]，它也用于其他棋盘游戏、即时电子游戏以及不确定性游戏。</p>
+
+<h1 id="蒙特卡洛树的搜索原理">蒙特卡洛树的搜索原理：</h1>
+
+<p>蒙特卡洛树搜索的每个循环包括四个步骤：</p>
+
+<ul>
+<li><p>选择（Selection）：从根结点R开始，选择连续的子结点向下至叶子结点L。后面给出了一种选择子结点的方法，让游戏树向最优的方向扩展，这是蒙特卡洛树搜索的精要所在。</p></li>
+
+<li><p>扩展（Expansion）：除非任意一方的输赢使得游戏在L结束，否则创建一个或多个子结点并选取其中一个结点C。</p></li>
+
+<li><p>仿真（Simulation）：在从结点C开始，用随机策略进行游戏，又称为playout或者rollout。</p></li>
+
+<li><p>反向传播（Backpropagation）：使用随机游戏的结果，更新从C到R的路径上的结点信息。</p></li>
+</ul>
+
+<p>每一个节点的内容代表胜利次数/游戏次数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j9e53IeAjh.png?imageslim" alt="mark" /></p>
+
+<h1 id="探索与利用">探索与利用</h1>
+
+<p>选择子结点的主要困难是在较高平均胜率的移动后对深层次变型的利用和对少数模拟移动的探索二者中保持某种平衡。</p>
+
+<p>第一个在游戏中平衡利用与探索的公式被称为UCT（Upper Confidence Bound 1 applied to trees，上限置信区间算法 ），由匈牙利国家科学院计算机与自动化研究所高级研究员列文特·科奇什与阿尔伯塔大学全职教授乔鲍·塞派什瓦里提出[6]。UCT基于奥尔（Auer）、西萨-比安奇（Cesa-Bianchi）和费舍尔（Fischer）提出的UCB1公式[25]，并首次由马库斯等人应用于多级决策模型（具体为马尔可夫决策过程）[26]。科奇什和塞派什瓦里建议选择游戏树中的每个结点移动，从而使表达式 ( {\frac {w<em>{i} }{n</em>{i} } }+c{\sqrt {\frac {\ln t}{n_{i} } } }) 具有最大值。在该式中：</p>
+
+<p>( w<em>{i}) 代表第( i) 次移动后取胜的次数；
+( n</em>{i})代表第( i) 次移动后仿真的次数；
+( c) 为探索参数—理论上等于( {\sqrt {2} }) ；在实际中通常可凭经验选择；
+( t) 代表仿真总次数，等于所有( n_{i}) 的和。
+大多数当代蒙特卡洛树搜索的实现都是基于UCT的一些变形。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%95%B0%E5%80%BC%E7%9A%84%E6%95%B4%E6%95%B0%E6%AC%A1%E6%96%B9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：数值的整数次方</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/01-k%E8%BF%91%E9%82%BB-knn/">
+            <span class="next-text nav-default">01 K近邻 KNN</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

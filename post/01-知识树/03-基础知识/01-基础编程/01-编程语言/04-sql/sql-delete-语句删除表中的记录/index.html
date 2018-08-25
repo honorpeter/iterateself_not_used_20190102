@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>SQL Delete 语句（删除表中的记录） - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-04 14:15:31&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89/ slug: sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89 title: SQL Delete 语句（删除表中的记录） wordpress_id: 5221 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa DELETE" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/04-sql/sql-delete-%E8%AF%AD%E5%8F%A5%E5%88%A0%E9%99%A4%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%AE%B0%E5%BD%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="SQL Delete 语句（删除表中的记录）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-04 14:15:31&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89/ slug: sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89 title: SQL Delete 语句（删除表中的记录） wordpress_id: 5221 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa DELETE" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/04-sql/sql-delete-%E8%AF%AD%E5%8F%A5%E5%88%A0%E9%99%A4%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%AE%B0%E5%BD%95/" /><meta property="article:published_time" content="2018-08-03T13:56:56&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T13:56:56&#43;00:00"/>
+<meta itemprop="name" content="SQL Delete 语句（删除表中的记录）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-04 14:15:31&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89/ slug: sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89 title: SQL Delete 语句（删除表中的记录） wordpress_id: 5221 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa DELETE">
+
+
+<meta itemprop="datePublished" content="2018-08-03T13:56:56&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T13:56:56&#43;00:00" />
+<meta itemprop="wordCount" content="665">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SQL Delete 语句（删除表中的记录）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-04 14:15:31&#43;00:00 layout: post link: http://106.15.37.116/2018/05/04/sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89/ slug: sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89 title: SQL Delete 语句（删除表中的记录） wordpress_id: 5221 categories: - 基础工具使用 tags: - SQL [mathjax] 注：非原创，推荐直接看原文 ORIGINAL SQL教程 TODO aaa MOTIVE aaa DELETE"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">SQL Delete 语句（删除表中的记录）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 665 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#sql">- SQL</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#motive">MOTIVE</a>
+<ul>
+<li><a href="#sql-delete-语句">SQL DELETE 语句</a>
+<ul>
+<li><a href="#sql-delete-语法">SQL DELETE 语法</a></li>
+</ul></li>
+<li><a href="#演示数据库">演示数据库</a></li>
+<li><a href="#sql-delete-实例">SQL DELETE 实例</a></li>
+<li><a href="#实例">实例</a></li>
+<li><a href="#删除所有数据">删除所有数据</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-04 14:15:31+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/04/sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89/">http://106.15.37.116/2018/05/04/sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89/</a>
+slug: sql-delete-%e8%af%ad%e5%8f%a5%ef%bc%88%e5%88%a0%e9%99%a4%e8%a1%a8%e4%b8%ad%e7%9a%84%e8%ae%b0%e5%bd%95%ef%bc%89
+title: SQL Delete 语句（删除表中的记录）
+wordpress_id: 5221
+categories:
+- 基础工具使用
+tags:</p>
+
+<h2 id="sql">- SQL</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，推荐直接看原文</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li><a href="https://www.w3cschool.cn/sql/">SQL教程</a></li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<p>DELETE语句用于删除表中现有记录。</p>
+
+<hr />
+
+<h2 id="sql-delete-语句">SQL DELETE 语句</h2>
+
+<p>DELETE 语句用于删除表中的行。</p>
+
+<h3 id="sql-delete-语法">SQL DELETE 语法</h3>
+
+<pre><code>DELETE FROM table_name
+WHERE condition;
+</code></pre>
+
+<p><td >**请注意
+*<strong><em>删除表格中的记录时要小心！</em></strong>*
+注意SQL DELETE 语句中的 WHERE 子句！**
+WHERE子句指定需要删除哪些记录。如果省略了WHERE子句，表中所有记录都将被删除！
+</td>
+</tr>
+</tbody>
+</table></p>
+
+<hr />
+
+<h2 id="演示数据库">演示数据库</h2>
+
+<p>在本教程中，我们将使用著名的Northwind示例数据库。</p>
+
+<p>以下是 &rdquo;Customers&rdquo; 表中的数据：
+<table class="reference notranslate   " >
+<tbody >
+<tr >
+CustomerID
+CustomerName
+ContactName
+Address
+City
+PostalCode
+Country
+</tr>
+<tr ></p>
+
+<p><td >1
+</td></p>
+
+<p><td >Alfreds Futterkiste
+</td></p>
+
+<p><td >Maria Anders
+</td></p>
+
+<p><td >Obere Str. 57
+</td></p>
+
+<p><td >Berlin
+</td></p>
+
+<p><td >12209
+</td></p>
+
+<p><td >Germany
+</td>
+</tr>
+<tr ></p>
+
+<p><td >2
+</td></p>
+
+<p><td >Ana Trujillo Emparedados y helados
+</td></p>
+
+<p><td >Ana Trujillo
+</td></p>
+
+<p><td >Avda. de la Constitución 2222
+</td></p>
+
+<p><td >México D.F.
+</td></p>
+
+<p><td >05021
+</td></p>
+
+<p><td >Mexico
+</td>
+</tr>
+<tr ></p>
+
+<p><td >3
+</td></p>
+
+<p><td >Antonio Moreno Taquería
+</td></p>
+
+<p><td >Antonio Moreno
+</td></p>
+
+<p><td >Mataderos 2312
+</td></p>
+
+<p><td >México D.F.
+</td></p>
+
+<p><td >05023
+</td></p>
+
+<p><td >Mexico
+</td>
+</tr>
+<tr ></p>
+
+<p><td >4
+</td></p>
+
+<p><td >Around the Horn
+</td></p>
+
+<p><td >Thomas Hardy
+</td></p>
+
+<p><td >120 Hanover Sq.
+</td></p>
+
+<p><td >London
+</td></p>
+
+<p><td >WA1 1DP
+</td></p>
+
+<p><td >UK
+</td>
+</tr>
+<tr ></p>
+
+<p><td >5
+</td></p>
+
+<p><td >Berglunds snabbköp
+</td></p>
+
+<p><td >Christina Berglund
+</td></p>
+
+<p><td >Berguvsvägen 8
+</td></p>
+
+<p><td >Luleå
+</td></p>
+
+<p><td >S-958 22
+</td></p>
+
+<p><td >Sweden
+</td>
+</tr>
+</tbody>
+</table></p>
+
+<hr />
+
+<h2 id="sql-delete-实例">SQL DELETE 实例</h2>
+
+<p>假设我们想从&rdquo;Customers&rdquo; 表中删除客户“Alfreds Futterkiste”。</p>
+
+<p>我们使用以下SQL语句：</p>
+
+<h2 id="实例">实例</h2>
+
+<p>DELETE FROM Customers
+WHERE CustomerName=&lsquo;Alfreds Futterkiste&rsquo;;</p>
+
+<p>现在，&rdquo;Customers&rdquo; 表如下所示：
+<table class="reference notranslate   " >
+<tbody >
+<tr >
+CustomerID
+CustomerName
+ContactName
+Address
+City
+PostalCode
+Country
+</tr>
+<tr ></p>
+
+<p><td >2
+</td></p>
+
+<p><td >Ana Trujillo Emparedados y helados
+</td></p>
+
+<p><td >Ana Trujillo
+</td></p>
+
+<p><td >Avda. de la Constitución 2222
+</td></p>
+
+<p><td >México D.F.
+</td></p>
+
+<p><td >05021
+</td></p>
+
+<p><td >Mexico
+</td>
+</tr>
+<tr ></p>
+
+<p><td >3
+</td></p>
+
+<p><td >Antonio Moreno Taquería
+</td></p>
+
+<p><td >Antonio Moreno
+</td></p>
+
+<p><td >Mataderos 2312
+</td></p>
+
+<p><td >México D.F.
+</td></p>
+
+<p><td >05023
+</td></p>
+
+<p><td >Mexico
+</td>
+</tr>
+<tr ></p>
+
+<p><td >4
+</td></p>
+
+<p><td >Around the Horn
+</td></p>
+
+<p><td >Thomas Hardy
+</td></p>
+
+<p><td >120 Hanover Sq.
+</td></p>
+
+<p><td >London
+</td></p>
+
+<p><td >WA1 1DP
+</td></p>
+
+<p><td >UK
+</td>
+</tr>
+<tr ></p>
+
+<p><td >5
+</td></p>
+
+<p><td >Berglunds snabbköp
+</td></p>
+
+<p><td >Christina Berglund
+</td></p>
+
+<p><td >Berguvsvägen 8
+</td></p>
+
+<p><td >Luleå
+</td></p>
+
+<p><td >S-958 22
+</td></p>
+
+<p><td >Sweden
+</td>
+</tr>
+</tbody>
+</table></p>
+
+<hr />
+
+<h2 id="删除所有数据">删除所有数据</h2>
+
+<p>您可以删除表中的所有行，而不需要删除该表。这意味着表的结构、属性和索引将保持不变：</p>
+
+<pre><code>DELETE FROM table_name;
+</code></pre>
+
+<p><strong>或者</strong></p>
+
+<pre><code>DELETE * FROM table_name;
+</code></pre>
+
+<p><strong>注意：</strong>在没有备份的情况下，删除记录要格外小心！因为你删除了不能重复！</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-03</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/04-sql/sql-insert-into-%E8%AF%AD%E5%8F%A5%E5%9C%A8%E8%A1%A8%E4%B8%AD%E6%8F%92%E5%85%A5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">SQL INSERT INTO 语句（在表中插入）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02data/python-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90-02-%E5%BC%95%E8%A8%80/">
+            <span class="next-text nav-default">Python 数据分析 02 引言</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

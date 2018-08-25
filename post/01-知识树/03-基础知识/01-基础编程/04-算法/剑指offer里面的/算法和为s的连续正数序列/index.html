@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：和为S的连续正数序列 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="REF CodingInterviews 题目 1 题目描述 输入一个递增排序的正数数组和一个数字 s，在数组中查找两个数，得它们的和正好是 s 。如果有多对数字的和等于 s ，输出乘积最小的即" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%92%8C%E4%B8%BAs%E7%9A%84%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B0%E5%BA%8F%E5%88%97/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：和为S的连续正数序列" />
+<meta property="og:description" content="REF CodingInterviews 题目 1 题目描述 输入一个递增排序的正数数组和一个数字 s，在数组中查找两个数，得它们的和正好是 s 。如果有多对数字的和等于 s ，输出乘积最小的即" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%92%8C%E4%B8%BAs%E7%9A%84%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B0%E5%BA%8F%E5%88%97/" /><meta property="article:published_time" content="2018-07-05T21:25:55&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-05T21:25:55&#43;00:00"/>
+<meta itemprop="name" content="算法：和为S的连续正数序列">
+<meta itemprop="description" content="REF CodingInterviews 题目 1 题目描述 输入一个递增排序的正数数组和一个数字 s，在数组中查找两个数，得它们的和正好是 s 。如果有多对数字的和等于 s ，输出乘积最小的即">
+
+
+<meta itemprop="datePublished" content="2018-07-05T21:25:55&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-05T21:25:55&#43;00:00" />
+<meta itemprop="wordCount" content="1711">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：和为S的连续正数序列"/>
+<meta name="twitter:description" content="REF CodingInterviews 题目 1 题目描述 输入一个递增排序的正数数组和一个数字 s，在数组中查找两个数，得它们的和正好是 s 。如果有多对数字的和等于 s ，输出乘积最小的即"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：和为S的连续正数序列</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-05 </span>
+        
+        <span class="more-meta"> 1711 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+<li><a href="#题目-1">题目 1</a>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+</ul></li>
+<li><a href="#题目解答-1">题目解答 1</a>
+<ul>
+<li><a href="#使用两个指针来靠近">使用两个指针来靠近</a></li>
+</ul></li>
+<li><a href="#题目-2">题目 2</a>
+<ul>
+<li><a href="#题目描述-1"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答-2">题目解答 2</a>
+<ul>
+<li><a href="#移动-start-和-end-来靠近">移动 start 和 end 来靠近</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="ref">REF</h1>
+
+<ul>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ul>
+
+<h1 id="题目-1">题目 1</h1>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>输入一个递增排序的正数数组和一个数字 s，在数组中查找两个数，得它们的和正好是 s 。如果有多对数字的和等于 s ，输出乘积最小的即可。</p>
+
+<p>例如：输入数组｛1 、2 、4、7 、11 、15 ｝和数字15。</p>
+
+<p>由于4+ 11 = 15 ，因此输出4 和11 。</p>
+
+<p>注意：序列是递增序列，而且元素都是正数。</p>
+
+<h1 id="题目解答-1">题目解答 1</h1>
+
+<h2 id="使用两个指针来靠近">使用两个指针来靠近</h2>
+
+<p><strong>为什么这个地方牵涉到了韦达定理？看到说用了 韦达定理，确认下。</strong></p>
+
+<p>OK，我们考虑两个数，如果他们的和为一个定值的话，那么他们接近相等的时候，他们的乘积最大，而越不相等，乘积越小。</p>
+
+<p>因此，如果这两个数是一个有序序列中的数， 比如：1 2 3 4 5 6</p>
+
+<p>那么，他们相隔的越远，乘积就越小 (1*6 &lt; 2 * 5 &lt; 3 * 4)，这样的话，我们从两端分别向中间走，那么先找到的那一对的乘积一定最小。</p>
+
+<p>OK，我们可以用两个指针 i 和 j ，分别指向头和尾，然后不断往中间靠拢，具体如下：</p>
+
+<ul>
+<li><p>如果 (a_i + a_j == sum)，那么这个(a_i) 和 (a_j) 就是答案，不用再找了。（因为相差越远乘积越小）。</p></li>
+
+<li><p>如果这时候 (a_i + a_j &gt; sum)，那么这时候的 (a_j) 肯定不是答案之一，因为前面的 (a_i) 已经看过了，后面的都是更大的，因此这时候 (j -= 1)。</p></li>
+
+<li><p>如果这时候若 (a_i + a_j &lt; sum)，同样的，(a_i) 肯定不是答案之一，因为两个指针再往中间的话，(a_j) 是越来越小的，因此 (i += 1)。</p></li>
+</ul>
+
+<p>OK，完整的代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;bitset&gt;
+
+using namespace std;
+
+
+
+class Solution {
+public:
+    vector&lt;int&gt; FindNumbersWithSum(vector&lt;int&gt; data, int sum) {
+        vector&lt;int&gt; res;
+        if (data.size() &lt; 2) {
+            return res;
+        }
+        int start = 0, end = data.size() - 1;
+        long curSum;
+        while (start &lt; end) {
+            curSum = data[start] + data[end];
+            if (curSum == sum) {
+                //把取到的数存放起来，这个时候的这两个值的乘积肯定是最小的
+                res.push_back(data[start]);
+                res.push_back(data[end]);
+                break;
+            }
+            else if (curSum &lt; sum) {
+                start++;//如果和比较小，就把小的数增大一些
+            }
+            else {
+                end--;//如果和比较大，就把大的数减小一些
+            }
+        }
+        return res;
+    }
+};
+
+int main() {
+    Solution solu;
+    int arr[] = { 1, 2, 4, 7, 11, 15, };
+    vector&lt;int&gt; vec(arr, arr + 6);
+    vector&lt;int&gt; res=solu.FindNumbersWithSum(vec, 15);
+    for each (int var in res) {
+        cout &lt;&lt; var &lt;&lt; &quot;  &quot;;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>4  11
+</code></pre>
+
+<h1 id="题目-2">题目 2</h1>
+
+<h2 id="题目描述-1"><strong>题目描述</strong></h2>
+
+<p>输出所有和为 S 的连续正数序列。序列内按照从小至大的顺序，序列间按照开始数字从小到大的顺序。例如：输入 5，输出：2，3</p>
+
+<h1 id="题目解答-2">题目解答 2</h1>
+
+<h2 id="移动-start-和-end-来靠近">移动 start 和 end 来靠近</h2>
+
+<p>我们可以仿照上面的思路，移动这个两端。</p>
+
+<p>OK，我们用两个数 start 和 end 分别表示序列的最小值和最大值。我们把 start 初始化为 1,  end 初始化为 2：</p>
+
+<ul>
+<li><p>如果从 start 到 end 的序列的和大于 s，我们可以从序列中去掉较小的值，也就是增大 start 的值。</p></li>
+
+<li><p>如果从 start 到 end 的序列的和小于 s，我们可以增大 end ，让这个序列包含更多的数字。</p></li>
+</ul>
+
+<p>因为这个序列至少要有两个数字，我们一直增加 start 到 (1+s)/2 为止。</p>
+
+<p>OK，下面，我们和为 9 的所有连续序列为例：</p>
+
+<ul>
+<li><p>我们先把 start 初始化为 1 ,  end 初始化为 2 ，这个时候介于start和end之间的序列是 {1,2}。</p></li>
+
+<li><p>由于此时的序列的和为 3，小于 9，所以我们下一步要让序列包含更多的数字。我们把 end 增加 1 变成 3，此时序列为 {I,2,3} 。</p></li>
+
+<li><p>由于序列的和是6，仍然小于9，我们接下来再增加 end 变成 4 ，介于 start 和 end 之间的序列也随之变成  {l,2,3,4}。</p></li>
+
+<li><p>由于序列的和 10 大于 9，因此我们要删去序列中的一些数字， 于是我们增加 start 变成 2 ，此时得到的序列是 {2, 3, 4} 。</p></li>
+
+<li><p>序列的和正好是 9 ，因此，我们找到了第一个和为 9 的连续序列，把它打印出来。</p></li>
+
+<li><p>接下来我们再增加 big ，重复前面的过程，可以找到第二个和为 9 的连续序列 {4,5} 。</p></li>
+
+<li><p>直到 start 到 (1+s)/2  或 end 到 s 为止。</p></li>
+</ul>
+
+<p>代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+
+class Solution {
+public:
+    vector&lt; vector&lt;int&gt; &gt; FindContinuousSequence(int sum) {
+        vector&lt; vector&lt;int&gt; &gt; res;//用来存放找到的队列
+        vector&lt;int&gt; currRes;//当前的队列
+        if (sum &lt; 3) {
+            return res;
+        }
+        int start = 1, end = 2;
+        int mid = (sum + 1) / 2;//用来作为start的上限
+        int currSum = start + end;
+        while (start &lt; mid &amp;&amp; end &lt; sum) {
+            if (currSum == sum) {
+                // 如果和是sum, 就存储下来
+                currRes.clear();
+                for (int i = start; i &lt;= end; i++) {
+                    cout &lt;&lt; i &lt;&lt; &quot; &quot;;
+                    currRes.push_back(i);
+                }
+                cout &lt;&lt; endl;
+                res.push_back(currRes);
+
+                // 存储完以后, 进一步往下走
+                end++;
+                currSum += end;
+            }
+            else if (currSum &gt; sum) {
+                // 如果和太大了, 缩短起始位置
+                currSum -= start;
+                start++;
+            }
+            else if (currSum &lt; sum) {
+                //  如果和太小了, 那么增加结束位置
+                end++;
+                currSum += end;
+            }
+        }
+        return res;
+    }
+};
+
+int main() {
+    Solution solu;
+    vector&lt; vector&lt;int&gt; &gt; res = solu.FindContinuousSequence(200);
+
+    //打印出结果
+    cout &lt;&lt; &quot;Total Count = &quot; &lt;&lt; res.size() &lt;&lt; endl;
+    for (unsigned int i = 0; i &lt; res.size(); i++) {
+        cout &lt;&lt; &quot;index = &quot; &lt;&lt; i &lt;&lt; &quot;, Size = &quot; &lt;&lt; res[i].size() &lt;&lt; endl;
+        for (unsigned int j = 0; j &lt; res[i].size(); j++) {
+            cout &lt;&lt; res[i][j] &lt;&lt; &quot; &quot;;
+        }
+        cout &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+38 39 40 41 42
+Total Count = 2
+index = 0, Size = 16
+5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+index = 1, Size = 5
+38 39 40 41 42
+</code></pre>
+
+<p>嗯，还是很厉害的，我之前还以为要按照 n(n+1)/2 来计算什么的，没想到是这种两边移动来靠近的，利害。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-05</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%B8%8D%E7%94%A8%E5%8A%A0%E5%87%8F%E4%B9%98%E9%99%A4%E5%81%9A%E5%8A%A0%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：不用加减乘除做加法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8/">
+            <span class="next-text nav-default">算法：合并两个排序的链表</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

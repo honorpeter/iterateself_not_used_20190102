@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>C&#43;&#43; 指针作为函数参数传递 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="指针作为函数参数传递 TODO 这个一直不是特别清楚，还是经常遇到的，因此要明确下。 这几天在学习C过程中，在使用指针作为函数参数传递的时候出现了问题，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="C&#43;&#43; 指针作为函数参数传递" />
+<meta property="og:description" content="指针作为函数参数传递 TODO 这个一直不是特别清楚，还是经常遇到的，因此要明确下。 这几天在学习C过程中，在使用指针作为函数参数传递的时候出现了问题，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/" /><meta property="article:published_time" content="2018-08-05T19:43:45&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-05T19:43:45&#43;00:00"/>
+<meta itemprop="name" content="C&#43;&#43; 指针作为函数参数传递">
+<meta itemprop="description" content="指针作为函数参数传递 TODO 这个一直不是特别清楚，还是经常遇到的，因此要明确下。 这几天在学习C过程中，在使用指针作为函数参数传递的时候出现了问题，">
+
+
+<meta itemprop="datePublished" content="2018-08-05T19:43:45&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-05T19:43:45&#43;00:00" />
+<meta itemprop="wordCount" content="2010">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="C&#43;&#43; 指针作为函数参数传递"/>
+<meta name="twitter:description" content="指针作为函数参数传递 TODO 这个一直不是特别清楚，还是经常遇到的，因此要明确下。 这几天在学习C过程中，在使用指针作为函数参数传递的时候出现了问题，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">C&#43;&#43; 指针作为函数参数传递</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-05 </span>
+        
+        <span class="more-meta"> 2010 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#指针作为函数参数传递">指针作为函数参数传递</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="指针作为函数参数传递">指针作为函数参数传递</h1>
+
+<p>TODO</p>
+
+<ul>
+<li>这个一直不是特别清楚，还是经常遇到的，因此要明确下。</li>
+</ul>
+
+<p>这几天在学习C过程中，在使用指针作为函数参数传递的时候出现了问题，根本不知道从何得解:源代码如下:</p>
+
+<pre><code class="language-cpp">createNode(BinNode *tree,char *p)
+{
+    tree = (BinNode *) malloc(sizeof(BinNode));
+    tree-&gt;data = *p;
+}
+</code></pre>
+
+<p>该代码段的意图是通过一个函数创建一个二叉树的节点，然而在，调用该函数后，试图访问该节点结构体的成员时候，却发生了内存访问错误，到底问题出在哪儿呢？</p>
+
+<p>一直不明白指针作为函数参数传值的机制，翻开林锐的《高质量C/C++编程指南》，找到了答案。</p>
+
+<p><strong>如果函数的参数是一个指针，不要指望用该指针去申请动态内存</strong>
+​
+问题的原因出在 C 编译器原理上：编译器总是要为函数的每个参数制作临时副本，指针参数<code>tree</code>的副本是 <code>_tree</code>，编译器使 <code>_tree = tree</code>。如果函数体内的程序修改了<code>_tree</code>的内容，就导致参数<code>tree</code>的内容作相应的修改。这就是指针可以用作输出参数的原因。</p>
+
+<p>即上面的函数代码经过编译后成为：</p>
+
+<pre><code class="language-cpp">createNode(BinNode *tree,char *p)
+{
+    BinNode *_tree;
+    _tree = tree;
+    _tree = (BinNode *) malloc(sizeof(BinNode));
+    _tree-&gt;data = *p;
+}
+</code></pre>
+
+<p>如果没有</p>
+
+<pre><code class="language-cpp">_tree = (BinNode *) malloc(sizeof(BinNode));
+</code></pre>
+
+<p>这个语句，在函数体内修改了<code>_tree</code>的内容，将会导致参数<code>tree</code>的内容作相应的修改，因为它们指向相同的内存地址。而</p>
+
+<pre><code class="language-cpp">_tree = (BinNode *) malloc(sizeof(BinNode));
+</code></pre>
+
+<p>这个句，系统重新分配内存给<code>_tree</code>指针，<code>_tree</code>指针指向了系统分配的新地址，函数体内修改的只是<code>_tree</code>的内容，对原<code>tree</code>所指的地址的内容没有任何影响。因此，函数的参数是一个指针时，不要在函数体内部改变指针所指的地址，那样毫无作用，需要修改的只能是指针所指向的内容。即应当把指针当作常量。</p>
+
+<p>如果非要使用函数指针来申请内存空间，那么需要使用指向指针的指针</p>
+
+<pre><code class="language-cpp">​createNode(BinNode **tree,char *p)
+{
+    *tree = (BinNode *) malloc(sizeof(BinNode));
+}
+</code></pre>
+
+<p><span style="color:red;">对上面这种写法还是不是特别的理解。</span></p>
+
+<p>上面的是林锐的说法，目前来说不知道怎么去理解，不过可以有另外的方案，通过函数返回值传递动态内存：</p>
+
+<pre><code class="language-cpp">BinNode *createNode()
+{
+    BinNode *tree;
+    tree = (BinNode *) malloc(sizeof(BinNode));
+    return tree;
+}
+</code></pre>
+
+<p>这个倒还说得过去，因为函数返回的是一个地址的值，该地址就是申请的内存块首地址。但是，这个容易和另外的一个忠告相混绕</p>
+
+<p><strong>不要用return语句返回指向“栈内存”的指针，因为该内存在函数结束时自动消亡</strong></p>
+
+<p>注意：实际上没有混淆，因为这里<code>tree</code>是在“堆内”分配的内存，而非在“栈”上。</p>
+
+<p>所谓一份拷贝，就是在函数调用时，将参数入栈，我们对形参的任何修改都是修改到栈上的个拷贝，并不影响我们的实际参数.</p>
+
+<p>任何编程语言的参数传递实际上都是在做传值调用.</p>
+
+<p>所谓的传指针，就是把指针指向者的地址(一个值)传进函数.</p>
+
+<p>也就是那个地址被压栈.</p>
+
+<p>然后我们再通过这个地址进行操作,因为实参和形参同样都是一个地址的值.</p>
+
+<p>所以改变形参指向者的状态时,实参指针也能看到这种变化.</p>
+
+<p>这里区分一下静态内存，栈内存和动态分配的内存(堆内存)的区别:</p>
+
+<ul>
+<li><p>从静态存储区域分配。内存在程序编译的时候就已经分配好，这块内存在程序的整个运行期间都存在。例如全局变量，static变量。</p></li>
+
+<li><p>在栈上创建。在执行函数时，函数内局部变量的存储单元都可以在栈上创建，函数执行结束时这些存储单元自动被释放。栈内存分配运算内置于处理器的指令集中，效率很高，但是分配的内存容量有限。</p></li>
+
+<li><p>从堆上分配，亦称动态内存分配。程序在运行的时候用malloc或new申请任意多少的内存，程序员自己负责在何时用free或delete释放内存。动态内存的生存期由我们决定，使用非常灵活，但问题也最多。</p></li>
+</ul>
+
+<p>因此，试图返回一个栈上分配的内存将会引发未知错误</p>
+
+<pre><code class="language-cpp">​char *GetString(void)
+​{
+​    char p[] = &quot;hello world&quot;;
+​    return p; // 编译器将提出警告
+​}
+</code></pre>
+
+<p><code>p</code> 是在栈上分配的内存，函数结束后将会自动释放，<code>p</code>指向的内存区域内容不是<code>&quot;hello world&quot;</code>，而是未知的内容。<span style="color:red;">嗯。</span></p>
+
+<p>如果是返回静态存储的内存呢:</p>
+
+<pre><code class="language-cpp">char *GetString(void)
+{
+    char *p = &quot;hello world&quot;;
+    return p;
+}
+</code></pre>
+
+<p>这里<code>&quot;hello world&quot;</code>是常量字符串，位于静态存储区，它在程序生命期内恒定不变。无论什么时候调用<code>GetString</code>，它返回的始终是同一个“只读”的内存块。<span style="color:red;">这个之前也不是很清楚，原来返回的是同一个只读的内存块。</span></p>
+
+<p>下面这两种方法是正确的：</p>
+
+<pre><code class="language-cpp">#include&lt;iostream&gt; //指向指针的指针
+using namespace std;
+
+void GetMemory(char *&amp;p,int num){
+    p=(char *)malloc(sizeof(char)*num);
+}
+void main(void){
+    char *str=NULL;
+    GetMemory(str,100);
+    strcpy(str,&quot;hello&quot;);
+    cout &lt;&lt; str &lt;&lt; endl;
+    free(str);
+}
+</code></pre>
+
+<p>或者：</p>
+
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+using namespace std;
+void GetMemory(char * *p,int num){
+    *p=(char *)malloc(sizeof(char)*num);
+}
+void main(void){
+    char *str=NULL;
+    GetMemory(&amp;str,100);
+    strcpy(str,&quot;hello&quot;);
+    cout &lt;&lt; str &lt;&lt; endl;
+    free(str);
+}
+</code></pre>
+
+<p><span style="color:red;">上面这两种写法不是很理解。再看下。</span></p>
+
+<p>下面的例子是错误的：</p>
+
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+using namespace std;
+void GetMemory(char *p,int num){
+    p=(char *)malloc(sizeof(char)*num);
+}
+void main(void){
+    char *str=NULL;
+    GetMemory(str,100);
+    strcpy(str,&quot;hello&quot;);
+    cout &lt;&lt; str &lt;&lt; endl;
+    free(str);
+}
+</code></pre>
+
+<p>试图用指针申请动态内存，错误的原因上面已经给出了详细的说明。总而言之，指针作为参数时，不能在函数体中改变指针的内存地址，要不然，实参的拷贝（压入栈中）改变了，而实参没有改变，造成内存泄露并且还达不到预期的效果。</p>
+
+<p>上面正确的2个例子都是通过另一种方法绕开了这个问题，改变指针的内容，例如：用了指向指针的指针，给指针的内容改变了，使其变为新分配内存的首地址，从而达到了效果。</p>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li>林锐《高质量C/C++编程指南》 <span style="color:red;">这个也要整合进来。完善对 C++ 的理解。</span></li>
+<li><a href="https://blog.csdn.net/olisten/article/details/8823511">面试笔试系列3-指针作为函数参数传递</a></li>
+<li><a href="https://www.zhihu.com/question/41476387">C 指针传递变量为什么无法修改变量值？</a> <span style="color:red;">这里面有这个的非常精彩的回答，要总结下。</span></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-05</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E7%BA%A6%E5%AE%9A-cdecl-stdcall-fastcall/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">C&#43;&#43; 函数调用约定 cdecl stdcall fastcall</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E7%BA%AF%E8%99%9A%E5%87%BD%E6%95%B0-%E8%99%9A%E5%87%BD%E6%95%B0/">
+            <span class="next-text nav-default">C&#43;&#43; 纯虚函数 虚函数</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

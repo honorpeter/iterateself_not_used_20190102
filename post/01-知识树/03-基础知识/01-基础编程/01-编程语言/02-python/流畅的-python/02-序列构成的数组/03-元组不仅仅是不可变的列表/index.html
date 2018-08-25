@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 元组不仅仅是不可变的列表 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="3 元组不仅仅是不可变的列表 有些 Python 入门教程把元组称为“不可变列表”，然而这并没有完全概括元组的特点。除了用作不可变的列表，它还可以用于没有字段" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/03-%E5%85%83%E7%BB%84%E4%B8%8D%E4%BB%85%E4%BB%85%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84%E5%88%97%E8%A1%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 元组不仅仅是不可变的列表" />
+<meta property="og:description" content="3 元组不仅仅是不可变的列表 有些 Python 入门教程把元组称为“不可变列表”，然而这并没有完全概括元组的特点。除了用作不可变的列表，它还可以用于没有字段" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/03-%E5%85%83%E7%BB%84%E4%B8%8D%E4%BB%85%E4%BB%85%E6%98%AF%E4%B8%8D%E5%8F%AF%E5%8F%98%E7%9A%84%E5%88%97%E8%A1%A8/" /><meta property="article:published_time" content="2018-07-11T17:30:55&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-11T17:30:55&#43;00:00"/>
+<meta itemprop="name" content="03 元组不仅仅是不可变的列表">
+<meta itemprop="description" content="3 元组不仅仅是不可变的列表 有些 Python 入门教程把元组称为“不可变列表”，然而这并没有完全概括元组的特点。除了用作不可变的列表，它还可以用于没有字段">
+
+
+<meta itemprop="datePublished" content="2018-07-11T17:30:55&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-11T17:30:55&#43;00:00" />
+<meta itemprop="wordCount" content="3295">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 元组不仅仅是不可变的列表"/>
+<meta name="twitter:description" content="3 元组不仅仅是不可变的列表 有些 Python 入门教程把元组称为“不可变列表”，然而这并没有完全概括元组的特点。除了用作不可变的列表，它还可以用于没有字段"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 元组不仅仅是不可变的列表</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-11 </span>
+        
+        <span class="more-meta"> 3295 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#3-元组不仅仅是不可变的列表">3 元组不仅仅是不可变的列表</a>
+<ul>
+<li><a href="#3-1-元组和记录">3.1 元组和记录</a></li>
+</ul></li>
+<li><a href="#3-2-元组拆包">3.2 元组拆包</a>
+<ul>
+<li><a href="#3-3-嵌套元组拆包">3.3 嵌套元组拆包</a></li>
+<li><a href="#3-4-具名元组">3.4 具名元组</a></li>
+</ul></li>
+<li><a href="#3-5-作为不可变列表的元组">3.5 作为不可变列表的元组</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="3-元组不仅仅是不可变的列表">3 元组不仅仅是不可变的列表</h2>
+
+<p>有些 Python 入门教程把元组称为“不可变列表”，然而这并没有完全概括元组的特点。除了用作不可变的列表，它还可以用于没有字段名的记录。鉴于后者常常被忽略，我们先来看看元组作为记录的功用。<span style="color:red;">是吗？没有字段名的记录是什么意思？</span></p>
+
+<h3 id="3-1-元组和记录">3.1 元组和记录</h3>
+
+<p>元组其实是对数据的记录：元组中的每个元素都存放了记录中一个字段的数据，外加这个字段的位置。正是这个位置信息给数据赋予了意义。</p>
+
+<p>如果只把元组理解为不可变的列表，那其他信息——它所含有的元素的总数和它们的位置——似乎就变得可有可无。但是如果把元组当作一些字段的集合，那么数量和位置信息就变得非常重要了。<span style="color:red;">嗯。那么到底怎么当作一些字段的集合呢？</span></p>
+
+<p>示例 2-7 中的元组就被当作记录加以利用。如果在任何的表达式里我们在元组内对元素排序，这些元素所携带的信息就会丢失，因为这些信息是跟它们的位置有关的。<span style="color:red;">嗯。</span></p>
+
+<p>示例 2-7 把元组用作记录</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; lax_coordinates = (33.9425, -118.408056)
+&gt;&gt;&gt; city, year, pop, chg, area = ('Tokyo', 2003, 32450, 0.66, 8014)
+&gt;&gt;&gt; traveler_ids = [('USA', '31195855'), ('BRA', 'CE342567'),
+...    ('ESP', 'XDA205856')]
+&gt;&gt;&gt; for passport in sorted(traveler_ids):
+...     print('%s/%s' % passport)
+BRA/CE342567
+ESP/XDA205856
+USA/31195855
+&gt;&gt;&gt; for country, _ in traveler_ids:
+...     print(country)
+USA
+BRA
+ESP
+</code></pre>
+
+<p><span style="color:red;"><code>print('%s/%s' % passport)</code> 这句对于元组的使用，嗯，之前好像看到过说可以这样用，不错。% 格式运算符能被匹配到对应的元组元素上。</span></p>
+
+<p>上面的 for 循环 <code>for country, _ in traveler_ids:</code> 可以分别提取元组里的元素，也叫作拆包(unpacking)。因为元组中第二个元素对我们没有什么用，所以它赋值给“_”占位符。<span style="color:red;">嗯，这个经常看到，没用的变量可以用 _ 来标识。</span></p>
+
+<p>拆包让元组可以完美地被当作记录来使用，这也是下一节的话题。<span style="color:red;">为什么呢？</span></p>
+
+<p><span style="color:red;">上面这个例子还是没明白怎么就把元组当做记录了？还是说把元组当做一条一条的记录？嗯，这样倒是OK</span></p>
+
+<h2 id="3-2-元组拆包">3.2 元组拆包</h2>
+
+<p>示例 2-7 中，我们把元组 (&lsquo;Tokyo&rsquo;, 2003, 32450, 0.66, 8014) 里的元素分别赋值给变量 city、year、pop、chg和area，而这所有的赋值我们只用一行声明就写完了。 同样，在后面一行中，一个 % 运算符就把 passport 元组里的元素对应到了 print 函数的格式字符串空档中。这两个都是对元组拆包的应用。<span style="color:red;">嗯，很好。</span></p>
+
+<blockquote>
+<p>元组拆包可以应用到任何可迭代对象上，唯一的硬性要求是，被可迭代对象中的元素数量必须要跟接受这些元素的元组的空档数一致。除非我们用 * 来表示忽略多余的元素，在“用 * 来处理多余的元素”一节里，我会讲到它的具体用法。 Python 爱好者们很喜欢用元组拆包这个说法，但是可迭代元素拆包这个表达也慢慢流行了起来，比如“PEP 3132—Extended Iterable Unpacking” (<a href="https://www.python.org/dev/peps/pep-3132/"> </a><a href="https://www.python.org/dev/peps/pep-3132/">https://www.python.org/dev/peps/pep-3 132/</a>)的标题就是这么用的。</p>
+</blockquote>
+
+<p>最好辨认的元组拆包形式就是平行赋值，也就是说把一个可迭代对象里的元素，一并赋值到由对应的变量组成的元组中。就像下面这段代码：</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; lax_coordinates = (33.9425, -118.408056)
+&gt;&gt;&gt; latitude, longitude = lax_coordinates # 元组拆包 &gt;&gt;&gt; latitude
+33.9425
+&gt;&gt;&gt; longitude
+-118.408056
+</code></pre>
+
+<p>另外一个很优雅的写法当属不使用中间变量交换两个变量的值：<span style="color:red;">嗯，这个经常见到，很nice</span></p>
+
+<pre><code class="language-python">&gt;&gt;&gt; b, a = a, b
+</code></pre>
+
+<p>还可以用 * 运算符把一个可迭代对象拆开作为函数的参数：<span style="color:red;">嗯，这个之前看到过不过感觉还是很陌生。</span></p>
+
+<pre><code class="language-python">&gt;&gt;&gt; divmod(20, 8)
+(2, 4)
+&gt;&gt;&gt; t = (20, 8)
+&gt;&gt;&gt; divmod(*t)
+(2, 4)
+&gt;&gt;&gt; quotient, remainder = divmod(*t)
+&gt;&gt;&gt; quotient, remainder
+(2, 4)
+</code></pre>
+
+<p>下面是另一个例子，这里元组拆包的用法则是让一个函数可以用元组的形式返回多个值，然后调用函数的代码就能轻松地接受这些返回值。比如 <code>os.path.split()</code> 函数就会返回以路径和最后一个文件名组成的元组 (path, last_part):</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; import os
+&gt;&gt;&gt; _, filename = os.path.split('/home/luciano/.ssh/idrsa.pub')
+&gt;&gt;&gt; filename
+'idrsa.pub'
+</code></pre>
+
+<p>在进行拆包的时候，我们不总是对元组里所有的数据都感兴趣， <code>_</code> 占位符能帮助处理这种情况，上面这段代码也展示了它的用法。<span style="color:red;">嗯。</span></p>
+
+<blockquote>
+<p>如果做的是国际化软件，那么<code>_</code>可能就不是一个理想的占位符，因为它也是 <code>gettext.gettext</code> 函数的常用别名， <code>gettext</code> 模块的文档 (<a href="https://docs.python.org/3/library/gettext.html"> </a><a href="https://docs.python.org/3/library/gettext.html">https://docs.python.org/3/library/gettext.html </a>)里提到了这一点。在其他情况下， <code>_</code> 会是一个很好的占位符。<span style="color:red;">这个还真的不知道，这个 gettext 模块是什么？</span></p>
+</blockquote>
+
+<p>除此之外，在元组拆包中使用 <code>*</code> 也可以帮助我们把注意力集中在元组的部分元素上。 用<code>*</code>来处理剩下的元素。</p>
+
+<p>在 Python 中，函数用 <code>*args</code> 来获取不确定数量的参数算是一种经典写法了。</p>
+
+<p>于是 Python 3 里，这个概念被扩展到了平行赋值中：<strong>注意</strong></p>
+
+<pre><code class="language-python">&gt;&gt;&gt; a, b, *rest = range(5)
+&gt;&gt;&gt; a, b, rest
+(0, 1, [2, 3, 4])
+&gt;&gt;&gt; a, b, *rest = range(3)
+&gt;&gt;&gt; a, b, rest
+(0, 1, [2])
+&gt;&gt;&gt; a, b, *rest = range(2)
+&gt;&gt;&gt; a, b, rest
+(0, 1, [])
+</code></pre>
+
+<p><span style="color:red;">嗯，上面这个还是要注意下的，注意 rest 接受到的值是什么。</span></p>
+
+<p>在平行赋值中，<code>*</code> 前缀只能用在一个变量名前面，但是这个变量可以出现在赋值表达式的任意位置：</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; a, *body, c, d = range(5)
+&gt;&gt;&gt; a, body, c, d
+(0, [1, 2], 3, 4)
+&gt;&gt;&gt; *head, b, c, d = range(5)
+&gt;&gt;&gt; head, b, c, d
+([0, 1], 2, 3, 4)
+</code></pre>
+
+<p><span style="color:red;">嗯，虽然只能用一个 <code>*</code>  但是，位置可以在任意的位置。</span></p>
+
+<p>另外元组拆包还有个强大的功能，那就是可以应用在嵌套结构中。</p>
+
+<h3 id="3-3-嵌套元组拆包">3.3 嵌套元组拆包</h3>
+
+<p>接受表达式的元组可以是嵌套式的，例如(a, b, (c, d))。只要这个接受元组的嵌套结构符合表达式本身的嵌套结构， Python 就可以作出正确的对应。示例 2-8 就是对嵌套元组 拆包的应用。</p>
+
+<p>示例 2-8 用嵌套元组来获取经度</p>
+
+<pre><code class="language-python">metro_areas = [
+    ('Tokyo','JP',36.933,(35.689722,139.691667)),
+    ('Delhi NCR', 'IN', 21.935, (28.613889, 77.208889)),
+    ('Mexico City', 'MX', 20.142, (19.433333, -99.133333)),
+    ('New York-Newark', 'US', 20.104, (40.808611, -74.020386)),
+    ('Sao Paulo', 'BR', 19.649, (-23.547778, -46.635833)),
+]
+print('{:15} | {:^9} | {:^9}'.format('', 'lat.', 'long.'))
+fmt = '{:15} | {:9.4f} | {:9.4f}'
+for name, cc, pop, (latitude, longitude) in metro_areas:
+    if longitude &lt;= 0:
+        print(fmt.format(name, latitude, longitude))
+</code></pre>
+
+<p><span style="color:red;">上面的几个 print 感觉有些厉害，要总结到我的 print 案例里。</span></p>
+
+<p>我们把输入元组的最后一个元素拆包到由变量构成的元组里，这样就获取了坐标。<span style="color:red;">嗯。</span></p>
+
+<p><code>if longitude &lt;= 0</code>: 这个条件判断把输出限制在西半球的城市。</p>
+
+<p>示例 2-8 的输出是这样的：</p>
+
+<pre><code>                |   lat.    |   long.
+Mexico City     |   19.4333 |  -99.1333
+New York-Newark |   40.8086 |  -74.0204
+Sao Paulo       |  -23.5478 |  -46.6358
+</code></pre>
+
+<blockquote>
+<p>在Python 3之前，元组可以作为形参放在函数声明中，例如 <code>def fn(a, (b, c), d):</code> 。然而Python 3不再支持这种格式，具体原因见于“PEP 3113—Removal of Tuple Parameter Unpacking” (<a href="http://python.org/dev/peps/pep-3113/">http://python+org/dev/peps/pep-3113/</a>) 。需要弄清楚的是，这个改变对函数调用者并没有影响，它改变的是某些函数的声明方式。<span style="color:red;">嗯。</span></p>
+</blockquote>
+
+<p>元组已经设计得很好用了，但作为记录来用的话，还是少了一个功能：我们时常会需要给记录中的字段命名。 namedtuple 函数的出现帮我们解决了这个问题。<span style="color:red;">是呀。给记录中的字段命名还是会经常用到的，不过这个感觉就像字典一样吧？与字典有什么区别吗？使用场景上呢？</span></p>
+
+<h3 id="3-4-具名元组">3.4 具名元组</h3>
+
+<p>collections.namedtuple 是一个工厂函数，它可以用来构建一个带字段名的元组和一个有名字的类——这个带名字的类对调试程序有很大帮助。<span style="color:red;">我想起来了，第一章的时候用过。<code>Card = collections.namedtuple('Card', ['rank', 'suit'])</code> 用来创建没有方法的类。</span></p>
+
+<blockquote>
+<p>用 namedtuple 构建的类的实例所消耗的内存跟元组是一样的，因为字段名都被存在对应的类里面。这个实例跟普通的对象实例比起来也要小一些，因为 Python 不会用 <strong>dict</strong> 来存放这些实例的属性。<span style="color:red;">嗯，这个与普通的对象实例之间的对比要清楚。</span></p>
+</blockquote>
+
+<p>在第 1 章的示例 1-1 中是这样新建 Card 类的：</p>
+
+<pre><code class="language-python">Card = collections.namedtuple('Card', ['rank', 'suit'])
+</code></pre>
+
+<p>示例 2-9 展示了如何用具名元组来记录一个城市的信息。</p>
+
+<p>示例 2-9 定义和使用具名元组</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; from collections import namedtuple
+&gt;&gt;&gt; City = namedtuple('City', 'name country population coordinates')
+&gt;&gt;&gt; tokyo = City('Tokyo', 'JP', 36.933, (35.689722, 139.691667))
+&gt;&gt;&gt; tokyo
+City(name='Tokyo', country='JP', population=36.933, coordinates=(35.689722,
+139.691667))
+&gt;&gt;&gt; tokyo.population
+36.933
+&gt;&gt;&gt; tokyo.coordinates
+(35.689722, 139.691667)
+&gt;&gt;&gt; tokyo[1]
+'JP'
+</code></pre>
+
+<p>创建一个具名元组需要两个参数，一个是类名，另一个是类的各个字段的名字。后者可以是由数个字符串组成的可迭代对象，或者是由空格分隔开的字段名组成的字符串。<span style="color:red;">嗯。怪不得上面两个例子的创建方式不同。</span></p>
+
+<p>存放在对应字段里的数据要以一串参数的形式传入到构造函数中(注意，元组的构造函数却只接受单一的可迭代对象)。<span style="color:red;">什么叫单一的可迭代对象？</span></p>
+
+<p>你可以通过字段名或者位置来获取一个字段的信息。</p>
+
+<p>除了从普通元组那里继承来的属性之外，具名元组还有一些自己专有的属性。示例 2-10 中就展示了几个最有用的：<code>_fields</code>类属性、类方法 <code>_make(iterable)</code>和实例方法 <code>_asdict()</code>。</p>
+
+<p>示例 2-10 具名元组的属性和方法(接续前一个示例)</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; City._fields
+('name', 'country', 'population', 'coordinates')
+&gt;&gt;&gt; LatLong = namedtuple('LatLong', 'lat long')
+&gt;&gt;&gt; delhi_data = ('Delhi NCR', 'IN', 21.935, LatLong(28.613889, 77.208889))
+&gt;&gt;&gt; delhi = City._make(delhi_data)
+&gt;&gt;&gt; delhi._asdict()
+OrderedDict([('name', 'Delhi NCR'), ('country', 'IN'), ('population',21.935),
+('coordinates', LatLong(lat=28.613889, long=77.208889))])
+&gt;&gt;&gt; for key, value in delhi._asdict().items():
+          print(key + ':', value)
+
+name: Delhi NCR
+country: IN
+population: 21.935
+coordinates: LatLong(lat=28.613889, long=77.208889)
+&gt;&gt;&gt;
+</code></pre>
+
+<p><code>_fields</code> 属性是一个包含这个类所有字段名称的元组。用 <code>_make()</code> 通过接受一个可迭代对象来生成这个类的一个实例，它的作用跟 <code>City(*delhi_data)</code> 是一样的。<span style="color:red;">嗯。</span> <code>_asdict()</code> 把具名元组以 <code>collections.OrderedDict</code> 的形式返回，我们可以利用它来把元组里的信息友好地呈现出来。<span style="color:red;">嗯。</span></p>
+
+<p>现在我们知道了，元组是一种很强大的可以当作记录来用的数据类型。</p>
+
+<p>它的第二个角色则是充当一个不可变的列表。下面就来看看它的第二重功能。</p>
+
+<h2 id="3-5-作为不可变列表的元组">3.5 作为不可变列表的元组</h2>
+
+<p>如果要把元组当作列表来用的话，最好先了解一下它们的相似度如何。在表 2-1 中可以清 楚地看到，除了跟增减元素相关的方法之外，元组支持列表的其他所有方法。还有一个例外，元组没有 <code>__reversed__</code> 方法，但是这个方法只是个优化而已， reversed(my_tuple) 这个用法在没有 <code>__reversed__</code> 的情况下也是合法的。<span style="color:red;">好吧，为什么会有两套 reverse？</span></p>
+
+<p>表2-1：列表或元组的方法和属性(那些由object类支持的方法没有列出来)</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180711/KJG5Del9g4.png?imageslim" alt="mark" /></p>
+
+<p>每个 Python 程序员都知道序列可以用 s[a:b] 的形式切片，但是关于切片，我还想说说它的一些不太为人所知的方面。<span style="color:red;">嗯。</span></p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/01-%E5%BC%80%E5%90%AFlinux%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E7%9A%84%E5%A4%A7%E9%97%A8/04-%E5%B0%8F%E7%BB%93/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 小结</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/02-%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+            <span class="next-text nav-default">02 列表推导和生成器表达式</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

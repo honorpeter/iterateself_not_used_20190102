@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>海量数据处理 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="海量数据处理 TOP N问题 如何在海量数据中找出重复最多一个。 通过hash映射为小文件 通过hash_map统计各个小文件重读最多的并记录次数 对每个小" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="海量数据处理" />
+<meta property="og:description" content="海量数据处理 TOP N问题 如何在海量数据中找出重复最多一个。 通过hash映射为小文件 通过hash_map统计各个小文件重读最多的并记录次数 对每个小" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/" /><meta property="article:published_time" content="2018-08-12T16:58:01&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T16:58:01&#43;00:00"/>
+<meta itemprop="name" content="海量数据处理">
+<meta itemprop="description" content="海量数据处理 TOP N问题 如何在海量数据中找出重复最多一个。 通过hash映射为小文件 通过hash_map统计各个小文件重读最多的并记录次数 对每个小">
+
+
+<meta itemprop="datePublished" content="2018-08-12T16:58:01&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T16:58:01&#43;00:00" />
+<meta itemprop="wordCount" content="1400">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="海量数据处理"/>
+<meta name="twitter:description" content="海量数据处理 TOP N问题 如何在海量数据中找出重复最多一个。 通过hash映射为小文件 通过hash_map统计各个小文件重读最多的并记录次数 对每个小"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">海量数据处理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1400 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#海量数据处理">海量数据处理</a>
+<ul>
+<li><a href="#top-n问题">TOP N问题</a></li>
+<li><a href="#分布式top-n问题">分布式TOP N问题</a></li>
+<li><a href="#快速外排序问题">快速外排序问题</a></li>
+<li><a href="#公共数据问题">公共数据问题</a></li>
+<li><a href="#内存内top-n问题">内存内TOP N问题</a></li>
+<li><a href="#位图法">位图法</a></li>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="海量数据处理">海量数据处理</h1>
+
+<h2 id="top-n问题">TOP N问题</h2>
+
+<ol>
+<li>如何在海量数据中找出重复最多一个。</li>
+</ol>
+
+<ul>
+<li><p>通过hash映射为小文件</p></li>
+
+<li><p>通过hash_map统计各个小文件重读最多的并记录次数</p></li>
+
+<li><p>对每个小文件重复最多的进行建立大根堆</p></li>
+</ul>
+
+<ol>
+<li>上亿有重数据，统计最多前N个。</li>
+</ol>
+
+<ul>
+<li><p>内存存不下</p>
+
+<ul>
+<li><p>通过hash映射为小文件</p></li>
+
+<li><p>通过hash_map统计各个小文件重读最多的并记录次数</p></li>
+
+<li><p>对每个小文件重复最多的进行建立大根堆并重复N次取走堆顶并重建堆操作</p></li>
+</ul></li>
+
+<li><p>内存存得下</p>
+
+<ul>
+<li><p>直接内存通过hash_map统计并建大根堆</p></li>
+
+<li><p>重复N次取走堆顶并重建堆操作</p></li>
+</ul></li>
+</ul>
+
+<ol>
+<li>海量日志数据，提取出某日访问百度次数最多的那个IP（同1）。</li>
+</ol>
+
+<ul>
+<li><p>将IP % 1000映射到1000个小文件中</p>
+
+<ul>
+<li><p>相同IP会被映射到同一个文件</p></li>
+
+<li><p>不会出现累加和更大情况</p></li>
+</ul></li>
+
+<li><p>分1000次在内存处理小文件，得到频率最大IP（使用map统计）</p></li>
+
+<li><p>对这1000个IP建立大根堆</p></li>
+</ul>
+
+<ol>
+<li>1000w查询串统计最热门10个（同2）。</li>
+</ol>
+
+<ul>
+<li>同上</li>
+</ul>
+
+<ol>
+<li>1G的文件，里面1行1个不超过16字节的词。内存限制1M，返回频数最高前100（同2）。</li>
+</ol>
+
+<ul>
+<li><p>将单词 % 5000存入5000小文件</p>
+
+<ul>
+<li><p>平均各文件约200K</p></li>
+
+<li><p>对超过1M的文件继续分割直到小于200K</p></li>
+</ul></li>
+
+<li><p>使用map统计各个词出现的频率</p></li>
+
+<li><p>对5000词使用堆排序或归并排序</p></li>
+</ul>
+
+<h2 id="分布式top-n问题">分布式TOP N问题</h2>
+
+<ol>
+<li>分布在100台电脑的海量数据，统计前十。</li>
+</ol>
+
+<ul>
+<li><p>各数据只出现在一台机器中</p>
+
+<ul>
+<li><p>先在独立机器得到前十</p>
+
+<ul>
+<li><p>若可以放入内存直接堆排序</p></li>
+
+<li><p>若不可全放入内存：哈希分块 -&gt; map统计 -&gt; 归总堆排</p></li>
+</ul></li>
+
+<li><p>再将100台计算机的TOP10组合起来堆排序</p></li>
+</ul></li>
+
+<li><p>同一元素可同时出现在不同机器中</p>
+
+<ul>
+<li>遍历所有数据，重新hash取模，使同一个元素只出现在单独的一台电脑中，然后采用上面方法先统计每台电脑TOP10再汇总起来</li>
+</ul></li>
+</ul>
+
+<h2 id="快速外排序问题">快速外排序问题</h2>
+
+<ol>
+<li>有10个1G文件，每行都是一个可重复用户query，按query频度排序。</li>
+</ol>
+
+<ul>
+<li><p>顺序读取十个文件并采取哈希，将query写入10个文件中</p></li>
+
+<li><p>通过hash_map(query, count)统计每个query出现次数，至少2G内存</p></li>
+
+<li><p>通过得到的hash_map中query和query_count，对query_count排序并将重新输出到文件中，得到已排序好的文件</p></li>
+
+<li><p>对十个文件进行归并排序（外排序）</p></li>
+</ul>
+
+<h2 id="公共数据问题">公共数据问题</h2>
+
+<ol>
+<li>A,B两个文件各存放50亿url，每个为64Byte，限制内存4G找出公共url。</li>
+</ol>
+
+<ul>
+<li><p>对A和B两个大文件，先通过url % 1000将数据映射到1000个文件中，单个文件大小约320M（我们只需要检查对应小文件A1 V B1&hellip;&hellip;，不对应小文件不会有相同url）</p></li>
+
+<li><p>通过hash_set统计，把A1的url存储到hash_set中，再遍历对应的B1小文件，检查是否在hash_set中，若存在则写入外存。重复循环处理对应的1000个对。</p></li>
+</ul>
+
+<ol>
+<li>1000w有重字符串，对字符串去重。</li>
+</ol>
+
+<ul>
+<li><p>先hash分为多个文件</p></li>
+
+<li><p>逐个文件检查并插入set中</p></li>
+
+<li><p>多个set取交集</p></li>
+</ul>
+
+<h2 id="内存内top-n问题">内存内TOP N问题</h2>
+
+<ol>
+<li>100w个数字找出最大100个。</li>
+</ol>
+
+<ul>
+<li><p>堆排序法</p>
+
+<ul>
+<li>建大根堆，取走堆顶并重建堆，重复100次</li>
+</ul></li>
+
+<li><p>快排法</p>
+
+<ul>
+<li>使用快速排序划分，若某次枢纽元在后10000时（具体情况具体分析），对后10000数据排序后取前100</li>
+</ul></li>
+</ul>
+
+<h2 id="位图法">位图法</h2>
+
+<ol>
+<li>在2.5亿数字中找出不重复的整数。</li>
+</ol>
+
+<ul>
+<li><p>使用2-Bit位图法，00表示不存在，01表示出现一次，10表示出现多次，11无意义。这样只需要1G内存。</p></li>
+
+<li><p>或者hash划分小文件，小文件使用hash_set检查各个元素，得到的。</p></li>
+</ul>
+
+<ol>
+<li>如何在40亿数字中快速判断是否有某个数？</li>
+</ol>
+
+<ul>
+<li>位图法标记某个数字是否存在，check标记数组。</li>
+</ul>
+
+<h2 id="ref">REF</h2>
+
+<ul>
+<li><a href="https://github.com/linw7/Skill-Tree">Skill-Tree</a></li>
+</ul>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-12</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">计算机网络</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91/01-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/02-linux-%E7%8E%AF%E5%A2%83/linux-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+            <span class="next-text nav-default">Linux 操作系统</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

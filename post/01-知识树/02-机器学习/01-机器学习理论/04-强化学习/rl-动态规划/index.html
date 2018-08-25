@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>RL 动态规划 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-16 16:29:04&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/5880/ slug: &amp;lsquo;5880&amp;rsquo; title: RL 动态规划 wordpress_id: 5880 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="RL 动态规划" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-16 16:29:04&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/5880/ slug: &lsquo;5880&rsquo; title: RL 动态规划 wordpress_id: 5880 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" /><meta property="article:published_time" content="2018-06-11T08:14:52&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:52&#43;00:00"/>
+<meta itemprop="name" content="RL 动态规划">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-16 16:29:04&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/5880/ slug: &lsquo;5880&rsquo; title: RL 动态规划 wordpress_id: 5880 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:52&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:52&#43;00:00" />
+<meta itemprop="wordCount" content="2435">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RL 动态规划"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-16 16:29:04&#43;00:00 layout: post link: http://106.15.37.116/2018/05/17/5880/ slug: &lsquo;5880&rsquo; title: RL 动态规划 wordpress_id: 5880 categories: - 人工智能学习 tags: - NOT_ADD - Reinforcement Learning [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">RL 动态规划</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 2435 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#reinforcement-learning">- Reinforcement Learning</a></li>
+</ul></li>
+<li><a href="#original">ORIGINAL</a></li>
+<li><a href="#强化学习读书笔记-04-动态规划-http-www-cnblogs-com-steven-yang-p-6493328-html"><a href="http://www.cnblogs.com/steven-yang/p/6493328.html">强化学习读书笔记 - 04 - 动态规划</a></a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a>
+<ul>
+<li><a href="#策略">策略</a></li>
+<li><a href="#最优策略-optimal-policy">最优策略(Optimal Policy)</a></li>
+<li><a href="#通用策略迭代-generalized-policy-iteration">通用策略迭代(Generalized Policy Iteration)</a></li>
+<li><a href="#策略迭代-policy-iteration-的实现步骤">策略迭代(Policy Iteration)的实现步骤</a></li>
+<li><a href="#策略评估公式说明">策略评估公式说明</a></li>
+<li><a href="#价值迭代-value-iteration">价值迭代(Value Iteration)</a></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#参照">参照</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-16 16:29:04+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/17/5880/">http://106.15.37.116/2018/05/17/5880/</a>
+slug: &lsquo;5880&rsquo;
+title: RL 动态规划
+wordpress_id: 5880
+categories:
+- 人工智能学习
+tags:
+- NOT_ADD</p>
+
+<h2 id="reinforcement-learning">- Reinforcement Learning</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h1 id="original">ORIGINAL</h1>
+
+<ol>
+<li></li>
+</ol>
+
+<h1 id="强化学习读书笔记-04-动态规划-http-www-cnblogs-com-steven-yang-p-6493328-html"><a href="http://www.cnblogs.com/steven-yang/p/6493328.html">强化学习读书笔记 - 04 - 动态规划</a></h1>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p><strong>动态规划(Dynamic Programming)</strong> - 计算最优策略的一组算法。</p>
+
+<h2 id="策略">策略</h2>
+
+<p>强化学习的一个主要目的是：找到最优策略。
+我们先要明白什么是策略？
+策略告诉主体(agent)在当前的状态下，应该选择哪个行动。
+我们稍微数据化上面的说法，变成：
+<strong>策略告诉主体(agent)在每个状态(s)下，选择行动(a)的可能性。</strong></p>
+
+<p>脑补一下：想象一个矩阵：
+每一行代表一个state，
+每一列代表一个action，
+单元的值是一个取值区间为([0, 1])的小数，代表对应状态-行动的选择概率。</p>
+
+<h2 id="最优策略-optimal-policy">最优策略(Optimal Policy)</h2>
+
+<p>最优策略是可以取得最大的长期奖赏的策略。
+<strong>长期奖赏就是(G_t)</strong>
+因此，我们需要对策略进行价值计算。计算的方法在<a href="http://www.cnblogs.com/steven-yang/p/6480666.html">强化学习读书笔记 - 03 - 有限马尔科夫决策过程</a>讲了。
+有两个计算公式：一个是策略的状态价值公式，一个是策略的行动价值公式。
+<strong>策略的状态价值公式</strong>有利于发现哪个状态的价值高。也就是找到最优状态。
+<strong>策略的行动价值公式</strong>有利于发现（在特定状态下）哪个行动的价值高。也就是找到最优行动。</p>
+
+<h2 id="通用策略迭代-generalized-policy-iteration">通用策略迭代(Generalized Policy Iteration)</h2>
+
+<p>动态规划的基本思想 - 通用策略迭代是：</p>
+
+<ol>
+<li><p>先从一个策略(\pi_0)开始，</p></li>
+
+<li><p>策略评估(Policy Evaluation) - 得到策略(\pi<em>0)的价值(v</em>{\pi_0})</p></li>
+
+<li><p>策略改善(Policy Improvement) - 根据价值(v_{\pi_0})，优化策略为(\pi_0)。</p></li>
+
+<li><p>迭代上面的步骤2和3，直到找到最优价值(v<em>*)，因此可以得到最优策略(\pi</em>*)（终止条件：得到了稳定的策略(\pi)和策略价值(v_{pi})）。</p></li>
+</ol>
+
+<p>这个被称为通用策略迭代(Generalized Policy Iteration)。
+数学表示如下：
+[
+\pi<em>0 \xrightarrow{E} v</em>{\pi_0} \xrightarrow{I} \pi<em>1 \xrightarrow{E} v</em>{\pi_1} \xrightarrow{I} \pi<em>2 \xrightarrow{E} \cdots \xrightarrow{I} \pi</em>* \xrightarrow{E} v_*
+]</p>
+
+<p>因此，我们需要关心两个问题：如何计算策略的价值，以及如何根据策略价值获得一个优化的策略。</p>
+
+<h2 id="策略迭代-policy-iteration-的实现步骤">策略迭代(Policy Iteration)的实现步骤</h2>
+
+<p>步骤如下：请参照书上的图4.1。</p>
+
+<ol>
+<li><p>初始化 - 所有状态的价值（比如：都设为0）。
+所有的状态(\mathcal{S} = { s_0, s_1,&hellip;,s_n})是一个集合。
+数学表示：(\vec{V_0(s)} = [0, \dots, 0])</p></li>
+
+<li><p>初始化 - 一个等概率随机策略(\pi_0) (the equiprobable random policy)
+<strong>等概率随机策略</strong> - 意味着每个行动的概率相同。
+数学表示：
+[
+\pi = \begin{bmatrix}
+\dots &amp; \dots &amp; \dots <br />
+\dots &amp; \pi(s, a) &amp; \dots <br />
+\dots &amp; \dots &amp; \dots <br />
+\end{bmatrix} <br />
+where <br />
+\pi \text{ - a matrix for each state s and action a} <br />
+\pi(s, a) =
+\begin{cases}
+\frac{1}{N_a}, \text{a is selected under state s by } \pi <br />
+0, otherwise <br />
+\end{cases} <br />
+N_a \text{ - the count of actions selected under state s by } \pi
+]
+矩阵(\pi)就是我们的策略，我们反过来看，如果一个单元的值不是0，说明该策略选择了这个行动，如果为0，说明该策略不选择这个行动。
+初始的时候：一个状态(s)对应的所有可能行动(a)，都是有值的。
+<strong>关键理解： 找到最优策略的过程就是优化矩阵(\pi) - 减少每个状态(s)选的行动(a)</strong>。</p></li>
+
+<li><p>策略迭代 - 策略评估过程
+根据(\pi)计算状态价值(\vec{V<em>{k+1}(s)})
+迭代策略评估公式 - iterative policy evaluation - Bellman update rule
+[
+\begin{align}
+v</em>{k+1}(s)
+&amp; = \mathbb{E}<em>{\pi} \left [ R</em>{t+1} + \gamma v<em>k(S</em>{t+1}) \ | \ S<em>t = s \right ] <br />
+&amp; = \sum</em>{a} \pi(a|s) \sum<em>{s&rsquo;,r} p(s&rsquo;,r|s,a) \left [ r + \gamma v</em>{k}(s&rsquo;) \right], \ \forall s \in \mathcal{S}
+\end{align}
+]</p></li>
+
+<li><p>策略迭代 - 策略优化过程
+根据状态价值(\vec{V_{k+1}(s)})，优化策略(\pi)。
+<strong>关键： 优化方法 - 对于每个状态(s)，只保留可达到最大状态价值的行动</strong>。
+举例说明：
+你是一个初级程序员(5)，你有4个选择：成为A: 架构师(10)，B: 项目经理(10)，C: 测试(8)，D: 运营(8)。
+括号里的是状态价值。由于架构师(10)，项目经理(10)的价值最大。
+所以，只保留行动A和B。</p></li>
+</ol>
+
+<p>数学表示：
+[
+\begin{align}
+\pi&rsquo;(s)
+&amp; = \underset{a}{argmax} \ q<em>{\pi}(s, a) <br />
+&amp; = \underset{a}{argmax} \ \sum</em>{s&rsquo;, r} p(s&rsquo;,r|s,a) \left [ r + \gamma v<em>{\pi}(s&rsquo;) \right ] <br />
+\end{align} <br />
+\because q</em>{\pi}(s, \pi&rsquo;(s)) \ge v(\pi), \ \forall s \in \mathcal{S} <br />
+\therefore v<em>{\pi}&lsquo;(s) \ge v</em>{\pi}(s) <br />
+v<em>{\pi}(s) = v</em>{\pi}&lsquo;(s) <br />
+where <br />
+\pi&rsquo;(s) \text{ - action(s) selected under the state s by policy } \pi&rsquo;
+]
+注意：这是一个贪恋的策略(greedy policy)，因为只做了<strong>一步</strong>价值计算。</p>
+
+<ol>
+<li>迭代结束条件 - 得到了稳定的策略(\pi)和策略价值(v<em>{pi})
+策略(\pi)稳定 - 即(\pi</em>{k+1} = \pi_k)。</li>
+</ol>
+
+<h2 id="策略评估公式说明">策略评估公式说明</h2>
+
+<p>下面这个是第三章讲的策略状态价值公式：
+[
+\begin{align}
+v<em>{\pi}(s)
+&amp; \doteq \mathbb{E}</em>{\pi} \left [ \sum<em>{k=0}^{\infty} \gamma^k R</em>{t+k+1} | S<em>t = s \right ] <br />
+&amp; = \sum</em>{a} \pi(a|s) \sum<em>{s&rsquo;,r} p(s&rsquo;,r|s,a) \left [ r + \gamma v</em>{\pi}(s&rsquo;) \right], \ \forall s \in \mathcal{S}
+\end{align}
+]
+可以看出状态(s)在策略(v_pi)上的价值是由其它状态(s&rsquo;)在策略(v_pi)的价值决定的。
+简单地想一想，就会发现这个公式难以（不能）被实现。</p>
+
+<p>因此：我们使用了一个迭代的公式：
+迭代策略评估公式 - iterative policy evaluation - Bellman update rule
+[
+\begin{align}
+v<em>{k+1}(s)
+&amp; = \mathbb{E}</em>{\pi} \left [ R_{t+1} + \gamma v<em>k(S</em>{t+1}) \ | \ S<em>t = s \right ] <br />
+&amp; = \sum</em>{a} \pi(a|s) \sum<em>{s&rsquo;,r} p(s&rsquo;,r|s,a) \left [ r + \gamma v</em>{k}(s&rsquo;) \right], \ \forall s \in \mathcal{S}
+\end{align}
+]
+这个公式和策略状态价值公式很像。
+仔细比较一下，就会发现这个公式的(v<em>{k+1}(s))是由(v</em>{k}(s&rsquo;))计算得到的。
+这就有了可行性。为什么呢？因为我们可以定义(v_0(s) = 0, \ \forall s \in \mathcal{S})。
+这样就可以计算(v_1(s), \ \forall s \in \mathcal{S})，以此类推，经过多次迭代((k \to \infty))， (v<em>k \cong v</em>{\pi})。</p>
+
+<h2 id="价值迭代-value-iteration">价值迭代(Value Iteration)</h2>
+
+<p>价值迭代方法是对上面所描述的方法的一种简化：
+在策略评估过程中，对于每个状态(s)，只找最优(价值是最大的)行动(a)。这样可以减少空间的使用。</p>
+
+<ol>
+<li><p>初始化 - 所有状态的价值（比如：都设为0）。</p></li>
+
+<li><p>初始化 - 一个等概率随机策略(\pi_0) (the equiprobable random policy)</p></li>
+
+<li><p>策略评估
+对于每个状态(s)，只找最优(价值是最大的)行动(a)。
+数学表示：
+简化策略评估迭代公式
+[
+\begin{align}
+v<em>{k+1}(s)
+&amp; \doteq \underset{a}{max} \ \mathbb{E} \left [ R</em>{t+1} + \gamma v<em>k(S</em>{t+1}) \ | \ S_t = s , A<em>t = a\right ] <br />
+&amp; = \underset{a}{max} \ \sum</em>{s&rsquo;,r} p(s&rsquo;,r|s,a) \left [ r + \gamma v_{k}(s&rsquo;) \right]
+\end{align} <br />
+where <br />
+\underset{a}{max}(.) \text{ - get the max value } \forall a \in \mathcal{A(s)}
+]</p></li>
+
+<li><p>策略优化
+没有变化。</p></li>
+</ol>
+
+<h2 id="总结">总结</h2>
+
+<p>通用策略迭代(DPI)是一个强化学习的核心思想，影响了几乎所有的强化学习方法。
+通用策略迭代(DPI)的通用思想是：两个循环交互的过程，迭代价值方法（value function）和迭代优化策略方法。</p>
+
+<p>动态规划(DP)对复杂的问题来说，可能不具有可行性。主要原因是问题状态的数量很大，导致计算代价太大。</p>
+
+<h2 id="参照">参照</h2>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-off-policy%E7%9A%84%E8%BF%91%E4%BC%BC%E6%96%B9%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">RL off-policy的近似方法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95monte-carlo-methods/">
+            <span class="next-text nav-default">RL 蒙特卡洛方法(Monte Carlo Methods)</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

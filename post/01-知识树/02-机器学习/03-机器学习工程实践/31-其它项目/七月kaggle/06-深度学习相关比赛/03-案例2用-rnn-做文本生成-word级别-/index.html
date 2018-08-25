@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 案例2：用 RNN 做文本生成 word级别 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="用RNN做文本生成 举个小小的例子，来看看LSTM是怎么玩的 我们这里不再用 char 级别，我们用 word 级别来做。 第一步，一样，先导入各种库 import os import numpy as np import nltk" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/03-%E6%A1%88%E4%BE%8B2%E7%94%A8-rnn-%E5%81%9A%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90-word%E7%BA%A7%E5%88%AB-/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 案例2：用 RNN 做文本生成 word级别" />
+<meta property="og:description" content="用RNN做文本生成 举个小小的例子，来看看LSTM是怎么玩的 我们这里不再用 char 级别，我们用 word 级别来做。 第一步，一样，先导入各种库 import os import numpy as np import nltk" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/03-%E6%A1%88%E4%BE%8B2%E7%94%A8-rnn-%E5%81%9A%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90-word%E7%BA%A7%E5%88%AB-/" /><meta property="article:published_time" content="2018-07-26T15:33:19&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-26T15:33:19&#43;00:00"/>
+<meta itemprop="name" content="03 案例2：用 RNN 做文本生成 word级别">
+<meta itemprop="description" content="用RNN做文本生成 举个小小的例子，来看看LSTM是怎么玩的 我们这里不再用 char 级别，我们用 word 级别来做。 第一步，一样，先导入各种库 import os import numpy as np import nltk">
+
+
+<meta itemprop="datePublished" content="2018-07-26T15:33:19&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-26T15:33:19&#43;00:00" />
+<meta itemprop="wordCount" content="2065">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 案例2：用 RNN 做文本生成 word级别"/>
+<meta name="twitter:description" content="用RNN做文本生成 举个小小的例子，来看看LSTM是怎么玩的 我们这里不再用 char 级别，我们用 word 级别来做。 第一步，一样，先导入各种库 import os import numpy as np import nltk"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 案例2：用 RNN 做文本生成 word级别</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-26 </span>
+        
+        <span class="more-meta"> 2065 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#用rnn做文本生成">用RNN做文本生成</a>
+<ul>
+<li><a href="#构造训练测试集">构造训练测试集</a></li>
+<li><a href="#模型建造">模型建造</a></li>
+<li><a href="#跑模型">跑模型</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="用rnn做文本生成">用RNN做文本生成</h1>
+
+<p>举个小小的例子，来看看LSTM是怎么玩的</p>
+
+<p>我们这里不再用 char 级别，我们用 word 级别来做。</p>
+
+<p>第一步，一样，先导入各种库</p>
+
+<pre><code class="language-python">import os
+import numpy as np
+import nltk
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Dropout
+from keras.layers import LSTM
+from keras.callbacks import ModelCheckpoint
+from keras.utils import np_utils
+from gensim.models.word2vec import Word2Vec
+</code></pre>
+
+<p>接下来，我们把文本读入</p>
+
+<p>使用 punkt 做句子的 tokenize，然后把句子 tokenize 分成单词，tokenize 成单词这一步在中文中是 jieba 分词。</p>
+
+<pre><code class="language-python">raw_text = ''
+for file in os.listdir(&quot;../input/&quot;):
+    if file.endswith(&quot;.txt&quot;):
+        raw_text += open(&quot;../input/&quot;+file, errors='ignore').read() + '\n\n'
+# raw_text = open('../input/Winston_Churchil.txt').read()
+raw_text = raw_text.lower()
+sentensor = nltk.data.load('tokenizers/punkt/english.pickle')
+sents = sentensor.tokenize(raw_text)
+corpus = []
+for sen in sents:
+    corpus.append(nltk.word_tokenize(sen))
+
+print(len(corpus))
+print(corpus[:3])
+</code></pre>
+
+<pre><code>91007
+[['\ufeffthe', 'project', 'gutenberg', 'ebook', 'of', 'great', 'expectations', ',', 'by', 'charles', 'dickens', 'this', 'ebook', 'is', 'for', 'the', 'use', 'of', 'anyone', 'anywhere', 'at', 'no', 'cost', 'and', 'with', 'almost', 'no', 'restrictions', 'whatsoever', '.'], ['you', 'may', 'copy', 'it', ',', 'give', 'it', 'away', 'or', 're-use', 'it', 'under', 'the', 'terms', 'of', 'the', 'project', 'gutenberg', 'license', 'included', 'with', 'this', 'ebook', 'or', 'online', 'at', 'www.gutenberg.org', 'title', ':', 'great', 'expectations', 'author', ':', 'charles', 'dickens', 'posting', 'date', ':', 'august', '20', ',', '2008', '[', 'ebook', '#', '1400', ']', 'release', 'date', ':', 'july', ',', '1998', 'last', 'updated', ':', 'september', '25', ',', '2016', 'language', ':', 'english', 'character', 'set', 'encoding', ':', 'utf-8', '***', 'start', 'of', 'this', 'project', 'gutenberg', 'ebook', 'great', 'expectations', '***', 'produced', 'by', 'an', 'anonymous', 'volunteer', 'great', 'expectations', '[', '1867', 'edition', ']', 'by', 'charles', 'dickens', '[', 'project', 'gutenberg', 'editor’s', 'note', ':', 'there', 'is', 'also', 'another', 'version', 'of', 'this', 'work', 'etext98/grexp10.txt', 'scanned', 'from', 'a', 'different', 'edition', ']', 'chapter', 'i', 'my', 'father’s', 'family', 'name', 'being', 'pirrip', ',', 'and', 'my', 'christian', 'name', 'philip', ',', 'my', 'infant', 'tongue', 'could', 'make', 'of', 'both', 'names', 'nothing', 'longer', 'or', 'more', 'explicit', 'than', 'pip', '.'], ['so', ',', 'i', 'called', 'myself', 'pip', ',', 'and', 'came', 'to', 'be', 'called', 'pip', '.']]
+</code></pre>
+
+<p>好，w2v乱炖：</p>
+
+<pre><code class="language-python">w2v_model = Word2Vec(corpus, size=128, window=5, min_count=5, workers=4)
+</code></pre>
+
+<p>可以了。这样的 Word2Vec 就很好，第一，size 是固定的，第二， 单词在空间里是有意义的。因此，我们使用这样的一个数字化的表达形式。</p>
+
+<pre><code class="language-python">w2v_model['office']
+</code></pre>
+
+<pre><code>array([-0.01398709,  0.15975526,  0.03589381, -0.4449192 ,  0.365403  ,
+        0.13376504,  0.78731823,  0.01640314, -0.29723561, -0.21117583,
+        0.13451998, -0.65348488,  0.06038611, -0.02000343,  0.05698346,
+        0.68013376,  0.19010596,  0.56921762,  0.66904438, -0.08069923,
+       -0.30662233,  0.26082459, -0.74816126, -0.41383636, -0.56303871,
+       -0.10834043, -0.10635001, -0.7193433 ,  0.29722607, -0.83104628,
+        1.11914253, -0.34119046, -0.39490014, -0.34709939, -0.00583572,
+        0.17824887,  0.43295503,  0.11827419, -0.28707108, -0.02838829,
+        0.02565269,  0.10328653, -0.19100265, -0.24102989,  0.23023468,
+        0.51493132,  0.34759828,  0.05510307,  0.20583512, -0.17160387,
+       -0.10351282,  0.19884749, -0.03935663, -0.04055062,  0.38888735,
+       -0.02003323, -0.16577065, -0.15858875,  0.45083243, -0.09268586,
+       -0.91098118,  0.16775337,  0.3432925 ,  0.2103184 , -0.42439541,
+        0.26097715, -0.10714807,  0.2415273 ,  0.2352251 , -0.21662289,
+       -0.13343927,  0.11787982, -0.31010333,  0.21146733, -0.11726214,
+       -0.65574747,  0.04007725, -0.12032496, -0.03468512,  0.11063002,
+        0.33530036, -0.64098376,  0.34013858, -0.08341357, -0.54826909,
+        0.0723564 , -0.05169795, -0.19633259,  0.08620321,  0.05993884,
+       -0.14693044, -0.40531522, -0.07695422,  0.2279872 , -0.12342903,
+       -0.1919964 , -0.09589464,  0.4433476 ,  0.38304719,  1.0319351 ,
+        0.82628119,  0.3677327 ,  0.07600326,  0.08538571, -0.44261214,
+       -0.10997667, -0.03823839,  0.40593523,  0.32665277, -0.67680383,
+        0.32504487,  0.4009226 ,  0.23463745, -0.21442334,  0.42727917,
+        0.19593567, -0.10731711, -0.01080817, -0.14738144,  0.15710345,
+       -0.01099576,  0.35833639,  0.16394758, -0.10431164, -0.28202233,
+        0.24488974,  0.69327635, -0.29230621], dtype=float32)
+</code></pre>
+
+<p>接下来，其实我们还是以之前的方式来处理我们的 training data，把源数据变成一个长长的 x，好让 LSTM 学会 predict 下一个单词：</p>
+
+<pre><code class="language-python">raw_input = [item for sublist in corpus for item in sublist]
+len(raw_input)
+</code></pre>
+
+<pre><code>2115170
+</code></pre>
+
+<pre><code class="language-python">raw_input[12]
+</code></pre>
+
+<pre><code>'ebook'
+</code></pre>
+
+<pre><code class="language-python">text_stream = []
+vocab = w2v_model.vocab
+for word in raw_input:
+    if word in vocab:
+        text_stream.append(word)
+len(text_stream)
+</code></pre>
+
+<pre><code>2058753
+</code></pre>
+
+<p>我们这里的文本预测就是，给了前面的单词以后，下一个单词是谁？</p>
+
+<p>比如，hello from the other, 给出 side</p>
+
+<h2 id="构造训练测试集">构造训练测试集</h2>
+
+<p>我们需要把我们的raw text变成可以用来训练的x,y:</p>
+
+<p>x 是前置单词们， y 是后一个单词。我们把10个单词的词向量作为 x。</p>
+
+<pre><code class="language-python">seq_length = 10
+x = []
+y = []
+for i in range(0, len(text_stream) - seq_length):
+    given = text_stream[i:i + seq_length]
+    predict = text_stream[i + seq_length]
+    x.append(np.array([w2v_model[word] for word in given]))
+    y.append(w2v_model[predict])
+</code></pre>
+
+<p>我们可以看看我们做好的数据集的长相：</p>
+
+<pre><code class="language-python">print(x[10])
+print(y[10])
+</code></pre>
+
+<p>每个单词都是 128 维的向量。</p>
+
+<pre><code>[[-0.02218935  0.04861801 -0.03001036 ...,  0.07096259  0.16345282
+  -0.18007144]
+ [ 0.1663752   0.67981642  0.36581406 ...,  1.03355932  0.94110376
+  -1.02763569]
+ [-0.12611888  0.75773817  0.00454156 ...,  0.80544478  2.77890372
+  -1.00110698]
+ ...,
+ [ 0.34167829 -0.28152692 -0.12020591 ...,  0.19967555  1.65415502
+  -1.97690392]
+ [-0.66742641  0.82389861 -1.22558379 ...,  0.12269551  0.30856156
+   0.29964617]
+ [-0.17075984  0.0066567  -0.3894183  ...,  0.23729582  0.41993639
+  -0.12582727]]
+[ 0.18125793 -1.72401989 -0.13503326 -0.42429626  1.40763748 -2.16775346
+  2.26685596 -2.03301549  0.42729807 -0.84830129  0.56945151  0.87243706
+  3.01571465 -0.38155749 -0.99618471  1.1960727   1.93537641  0.81187075
+ -0.83017075 -3.18952608  0.48388934 -0.03766865 -1.68608069 -1.84907544
+ -0.95259917  0.49039507 -0.40943271  0.12804921  1.35876858  0.72395176
+  1.43591952 -0.41952157  0.38778016 -0.75301784 -2.5016799  -0.85931653
+ -1.39363682  0.42932403  1.77297652  0.41443667 -1.30974782 -0.08950856
+ -0.15183811 -1.59824061 -1.58920395  1.03765178  2.07559252  2.79692245
+  1.11855054 -0.25542653 -1.04980111 -0.86929852 -1.26279402 -1.14124119
+ -1.04608357  1.97869778 -2.23650813 -2.18115139 -0.26534671  0.39432198
+ -0.06398458 -1.02308178  1.43372631 -0.02581184 -0.96472031 -3.08931994
+ -0.67289352  1.06766248 -1.95796657  1.40857184  0.61604798 -0.50270212
+ -2.33530831  0.45953822  0.37867084 -0.56957626 -1.90680516 -0.57678169
+  0.50550407 -0.30320352  0.19682285  1.88185465 -1.40448165 -0.43952951
+  1.95433044  2.07346153  0.22390689 -0.95107335 -0.24579825 -0.21493609
+  0.66570002 -0.59126669 -1.4761591   0.86431485  0.36701021  0.12569368
+  1.65063572  2.048352    1.81440067 -1.36734581  2.41072559  1.30975604
+ -0.36556485 -0.89859813  1.28804696 -2.75488496  1.5667206  -1.75327337
+  0.60426879  1.77851915 -0.32698369  0.55594021  2.01069188 -0.52870172
+ -0.39022744 -1.1704396   1.28902853 -0.89315164  1.41299319  0.43392688
+ -2.52578211 -1.13480854 -1.05396986 -0.85470092  0.6618616   1.23047733
+ -0.28597715 -2.35096407]
+</code></pre>
+
+<pre><code class="language-python">print(len(x))
+print(len(y))
+print(len(x[12]))
+print(len(x[12][0]))
+print(len(y[12]))
+</code></pre>
+
+<pre><code>2058743
+2058743
+10
+128
+128
+</code></pre>
+
+<p>接下来我们做两件事：</p>
+
+<ol>
+<li>我们已经有了一个input的数字表达（w2v），我们要把它变成 LSTM 需要的数组格式： [样本数，时间步伐，特征]</li>
+<li>第二，对于output，我们直接用128维的输出</li>
+</ol>
+
+<pre><code class="language-python">x = np.reshape(x, (-1, seq_length, 128))
+y = np.reshape(y, (-1,128))
+</code></pre>
+
+<p>是的，这里我们要用 128 ，-1 的意思是随意个，就是前面随便多少个。y 还是一个 128 维的表示，也就是说，我们预测的 y 实际上是词向量空间里面的一个点。然后我们在这个点附近找到最近的词。</p>
+
+<h2 id="模型建造">模型建造</h2>
+
+<p>LSTM模型构建</p>
+
+<pre><code class="language-python">model = Sequential()
+model.add(LSTM(256, dropout_W=0.2, dropout_U=0.2, input_shape=(seq_length, 128)))
+model.add(Dropout(0.2))
+model.add(Dense(128, activation='sigmoid'))
+model.compile(loss='mse', optimizer='adam')
+</code></pre>
+
+<p><span style="color:red;">为什么lstm 是256 个神经元？而且 dropout_W 和 dropout_U 是什么？与 Dropout 层有什么区别？</span></p>
+
+<h2 id="跑模型">跑模型</h2>
+
+<pre><code class="language-python">model.fit(x, y, nb_epoch=50, batch_size=4096)
+</code></pre>
+
+<pre><code>Epoch 1/50
+2058743/2058743 [==============================] - 150s - loss: 0.6839
+Epoch 2/50
+2058743/2058743 [==============================] - 150s - loss: 0.6670
+Epoch 3/50
+2058743/2058743 [==============================] - 150s - loss: 0.6625
+Epoch 4/50
+2058743/2058743 [==============================] - 150s - loss: 0.6598
+Epoch 5/50
+2058743/2058743 [==============================] - 150s - loss: 0.6577
+Epoch 6/50
+2058743/2058743 [==============================] - 150s - loss: 0.6562
+Epoch 7/50
+2058743/2058743 [==============================] - 150s - loss: 0.6549
+Epoch 8/50
+2058743/2058743 [==============================] - 150s - loss: 0.6537
+Epoch 9/50
+2058743/2058743 [==============================] - 150s - loss: 0.6527
+Epoch 10/50
+2058743/2058743 [==============================] - 150s - loss: 0.6519
+Epoch 11/50
+2058743/2058743 [==============================] - 150s - loss: 0.6512
+Epoch 12/50
+2058743/2058743 [==============================] - 150s - loss: 0.6506
+Epoch 13/50
+2058743/2058743 [==============================] - 150s - loss: 0.6500
+Epoch 14/50
+2058743/2058743 [==============================] - 150s - loss: 0.6496
+Epoch 15/50
+2058743/2058743 [==============================] - 150s - loss: 0.6492
+Epoch 16/50
+2058743/2058743 [==============================] - 150s - loss: 0.6488
+Epoch 17/50
+2058743/2058743 [==============================] - 151s - loss: 0.6485
+Epoch 18/50
+2058743/2058743 [==============================] - 150s - loss: 0.6482
+Epoch 19/50
+2058743/2058743 [==============================] - 150s - loss: 0.6480
+Epoch 20/50
+2058743/2058743 [==============================] - 150s - loss: 0.6477
+Epoch 21/50
+2058743/2058743 [==============================] - 150s - loss: 0.6475
+Epoch 22/50
+2058743/2058743 [==============================] - 150s - loss: 0.6473
+Epoch 23/50
+2058743/2058743 [==============================] - 150s - loss: 0.6471
+Epoch 24/50
+2058743/2058743 [==============================] - 150s - loss: 0.6470
+Epoch 25/50
+2058743/2058743 [==============================] - 150s - loss: 0.6468
+Epoch 26/50
+2058743/2058743 [==============================] - 150s - loss: 0.6466
+Epoch 27/50
+2058743/2058743 [==============================] - 150s - loss: 0.6464
+Epoch 28/50
+2058743/2058743 [==============================] - 150s - loss: 0.6463
+Epoch 29/50
+2058743/2058743 [==============================] - 150s - loss: 0.6462
+Epoch 30/50
+2058743/2058743 [==============================] - 150s - loss: 0.6461
+Epoch 31/50
+2058743/2058743 [==============================] - 150s - loss: 0.6460
+Epoch 32/50
+2058743/2058743 [==============================] - 150s - loss: 0.6458
+Epoch 33/50
+2058743/2058743 [==============================] - 150s - loss: 0.6458
+Epoch 34/50
+2058743/2058743 [==============================] - 150s - loss: 0.6456
+Epoch 35/50
+2058743/2058743 [==============================] - 150s - loss: 0.6456
+Epoch 36/50
+2058743/2058743 [==============================] - 150s - loss: 0.6455
+Epoch 37/50
+2058743/2058743 [==============================] - 150s - loss: 0.6454
+Epoch 38/50
+2058743/2058743 [==============================] - 150s - loss: 0.6453
+Epoch 39/50
+2058743/2058743 [==============================] - 150s - loss: 0.6452
+Epoch 40/50
+2058743/2058743 [==============================] - 150s - loss: 0.6452
+Epoch 41/50
+2058743/2058743 [==============================] - 150s - loss: 0.6451
+Epoch 42/50
+2058743/2058743 [==============================] - 150s - loss: 0.6450
+Epoch 43/50
+2058743/2058743 [==============================] - 150s - loss: 0.6450
+Epoch 44/50
+2058743/2058743 [==============================] - 150s - loss: 0.6449
+Epoch 45/50
+2058743/2058743 [==============================] - 150s - loss: 0.6448
+Epoch 46/50
+2058743/2058743 [==============================] - 150s - loss: 0.6447
+Epoch 47/50
+2058743/2058743 [==============================] - 150s - loss: 0.6447
+Epoch 48/50
+2058743/2058743 [==============================] - 150s - loss: 0.6446
+Epoch 49/50
+2058743/2058743 [==============================] - 150s - loss: 0.6446
+Epoch 50/50
+2058743/2058743 [==============================] - 150s - loss: 0.6445
+</code></pre>
+
+<p>这个是用的 K40 ，这个比刚才的 char 例子用的 lstm 的神经元数量多了一倍，但是时间确实 150s 一遍，比用 cpu 时间少很多。</p>
+
+<pre><code>&lt;keras.callbacks.History at 0x7f6ed8816a58&gt;
+</code></pre>
+
+<p>我们来写个程序，看看我们训练出来的LSTM的效果：</p>
+
+<pre><code class="language-python">def predict_next(input_array):
+    x = np.reshape(input_array, (-1,seq_length,128))
+    y = model.predict(x)
+    return y
+
+def string_to_index(raw_input):
+    raw_input = raw_input.lower()
+    input_stream = nltk.word_tokenize(raw_input)
+    res = []
+    for word in input_stream[(len(input_stream)-seq_length):]:
+        res.append(w2v_model[word])
+    return res
+
+def y_to_word(y):
+    word = w2v_model.most_similar(positive=y, topn=1)
+    return word
+</code></pre>
+
+<p><span style="color:red;">竟然有 most_similar 这个函数，<code>w2v_model.most_similar(positive=y, topn=1)</code> 看来这种使用还是非常频繁的。</span></p>
+
+<p>好，写成一个大程序：</p>
+
+<pre><code class="language-python">def generate_article(init, rounds=30):
+    in_string = init.lower()
+    for i in range(rounds):
+        n = y_to_word(predict_next(string_to_index(in_string)))
+        in_string += ' ' + n[0][0]
+    return in_string
+</code></pre>
+
+<pre><code class="language-python">init = 'Language Models allow us to measure how likely a sentence is, which is an important for Machine'
+article = generate_article(init)
+print(article)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>language models allow us to measure how likely a sentence is, which is an important for machine engagement . to-day good-for-nothing fit job job job job job . i feel thing job job job ; thing really done certainly job job ; but i need not say
+</code></pre>
+
+<p>这个就是这两部分，带记忆的神经网络的用法。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/04-%E6%A1%88%E4%BE%8B3image-search-/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 案例3：image search</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/31-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/06-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E6%AF%94%E8%B5%9B/02-%E6%A1%88%E4%BE%8B1%E7%94%A8-rnn-%E5%81%9A%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90-char-%E7%BA%A7%E5%88%AB/">
+            <span class="next-text nav-default">02 案例1：用 RNN 做文本生成 char 级别</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

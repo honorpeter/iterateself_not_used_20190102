@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>40亿个数中快速查找 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="##40亿个数中快速查找 题目描述 给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/05-%E5%85%B6%E4%BB%96/40%E4%BA%BF%E4%B8%AA%E6%95%B0%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="40亿个数中快速查找" />
+<meta property="og:description" content="##40亿个数中快速查找 题目描述 给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/05-%E5%85%B6%E4%BB%96/40%E4%BA%BF%E4%B8%AA%E6%95%B0%E4%B8%AD%E5%BF%AB%E9%80%9F%E6%9F%A5%E6%89%BE/" /><meta property="article:published_time" content="2018-06-20T10:30:28&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-20T10:30:28&#43;00:00"/>
+<meta itemprop="name" content="40亿个数中快速查找">
+<meta itemprop="description" content="##40亿个数中快速查找 题目描述 给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿">
+
+
+<meta itemprop="datePublished" content="2018-06-20T10:30:28&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-20T10:30:28&#43;00:00" />
+<meta itemprop="wordCount" content="2146">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="40亿个数中快速查找"/>
+<meta name="twitter:description" content="##40亿个数中快速查找 题目描述 给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">40亿个数中快速查找</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-20 </span>
+        
+        <span class="more-meta"> 2146 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+<li><a href="#分析与解法">分析与解法</a>
+<ul>
+<li><a href="#解法一">解法一</a></li>
+<li><a href="#解法二">解法二</a></li>
+</ul></li>
+<li><a href="#问题扩展">问题扩展</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>##40亿个数中快速查找</p>
+
+<h3 id="题目描述">题目描述</h3>
+
+<p>给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？</p>
+
+<h3 id="分析与解法">分析与解法</h3>
+
+<p>海量数据处理往往会很有趣，有趣在什么地方呢？</p>
+
+<ul>
+<li>空间，available的内存不够，需要反复交换内存</li>
+<li>时间，速度太慢不行，毕竟那是海量数据</li>
+<li>处理，数据是一次调用还是反复调用，因为针对时间和空间，通常来说，多次调用的话，势必会增加预处理以减少每次调用的时候的时间代价。</li>
+</ul>
+
+<h4 id="解法一">解法一</h4>
+
+<p>咱们回到眼前要解决的这个问题，1个unsigned int占用4字节，40亿大约是4G个数，那么一共大约要用16G的内存空间，如果内存不够大，反复和硬盘交换数据的话，后果不堪设想。</p>
+
+<p>那么怎么储存这么多的数据呢？还记得伴随数组么？还是那种思想，利用内存地址代替下标。</p>
+
+<p>先举例，在内存中应该是1个byte=8bit，那么明显有</p>
+
+<p>0   = 0000 0000</p>
+
+<p>255 = 1111 1111</p>
+
+<p>69  = 0100 0101</p>
+
+<p>那么69可以表示0.2.6三个数存在，其余的7以下的数不存在，0表示0-7都不存在，255表示0-7都存在，这就是位图算法：通过全部置0，存在置1，这样一种模式来通过连续的地址存贮数据，和检验数据的方法。</p>
+
+<p>那么1个 unsigned int代表多少个数呢？1个unsigned int 是一个2^32以内的数，那么也就是这样的1个数，可以表示32个数是否存在。同理申请一个unsigned int的数组a[n]则可以表示连续的 n*32的数。也就是a[0]表示0-31的数是否存在，a[1]表示32-63的数是否存在，依次类推。</p>
+
+<p>这时候需要用多大的内存呢？</p>
+
+<p>16G/32=512M</p>
+
+<p>512M和16G之间的区别，却是是否一个32位寻址的CPU能否办得到的事儿了，众所周知，32位CPU最大寻址不超过4G，固然，你会说，现在都是64位的CPU之类的云云，但是，对于底层的设计者来说，寻址范围越小越好操控的事实是不争的。</p>
+
+<p>问题到这里，其实基本上已经完事了，判断本身，在位图算法这里就是找到对应的内存位置是否为1就可以了。</p>
+
+<h4 id="解法二">解法二</h4>
+
+<p>当然，下面就要开始说一说，当数据超出了可以接受的范围之后的事情了。比如， 2^66范围的数据检索，也会是一个问题</p>
+
+<p>4倍于64位CPU寻址范围，如果加上CPU本身的偏移寄存器占用的资源，可能应该是6-8个64位CPU的寻址范围，如果反复从内存到硬盘的读写，过程本身就是可怕的。</p>
+
+<p>算法，更多的是用来解决瓶颈的，就想现在，根本不用考虑内存超出8M的问题，但是20年前，8086的年代，内存4M，或者内存8M，你怎么处理?固然做软件的不需要完全考虑摩尔定律，但是摩尔定律绝对是影响软件和算法编写者得想法的。</p>
+
+<p>再比如，乌克兰俄罗斯的一批压缩高手，比如国内有名的R大，为什么压缩会出现？就是因为，要么存不下，要么传输时间过长。网络再好，64G的高清怎么的也得下遍历n个元素取出等概率载个一段时间吧。海量数据处理，永远是考虑超过了当前硬件条件的时候，该怎么办？！</p>
+
+<p>那么我们可以发现一个更加有趣的问题，如果存不下，但是还要存，怎么办！</p>
+
+<p>压缩！这里简单的说一嘴，无损压缩常见的为Huffman算法和LZW(Lenpel-Ziv &amp;Welch)压缩算法，前者研究不多，后者却经常使用。</p>
+
+<p>因为上面提到了位图算法，我就用常见的位图类的数据举例：</p>
+
+<p>以下引自我的摘抄出处忘记了，请作者见谅：</p>
+
+<p>对原始数据ABCCAABCDDAACCDB进行LZW压缩</p>
+
+<p>原始数据中，只包括4个字符(Character),A,B,C,D,四个字符可以用一个2bit的数表示，0-A,1-B,2-C,3-D,从最直观的角度看，原始字符串存在重复字符：ABCCAABCDDAACCDB，用4代表AB,5代表CC，上面的字符串可以替代表示为:45A4CDDAA5DB,这样是不是就比原数据短了一些呢！</p>
+
+<h3 id="问题扩展">问题扩展</h3>
+
+<p>为了区别代表串的值(Code)和原来的单个的数据值(String)，需要使它们的数值域不重合，上面用0-3来代表A-D,那么AB就必须用大于3的数值来代替，再举另外一个例子，原来的数值范围可以用8bit来表示，那么就认为原始的数的范围是0～255，压缩程序生成的标号的范围就不能为0～255（如果是0-255，就重复了）。只能从256开始，但是这样一来就超过了8位的表示范围了，所以必须要扩展数据的位数，至少扩展一位，但是这样不是增加了1个字符占用的空间了么？但是却可以用一个字符代表几个字符，比如原来255是8bit,但是现在用256来表示254，255两个数，还是划得来的。从这个原理可以看出LZW算法的适用范围<u>是原始数据串最好是有大量的子串多次重复出现，重复的越多，压缩效果越好。反之则越差，可能真的不减反增了</u>。</p>
+
+<p>伪代码如下</p>
+
+<pre><code>  STRING = get input character
+  WHILE there are still input characters DO
+    CHARACTER = get input character
+    IF STRING+CHARACTER is in the string table then
+      STRING = STRING+character
+    ELSE
+      output the code for STRING
+      add STRING+CHARACTER to the string table
+      STRING = CHARACTER
+    END of IF
+  END of WHILE
+  output the code for STRING 
+</code></pre>
+
+<p>看过上面的适用范围再联想本题，数据有多少种，根据同余模的原理，可以惊人的发现，其实真的非常适合压缩，但是压缩之后，尽管存下了，在查找的时候，势必又需要解码，那么又回到了我们当初学习算法时的那句经典话，算法本身，就是为了解决时间和空间的均衡问题，要么时间换空间，要么空间换时间。</p>
+
+<p>更多的，请读者自行思考，因为，压缩本身只是想引起读者思考，已经是题外话了~本部分完&ndash;<strong>上善若水.qinyu</strong>。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-20</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/01-%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/12-%E6%9C%AC%E7%AB%A0%E4%B9%A0%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">12 本章习题</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/05-%E5%85%B6%E4%BB%96/%E9%9A%8F%E6%9C%BA%E5%8F%96%E5%87%BA%E5%85%B6%E4%B8%AD%E4%B9%8B%E4%B8%80%E5%85%83%E7%B4%A0/">
+            <span class="next-text nav-default">随机取出其中之一元素</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

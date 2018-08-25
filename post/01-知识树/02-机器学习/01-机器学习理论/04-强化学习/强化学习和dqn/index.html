@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>强化学习和DQN - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="缘由： 对强化学习总结一下，实际上感觉强化学习还是很多的。 1.强化学习成就 Learned the world’s best player of Backgammon (Tesauro 1995) Learned acrobatic helicopter autopilots (Ng, Abbeel, Coates et al2006&#43;) Widely used in the placement and selection of advertisements on" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%92%8Cdqn/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="强化学习和DQN" />
+<meta property="og:description" content="缘由： 对强化学习总结一下，实际上感觉强化学习还是很多的。 1.强化学习成就 Learned the world’s best player of Backgammon (Tesauro 1995) Learned acrobatic helicopter autopilots (Ng, Abbeel, Coates et al2006&#43;) Widely used in the placement and selection of advertisements on" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%92%8Cdqn/" /><meta property="article:published_time" content="2018-07-27T15:02:31&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T15:02:31&#43;00:00"/>
+<meta itemprop="name" content="强化学习和DQN">
+<meta itemprop="description" content="缘由： 对强化学习总结一下，实际上感觉强化学习还是很多的。 1.强化学习成就 Learned the world’s best player of Backgammon (Tesauro 1995) Learned acrobatic helicopter autopilots (Ng, Abbeel, Coates et al2006&#43;) Widely used in the placement and selection of advertisements on">
+
+
+<meta itemprop="datePublished" content="2018-07-27T15:02:31&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T15:02:31&#43;00:00" />
+<meta itemprop="wordCount" content="2268">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="强化学习和DQN"/>
+<meta name="twitter:description" content="缘由： 对强化学习总结一下，实际上感觉强化学习还是很多的。 1.强化学习成就 Learned the world’s best player of Backgammon (Tesauro 1995) Learned acrobatic helicopter autopilots (Ng, Abbeel, Coates et al2006&#43;) Widely used in the placement and selection of advertisements on"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">强化学习和DQN</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 2268 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#1-强化学习成就">1.强化学习成就</a></li>
+<li><a href="#强化学习-深度学习">强化学习+深度学习</a></li>
+<li><a href="#强化学习要点大纲">强化学习要点大纲</a></li>
+<li><a href="#强化学习问题">强化学习问题：</a></li>
+<li><a href="#马尔可夫决策过程-mdp">马尔可夫决策过程(MDP)</a>
+<ul>
+<li><a href="#强化学习的难点">强化学习的难点？</a></li>
+<li><a href="#打折的未来奖励-discounted-future-reward">打折的未来奖励 Discounted Future Reward</a></li>
+</ul></li>
+<li><a href="#q-learning">Q-learning</a>
+<ul>
+<li><a href="#q-learning-1">Q-learning</a></li>
+<li><a href="#q-learning-核心思想">Q-learning 核心思想</a></li>
+<li><a href="#q-learning-经典例子">Q-learning 经典例子：</a></li>
+</ul></li>
+<li><a href="#deep-q-network">Deep Q Network</a></li>
+<li><a href="#experience-replay-经验回放">Experience Replay 经验回放</a></li>
+<li><a href="#exploration-exploitation">Exploration-Exploitation</a></li>
+<li><a href="#deep-q-learning-algorithm">Deep Q-learning Algorithm</a></li>
+<li><a href="#flappy-bird">Flappy-bird</a></li>
+<li><a href="#comment">COMMENT：</a></li>
+<li><a href="#ref">REF：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对强化学习总结一下，实际上感觉强化学习还是很多的。</p>
+
+<h1 id="1-强化学习成就">1.强化学习成就</h1>
+
+<ul>
+<li><p>Learned the world’s best player of Backgammon (Tesauro 1995)</p></li>
+
+<li><p>Learned acrobatic helicopter autopilots (Ng, Abbeel, Coates et al2006+)</p></li>
+
+<li><p>Widely used in the placement and selection of advertisements on the web (e.g. A-B tests)</p></li>
+
+<li><p>Used to make strategic decisions in Jeopardy! (IBM’s Watson 2011)</p></li>
+
+<li><p>Achieved human-level performance on Atari games from pixel-level visual input, in conjunction with deep learning (GoogleDeepmind 2015)</p></li>
+
+<li><p>In all these cases, performance was better than could be obtained by any other method, and was obtained without human instruction</p></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IfhlKH06m1.png?imageslim" alt="mark" /></p>
+
+<p>Human-level control through deep reinforcement learning 2015 Nature</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mLg1j55kGe.png?imageslim" alt="mark" /></p>
+
+<h1 id="强化学习-深度学习">强化学习+深度学习</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/bA0hd32CEG.png?imageslim" alt="mark" /></p>
+
+<h1 id="强化学习要点大纲">强化学习要点大纲</h1>
+
+<ul>
+<li><p>强化学习的难点？</p>
+
+<ul>
+<li><p>credit assignment problem</p></li>
+
+<li><p>the exploration-exploitation dilemma</p></li>
+</ul></li>
+
+<li><p>怎么定义强化学习？</p>
+
+<ul>
+<li>马尔可夫决策过程</li>
+</ul></li>
+
+<li><p>怎么把“眼光”放长远？</p>
+
+<ul>
+<li>discounted future reward</li>
+</ul></li>
+
+<li><p>怎么预估“未来收益”？</p>
+
+<ul>
+<li>table-based Q-learning 算法</li>
+</ul></li>
+
+<li><p>状态空间太大怎么办？</p>
+
+<ul>
+<li>使用深度神经网络</li>
+</ul></li>
+
+<li><p>如何实际应用</p>
+
+<ul>
+<li>“重演”策略</li>
+</ul></li>
+</ul>
+
+<h1 id="强化学习问题">强化学习问题：</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2Fl5710he4.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ai70Bgl458.png?imageslim" alt="mark" /></p>
+
+<p>David Silver reinforcement leanring Lecture 1</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FgJDe3L4Ga.png?imageslim" alt="mark" /></p>
+
+<p>Atari Breakout游戏</p>
+
+<ul>
+<li><p>三种动作：向左，向右以及开火（把球射出）</p></li>
+
+<li><p>状态：所处的位置，屏幕上方状况等</p></li>
+
+<li><p>奖励：得分增减</p></li>
+</ul>
+
+<p>传统有监督？无监督？强化学习：有稀疏并延时的标签：奖励</p>
+
+<p>信用分配问题 (credit assignment problem)</p>
+
+<ul>
+<li><p>击中砖块并且得分和前一时刻如何移动横杆没有直接关系</p></li>
+
+<li><p>前面某一时刻的横杆移动有作用</p></li>
+</ul>
+
+<p>探索-利用困境（exploration-exploitation dilemma）</p>
+
+<ul>
+<li><p>游戏开始，只发射球，不移动横杆，你总是能得10分的</p></li>
+
+<li><p>满足于得分还是去探索更多的可能性？(可能更好或者更坏)</p></li>
+</ul>
+
+<h1 id="马尔可夫决策过程-mdp">马尔可夫决策过程(MDP)</h1>
+
+<ul>
+<li><p>操作者或智能体（agent）</p></li>
+
+<li><p>状态（state）（比如横杆的位置，球的位置，球的方向，当前环境中的砖块等等）</p></li>
+
+<li><p>动作（actions）（比如向左或向右移动横杆）</p></li>
+
+<li><p>奖励（reward）（比如分数的增加）</p></li>
+
+<li><p>策略（policy）：在state下采取行动的原则</p></li>
+</ul>
+
+<h2 id="强化学习的难点">强化学习的难点？</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/c0GHl3f745.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/71mkb8aj79.png?imageslim" alt="mark" /></p>
+
+<h2 id="打折的未来奖励-discounted-future-reward">打折的未来奖励 Discounted Future Reward</h2>
+
+<ul>
+<li>一个马尔科夫决策过程，它对应的奖励总和：</li>
+</ul>
+
+<p>[R=r_1+r_2+r_3+\cdots +r_n]</p>
+
+<ul>
+<li>t时刻的未来奖励：</li>
+</ul>
+
+<p>[R_t=r<em>t+r</em>{t+1}+r_{t+2}+\cdots +r_n]</p>
+
+<ul>
+<li>无法确定在两次采取相同动作，agent能够获得相同的奖励，未来有不确定性，计算“ 打折的未来奖励”</li>
+</ul>
+
+<p>[R_t=r<em>t+\gamma r</em>{t+1}+\gamma^2r_{t+2}+\cdots +\gamma^{n-t}r_n]</p>
+
+<ul>
+<li><p>gamma是一个0到1的值，使得我们更少地考虑哪些更长远未来的奖励</p></li>
+
+<li><p>(R<em>t)可以用(R</em>{t+1})来表示，写成递推式</p></li>
+</ul>
+
+<p>[R_t=r<em>t+\gamma (r</em>{t+1}+\gamma (r_{t+2}+\cdots ))=r<em>t+\gamma R</em>{t+1}]</p>
+
+<h1 id="q-learning">Q-learning</h1>
+
+<h2 id="q-learning-1">Q-learning</h2>
+
+<p>Q(s, a)函数，用来表示智能体在s状态下采用a动作并在之后采取最优动作条件下的打折的未来奖励。</p>
+
+<p>[Q(s_t,a<em>t)=maxR</em>{t+1}]</p>
+
+<p>假设得到了Q-函数，你只要选取Q-函数值最大的动作(policy明确)</p>
+
+<p>[\pi (s)=argmax_aQ(s,a)]</p>
+
+<p>我们可以采用与打折的未来奖励相同的方式定义这一状态下的Q函数</p>
+
+<p>[Q(s,a)=r+\gamma max_{a&rsquo;}Q(s&rsquo;,a&rsquo;)]</p>
+
+<p>贝尔曼公式实际非常合理。对于某个状态来讲，最大化未来奖励相当于最大化即刻奖励与下一状态最大未来奖励之和。</p>
+
+<h2 id="q-learning-核心思想">Q-learning 核心思想</h2>
+
+<p>Q-learning的核心思想是：我们能够通过贝尔曼公式迭代地近似Q-函数。</p>
+
+<p>最简单的情况下，我们可以采用一种填表的方式学习Q-函数。这个表包含状态空间大小的行，以及动作个数大小的列。填表的算法伪码如下所示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lHA3eDGI4e.png?imageslim" alt="mark" /></p>
+
+<p>其中α是在更新Q[s, a]时，调节旧Q[s, a]与新Q[s, a]比例的学习速率。如果α=1，Q[s, a]就被消掉，而更新方式就完全与贝尔曼公式相同。</p>
+
+<h2 id="q-learning-经典例子">Q-learning 经典例子：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/elmkc0b96f.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/f0F5F6ml24.png?imageslim" alt="mark" /></p>
+
+<p><a href="http://fromwiz.com/share/s/1CGZRH2S1Aro2gtjMB0TJPbh2WMt0I1fPkJq26Z6cI3pS8GI">http://fromwiz.com/share/s/1CGZRH2S1Aro2gtjMB0TJPbh2WMt0I1fPkJq26Z6cI3pS8GI</a></p>
+
+<h1 id="deep-q-network">Deep Q Network</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/d9ckh3EE3E.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li><p>能不能设计一种通用的表示游戏状态的方法呢？ =&gt; 屏幕像素</p></li>
+
+<li><p>采用连续两个游戏屏幕的像素，球速和方向等各种信息也可以表示出来</p></li>
+
+<li><p>屏幕大小84*84 ，每个像素点有 256 个灰度值，总共 256^(84 * 84*4)~10^67970种可能的状态</p></li>
+
+<li><p>Q-table有10^67970行，且非常稀疏（有很多状态遇不到！！）</p></li>
+
+<li><p>用一个神经网络对Q-函数进行建模</p></li>
+</ul>
+
+<p>神经网络接收一个状态(连续四步的屏幕)和一个动作，然后输出对应的Q-函数的值</p>
+
+<p>改造一下：只接受一个状态作为输入，然后输出所有动作的分数（具体来讲是动作个数大小的向量），这样一次前向运算可以得到所有动作的得分</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LB1gGFBea9.png?imageslim" alt="mark" /></p>
+
+<p>Deep Q Network</p>
+
+<p>DeepMind论文中使用优化的Q网络 DeepMind在论文中使用的网络结构</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/429d0hHdi8.png?imageslim" alt="mark" /></p>
+
+<p>没有池化层！！</p>
+
+<p>池化层带来位置不变性，会使我们的网络对于物体的位置不敏感，从而无法有效地识别游戏中球的位置</p>
+
+<p>回归问题，loss function如下</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/f0AmGeAGGA.png?imageslim" alt="mark" /></p>
+
+<h1 id="experience-replay-经验回放">Experience Replay 经验回放</h1>
+
+<ul>
+<li>我们可以用Q-learning的算法估计未来奖励，并能够用一个卷积神经网络近似Q-函数。</li>
+<li>但使用Q 值近似非线性的Q-函数可能非常不稳定。即使使用很多小技巧使得这个函数收敛。在单GPU上也可能需要一个星期的时间训练模型。</li>
+</ul>
+
+<p>最重要的技巧是经验回放（experience replay）</p>
+
+<ul>
+<li>在玩游戏的过程中，所有经历的都被记录起来。</li>
+<li>训练神经网络时，我们从这些记录的中随机选取一些mini-batch作为训练数据训练，而不是按照时序地选取一些连续的。</li>
+<li>按时序选取，训练实例之间相似性较大，网络很容易收敛到局部最小值。</li>
+</ul>
+
+<h1 id="exploration-exploitation">Exploration-Exploitation</h1>
+
+<p>Q-learning算法尝试解决信用分配问题</p>
+
+<ul>
+<li>通过Q-learning，奖励被回馈到关键的决策时刻</li>
+</ul>
+
+<p>依旧存在的是探索-利用困境</p>
+
+<ul>
+<li><p>在游戏开始阶段，Q-table或Q-network是随机初始化的。它给出的Q-值最高的动作是完全随机的，智能体表现出的是随机的“探索”。</p></li>
+
+<li><p>当Q-函数收敛时，随机“探索”的情况减少。所以，Q-learning中包含“探索”的成分。但是这种探索是“贪心”的，它只会探索当前模型认为的最好的策略 。</p></li>
+</ul>
+
+<p>一种简单修正技巧：</p>
+
+<ul>
+<li><p>\epsilon-贪心探索</p></li>
+
+<li><p>以\epsilon的概率选取随机的动作做为下一步动作，1-\epsilon的概率选取分数最高的动作</p></li>
+
+<li><p>DeepMind的系统中，\epsilon随着时间从1减少到0.1。这意味着开始时，系统完全随机地探索状态空间，最后以固定的概率探索。</p></li>
+</ul>
+
+<h1 id="deep-q-learning-algorithm">Deep Q-learning Algorithm</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/G3A9d9b8l7.png?imageslim" alt="mark" /></p>
+
+<p>DeepMind还使用了一系列其他的技巧，比如：<strong>目标网络、误差截断、回馈截断  要学习</strong></p>
+
+<p>新的论文进展包括Double Q-learning, Prioritized Experience Replay, Dueling Network Architecture, extension to continuous action space</p>
+
+<p>有兴趣的同学可以关注NIPS 2015 deep reinforcement learning workshop以及ICLR 2016</p>
+
+<h1 id="flappy-bird">Flappy-bird</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AGhiLhjicG.png?imageslim" alt="mark" /></p>
+
+<p><a href="https://github.com/yenchenlin/DeepLearningFlappyBird">https://github.com/yenchenlin/DeepLearningFlappyBird</a></p>
+
+<p>Deep Q Network algorithm</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CF7KfBAIb1.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mbmiHdEeag.png?imageslim" alt="mark" /></p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>有很多东西没有总结进来，而且很多东西讲的只是随便讲讲。要自己动手实践总结。</strong></p>
+
+<h1 id="ref">REF：</h1>
+
+<ol>
+<li>七月在线 深度学习</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-27</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/05-%E7%94%9F%E6%88%90%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/gan-%E4%BE%8B%E5%AD%901%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E7%94%9F%E6%88%90/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">GAN 例子1：手写数字生成</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/%E5%86%B3%E7%AD%96%E6%A0%91/">
+            <span class="next-text nav-default">决策树</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

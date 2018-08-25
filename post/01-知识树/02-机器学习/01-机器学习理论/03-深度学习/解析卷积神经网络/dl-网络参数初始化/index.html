@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>DL 网络参数初始化 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 网络参数初始化 俗话说“万事开头难”，放在卷积神经网络训练中也是如此。通过上一篇基础 理论篇的介绍，我们知道" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E7%BD%91%E7%BB%9C%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="DL 网络参数初始化" />
+<meta property="og:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 网络参数初始化 俗话说“万事开头难”，放在卷积神经网络训练中也是如此。通过上一篇基础 理论篇的介绍，我们知道" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E7%BD%91%E7%BB%9C%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%8C%96/" /><meta property="article:published_time" content="2018-06-26T19:32:12&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:32:12&#43;00:00"/>
+<meta itemprop="name" content="DL 网络参数初始化">
+<meta itemprop="description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 网络参数初始化 俗话说“万事开头难”，放在卷积神经网络训练中也是如此。通过上一篇基础 理论篇的介绍，我们知道">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:32:12&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:32:12&#43;00:00" />
+<meta itemprop="wordCount" content="2874">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DL 网络参数初始化"/>
+<meta name="twitter:description" content="REF 《解析卷积神经网络》魏秀参 TODO aaa INTRODUCTION aaa 网络参数初始化 俗话说“万事开头难”，放在卷积神经网络训练中也是如此。通过上一篇基础 理论篇的介绍，我们知道"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">DL 网络参数初始化</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 2874 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ref">REF</a></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="ref">REF</h1>
+
+<ol>
+<li>《解析卷积神经网络》魏秀参</li>
+</ol>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<p>网络参数初始化</p>
+
+<p>俗话说“万事开头难”，放在卷积神经网络训练中也是如此。通过上一篇基础</p>
+
+<p>理论篇的介绍，我们知道神经网络模型一般依靠随机梯度下降法进行模型训练</p>
+
+<p>和参数更新，网络的最终性能与收敛得到的最优解直接相关，而收敛效果实际</p>
+
+<p>上又很大程度取决于网络参数最开始的初始化。理想的网络参数初始化使模型</p>
+
+<p>训练事半功倍，相反，糟糕的初始化方案不仅会影响网络收敛甚至会导致“梯</p>
+
+<p>度弥散”或“爆炸”致使训练失败i。面对如此重要而充满技巧性的模型参数 初始化，对于没有任何训练网络经验的使用者，他们往往不敢从头训练(from scratch)自己的神经网络。那么，网络参数初始化都有哪些方案？哪些又是相</p>
+
+<p>对有效</p>
+
+<p>络参数</p>
+
+<p>章将逐一介绍和比较目前实践中常用的几种网</p>
+
+<p>作为非线性激活函数，若参数初始化为过大值，前向运算</p>
+
+<p>全为o或1的二值，而导致在反向运算时的对应梯度全部 度弥散”现象。无独有偶，不理想的初始化对于ReLU函数也会产生问</p>
+
+<p>初始化，前向运算时的输出结果会有可能全部为负，经过ReLU函数后此 算时则毫无响应。这便是ReLU函数的“死区”现象。</p>
+
+<p>7.1全零初始化
+通过合理的数据预处理和规范化，当网络收敛到稳定状态时，参数(权值)在</p>
+
+<p>理想情况下应基本保持正负各半的状态(此时期望为0)。因此，一种简单且听 起来合理的参数初始化做法是，干脆将所有参数都初始化为o,因为这样可使 得初始化全零时参数的期望(expectation)与网络稳定时参数的期望一致为零。</p>
+
+<p>不过，细细想来则会发现参数全为0时网络不同神经元的输出必然相同，相 同输出则导致梯度更新完全一样，这样便会令更新后的参数仍然保持一样的状 态。换句话说，如若参数进行了全零初始化，那么网络神经元将毫无能力对此 做出改变，从而无法进行模型训练。</p>
+
+<p>7.2随机初始化
+将参数随机化自然是打破上述“僵局”的一个有效手段，不过我们仍然希望所有</p>
+
+<p>参数期望依旧接近0。遵循这一原则，我们可将参数值随机设定为接近o的一个 很小的随机数(有正有负)。在实际应用中，随机参数服从高斯分布(Gaussian distribution)或均匀分布(uniform distribution)都是较有效的初始化方式。</p>
+
+<p>假设网络输人神经元个数为nin，输出神经元个数位nQut,则服从高斯分布 的参数随机初始化为：</p>
+
+<p>1    % Parameter initialization following</p>
+
+<p>2    % the Gaussian distribution</p>
+
+<p>3    w = 0.001 .* randn(n_in, n_out);</p>
+
+<p>其中的高斯分布为均值为0,方差为1的标准高斯分布(standard normal distribution)。式中的“0+001”为控制参数量纲的因子，这样可使得参数期望 能保持在接近0的较小数值范围内。</p>
+
+<p>但是，且慢！上述做法仍会带来一个问题，即网络输出数据分布的方差会随 着输人神经元个数改变(原因参见公式7.1至7.5)。为解决这一问题，会在初始 化的同时加上对方差大小的规范化，如：</p>
+
+<p>7.2.随机初始化</p>
+
+<p>1    % Calibrating the variances (the Xavier method)</p>
+
+<p>2    w = (0.001 .* randn(n_in, n_out)) ./ sqrt(n);</p>
+
+<p>其中，n为输人神经元个数nin (有时也可指定为(nin + nout)/2)。这便是著名 的“Xavier参数初始化方法” [27],实验对比发现此初始化方法的网络相比未做 方差规范化的版本有更快的收敛速率。Xavier这样初始化的原因在于维持了输 人输出数据分布方差的一致性，具体分析而言有下式：(其中假设 s 为未经非线 性变换的该层网络输出结果，^为该层参数，x为该层输人数据)</p>
+
+<p>Var(s) = Var(y^ ^iXi)    (7.1)</p>
+
+<p>i</p>
+
+<p>n</p>
+
+<p>=Var(^iXi)    (7+2)</p>
+
+<p>i</p>
+
+<p>n</p>
+
+<p>=[E(^i)]2 Var(xi)十[E(xi)]2 Var(wi)十 Var(Xi)Var(^i)    (7+3)</p>
+
+<p>i</p>
+
+<p>n</p>
+
+<p>i</p>
+
+<p>=(nVar(^))Var(x).    (7.5)</p>
+
+<p>因为输出s未经过非线性变換，故s = ^n wxi。又因x各维服从独立同 分布的假设，可得式7.1到式7.2,后由方差公式展开得式7.3。大家应该还记 得，在本章一开始，我们就提到理想情况下处于稳定状态的神经网络参数和 数据均值应为0,则式7.3中的E(Wi) = E(xi) = 0,故式7.3可简化为式7.4, 最终得到式7.5。为保证输人数据Var(s)和输出数据Var(x)方差一致，需令 nVar(w) = 1,即 n，Var(w) = n• Var(awz) = n• a• Var(wz) = 1,则 a = (1/n), 其中为方差规范化后的参数。这便是Xavier参数初始化的由来。</p>
+
+<p>不过，细心的读者应该能发现Xavier方法仍有不甚完美之处，即该方法并 未考虑非线性映射函数对输人s的影响。因为使用如ReLU函数等非线性映射 函数后，输出数据的期望往往不再为0,因此Xavier方法解决的问题并不完全</p>
+
+<p>符合实际情况。2015年He等人［34］14对此提出改进——将非线性映射造成的影 响考虑进参数初始化中，他们提出原本Xavier方法中方差规范化的分母应为 V（n/2）而不是vn。</p>
+
+<p>文献［34］中给出了 He参数初始化方法与Xavier参数初始化方法的收敛结 果对比，如图7+1,可以看出因为考虑了 ReLU非线性映射函数的影响，He参 数初始化方法（图中红线）比Xavier参数初始化方法（图中蓝线）拥有更好的 收敛效果，尤其是在33层这种更深层的卷积网络上，Xavier方法不能收敛而 He方法可在第9轮（epoch）收敛到较好的（局部）最优解。</p>
+
+<p>（b） 30层卷积神经网络上的收敛结果对比。</p>
+
+<p>(a) 22 -</p>
+
+<p>图7+1: Xavier参数初始化方法与He参数初始化方法对比［34］。纵轴为误差， 横轴为训练轮数。</p>
+
+<p>以上是参数初始化分布服从高斯分布的情形。刚才还提到均匀分布也是一种 很好的初始化分布，当参数初始化服从均匀分布（uniform distribution），由于 分布性质的不同，均匀分布需指定其取值区间，则Xavier初始化方法和He初</p>
+
+<p>% Parameterrifinitializationimfollowing</p>
+
+<p>% the uniform distribution % The Xavier method</p>
+
+<p>7.3.其他初始化方法</p>
+
+<p>4    low = -sqrt(3/n); high = sqrt(3/n);</p>
+
+<p>5    % The interval is [low,high].</p>
+
+<p>e rand_param = a + (b-a) .* rand(n_in, n_out); 7 w = 0.001 .* rand_param;</p>
+
+<p>1    % Parameter initialization following</p>
+
+<p>2    % the uniform distribution s % The He method</p>
+
+<p>4    low = -sqrt(6/n); high = sqrt(6/n);</p>
+
+<p>5    % The interval is [low,high].</p>
+
+<p>e rand_param = a + (b-a) .* rand(n_in, n_ou 7 w = 0.001 .* rand_param;</p>
+
+<p>7.3其他初始化方法
+除了直接随机初始化网络参数，一种简便易行且十分有效的方式则是利用预训</p>
+
+<p>练模型(pre-trained model)-将预训练模型的参数作为新任务上模型的参</p>
+
+<p>数初始化。由于预训练模型已经在原先任务(如ImageNet3、Places2。54等数据 集)上收敛到较理想的局部最优解，加上很容易获得这些预训练模型5,用此最 优解作为新任务的参数初始化无疑是一个优质首选。</p>
+
+<p>另外，2016年美国加州伯克利分校和卡内基梅隆大学的研究者提出了一种 数据敏感的参数初始化方式[50]6,是一种根据自身任务数据集量身定制的参数 初始化方式，读者在进行自己训练任务时不妨尝试一下。</p>
+
+<p>ImageNet 数据集：www.image-net.org/</p>
+
+<p>Places205 数据集：<a href="http://places.csail.mit.edu/。">http://places.csail.mit.edu/。</a></p>
+
+<p>许多深度学习开源工具都提供了预训练模型的下载，具体内容请参见第14章“深度学习开源工</p>
+
+<p>数据敏感的参数初始化方式”代码链接：</p>
+
+<p><a href="https://github.com/philkr/magic_init。">https://github.com/philkr/magic_init。</a></p>
+
+<p>7.4小结
+§ 网络参数初始化的优劣极大程度决定了网络的最终性能；</p>
+
+<p>§比较推荐的网络初始化方式为He方法，将参数初始化为服从高斯分布或 均匀分布的较小随机数,同时对参数方差需施加规范化；</p>
+
+<p>§ 借助预训练模型中参数作为新任务参数初始化的方式是一种简便易行且十 分有效的模型参数初始化方法。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-06-26</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E7%BD%91%E7%BB%9C%E6%AD%A3%E5%88%99%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">DL 网络正则化</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/%E8%A7%A3%E6%9E%90%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/dl-%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0/">
+            <span class="next-text nav-default">DL 目标函数</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

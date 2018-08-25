@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 如何使用特殊方法 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="2 如何使用特殊方法 首先明确一点，特殊方法的存在是为了被 Python 解释器调用的，你自己并不需要调用它们。嗯。也就是说没有 my_object.__len__() 这种写法，而应该使用len(" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/01-python-%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B/02-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E7%89%B9%E6%AE%8A%E6%96%B9%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 如何使用特殊方法" />
+<meta property="og:description" content="2 如何使用特殊方法 首先明确一点，特殊方法的存在是为了被 Python 解释器调用的，你自己并不需要调用它们。嗯。也就是说没有 my_object.__len__() 这种写法，而应该使用len(" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/01-python-%E6%95%B0%E5%AD%A6%E6%A8%A1%E5%9E%8B/02-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E7%89%B9%E6%AE%8A%E6%96%B9%E6%B3%95/" /><meta property="article:published_time" content="2018-07-11T15:00:12&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-11T15:00:12&#43;00:00"/>
+<meta itemprop="name" content="02 如何使用特殊方法">
+<meta itemprop="description" content="2 如何使用特殊方法 首先明确一点，特殊方法的存在是为了被 Python 解释器调用的，你自己并不需要调用它们。嗯。也就是说没有 my_object.__len__() 这种写法，而应该使用len(">
+
+
+<meta itemprop="datePublished" content="2018-07-11T15:00:12&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-11T15:00:12&#43;00:00" />
+<meta itemprop="wordCount" content="3263">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 如何使用特殊方法"/>
+<meta name="twitter:description" content="2 如何使用特殊方法 首先明确一点，特殊方法的存在是为了被 Python 解释器调用的，你自己并不需要调用它们。嗯。也就是说没有 my_object.__len__() 这种写法，而应该使用len("/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 如何使用特殊方法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-11 </span>
+        
+        <span class="more-meta"> 3263 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#2-如何使用特殊方法">2 如何使用特殊方法</a>
+<ul>
+<li><a href="#2-1-模拟数值类型">2.1 模拟数值类型</a></li>
+<li><a href="#2-2-字符串表示形式">2.2 字符串表示形式</a></li>
+<li><a href="#2-3-算术运算符">2.3 算术运算符</a></li>
+<li><a href="#2-4-自定义的布尔值">2.4 自定义的布尔值</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="2-如何使用特殊方法">2 如何使用特殊方法</h2>
+
+<p>首先明确一点，特殊方法的存在是为了被 Python 解释器调用的，你自己并不需要调用它们。<span style="color:red;">嗯。</span>也就是说没有 <code>my_object.__len__()</code> 这种写法，而应该使用<code>len(my_object)</code>。在 执行 <code>len(my_object)</code> 的时候，如果 <code>my_object</code> 是一个自定义类的对象，那么 Python 会自己去调用其中由你实现的 <code>__len__</code> 方法。</p>
+
+<p>然而如果是Python内置的类型，比如列表(list)、字符串(str)、字节序列 (bytearray)等，那么 CPython 会抄个近路，<code>__len__</code>实际上会直接返回 PyVarObject 里的 <code>ob_size</code> 属性。 PyVarObject 是表示内存中长度可变的内置对象的 C 语言结构体。直接读取这个值比调用一个方法要快很多。</p>
+
+<p>很多时候，特殊方法的调用是隐式的，比如 <code>for i in x:</code> 这个语句，背后其实用的是 <code>iter(x)</code>，而这个函数的背后则是<code>x.__iter__()</code>方法。当然前提是这个方法在<code>x</code>中被实现了。<span style="color:red;"><code>__iter__</code>要怎么实现？</span></p>
+
+<p>通常你的代码无需直接使用特殊方法。除非有大量的元编程存在，直接调用特殊方法的频率应该远远低于你去实现它们的次数。<span style="color:red;">为什么有大量的元编程存在的时候就需要直接使用特殊方法？</span>唯一的例外可能是 <code>__init__</code> 方法，你的代码里可 能经常会用到它，目的是在你自己的子类的 <code>__init__</code> 方法中调用超类的构造器。<span style="color:red;">嗯，是的。</span></p>
+
+<p>通过内置的函数(例如len、iter、str，等等)来使用特殊方法是最好的选择。这些内置函数不仅会调用特殊方法，通常还提供额外的好处，而且对于内置的类来说，它们的速度更快。 14.12 节中有详细的例子。<span style="color:red;">嗯</span></p>
+
+<p>不要自己想当然地随意添加特殊方法，比如 <code>__foo__</code> 之类的，因为虽然现在这个名字没有被 Python 内部使用，以后就不一定了。<span style="color:red;">嗯，这就是方法名不能是两个下划线的原因。</span></p>
+
+<h3 id="2-1-模拟数值类型">2.1 模拟数值类型</h3>
+
+<p>利用特殊方法，可以让自定义对象通过加号“+”(或是别的运算符)进行运算。第 13 章对此有详细的介绍，现在只是借用这个例子来展示特殊方法的使用。</p>
+
+<p>我们来实现一个二维向量(vector)类，这里的向量就是欧几里得几何中常用的概念，常在数学和物理中使用的那个(见图 1-1)。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180711/G8ecdCDaf2.png?imageslim" alt="mark" /></p>
+
+<blockquote>
+<p>Python 内置的 complex 类可以用来表示二维向量，但我们这个自定义的类可以扩展到 n 维向量，详见第 14 章。<span style="color:red;">嗯，不知道complex可以表示二维向量，怎么使用的？现在应该都使用numpy了吧。</span></p>
+</blockquote>
+
+<p>为了给这个类设计API，我们先写个模拟的控制台会话来做doctest。下面这一段代码就是图 1-1 所示的向量加法:</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; v1 = Vector(2, 4)
+&gt;&gt;&gt; v2 = Vector(2, 1)
+&gt;&gt;&gt; v1 + v2
+Vector(4, 5)
+</code></pre>
+
+<p>注意其中的 <code>+</code> 运算符所得到的结果也是一个向量，而且结果能被控制台友好地打印出来。<span style="color:red;">嗯，就是两个功能</span></p>
+
+<p><code>abs</code> 是一个内置函数，如果输入是整数或者浮点数，它返回的是输入值的绝对值；如果输入是复数(complex number)，那么返回这个复数的模。为了保持一致性，我们的API在碰到 <code>abs</code> 函数的时候，也应该返回该向量的模:</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; v=Vector(3,4)
+&gt;&gt;&gt; abs(v)
+5.0
+</code></pre>
+
+<p>我们还可以利用 <code>*</code> 运算符来实现向量的标量乘法（即向量与数的乘法，得到的结果向量的方向与原向量一致，模变大，
+如果向量与负数相乘，得到的结果向量的方向与原向量相反）。</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; v * 3
+Vector(9, 12)
+&gt;&gt;&gt; abs(v * 3)
+15.0
+</code></pre>
+
+<p>示例 1-2 包含了一个 Vector 类的实现，上面提到的操作在代码里是用这些特殊方法实现 的： <code>__repr__</code> 、 <code>__abs__</code> 、 <code>__add__</code> 和 <code>__mul__</code> 。</p>
+
+<p>示例1-2 —个简单的二维向量类</p>
+
+<pre><code class="language-python">from math import hypot
+
+class Vector:
+
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+    def __repr__(self):
+        return 'Vector(%r, %r)' % (self.x, self.y)
+
+    def __abs__(self):
+        return hypot(self.x, self.y)
+
+    def __bool__(self):
+        return bool(abs(self))
+
+    def __add__(self, other):
+        x = self.x + other.x
+        y = self.y + other.y
+        return Vector(x, y)
+
+    def __mul__(self, scalar):
+        return Vector(self.x * scalar, self.y * scalar)
+</code></pre>
+
+<p><span style="color:red;"> <code>hypot</code> 是什么？math 也要总结下。</span></p>
+
+<p>虽然代码里有 6 个特殊方法，但这些方法（除了 init）并不会在这个类自身的代码中使用。即便其他程序要使用这个类的这些方法，也不会直接调用它们，就像我们在上面的控制台对话中看到的。上文也提到过，一般只有 Python 的解释器会频繁地直接调用这些方法。接下来看看每个特殊方法的实现。</p>
+
+<h3 id="2-2-字符串表示形式">2.2 字符串表示形式</h3>
+
+<p>Python 有一个内置的函数叫 repr，它能把一个对象用字符串的形式表达出来以便辨认， 这就是 “字符串表示形式” 。 repr 就是通过 <code>__repr__</code> 这个特殊方法来得到一个对象的字符串表示形式的。如果没有实现 repr，当我们在控制台里打印一个向量的实例时， 得到的字符串可能会是 <Vector object at 0x10e100070>。<span style="color:red;">嗯。</span></p>
+
+<p>交互式控制台和调试程序(debugger)用repr函数来获取字符串表示形式；在老的使用 % 符号的字符串格式中，这个函数返回的结果用来代替 %r 所代表的对象；同样， str.format 函数所用到的新式字符串格式化语法(<a href="https://docs.python.org/2/library/string.html#format-string-syntax)也是利用了">https://docs.python.org/2/library/string.html#format-string-syntax)也是利用了</a> repr，才把!r 字段变成字符串。<span style="color:red;">嗯。</span></p>
+
+<blockquote>
+<p>%和str.format这两种格式化字符串的手段在本书中都会使用。其实整个 Python 社区都在同时使用这两种方法。个人来讲，我越来越喜欢 str.format 了，但是 Python 程序员更喜欢简单的 %。因此，这两种形式并存的情况还会持续下去。<span style="color:red;">这两种都要仔细掌握</span></p>
+</blockquote>
+
+<p>在 <code>__repr__</code> 的实现中，我们用到了 %r 来获取对象各个属性的标准字符串表示形式，这是个好习惯，它暗示了一个关键：<code>Vector(1, 2)</code> 和 <code>Vector( '1', '2')</code> 是不一样的，后者在我们的定义中会报错，因为向量对象的构造函数只接受数值，不接受字符串。<span style="color:red;">嗯，的确更严密一些</span></p>
+
+<blockquote>
+<p>实际上，Vector的构造函数接受字符串。而且，对于使用字符串构造的 Vector ，这6个特殊方法中，只有<code>__abs__</code> 和<code>__bool__</code>会报错。此外，1.2.4节定义的<code>__bool__</code>不会报错。</p>
+</blockquote>
+
+<p><code>__repr__</code> 所返回的字符串应该准确、无歧义，并且尽可能表达出如何用代码创建出这个被打印的对象。因此这里使用了类似调用对象构造器的表达形式(比如 Vector(3, 4) 就是个例子)。<span style="color:red;">嗯，是的，尽可能表达出如何用代码创建出这个被打印的对象</span></p>
+
+<p><strong><code>__repr__</code> 和 <code>__str__</code> 的区别在于，后者是在 <code>str()</code> 函数被使用，或是在用 <code>print</code> 函数 打印一个对象的时候才被调用的，并且它返回的字符串对终端用户更友好。</strong><span style="color:red;">嗯，这个要注意，</span></p>
+
+<p>如果你只想实现这两个特殊方法中的一个， <code>__repr__</code> 是更好的选择，因为如果一个对象没有 <code>__str__</code> 函数，而 Python 又需要调用它的时候，解释器会用 <code>__repr__</code> 作为替代。<span style="color:red;">嗯。</span></p>
+
+<blockquote>
+<p>“Difference between str and repr in Python” (<a href="http://stackoverflow.com/questions/1436703/difference-between-str-and-repr-in-python)是">http://stackoverflow.com/questions/1436703/difference-between-str-and-repr-in-python)是</a> Stack Overflow 上的一个问题，Python 程序员 Alex Martelli 和 Martijn Pieters 的回答很精彩。<span style="color:red;">要补充进来。</span></p>
+</blockquote>
+
+<h3 id="2-3-算术运算符">2.3 算术运算符</h3>
+
+<p>通过 <code>__add__</code> 和 <code>__mul__</code>，示例 1-2 为向量类带来了 <code>+</code> 和 <code>*</code> 这两个算术运算符。值得注 意的是，这两个方法的返回值都是新创建的向量对象，被操作的两个向量( self 或 other )还是原封不动，代码里只是读取了它们的值而己。<strong>中缀运算符的基本原则就是不改变操作对象，而是产出一个新的值。</strong> <span style="color:red;">这个不知道。</span>第 13 章会谈到更多这方面的问题。</p>
+
+<blockquote>
+<p>示例1-2只实现了数字做乘数、向量做被乘数的运算，乘法的交换律则被忽略了。在第 13 章里，我们将利用 <code>__rmul__</code> 解决这个问题。<span style="color:red;">交换律不是自然支持的，嗯的确，两个矩阵的相乘就是与顺序有关的。</span></p>
+</blockquote>
+
+<h3 id="2-4-自定义的布尔值">2.4 自定义的布尔值</h3>
+
+<p>尽管 Python 里有 bool 类型，但实际上任何对象都可以用于需要布尔值的上下文中(比如 if 或 while 语句，或者 and、 or 和 not 运算符)。<span style="color:red;">厉害，这个都考虑到了。</span>为了判定一个值 <code>x</code> 为真还是为假，Python会调用<code>bool(x)</code>，这个函数只能返回<code>True</code>或者<code>False</code>。</p>
+
+<p><strong>默认情况下，我们自己定义的类的实例总被认为是真的，除非这个类对 bool 或者 len 函数有自己的实现。</strong> <span style="color:red;">嗯。</span> <code>bool(x)</code> 的背后是调用 <code>x.__bool__()</code> 的结果；如果不存在 <code>__bool__</code> 方法，那么 <code>bool(x)</code> 会尝试调用 <code>x.len()</code>。若返回 <code>0</code>，则 <code>bool</code> 会返回 <code>False</code>；否则返回<code>True</code>。<span style="color:red;">嗯。</span></p>
+
+<p>我们对 <code>__bool__</code> 的实现很简单，如果一个向量的模是0，那么就返回<code>False</code>，其他情况则返回<code>True</code>。因为bool函数的返回类型应该是布尔型，所以我们通过 <code>bool(abs(self))</code> 把模值变成了布尔值。</p>
+
+<p>在Python标准库的文档中，有一节叫作“Built-in Types” ( <a href="https://docs.python.org/3/library/stdtypes.html#truth">https://docs.python.org/3/library/stdtypes.html#truth</a>) ，其中规定了真值检验的标准。通过实现 bool，你定义的对象就可以与这个标准保持一致。<span style="color:red;">嗯，很不错。</span></p>
+
+<p>如果想让 Vector.bool 更高效，可以采用这种实现:</p>
+
+<pre><code class="language-python">def __bool__(self):
+    return bool(self.x or self.y)
+</code></pre>
+
+<p><span style="color:red;">厉害的写法，很nice。</span></p>
+
+<p>它不那么易读，却能省掉从 <code>abs</code> 到 <code>__abs__</code> 到平方再到平方根这些中间步骤。通过 <code>bool</code> 把返回类型显式转换为布尔值是为了符合 <code>__bool__</code> 对返回值的规定，因为 <code>or</code> 运算符可能会返回 <code>x</code> 或者 <code>y</code> 本身的值:若 <code>x</code> 的值等价于真，则 <code>or</code> 返回 <code>x</code> 的值；否则 返回 <code>y</code> 的值。</p>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-07-11</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/00-%E4%BB%8B%E7%BB%8D/00-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">00 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/%E6%B5%81%E7%95%85%E7%9A%84-python/02-%E5%BA%8F%E5%88%97%E6%9E%84%E6%88%90%E7%9A%84%E6%95%B0%E7%BB%84/10-%E5%B0%8F%E7%BB%93%E4%B8%8E%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB/">
+            <span class="next-text nav-default">10 小结与延伸阅读</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

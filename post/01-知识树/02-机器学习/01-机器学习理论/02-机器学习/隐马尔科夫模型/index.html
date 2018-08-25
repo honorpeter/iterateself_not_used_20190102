@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>隐马尔科夫模型 - iterate self</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="隐马尔科夫模型 讲东西，一定要注意实践的问题与我的理论模型相对应。不然讲了之后也不知道怎么用，也不知道什么时候会用到。 MOTIVE 对HMM进行总结 面试笔" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="隐马尔科夫模型" />
+<meta property="og:description" content="隐马尔科夫模型 讲东西，一定要注意实践的问题与我的理论模型相对应。不然讲了之后也不知道怎么用，也不知道什么时候会用到。 MOTIVE 对HMM进行总结 面试笔" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="隐马尔科夫模型">
+<meta itemprop="description" content="隐马尔科夫模型 讲东西，一定要注意实践的问题与我的理论模型相对应。不然讲了之后也不知道怎么用，也不知道什么时候会用到。 MOTIVE 对HMM进行总结 面试笔">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="5121">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="隐马尔科夫模型"/>
+<meta name="twitter:description" content="隐马尔科夫模型 讲东西，一定要注意实践的问题与我的理论模型相对应。不然讲了之后也不知道怎么用，也不知道什么时候会用到。 MOTIVE 对HMM进行总结 面试笔"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">iterate self</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">about</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">iterate self</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">about</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">隐马尔科夫模型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 5121 words </span>
+        <span class="more-meta"> 11 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#隐马尔科夫模型">隐马尔科夫模型</a></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#前置知识">前置知识</a></li>
+<li><a href="#hmm-介绍">HMM 介绍</a></li>
+<li><a href="#hmm的用处">HMM的用处</a></li>
+<li><a href="#复习一下马尔科夫模型">复习一下马尔科夫模型</a>
+<ul>
+<li><a href="#马尔科夫模型">马尔科夫模型</a></li>
+<li><a href="#马尔科夫随机过程生成伪随机数">马尔科夫随机过程生成伪随机数</a></li>
+<li><a href="#伪随机">伪随机</a></li>
+<li><a href="#思考和发现">思考和发现</a></li>
+<li><a href="#马尔科夫模型还可以用在采样部分-mcmc">马尔科夫模型还可以用在采样部分，MCMC</a></li>
+</ul></li>
+<li><a href="#hmm">HMM</a>
+<ul>
+<li><a href="#hmm定义">HMM定义</a></li>
+<li><a href="#隐马尔科夫模型的贝叶斯网络如下">隐马尔科夫模型的贝叶斯网络如下</a></li>
+<li><a href="#那么如何描述这个隐马尔科夫模型呢">那么如何描述这个隐马尔科夫模型呢？</a></li>
+<li><a href="#hmm的两个基本性质">HMM的两个基本性质</a></li>
+<li><a href="#hmm举例">HMM举例</a></li>
+<li><a href="#ok-这个就是hmm下的3个基本问题">OK，这个就是HMM下的3个基本问题</a></li>
+<li><a href="#第一个-概率计算问题">第一个，概率计算问题</a>
+<ul>
+<li><a href="#直接计算法">直接计算法</a></li>
+<li><a href="#借鉴算法的优化思想">借鉴算法的优化思想</a></li>
+</ul></li>
+<li><a href="#举个例子-盒子球模型">举个例子：盒子球模型</a></li>
+<li><a href="#前后向关系">前后向关系</a></li>
+<li><a href="#单个状态的概率">单个状态的概率</a></li>
+<li><a href="#学习算法">学习算法</a>
+<ul>
+<li><a href="#第一个情况非常简单-直接上大数定理">第一个情况非常简单，直接上大数定理</a></li>
+<li><a href="#第二个情况就是bw算法">第二个情况就是BW算法</a></li>
+<li><a href="#现在来看一下bw算法">现在来看一下BW算法：</a></li>
+</ul></li>
+<li><a href="#预测算法">预测算法</a>
+<ul>
+<li><a href="#例子-走棋盘-格子取数">例子：走棋盘/格子取数</a></li>
+<li><a href="#问题分析">问题分析</a></li>
+<li><a href="#viterbi算法">Viterbi算法</a></li>
+<li><a href="#例子">例子</a></li>
+</ul></li>
+<li><a href="#baum-welch-代码">Baum-Welch 代码</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a>
+<ul>
+<li><a href="#ref">REF</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="隐马尔科夫模型">隐马尔科夫模型</h1>
+
+<ul>
+<li>讲东西，一定要注意实践的问题与我的理论模型相对应。不然讲了之后也不知道怎么用，也不知道什么时候会用到。</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li><p>对HMM进行总结</p></li>
+
+<li><p>面试笔试的时候老是会考Viterbi算法。这个要注意</p></li>
+</ul>
+
+<hr />
+
+<h1 id="前置知识">前置知识</h1>
+
+<ul>
+<li>马尔科夫模型</li>
+</ul>
+
+<h1 id="hmm-介绍">HMM 介绍</h1>
+
+<p>#</p>
+
+<h1 id="hmm的用处">HMM的用处</h1>
+
+<ul>
+<li><p>可以用于中文分词：绿茶中我最喜欢信阳毛峰 分为：绿茶中/我最/喜欢/信/阳/毛峰 。这个过程中截断的地方我观测不到，是隐状态。但是这个句子的流我能观测到。</p></li>
+
+<li><p>也可用于语音识别：比如说我读dog， 肯定是先发d 的音，然后是o 然后是g 然后还有很多原音和辅音。好多这种东西是我观测不到的，但是我能观测到我说了很多话，这些是一维数据，而到底说了什么是我的隐状态。那么我能不能通过我说的话来预测我到底说了什么呢？这就完成了语音的识别。</p></li>
+</ul>
+
+<p>注意，这个分词功能可以直接用HMM本身来做，即可以不带词库。jieba是HMM配合词库来做的这个分词。所以准确率很高</p>
+
+<p>HMM和明天要介绍的条件随机场CRF 是中文分词非常重要的两种手段</p>
+
+<h1 id="复习一下马尔科夫模型">复习一下马尔科夫模型</h1>
+
+<p><strong>这部分要拿到马尔科夫那里讲，不要放在HMM里面。</strong></p>
+
+<h2 id="马尔科夫模型">马尔科夫模型</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/I1H9a344HJ.png?imageslim" alt="mark" /></p>
+
+<h2 id="马尔科夫随机过程生成伪随机数">马尔科夫随机过程生成伪随机数</h2>
+
+<p>这个模型其实早已使用，并不陌生。考察C语言提供的rand随机数函数。</p>
+
+<p>伪随机：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ebA3dmmGJ7.png?imageslim" alt="mark" /></p>
+
+<p>辅助结构</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hiKkcHj8AF.png?imageslim" alt="mark" /></p>
+
+<p>先给定一个当前的种子。<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l1HEgeJe6b.png?imageslim" alt="mark" /></p>
+
+<p>也就是 holdrand 其实决定了返回值，而这个holdrand最初给定的是1：<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hlHh9d0DEb.png?imageslim" alt="mark" />。</p>
+
+<h2 id="伪随机">伪随机</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HKJi1id58i.png?imageslim" alt="mark" /></p>
+
+<p>可见，rand函数符合的是马尔科夫模型，而不是真正的样本独立，它比独立弱了一点点，它样本间只有相邻元素是有相关关系的。</p>
+
+<p>这种伪随机几乎不会影响到我们的使用。</p>
+
+<p>伪随机的效果：产生二维随机数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GmLkKKef7j.png?imageslim" alt="mark" /></p>
+
+<p>伪随机效果：产生圆内随机数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/K3CJd3A4Kg.png?imageslim" alt="mark" /></p>
+
+<h2 id="思考和发现">思考和发现</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4E3lAI1lga.png?imageslim" alt="mark" /></p>
+
+<p>马尔科夫过程版本的大数定理</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4B9ie389Fc.png?imageslim" alt="mark" /></p>
+
+<p>大树定理里面，如果样本之间符合马尔科夫模型，也可以得到频率等于概率这个结论的。</p>
+
+<p>此外：</p>
+
+<h2 id="马尔科夫模型还可以用在采样部分-mcmc">马尔科夫模型还可以用在采样部分，MCMC</h2>
+
+<p><strong>MCMC在这个地方没有讲</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/IceII187mf.png?imageslim" alt="mark" /></p>
+
+<p>除了之和前面一个有关之外，还有比如说与前面两个有关的，或者与前面三个有关的，这些都是高阶的马尔科夫模型。如果与前面所有状态都有关，那么就是一个全联通的图。</p>
+
+<p><strong>那么我们怎么知道什么时候是一阶的马尔科夫模型？什么时候是高阶的？</strong></p>
+
+<p>OK 我们还是把目光放在HMM上：</p>
+
+<h1 id="hmm">HMM</h1>
+
+<h2 id="hmm定义">HMM定义</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/28D42Ca8f2.png?imageslim" alt="mark" /></p>
+
+<h2 id="隐马尔科夫模型的贝叶斯网络如下">隐马尔科夫模型的贝叶斯网络如下</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5iGlFhC3EH.png?imageslim" alt="mark" /></p>
+
+<p>它的隐状态的序列是一个标准的马尔科夫模型，它的 x 叫做观测序列，z 叫做状态序列，状态序列是不可观测的。</p>
+
+<p>由于z1 是不确定的，所以x1 与z2 是head-to-head  因此x1与z2 是不独立的，所以x1与x2 也是不独立的，类似的x1与后面的所有都是不独立的，也就是说x1与xn也是不独立的。</p>
+
+<p>瞬间感觉这个就很利害了，这样字的模型其实感觉更符合我们的直观。比如说写文章的时候，第一个词是变形金刚，那么文章后面基本不会出现中药相关的。</p>
+
+<p>这个其实就不再是LDA里面的bag-of-words 词袋模型 。因为有顺序的信息了。是真正的不独立的模型。</p>
+
+<h2 id="那么如何描述这个隐马尔科夫模型呢">那么如何描述这个隐马尔科夫模型呢？</h2>
+
+<p>HMM由初始概率分布π(向量)、状态转移概率分布A(矩阵)以及观测概率分布B(矩阵)确定。π和A决定状态序列，B决定观测序列。因此，HMM可以用三元符号表示，称为HMM的三要素：</p>
+
+<p>[λ=(A,B,π)]</p>
+
+<p>在初始状态的时候，可能有n个状态。因此是一个初始概率分布。</p>
+
+<p>还需要描述在第i号状态的时候能够观测到的xn它的状态是什么。</p>
+
+<ul>
+<li><p>如果从zn到xn这一步是离散的，那么它就需要一个观测的概率分布矩阵来表达</p></li>
+
+<li><p>如果它是连续的，就需要若干个条件分布来表达。</p></li>
+</ul>
+
+<p>所以B不一定是个矩阵，但是可以这么写。</p>
+
+<p><strong>这个观测的概率分布为什么是一个矩阵？还是有点不是很清楚？</strong></p>
+
+<p>我们具体来看一下怎么做：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/48I839G78B.png?imageslim" alt="mark" /></p>
+
+<p>Q一定是离散的。但是从 z 到 x ，生成的 x 可能是连续的，也可能是离散的，</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/cfl9EDaAKi.png?imageslim" alt="mark" /></p>
+
+<p>这个地方注意一下，这个I和O是隐状态序列和观测到的状态序列，而Q和V是所有可能的状态，这不是同一个东西。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/m5KhbHjaL2.png?imageslim" alt="mark" />表达的意思是：前一个隐状态是是第i个状态的时候，后一个隐状态是第j个状态的概率。</p>
+
+<p>很显然，第 i 行表示的就是，前一个状态是第i个的时候，后一个状态各自是 q1q2。。。qN 的概率。因此，第 i 行的和一定是 1 。</p>
+
+<p>然后</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fd5e44mKCb.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3Cj07Ggli7.png?imageslim" alt="mark" />这个的意思是：t 时刻的 隐状态是 qi 的时候，我观测到的状态是vk的概率  这个相当于第i行第k列。注意这个行数是N个，列是M个。</p>
+
+<p>这个M列有可能是M个离散值，也可能就是N个条件分布。</p>
+
+<p>由于z1是最开始，那么这个最开始的时候的状态是什么呢？我们用<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aJ1iJHAfIf.png?imageslim" alt="mark" />来描述，</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bAKJbchcBe.png?imageslim" alt="mark" /></p>
+
+<p>所以，到这里，对 [λ=(A,B,π)] 的描述进行了讲解。</p>
+
+<p>OK 我们继续：</p>
+
+<h2 id="hmm的两个基本性质">HMM的两个基本性质</h2>
+
+<p>这两个性质就是马尔科夫模型的额本质。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Agmce3d2dC.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9D542m2AJE.png?imageslim" alt="mark" /></p>
+
+<p>在所有的i和o的观测和状态都给定的情况下，zn这个结点位于第i_t号状态的概率只与i_t-1有关。</p>
+
+<p>而这个时候的o_t 只与那个时候的额i_t有关。</p>
+
+<p>这个地方说明下：zn的状态是i_t，x_n的状态是o_t</p>
+
+<p><strong>其实我想知道实际生活中是不是就是x然后背后隐藏着z？而且z是马尔科夫链？</strong></p>
+
+<p><strong>贝叶斯网络这个东西，感觉必然要与深度学习的那些神经网络产生关系。产生融合，才能够去做更多的事情。嗯 利害的。比如说现在的CNN和RNN等，太冗余了，冗余度太高了，感觉人类的神经不因该是这个样子的。不知道现在有没有神经网络与HMM的结合的东西，以及为什么没有这种结合？</strong></p>
+
+<p>我们想一下开始的时候，介绍的用HMM来做分词，怎么做呢？比如说：两个基本性质 这句话，把每个字都看作一个x，然后隐含的是什么呢？是是否截断。比如两个| 基本|性质。 那么，它的截断状态可能就是：NYNYNY  。这些词与词之间的是否截断就可以看作是隐状态 。这样就可以用HMM来做。<strong>感觉这样的话很多东西都可以用啊。再想想。</strong></p>
+
+<p>OK，我们看一下例子：</p>
+
+<h2 id="hmm举例">HMM举例</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j265kc3LmC.png?imageslim" alt="mark" /></p>
+
+<p>该示例的各个参数</p>
+
+<ul>
+<li><p>状态集合：Q={盒子1，盒子2，盒子3}</p></li>
+
+<li><p>观测集合：V={红，白}</p></li>
+
+<li><p>状态序列和观测序列的长度T=5</p></li>
+
+<li><p>初始概率分布π：</p></li>
+
+<li><p>状态转移概率分布A：</p></li>
+
+<li><p>观测概率分布B：</p></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d92l5g7B8k.png?imageslim" alt="mark" /></p>
+
+<p>注意：这个A是给定的。\pi 相当于是A的火车头。</p>
+
+<p>思考：在给定参数π、A、B的前提下，得到观测序列“红红白白红”的概率是多少？</p>
+
+<h2 id="ok-这个就是hmm下的3个基本问题">OK，这个就是HMM下的3个基本问题</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/C9DB57H5JB.png?imageslim" alt="mark" /></p>
+
+<p>OK 这个是HMM的三个基本问题。</p>
+
+<ul>
+<li><p>概率计算问题是核心，虽然不是重点。因为这个搞定了，另外两个的基础就有了。</p></li>
+
+<li><p>学习问题是：当这个模型的参数各自取什么的时候，是的这个观测序列出现的概率是最大的 ？</p></li>
+
+<li><p>预测问题是：我想来看一下在参数和O给定的情况下，哪一个隐状态i出现的概率是最大的。这个是最重要的内容，因为，平时我们的问题基本就是这种类型的问题，比如翻译、分词、等。</p></li>
+</ul>
+
+<p>下面就开始研究这三个问题：</p>
+
+<h2 id="第一个-概率计算问题">第一个，概率计算问题</h2>
+
+<ul>
+<li><p>直接算法</p>
+
+<ul>
+<li>暴力算法</li>
+</ul></li>
+
+<li><p>前向算法</p></li>
+
+<li><p>后向算法</p>
+
+<ul>
+<li>这二者是理解HMM的算法重点</li>
+</ul></li>
+</ul>
+
+<h3 id="直接计算法">直接计算法</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8jC6AlbC82.png?imageslim" alt="mark" /></p>
+
+<p>是的，先算联合概率。给定\lambda 的时候：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CkgaECkF41.png?imageslim" alt="mark" /></p>
+
+<p><strong>为什么这个乘起来就是这个O？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6391I2F559.png?imageslim" alt="mark" /></p>
+
+<p>我把所有的I的可能情况都拿出来。</p>
+
+<p>I1 有n中不同的取之情况，I2 有n中不同的取值情况，。。一共有多少次呢？T次，</p>
+
+<p>然后这T次是分别出现的，因此最后是N^T  这是一个非常大的数字。</p>
+
+<p>直接计算法分析：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LikgaEbJcC.png?imageslim" alt="mark" /></p>
+
+<p>那么怎么做才能降低时间复杂度呢？</p>
+
+<h3 id="借鉴算法的优化思想">借鉴算法的优化思想</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i80DCl5EfL.png?imageslim" alt="mark" /></p>
+
+<p>定义：前向-后向：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aGc7J8KDeL.png?imageslim" alt="mark" /></p>
+
+<p>我们假定 qt 位于第 i 号状态的时候</p>
+
+<ul>
+<li><p>前向概率： 第t个时刻它位于 i 号状态，并且我观察到了前t个观测值。它的概率有多大。</p></li>
+
+<li><p>后向概率：t号时刻已经是第i号状态了，那么在这个条件之下，我能观测到后面这些结点的概率有多大。</p></li>
+</ul>
+
+<p>嗯。这两个定义是非常重要的。</p>
+
+<p>q到底是几其实没有观测到，只是我们假定它位于第i号状态。</p>
+
+<p>前向算法</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/G8dEe9E4Aj.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2iibmf3JfC.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bdLCHC3KKk.png?imageslim" alt="mark" />就是第一个隐状态位于i的时候，我还观测到了o1。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jB9AHmeGdf.png?imageslim" alt="mark" />t+1时刻隐状态位于i号状态的概率。</p>
+
+<p>在t时刻的时候，状态不知道，假定位于j号状态，不管j是多少，一定要转移到i号状态，因此是<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/83i07lg88B.png?imageslim" alt="mark" />。然后对j积分。那么这个<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/73bJmi55DE.png?imageslim" alt="mark" />里面做完之后就表示已经到达t+1时刻的i号状态了。并且我们观测到了o1,o2&hellip;ot 没有看到o<em>{t+1},我们还需要让第i号状态看到o</em>{t+1} ，因此把第i号隐状态到t+1的输出乘一下。就得到了。<strong>为什么这个时候前面的o1，o2。。。不用管？为什么要让t+1的时候的状态为第i号状态？嗯 知道了这个地方，这个状态i其实是无所谓的，因为我并不关心这个状态到底是什么，只要我的观测到的序列是我想要的序列就行。但是为什么这个时刻的和下个时刻的都是i？</strong></p>
+
+<p>我们像<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/eFH06Lklib.png?imageslim" alt="mark" />这样把1号，2号。。。。到T-1号都做一遍 最终就能求出\alpha_T(i) .而这个<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5Jg2jab5BF.png?imageslim" alt="mark" />是什么意思呢？这个意味着在T时刻我观测到了o1,o2,。。。oT ，并且隐状态已经是i号状态了，注意，隐状态是几我不关心，我只关心o1,o2,。。。oT这个序列。因此我把它积掉，得到：<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2LhDB1Bh3k.png?imageslim" alt="mark" /></p>
+
+<p>利害的</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kLLDd7m96H.png?imageslim" alt="mark" /></p>
+
+<p>可见，这个的时间复杂度比之前硬算要好得多。</p>
+
+<h2 id="举个例子-盒子球模型">举个例子：盒子球模型</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/khK14A4jA0.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j9HgJFaiGj.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lKEG6abhl1.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j6LdafGDK0.png?imageslim" alt="mark" /></p>
+
+<p>那么仿照前向概率有后向概率：</p>
+
+<p>前向算法：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GmaKkJK02H.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7geAAc5CjH.png?imageslim" alt="mark" /></p>
+
+<p>嗯这个地方是从后往前类推的。<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/G0cC3bKK4m.png?imageslim" alt="mark" />我们保证了t+2到T是观测到的， 我们再要求从第i号状态转移到第j号状态。<strong>没明白？</strong></p>
+
+<p>后向算法的说明</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0l9Am0L8BL.png?imageslim" alt="mark" /></p>
+
+<h2 id="前后向关系">前后向关系</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/eGmamHghCj.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3H1FEfE9gg.png?imageslim" alt="mark" /></p>
+
+<h2 id="单个状态的概率">单个状态的概率</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j1Dm46megj.png?imageslim" alt="mark" /></p>
+
+<p>单个状态的概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/K600D39K23.png?imageslim" alt="mark" /></p>
+
+<p>γ的意义</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j9j9DiGJg5.png?imageslim" alt="mark" /></p>
+
+<p>两个状态的联合概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hHmB1khdDj.png?imageslim" alt="mark" /></p>
+
+<p>两个状态的联合概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bKd8Jb3Fd7.png?imageslim" alt="mark" /></p>
+
+<p>(P(i<em>t=q,i</em>{t+1}=q_j,O\mid \lambda))  我想去观测到O，要求是第t个时刻位于i号状态，(\alpha_t(i)) 就能保证再t时刻位于i号状态。并且我看到了 o1~ot</p>
+
+<p>(\beta<em>{t+1}(j)) 保证了t+1时刻位于j号状态，并且我看到了o</em>{t+2}~o_T</p>
+
+<p>那么还少一个o_{t+1}</p>
+
+<p>因为我要求的是再t+1时刻位于j号状态，因此 乘以(b<em>{jo</em>{t+1} })</p>
+
+<p>然后要求的是t时刻位于i号状态，到了t+1位于j号状态，因此转移一下就行(a_{ij})</p>
+
+<p>这个时候(\alpha<em>t(i))和(\beta</em>{t+1}(j))  刚在已经解释过怎么做了，而(b<em>{jo</em>{t+1} })和(a_{ij})是给定值，所以这个值是可以算的。</p>
+
+<p>期望</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a5F3bmAmcb.png?imageslim" alt="mark" /></p>
+
+<p>这个跟我们做参数学习无关，只是提了一下。</p>
+
+<p>到现在未知概率计算问题都已经讲完了。</p>
+
+<p>然后：</p>
+
+<p>如何根据我们拿到的样本进行参数的估计？</p>
+
+<p>比如说我拿到了一对文本，然后在哪里分词也拿到了，那么这个就是一个监督学习问题。</p>
+
+<h2 id="学习算法">学习算法</h2>
+
+<ul>
+<li><p>若训练数据包括观测序列和状态序列，则HMM的学习非常简单，是监督学习；</p></li>
+
+<li><p>若训练数据只有观测序列，则HMM的学习需要使用EM算法，是非监督学习。</p></li>
+</ul>
+
+<h3 id="第一个情况非常简单-直接上大数定理">第一个情况非常简单，直接上大数定理</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/g2HC2GF66K.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kG70F2hi6c.png?imageslim" alt="mark" /></p>
+
+<p>a_{ij} 可以数出频数</p>
+
+<h3 id="第二个情况就是bw算法">第二个情况就是BW算法</h3>
+
+<p>这个本质上是EM算法的东西。</p>
+
+<p>先看一下之前学习过的 EM 算法的框架：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kAe4Eafi7A.png?imageslim" alt="mark" /></p>
+
+<p>第一步就是看一下隐状态的条件概率</p>
+
+<p>对于某一个给定的参数而言，那么这个隐状态的概率值可以算出来。就是(\alpha_t(i))，(\beta_t(i))  这些算出来的。</p>
+
+<p>既然Q能算出来是一个数，</p>
+
+<p>而(\theta)就是我的HMM模型里面的\lambda</p>
+
+<p>(Q_i(z^{(i)}))  就是一个数，因此它的计算可以扔掉不用。</p>
+
+<h3 id="现在来看一下bw算法">现在来看一下BW算法：</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/EfmBgmdhlk.png?imageslim" alt="mark" /></p>
+
+<p>注意这个地方的Q是想去求极大的那个东西，</p>
+
+<p>相当于在参数给定的时候，如果拿到手样本的部分观测值，想看一下隐状态的概率。</p>
+
+<p>这个(P(O,I\mid \lambda)) 就是(p(x^{(i)},z^{(i)};\theta)</p>
+
+<p>(Q(\lambda,\overline{\lambda})) 就是EM中的M，对它求极大值就可以</p>
+
+<p>EM过程</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/49h0F51H5b.png?imageslim" alt="mark" /></p>
+
+<p>这个(\overline{\lambda})  是当前的估计值。(\lambda) 这个是未知的。把这个东西带进来，然后乘积转加和。</p>
+
+<p>这里面\pi 是未知的 a，b都是未知的，但是(P(O,I\mid \overline{\lambda})) 这个通过前向后项是可以求的。</p>
+
+<p>我们把这三项分别求极大。</p>
+
+<p>极大化</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jF3AlbjmGb.png?imageslim" alt="mark" /></p>
+
+<p>初始状态概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/dfbBcaGiJH.png?imageslim" alt="mark" /></p>
+
+<p>转移概率和观测概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ijdkk9Imac.png?imageslim" alt="mark" /></p>
+
+<p>因此\pi 和a 和b都能球出来。</p>
+
+<p>走到HMM这里，其实对之前学习过的东西都可以进行应用了</p>
+
+<p><strong>上面就是BW算法还是要好好理解应用的。</strong></p>
+
+<h2 id="预测算法">预测算法</h2>
+
+<ul>
+<li><p>近似算法</p></li>
+
+<li><p>Viterbi算法</p></li>
+</ul>
+
+<p>预测的近似算法</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8b2c0Fm5Ck.png?imageslim" alt="mark" /></p>
+
+<h3 id="例子-走棋盘-格子取数">例子：走棋盘/格子取数</h3>
+
+<p>给定m*n的矩阵，每个位置是一个非负整数，从左上角开始，每次只能朝右和下走，走到右下角，求总和最小的路径。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/g9C1hj1BK4.png?imageslim" alt="mark" /></p>
+
+<h3 id="问题分析">问题分析</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AGFJiGlB9f.png?imageslim" alt="mark" /></p>
+
+<p>走的方向决定了同一个格子不会经过两次。</p>
+
+<p>若当前位于(x,y)处，它来自于哪些格子呢？</p>
+
+<p>dp[0,0]=a[0,0] / 第一行(列)累积</p>
+
+<p>dp[x,y] = min(dp[x-1,y]+a[x,y],dp[x,y-1]+a[x,y])</p>
+
+<p>即：dp[x,y] = min(dp[x-1,y],dp[x,y-1]) +a[x,y]</p>
+
+<p>思考：若将上述问题改成“求从左上到右下的最大路径”呢？</p>
+
+<p>它从一个盒子的坐标转移到另一个方块的坐标，相当于状态转移，那么有一个状态转移矩阵。</p>
+
+<h3 id="viterbi算法">Viterbi算法</h3>
+
+<p>Viterbi算法实际是用动态规划解HMM预测问题，用DP求概率最大的路径(最优路径)，这是一条路径对应一个状态序列。</p>
+
+<p>定义变量(δ_t(i))：在时刻t状态为i的所有路径中，概率的最大值。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ek53Dd328c.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/JaLH4j3hAe.png?imageslim" alt="mark" /></p>
+
+<p>这个是，好比t-1时刻包括之前的都已经走完了，那么这个时候i1,i2&hellip;.i_{t-1}都已经得到了，那么这个时候的t时刻 状态为i的概率的大小。</p>
+
+<p>举一个例子：自己看一下。就是根据观测到的序列确定最优的隐状态序列。</p>
+
+<h3 id="例子">例子</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bHHKk0bBmK.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7haJ2h9JE9.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FmBke5BJm2.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LID8k69E3g.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ff6JDf6dLL.png?imageslim" alt="mark" /></p>
+
+<h2 id="baum-welch-代码">Baum-Welch 代码</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d46Fkg2HjB.png?imageslim" alt="mark" /></p>
+
+<p>Baum-Welch：主函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/780Ce0GBaJ.png?imageslim" alt="mark" /></p>
+
+<p>前向-后向</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/eBKFaJaebA.png?imageslim" alt="mark" /></p>
+
+<p>隐状态概率 – 隐状态转移概率</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/k9g2Fbk0Ee.png?imageslim" alt="mark" /></p>
+
+<p>EM迭代</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bBE1i784Il.png?imageslim" alt="mark" /></p>
+
+<p>Viterbi</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Kl347kedah.png?imageslim" alt="mark" /></p>
+
+<p>分词</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lIb1BFGjka.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HmJi5k4d6B.png?imageslim" alt="mark" /></p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p>BW算法的代码：自己看一下。</p>
+
+<p>分词的代码也自己看一下，他分的是4个状态：BMES begin middle end single</p>
+
+<p>有很多东西没有懂，看来要再看一遍。</p>
+
+<h2 id="ref">REF</h2>
+
+<ol>
+<li>七月在线 机器学习 邹博</li>
+</ol>
+
+    </div>
+
+    
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">iterateself</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2018-08-21</span>
+  </p>
+  
+  
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：顺时针打印矩阵</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/em%E7%AE%97%E6%B3%95/">
+            <span class="next-text nav-default">EM算法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

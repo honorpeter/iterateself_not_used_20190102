@@ -9,7 +9,6 @@ weight: 50
 	- 01 智能探索
 		- 01 人工智能
 			- 01 强人工智能
-				- [01 人工智能介绍.md](http://iterate.site/post/01-知识树/01-智能探索/01-人工智能/01-强人工智能/01-人工智能介绍)
 				- [01 什么是强人工智能.md](http://iterate.site/post/01-知识树/01-智能探索/01-人工智能/01-强人工智能/01-什么是强人工智能)
 				- [人工智能的四个阶段.md](http://iterate.site/post/01-知识树/01-智能探索/01-人工智能/01-强人工智能/人工智能的四个阶段)
 				- [强人工智能.md](http://iterate.site/post/01-知识树/01-智能探索/01-人工智能/01-强人工智能/强人工智能)
@@ -1550,6 +1549,8 @@ weight: 50
 							- [git 撤销修改.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/git-撤销修改)
 							- [github 下 fork 后如何同步源的新更新内容？.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github-下-fork-后如何同步源的新更新内容？)
 							- [github上传时出现error.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github上传时出现error)
+							- [github上面的文件夹是灰色的.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github上面的文件夹是灰色的)
+							- [Github使用方法及常见错误.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/github使用方法及常见错误)
 							- [SSH-key.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/git/ssh-key)
 						- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/代码管理/大纲)
 					- [大纲.md](http://iterate.site/post/01-知识树/03-基础知识/05-基础服务开发/01-项目开发基础/01-软件工程/大纲)
@@ -1916,6 +1917,8 @@ weight: 50
 		- [expect comment.md](http://iterate.site/post/03-非核心/hexo/expect-comment)
 		- [Template render error.md](http://iterate.site/post/03-非核心/hexo/template-render-error)
 		- [介绍.md](http://iterate.site/post/03-非核心/hexo/介绍)
+	- hugo
+		- [介绍.md](http://iterate.site/post/03-非核心/hugo/介绍)
 	- [jupter.md](http://iterate.site/post/03-非核心/jupter)
 	- latex
 		- [Latex 常用符号.md](http://iterate.site/post/03-非核心/latex/latex-常用符号)

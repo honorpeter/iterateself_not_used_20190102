@@ -5,8 +5,12 @@ import os
 
 isFormal=1
 
-basedir="C://Users//evo//Desktop//iterateself//content//post"
-mdpath="C://Users//evo//Desktop//iterateself//content//catalog.md"
+basedir="content//post"
+mdpath="content//catalog.md"
+
+
+# basedir="C://Users//evo//Desktop//iterateself//content//post"
+# mdpath="C://Users//evo//Desktop//iterateself//content//catalog.md"
 urlbase="http://localhost:1313/post"
 urlbase_formal="http://iterate.site/post"
 

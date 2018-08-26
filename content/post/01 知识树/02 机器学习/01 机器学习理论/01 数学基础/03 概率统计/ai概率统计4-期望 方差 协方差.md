@@ -1,27 +1,10 @@
 ---
-title: ai概率统计(4)-期望 方差 协方差
+title: ai概率统计4-期望 方差 协方差
 toc: true
-date: 2018-08-26 15:16:23
----
----
-author: evo
-comments: true
-date: 2018-04-06 00:04:49+00:00
-layout: post
-link: http://106.15.37.116/2018/04/06/ai-probability-statistics-expected-variance-covariance/
-slug: ai-probability-statistics-expected-variance-covariance
-title: ai概率统计(4)-期望 方差 协方差
-wordpress_id: 3414
-categories:
-- 随想与反思
-tags:
-- '@todo'
-- '@want_to_know'
+date: 2018-08-21 18:16:23
 ---
 
-<!-- more -->
-
-[mathjax]
+# ai概率统计4-期望 方差 协方差
 
 
 # 缘由：

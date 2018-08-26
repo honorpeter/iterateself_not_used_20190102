@@ -1,5 +1,5 @@
 ---
-title: "{{ replace .BaseFileName  "-" " " | title }}"
+title: "{{ replace .TranslationBaseName "-" " " | title }}"
 date: {{ .Date }}
 lastmod: {{ .Date }}
 draft: true

@@ -1,27 +1,10 @@
 ---
-title: ai概率统计(7)-无偏估计与均方误差
+title: ai概率统计7-无偏估计与均方误差
 toc: true
 date: 2018-07-27 13:39:28
 ---
----
-author: evo
-comments: true
-date: 2018-03-27 10:14:02+00:00
-layout: post
-link: http://106.15.37.116/2018/03/27/ai-probability-statistics-unbiased-estimates-and-mean-square-errors/
-slug: ai-probability-statistics-unbiased-estimates-and-mean-square-errors
-title: ai概率统计(7)-无偏估计与均方误差
-wordpress_id: 938
-categories:
-- 随想与反思
-tags:
-- '@todo'
-- '@want_to_know'
----
 
-<!-- more -->
-
-[mathjax]
+# ai概率统计7-无偏估计与均方误差
 
 
 # 缘由：

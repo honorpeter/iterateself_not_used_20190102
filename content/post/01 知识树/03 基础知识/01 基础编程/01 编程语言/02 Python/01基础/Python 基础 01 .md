@@ -5,7 +5,7 @@ date: 2018-08-03 13:52:35
 ---
 [TOC]
 
-# TODO
+## 需要补充的
 
 - ==需要进行拆分，==
 - ==要补全，最好把 python 手册全部放过来，不然根本没办法全面掌握。==
@@ -580,7 +580,7 @@ datetime.datetime(2011, 11, 15, 22, 30)
 if x < 0:
     print('negative!')
 elif x == 0:
-    # TODO: put something smart here
+    ## 需要补充的: put something smart here
     pass
 else:
     print('positive!')

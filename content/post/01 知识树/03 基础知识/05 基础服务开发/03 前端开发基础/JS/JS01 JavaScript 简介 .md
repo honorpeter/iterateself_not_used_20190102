@@ -3,7 +3,7 @@ title: JS01 JavaScript 简介
 toc: true
 date: 2018-08-03 14:22:48
 ---
-TODO
+## 需要补充的
 
 * 大概知道 JavaScript 是由ECMAScript 和 BOM 和 DOM 三部分组成的。
 

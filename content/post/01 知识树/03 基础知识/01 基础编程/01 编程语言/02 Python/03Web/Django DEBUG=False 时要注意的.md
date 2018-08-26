@@ -3,7 +3,7 @@ title: Django DEBUG=False 时要注意的
 toc: true
 date: 2018-06-22 21:39:53
 ---
-# TODO
+## 需要补充的
 
 
   * **关于 static 到底像这个网页上说的，放到 项目里面，还是 就放在 manage.py 同级目录下？STATICFILES_DIRS 有必要使用吗？大项目都是怎么做的？**

@@ -7,7 +7,7 @@ date: 2018-07-27 10:28:10
 
 
 
-TODO
+## 需要补充的
 
 * **这个没有很理解到底是做什么的，要对照书看一下**
 * **运行的时候报错说：ModuleNotFoundError: No module named 'rfc822' 。尚没有解决。**

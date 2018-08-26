@@ -3,7 +3,7 @@ title: Python2.x与3​​.x版本区别
 toc: true
 date: 2018-06-14 14:58:20
 ---
-TODO
+## 需要补充的
 
 * 要合并到 Python 2 与 3 里面
 

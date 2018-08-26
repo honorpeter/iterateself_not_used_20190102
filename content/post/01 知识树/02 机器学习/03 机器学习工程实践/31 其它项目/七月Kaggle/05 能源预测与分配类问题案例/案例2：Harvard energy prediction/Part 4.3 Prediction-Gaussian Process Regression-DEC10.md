@@ -3,7 +3,7 @@ title: Part 4.3 Prediction-Gaussian Process Regression-DEC10
 toc: true
 date: 2018-07-26 08:18:50
 ---
-TODO
+## 需要补充的
 
 - 箱线图到底是怎么看的？
 

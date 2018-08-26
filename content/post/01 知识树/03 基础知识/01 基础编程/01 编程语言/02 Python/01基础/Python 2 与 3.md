@@ -3,7 +3,7 @@ title: Python 2 与 3
 toc: true
 date: 2018-06-14 14:56:53
 ---
-TODO
+## 需要补充的
 
 - **有些类库在 2 和 3 中已经变更了，也要总结下的，比如urllib requrest 什么的。**
 

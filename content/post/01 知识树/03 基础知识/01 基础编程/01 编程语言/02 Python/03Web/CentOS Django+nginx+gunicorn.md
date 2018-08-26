@@ -3,7 +3,7 @@ title: CentOS Django+nginx+gunicorn
 toc: true
 date: 2018-06-22 21:39:29
 ---
-# TODO
+## 需要补充的
 
 
 

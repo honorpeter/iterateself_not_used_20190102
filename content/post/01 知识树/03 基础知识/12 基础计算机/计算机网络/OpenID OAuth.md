@@ -6,7 +6,7 @@ date: 2018-08-01 17:39:39
 # OpenID OAuth
 
 
-TODO
+## 需要补充的
 
 
 * 到底什么是OpenID？为什么需要有OpenID？

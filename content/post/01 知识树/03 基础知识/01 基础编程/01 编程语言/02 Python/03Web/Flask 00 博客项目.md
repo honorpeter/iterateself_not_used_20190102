@@ -5,7 +5,7 @@ date: 2018-06-22 21:43:00
 ---
 # flask 博客项目需要注意的
 
-# TODO
+## 需要补充的
 - markdown 要支持 TOC
 - markdown 要支持复制图片上传到七牛
 - markdown 要支持 复制网页 时转成 markdown

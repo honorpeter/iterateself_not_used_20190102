@@ -3,7 +3,7 @@ title: Nginx gunicorn 一些配置
 toc: true
 date: 2018-06-12 10:31:40
 ---
-# TODO
+## 需要补充的
 
 * 只是零碎的配置，需要系统的整理
 

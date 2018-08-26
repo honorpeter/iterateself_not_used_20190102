@@ -51,7 +51,7 @@ sampleDataRDD = sc.parallelize([sampleOne, sampleTwo, sampleThree])
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 sampleOHEDictManual = {}
 sampleOHEDictManual[(0,'bear')] = 0
 sampleOHEDictManual[(0,'cat')] = 1
@@ -114,7 +114,7 @@ from pyspark.mllib.linalg import SparseVector
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 aDense = np.array([0., 3., 0., 4.])
 aSparse = SparseVector(4, [(1,3), (3,4)])
 
@@ -164,7 +164,7 @@ Test.assertTrue(bDense.dot(w) == bSparse.dot(w),
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 sampleOneOHEFeatManual = SparseVector(7, [(2,1), (3,1)])
 sampleTwoOHEFeatManual = SparseVector(7, [(1,1),(4,1),(5,1)])
 sampleThreeOHEFeatManual = SparseVector(7,[(0,1),(3,1),(6,1)])
@@ -376,8 +376,8 @@ Test.assertEquals(sorted(sampleOHEDictAuto.values()), range(7),
 ### **Part 3: Parse CTR data and generate OHE features**
 
 #### Before we can proceed, you'll first need to obtain the data from Criteo.  If you have already completed this step in the setup lab, just run the cells below and the data will be loaded into the `rawData` variable.
-#### Below is Criteo's data sharing agreement.  After you accept the agreement, you can obtain the download URL by right-clicking on the "Download Sample" button and clicking "Copy link address" or "Copy Link Location", depending on your browser.  Paste the URL into the `# TODO` cell below.  The file is 8.4 MB compressed.  The script below will download the file to the virtual machine (VM) and then extract the data.
-#### If running the cell below does not render a webpage, open the [Criteo agreement](http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/) in a separate browser tab.  After you accept the agreement, you can obtain the download URL by right-clicking on the "Download Sample" button and clicking "Copy link address" or "Copy Link Location", depending on your browser.  Paste the URL into the `# TODO` cell below.
+#### Below is Criteo's data sharing agreement.  After you accept the agreement, you can obtain the download URL by right-clicking on the "Download Sample" button and clicking "Copy link address" or "Copy Link Location", depending on your browser.  Paste the URL into the `## 需要补充的` cell below.  The file is 8.4 MB compressed.  The script below will download the file to the virtual machine (VM) and then extract the data.
+#### If running the cell below does not render a webpage, open the [Criteo agreement](http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challenge-dataset/) in a separate browser tab.  After you accept the agreement, you can obtain the download URL by right-clicking on the "Download Sample" button and clicking "Copy link address" or "Copy Link Location", depending on your browser.  Paste the URL into the `## 需要补充的` cell below.
 #### Note that the download could take a few minutes, depending upon your connection speed.
 
 
@@ -406,7 +406,7 @@ IFrame("http://labs.criteo.com/downloads/2014-kaggle-display-advertising-challen
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 # Just replace <FILL IN> with the url for dac_sample.tar.gz
 import glob
 import os.path
@@ -488,7 +488,7 @@ if os.path.isfile(fileName):
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 weights = [.8, .1, .1]
 seed = 42
 # Use randomSplit with weights and seed
@@ -725,7 +725,7 @@ pass
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 def oneHotEncoding(rawFeats, OHEDict, numOHEFeats):
     """Produce a one-hot-encoding from a list of features and an OHE dictionary.
 
@@ -792,7 +792,7 @@ includeIntercept = True
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 model0 = LogisticRegressionWithSGD.train(OHETrainData,
                                          iterations=numIters,
                                          step=stepSize,
@@ -892,7 +892,7 @@ Test.assertTrue(np.allclose([computeLogLoss(0, 1), computeLogLoss(1, 1), compute
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 # Note that our dataset has a very high click-through rate by design
 # In practice click-through rate can be one to two orders of magnitude lower
 classOneFracTrain = OHETrainData.map(lambda lp: lp.label).mean()
@@ -1157,7 +1157,7 @@ Test.assertEquals(sampThreeHundredBuckets, {72: 1.0, 5: 1.0, 14: 1.0},
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 def parseHashPoint(point, numBuckets):
     """Create a LabeledPoint for this observation using hashing.
 
@@ -1287,7 +1287,7 @@ bestLogLoss = 1e10
 
 
 ```python
-# TODO: Replace <FILL IN> with appropriate code
+## 需要补充的: Replace <FILL IN> with appropriate code
 stepSizes = [1, 10]
 regParams = [1e-6, 1e-3]
 for stepSize in stepSizes:

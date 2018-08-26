@@ -3,7 +3,7 @@ title: 08 Git 查看提交历史
 toc: true
 date: 2018-08-03 20:53:13
 ---
-TODO：
+## 需要补充的：
 
 - 没想到 log 还有这么多玩法，nice
 

@@ -3,7 +3,7 @@ title: Python Data 环境安装
 toc: true
 date: 2018-06-14 14:54:45
 ---
-TODO
+## 需要补充的
 
 * 对于 Anaconda 的使用也要总结一下，之前一直没有系统的全面的额使用 Anaconda。
 * 到底使用 pip 还是用 Anaconda？什么时候使用什么？

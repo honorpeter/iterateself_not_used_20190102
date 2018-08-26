@@ -3,7 +3,7 @@ title: Python 库 pillow
 toc: true
 date: 2018-06-22 22:29:21
 ---
-# TODO
+## 需要补充的
 - 关于 pillow 还是要总结下的。
 
 

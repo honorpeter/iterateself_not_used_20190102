@@ -3,7 +3,7 @@ title: Python3 安装 CentOS
 toc: true
 date: 2018-06-22 21:47:52
 ---
-TODO
+## 需要补充的
 - 怎么说是：Successfully installed pip-9.0.1 setuptools-28.8.0  ？setuptools 不是应该是从 1.几 开始的吗？ 既然说已经成功安装了，那么后面的 setuptools 的1.几版本的还要不要装？
 
 

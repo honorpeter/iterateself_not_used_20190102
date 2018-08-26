@@ -3,7 +3,7 @@ title: tmux
 toc: true
 date: 2018-06-14 17:57:51
 ---
-TODO
+## 需要补充的
 
 * 要整理下。
 

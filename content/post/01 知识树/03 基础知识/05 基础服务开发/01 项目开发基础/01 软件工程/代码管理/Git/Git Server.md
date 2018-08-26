@@ -3,7 +3,7 @@ title: Git Server
 toc: true
 date: 2018-08-03 14:45:57
 ---
-TODO
+## 需要补充的
 
 * 非常好，一定要按这个来，不然的化 CentOS 上会有一些问题，
 

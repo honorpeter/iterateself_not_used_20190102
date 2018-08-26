@@ -225,7 +225,7 @@ sohu的yum源安装方法查看: [http://mirrors.sohu.com/help/centos.html](htt
 
 
 
-# REF
+## 相关资料
 
 1. [Linux教程](https://www.w3cschool.cn/linux/)
 2. [linux 用yum安装软件和卸载软件](https://blog.csdn.net/ospop/article/details/17304233)

@@ -140,6 +140,6 @@ char *strA()
 
 
 
-## REF
+## 相关资料
 
 - [字符串数组 和 字符串指针 的区别](https://blog.csdn.net/qq_35212671/article/details/53440439)

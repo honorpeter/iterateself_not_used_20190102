@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
 
 
-# REF
+## 相关资料
   1. [Flask学习记录之Flask-Migrate](https://www.cnblogs.com/agmcs/p/4448094.html)
   2. [Flask-SQLAlchemy 和 Flask-Migrate 使用](https://liuliqiang.info/post/flask-sqlalchemy-and-migrate/%0A)
   3. [Flask-Migrate的使用](https://wing324.github.io/2017/02/26/Flask-Migrate%E7%9A%84%E4%BD%BF%E7%94%A8/)

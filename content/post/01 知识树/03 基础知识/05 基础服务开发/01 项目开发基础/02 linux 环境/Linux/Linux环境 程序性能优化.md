@@ -350,7 +350,7 @@ OProfile: Linux 平台上的一个功能强大的性能分析工具,使用参考
 
 
 
-## REF
+## 相关资料
 
 
 1. [Linux Tools Quick Tutorial](http://linuxtools-rst.readthedocs.io/zh_CN/latest/index.html)

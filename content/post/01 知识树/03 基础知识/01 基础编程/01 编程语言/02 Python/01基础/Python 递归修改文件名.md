@@ -38,6 +38,6 @@ os.rename()：修改文件名
 
 
 
-## REF
+## 相关资料
 
 - [Python Tricks（十）—— 递归修改文件名](https://blog.csdn.net/lanchunhui/article/details/51474540)

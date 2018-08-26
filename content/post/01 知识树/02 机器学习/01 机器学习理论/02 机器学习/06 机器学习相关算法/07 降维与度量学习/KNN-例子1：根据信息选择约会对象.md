@@ -317,6 +317,6 @@ date: 2018-08-03 12:18:46
 
 
 
-# REF
+## 相关资料
 
 1. [第2章 k-近邻算法](http://ml.apachecn.org/mlia/knn/)

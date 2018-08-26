@@ -119,6 +119,6 @@ CART 是十分著名且广泛记载的树构建算法，它使用二元切分来
 
 
 
-## REF
+## 相关资料
 
 1.[第9章 树回归](http://ml.apachecn.org/mlia/tree-regress/)

@@ -184,6 +184,6 @@ KRR prediction for 100000 inputs in 0.327 s
 
 
 
-# REF
+## 相关资料
 1. [Comparison of kernel ridge regression and SVR](http://scikit-learn.org/stable/auto_examples/plot_kernel_ridge_regression.html#sphx-glr-auto-examples-plot-kernel-ridge-regression-py)
 2. [sklearn.kernel_ridge.KernelRidge](http://scikit-learn.org/stable/modules/generated/sklearn.kernel_ridge.KernelRidge.html)

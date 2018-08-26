@@ -93,7 +93,7 @@ OK，现在才开始写配置文件：
 
 
 
-## REF
+## 相关资料
 
 1. [nginx的sites-available目录找不到/丢失](https://www.centos.bz/question/nginx-sites-available-not-found/)
 2. [centos 下 nginx 没有 sites-enabled 文件夹](https://www.jianshu.com/p/10814151f071)

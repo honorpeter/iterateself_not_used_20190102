@@ -267,6 +267,6 @@ Costa et al.（+2017）实施了使用生物激励组件的长短期记忆网络
 
 原文链接：
 
-## REF
+## 相关资料
 
 - 作者 | Grace Lindsay https://neurdiness.wordpress.com/2018/05/17/deep-convolutional-neural-networks-as-models-of-the-visual-system-qa/

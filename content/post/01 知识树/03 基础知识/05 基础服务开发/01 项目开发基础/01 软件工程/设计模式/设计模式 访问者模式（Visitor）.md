@@ -249,7 +249,7 @@ double dispatch（双分派）则在选择一个方法的时候，不仅仅要�
 
 
 
-# REF
+## 相关资料
 
 1. [design-patterns-cpp](https://github.com/yogykwan/design-patterns-cpp)  作者： [Jennica](http://jennica.space/)  厉害的
 2. 《设计模式精解 - GoF 23种设计模式解析》

@@ -203,6 +203,6 @@ TODO
 
 
 
-# REF
+## 相关资料
 
 1. [第4章 基于概率论的分类方法：朴素贝叶斯](http://ml.apachecn.org/mlia/naive-bayes/)

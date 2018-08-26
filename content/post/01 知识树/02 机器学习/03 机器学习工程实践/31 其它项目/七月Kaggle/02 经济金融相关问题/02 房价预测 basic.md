@@ -597,7 +597,7 @@ submission_df.head(10)
 
 
 
-## REF
+## 相关资料
 
 - https://www.kaggle.com/c/house-prices-advanced-regression-techniques
 

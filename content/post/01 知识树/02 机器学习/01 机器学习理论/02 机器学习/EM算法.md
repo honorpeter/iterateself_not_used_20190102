@@ -514,7 +514,7 @@ pLSA不需要先验信息即可完成自学习——这是它的优势。如果�
 
 
 
-## REF
+## 相关资料
 
 1. 七月在线 机器学习
 2. [从最大似然到EM算法浅解](https://blog.csdn.net/zouxy09/article/details/8537620)

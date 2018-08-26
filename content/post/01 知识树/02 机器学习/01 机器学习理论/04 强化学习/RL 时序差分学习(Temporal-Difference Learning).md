@@ -5,7 +5,7 @@ date: 2018-08-12 20:24:58
 ---
 # RL 时序差分学习(Temporal-Difference Learning)
 
-## REF
+## 相关资料
 
 # [强化学习读书笔记 - 06~07 - 时序差分学习(Temporal-Difference Learning)](http://www.cnblogs.com/steven-yang/p/6516818.html)
 

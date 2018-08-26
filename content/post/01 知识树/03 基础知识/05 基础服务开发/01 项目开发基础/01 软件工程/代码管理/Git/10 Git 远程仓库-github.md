@@ -217,6 +217,6 @@ origin   git@github.com:WongJay/w3cschool.cn.git (push)
 <span style="color:red;">可以有两个 origin 吗？</span>
 
 
-# REF
+## 相关资料
 
 - [Git教程](https://www.w3cschool.cn/git/)

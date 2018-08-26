@@ -213,6 +213,6 @@ https://medium.mybridge.co/30-amazing-machine-learning-projects-for-the-past-yea
 
 
 
-## REF
+## 相关资料
 
 - [2017年 GitHub最受欢迎的机器学习、图像处理等开源项目](https://blog.csdn.net/u011326478/article/details/79392166)

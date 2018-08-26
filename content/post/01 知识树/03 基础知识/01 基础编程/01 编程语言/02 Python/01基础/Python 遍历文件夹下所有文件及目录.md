@@ -50,5 +50,5 @@ for path,dir_list,file_list in g:
         print(os.path.join(path, dir_name) )
 ```
 
-# REF
+## 相关资料
   1. [Python遍历文件夹下的所有文件和目录](https://blog.csdn.net/mighty13/article/details/77995857)

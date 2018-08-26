@@ -3,7 +3,7 @@ title: 算法：和为S的连续正数序列
 toc: true
 date: 2018-07-05 21:25:55
 ---
-# REF
+## 相关资料
 - [CodingInterviews](https://github.com/gatieme/CodingInterviews)
 
 

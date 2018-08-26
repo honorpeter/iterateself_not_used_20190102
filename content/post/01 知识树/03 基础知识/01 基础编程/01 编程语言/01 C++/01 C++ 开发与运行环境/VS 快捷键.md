@@ -1628,7 +1628,7 @@ End    　　　　     // 跳到一行最后面
 
 
 
-## REF
+## 相关资料
 
 1. [VS 和Visual Assist X快捷键](http://blog.csdn.net/xueying_/article/details/7679042)
 2. [VS2012常用快捷键最全面整理](http://www.open-open.com/lib/view/open1412261028453.html)

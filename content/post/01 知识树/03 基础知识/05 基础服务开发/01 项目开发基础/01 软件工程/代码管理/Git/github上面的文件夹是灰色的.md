@@ -23,6 +23,6 @@ date: 2018-08-25 22:27:00
 先把 even 剪切到另一个地方，然后 git add . git commit -m 'commit' git push 然后，把 even 里面的.git 文件夹删掉，再把 even 剪切到原来的地方，然后在提交，就行了。
 
 
-## REF
+## 相关资料
 
 - [有时候发现git push后在github上文件夹是灰色的](https://blog.csdn.net/github_37360787/article/details/54619552)

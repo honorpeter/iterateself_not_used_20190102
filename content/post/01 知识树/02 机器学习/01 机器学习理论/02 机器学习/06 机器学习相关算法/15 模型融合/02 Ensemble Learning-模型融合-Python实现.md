@@ -177,7 +177,7 @@ y_submission = clf.predict_proba(dataset_blend_test)[:, 1]1234567891011121314151
 
 完整代码见：[GitHub_ensemble_blending](https://github.com/InsaneLife/MyPicture/blob/master/ensemble_blending.py)
 
-# Reference
+## 相关资料erence
 
 1. [HUMAN ENSEMBLE LEARNING](http://link.zhihu.com/?target=https%3A//mlwave.com/human-ensemble-learning/)
 2. <https://mlwave.com/kaggle-ensembling-guide/>
@@ -186,6 +186,6 @@ y_submission = clf.predict_proba(dataset_blend_test)[:, 1]1234567891011121314151
 
 
 
-# REF
+## 相关资料
 
 - [shine19930820](https://blog.csdn.net/shine19930820/article/details/75209021)

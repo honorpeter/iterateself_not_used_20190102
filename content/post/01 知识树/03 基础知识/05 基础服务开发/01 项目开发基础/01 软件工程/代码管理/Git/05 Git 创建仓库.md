@@ -72,6 +72,6 @@ $ git clone git://github.com/schacon/grit.git mygrit
 ```
 
 
-# REF
+## 相关资料
 
 - [Git教程](https://www.w3cschool.cn/git/)

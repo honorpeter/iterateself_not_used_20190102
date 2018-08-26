@@ -92,7 +92,7 @@ atexit是注册后进先出的函数，和函数入栈出栈是一样的。
 
 
 
-## REF
+## 相关资料
 
 - [C++面试题： main函数执行完之后还会调用其他的函数吗？](https://blog.csdn.net/rl529014/article/details/51671270)
 

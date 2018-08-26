@@ -546,6 +546,6 @@ ipcs命令用于报告共享内存、信号量和消息队列信息。
 
 
 
-## REF
+## 相关资料
 
 - [Skill-Tree](https://github.com/linw7/Skill-Tree)

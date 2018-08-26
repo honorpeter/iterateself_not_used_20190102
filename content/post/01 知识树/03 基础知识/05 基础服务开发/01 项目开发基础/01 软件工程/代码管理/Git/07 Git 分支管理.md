@@ -310,6 +310,6 @@ $ git commit
 
 
 
-## REF
+## 相关资料
 
 - [Git教程](https://www.w3cschool.cn/git/)

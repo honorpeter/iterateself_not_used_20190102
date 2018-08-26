@@ -545,6 +545,6 @@ R-FCN
 (Caffe + Python) https://github.com/Orpine/py-R-FCN
 
 
-## REF：
+## 相关资料：
 
 1. 七月在线 深度学习

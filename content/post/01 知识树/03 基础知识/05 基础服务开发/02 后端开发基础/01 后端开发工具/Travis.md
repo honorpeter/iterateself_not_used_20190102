@@ -17,7 +17,7 @@ date: 2018-08-01 17:53:17
 
 
 
-## REF
+## 相关资料
 
 - [travis实现自动部署git项目到私有云服务器](https://github.com/roy-k/roy-k.github.io/issues/7)
 - [使用Travis自动构建并发布Hugo](https://blog.csdn.net/u014291497/article/details/80879319)

@@ -182,6 +182,6 @@ Actor-Critic with Eligibility Traces (continuing)
 
 
 
-## REF
+## 相关资料
 
 - [强化学习读书笔记 - 14 - 心理学](http://www.cnblogs.com/steven-yang/p/6636358.html)

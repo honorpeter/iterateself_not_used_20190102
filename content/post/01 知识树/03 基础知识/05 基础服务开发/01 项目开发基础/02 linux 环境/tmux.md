@@ -27,7 +27,7 @@ TODO
 
 
 
-# REF
+## 相关资料
 
 * [tmux 指南](https://wdxtub.com/2016/03/30/tmux-guide/)
 * [tmux简洁教程及config关键配置](https://www.jianshu.com/p/fd3bbdba9dc9)

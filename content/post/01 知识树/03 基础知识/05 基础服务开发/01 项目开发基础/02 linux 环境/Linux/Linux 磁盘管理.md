@@ -607,6 +607,6 @@ Linux 的磁盘挂载使用 `mount` 命令，卸载使用 `umount` 命令。
 
 
 
-# REF
+## 相关资料
 
 1. [Linux教程](https://www.w3cschool.cn/linux/)

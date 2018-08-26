@@ -238,7 +238,7 @@ LSTM的变体实际上是非常多的。
 
 
 
-# REF
+## 相关资料
 
 1. 七月在线  深度学习
 2. [Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/)

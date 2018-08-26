@@ -151,6 +151,6 @@ https://github.com/Rochester-NRT/RocAlphaGo/wiki/01.-Home
 
 
 
-## REF：
+## 相关资料：
 
 1. 七月在线 深度学习

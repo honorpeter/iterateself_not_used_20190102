@@ -262,7 +262,7 @@ date: 2018-07-10 15:43:07
 
 
 
-# REF
+## 相关资料
 
 1. [How To Install the Django Web Framework on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-the-django-web-framework-on-centos-7)  非常好
 2. [快速安装指南](https://docs.djangoproject.com/zh-hans/2.0/intro/install/)

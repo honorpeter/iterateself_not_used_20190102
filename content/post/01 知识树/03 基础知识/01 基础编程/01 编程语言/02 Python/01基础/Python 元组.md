@@ -334,7 +334,7 @@ Python元组包含了以下内置函数
 
 
 
-# REF
+## 相关资料
 
 1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
 2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

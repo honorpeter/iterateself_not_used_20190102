@@ -22,6 +22,6 @@ source ~/venv/bin/activate
 
 
 
-# REF
+## 相关资料
 
 1. [linux:环境变量设置.bashrc及相关](https://blog.csdn.net/lzx_bupt/article/details/5642690)

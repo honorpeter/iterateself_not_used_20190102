@@ -38,6 +38,6 @@ Hassner Basri - Example Based 3D Reconstruction from Single 2D Images.pdf
 
 
 
-## REF
+## 相关资料
 
 - 七月在线 opencv计算机视觉

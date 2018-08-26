@@ -272,6 +272,6 @@ Linux预设提供了六个命令窗口终端机让我们来登录。
 
 
 
-# REF
+## 相关资料
 
 1. [Linux教程](https://www.w3cschool.cn/linux/)

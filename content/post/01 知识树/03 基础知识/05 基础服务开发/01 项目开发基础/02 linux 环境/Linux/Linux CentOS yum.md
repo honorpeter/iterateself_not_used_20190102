@@ -23,6 +23,6 @@ rm -f /var/run/yum.pid
 然后就可以使用yum了。OK，很简单。
 
 
-# REF
+## 相关资料
 
 1. [centos在yum install报错：Another app is currently holding the yum lock解决方法](https://www.cnblogs.com/jincon/p/3371471.html)

@@ -6,7 +6,7 @@ date: 2018-08-03 14:00:58
 # SQL INSERT INTO 语句（在表中插入）
 
 
-## REF
+## 相关资料
 
 1. [SQL教程](https://www.w3cschool.cn/sql/)
 

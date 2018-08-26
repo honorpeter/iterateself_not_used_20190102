@@ -137,7 +137,7 @@ settings.py 里面，添加了：
 
 
 
-## REF
+## 相关资料
 
 1. [nginx报错:failed (13: Permission denied)](https://jingyan.baidu.com/article/64d05a023f8d46de55f73b37.html)
 2. [解决Nginx出现403 forbidden (13: Permission denied)报错的三种办法](http://www.shuchengxian.com/article/658.html)

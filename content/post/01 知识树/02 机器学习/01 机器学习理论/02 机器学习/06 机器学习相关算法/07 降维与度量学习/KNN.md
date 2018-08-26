@@ -99,6 +99,6 @@ OK，从上面的分类过程可以看出，这其中的：
 
 
 
-## REF
+## 相关资料
 
 1. [第2章 k-近邻算法](http://ml.apachecn.org/mlia/knn/)

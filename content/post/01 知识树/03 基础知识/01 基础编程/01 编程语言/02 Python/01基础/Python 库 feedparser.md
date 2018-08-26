@@ -21,6 +21,6 @@ feedparser是python中最常用的RSS程序库，使用它我们可轻松地实�
 
 
 
-# REF
+## 相关资料
   1. [feedparser 5.2.0 documentation](https://pythonhosted.org/feedparser/index.html#)
   2. [python 中 feedparser的简单用法](https://blog.csdn.net/lilong117194/article/details/77323673)

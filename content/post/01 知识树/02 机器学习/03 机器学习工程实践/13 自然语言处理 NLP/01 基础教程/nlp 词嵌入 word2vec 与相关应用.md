@@ -1027,6 +1027,6 @@ http://www.sogou.com/labs/resource/ca.php
 
 
 
-# REF：
+## 相关资料：
 
   1. 七月在线 深度学习

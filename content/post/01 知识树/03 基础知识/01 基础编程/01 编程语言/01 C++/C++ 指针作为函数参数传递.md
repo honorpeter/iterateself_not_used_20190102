@@ -203,7 +203,7 @@ void main(void){
 
 
 
-## REF
+## 相关资料
 
 - 林锐《高质量C/C++编程指南》 <span style="color:red;">这个也要整合进来。完善对 C++ 的理解。</span>
 - [面试笔试系列3-指针作为函数参数传递](https://blog.csdn.net/olisten/article/details/8823511)

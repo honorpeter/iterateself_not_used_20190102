@@ -195,6 +195,6 @@ autotuned 是不指定他是 LSH 还是 K-means Tree 什么的，让他帮我们
 
 
 
-## REF
+## 相关资料
 
 - 七月在线 opencv计算机视觉

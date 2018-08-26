@@ -60,5 +60,5 @@ print(id(f), f)  # 还是使用copy.deepcopy 最保险
 
 
 
-# REF
+## 相关资料
 - [[Python] 正确复制列表的方法](http://www.cnblogs.com/ifantastic/p/3811145.html)

@@ -20,7 +20,7 @@ date: 2018-08-20 20:31:18
 
 
 
-## REF
+## 相关资料
 
 - [git 配置多个SSH-Key](https://my.oschina.net/stefanzhlg/blog/529403)
 - [多个github帐号的SSH key切换](https://blog.csdn.net/itmyhome1990/article/details/42643233)

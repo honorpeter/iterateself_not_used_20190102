@@ -40,5 +40,5 @@ TypeError: write() argument must be str, not bytes
 
 
 
-# REF
+## 相关资料
 -   1. [Using pickle.dump - TypeError: must be str, not bytes](https://stackoverflow.com/questions/13906623/using-pickle-dump-typeerror-must-be-str-not-bytes)

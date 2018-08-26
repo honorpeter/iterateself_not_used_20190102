@@ -412,6 +412,6 @@ AdaBoost算法权重计算公式
 
 
 
-## REF
+## 相关资料
 
 - [第7章 集成方法 ensemble method](http://ml.apachecn.org/mlia/ensemble-random-tree-adaboost/#_3)

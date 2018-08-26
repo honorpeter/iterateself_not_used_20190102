@@ -23,7 +23,7 @@ date: 2018-07-10 15:52:21
 
 
 
-# REF
+## 相关资料
 
 1. [Linux Terminal/Terminator的设置，配色、字体和layout](https://blog.csdn.net/Laily123/article/details/11972159)
 2. [Linux 终端配置](https://blog.csdn.net/jiandanjinxin/article/details/70174644)

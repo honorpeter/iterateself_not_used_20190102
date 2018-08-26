@@ -1017,6 +1017,6 @@ $$\mathcal{L}(w,b,\alpha)=\frac{1}{2}||w||^2-\sum_{i=1}^{n}\alpha_i(y_i(w^Tx_i+b
 
 
 
-## REF
+## 相关资料
 
 - [支持向量机通俗导论（理解SVM的三层境界）](https://blog.csdn.net/v_july_v/article/details/7624837) 作者：July

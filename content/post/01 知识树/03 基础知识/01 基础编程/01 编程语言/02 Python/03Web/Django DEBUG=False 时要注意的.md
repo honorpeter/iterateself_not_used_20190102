@@ -49,7 +49,7 @@ date: 2018-06-22 21:39:53
 
 
 
-# REF
+## 相关资料
 
 1. [配置Django框架为生产环境的注意事项（DEBUG=False）](https://www.cnblogs.com/zhming26/p/6163952.html)
 2. [dajngo debug=false时无法加载css、js](https://blog.csdn.net/big__v/article/details/78532688)

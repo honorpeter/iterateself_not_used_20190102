@@ -73,7 +73,7 @@ OK，我暂时的方法就是按照这个 CREAT_TABLE ... 的语句重新建立�
 
 
 
-# REF
+## 相关资料
 
 - [SQlite在已创建的表中插入,删除一列](https://my.oschina.net/u/2607809/blog/619220) 这个方法是有问题的，生成的table 很多的 key 信息丢失了。
 

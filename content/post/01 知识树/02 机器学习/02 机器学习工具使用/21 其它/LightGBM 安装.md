@@ -47,7 +47,7 @@ python .\simple_example.py
 
 
 
-## REF
+## 相关资料
 
 1. [ LightGBM 中文文档](http://lightgbm.apachecn.org/cn/latest/index.html)
 2. [在Windows下安装LightGBM的Python包](https://blog.csdn.net/jiaqiangbandongg/article/details/53814663)

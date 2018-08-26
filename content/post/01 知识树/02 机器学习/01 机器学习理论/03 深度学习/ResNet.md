@@ -273,6 +273,6 @@ _[12]. A. Veit, M. Wilber and S. Belongie. Residual Networks Behave Like Ensembl
 
 
 
-## REF
+## 相关资料
 
 1.[一文简述ResNet及其多种变体](http://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2650741211&idx=1&sn=fa2229f97a63977853d7ebcea7858076&chksm=871adda5b06d54b34389edac855f55b4163b81ffc25c38f26cc12e99822d87c3e28c459d78f9&mpshare=1&scene=1&srcid=04273YtoqbPBmH8wVdIiqoE7#rd)

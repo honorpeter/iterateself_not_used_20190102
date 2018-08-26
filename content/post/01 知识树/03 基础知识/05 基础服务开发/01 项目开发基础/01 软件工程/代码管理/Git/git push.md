@@ -50,6 +50,6 @@ git pull –rebase origin master意为先取消commit记录，并且把它们临
 
 
 
-## REF
+## 相关资料
 
 - [git push错误failed to push some refs to的解决](https://blog.csdn.net/MBuger/article/details/70197532)

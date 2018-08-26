@@ -4,7 +4,7 @@ toc: true
 date: 2018-07-27 17:56:05
 ---
 
-# REF
+## 相关资料
 
 1. [design-patterns-cpp](https://github.com/yogykwan/design-patterns-cpp)  作者： [Jennica](http://jennica.space/)  厉害的
 

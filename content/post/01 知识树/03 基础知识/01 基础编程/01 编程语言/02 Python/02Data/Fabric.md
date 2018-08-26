@@ -47,7 +47,7 @@ def deploy():
 
 
 
-# REF
+## 相关资料
 1. [使用nginx,gunicorn,fabric设置网站自动部署](https://www.jianshu.com/p/bc1111e7e6d0)
 2. [PYTHON FABRIC实现远程操作和部署](http://wklken.me/posts/2013/03/25/python-tool-fabric.html#zhi-xing-ben-ji-cao-zuo)
 3. 官网：[http://www.fabfile.org/](http://www.fabfile.org/)

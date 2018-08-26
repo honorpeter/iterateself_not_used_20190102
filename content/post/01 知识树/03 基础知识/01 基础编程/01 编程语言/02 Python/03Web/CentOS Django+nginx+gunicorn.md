@@ -173,7 +173,7 @@ gunicorn 部分：
 
 
 
-# REF
+## 相关资料
 
 1. [CentOS7部署Flask/Gunicorn/Nginx/Supervisor](http://www.madmalls.com/blog/post/deploy-flask-gunicorn-nginx-supervisor-on-centos7/)
 2. [写给Web开发人员看的Nginx介绍](https://fraserxu.me/2013/06/22/Nginx-for-developers/)

@@ -145,7 +145,7 @@ hexo
   hexo deploy
   ```
 
-# REF
+## 相关资料
 
 * [Hexo 个人博客部署到 CentOS 个人服务器](https://segmentfault.com/a/1190000010680022) 是在本地的_config.yml 中把 deploy 地址设到 server 上的，也就是说转化的过程是发生在本地的。
 * [Hexo 官网](https://hexo.io/zh-cn/)

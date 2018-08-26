@@ -45,6 +45,6 @@ centos6.4 下载地址：
 
 
 
-# REF
+## 相关资料
 
 1. [Linux教程](https://www.w3cschool.cn/linux/)

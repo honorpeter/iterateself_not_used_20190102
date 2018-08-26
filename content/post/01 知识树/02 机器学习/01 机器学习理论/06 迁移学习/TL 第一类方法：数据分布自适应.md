@@ -423,6 +423,6 @@ DISTANCE(\mathcal{D}_s,\mathcal{D}_t) \approx (1 &- \mu)DISTANCE(P(\mathbf{x}_s)
 
 
 
-# REF
+## 相关资料
 
 1. [迁移学习简明手册](https://github.com/jindongwang/transferlearning-tutorial)  [王晋东](https://zhuanlan.zhihu.com/p/35352154)

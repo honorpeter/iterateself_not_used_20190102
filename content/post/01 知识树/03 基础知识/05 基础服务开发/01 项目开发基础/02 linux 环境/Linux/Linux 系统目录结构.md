@@ -149,6 +149,6 @@ sysfs文件系统集成了下面3种文件系统的信息：针对进程信息�
 
 
 
-# REF
+## 相关资料
 
 1. [Linux教程](https://www.w3cschool.cn/linux/)

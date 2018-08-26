@@ -255,6 +255,6 @@ until S' is terminal</blockquote>
 
 
 
-# REF
+## 相关资料
 
 1.# [强化学习读书笔记 - 09 - on-policy预测的近似方法](http://www.cnblogs.com/steven-yang/p/6535418.html)

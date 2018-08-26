@@ -21,6 +21,6 @@ date: 2018-08-01 17:38:53
 
 
 
-## REF
+## 相关资料
 
 - [理解OAuth 2.0](http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)

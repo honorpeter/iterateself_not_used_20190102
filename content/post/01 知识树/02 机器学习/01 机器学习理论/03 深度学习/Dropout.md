@@ -73,4 +73,4 @@ H1是一个ReLU层，U1生成H1相同shape的随机数，并且随机数小于0.
 - 2013, Stefan Wager, etc 《Dropout Training as Adaptive Regularization》
 
 
-## REF
+## 相关资料

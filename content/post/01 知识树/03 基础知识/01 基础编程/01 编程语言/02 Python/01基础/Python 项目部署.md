@@ -22,7 +22,7 @@ python 的项目，比如 django flask 在部署的时候都是有一些固定�
 
 
 
-# REF
+## 相关资料
 
 
     1. [Python 项目的部署，目前互联网公司有哪些成熟的方案？](https://www.zhihu.com/question/38081354)

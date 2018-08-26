@@ -254,7 +254,7 @@ filter()函数可以对序列做过滤处理，就是说可以使用一个自定
 不知道lambda还有没有什么精妙的用法，还是说上面的reduce，map，filter 已经足以对应所有的情况了？
 
 
-## REF：
+## 相关资料：
 
 
 1.[函数式编程](https://coolshell.cn/articles/10822.html)

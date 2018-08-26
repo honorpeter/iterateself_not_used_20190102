@@ -32,6 +32,6 @@ file 对象使用 open 函数来创建，下表列出了 file 对象常用的函
 
 
 
-# REF
+## 相关资料
   1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
   2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

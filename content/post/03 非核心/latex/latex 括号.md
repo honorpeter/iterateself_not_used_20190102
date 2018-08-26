@@ -3,7 +3,7 @@ title: latex 括号
 toc: true
 date: 2018-07-27 20:34:06
 ---
-# REF
+## 相关资料
   * [latex 空心中括号](https://blog.csdn.net/lanchunhui/article/details/51289971)
   * [latex 括号总结](https://blog.csdn.net/han____shuai/article/details/49679335)
 

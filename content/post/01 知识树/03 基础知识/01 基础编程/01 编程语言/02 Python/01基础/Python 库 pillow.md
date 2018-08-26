@@ -7,7 +7,7 @@ date: 2018-06-22 22:29:21
 - 关于 pillow 还是要总结下的。
 
 
-# REF
+## 相关资料
 安装一个别人开发的django 博客的时候，需要用到 pillow，因此记录一下 pillow 在安装之前需要用到的一些 c 库的安装。
 
 
@@ -47,7 +47,7 @@ pip install pillow==4.0.0
 
 
 
-# REF
+## 相关资料
   1. [CentOS7，Python3.6安装pillow](https://blog.csdn.net/chenlou123/article/details/53403952)
   2. [centos安装Pillow](https://blog.csdn.net/bwlab/article/details/51281390)
   3. [External Libraries](https://pillow.readthedocs.io/en/3.1.x/installation.html#building-on-linux)

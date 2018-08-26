@@ -30,7 +30,7 @@ date: 2018-06-12 12:59:20
 
 
 
-# REF
+## 相关资料
 
 1. [Celery 3.1.7 文档](http://docs.jinkan.org/docs/celery/#)
 2. 

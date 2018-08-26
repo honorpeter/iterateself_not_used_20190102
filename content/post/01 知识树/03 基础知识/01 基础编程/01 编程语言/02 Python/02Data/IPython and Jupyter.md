@@ -477,6 +477,6 @@ plt.plot(np.random.randn(50).cumsum())
 
 
 
-# REF
+## 相关资料
 
 * [Jupyter Notebook 快速入门（上）](http://www.codingpy.com/article/getting-started-with-jupyter-notebook-part-1/) 这个是翻译者推荐的Jupyter Notebook 的教程，说是非常好的，要把它总结进来。

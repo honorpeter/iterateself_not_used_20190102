@@ -588,7 +588,7 @@ True
 **肯定有不充分的地方，后续迭代补充，而且对这些方法的使用还不熟练**
 
 
-## REF：
+## 相关资料：
 *
 
 
@@ -2620,7 +2620,7 @@ steps = np.random.normal(loc=0, scale=0.25, size=(nwalks, nsteps))# 什么意思
 
 
 
-# REF
+## 相关资料
 - [数据 Numpy & Pandas](https://morvanzhou.github.io/tutorials/data-manipulation/np-pd/)  **（推荐入门看这个人的莫烦python）**
 - [Python Numpy Tutorial](http://cs231n.github.io/python-numpy-tutorial/) （这个没有补充进去，暂时记在这里）
 - Wiki：[NumPy](https://www.wikiwand.com/zh-hans/NumPy)

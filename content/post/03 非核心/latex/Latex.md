@@ -88,7 +88,7 @@ REF：[IT 圈里有哪些经常被读错的词？](https://www.zhihu.com/questio
 
 
 
-## REF：
+## 相关资料：
 
 1. [latex中的空格](https://blog.csdn.net/seaskying/article/details/51316607)
 2. [帮助:数学公式 wiki](https://zh.wikipedia.org/wiki/Help:%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F)

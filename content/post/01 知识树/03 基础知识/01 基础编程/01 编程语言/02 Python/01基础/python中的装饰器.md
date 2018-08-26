@@ -665,7 +665,7 @@ OK，到这里，普通的函数的装饰器，带参数的函数的装饰器，
 **关于这个装饰器还是有些没有弄明白的，要弄清楚**
 
 
-## REF：
+## 相关资料：
 
 
 1.[[Python] 对 Python 装饰器的理解心得](http://www.cnblogs.com/ifantastic/archive/2012/12/09/2809325.html)

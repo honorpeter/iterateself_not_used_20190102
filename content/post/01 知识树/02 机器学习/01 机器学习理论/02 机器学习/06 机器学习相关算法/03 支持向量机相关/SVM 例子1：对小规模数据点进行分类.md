@@ -465,6 +465,6 @@ the test error rate is: 0.150000
 
 
 
-# REF
+## 相关资料
 
 - [第6章 支持向量机](http://ml.apachecn.org/mlia/svm/)

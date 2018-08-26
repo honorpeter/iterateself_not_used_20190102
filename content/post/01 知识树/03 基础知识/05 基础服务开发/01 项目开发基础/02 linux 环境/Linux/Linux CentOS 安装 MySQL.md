@@ -335,6 +335,6 @@ Yum 会自动处理 MySQL 与其他组件的依赖关系。遇到提示，输入
 
 
 
-# REF
+## 相关资料
 
 1. [CentOS 7 安装 MySQL](https://blog.csdn.net/SmallTankPy/article/details/75451645)

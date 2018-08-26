@@ -5,13 +5,6 @@ date: 2018-08-01 18:06:13
 ---
 # C++ STL istream_iterator、ostream_iterator
 
-
-TODO
-
-
-
-# 缘由
-
 今天看一道算法题里面有这么一句：
 
 
@@ -24,17 +17,8 @@ TODO
 
 
 
-**待总结**
 
 
-
-
-
-
-
-
-
-
-## REF
+## 相关资料
 
 1. [STL中istream_iterator和ostream_iterator的基本用法](https://www.cnblogs.com/VIPler/p/4367308.html)

@@ -351,6 +351,6 @@ OK，到这里，python 和 pip 、virtualenv 都已经安装好了。
 
 
 
-# REF
+## 相关资料
 1. [How To Set Up Python 2.7.6 and 3.3.3 on CentOS 6.4](https://www.digitalocean.com/community/tutorials/how-to-set-up-python-2-7-6-and-3-3-3-on-centos-6-4)
 2. [自定义安装python，退格，方向键无法正常使用（已解决）](http://bbs.chinaunix.net/thread-2322983-1-1.html)

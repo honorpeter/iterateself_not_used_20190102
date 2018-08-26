@@ -245,7 +245,7 @@ https://github.com/dmlc/xgboost
 
 
 
-## REF
+## 相关资料
 
 1. 七月在线 机器学习
 2. [A Gentle Introduction to Gradient ](http://www.chengli.io/tutorials/gradient_boosting.pdf)  **这个很好 需要看下**

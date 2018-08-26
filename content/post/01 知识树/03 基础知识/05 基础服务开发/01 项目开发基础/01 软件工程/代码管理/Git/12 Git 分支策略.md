@@ -289,7 +289,7 @@ Deleted branch hotfix-1.2.1 (was abbe5d6).
 
 
 
-# REF
+## 相关资料
 
 - [Git教程](https://www.w3cschool.cn/git/)
 - [Git分支最佳实践](https://www.holddie.com/2018/03/07/Git%E5%88%86%E6%94%AF%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/index.html)

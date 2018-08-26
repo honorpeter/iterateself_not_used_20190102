@@ -956,7 +956,7 @@ tensorflow playground
 
 
 
-## REF
+## 相关资料
 
 1. 七月在线 深度学习
 2. 七月在线 机器学习

@@ -18,7 +18,7 @@ date: 2018-07-10 15:45:49
 
 
 
-# REF
+## 相关资料
 
 1. [Linux中source命令的用法](https://blog.csdn.net/simon_dong618/article/details/1581132)
 2. [我使用过的Linux命令之source - 在当前shell环境中执行指定文件中的命令](http://codingstandards.iteye.com/blog/837935)

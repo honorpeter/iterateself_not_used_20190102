@@ -21,7 +21,7 @@ TODO：
 
 
 
-# REF
+## 相关资料
 
 - [CentOS7.4弃用RSAAuthentication支持](https://ashub.cn/articles/21)
 - [DEBIAN 9 配置密钥登录错误 && 正确姿势](https://blog.silversky.moe/rt/debian-9-conf-priv-key-login-errors)

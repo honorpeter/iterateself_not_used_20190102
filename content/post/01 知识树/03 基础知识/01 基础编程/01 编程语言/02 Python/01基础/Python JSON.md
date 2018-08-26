@@ -125,6 +125,6 @@ Python 可以使用 demjson.decode() 函数解码 JSON 数据。该函数返回 
     {u'a': 1, u'c': 3, u'b': 2, u'e': 5, u'd': 4}
 
 
-# REF
+## 相关资料
   1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
   2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

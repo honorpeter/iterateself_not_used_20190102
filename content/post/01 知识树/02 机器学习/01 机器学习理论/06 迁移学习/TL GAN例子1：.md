@@ -17,6 +17,6 @@ date: 2018-07-14 11:26:50
 
 
 
-# REF
+## 相关资料
 
 1. [迁移学习简明手册](https://github.com/jindongwang/transferlearning-tutorial)  [王晋东](https://zhuanlan.zhihu.com/p/35352154)

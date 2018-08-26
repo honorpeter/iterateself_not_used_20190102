@@ -305,7 +305,7 @@ _print sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels
 **还是又很多东西不明白，不明确的，要补充下**
 
 
-# REF：
+## 相关资料：
 
 
 

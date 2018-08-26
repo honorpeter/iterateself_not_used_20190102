@@ -40,6 +40,6 @@ date: 2018-08-11 14:47:38
  - $_{B}^{A}\textrm{H}$ 这个是在 CV 里面三维空间的坐标变换的时候表示的从 B 空间变换到 A 空间的坐标变换。
 
 
-# REF：
+## 相关资料：
 - [MathJax 快速参考](http://colobu.com/2014/08/17/MathJax-quick-reference/) 这个人总结的 MathJax 他常用的符号，非常好，的确是常用的 ，比如 $\ell$
 -[The Comprehensive LaTeX Symbol List]http://ctan.math.ca/tex-archive/info/symbols/comprehensive/symbols-a4.pdf

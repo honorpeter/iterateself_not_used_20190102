@@ -8,7 +8,7 @@ date: 2018-07-13 16:32:13
 
 
 
-# REF
+## 相关资料
 
 1. [scikit学习心得——Isotonic Regression](https://blog.csdn.net/qq_14905099/article/details/49908089)
 

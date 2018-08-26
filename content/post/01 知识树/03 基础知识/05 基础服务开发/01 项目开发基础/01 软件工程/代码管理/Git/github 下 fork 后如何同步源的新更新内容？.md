@@ -19,6 +19,6 @@ gitlab或github下，a开发者fork了b开发者的项目后，如果b开发人�
 
 
 
-## REF
+## 相关资料
 
 - [gitlab或github下fork后如何同步源的新更新内容？](https://www.zhihu.com/question/28676261)

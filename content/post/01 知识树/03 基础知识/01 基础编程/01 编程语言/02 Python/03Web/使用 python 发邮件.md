@@ -90,7 +90,7 @@ date: 2018-07-27 17:18:10
 
 
 
-## REF：
+## 相关资料：
 
 
 1.[Python SMTP发送邮件](http://www.runoob.com/python/python-email.html)

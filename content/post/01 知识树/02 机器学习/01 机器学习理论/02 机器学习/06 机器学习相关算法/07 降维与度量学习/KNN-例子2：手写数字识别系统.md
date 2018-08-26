@@ -144,7 +144,7 @@ the total error rate is: 0.010571
 
 
 
-## REF
+## 相关资料
 
 1. [第2章 k-近邻算法](http://ml.apachecn.org/mlia/knn/)
 2. 《机器学习实战》

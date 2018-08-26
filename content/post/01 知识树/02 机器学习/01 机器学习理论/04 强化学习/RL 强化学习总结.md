@@ -655,6 +655,6 @@ $$
 
 
 
-## REF
+## 相关资料
 
 - [强化学习总结](http://www.cnblogs.com/steven-yang/p/6649213.html)

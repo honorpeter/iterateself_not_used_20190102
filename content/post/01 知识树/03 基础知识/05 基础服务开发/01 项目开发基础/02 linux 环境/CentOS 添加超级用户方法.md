@@ -32,6 +32,6 @@ junguoguo ALL=(ALL) ALL
 修改完毕，现在可以用 junguoguo 帐号登录，然后用命令 **su –** ，即可获得root权限进行操作。
 
 
-## REF
+## 相关资料
 
 1. [CentOS添加Root权限(超级用户)用户方法|su,sudo命令详解（转）](https://my.oschina.net/u/559845/blog/78293)

@@ -220,6 +220,6 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb1 in position 0: invalid 
 
 
 
-# REF
+## 相关资料
 * [字符串，那些你不知道的事](http://liujiacai.net/blog/2015/11/20/strings/)
 *

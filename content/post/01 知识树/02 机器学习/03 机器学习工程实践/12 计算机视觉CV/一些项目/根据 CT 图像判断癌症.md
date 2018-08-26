@@ -1357,7 +1357,7 @@ avg / total       0.66      0.81      0.73       570
 
 
 
-## REF
+## 相关资料
 
 - [DSB3Tutorial](https://github.com/booz-allen-hamilton/DSB3Tutorial/blob/master/Tutorial.ipynb) 作者 JonathanMulholland <span style="color:red;">这个 git 里面感觉还有些不错的，要整理下。</span>
 - [使用U-Net分割方法进行癌症诊断（教程翻译）](https://blog.csdn.net/qq_30911665/article/details/74356112)

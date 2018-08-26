@@ -1278,5 +1278,5 @@ $ ping [www.google.com](http://www.google.com)
 
 
 
-# REF
+## 相关资料
 - [OpenStack构架知识梳理](http://www.cnblogs.com/kevingrace/p/5733508.html)

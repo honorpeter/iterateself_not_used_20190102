@@ -23,6 +23,6 @@ date: 2018-06-11 23:06:33
 
 
 
-# REF
+## 相关资料
 
 - python 2中的中文使用说明：[详解 python 中文编码与处理](https://my.oschina.net/leejun2005/blog/74430)

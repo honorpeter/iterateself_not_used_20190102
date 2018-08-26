@@ -23,5 +23,5 @@ date: 2018-06-22 22:20:37
 **需要补充，这个课讲这个地方只是稍微讲了下**
 
 
-# REF
+## 相关资料
 - [itertools — Functions creating iterators for efficient looping](https://docs.python.org/3.6/library/itertools.html)

@@ -24,7 +24,7 @@ git 是直接从 代码库里clone 到linux上吗？然后push的时候登陆到
 
 
 
-# REF
+## 相关资料
 
 1. [快速配置 Samba 将 Linux 目录映射为 Windows 驱动器，用于跨平台编程](http://zyan.cc/samba_linux_windows/)
 2. [炼丹工具集-PyCharm 利用SFTP远程炼丹](https://zhuanlan.zhihu.com/p/37361332) 他这里说比 samba 还好用

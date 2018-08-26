@@ -48,6 +48,6 @@ Git是一个开源的分布式版本控制系统，用于敏捷高效地处理�
   5. [GIT常用操作](https://www.holddie.com/2018/03/07/Git%E5%88%86%E6%94%AF%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/index.html) 这篇文章还是很好的，后半部分的 GIT 常用操作没有整理进来。
 
 
-## REF
+## 相关资料
 
 - [Git教程](https://www.w3cschool.cn/git/)

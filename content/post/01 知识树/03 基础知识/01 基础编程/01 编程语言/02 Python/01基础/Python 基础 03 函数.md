@@ -587,7 +587,7 @@ ERROR:root:File `'example/ipython_bug.py'` not found.
 
 
 
-# REF
+## 相关资料
 
 * [函数加里化(Currying)和偏函数应用(Partial Application)的比较](http://www.vaikan.com/currying-partial-application/)
 

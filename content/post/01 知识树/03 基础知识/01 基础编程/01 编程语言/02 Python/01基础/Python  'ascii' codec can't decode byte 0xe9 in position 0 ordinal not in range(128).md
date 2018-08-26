@@ -19,6 +19,6 @@ if sys.getdefaultencoding() != default_encoding:
     sys.setdefaultencoding(default_encoding)
 ```
 
-# REF
+## 相关资料
 
   1. [python 处理中文时出现的错误'ascii' codec can't decode byte 0xe9 in position 0: ordinal not in range(128)" 解决方法](https://blog.csdn.net/andoring/article/details/6624533)

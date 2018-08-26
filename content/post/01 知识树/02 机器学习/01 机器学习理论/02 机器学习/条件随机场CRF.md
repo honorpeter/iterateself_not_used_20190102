@@ -1023,7 +1023,7 @@ CRF的预测问题，是给定条件随机场P(Y|X)和输入序列(观测序列)
 
 
 
-## REF
+## 相关资料
 
 * 七月在线 机器学习
 * [NLP —— 图模型（二）条件随机场（Conditional random field，CRF）](http://www.cnblogs.com/Determined22/p/6915730.html)

@@ -82,7 +82,7 @@ Kaggle机器学习之模型融合（stacking）心得
 
 
 
-# REF
+## 相关资料
 
 - [Kaggle机器学习之模型融合（stacking）心得](https://www.leiphone.com/news/201709/zYIOJqMzR0mJARzj.html)作者[吉他手](https://www.zhihu.com/people/zhu-a-zhu-83/activities)
 - [思颖](https://www.leiphone.com/author/siying985)

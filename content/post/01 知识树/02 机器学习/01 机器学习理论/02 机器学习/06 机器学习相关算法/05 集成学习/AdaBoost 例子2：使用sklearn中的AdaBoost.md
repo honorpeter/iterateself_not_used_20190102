@@ -126,6 +126,6 @@ y_scores--- <class 'numpy.float64'> 4 [ 0.1   0.4   0.35  0.8 ]
 
 
 
-## REF
+## 相关资料
 
 - [第7章 集成方法 ensemble method](http://ml.apachecn.org/mlia/ensemble-random-tree-adaboost/)

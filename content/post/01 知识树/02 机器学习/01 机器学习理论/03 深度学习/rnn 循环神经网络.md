@@ -335,5 +335,5 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 
 
 
-# REF：
+## 相关资料：
 1. 七月在线 深度学习

@@ -35,7 +35,7 @@ date: 2018-06-12 13:11:38
 
 
 
-# REF
+## 相关资料
 
 1. [跟我一起写 Makefile  陈皓](http://scc.qibebt.cas.cn/docs/linux/base/%B8%FA%CE%D2%D2%BB%C6%F0%D0%B4Makefile-%B3%C2%F0%A9.pdf)
 2. [Make 命令教程](http://www.ruanyifeng.com/blog/2015/02/make.html)

@@ -14,6 +14,6 @@ date: 2018-08-17 19:06:31
 
 
 
-## REF
+## 相关资料
 
 1. [【机器学习PAI实践六】金融贷款发放预测](https://blog.csdn.net/buptgshengod/article/details/71516359)

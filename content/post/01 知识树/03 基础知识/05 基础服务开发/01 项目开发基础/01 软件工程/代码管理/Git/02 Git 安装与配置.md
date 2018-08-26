@@ -9,7 +9,7 @@ date: 2018-07-10 11:05:12
 
 # Git 安装配置
 
-## REF
+## 相关资料
 
 - [Git教程](https://www.w3cschool.cn/git/)
 

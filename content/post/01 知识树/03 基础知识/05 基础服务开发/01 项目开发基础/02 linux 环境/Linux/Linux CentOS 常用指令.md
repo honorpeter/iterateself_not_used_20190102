@@ -21,7 +21,7 @@ date: 2018-07-10 15:43:46
 
 
 
-# REF
+## 相关资料
 
 1. [Linux下的包管理工具——yum](https://www.jianshu.com/p/19408c427825)
 2. [CentOS 7 快速上手教程](https://ken.io/serie/centos7-quickstart)

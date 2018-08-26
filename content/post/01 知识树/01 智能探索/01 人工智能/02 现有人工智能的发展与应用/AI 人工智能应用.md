@@ -38,5 +38,5 @@ date: 2018-06-22 18:16:38
 
 
 
-# REF
+## 相关资料
 1. [人工智能  wiki](https://zh.wikipedia.org/wiki/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8)

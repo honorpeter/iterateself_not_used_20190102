@@ -216,7 +216,7 @@ FM 的作用不是增加一些特征，而是把组合项的权重的维度降�
 
 
 
-## Reference
+## 相关资料erence
 
 - [深入FFM原理与实践](https://tech.meituan.com/deep_understanding_of_ffm_principles_and_practices.html) 作者：del2z, 大龙
 - http://blog.csdn.net/lilyth_lilyth/article/details/48032119

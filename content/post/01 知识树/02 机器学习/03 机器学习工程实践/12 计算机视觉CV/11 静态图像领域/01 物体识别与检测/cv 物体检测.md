@@ -868,7 +868,7 @@ RFCN能不能满足real-time的？现在最快的应该是1s处理4帧，比Fast
 
 
 
-## REF：
+## 相关资料：
 
 1. 七月在线 深度学习
 2. [DPM（Deformable Parts Model）](http://www.52ml.net/15680.html) **这个还没看**

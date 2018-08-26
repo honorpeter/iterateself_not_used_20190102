@@ -892,7 +892,7 @@ self.name = nm # class instance (data) attribute print 'Created a class instance
 
 """display class(static) attribute"""
 
-print self.version    # references FooClass.version
+print self.version    ## 相关资料erences FooClass.version
 
 def addMe2Me(self， x): # does not use 'self'
 

@@ -714,7 +714,7 @@ AlexNet 虽然很老，但是还在用，比如说做电商某种小商品的分
 
 
 
-## REF
+## 相关资料
 
 1. 七月在线 深度学习
 2. [多通道卷积计算](https://blog.csdn.net/yudiemiaomiao/article/details/72466402)

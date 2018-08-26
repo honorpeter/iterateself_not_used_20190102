@@ -251,6 +251,6 @@ def download(filename):
 
 
 
-## REF
+## 相关资料
 
 - 七月在线 opencv计算机视觉

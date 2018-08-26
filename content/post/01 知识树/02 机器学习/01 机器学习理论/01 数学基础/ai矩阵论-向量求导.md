@@ -52,7 +52,7 @@ A为\(n\times n\)的矩阵，x为\(n\times 1\)的列向量，记 \(y=\overrighta
 
 
 
-## REF
+## 相关资料
 
 1. 七月在线 机器学习
 2. [矩阵论：向量求导/微分和矩阵微分](https://blog.csdn.net/pipisorry/article/details/68961388)

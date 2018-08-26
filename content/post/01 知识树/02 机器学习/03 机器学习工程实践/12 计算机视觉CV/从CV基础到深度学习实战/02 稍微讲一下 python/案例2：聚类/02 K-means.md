@@ -220,6 +220,6 @@ Compare the input and output image: we've reduced the $256^3$ colors to just 64.
 
 
 
-## REF
+## 相关资料
 
 - 七月在线 opencv计算机视觉

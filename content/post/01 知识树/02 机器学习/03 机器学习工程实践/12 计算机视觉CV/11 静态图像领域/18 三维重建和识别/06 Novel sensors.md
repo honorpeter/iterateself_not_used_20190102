@@ -40,6 +40,6 @@ http://chenlab.ece.cornell.edu/projects/MobileCamArray/videos/self_reconfigurati
 
 
 
-## REF
+## 相关资料
 
 - 七月在线 opencv计算机视觉

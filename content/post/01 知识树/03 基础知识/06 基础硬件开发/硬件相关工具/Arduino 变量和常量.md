@@ -88,6 +88,6 @@ Arduino使用的C语言中的变量具有名为scope（范围）的属性。scop
 
 
 
-# REF
+## 相关资料
 
 1. [Arduino教程](https://www.w3cschool.cn/arduino/)

@@ -79,6 +79,6 @@ C++ 标准允许标准的 headers include 别的标准 headers，因此，你虽
 
 
 
-# REF
+## 相关资料
 
 1. [Difference between <cstring> and <string>](https://stackoverflow.com/questions/12824595/difference-between-cstring-and-string)

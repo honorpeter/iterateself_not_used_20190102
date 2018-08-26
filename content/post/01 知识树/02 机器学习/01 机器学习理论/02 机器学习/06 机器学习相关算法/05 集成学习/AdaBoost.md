@@ -324,7 +324,7 @@ AdaBoost确实采用的是指数损失，基分类器最常见的是决策树（
 
 
 
-# REF
+## 相关资料
 
 * 七月在线 机器学习
 * [机器学习算法中GBDT与Adaboost的区别与联系是什么？](https://www.zhihu.com/question/54626685)

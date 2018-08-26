@@ -31,7 +31,7 @@ Xshell 还是很好用的，但是我现在对于 Xshell的使用仅限于手动
 
 
 
-# REF
+## 相关资料
 
 1. [Xshell使用教程](https://blog.csdn.net/Hanani_Jia/article/details/78732033)
 2. [Xshell和Xftp的安装与使用教程](https://blog.csdn.net/HighproX/article/details/51283990)

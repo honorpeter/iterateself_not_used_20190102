@@ -419,6 +419,6 @@ models/rnn/translate
 
 
 
-## REF：
+## 相关资料：
 
 1. 七月在线 深度学习

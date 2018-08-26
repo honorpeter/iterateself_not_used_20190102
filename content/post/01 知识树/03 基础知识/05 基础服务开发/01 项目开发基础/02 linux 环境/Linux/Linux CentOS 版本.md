@@ -35,6 +35,6 @@ Codename:       Final
 
 
 
-# REF
+## 相关资料
 
 - [查看CentOS版本方法](https://www.cnblogs.com/zyw-205520/p/4900689.html)

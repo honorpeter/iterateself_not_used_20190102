@@ -1,5 +1,5 @@
 ---
-title: about
+title: 关于
 toc: true
 date: 2018-08-19 17:00:05
 menu: main

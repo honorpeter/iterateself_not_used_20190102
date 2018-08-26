@@ -1,76 +1,15 @@
 ---
-title: TL JDA例子1：
+title: TL JDA例子1
 toc: true
 date: 2018-06-11 08:14:54
 ---
----
-author: evo
-comments: true
-date: 2018-05-21 13:18:27+00:00
-layout: post
-link: http://106.15.37.116/2018/05/21/tl-%e4%b8%8a%e6%89%8b%e5%ae%9e%e8%b7%b5/
-slug: tl-%e4%b8%8a%e6%89%8b%e5%ae%9e%e8%b7%b5
-title: TL JDA例子1：
-wordpress_id: 6194
-categories:
-- 人工智能学习
-tags:
-- '@NULL'
-- Transfer Learning
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。**
-
-
-## 相关资料
-
-
-
-
-
- 	
-  1. [迁移学习简明手册](https://github.com/jindongwang/transferlearning-tutorial)  [王晋东](https://zhuanlan.zhihu.com/p/35352154)
-
- 	
-  2. [迁移学习代码实现 总结 王晋东](https://github.com/jindongwang/transferlearning/tree/master/code)
 
 
 
 
 ## 需要补充的
 
-
-
-
-
- 	
-  * 没有写，之前的册子上是Matlab代码的，
-
-
-
-
-
-* * *
-
-
-
-
-
-# INTRODUCTION
-
-
-
-
-
- 	
-  * aaa
-
-
-
+- 没有写，之前的册子上是Matlab代码的，
 
 
 
@@ -96,21 +35,8 @@ Office+Caltech10  数据集的介绍可以在本手册的第~\ref{sec-dataset}�
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [迁移学习简明手册](https://github.com/jindongwang/transferlearning-tutorial) 
+- [王晋东](https://zhuanlan.zhihu.com/p/35352154)
+- [迁移学习代码实现 总结 王晋东](https://github.com/jindongwang/transferlearning/tree/master/code)

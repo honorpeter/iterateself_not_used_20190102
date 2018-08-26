@@ -45,7 +45,7 @@ def Test():
     wildcard = ".md"
     file = open(mdpath,"w",encoding= 'utf-8')
     file.write("---\n"
-        +"title: 目录\n"
+        +"title: 完整目录\n"
         +"date: 2017-08-20T21:38:52+08:00\n"
         +"lastmod: 2017-08-28T21:41:52+08:00\n"
         +"menu: main\n"

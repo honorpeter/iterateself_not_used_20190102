@@ -1,5 +1,5 @@
 ---
-title: TL DNS例子1：
+title: TL DNS例子1
 toc: true
 date: 2018-08-12 20:30:24
 ---

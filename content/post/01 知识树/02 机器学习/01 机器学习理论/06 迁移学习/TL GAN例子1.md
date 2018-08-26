@@ -1,5 +1,5 @@
 ---
-title: TL GAN例子1：
+title: TL GAN例子1
 toc: true
 date: 2018-07-14 11:26:50
 ---
@@ -7,12 +7,11 @@ date: 2018-07-14 11:26:50
 
 
 
-* 深度对抗网络的迁移   [ADDA方法(Tensorflow)](https://github.com/erictzeng/adda)   [DANN方法(Tensorflow)](https://github.com/jindongwang/tf-dann)
+* 深度对抗网络的迁移   
 
 
-
-
-
+[ADDA方法(Tensorflow)](https://github.com/erictzeng/adda)   
+[DANN方法(Tensorflow)](https://github.com/jindongwang/tf-dann)
 
 
 

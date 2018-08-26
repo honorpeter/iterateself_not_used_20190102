@@ -6,7 +6,7 @@ date: 2018-07-27 10:09:51
 # GAN
 
 
-# ORIGINAL
+## 相关资料
 
   1. [最简单易懂的GAN（生成对抗网络）教程：从理论到实践（附代码）](https://www.leiphone.com/news/201706/ty7H504cn7l6EVLd.html)
   2.[Generative-Adversarial-Network-Tutorial](https://github.com/uclaacmai/Generative-Adversarial-Network-Tutorial)

@@ -12,7 +12,7 @@ date: 2018-07-10 11:04:44
 
 # git 撤销修改
 
-# ORIGINAL
+## 相关资料
 
 - [git丢弃本地修改的所有文件（新增、删除、修改）](https://blog.csdn.net/leedaning/article/details/51304690)
 

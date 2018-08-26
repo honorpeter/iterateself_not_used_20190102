@@ -5,7 +5,7 @@ date: 2018-08-12 20:11:45
 ---
 # k-means
 
-# ORIGINAL
+## 相关资料
 
 * 对k-means 进行总结
 * 掌握K-means聚类的思路和使用条件

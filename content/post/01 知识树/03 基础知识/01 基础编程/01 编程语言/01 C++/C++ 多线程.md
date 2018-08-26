@@ -5,7 +5,7 @@ date: 2018-06-26 19:49:58
 ---
 
 
-# ORIGINAL
+## 相关资料
   1. [秒杀多线程](https://blog.csdn.net/column/details/killthreadseries.html)
 
 

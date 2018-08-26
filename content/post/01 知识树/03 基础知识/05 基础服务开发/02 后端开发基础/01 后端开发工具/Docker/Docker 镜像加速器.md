@@ -5,7 +5,7 @@ date: 2018-07-29 21:47:12
 ---
 # docker 镜像加速器
 
-# ORIGINAL
+## 相关资料
 
 1. [CentOS7安装Docker](https://www.jianshu.com/p/3a4cd73e3272)
 

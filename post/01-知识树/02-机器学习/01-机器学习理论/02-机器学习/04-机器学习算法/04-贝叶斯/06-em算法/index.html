@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 EM算法 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="EM算法 在前面的讨论中，我们一直假设训练样本所有属性变量的值都已被观测到, 即训练样本是“完整”的.但在现实应用中往往会遇到“不完整”的训练样" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/06-em%E7%AE%97%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 EM算法" />
+<meta property="og:description" content="EM算法 在前面的讨论中，我们一直假设训练样本所有属性变量的值都已被观测到, 即训练样本是“完整”的.但在现实应用中往往会遇到“不完整”的训练样" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/06-em%E7%AE%97%E6%B3%95/" /><meta property="article:published_time" content="2018-08-12T20:12:53&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:12:53&#43;00:00"/>
+<meta itemprop="name" content="06 EM算法">
+<meta itemprop="description" content="EM算法 在前面的讨论中，我们一直假设训练样本所有属性变量的值都已被观测到, 即训练样本是“完整”的.但在现实应用中往往会遇到“不完整”的训练样">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:12:53&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:12:53&#43;00:00" />
+<meta itemprop="wordCount" content="2198">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 EM算法"/>
+<meta name="twitter:description" content="EM算法 在前面的讨论中，我们一直假设训练样本所有属性变量的值都已被观测到, 即训练样本是“完整”的.但在现实应用中往往会遇到“不完整”的训练样"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 EM算法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 2198 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#comment">COMMENT</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>EM算法</p>
+
+<p>在前面的讨论中，我们一直假设训练样本所有属性变量的值都已被观测到, 即训练样本是“完整”的.但在现实应用中往往会遇到“不完整”的训练样本，例如由于西瓜的根蒂已脱落，无法看出是“蜷缩”还是“硬挺”，则训练样本的 “根蒂” 属性变量值未知.在这种存在 “未观测” 变量的情形下，是否仍能对模型参数进行估计呢？</p>
+
+<p>未观测变量的学名是 “隐变量”(latent variable).令 $X$ 表示已观测变量集，$Z$ 表示隐变量集，$\Theta$ 表示模型参数.若欲对 $\Theta$ 做极大似然估计，则应最大化 对数似然</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/Hfch1EI6JD.png?imageslim" alt="mark" /></p>
+
+<p>然而由于 Z 是隐变量，上式无法直接求解.此时我们可通过对 Z 计算期望，来最大化已观测数据的对数“边际似然”(marginal likelihood)</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/F6i8iEI7B7.png?imageslim" alt="mark" /></p>
+
+<p>EM (Expectation-Maximization)算法是常用的估计参数隐变量的利器，它是一种迭代式的方法，其基本想法是：若参数 $\Theta$ 已知, 则可根据训练数据推断出最优隐变量 Z 的值(E步);反之，若 Z 的值已知，则可方便地对参数 $\Theta$ 做极大似然估计(M步).</p>
+
+<p>于是，以初始值为起点，对式(7.35)，可迭代执行以下步骤直至收敛：</p>
+
+<ul>
+<li><p>基于 $\Theta^t$ 推断隐变量 Z 的期望，记为 $Z^t$ ；</p></li>
+
+<li><p>基于已观测变量 X 和 $Z^t$ 对参数 $\Theta$ 做极大似然估计，记为 $\Theta^{t+1}$</p></li>
+</ul>
+
+<p>这就是 EM 算法的原型.</p>
+
+<p>进一步，若我们不是取 Z 的期望，而是基于 $\Theta^t$ 计算隐变量 Z 的概率分布 $P(Z|X,\Theta^t)$ ，则EM算法的两个步骤是：</p>
+
+<ul>
+<li><p>E步(Expectation):以当前参数 $\Theta^t$ 推断隐变量分布 $P(Z|X,\Theta^t)$ ,并计 算对数似然 $LL(\Theta |X,Z)$ 关于Z的期望:
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/BJfbl075LJ.png?imageslim" alt="mark" /></p></li>
+
+<li><p>M步(Maximization):寻找参数最大化期望似然，即
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/ba2m2c5L4J.png?imageslim" alt="mark" /></p></li>
+</ul>
+
+<p>简要来说，EM算法使用两个步骤交替计算：第一步是期望(E)步，利用当 前估计的参数值来计算对数似然的期望值;第二步是最大化(M)步，寻找能使 E步产生的似然期望最大化的参数值.然后，新得到的参数值重新被用于E步，……直至收敛到局部最优解.</p>
+
+<p>事实上，隐变量估计问题也可通过梯度下降等优化算法求解，但由于求和的项数将随着隐变量的数目以指数级上升，会给梯度计算带来麻烦；而EM算 法则可看作一种非梯度优化方法.</p>
+
+<h1 id="comment">COMMENT</h1>
+
+<p>下面是补充阅读</p>
+
+<p>贝叶斯决策论在机器学习、模式识别等诸多关注数据分析的领域都极 为重要的地位.对贝叶斯定理进行近似求解，为机器学习算法的设计提供了 一种有效途径.为避兔贝叶斯定理求解时面临的组合爆炸、样本稀疏问题，朴 素贝叶斯分类器引入了属性条件独立性假设.这个假设在现实应用中往往很 难成立，但有趣的是，朴素贝叶斯分类器在很多情形下都能获得相当好的性能 [Domingos and Pazzani, 1997; Ng and Jordan, 2002]. 一种解释是对分类任务 来说，只需各类别的条件概率排序正确、无须精准概率值即可导致正确分类结 果[Domingos and Pazzani, 1997];另一种解释是,若属性间依赖对所有类别影 响相同，或依赖关系的影响能相互抵消，则属性条件独立性假设在降低计算开 销的同时不会对性能产生负面影响[Zhang, 2004].朴素贝叶斯分类器在信息检 索领域尤为常用[Lewis, 1998], [McCallum and Nigam, 1998]对其在文本分类 中的两种常见用法进行了比较.</p>
+
+<p>根据对属性间依赖的涉及程度，贝叶斯分类器形成了一个“谱”：朴素贝 叶斯分类器不考虑属性间依赖性，贝叶斯网能表示任意属性间的依赖性，二者 分别位于“谱”的两端；介于两者之间的则是一系列半朴素贝叶斯分类器，它 们基于各种假设和约束来对属性间的部分依赖性进行建模.一般认为，半朴素 贝叶斯分类器的研究始于[Kononenko, 1991]. ODE仅考虑依赖一个父属性， 由此形成了独依赖分类器如 TAN [Friedman et al., 1997]&gt; AODE [Webb et al.5 2005]、LBR (lazy Bayesian Rule) [Zheng and Webb, 2000]等；feDE 则考虑最 多依赖个父属性，由此形成了 依赖分类器如KDB [Sahami, 1996]&gt; NBtree [Kohavi, 1996]等.</p>
+
+<p>贝叶斯分类器(Bayes Classifier)与一般意义上的“贝叶斯学习” (Bayesian Learning)有显著区别，前者是通过最大后验概率进行单点估计，后者则是进行 分布估计.关于贝叶斯学习的内容可参阅[Bishop, 2006].</p>
+
+<p>J. Pearl教授因这方面的 卓越贡献而获得2011年 图灵奖,参见第14章.</p>
+
+<p>贝叶斯网是经典的概率 图模型，参见第14章.</p>
+
+<p>贝叶斯网为不确定学习和推断提供了基本框架，因其强大的表示能力、 良好的可解释性而广受关注[Pearl，1988].贝叶斯网学习可分为结构学习和 参数学习两部分.参数学习通常较为简单，而结构学习则被证明是NP难问 题[Cooper, 1990; Chickering et al., 2004],人们为此提出了多种评分搜索方法 [Friedman and Goldszmidt, 1996].贝叶斯网通常被看作生成式模型，但近年来 也有不少关于贝叶斯网判别式学习的研究[Grossman and Domingos, 2004].关 于贝叶斯网的更多介绍可参阅[Jensen, 1997; Heckerman, 1998].</p>
+
+<p>EM算法是最常见的隐变量估计方法，在机器学习中有极为广泛的用途，例如常被用来学习高斯混合模型(Gaussian mixture model,简称GMM)的参数; 9.4节将介绍的均值聚类算法就是一个典型的EM算法.更多关于EM算法 的分析、拓展和应用可参阅[McLachlan and Krishnan, 2008].
+“数据挖掘十大算法” 还包括前几章介绍的 C4.5、CART决策树、支 持向量机，以及后几章将 要介绍的AdaBoost、k均 值聚类、fc近邻算法等.</p>
+
+<p>如常被用来学习高斯混合模型(Gaussian mixture model,简称GMM)的参数; 9.4节将介绍的均值聚类算法就是一个典型的EM算法.更多关于EM算法 的分析、拓展和应用可参阅[McLachlan and Krishnan, 2008].
+本章介绍的朴素贝叶斯算法和EM算法均曾入选“数据挖掘十大算法” [Wu et al.3 2007].</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/05-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">集成学习算法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/%E8%B4%9D%E5%8F%B6%E6%96%AF%E7%BD%91%E7%BB%9C/">
+            <span class="next-text nav-default">贝叶斯网络</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

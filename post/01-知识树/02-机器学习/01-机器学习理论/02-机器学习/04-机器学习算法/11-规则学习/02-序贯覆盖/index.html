@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 序贯覆盖 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="序贯覆盖 规则学习的目标是产生一个能覆盖尽可能多的样例的规则集.最直接的做法是“序贯覆盖” （sequential covering）,即逐条归纳" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/11-%E8%A7%84%E5%88%99%E5%AD%A6%E4%B9%A0/02-%E5%BA%8F%E8%B4%AF%E8%A6%86%E7%9B%96/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 序贯覆盖" />
+<meta property="og:description" content="序贯覆盖 规则学习的目标是产生一个能覆盖尽可能多的样例的规则集.最直接的做法是“序贯覆盖” （sequential covering）,即逐条归纳" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/11-%E8%A7%84%E5%88%99%E5%AD%A6%E4%B9%A0/02-%E5%BA%8F%E8%B4%AF%E8%A6%86%E7%9B%96/" /><meta property="article:published_time" content="2018-07-07T15:16:32&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-07T15:16:32&#43;00:00"/>
+<meta itemprop="name" content="02 序贯覆盖">
+<meta itemprop="description" content="序贯覆盖 规则学习的目标是产生一个能覆盖尽可能多的样例的规则集.最直接的做法是“序贯覆盖” （sequential covering）,即逐条归纳">
+
+
+<meta itemprop="datePublished" content="2018-07-07T15:16:32&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-07T15:16:32&#43;00:00" />
+<meta itemprop="wordCount" content="2482">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 序贯覆盖"/>
+<meta name="twitter:description" content="序贯覆盖 规则学习的目标是产生一个能覆盖尽可能多的样例的规则集.最直接的做法是“序贯覆盖” （sequential covering）,即逐条归纳"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 序贯覆盖</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-07 </span>
+        
+        <span class="more-meta"> 2482 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>序贯覆盖</p>
+
+<p>规则学习的目标是产生一个能覆盖尽可能多的样例的规则集.最直接的做法是“序贯覆盖” （sequential covering）,即逐条归纳：在训练集上每学到一条规则，就将该规则覆盖的训练样例去除，然后以剩下的训练样例组成训练集重复上述过程。由于每次只处理一部分数据，因此也被称为“分治”（separate-and-conquer）策略.</p>
+
+<p>我们以命题规则学习为例来考察序贯覆盖法.命题规则的规则体是对样例属性值进行评估的布尔函数，如 “色泽=青绿” “含糖率$\leq$ 0.2”等，规则头是样例类别。序贯覆盖法的关键是如何从训练集学出单条规则。</p>
+
+<p>显然，对规则学习目标 $\oplus$ ，产生一条规则就是寻找最优的一组逻辑文字来构成规则体， 这是一个搜索问题。形式化地说，给定正例集合与反例集合，学习任务是基于候选文字集合 $\mathcal{F}={f_k}$ 来生成最优规则 $r$ 。在命题规则学习中，候选文字是形如 “$R(属性<em>i,属性值</em>{i,j})$” 的布尔表达式，其中 $属性<em>i$ 表示样例第 i 个属性，$属性值</em>{i,j}$ 表示 $属性_i$ 的第 j 个候选值， $R(x,y)$ 则是判断 $x$、$y$ 是否满足关系$R$ 的二元布尔函数.</p>
+
+<p>最简单的做法是从空规则 “$\oplus \leftarrow$ ”开始，将正例类别作为规则头，再逐个遍历训练集中的每个属性及取值，尝试将其作为逻辑文字増加到规则体中，若能使当前规则体仅覆盖正例，则由此产生一条规则，然后去除已被覆盖的正例并基于剩余样本尝试生成下一条规则.</p>
+
+<p>以西瓜数据集2.0训练集为例，首先根据第1个样例生成文字 “好瓜” 和 “色泽=青绿” 加入规则，得到</p>
+
+<p>$$好瓜\leftarrow (色泽=青绿)$$</p>
+
+<p>这条规则覆盖样例 1, 6, 10 和 17,其中有两个正例和两个反例，不符合“当前规则仅覆盖正例”的条件.于是，我们尝试将该命题替换为基于属性 “色泽” 形成的其他原子命题，例如“色泽=乌黑”；然而在这个数据集上，这样的操作 不能产生符合条件的规则。于是我们回到“色泽=青绿”，尝试增加一个基于其他属性的原子命题,例如“根蒂=蜷缩”：</p>
+
+<p>$$好瓜\leftarrow (色泽=青绿)\wedge(根蒂=蜷缩)$$</p>
+
+<p>该规则仍覆盖了反例17.于是我们将第二个命题替换为基于该属性形成的其他原子命题，例如 “根蒂=稍蜷”：</p>
+
+<p>$$好瓜\leftarrow (色泽=青绿)\wedge(根蒂=稍蜷)$$</p>
+
+<p>这条规则不覆盖任何反例，虽然它仅覆盖一个正例，但已满足“当前规则仅覆盖正例”的条件.因此我们保留这条规则并去除它覆盖的样例 6 ,然后将剩下的 9个样例用作训练集。</p>
+
+<p>如此继续，我们将得到：</p>
+
+<p>$$规则1:好瓜\leftarrow (色泽=青绿)\wedge(根蒂=稍蜷)$$
+$$规则2:好瓜\leftarrow (色泽=青绿)\wedge(敲声=浊响)$$
+$$规则3:好瓜\leftarrow (色泽=乌黑)\wedge(根蒂=蜷缩)$$
+$$规则4:好瓜\leftarrow (色泽=乌黑)\wedge(纹理=稍糊)$$</p>
+
+<p>这个规则集覆盖了所有正例，未覆盖任何反例，这就是序贯覆盖法学得的结果.</p>
+
+<p>上面这种基于穷尽搜索的做法在属性和候选值较多时会由于组合爆炸而不可行.现实任务中一般有两种策略来产生规则：</p>
+
+<ul>
+<li>第一种是“自顶向下” （top-down）,即从比较一般的规则开始，逐渐添加新文字以缩小规 则覆盖范围，直到满足预定条件为止；亦称为“生成-测试”（generate-tlien-test）法，是规则逐渐“特化”（specialization）的过程.</li>
+<li>第二种策略是“自底向 上” （bottom-up）,即从比较特殊的规则开始，逐渐删除文字以扩大规则覆盖范围，直到满足条件为止；亦称为“数据驱动”（data-driven）法，是规则逐渐“泛化”（generalization）的过程.</li>
+</ul>
+
+<p>第一种策略是覆盖范围从大往小搜索规则，第二 种策略则相反；前者通常更容易产生泛化性能较好的规则，而后者则更适合于训练样本较少的情形，此外，前者对噪声的鲁棒性比后者要强得多.因此，在命题规则学习中通常使用第一种策略，而第二种策略在一阶规则学习这类假设空间非常复杂的任务上使用较多.</p>
+
+<p>下面以西瓜数据集2.0训练集为例来展示自顶向下的规则生成方法.首先从空规则 “好瓜$\leftarrow$” 开始，逐一将 “属性=取值” 作为原子命题加入空规则进行考察。假定基于训练集准确率来评估规则的优劣，$n/m$ 表示加入某命题后新规则在训练集上的准确率，其中$m$为覆盖的样例总数，$n$为覆盖的正例数.如 图15.1所示，经过第一轮评估，“色泽=乌黑”和“脐部=凹陷”都达到了最高 准确率3/4.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/HJBb6Bk0jc.png?imageslim" alt="mark" /></p>
+
+<p>将属性次序最靠前的逻辑文字 “色泽=乌黑” 加入空规则，得到</p>
+
+<p>$$好瓜\leftarrow (色泽=乌黑)$$</p>
+
+<p>然后，对上面这条规则覆盖的样例，通过第二轮评估可发现，将图15.1中的五 个逻辑文字加入规则后都能达到 100% 准确率，我们将覆盖样例最多、且属性 次序最靠前的逻辑文字 “根蒂=蜷缩” 加入规则，于是得到结果</p>
+
+<p>$$好瓜\leftarrow (色泽=乌黑)\wedge(根蒂=蜷缩)$$</p>
+
+<p>规则生成过程中涉及一个评估规则优劣的标准，在上面的例子中使用的标准是：先考虑规则准确率，准确率相同时考虑覆盖样例数，再相同时考虑属性次 序.现实应用中可根据具体任务情况设计适当的标准.</p>
+
+<p>此外，在上面的例子中每次仅考虑一个“最优”文字，这通常过于贪心，易陷入局部最优。为缓解这个问题，可采用一些相对温和的做法，例如采用“集束搜索” （beam search）,即每轮保留最优的 $b$ 个逻辑文字，在下一轮均用于构建 候选集，再把候选集中最优的 $b$ 个留待再下一轮使用。</p>
+
+<p>图15.1中若采用 $b=2$ 的集束搜索，则第一轮将保留准确率为 $<sup>3</sup>&frasl;<sub>4</sub>$ 的两个逻辑文字，在第二轮评估后就能获得下面这条规则，其准确率仍为100%,但是覆盖了3个正例：</p>
+
+<p>$$好瓜\leftarrow (脐部=凹陷)\wedge(根蒂=蜷缩)$$</p>
+
+<p>由于序贯覆盖法简单有效，几乎所有规则学习算法都以它为基本框架.它能方便地推广到多分类问题上，只需将每类分别处理即可：当学习关于第 $c$ 类 的规则时,将所有属于类别 $c$ 的样本作为正例，其他类别的样本作为反例。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/11-%E8%A7%84%E5%88%99%E5%AD%A6%E4%B9%A0/03-%E5%89%AA%E6%9E%9D%E4%BC%98%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 剪枝优化</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/02-%E4%B8%AA%E4%BA%BA%E8%BF%AD%E4%BB%A3/02-%E4%B8%AA%E4%BA%BA/04-%E8%83%BD%E5%8A%9B%E6%B0%B4%E5%B9%B3/%E5%AD%A6%E4%B9%A0%E8%83%BD%E5%8A%9B/%E8%BF%99%E6%A0%B7%E8%AF%BB%E4%B9%A6%E5%B0%B1%E5%A4%9F%E4%BA%86/%E8%BF%99%E6%A0%B7%E8%AF%BB%E4%B9%A6%E5%B0%B1%E5%A4%9F%E4%BA%86/">
+            <span class="next-text nav-default">这样读书就够了</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

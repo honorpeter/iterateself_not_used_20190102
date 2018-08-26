@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>pLSA - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="pLSA 相关资料 七月在线 机器学习 MOTIVE 对 pLSA 做总结，看下是如何把EM算法应用在pLSA上面的。 为什么要引入隐变量？ 朴素贝叶斯的分析 因此加入主题这个隐变量" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/plsa/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="pLSA" />
+<meta property="og:description" content="pLSA 相关资料 七月在线 机器学习 MOTIVE 对 pLSA 做总结，看下是如何把EM算法应用在pLSA上面的。 为什么要引入隐变量？ 朴素贝叶斯的分析 因此加入主题这个隐变量" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/plsa/" /><meta property="article:published_time" content="2018-08-12T20:04:22&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:04:22&#43;00:00"/>
+<meta itemprop="name" content="pLSA">
+<meta itemprop="description" content="pLSA 相关资料 七月在线 机器学习 MOTIVE 对 pLSA 做总结，看下是如何把EM算法应用在pLSA上面的。 为什么要引入隐变量？ 朴素贝叶斯的分析 因此加入主题这个隐变量">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:04:22&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:04:22&#43;00:00" />
+<meta itemprop="wordCount" content="1474">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="pLSA"/>
+<meta name="twitter:description" content="pLSA 相关资料 七月在线 机器学习 MOTIVE 对 pLSA 做总结，看下是如何把EM算法应用在pLSA上面的。 为什么要引入隐变量？ 朴素贝叶斯的分析 因此加入主题这个隐变量"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">pLSA</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1474 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#plsa">pLSA</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#为什么要引入隐变量">为什么要引入隐变量？</a></li>
+<li><a href="#plsa模型">pLSA模型</a>
+<ul>
+<li><a href="#现在我们来看一下如何进行这个主题模型的建立">现在我们来看一下如何进行这个主题模型的建立</a></li>
+<li><a href="#然后-我们看看这个怎么求期望的极大值">然后，我们看看这个怎么求期望的极大值：</a></li>
+<li><a href="#完成目标函数的建立">完成目标函数的建立：</a></li>
+</ul></li>
+<li><a href="#plsa的总结">pLSA的总结</a></li>
+<li><a href="#plsa进一步思考">pLSA进一步思考：</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="plsa">pLSA</h1>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+<h1 id="motive">MOTIVE</h1>
+
+<p>对 pLSA 做总结，看下是如何把EM算法应用在pLSA上面的。</p>
+
+<h1 id="为什么要引入隐变量">为什么要引入隐变量？</h1>
+
+<p>朴素贝叶斯的分析</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7H202mH9K6.png?imageslim" alt="mark" /></p>
+
+<p>因此加入主题这个隐变量。</p>
+
+<p>增加这个隐变量可以一定程度解决问题。</p>
+
+<p>文档和主题：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/514Cd066k6.png?imageslim" alt="mark" /></p>
+
+<p>不管是pLSA还是LDA，具体的做法都非常简单，但是困难的是中间的推理过程。</p>
+
+<p>为什么这个理论是有道理的。</p>
+
+<p>先讲一些pLSA模型。</p>
+
+<h1 id="plsa模型">pLSA模型</h1>
+
+<p>基于概率统计的 pLSA 模型(probabilistic Latent Semantic Analysis，概率隐语义分析)，增加了主题模型，形成简单的贝叶斯网络，可以使用EM算法学习模型参数。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/83bf1CGmJf.png?imageslim" alt="mark" /></p>
+
+<p>这个就是增加主题的基本的网络模型。这么简单的一个贝叶斯网络就是pLSA模型，分析一下这个样的网络发生什么事情：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/IAgGGG3eKl.png?imageslim" alt="mark" /></p>
+
+<p>每个文档在所有主题上服从多项分布，的意思是：</p>
+
+<p>比如<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3h5B9H2mha.png?imageslim" alt="mark" />第一篇文档除了是小说，还是关于民国的。</p>
+
+<p>每个主题在所有词项上服从多项分布：</p>
+
+<p>假如词典有V个词，那么主题在所有的词上就服从v项分布。</p>
+
+<p>假设主题有t个，那么每个文档在所有的主题上服从t项分布</p>
+
+<p><strong>整个文档的生成过程是什么意思？ </strong></p>
+
+<h2 id="现在我们来看一下如何进行这个主题模型的建立">现在我们来看一下如何进行这个主题模型的建立</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fL7KjCmlKF.png?imageslim" alt="mark" /></p>
+
+<p>对于<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/be1Em9FKGb.png?imageslim" alt="mark" />这个解释一下：</p>
+
+<p>由全概率公式得：(p(w<em>j)=\sum</em>{k=1}^{K}p(w_j\mid z_k)*p(z_k)) 而，这里都加了d而已，由于给定z得时候，d和w是head-to-tail 得关系，也就是说给定z的时候，d和w是独立的即<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/macJe7IHKE.png?imageslim" alt="mark" />，因此<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5Kc018KG5g.png?imageslim" alt="mark" />这个里面的d就省略的。</p>
+
+<p>所以可见有了贝叶斯网络的基本的东西之后</p>
+
+<p>正常而言，还是用极大似然估计</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/94macfFgC6.png?imageslim" alt="mark" /></p>
+
+<p>这个地方解释下，主题有K个，词有M个，文档有N个</p>
+
+<p>可见，这是一个关于w z d 的部分可观测的目标函数，因此使用的最正的办法就是EM算法：</p>
+
+<p>目标函数分析：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b49Cb50KEa.png?imageslim" alt="mark" /></p>
+
+<p>OK，我们先做第一步：写隐变量主题(z_k) 的后验概率:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9fi6l32ha6.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9AibdfJd68.png?imageslim" alt="mark" />这个式子，把d去掉就能看明白了，然后在把d加上就可以理解了。，所以上面。这个就是给定样本之下的隐变量的后验概率</p>
+
+<h2 id="然后-我们看看这个怎么求期望的极大值">然后，我们看看这个怎么求期望的极大值：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/56BBE37mBA.png?imageslim" alt="mark" /></p>
+
+<p>看看怎么求的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/L19keeLgFa.png?imageslim" alt="mark" /></p>
+
+<p>写开之后，后面的部分 (P(d_i)) 是文档的概率，(n(d_i,w<em>j)) 是联合起来的数出的个数，也就是说后面的部分是常数，因此只看前面的部分。l</em>{new}</p>
+
+<p>对(l<em>{new})求期望之后，(\sum</em>{k=1}^{K}P(z_k\mid d_i,w_j)) 就是在给定d w 的情况下的主题的条件概率，就是推EM算法的时候，里面的Qi。没明白？</p>
+
+<p>这么一个式子看着很长，其实是一个带有约束的求极值问题。</p>
+
+<h2 id="完成目标函数的建立">完成目标函数的建立：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hCFKb89ld3.png?imageslim" alt="mark" /></p>
+
+<p>进行求解：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ikGjLGAI0i.png?imageslim" alt="mark" /></p>
+
+<p>注意，我们这里求导的时候只关心第k个主题，第j个词，所以很多的求和符号就都没有了，因为i是文档的，所以要保留</p>
+
+<p>分析第一个等式得到：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CB2kH0lJlA.png?imageslim" alt="mark" /></p>
+
+<p>这个地方的<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/dl3kAFel7j.png?imageslim" alt="mark" />带入到上面的<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jb3m7DL02H.png?imageslim" alt="mark" />里面，就得到了：<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/I3mH6a8K8F.png?imageslim" alt="mark" />。</p>
+
+<p>注意这里的<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/35DJh1cL3G.png?imageslim" alt="mark" />下面不是m而是j。</p>
+
+<p>利用这个等于0得到主题给定的情况下，词的分布。</p>
+
+<p>同理分析第二个等式</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kAE0j5i0j9.png?imageslim" alt="mark" /></p>
+
+<p>上面这两个就是M过程。</p>
+
+<p>而<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/g4mKHag40l.png?imageslim" alt="mark" />
+就是刚刚在<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1HI7dm9L00.png?imageslim" alt="mark" />
+这里算出来的，所以带入即可。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d8Iii37JDa.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/BmCLmCJajI.png?imageslim" alt="mark" /></p>
+
+<p>这个是给定的样本之下z_k这个主题出现的概率。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CC40a5ge7g.png?imageslim" alt="mark" />这个就是看一下 $d_i$ $w_j$出现的次数。</p>
+
+<p>上面就是pLSA 的全部的推导过程，还是要自己推一下。再理解一下。</p>
+
+<h1 id="plsa的总结">pLSA的总结</h1>
+
+<p>pLSA应用于信息检索、过滤、自然语言处理等领域，pLSA考虑到词分布和主题分布，使用EM算法来学习参数。</p>
+
+<p>虽然推导略显复杂，但最终公式简洁清晰，很符合直观理解，需用心琢磨；此外，推导过程使用了EM算法，也是学习EM算法的重要素材。</p>
+
+<p>实际上pLSA是10年前的产物了，而现在已经全部转向LDA了。</p>
+
+<p>OK，对于pLSA进一步思索：</p>
+
+<h1 id="plsa进一步思考">pLSA进一步思考：</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4LiHcc2E4i.png?imageslim" alt="mark" /></p>
+
+<p>是的，是不需要先验信息，只需要数出</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i7e392ejEH.png?imageslim" alt="mark" /></p>
+
+<p>就行了，其它的全都是假设的，然后迭代出来的。</p>
+
+<p>这个是它的优势，但是也是它的劣势，因为没办法人工干预他。</p>
+
+<p>而对它的进行的改进，就是这个著名的 LDA。</p>
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/05-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0%E4%B8%8E%E9%80%89%E6%8B%A9/roc/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ROC</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/07-%E9%99%8D%E7%BB%B4%E4%B8%8E%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/04-%E6%A0%B8%E5%8C%96%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4/">
+            <span class="next-text nav-default">04 核化线性降维</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

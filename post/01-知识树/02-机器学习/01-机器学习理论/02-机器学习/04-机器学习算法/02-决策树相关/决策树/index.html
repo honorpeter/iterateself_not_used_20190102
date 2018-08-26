@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>决策树 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 又添加了邹博的东西进去，要整理下。 实际上 关于决策树的生成，剪枝，新增样本时候怎么调整还是有一些问题不清楚的。要弄清楚。 而且没有实例" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/%E5%86%B3%E7%AD%96%E6%A0%91/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="决策树" />
+<meta property="og:description" content="需要补充的 又添加了邹博的东西进去，要整理下。 实际上 关于决策树的生成，剪枝，新增样本时候怎么调整还是有一些问题不清楚的。要弄清楚。 而且没有实例" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E5%86%B3%E7%AD%96%E6%A0%91%E7%9B%B8%E5%85%B3/%E5%86%B3%E7%AD%96%E6%A0%91/" /><meta property="article:published_time" content="2018-07-27T14:46:37&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T14:46:37&#43;00:00"/>
+<meta itemprop="name" content="决策树">
+<meta itemprop="description" content="需要补充的 又添加了邹博的东西进去，要整理下。 实际上 关于决策树的生成，剪枝，新增样本时候怎么调整还是有一些问题不清楚的。要弄清楚。 而且没有实例">
+
+
+<meta itemprop="datePublished" content="2018-07-27T14:46:37&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T14:46:37&#43;00:00" />
+<meta itemprop="wordCount" content="3082">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="决策树"/>
+<meta name="twitter:description" content="需要补充的 又添加了邹博的东西进去，要整理下。 实际上 关于决策树的生成，剪枝，新增样本时候怎么调整还是有一些问题不清楚的。要弄清楚。 而且没有实例"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">决策树</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 3082 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#知识前提">知识前提</a></li>
+<li><a href="#主要内容">主要内容：</a></li>
+<li><a href="#基础知识">基础知识</a></li>
+<li><a href="#决策树的定义">决策树的定义</a></li>
+<li><a href="#决策树的架构">决策树的架构：</a></li>
+<li><a href="#决策树的示意">决策树的示意</a></li>
+<li><a href="#那么我们怎么生成这样一个树呢">那么我们怎么生成这样一个树呢？</a>
+<ul>
+<li><a href="#首先-我们怎样实现分割">首先，我们怎样实现分割：</a></li>
+<li><a href="#什么样的分割是好的分割">什么样的分割是好的分割？</a></li>
+<li><a href="#信息增益-信息增益率">信息增益 信息增益率</a></li>
+<li><a href="#基尼指数">基尼指数</a></li>
+<li><a href="#ok-总结一下生成方法">OK，总结一下生成方法</a></li>
+</ul></li>
+<li><a href="#怎么处理这样的完全树的过拟合">怎么处理这样的完全树的过拟合？</a>
+<ul>
+<li><a href="#过拟合的出现">过拟合的出现</a></li>
+<li><a href="#怎么进行剪枝">怎么进行剪枝？</a></li>
+<li><a href="#怎样进行剪枝">怎样进行剪枝？</a></li>
+<li><a href="#那么如何构造备选树呢">那么如何构造备选树呢？</a></li>
+</ul></li>
+<li><a href="#决策树的效果">决策树的效果：</a></li>
+<li><a href="#决策树的优缺点">决策树的优缺点：</a></li>
+<li><a href="#使用决策树算法">使用决策树算法</a></li>
+<li><a href="#决策树算法的特点">决策树算法的特点</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>又添加了邹博的东西进去，要整理下。</li>
+<li>实际上 关于决策树的生成，剪枝，新增样本时候怎么调整还是有一些问题不清楚的。要弄清楚。</li>
+
+<li><p>而且没有实例，需要补充</p>
+
+<ul>
+<li>a</li>
+</ul></li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li><p>对决策树进行总结</p></li>
+
+<li><p>可见，学习一个技术知识，最好是找一个贴合的简单例子，从头到尾贯通一遍，再把理论和公式 重新梳理明确一遍，现在他只讲理论，配合简单的解释，有点云里雾里。</p></li>
+</ul>
+
+<hr />
+
+<h1 id="知识前提">知识前提</h1>
+
+<ul>
+<li><p>熵</p></li>
+
+<li><p>信息熵</p></li>
+
+<li><p>信息增益</p></li>
+</ul>
+
+<h1 id="主要内容">主要内容：</h1>
+
+<ul>
+<li><p>决策树的生成与裁剪算法  嗯</p></li>
+
+<li><p>然后基于决策树，提出了集成学习的思路，一个是Bagging，一个是Boosting 其中Bagging 的代表就是随机森林</p></li>
+
+<li><p>然后是RF的代码实现与数据实验  <strong>这个没有，要拆分开来。</strong></p></li>
+</ul>
+
+<h1 id="基础知识">基础知识</h1>
+
+<ul>
+<li><p>熵计算</p></li>
+
+<li><p>条件熵</p></li>
+</ul>
+
+<p>#</p>
+
+<h1 id="决策树的定义">决策树的定义</h1>
+
+<ul>
+<li><p>每个非叶节点标识一种对样本的分割，通常是选用样本的某个特征，将样本分散到不同的子节点中</p></li>
+
+<li><p>子节点继续对分散开的样本进行分割操作</p></li>
+
+<li><p>叶子节点标识输出，每个分散该叶节点中样本都属于同一类（或近似的回归值）</p></li>
+</ul>
+
+<p>#</p>
+
+<h1 id="决策树的架构">决策树的架构：</h1>
+
+<p>分为两个阶段：</p>
+
+<p>决策树学习：</p>
+
+<ul>
+<li><p>一种根据样本为基础的归纳学习</p></li>
+
+<li><p>采用的是自顶向下的递归方法：开始数据都在根节点，递归的进行数据分片</p></li>
+
+<li><p>采用剪枝方法，防止过拟合</p></li>
+</ul>
+
+<p>决策树的使用：</p>
+
+<ul>
+<li><p>对未知数据进行分类</p></li>
+
+<li><p>按照决策树上生成时所采用的分割属性逐层往下，直到一个叶子节点</p></li>
+</ul>
+
+<p>** 怎么进行剪枝的？为什么用剪枝的方法可以防止过拟合？因为假如说我把所有的训练样本很好的分类，因为我的样本存在噪声，而且样本数可能不够。但是还是没有说为什么能防止过拟合？ **</p>
+
+<h1 id="决策树的示意">决策树的示意</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/c5KFbFhIm1.png?imageslim" alt="mark" /></p>
+
+<p>上图可以看出决策树的一个很重要的特点：它不挑特征的种类，比如可以是年龄，也可以是标记型数据，其他的比如SVM，logistic，一般都要求是标量，或者数字。</p>
+
+<p>注意：决策树是可以多插树的。</p>
+
+<h1 id="那么我们怎么生成这样一个树呢">那么我们怎么生成这样一个树呢？</h1>
+
+<h2 id="首先-我们怎样实现分割">首先，我们怎样实现分割：</h2>
+
+<p>可以选择一个特征，设定一个阈值（threshold），Decision Stump。当然，也可以使用两个特征，构造一个平面来划分。<strong>这个是什么样的？</strong></p>
+
+<h2 id="什么样的分割是好的分割">什么样的分割是好的分割？</h2>
+
+<p>什么样的分割的分类效果最好（或分类最纯的，或能使树的路径最短的） 度量方法如下：**分类最纯的这个是什么意思？ **</p>
+
+<ul>
+<li><p>信息增益（ID3）</p></li>
+
+<li><p>信息增益率（C4.5）</p></li>
+
+<li><p>基尼指数（CART）</p></li>
+</ul>
+
+<p>现在基本用的就是CART，ID3和C4.5现在已经难得用到了。</p>
+
+<p>OK，我们挨个介绍一下：</p>
+
+<h2 id="信息增益-信息增益率">信息增益 信息增益率</h2>
+
+<p>经验熵：某个节点分割前的熵值（empirical entropy）</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/iLA9A2jAbB.png?imageslim" alt="mark" /></p>
+
+<p>经验条件熵：分割后的熵值</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Id44m5E8l2.png?imageslim" alt="mark" /></p>
+
+<p>里面的求和是针对Di的。然后乘以前面的权重，再求和，就得到了经验条件熵。</p>
+
+<p>那么信息增益呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CiiCmK0Akb.png?imageslim" alt="mark" /></p>
+
+<p>信息增益率呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/be0m2JIlig.png?imageslim" alt="mark" /></p>
+
+<p><strong>这个地方写错了把？H(A)?</strong></p>
+
+<p>而我们就旋转信息增益最大的那个分割，我们会在这个节点把所有的分割全部考察一遍。</p>
+
+<p>实际上，最常用的并不是信息增益和增益率，而是基尼指数。</p>
+
+<h2 id="基尼指数">基尼指数</h2>
+
+<p>分割之前的计算：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eCJ99gm1ll.png?imageslim" alt="mark" /></p>
+
+<p>分割之后的计算：对每个子节点加权求和</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/bHEgCeiGgJ.png?imageslim" alt="mark" /></p>
+
+<p>感觉与上面的信息增益还是有些类似的。</p>
+
+<h2 id="ok-总结一下生成方法">OK，总结一下生成方法</h2>
+
+<p>执行一个分割的信息增益越大，表明这个分割对样本的熵减少的能力越强，这个分割所在的特征使得数据由不确定性变成确定性的能力越强。</p>
+
+<p>这三种方法的效果是很类似的，随机森林里面用的是CART这个算法就是基尼指数。<strong>为什么另外两个不用？这个CART和RF是同一个发明人。</strong></p>
+
+<h1 id="怎么处理这样的完全树的过拟合">怎么处理这样的完全树的过拟合？</h1>
+
+<h2 id="过拟合的出现">过拟合的出现</h2>
+
+<p>由于：样本噪声，或者样本数量不足，会使得这样的对样本完全分类的树（完整树），容易发生过拟合，泛化能力较弱。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/iIBcgfLGGl.png?imageslim" alt="mark" /></p>
+
+<p>样本量多少叫少？可以使用各种的验证方法来验证我的这个分类算法的泛化能力，比如交叉验证。<strong>到底什么样的样本叫多还是少？ 什么叫做交叉验证？</strong></p>
+
+<p>怎么解决这个过拟合的问题呢？</p>
+
+<ul>
+<li><p>可以对树进行剪枝。</p></li>
+
+<li><p>可以使用随机森林。 这个在集成学习里面会讲到，是基于决策树的。</p></li>
+</ul>
+
+<h2 id="怎么进行剪枝">怎么进行剪枝？</h2>
+
+<p>为了进行剪枝，我们需要对决策树进行评价，可以设计一个树的分类误差评价函数：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/KmDD1BADIl.png?imageslim" alt="mark" /></p>
+
+<p>即对所有叶节点的熵加权求和：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mGH5hdhhfL.png?imageslim" alt="mark" /></p>
+
+<p>t是指所有叶子节点，Nt指的是在这个叶子节点下面的样本的数目，H(t)值得是这个叶子节点下面的熵值。如果说，t这个叶子下面都是一个样本，那么熵就是0，也就是说完整树的C(T)就是0，但是，假如样本里面有两个一模一样的树，然后分配个两个不同的属性，有这种可能。</p>
+
+<p>实际上，决策树在决定那个特征作为分支的时候是比较贪心的，而且梯度下降也是一个比较贪心的算法。 <strong>什么是贪心？</strong></p>
+
+<p>可以使用叶节点数目复杂度评估函数，剪枝的目标就是在这两个函数之间做出平衡，设计出最后的评价函数</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6AHfmm3d6f.png?imageslim" alt="mark" /></p>
+
+<p>因此树的剪枝，就是挑选出完整树的子树，从而使评价函数值最小</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1ag8l14eh2.png?imageslim" alt="mark" /></p>
+
+<h2 id="怎样进行剪枝">怎样进行剪枝？</h2>
+
+<ul>
+<li><p>第一种方法，固定某个经验值α，生成唯一的使评价函数最小的树</p></li>
+
+<li><p>第二种方法：通过迭代操作，构造一系列不同的α值，但是评价函数近似的备选树，然后通过交叉验证的方法选择最好的树。</p></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/F8F5Gmi46m.png?imageslim" alt="mark" /></p>
+
+<p>即固定权重，迭代生成备选树。</p>
+
+<p><strong>怎么通过交叉验证来选择最好的树的？</strong></p>
+
+<h2 id="那么如何构造备选树呢">那么如何构造备选树呢？</h2>
+
+<p><strong>这个地方没有很明白，要弄明白。</strong></p>
+
+<ol>
+<li><p>从完整树开始，当α为0的时候，明显完整树使最有数，即第一个备选树，评价函数值就是(C(T_0))</p></li>
+
+<li><p>现在裁剪一个r节点，其他部分不动，因此我们可以独立考察r节点构成的单节点树和根节点树的评价函数的变化     (C_α(t_r)=C(t_r)+α)        (C_α(T_r)=C(T_r)+α|T_r|)</p></li>
+
+<li><p>当α比较小的时候，(C_α(T_r)&lt;C_α(t_r))，可以满满增大α，使得不等式变成等式，为了使得α满满增加，可以选择改动最小的节点 (\frac{C_α(T_r)-C_α(t_r)}{|T_r|-1})  即相等的时候就可以算出这个(\alpha)值，<strong>什么是改动最小的那个节点？</strong></p></li>
+
+<li><p>当选择改动最小那个节点之后，我们可以增大α，使得不等式为等式</p></li>
+
+<li><p>重复迭代这个过程，知道根节点为止，生成一系列备选树。</p></li>
+</ol>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FfgC1HHCJb.png?imageslim" alt="mark" /></p>
+
+<p>为什么要令二者相等？哦，我先算一个作为临界点，而相等的时候，就是剪枝前后的决策树的损失是相等的，把这个作为临界点，稍微调大一点，那么剪枝后的就是优的，如果比这个临界点小，那么剪枝前的就是优的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1CIjlm8m45.png?imageslim" alt="mark" /> 这个是什么？叶子的个数吗？</p>
+
+<p>那么我们怎么到底剪枝那些呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8ikFG087g1.png?imageslim" alt="mark" /></p>
+
+<p>从T1到T2的过程中，你需要把所有的内部节点再算一遍的。</p>
+
+<p><strong>为什么是查找最小剪枝系数的节点？为什么这个点是稳妥的？因为 (\alpha=0) 就是原始状态，等于∞就是树根的状态，因此稍微减一点。但是为什么平稳的是好的？</strong></p>
+
+<p>这部分在李航的书里面还是有介绍的</p>
+
+<p>一般样本分为三类，一个是做训练用的，一个是用来调节超参数用的，最后一个是用来做测试用的。也可能是分为两类，没有调节超参数的。</p>
+
+<h1 id="决策树的效果">决策树的效果：</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HEA9IH9fGL.png?imageslim" alt="mark" /></p>
+
+<p>就是这样一刀一刀切出来的。</p>
+
+<h1 id="决策树的优缺点">决策树的优缺点：</h1>
+
+<p>优点：</p>
+
+<ul>
+<li><p>构造简单，判别计算快速</p></li>
+
+<li><p>对数据不需要任何加工，数据不需要任何加工，让本既可以是离散性也可以是连续型，而且数据也是允许缺失的。比如说20%的数据是没有的，但是这个对决策树，这个没有问题，如果是用线性的方法，缺少就没有办法对应，只能人工填上一个值。</p></li>
+
+<li><p>对unblance的数据效果很好。</p></li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li><p>泛化能力差，容易出现过拟合</p></li>
+
+<li><p>对新增加的样本，需要重新调整树的结构。如果新增加的一个样本，如果分错了，那么这个树就不是一个最优树了，那么就需要重新调整。<strong>怎么进行调整？</strong></p></li>
+</ul>
+
+<h1 id="使用决策树算法">使用决策树算法</h1>
+
+<p>需要注意的：树构造算法只适用于标称型数据，因此数值型数据必须离散化。</p>
+
+<p>决策树算法在进行测试的时候使用经验树计算错误率。<strong>什么是经验树？</strong></p>
+
+<p>构造完树之后，最好把树画出来看看是否符合你的预期。</p>
+
+<h1 id="决策树算法的特点">决策树算法的特点</h1>
+
+<p>优点：</p>
+
+<ul>
+<li><p>计算复杂度不高</p></li>
+
+<li><p>输出结果易于理解</p></li>
+
+<li><p>对中间值的缺失不敏感</p></li>
+
+<li><p>可以处理不相关特征数据  <strong>什么叫可以处理不相关特征数据？</strong></p></li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>可能会产生过度匹配问题。</li>
+</ul>
+
+<p>适用数据类型：</p>
+
+<ul>
+<li>数值型和标称型。</li>
+</ul>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 机器学习</li>
+<li> <a href="https://blog.csdn.net/xbinworld/article/details/44660339">机器学习方法(四)：决策树Decision Tree原理与实现技巧</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%92%8Cdqn/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">强化学习和DQN</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/%E6%A0%B8%E5%B2%AD%E5%9B%9E%E5%BD%92-scikit%E4%BE%8B%E5%AD%901/">
+            <span class="next-text nav-default">核岭回归 （scikit）例子1</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

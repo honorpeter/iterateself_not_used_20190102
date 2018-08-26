@@ -8,8 +8,8 @@ date: 2018-08-21 18:16:23
 
 ## 需要补充的
 
-* 有人搜了下： Conditional Random Fields as Recurrent Neural Networks  确认下，CRF是不是可以与 rnn 关联？
-* 视频要重新看一下啊，有很多的推理没有弄明白。
+- 有人搜了下： Conditional Random Fields as Recurrent Neural Networks  确认下，CRF是不是可以与 rnn 关联？
+- 视频要重新看一下啊，有很多的推理没有弄明白。
 
 
 

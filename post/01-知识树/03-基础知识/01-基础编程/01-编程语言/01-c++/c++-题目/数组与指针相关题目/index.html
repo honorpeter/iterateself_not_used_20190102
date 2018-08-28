@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>数组与指针相关题目 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Q 5 : 题目： 下面程序的输出是什么？ int main(void) { int a[5] = {1, 2, 3, 4, 5}; int *ptr = (int *)(&amp;amp;a &#43; 1); printf(&amp;quot;%d,%d&amp;quot;, *(a &#43; 1), *(ptr - 1)); return 0; } 答案: 2 5 解答: a表示数组首元素的地址，对a的所有" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E9%A2%98%E7%9B%AE/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="数组与指针相关题目" />
+<meta property="og:description" content="Q 5 : 题目： 下面程序的输出是什么？ int main(void) { int a[5] = {1, 2, 3, 4, 5}; int *ptr = (int *)(&amp;a &#43; 1); printf(&quot;%d,%d&quot;, *(a &#43; 1), *(ptr - 1)); return 0; } 答案: 2 5 解答: a表示数组首元素的地址，对a的所有" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E9%A2%98%E7%9B%AE/%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88%E7%9B%B8%E5%85%B3%E9%A2%98%E7%9B%AE/" /><meta property="article:published_time" content="2018-08-28T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-28T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="数组与指针相关题目">
+<meta itemprop="description" content="Q 5 : 题目： 下面程序的输出是什么？ int main(void) { int a[5] = {1, 2, 3, 4, 5}; int *ptr = (int *)(&amp;a &#43; 1); printf(&quot;%d,%d&quot;, *(a &#43; 1), *(ptr - 1)); return 0; } 答案: 2 5 解答: a表示数组首元素的地址，对a的所有">
+
+
+<meta itemprop="datePublished" content="2018-08-28T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-28T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="833">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="数组与指针相关题目"/>
+<meta name="twitter:description" content="Q 5 : 题目： 下面程序的输出是什么？ int main(void) { int a[5] = {1, 2, 3, 4, 5}; int *ptr = (int *)(&amp;a &#43; 1); printf(&quot;%d,%d&quot;, *(a &#43; 1), *(ptr - 1)); return 0; } 答案: 2 5 解答: a表示数组首元素的地址，对a的所有"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">数组与指针相关题目</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-28 </span>
+        
+        <span class="more-meta"> 833 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#q-5">Q 5 :</a></li>
+<li><a href="#q-7">Q 7 :</a></li>
+<li><a href="#q-18">Q 18 :</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h4 id="q-5">Q 5 :</h4>
+
+<p>题目：</p>
+
+<p>下面程序的输出是什么？</p>
+
+<pre><code>int main(void)
+{
+    int a[5] = {1, 2, 3, 4, 5};
+    int *ptr = (int *)(&amp;a + 1);
+    printf(&quot;%d,%d&quot;, *(a + 1), *(ptr - 1));
+    return 0;
+}
+</code></pre>
+
+<p>答案:</p>
+
+<p>2
+5</p>
+
+<p>解答:</p>
+
+<ol>
+<li>a表示数组首元素的地址，对a的所有操作均是以一个元素为单位的。</li>
+<li>&amp;a表示整个数组的地址，对&amp;a的所有操作均是以一个数组为单位的。<span style="color:red;">这个不知道</span></li>
+<li>ptr类型为int *，所有对ptr的所有操作均是以int大小为单位进行的。</li>
+<li>(int <em>)(&amp;a + 1)表示指向a数组最后一个元素后一个字节的int类型指针，</em>(ptr - 1)表示向前移动一个int类型的数据的位置。<span style="color:red;">这个向前移动一个 int 类型的数据，是指的什么？在这里，跟一个元素的位置一样吗？</span></li>
+<li>所有指针类型操作先看右侧是以什么为单位，之后再转换为左侧定义的单位。</li>
+</ol>
+
+<h4 id="q-7">Q 7 :</h4>
+
+<p>题目：
+下列代码的输出为：</p>
+
+<pre><code>int* pint = 0;
+pint += 6;
+cout &lt;&lt; pint &lt;&lt; endl;
+</code></pre>
+
+<p>答案:
+24</p>
+
+<p>解答:
+考察指针运算。
+1. 变量pint为指向int类型的指针，这里 <code>+1</code> 表示地址加4（pint值加4）。<span style="color:red;">这个之前不是很清楚</span>
+2. 变量pint初值为0，pint + 6后pint的值变为24。</p>
+
+<h4 id="q-18">Q 18 :</h4>
+
+<p>题目：
+以下函数用法正确的个数是：</p>
+
+<pre><code>void test1(){
+    unsigned char array[MAX_CHAR + 1], i;
+    for(i = 0;i &lt;= MAX_CHAR; i++){
+        array[i] = i;
+    }
+}
+
+char *test2(){
+    char p[] = &quot;hello world&quot;;
+    return p;
+}
+char *p = test2();
+
+void test3(){
+    char str[10];
+    str++;
+    *str = '0';
+}
+</code></pre>
+
+<p>答案:
+0</p>
+
+<p>解答:
+考察数组名和指针区别。
+1. i的范围有可能超过unsigned char范围。<span style="color:red;">嗯，这个是的。</span>
+2. 这里char p[] = &ldquo;hello world&rdquo;是数组，该数组是临时变量，函数结束后不能继续使用。<span style="color:red;">数组是临时变量，函数结束后不能继续使用</span>
+3. 如果为char *p = &ldquo;hello world&rdquo;，这里p是指针并指向常量区字串，虽然p会被销毁，但字符串仍然在，就不会出问题。<span style="color:red;">嗯，这个之前不知道。p 会被销毁，那么这个字符串还可以返回回来吗？</span>
+4. 这里 str 是数组名，数组名是常量，不可以自增，正确的操作是char *p = str; p++; *p = &lsquo;0&rsquo;。<span style="color:red;">数组名是常量，不可以自增，这个与上面的 Q5 的问题可以放在一起看，&amp;a表示整个数组的地址，对&amp;a的所有操作均是以一个数组为单位的。嗯，现在才对这个稍微有些了解，以前的都忘记了。</span></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E9%A2%98%E7%9B%AE/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">多线程</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E9%A2%98%E7%9B%AE/%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0-%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0%E9%97%AE%E9%A2%98/">
+            <span class="next-text nav-default">有符号数-无符号数问题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

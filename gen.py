@@ -1,4 +1,6 @@
 
+# 根据所有的文本生成一个完整目录
+
 import time
 from datetime import datetime
 import os

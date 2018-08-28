@@ -1,5 +1,5 @@
 ---
-title: Git 多个key 的使用
+title: Git 多个key的使用
 toc: true
 date: 2018-08-26 15:40:00
 ---
@@ -26,3 +26,4 @@ ssh-add /c/Users/evo/.ssh/id_rsa_hugo
 - [Running SSH Agent when starting Git Bash on Windows](https://stackoverflow.com/questions/18404272/running-ssh-agent-when-starting-git-bash-on-windows)
 - [Getting ssh-agent to work with git run from windows command shell](https://stackoverflow.com/questions/3669001/getting-ssh-agent-to-work-with-git-run-from-windows-command-shell/15870387#15870387)
 - [Working with SSH key passphrases](https://help.github.com/articles/working-with-ssh-key-passphrases/#auto-launching-ssh-agent-on-git-for-windows)
+

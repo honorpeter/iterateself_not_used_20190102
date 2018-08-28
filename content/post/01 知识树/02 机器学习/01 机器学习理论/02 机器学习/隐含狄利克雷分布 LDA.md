@@ -1,5 +1,5 @@
 ---
-title: LDA
+title: 隐含狄利克雷分布 LDA
 toc: true
 date: 2018-08-21 18:16:22
 ---

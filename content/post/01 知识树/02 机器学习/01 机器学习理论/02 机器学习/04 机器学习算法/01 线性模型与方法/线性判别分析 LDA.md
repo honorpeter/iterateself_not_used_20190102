@@ -1,5 +1,5 @@
 ---
-title: LDA2
+title: 线性判别分析 LDA
 toc: true
 date: 2018-08-01 23:30:21
 ---

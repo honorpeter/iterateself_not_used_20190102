@@ -1,3 +1,5 @@
+主要内容在 /content/post 内
+
 # iterateself
 
 wiki for self iterate.

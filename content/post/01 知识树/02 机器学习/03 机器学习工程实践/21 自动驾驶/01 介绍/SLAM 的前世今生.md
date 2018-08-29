@@ -27,15 +27,14 @@ SLAM作为一种基础技术，从最早的军事用途（核潜艇海底定位�
 
 目前用在SLAM上的Sensor主要分两大类，激光雷达和摄像头。（待会儿发的部分素材摘自官网、论文、专利，侵删）。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180828/Fb0KJh28ae.png?imageslim)
+![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/l4fG47Hef8.png?imageslim)
 
 
 这里面列举了一些常见的雷达和各种深度摄像头。激光雷达有单线多线之分，角分辨率及精度也各有千秋。SICK、velodyne、Hokuyo以及国内的北醒光学、Slamtech是比较有名的激光雷达厂商。他们可以作为SLAM的一种输入形式。
 
 这个小视频里展示的就是一种简单的2D SLAM。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180828/bAF552jGi4.gif)
-
+![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/6aJjhLJ8c4.gif)
 
 这个小视频是宾大的教授kumar做的特别有名的一个demo，是在无人机上利用二维激光雷达做的SLAM。
 

@@ -1,3 +1,8 @@
+---
+title: 01 Python 简介
+toc: true
+date: 2018-08-29
+---
 #### 第5章Python基础
 
 Life is short, you need Python 人生苦短，你需要用Python

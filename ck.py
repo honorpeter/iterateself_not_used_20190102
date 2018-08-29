@@ -16,13 +16,15 @@ def Checkyaml(path):
         else:
             filemt= time.localtime(time.time())
             fileTime= time.strftime("%Y-%m-%d",filemt)
+            print(p)
 
             # 快速检查前两行
             lines = linecache.getlines(p)[0:2]
-            if lines[0]=="---\n":
-                if lines[1]==('title: '+os.path.splitext(os.path.basename(p))[0]+'\n'):
-                    linecache.clearcache()
-                    continue
+            if len(lines) == 2:
+                if lines[0]=="---\n":
+                    if lines[1]==('title: '+os.path.splitext(os.path.basename(p))[0]+'\n'):
+                        linecache.clearcache()
+                        continue
 
             # 对不符合的文本进行修改
             linecache.clearcache()

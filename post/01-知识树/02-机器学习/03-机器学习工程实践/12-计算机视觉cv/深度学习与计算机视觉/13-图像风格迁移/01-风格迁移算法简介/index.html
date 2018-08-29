@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第13章图像风格迁移 本章简要介绍一种实现图像风格迁移的算法，并介绍MXNet中对照片风格化处理的 有趣例子。 13.1风格迁移算法简介 本节简要介" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/13-%E5%9B%BE%E5%83%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/01-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="第13章图像风格迁移 本章简要介绍一种实现图像风格迁移的算法，并介绍MXNet中对照片风格化处理的 有趣例子。 13.1风格迁移算法简介 本节简要介" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/13-%E5%9B%BE%E5%83%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/01-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="第13章图像风格迁移 本章简要介绍一种实现图像风格迁移的算法，并介绍MXNet中对照片风格化处理的 有趣例子。 13.1风格迁移算法简介 本节简要介">
+
+
+
+<meta itemprop="wordCount" content="6656">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="第13章图像风格迁移 本章简要介绍一种实现图像风格迁移的算法，并介绍MXNet中对照片风格化处理的 有趣例子。 13.1风格迁移算法简介 本节简要介"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 6656 words </span>
+        <span class="more-meta"> 14 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#第13章图像风格迁移">第13章图像风格迁移</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h5 id="第13章图像风格迁移">第13章图像风格迁移</h5>
+
+<p>本章简要介绍一种实现图像风格迁移的算法，并介绍MXNet中对照片风格化处理的 有趣例子。</p>
+
+<p>13.1风格迁移算法简介</p>
+
+<p>本节简要介绍通过基于卷积神经网络的图像重建，实现风格迁移的方法。</p>
+
+<p>13.1.1通过梯度下降法进行图像重建</p>
+
+<p>前面已经讲过，神经网络可以看作是一种变换，输入在每一层变接后都可以看作是一 个向量，这个向量经过下一层继续变换成为新的向量。因为是变换，很自然会想到是否可 以做逆变换，也就是根据提取的特征进行图像重建的问题。对于一般的卷积神经网络，严 格的逆变换常常是不行的，不过这个问题有不少人研究过，其中一种比较有代表性的方法 是 VGG 组在 2015 年 CVPR 上发表的《Understanding Deep Image Representations by Inverting Them》。方法的基本思路是原始图片经过变换后会得到一个向量作为特征，这时候保持提 取特征的网络的参数不变，用任意输入（比如白噪声）经过网络变换可以得到一个特征， 然后定义一种损失函数来计算这个特征和原图得到特征的差异，并利用梯度下降法进行优 化，同时加入规范化的项对要重建的图像进行约束。这就转换成了一个优化问题：</p>
+
+<p>(公式13-1)</p>
+
+<p>argmm(G(x)-G(ximg))2+2/?(x)</p>
+
+<p>其中，ximg是目标图像，是迭代过程中的图像，所以维度是图像的宽（W）乘以高（//） 再乘以通道数（C）。优化的目标函数是要让目标图像经过一个卷积神经网络G得到的特 征，和要重建的图像经过G得到的特征尽量一致。采用欧式距离作为损失函数，另外，因 为通常是个不可逆问题，所以需加上规范化的项。规范项有很多选项，原文中采用的是图 像的梯度，外加考虑了图像分辨率大小的取值幅度。</p>
+
+<p>求解这个问题就可以得到重建的图像，如图13-la所示。至于变换G，可以是不同的 网络，也可以是同一个网络中任何层得到的特征。第4章中已经讨论过，对于一般的分类/ 检测网络等，越靠近输入的特征越底层，比如纹理，或是简单形状等；越靠近输出的特征 则包含越多的语义信息，比如不同种类的物体或是某类物体的明显特点。在图像重建中， 特征所处的位置则反映在重建的完整性上。对于底层的卷积核，如果数量足够，是能够很 好保存原始图像中的信息的。另一方面因为低层的特征响应图的维度通常远高于输入的图 像，这时候只要特征足够多样化，几乎是可以完美重建输入图像。随着特征的不断传播， 丢失的信息越来越多，尤其是到了很高的层之后，特征的维度也降下来，这时候通过梯度 下降重建输入图像成了典型的病态问题，重建的效果就不会很好，最后的结果受到规范化 项的影响也比较大。体现在视觉上就是低层特征重建的图像和原图更像包括线条等细节， 都能够得到很好的还原，而高层特征重建的图像则丢失较多内容，尤其是细节部分。比如</p>
+
+<p>用 MXNet 的 neural-style 自带的 VGG-19 模型为例，<a href="https://github.com/dmlc/mxnet/blob/">https://github.com/dmlc/mxnet/blob/</a> master/example/neural-style/model_vggl9.py,分另lj基于 relul_l、relu2_l、relu3_l、relu4_l 和relu5_l的特征进行图像重建，就会发现随着特征层数的不断变高，丢失的信息从细节 边缘到颜色，再到整个画面，如图13-lb所示。</p>
+
+<p>基于不同层特征重建的图像</p>
+
+<p>relull relu2_l relu3_l relu4_l    relu5_l</p>
+
+<p>图13-1通过梯度下降的方法重建图像示意图</p>
+
+<p>13.1.2图像风格重建和Gram矩阵</p>
+
+<p>提到图像风格，其实是个很主观的概念，每个人都有不同的理解，比如绘画的表现形 式有写实、印象、浪漫等。稍微具体一些的比如以画的类型区分，有油画、水彩、国画或 素描，到这个层级就已经偏向客观一些了，从纹理上就能很明显地区分。更细致具体的就 是绘画的笔触了，比如素描中不同的笔触会留下不同的线条和变化。计算机视觉中，谈到 图像风格一般指的都是偏于客观的成分，也就是纹理、线条等特点。图像风格学习基于的 早期研究都属于计算机视觉中纹理合成(Texture Synthesis)的范畴，这在第1章中也介绍 过。所以在本章中说到图像风格的学习，其实具体一些可以理解为基于卷积神经网络的纹 理合成。</p>
+
+<p>通过13.1.1节我们知道了如何通过图像特征重建图像内容的一种方法，本节介绍基于 同样套路来重建图像纹理风格的方法。既然是纹理，其中的一个特点就是和图像中的具体 位置无关（比如第1章图l-12a）,基于此常见的思路有两大类：一类是参数化方法，把 图像中的某种统计信息拿出来作为一种代表纹理的特征；另一类是非参数化方法，大体思 路是随机采样图像中的区域，然后通过某种自然的方式合成新的纹理。本节介绍的方法属 于第一类，利用卷积神经网络不同层响应图的Gram矩阵代表纹理的信息：</p>
+
+<p>（公式 13-2）</p>
+
+<p>k</p>
+
+<p>其中Gz代表第/层响应图对应的Gram矩阵，F/代表该层第f个卷积核对应的响应图。通 常一个响应图是二维的，这里把响应图展开为一个一维向量，其中Fz/代表该层第/个响应 图的第*个元素。所以Gram矩阵中每个元素就是该层响应图对应的两个通道的点积，代 表了这两个通道的特征之间的相关性。接下来就和13.1.1节一样了，把每层Gram矩阵作 为特征，让重建图像的Gram矩阵尽量接近原图的Gram矩阵，也是个优化问题：</p>
+
+<p>x = arg min V WjE,    （公式 13-3）</p>
+
+<p>xeR.xC 勺-</p>
+
+<p>其中松是每一层的loss,    是该层loss的权重。松的形式是考虑到每层响应图大小后</p>
+
+<p>的Gram矩阵差异。</p>
+
+<p>（公式叫）</p>
+
+<p>其中是输入图像每层的Gram矩阵。从第4章中知道，不同层响应图的像素对 应着原画面上不同大小的感受野，同时越高层相应包含的信息越抽象，*这种特性一定程度 上也体现在重建的纹理中。下面以梵高的《星夜》作为输入，来看看分别以relul_l&gt; relu2_l&gt; relu3_l、relu4_l和relu5_l,还有把这些层综合考虑一起的Gmm矩阵作为优化目标得到的 纹理。采用的模型同样是mxnet/example/neural-style自带的VGG-19，结果如图13-2所75。</p>
+
+<p>relul 一 1    relu2_l    relu3_l</p>
+
+<p>“The Starry Night” by Vincent van Gogh</p>
+
+<p>图13-2不同层Gram矩阵重建纹理的结果</p>
+
+<p>通过图13-2可以观察出不同层的Gram矩阵对重建图像的贡献，比如relul_l只能得 到很高频的纹理特征，差不多是画面中最基本的色块，无序程度也最高。而随着层数的增 加，得到的重建纹理中渐渐出现了类似于线条走向的信息，甚至能勉强看出一点梵高特有 的漩涡状线条。然后把所有5个层对应的loss平均加在一起，就综合考虑了各种不同尺度 和层次的纹理。得到的重建如图13-2中的all图所示，感觉夜空、小镇、星月和松树像是 都溶进了一幅随手涂的油画里。</p>
+
+<p>13.1.3图像风格迁移</p>
+
+<p>图像内容和图像风格(纹理)的重建方法都有了，那么图像风格迁移的思路就很自然 了，就是把两种loss考虑在一起，重建的图像会融合一张图像的内容和另一张图像的风格， 所以仍然是个优化问题。</p>
+
+<p>x = argmin aLcontent (x,xcontent) + ^styIe (x,xstyle) + 2/? (x) (公式 13-5)</p>
+
+<p>xeK//xrxc</p>
+
+<p>其中々。。⑽和LeQntent分别是内容图像和对应的loss,    £style分别是风格图像和对</p>
+
+<p>应的loss, 7?(x)是规范项。a, 和A分别是权重系数，用来决定重建的图像更偏重内容还 是风格。这个方法算是基于卷积神经网络进行风格迁移的开山之作，最早由德国Tubingen 大学的 Leon A. Gatys 发表在 arxiv 上的预印版论文《A Neural Algorithm of Artistic Style》 中，后来完善版的论文《Image Style Transfer Using Convolutional Neural Networks》发表在 2016年的CVPR上。</p>
+
+<p>这种直接基于优化的方法优点是简单清晰，发表之后就陆续出现改进风格loss的各种 办法。比如德国Mainz大学一个研究组，用基于图像patch的马尔科夫随机场loss替换Gram 矩阵的《Combining Markov Random Fields and Convolutional Neural Networks for Image Synthesis)),对于很多图片的效果要自然很多。</p>
+
+<p>从图像直接优化的过程其缺点在于很慢，所以另一个方向是针对慢的问题进行研究。 比如 Stanford 的 Li Fei-Fei 组发表在 2016 年 ECCV 上的论文 «Perceptual Losses for Real-Time Style Transfer and Super-Resolution》，把内容图像经过一个变换网络，再送入计 算内容加风格loss的网络，这样再生成新图片的时候就不需要经过漫长的优化过程了，达 到了实时。在MXNet中的官方例子里，有个end_to_end的文件夹，其中的方法就和这个 思路类似但又不完全一样，有兴趣的读者可以参考<a href="http://dmlc.ml/mxnet/2016/06/20/">http://dmlc.ml/mxnet/2016/06/20/</a> end-to-end-neural-style.html。</p>
+
+<p>2017 年 1 月，在 arXiv 上出现了一篇叫《Bringing Impressionism to Life with Neural Style Transfer in Come Swim》的论文，这篇论文用风格迁移的方法对影片《Come Swin》的画面 进行了风格转换和调参，提出了风格迁移和艺术结合的研究方向。</p>
+
+<p>13.2 MXNet中的图像风格迁移例子</p>
+
+<p>本节一起来了解MXNet下实现图像风格迁移的官方例子，并试试效果。</p>
+
+<p>13.2.1 MXNet的风格迁移实现</p>
+
+<p>MXNet中风格迁移的实现在mxnet/example/neural-style下，实现的是最原始的Gatys 版的算法，文件列表如图13-3所示。</p>
+
+<table>
+<thead>
+<tr>
+<th>g README.md</th>
+<th>New callback interface for training visualization. (#3849)</th>
+<th>2 months ago</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>|S) checkpoint-viewer.ipynb</td>
+<td>New callback interface for training visualization. (#3849)</td>
+<td>2 months ago</td>
+</tr>
+
+<tr>
+<td>g) download.sh</td>
+<td>I exam pie] init commit of neural-style</td>
+<td>a year ago</td>
+</tr>
+
+<tr>
+<td>區]f»nd.mxnet.py</td>
+<td>lexamplel commit of neural-style</td>
+<td>a year ago</td>
+</tr>
+
+<tr>
+<td>g] modeLvggl9.py</td>
+<td>(STYLE] make pure symbolic impl, add tv loss</td>
+<td>10 months ago</td>
+</tr>
+
+<tr>
+<td>@ neuralartipynb</td>
+<td>New callback interface for training visualization. (#3849)</td>
+<td>2 months ago</td>
+</tr>
+
+<tr>
+<td>g) nstyle.py</td>
+<td>New callback interface for training visualization. (#3849)</td>
+<td>2 months ago</td>
+</tr>
+</tbody>
+</table>
+
+<p>图13-3 MXNet中neural-style例子的主要文件</p>
+
+<p>其中download.sh用于下载VGG-19模型的参数；model_vggl9.py为模型结构的定义； 其他大部分实现都在nstyle.py S； find mxnet.py是用来自动导入MXNet的脚本;两个ipynb 是ipython notebook文件，主要演示如何运行和查看优化过程中的结果，在控制台执行：</p>
+
+<p>» jupyter notebook</p>
+
+<p>然后在浏览器中找到这两个ipynb文件就可以打开。因为方法本舞非常简单，所以主 要关注的几乎都在nstyle.py中，下面通过注释的方式结合代码一起来看看这个文件的具体 实现。</p>
+
+<p>import find_mxnet import mxnet as mx import numpy as np import importlib import logging</p>
+
+<p>logging.basicConfig(level=logging.DEBUG) import argparse</p>
+
+<p>from collections import namedtuple from skimage import io, transform</p>
+
+<p>from skimage.restoration import denoise_tv_chambolle</p>
+
+<p>CallbackData = namedtuple(* CallbackData&rsquo;, field_names=[* eps&rsquo;, &lsquo;epoch *,</p>
+
+<p>* img <em>,</em> filename1])</p>
+
+<p>def get_args(arglist=None):</p>
+
+<p>ft vv vv</p>
+
+<p>各种输入参数的定义</p>
+
+<p>i&rdquo;i n</p>
+
+<p>parser = argparse.ArgumentParser(description=1 neural style1)</p>
+
+<p>#指定模型，默认使用vggl9,如果要使用自己定义的模型，需要按照 # model<em>vggl 9. py的格式定义好style和content对应的特征层 #并命名为model</em>[模型名字].py的形式</p>
+
+<p>parser.add_argument(1——model *, type=str, default=&lsquo;vggl9 *, choices =    [&lsquo;vgg1],</p>
+
+<p>help =    * the pretrained model</p>
+
+<p>to use1)</p>
+
+<p>#指定内容图片</p>
+
+<p>parser.add_argument(&lsquo;&ndash;content-image&rsquo;, type=str, default=1 input/ IMG_4343.jpg’，</p>
+
+<p>help= * the content image *)</p>
+
+<p>#指定风格图片，默认是梵高的《星夜》</p>
+
+<p>parser.add_argument(&lsquo;&ndash;style-image *,    type=str,    default=&lsquo;input/</p>
+
+<p>starry_night.jpg&rsquo;,</p>
+
+<p>help=&lsquo;the style image&rsquo;)</p>
+
+<p>#当重建图像的相对变换小于stop-eps时停止迭代</p>
+
+<p>parser.add_argument(*&ndash;stop-eps&rsquo;z type=float, default=.005z</p>
+
+<p>help=1 stop if the relative</p>
+
+<p>chanage is less than eps *)</p>
+
+<p>#内容loss的权重，会认10</p>
+
+<p>parser.add_argument(*——content-weight *, type=float, default=10, help=&lsquo;the weight for the</p>
+
+<p>content image1)</p>
+
+<p>#风格loss的权重，默认1</p>
+
+<p>parser.add_argument(*——style-weight *, type=floatz default=l,</p>
+
+<p>help=&lsquo;the weight for the style</p>
+
+<p>image1)</p>
+
+<p>#规范项之totol-variation的权重</p>
+
+<p>parser.add_argument(1&ndash;tv-weight *, type=float, default=le-2,</p>
+
+<p>help= * the magtitute on TV loss&rsquo;)</p>
+
+<p>#最大迭代次数</p>
+
+<p>parser.add_argument(*&ndash;max-num-epochs *, type=int, default=1000, help= * the maximal number of</p>
+
+<p>training epochs *)</p>
+
+<p>#限制输入图像的最长边</p>
+
+<p>parser.add_argument(* ——max-long-edge•, type=int, help=* resize the</p>
+
+<p>default=600, content image *)</p>
+
+<p>001,</p>
+
+<p>learning rate1)</p>
+
+<p>#基础学习率</p>
+
+<p>parser.add_argument(&lsquo;——lr&rsquo;, type=float, default= help=&lsquo;the initial</p>
+
+<p>#指定要用来进行优化的GPU</p>
+
+<p>parser.add_argument(&lsquo;&ndash;gpu&rsquo;, type=int, default=0,</p>
+
+<p>help=&lsquo;which gpu card to use,</p>
+
+<p>-1 means using cpu *)</p>
+
+<p>#指定^出文件，包含优化过程中的文件和最后文件的输出位置</p>
+
+<p>parser.add_argument(&lsquo;——output_dir *, type=str, default= * output/*, help=1 the output image *)</p>
+
+<p>#每隔多少次进行一次重建图像的保存</p>
+
+<p>parser.add_argument(1&ndash;save-epochs *, type=int, default=50,</p>
+
+<p>help= * save the output every n</p>
+
+<p>epochs’)</p>
+
+<p>#移除噪音的幅度</p>
+
+<p>parser,add_argument(&lsquo;&ndash;remove-noise*, type=float, default=.O2,</p>
+
+<p>help=&lsquo;the magtitute to remove</p>
+
+<p>noise&rsquo;)</p>
+
+<p>#学习率变化的策略，默认75次迭代学习率下降为之前0.9倍</p>
+
+<p>parser.add_argument(&lsquo;&ndash;lr-sched-delay1, type=int, default=75,</p>
+
+<p>help=&lsquo;how many epochs between</p>
+
+<p>decreasing learning rate *)</p>
+
+<p>parser.add_argument(&lsquo;——lr-sched-factor&rsquo; , type=int, default=0.9, help=&lsquo;factor to    decrease</p>
+
+<p>learning rate on schedule *) if arglist is None:</p>
+
+<p>return parser.parse_args()</p>
+
+<p>else:</p>
+
+<p>return parser.parse_args(arglist)</p>
+
+<p>def PreprocessContentlmage(path, long_edge):</p>
+
+<p>If If If</p>
+
+<p>预处理内容输入图片</p>
+
+<p>内容在此省略</p>
+
+<p>def PreprocessStylelmage(path, shape):</p>
+
+<p>预处理风格输入图片</p>
+
+<p>VI IV VT</p>
+
+<p>&hellip;内容在此省略&hellip;</p>
+
+<p>def Postprocesslmage(img):</p>
+
+<p>VI IV IV</p>
+
+<p>将重建得到的向量变换回图像</p>
+
+<table>
+<thead>
+<tr>
+<th>img =</th>
+<th>np.resize(img,</th>
+<th>(3,</th>
+<th>img.shape[2], img.shape[3]))</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>img[0,</td>
+<td>:]+= 123.68</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>img[1,</td>
+<td>:]+=    116.779</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>img[2,</td>
+<td>:]+= 103.939</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>img =</td>
+<td>np.swapaxes(img,</td>
+<td>1,</td>
+<td>2)</td>
+</tr>
+
+<tr>
+<td>img =</td>
+<td>np.swapaxes(img,</td>
+<td>0,</td>
+<td>2)</td>
+</tr>
+
+<tr>
+<td>#防止溢出</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>img =</td>
+<td>np.clip(img, 0,</td>
+<td>255)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>return img.astype(&lsquo;uint8 *) def SaveImage(img, filename, remove_noise=0.):</p>
+
+<p>If If If</p>
+
+<p>保存图片</p>
+
+<p>vv vv n</p>
+
+<p>&hellip;内容在此省略&hellip;</p>
+
+<p>def style_gram_symbol(input_size, style):</p>
+
+<p>VV VV If</p>
+
+<p>for i in range(len(style.list_outputs())): shape = output_shapes[i]</p>
+
+<p>x = mx.sym.Reshape(style[i],    target_shape=(int(shape[1]),</p>
+
+<p>int(np.prod(shape[2:]))))</p>
+
+<p>#利用全连接层快速计算点积：(x, x-T)</p>
+
+<p>gram = mx.sym.FullyConnected(x, x, no<em>bias=True, num</em> hidden=shape[1])</p>
+
+<p>gram一list.append(gram)</p>
+
+<p>grad_scale.append(np.prod(shape[1:])    ★ shape[1]〉</p>
+
+<p>return mx.sym.Group(gram_list), grad_scale</p>
+
+<p>def get_loss(gram, content):</p>
+
+<p>ft VV II</p>
+
+<p>利用Gram矩阵计算风格的loss</p>
+
+<p>gram_loss =    []</p>
+
+<p># ^＞文中不同的是这里并没有设置权重，而是直接相加</p>
+
+<p>for i in range(len(gram.list_outputs())):</p>
+
+<p>gvar = mx. sym. Variable (ntarget<em>gram</em>%d,&rsquo; % i)</p>
+
+<p>gram_loss.append(mx.sym.sum(mx.sym.square(gvar - gram[i])))</p>
+
+<p>cvar = mx. sym.Variable (ntarget_content**)</p>
+
+<p>content_loss = mx.sym.sum(mx.sym.square(cvar - content)) return mx.sym.Group(gram_loss), content_loss</p>
+
+<p>def get_tv_grad_executor(img, ctx, tv_weight):</p>
+
+<p>VV VI IV</p>
+
+<p>计算图像梯度作为Total Variation的定义 思路是用3x3的Laplace和对图像做卷积</p>
+
+<p>if tv_weight &lt;=    0.0:</p>
+
+<p>return None</p>
+
+<p>nchannel = img.shape[1]</p>
+
+<p>simg = mx.sym.Variable(&ldquo;img&rdquo;)</p>
+
+<p>skernel = mx.sym.Variable(&ldquo;kernel&rdquo;)</p>
+
+<p>channels = mx.sym.SliceChannel(simg, num_outputs=nchannel) out = mx.sym.Concat(*[</p>
+
+<p>mx.sym.Convolution(data=channels [i], weight=skernel, num_filter=l,</p>
+
+<p>kernel=(3f    3), pad=(l,l),</p>
+
+<p>no_bias=True,</p>
+
+<p>stride=(1,1))</p>
+
+<p>for i in range(nchannel)])</p>
+
+<p>out = out * tv_weight</p>
+
+<p>return out.bind(ctx, args={&ldquo;img&rdquo;: img,</p>
+
+<p>&ldquo;kernel&rdquo;: kernel})</p>
+
+<p>def train_nstyle(args, callback=None):</p>
+
+<p>IV VV ft</p>
+
+<p>训练过程的定义</p>
+
+<p>IV VI If</p>
+
+<p>#输入：内容图像和风格图像</p>
+
+<p>dev = mx. gpu (args. gpu) if args.gpu &gt;=    0 else mx. cpu ()</p>
+
+<p>content_np = PreprocessContentlmage(args.content_imagez    args.</p>
+
+<p>max_long_edge)</p>
+
+<p>style_np = PreprocessStylelmage(args.style<em>imagez shape=content</em> np.shape)</p>
+
+<p>size = content_np.shape[2:]</p>
+
+<p>#模型和相应的executor</p>
+
+<p>Executor = namedtuple(1 Executor&rsquo;,    [* executor1,    &lsquo;data&rsquo;,    *data_grad&rsquo;])</p>
+
+<p>model_module = importlib.import<em>module(*model</em>&rsquo; + args.model) style, content = model_module.get_symbol()</p>
+
+<p>gram, gscale = style_gram_symbol(size, style)</p>
+
+<p>model_executor = model—module.get_executor(gram, content, size,</p>
+
+<p>dev)</p>
+
+<p>model_executor.data[: ]    = style_np</p>
+
+<p>model_executor.executor.forward() style—array =    []</p>
+
+<p>for i in range(len(model_executor.style)):</p>
+
+<p>style_array.append(model_executor.style[i].copyto(mx.cpu())) model_executor.data[:]    = content_np</p>
+
+<p>model_executor.executor.forward()</p>
+
+<p>content_array = model_executor.content.copyto(mx.cpu())</p>
+
+<p>#图像内_容和风格特征已经获&rsquo;取，删除当前executor #接下来用新的executor用于重建图像的梯度下降 del model_executor</p>
+
+<p>style_loss, content_loss = get_loss(gram, content) model_executor = model_module•get一executor(</p>
+
+<p>style_loss, content_loss, size, dev) grad_array =    []</p>
+
+<p>for i in range(len(style_array)):</p>
+
+<p>style_array[i].copyto(model_executor.arg_dict[ntarget<em>gram</em>%dn % i])</p>
+
+<p>grad_array.append(mx.nd.ones((1z), dev) ★ (float(args.</p>
+
+<p>style_weight) / gscale[i]))</p>
+
+<p>grad_array.append(mx.nd.ones((1, ) , dev) * (float(args.content— weight)))</p>
+
+<p>print([x.asscalar() for x in grad_array])</p>
+
+<p>content_array.copyto(model_executor.arg一diet[&ldquo;target_contentu])</p>
+
+<p>#要重達的图像，用随机噪声初始不七</p>
+
+<p>img = mx.nd.zeros(content_np.shape, ctx=dev) img[:]    = mx.rnd.uniform(-0.1,    0.1, img.shape)</p>
+
+<p>#学习率策略</p>
+
+<p>lr = mx.lr_scheduler.FactorScheduler(step=args.lr_sched_delay, factor=args.lr_sched_factor)</p>
+
+<p>#用NAG进行梯度下降</p>
+
+<p>optimizer = mx.optimizer.NAG(</p>
+
+<p>learning_rate = args.lr, wd =    0.0001,</p>
+
+<p>momentum=0.95, lr_scheduler = lr)</p>
+
+<p>optim_state = optimizer.create_state(0, img) logging.info(* start training arguments %s &lsquo; , args) old_img = img.copyto(dev)</p>
+
+<p>clip_norm =    1    * np.prod(img.shape)</p>
+
+<p>tv_grad_executor = get_tv_grad_executor(img, dev, args.tv_weight)</p>
+
+<p># _执行&lt;度下降</p>
+
+<p>for e in range(args,max_num_epochs): img.copyto(model_executor.data) model executor.executor.forward()</p>
+
+<p>——    i</p>
+
+<p>model_executor.executor.backward(grad_array)</p>
+
+<p>gnorm = mx.nd.norm(model_executor.data_grad).asscalar()</p>
+
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>梯度截断防止过大梯度出现</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>if</td>
+<td>gnorm &gt; clip norm:model executor.data_grad[:]</td>
+<td>★= clip norm /</td>
+<td>&lsquo;gnorm</td>
+</tr>
+
+<tr>
+<td>if</td>
+<td>tv grad executor is not None: tv grad executor.forward() optimizer.update(0, img,</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>model_executor.data_grad</p>
+
+<p>+ tv_grad_executor.outputs [ 0],</p>
+
+<p>optim—state)</p>
+
+<p>else:</p>
+
+<p>optimizer.update(0, img, model_executor.data_grad,</p>
+
+<p>optim_state)</p>
+
+<p>new_img = img</p>
+
+<p># ;算相对变化，用于判断是否停止迭代</p>
+
+<p>eps = (mx.nd.norm(old_img - new_img) / mx.nd.norm (new_img)).asscalar()</p>
+
+<p>old_img = new_img.copyto(dev)</p>
+
+<p>logging.info(&lsquo;epoch %d, relative change %f&rsquo;, e, eps) if eps &lt; args. stop_eps:</p>
+
+<p>logging.info(* eps &lt; args.stop_eps, training finished*) break</p>
+
+<p>if callback:</p>
+
+<p>outfn = args.output<em>dir +    *e</em>*+str(e+1) + <em>.jpg</em></p>
+
+<p>npimg = new_img.asnumpy()</p>
+
+<p>Savelmage(npimg, outfn, args.remove_noise) if callback:</p>
+
+<p>cbdata[* filename * ]    = outfn</p>
+
+<p>cbdata[* img1]</p>
+
+<p>npimg</p>
+
+<p>if callback:</p>
+
+<p>callback(cbdata)</p>
+
+<p>final_fn = args.output_dir +    */final.jpg *</p>
+
+<p>SaveImage(new_img.asnumpy(), final_fn)</p>
+
+<p>if <em>name</em> ==    •’<em>main</em>&ldquo;:</p>
+
+<p>args = get_args() train_nstyle(args)</p>
+
+<p>model_vggl9.py文件这里也简单看一下，主要值得关注的是get_symbol()函数的最后 几行：</p>
+
+<p>#定义用来提取风格和内容特征的层</p>
+
+<p>style = mx.sym.Group([relul_l, relu2_l, relu3_l, relu4_l, relu5_l])</p>
+
+<p>content = mx.sym.Group([relu4_2]) return style, content</p>
+
+<p>可以看到风格训练有用到从高层到低层的特征，而训练图像内容只使用了 relu4_2这 一比较高层的特征，这样可以让纹理更充分地替代图像内容中的细节。</p>
+
+<p>13.2.2对图片进行风格迁移</p>
+
+<p>首先来试试自带的例子，第一步下载预训练好的VGG-19模型参数和示例图片。</p>
+
+<p>&gt;&gt; sh download, sh</p>
+
+<p>之后会在input文件夹下得到两幅演示的图像，model文件夹下得到VGG-19的模型参 数vggl9.params。然后直接运行：</p>
+
+<p>» python nstyle.py</p>
+
+<p>X</p>
+
+<p>即能得到把《星夜》风格迁移到建筑物上的图片了，输出在output文件夹下。作为演示， 用下面命令运行脚本，每隔30次迭代获取一幅重建中的图像。</p>
+
+<p>» python nstyle.py ——save-epochs 30 训练中重建图像的变化过程如图13-4所示。</p>
+
+<p><img src="file:///E:/00.Ebook/__Recent__html__/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)_files/00_f1a666600ea1973ac6c9%20%2097d59f060146b694280ee3019eb0_14279998(1)-315.jpg" alt="img" /></p>
+
+<p>迭代30次    迭代90次    迭代150次</p>
+
+<p>图13-4重建图片随训练进行的变化过程</p>
+
+<p>可以看到随着迭代次数的增加，图片渐渐从一团乱糟变成了带有《星夜》味道的图像。 下面再来试试其他的照片和风格，通过&ndash;content-image和&ndash;style-image参数可以分别指定内 容和风格图像，通过-content-weight和&ndash;style-weight可以调整相应loss的比重。下面用海 边拍摄的照片分别加上莫奈的《帆船，夜晚印象》，以及19世纪德国浪漫主义画家Caspar David Friedrich的《云端的旅行者》，并把风格的权重系数增加到2来测试，结果如图13-5 所示。</p>
+
+<p><img src="file:///E:/00.Ebook/__Recent__html__/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)_files/00_f1a666600ea1973ac6c9%20%2097d59f060146b694280ee3019eb0_14279998(1)-318.jpg" alt="img" /></p>
+
+<p><img src="file:///E:/00.Ebook/__Recent__html__/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)_files/00_f1a666600ea1973ac6c9%20%2097d59f060146b694280ee3019eb0_14279998(1)-319.jpg" alt="img" /></p>
+
+<p><img src="file:///E:/00.Ebook/__Recent__html__/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)_files/00_f1a666600ea1973ac6c9%20%2097d59f060146b694280ee3019eb0_14279998(1)-320.jpg" alt="img" /></p>
+
+<p>图13-5图像风格迁移的例子</p>
+
+<p><img src="file:///E:/00.Ebook/__Recent__html__/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)/00_深度学习与计算机视觉%20%20算法原理、框架应用与代码实现_14279998(1)_files/00_f1a666600ea1973ac6c9%20%2097d59f060146b694280ee3019eb0_14279998(1)-322.jpg" alt="img" /></p>
+
+<p>从图13-5中看效果还不错，从《帆船，夜晚印象》的例子来看，得到的照片甚至暗部 细节也提升了，相当于实现了 HDR (High Dynamic Range)效果，也就是说连图像的动态 范围也作为风格学习到了。通过调整风格比重，甚至改变用来提取特征的层，还可以获得 更多不同的变化，这些变化就留给读者自己探索了。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/12-%E5%BA%A6%E9%87%8F%E5%AD%A6%E4%B9%A0/02-%E7%94%A8-mnist-%E8%AE%AD%E7%BB%83-siameses-%E7%BD%91%E7%BB%9C/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/13-%E5%9B%BE%E5%83%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/02-mxnet-%E4%B8%AD%E7%9A%84%E5%9B%BE%E5%83%8F%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB%E4%BE%8B%E5%AD%90/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

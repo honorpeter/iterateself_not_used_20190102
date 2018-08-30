@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>基于卷积神经网络的一些计算机视觉应用 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="基于卷积神经网络的计算机视觉应用 和计算机关联最紧密的深度学习技术是卷积神经网络。本节来列举一些卷积神经网络 发挥重要作用的计算机视觉的方向。 图" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%90%86%E8%AE%BA/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E4%BB%8B%E7%BB%8D/%E5%9F%BA%E4%BA%8E%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%BA%94%E7%94%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="基于卷积神经网络的一些计算机视觉应用" />
+<meta property="og:description" content="基于卷积神经网络的计算机视觉应用 和计算机关联最紧密的深度学习技术是卷积神经网络。本节来列举一些卷积神经网络 发挥重要作用的计算机视觉的方向。 图" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%90%86%E8%AE%BA/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E4%BB%8B%E7%BB%8D/%E5%9F%BA%E4%BA%8E%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%BA%94%E7%94%A8/" /><meta property="article:published_time" content="2018-08-30T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-30T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="基于卷积神经网络的一些计算机视觉应用">
+<meta itemprop="description" content="基于卷积神经网络的计算机视觉应用 和计算机关联最紧密的深度学习技术是卷积神经网络。本节来列举一些卷积神经网络 发挥重要作用的计算机视觉的方向。 图">
+
+
+<meta itemprop="datePublished" content="2018-08-30T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-30T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3663">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基于卷积神经网络的一些计算机视觉应用"/>
+<meta name="twitter:description" content="基于卷积神经网络的计算机视觉应用 和计算机关联最紧密的深度学习技术是卷积神经网络。本节来列举一些卷积神经网络 发挥重要作用的计算机视觉的方向。 图"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">基于卷积神经网络的一些计算机视觉应用</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-30 </span>
+        
+        <span class="more-meta"> 3663 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#基于卷积神经网络的计算机视觉应用">基于卷积神经网络的计算机视觉应用</a>
+<ul>
+<li><a href="#图像分类">图像分类</a></li>
+<li><a href="#物体检测">物体检测</a></li>
+<li><a href="#人脸识别">人脸识别</a></li>
+<li><a href="#图像搜索">图像搜索</a></li>
+<li><a href="#图像分割">图像分割</a></li>
+<li><a href="#视频识别">视频识别</a></li>
+<li><a href="#纹理-图像合成">纹理/图像合成</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="基于卷积神经网络的计算机视觉应用">基于卷积神经网络的计算机视觉应用</h2>
+
+<p>和计算机关联最紧密的深度学习技术是卷积神经网络。本节来列举一些卷积神经网络 发挥重要作用的计算机视觉的方向。</p>
+
+<h3 id="图像分类">图像分类</h3>
+
+<p>顾名思义，图像分类就是对于输入的已知图像，由算法提取特征并最终分 到已知的一个类别里，或者说判断图像中是否包含一个已知类别中的物体，如图1-9所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180830/ecbm08F19m.png?imageslim" alt="mark" /></p>
+
+<p>前面花了不少篇幅讲述ILSVRC从2010年到2016年的风云变幻，而图像分类是深度 学习在计算机视觉领域大放异彩的第一个方向。不管是最开始的MNIST,还是后来的 ImageNet,基于深度学习的图像分类在特定任务上早就超过了人的平均水平。</p>
+
+<h3 id="物体检测">物体检测</h3>
+
+<p>物体检测和图像分类差不多，也是计算机视觉里最基础的两个方向。它和图像分类的侧重点不同，物体检测要稍微复杂一些，关心的是什么东西出现在了什么地方, 是一种更强的信息。如图1-10中，经过物体检测，我们得到的信息不仅是照片中包含马和摄影师，还得到了每一样检测到的类别的位置信息，以方框的形式展现出来。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180830/jLKhlBGjjI.png?imageslim" alt="mark" /></p>
+
+<p>和图像分类相比，物体检测传达的信息更强，例如要分类猫和狗的图片的问题，那么如果图像中既有猫又有狗该怎么分类呢？这时候如果还是坚持用分类则是一个多标签分类问题，或者就进一步用物体检测告诉我们猫在哪，狗在哪。在物体检测领域以基于 Region Proposal 的R-CNN及后续的衍生算法，以及基于直接回归的 YOLO/SSD 一系的算法为代表。这两类算法都是基于卷积神经网络，借助的不仅仅是深度网络强大的图像特征提取和分类能力，也会用到神经网络的逼近能力。<span style="color:red;">R-CNN 和 YOLO/SSD 不是一个原理吗？基于RegionProposal 和 基于直接回归的有什么区别？</span></p>
+
+<h3 id="人脸识别">人脸识别</h3>
+
+<p>人脸识别是计算机视觉里非常悠久的一个方向，也是和人相关的研究最多 的一个计算机视觉子领域。和我们生活中最相关的应用一般有两个方面：</p>
+
+<ul>
+<li>第一个是检测图像中是否存在人脸，这个应用和物体检测很像。主要应用有数码相机中对人脸的检测，网络或手机相册中对人脸的提取等；</li>
+<li>第二个是人脸匹配，有了第一个方面或是其他手段把人脸部分找到后，人脸的匹配才是一个更主流的应用。主要的思想是把要比对的两个人脸之间的相似度计算出来。计算这种度量，传统的方法叫做度量学习(metric learning)。其基 本思想是通过变换，让变换后的空间中定义为相似的样本距离更近，不相似的样本距离更远。基于深度学习也有相应的方法，比较有代表性的是Siamese网络和Triplet网络，当然广义上来说都可以算是度量学习。有了这种度量，可以进一步判断是否是一个人。这就是身份辨识，广泛用于罪犯身份确认、银行卡开卡等场景中。2015年马云在德国的汉诺威信息技术博览会上“刷脸”的大新闻，背后就是这种技术。此外还可以利用相似度实现一些好玩的应用，如用自拍照找相似的明星脸等。<span style="color:red;">什么是 Siamese 网络和 Triplet 网络？之前好像没听说过。</span></li>
+</ul>
+
+<p>人脸领域最流行的测试基准数据是 LFW (Labeled Faces in the Wild)，顾名思义就是从实拍照片中标注的人脸。该图片库由美国麻省理工大学开发，约 13000 多张图片，其中有 1680 人的脸出现了两次或两次以上。在这个数据上，人类判断两张脸是否是同一人能达到的准确率为99.2%。而在深度学习大行其道之后，自 2014 年起这个记录已经被各种基于深度学习的方法打破。虽然这未必真的代表深度学习胜过了人类，但基于深度学习的人脸算法让相关应用的可用性大大提高。如今人脸识别相关的商业应用已经遍地开花。</p>
+
+<h3 id="图像搜索">图像搜索</h3>
+
+<p>狭义来说图像搜索还有个比较学术的名字是基于内容的图片检索(Content Based Image Retrieval, CBIR)。图像搜索是个比较复杂的领域，除了单纯的图像算法，还带有搜索和海量数据处理的属性。其中图像部分背后的重要思想之一和人脸识别中提到 的度量学习很像，也是要找到和被搜图像的某种度量最近的图片。最常见的应用如 Google 的 Reverse Image Search 和百度的识图功能，京东和淘宝的拍照购物及相似款推荐等。深度学习在其中的作用主要是把图像转换为一种更适合搜索目的的表达，并且考虑到图像搜索应用场景和海量数据，这个表达常常会哈希/二值化处理，以达到更高的检索/排序效率。</p>
+
+<h3 id="图像分割">图像分割</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180830/ckBegg9EDC.png?imageslim" alt="mark" /></p>
+
+<p>图像分割是个比较传统的视觉应用，指的是以像素为单位将图像划分为不同部分，这些部分代表着不同的感兴趣区域。如图1-11所示的例子，画面中是山东威海的 一只受伤幼年红隼和背景。经过图像分割后，红隼在画面中所占的像素被标了出来，和背景有了区分。</p>
+
+<p>传统的图像分割算法五花八门，如基于梯度和动态规划路径的 Intelligent Scissors (Photoshop中的磁力套索)；利用高一维空间的超曲面解决当前空间轮廓的水平集(Level Set)方法；直接聚类的K-means；后期很流行的基于能量最小化的 GraphCut/GrabCut 和随机场的 CRF (Conditional Random Field)等。<span style="color:red;">竟然有这么多方法，都要好好整理下。</span></p>
+
+<p>后来深度学习出现了。和传统方法相比，深度学习未必能做到很精细的像素级分割。</p>
+
+<p>但是因为深度学习能学到大量样本中的图像语义信息的天然优势，这更贴近人对图像的理解，所以分割的结果可用性通常也更好一些。常见的基于深度学习的图像分割手段是全卷积神经网络(Fully Convolutional Networks, FCN)。Facebook 的人工智能实验室 FAIR(Facebook Artificial Intelligence Research)于 2016 年发布了一套用于分割+物体检测的框 架。其构成是一个大体分割出物体区域的网络DeepMask，加上利用浅层图像信息精细图像分割的 SharpMask，最后是一个 MultiPathNet 模块进行物体检测。其实在这背后也体现 出学界和业界开始慢慢流行起的另一个很底层的思想：就是图像分割和物体检测背后其实 是一回事，不应该分开来研究。对照物体检测和图像分类的关系，图像分割传达的是比物体检测更进一步、更强的信息。<span style="color:red;">嗯，之前对于图像分割还没有很重视，还没有把他单独列出来，现在看起来图像分割可以划分到物体检测里面</span></p>
+
+<h3 id="视频识别">视频识别</h3>
+
+<p>因为和图像的紧密联系，视频当然少不了深度学习的方法。深度学习在图像分类任务上大行其道之后，视频识别的研究立刻就跟进了上来，比较有代表性的工作从 2014 年起相继出现。<span style="color:red;">原来从 2014 年就开始了。</span></p>
+
+<p>2014年的 CVPR 上，斯坦福大学的Fei-Fei Li组发表了一篇视频识别的论文。其基本思路是用视频中的多帧作为输入，再通过不同的顺序和方式将多帧信息进行融合。其方法并没什么特别出彩的地方，但随着论文发布了 Sport-1M数据集，包含了 Youtube 上487类 共计113万的体育视频，是目前最大的视频分类数据集。</p>
+
+<p>2014年的 NIPS 上，牛津大学传统视觉强组VGG (Visual Geometry Group)发表了一 篇更经典的视频识别的文章，将图像的空间信息，也就是画面信息，用一个称为 Spatial Stream ConvNet 的网络处理，而视频中帧之间的时序信息用另一个称为 Temporal Stream ConNet 的网络处理，最后融合称为 Two Streams，直译就是二流法。这个方法后来被改来改去，发展出了更深网络的双流法，以及更炫融合方式的双流法，甚至是除了双流还加入音频流的三流法。不过影响最大的改进还是马里兰大学和 Google 的一篇论文，其对时序信息进行了处理和改进，加入了本章提到过的LSTM，以及改进版二流合并的方法，成为了主流框架之一。<span style="color:red;">这么厉害，想深入了解这个，而且，这个是用来做什么的，感觉真的是非常厉害。</span></p>
+
+<p>因为视频有时间的维度，所以还有一个很自然的想法是用三维卷积去处理视频帧，这样自然能将时序信息包括进来，这也是一个流行的思路。<span style="color:red;">这个思路现在有人在做吗？</span></p>
+
+<p>更近的一些研究中，最新的深度学习概率框架生成式对抗网络(Generative Adversarial Networks, GAN)也被用到了视频处理当中。2016年，Comma AI 的实习生 Eder Santana 和被称为天才黑客的 George Hotz 将 GAN 用于对视频输入进行降维，然后用低维表达和 LSTM 进行处理，从而对视频的未来帧进行预测，可以比较准确地预测沿直线前进时未来的画面。<span style="color:red;">怎么对视频输入进行降维的？感觉像是 GAN 的正规的用法，想什么了解下这个项目</span></p>
+
+<p>视频作为比图像更高一维度的数据，并且还带有时序信息和声音等信息，可探索的空间更大，相信未来会有更多精彩有趣的深度学习相关应用出现。<span style="color:red;">是呀，视频感觉直接与用摄像头和麦克风来捕捉现实社会的信息挂钩。</span></p>
+
+<h3 id="纹理-图像合成">纹理/图像合成</h3>
+
+<p>这是一个2016年左右才开始进入大众视野的领域，是因为一个叫 Prisma的App。纹理合成其实也是计算机视觉的一个传统应用，主要实现的是根据一种图 案，进行相似的复制和排列生成纹理。如图l-12a所示，根据左边照片中间部分的花朵图 案生成右边的图案。</p>
+
+<p>在2014年前后，这个领域开始被深度学习大幅攻占。到了 2015 年， 纹理合成上的进展自然而然地拓展到了图片风格学习上。其中最有影响力的是德国的 Leon Gatys 发表的《A Neural Algorithm of Artistic Style》，其中提出的办法可以学习特定图片的 纹理风格并基于其他图片的内容生成风格化的图片。如图 l-12b 所示就是图片风格学习的 例子，左边的图片是拍摄于密云不老屯的射电望远镜和银河，通过深度网络给这张照片加 上了日本浮世绘名家葛饰北斋的作品《神奈川冲浪里》的风格。<span style="color:red;">嗯，风格迁移</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180830/DgK1J1AHK4.png?imageslim" alt="mark" /></p>
+
+<p>其他应用除了上面提到的这些应用，传统图像和视觉领域里很多方向现在都有了基 于深度学习的解决方案，包括图像降噪、图像去模糊、图像复原、超分辨率、图像内容描述、图像深度（立体）信息提取等，在此就不详述了。<span style="color:red;">嗯，每个方向都要好好总结整理下。融汇贯通。</span></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>《深度学习与计算机视觉》</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%90%86%E8%AE%BA/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E4%BB%8B%E7%BB%8D/gpu-%E7%9B%B8%E5%85%B3/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">GPU 相关</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/%E5%A4%A7%E7%BA%B2/">
+            <span class="next-text nav-default">大纲</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

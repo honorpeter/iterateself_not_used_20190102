@@ -60,7 +60,7 @@
 
 <meta itemprop="datePublished" content="2018-08-29T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-08-29T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="9476">
+<meta itemprop="wordCount" content="4161">
 
 
 
@@ -135,8 +135,8 @@
       <div class="post-meta">
         <span class="post-time"> 2018-08-29 </span>
         
-        <span class="more-meta"> 9476 words </span>
-        <span class="more-meta"> 19 mins read </span>
+        <span class="more-meta"> 4161 words </span>
+        <span class="more-meta"> 9 mins read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
     </header>
@@ -149,14 +149,15 @@
   <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
-<li>
+<li><a href="#第-7-章-hello-world">第 7 章 Hello World!</a>
 <ul>
-<li>
+<li><a href="#用mxnet实现一个神经网络">用MXNet实现一个神经网络</a>
 <ul>
-<li>
-<ul>
-<li><a href="#第-7-章-hello-world">第 7 章 Hello World!</a></li>
+<li><a href="#基础工具-nvidia驱动和cuda安装">基础工具、NVIDIA驱动和CUDA安装</a></li>
 </ul></li>
+<li><a href="#安装-mxnet">安装 MXNet</a>
+<ul>
+<li><a href="#mxnet-基本使用">MXNet 基本使用</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -171,207 +172,115 @@
     <div class="post-content">
       
 
-<h4 id="第-7-章-hello-world">第 7 章 Hello World!</h4>
+<h1 id="第-7-章-hello-world">第 7 章 Hello World!</h1>
 
-<p>从第7章开始就进入到了实战阶段，将通过一系列基础例子了解基于深度学习计算机 视觉的有趣应用和实施方法。本章作为实战阶段的第一章，用一个Hello World级别的神 经网络小例子带大家一起入门最基本的训练（Training）-预测（Inference）流程，以及MXNet 和Caffe这两种框架的基本使用。对于MXNet和Caffe这两种框架，本书会基于实例对其 用法进行最基本的介绍。不过作为一本入门书，本书不会涉及分布式使用、代码细节和架 构等方面，而只会专注于基本算法的实现方法。深度学习框架多种多样，但框架终究是工 具，重点是通过了解每个例子和背后对应的思想来入门深度学习/计算机视觉这个有用又有 趣的领域。</p>
+<p>从第7章开始就进入到了实战阶段，将通过一系列基础例子了解基于深度学习计算机 视觉的有趣应用和实施方法。本章作为实战阶段的第一章，用一个Hello World级别的神 经网络小例子带大家一起入门最基本的训练（Training）-预测（Inference）流程，以及 MXNet 和 Caffe 这两种框架的基本使用。</p>
 
-<p>和第6章一样，本章中完整实例的代码都可以在下面地址找到，之后章节中的每个入 门实例的代码也将放在这个github的代码仓库中，不再强调，地址为<a href="https://github.com/">https://github.com/</a> frombeijingwithlove/ dlcvforbeginners o</p>
+<p>对于 MXNet 和 Caffe 这两种框架，本书会基于实例对其用法进行最基本的介绍。不过作为一本入门书，本书不会涉及分布式使用、代码细节和架 构等方面，而只会专注于基本算法的实现方法。深度学习框架多种多样，但框架终究是工具，重点是通过了解每个例子和背后对应的思想来入门深度学习/计算机视觉这个有用又有趣的领域。<span style="color:red;">嗯。</span></p>
 
-<p>7.1用MXNet实现一个神经网络</p>
+<h2 id="用mxnet实现一个神经网络">用MXNet实现一个神经网络</h2>
 
-<p>MXNet的起源已经在第1章大概介绍过，本节主要介绍MXNet的安装和基本概念， 并通过实现一个最简单的神经网络来了解MXNet的使用。</p>
+<p>MXNet 的起源已经在第 1 章大概介绍过，本节主要介绍 MXNet 的安装和基本概念，并通过实现一个最简单的神经网络来了解 MXNet 的使用。</p>
 
-<p>7.1.1 基础工具、NVIDIA驱动和CUDA安装</p>
+<h3 id="基础工具-nvidia驱动和cuda安装">基础工具、NVIDIA驱动和CUDA安装</h3>
 
-<p>首先是安装大部分开发工具需要的基础依赖工具包，比如git、用于矩阵计算的atlas, 和图可视化的graphviz等，以Ubuntu 16.04 LTS为例，执行下面命令安装包：</p>
+<p>首先是安装大部分开发工具需要的基础依赖工具包，比如 git、用于矩阵计算的 atlas, 和图可视化的 graphviz 等，以Ubuntu 16.04 LTS为例，执行下面命令安装包：<span style="color:red;">这个 atlas 是什么？</span></p>
 
-<p>»    sudo    apt    update</p>
+<pre><code>sudo apt update
+sudo apt install build-essential git libatlas-base-dev
+sudo pip install graphviz
+</code></pre>
 
-<p>»    sudo    apt    install    build-essential    git libatlas-base-dev</p>
+<p><span style="color:red;">现在的 linux 用来做机器学习的机器普遍都是装的 ubuntu 吗？</span></p>
 
-<p>&gt;&gt;    sudo    pip    install    graphviz</p>
+<p>第 5 章和第 6 章讲过的 pip、NumPy 和 OpenCV 也是需要的，安装方法已经讲过在此就不再介绍了。</p>
 
-<p>第5章和第6章讲过的pip、NumPy和OpenCV也是需要的，安装方法已经讲过在此 就不再介绍了。</p>
+<p>对于当前的所有深度学习框架，如果要训练神经网络一定离不开（NVIDIA的）GPU, 以及配套的 GPU 编程工具包 CUDA。所以接下来是安装 NVIDIA 的驱动和 CUDA 工具包。安装 NVIDIA 驱动前需要先卸载系统自己的驱动：</p>
 
-<p>对于当前的所有深度学习框架，如果要训练神经网络一定离不开（NVIDIA的）GPU, 以及配套的GPU编程工具包CUDA。所以接下来是安装NVIDIA的驱动和CUDA工具包。 安装NVIDIA驱动前需要先卸载系统自己的驱动：</p>
-
-<p>» sudo apt ——purge remove xserver-xorg-video-nouveau</p>
+<pre><code>sudo apt --purge remove xserver-xorg-video-nouveau
+</code></pre>
 
 <p>然后添加NVIDIA驱动的源：</p>
 
-<p>» sudo add-apt-repository ppa:graphics-drivers/ppa</p>
+<pre><code>sudo add-apt-repository ppa:graphics-drivers/ppa
+</code></pre>
 
 <p>然后就可以安装驱动和CUDA工具包了。</p>
 
-<p>&gt;&gt; sudo apt install nvidia-361 nvidia-settings nvidia-prime » sudo apt install nvidia-cuda-toolkit</p>
+<pre><code>sudo apt install nvidia-361 nvidia-settings nvidia-prime
+sudo apt install nvidia-cuda-toolkit
+</code></pre>
 
 <p>安装完成后，在控制台输入：</p>
 
-<p>&gt;&gt; nvidia-smi</p>
+<pre><code>nvidia-smi
+</code></pre>
 
-<p>如果安装成功则会显示显卡的信息，比如笔者的GTX980M笔记本显示信息如图7-1 所示。</p>
+<p>如果安装成功则会显示显卡的信息，比如笔者的 GTX980M 笔记本显示信息如图7-1 所示。</p>
 
-<p>心：:•、leaf醪Arreat-Top: ~</p>
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180830/bKk4m1ab7H.png?imageslim" alt="mark" /></p>
 
-<p>leaf@Arreat-Top:-$ nvtdta-snt Sat Apr 23 17:45:29 2016</p>
+<p>如果是其他的Linux系统，步骤也很相似，首先卸载自带的显卡驱动，然后用系统自带软件包或者到 NVIDIA 官网下载驱动及 CUDA 按照说明进行安装，下载地址为 <a href="http://www.nvidia.com/Download/index.aspx">http://www.nvidia.com/Download/index.aspx</a> 或  <a href="https://developer.nvidia.com/cuda-downloads。">https://developer.nvidia.com/cuda-downloads。</a><span style="color:red;">还没有亲自安装过，一定要亲自实践并总结。</span></p>
 
-<p>NVIDIA-SMI 351.42</p>
+<p>cuDNN 是 CUDA 中专门为加速深度神经网络设计的库，是个可选的安装选项。下载 ±也址为 <a href="https://developer.nvidia.com/cudnn">https://developer.nvidia.com/cudnn</a> 。</p>
 
-<p>Driver Version: 361.42</p>
+<p>找到对应的版本并填写需要的信息之后就可以下载了。下载之后是一个压缩包，这里 以 cuDNN 5.1 为例，执行以下命令将 cuDNN 中的库解压并添加到 CUDA 对应文件夹下。</p>
 
-<table>
-<thead>
-<tr>
-<th>GPUFan</th>
-<th>NaneTemp</th>
-<th>Perf</th>
-<th>&hellip;&hellip;&hellip;&hellip;..+ ■Pe「ststence-M| Pwr:Usage/Cap|</th>
-<th>Bus-IdMenor</th>
-<th>•&hellip;&hellip;..+&hellip;&hellip;&hellip;.Disp.A | Volattle y-Usage | GPU-Util</th>
-<th>Uncorr, ECC Compute M.</th>
-</tr>
-</thead>
+<pre><code>tar -xvzf cudnn-8.0-linux-x64-v5.1-ga.tgz
+sudo cp -P cuda/include/cudnn.h /usr/local/cuda/include
+sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
+</code></pre>
 
-<tbody>
-<tr>
-<td>0</td>
-<td>GeForce GTX</td>
-<td>980H    Off |</td>
-<td>0000:01:00.0</td>
-<td>Off J</td>
-<td>N/A</td>
-<td></td>
-</tr>
+<p>任何深度学习框架中，基于 CPU 的矩阵计算包也是基础的库之一，除了本节一开始安 装的 atlas, Intel 的 MKL (Math Kernel Library) 因为其优异的性能，往往是一个更佳的选项，MKL 的下载地址为 <a href="https://software.intel.com/en-us/intel-mkl/">https://software.intel.com/en-us/intel-mkl/</a> 。<span style="color:red;">嗯。</span></p>
 
-<tr>
-<td>N/A</td>
-<td>54C</td>
-<td>P8</td>
-<td>7W / N/A |</td>
-<td>322M1B /</td>
-<td>8191M1B j    0%</td>
-<td>Default</td>
-</tr>
+<p>MKL 对于个人是免费的，需要一定的注册步骤获取一个许可证。其安装也不难，下载好安装包并解压后，执行 install.sh 或者 install_GUI.sh ，按照指示一步步安装即可。</p>
 
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
+<h2 id="安装-mxnet">安装 MXNet</h2>
 
-<tr>
-<td>Processes</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>GPU Memory</td>
-<td></td>
-</tr>
+<p>MXNet 的 github 页面是 <a href="https://github.com/dmlc/mxnet">https://github.com/dmlc/mxnet</a> 。</p>
 
-<tr>
-<td>GPU</td>
-<td></td>
-<td>PID</td>
-<td>Type Process name</td>
-<td></td>
-<td>Usage</td>
-<td></td>
-</tr>
+<p>在这里可以找到源代码的 git 地址，然后在要保存的控制台地址中输入下面命令:</p>
 
-<tr>
-<td>0</td>
-<td></td>
-<td>9B6</td>
-<td>G /usr/llb/xorg/Xorg</td>
-<td></td>
-<td>207M1B</td>
-<td></td>
-</tr>
+<pre><code>git clone --recursive https://github.com/dmlc/mxnet
+</code></pre>
 
-<tr>
-<td>0</td>
-<td></td>
-<td>1470</td>
-<td>G compiz</td>
-<td></td>
-<td></td>
-<td>92M1B</td>
-</tr>
+<p><span style="color:red;">为什么要写 recursive ？</span></p>
 
-<tr>
-<td>0</td>
-<td>26046</td>
-<td>G    unity-control-center</td>
-<td></td>
-<td>IMiB</td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p>之后就会在执行命令的文件夹下得到一个 mxnet 的文件夹。第一步是配置安装的基础选项，打开 mxnet/make 文件夹下的 config.mk 文件，主要需要配置的是以下3个选项。</p>
 
-<p>leaf@Arreat-Top:-$ Q)</p>
+<ul>
+<li>USE_CUDA = 0；</li>
+<li>USE_CUDNN = 0；</li>
+<li>USEBLAS = atlas。</li>
+</ul>
 
-<p>图7-1显卡信息</p>
+<p>上面列出的都是默认选项，对于训练网络的需求，需要至少把 USE_CUDA 改成 1，如果需要 cuDNN 和 mkl 的话则需要把 USE_CUDNN 改成 1，USE_BLAS 改为 mkl。</p>
 
-<p>如果是其他的Linux系统，步骤也很相似，首先卸载自带的显卡驱动，然后用系统自 带软件包或者到NVIDIA官网下载驱动及CUDA按照说明进行安装，下载地址为 <a href="http://www.nvidia.com/Download/index.aspx">http://www.nvidia.com/Download/index.aspx</a> 或 <a href="https://developer.nvidia.com/cuda-downloads%e3%80%82">https://developer.nvidia.com/cuda-downloads</a><a href="https://developer.nvidia.com/cuda-downloads%e3%80%82">。</a></p>
+<p>配置好后就可以开始安装了。在Ubuntu下有个非常方便的方式，就是进入 mxnet/setup-utils 文件夹下，直接执行对应脚本：</p>
 
-<p>cuDNN是CUDA中专门为加速深度神经网络设计的库，是个可选的安装选项。下载 ±也址为 <a href="https://developer.nvidia.com/cudnn%e3%80%82">https://developer.nvidia.com/cudnn</a><a href="https://developer.nvidia.com/cudnn%e3%80%82">。</a></p>
+<pre><code>cd mxnet/setup-utils
+sh install-mxnet-ubuntu-python.sh
+</code></pre>
 
-<p>找到对应的版本并填写需要的信息之后就可以下载了。下载之后是一个压缩包，这里 以cuDNN 5.1为例，执行以下命令将cuDNN中的库解压并添加到CUDA对应文件夹下。</p>
+<p>等待执行结束就大功告成了。当然如果不是 Ubuntu，那么一般的方式是回到 mxnet 目录下，执行：</p>
 
-<p>&gt;&gt; tar -xvzf cudnn-8.0-linux-x64-v5.1-ga.tgz</p>
+<pre><code>cd mxnet
+make - j
+</code></pre>
 
-<p>» sudo cp -P cuda/include/cudnn.h /usr/local/cuda/include</p>
+<p>自动利用所有可用的 CPU 核对代码进行编译，如果在 -j 后面直接加上数字可以指定用的核数。然后配置 Python 接口：</p>
 
-<p>» sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64</p>
+<pre><code>cd python
+sudo python setup.py install
+</code></pre>
 
-<p>任何深度学习框架中，基于CPU的矩阵计算包也是基础的库之一，除了本节一开始安 装的atlas, Intel的MKL (Math Kernel Library)因为其优异的性能，往往是一个更佳的选 项，MKL 的下载地址为 <a href="https://software.intel.com/en-us/intel-mkl/%e3%80%82">https://software.intel.com/en-us/intel-mkl/</a><a href="https://software.intel.com/en-us/intel-mkl/%e3%80%82">。</a></p>
+<p><span style="color:red;">配置 Python 接口是什么意思？</span></p>
 
-<p>MKL对于个人是免费的，需要一定的注册步骤获取一个许可证。其安装也不难，下载 好安装包并解压后，执行install.sh或者install_GUI.Sh，按照指示一步步安装即可。</p>
+<p>万事俱备，接下来可以开始使用这个强大的框架了。</p>
 
-<p>7.1.2 安装 MXNet</p>
+<h3 id="mxnet-基本使用">MXNet 基本使用</h3>
 
-<p>MXNet 的 github 页面是 <a href="https://github.com/dmlc/mxnet%e3%80%82">https://github.com/dmlc/mxnet</a><a href="https://github.com/dmlc/mxnet%e3%80%82">。</a></p>
-
-<p>在这里可以找到源代码的git地址，然后在要保存的控制台地址中输入下面命令:</p>
-
-<p>» git clone &ndash;recursive <a href="https://github.com/dmlc/mxnet">https://github.com/dmlc/mxnet</a></p>
-
-<p>之后就会在执行命令的文件夹下得到一个mxnet的文件夹。第一步是配置安装的基础</p>
-
-<p>选项，打开mxnet/make文件夹下的config.mk文件，主要需要配置的是以下3个选项。</p>
-
-<p>□    USE_CUDA = 0；</p>
-
-<p>□    USECUDNN = 0；</p>
-
-<p>□    USEBLAS = atlas。</p>
-
-<p>上面列出的都是默认选项，对于训练网络的需求，需要至少把USE_CUDA改成1，如 果需要cuDNN和mkl的话则需要把USE_CUDNN改成1，USE_BLAS改为mkl。</p>
-
-<p>配置好后就可以开始安装了。在Ubuntu下有个非常方便的方式，就是进入 mxnet/setup-utils文件夹下，直接执行对应脚本：</p>
-
-<p>» cd mxnet/setup-utils » sh install-mxnet-ubuntu-python.sh</p>
-
-<p>等待执行结束就大功告成了。当然一般的方式是回到mxnet目录下，执行：</p>
-
-<p>» cd mxnet » make - j</p>
-
-<p>自动利用所有可用的CPU核对代码进行编译，如果在-j后面直接加上数字可以指定用的核 数。然后配置Python接口：</p>
-
-<p>» cd python</p>
-
-<p>» sudo python setup.py install 万事俱备，接下来可以开始使用这个强大的框架了。</p>
-
-<p>7.1.3 MXNet基本使用</p>
-
-<p>在第3章已经&rsquo;提到过，当描述一个神经网络或者一些计算公式及函数的时候，实质上 是在描述一种可以用图表示的计算关系。在MXNet中，这种计算关系可以有两种方式表 达和计算，即命令式(Imperative)和符号式(Symbolic)。比如(a+b)*c,命令式计算的代 码如下：</p>
+<p>在第 3 章已经提到过，当描述一个神经网络或者一些计算公式及函数的时候，实质上 是在描述一种可以用图表示的计算关系。在MXNet中，这种计算关系可以有两种方式表 达和计算，即命令式(Imperative)和符号式(Symbolic)。比如(a+b)*c,命令式计算的代 码如下：</p>
 
 <p>import mxnet as mx #申请内存并赋值，默认利用CPU</p>
 
@@ -642,594 +551,6 @@
 <p>注意这只是最简单的例子，目的是帮助了解MXNet的基本使用，并没有设置验证/测 试集，训练迭代1000次也只是随便定的。7.2节将用Caffe实现这个例子，而更加实际的 例子会从第8章开始。</p>
 
 <p>图7-3标签为1的概率在取值平面上的分布可视化</p>
-
-<p>7.2用Caffe实现一个神经网络</p>
-
-<p>Caffe虽然从应用角度更针对于卷积神经网络，但是实现7.1节的例&rsquo;子当然是不在话下 的。本节将通过实现两层的小网络来了解Caffe的基础概念和基本使用。</p>
-
-<p>7.2.1 安装 Caffe</p>
-
-<p>Caffe是个依赖非常多的框架，除了在7.1.1节中我们已经安装好的基础依赖，还需要 以下的依赖包。</p>
-
-<p>» sudo apt install libprotobuf-dev libleveldb-dev libsnappy-dev libboost-all-dev libhdf5-serial-dev protobuf-compiler gfortran libjpeg62 libfreeimage-dev libgoogle-glog-dev libbz2-dev libxml2-dev libxslt-dev libffi-dev libssl-dev libgflags-dev liblmdb-dev python-yaml</p>
-
-<p>然后可以开始安装Caffe 了，先到要安装Caffe的文件夹下：</p>
-
-<p>» git clone <a href="https://github.com/BVLC/caffe.git">https://github.com/BVLC/caffe.git</a></p>
-
-<p>然后到caffe文件夹下，找到Makefile.config.example文件复制一份：</p>
-
-<p>» cd caffe</p>
-
-<p>» cp Makefile.config.example Makefile.config</p>
-
-<p>和MXNet类似，Makefile.config是编译的配置文件，在这个文件里可以配置一些编译 选项，-般来说主要配置CUDA、cuDNN和bias库。比如笔者的机器上，主要是下面两 个选项：</p>
-
-<p>□    USE_CUDNN:=1；</p>
-
-<p>□    BLAS:=mklo</p>
-
-<p>默认情况下CPU_ONLY:=1是被注释掉的，所以不用管。除非是在没有NVIDIA的 GPU机器上安装Caffe,那么把注释取消即可。</p>
-
-<p>还有一个选项是WITH_PYTHON_LAYER:=1,意思是支持用Python定义神经网络中 的层，和MXNet中定义层的方式有些相像。如果要使用一些Python的层或是一些特定 功能的Caffe版本，比如Ross Girshick的py-faster-rcnn,那么就需要把这一项前的注释 取消。</p>
-
-<p>配置好Makefile.config后，就可以开始编译了，依次执行下面的命令：</p>
-
-<p>» make pycaf fe - j</p>
-
-<p>» make all -j</p>
-
-<p>» make test - j</p>
-
-<p>因为Caffe的依赖过多，在安装过程中有可能找不到一些动态库，这个时候需要把相 对的路径加入到LD_LIBRARY_PATH下即可，如果是头文件则可以把对应路径加入到 CPLUS_INCLUDE_PATH中。比如找不到HDF5的库，可在控制台下执行：</p>
-
-<p>» export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/hdf5/serial</p>
-
-<p>为了在Python中直接调用Caffe,还需要把Caffe的Python路径加入到PYTHONPATH0</p>
-
-<p>» export PYTHONPATH=$PYTHONPATH=:/path/to/caffe/python</p>
-
-<p>有的版本的Ubuntu下如果是使用apt安装的cuda,还需要添加下面两个路径：</p>
-
-<p>□    /usr/lib/nvidia-cuda-tookit；</p>
-
-<p>□    /usr/lib/x86-linux-gnu o</p>
-
-<p>7.2.2 Caffe的基本概念</p>
-
-<p>Caffe从本质上来说和MXNet中Symbolic的使用方式差不多，都是先定义好一个计算 关系，然后根据这个计算关系结合数据训练和使用模型。在Caffe中，最基本的计算节点 是层(Layer)，所有的计算关系都是基于层的，无论是Caffe预定义好的层，还是用户自 定义的层。这和MXNet中预定义层的使用方式也很像，如果直接基于Python写层的定义 就更像了。不过这里我们要了解的是更常用的一种使用方式，即利用protobuf的格式而不 是代码来定义网络的结构，然后再结合数据进行训练，也就是说用Caffe训练模型是不需 要写代码的。这体现了 Caffe设计哲学中利用表达式(expression)和模块化(Modularity) 的特点。</p>
-
-<p>Caffe中预定义的层覆盖了当前流行的网络结构中几乎所有的类型，比如卷积神经网络 最常用到的全连接层(InnerProduct)、卷积层(Convolution)和池化层(Pooling)；各种 各样的激活函数层(ReLU、Sigmoid、PReLU等)；以及数据交互的各种层(Data、HDF5Data、 ImageData 等)；输出及计算损失函数的层(Softmax、SoftmaxWithLoss&gt; Euclidean 等)。 除了 Caffe的接口文档，各种常用层的信息一览在Caffe官网也有列出地址为 <a href="http://caffe.berkeleyvision.org/tutorial/layers.htmlo">http://caffe.berkeleyvision.org/tutorial/layers.htmlo</a></p>
-
-<p>基于各种层就可以构建成网络(Net),然后定义好数据，就可以训练一个模型了。在 Caffe中，数据的形式是一种叫Blob的类，其实就是空间连续的多维数组，比如存储图像 的时候是个四维的数组，四个维度分别是批大小、通道数、图像高度、图像宽度。有了网 络结构和数据之后，再定义一个利用梯度下降法做优化的Solver模块，就可以训练网络了。 具体总结如下。</p>
-
-<p>□层(Layer);</p>
-
-<p>□网络(Net)；</p>
-
-<p>□数据（Blob）;</p>
-
-<p>□梯度下降（Solver）。</p>
-
-<p>这4个部分就是入门学习最关键的内容。</p>
-
-<p>7.2.3用Caffe实现一个两层神经网络</p>
-
-<p>本节还是通过例子来了解Caffe的基本使用，比如7.1节中神经网络的小例子。第一步 是准备数据，在Caffe中，非图像数据的支持并不是很好，这里我们用HDF5格式来准备 7.1节中产生的坐标数据和对应标签，具体代码如下：</p>
-
-<p>import pickle import numpy as np import h5py #读取先前保存好的数据</p>
-
-<p>with open (* data .pkl1,    * rb *) as f:</p>
-
-<p>samples, labels = pickle.load(f)</p>
-
-<p>sample_size = len(labels)</p>
-
-<p>#按照HDF5格式要求制作数据</p>
-
-<p>samples = np. array (samples) . reshape ( (sample_size, 2)) labels = np.array(labels).reshape((sample_sizeA 1))</p>
-
-<p>#生成HDF5 &amp;式数据</p>
-
-<p>h5_filename = * data.h5 *    )</p>
-
-<p>with h5py. File (h5_filename, * w *) as h:</p>
-
-<p>h.create_dataset(* data <em>, data=samples) h.create_dataset(</em> label *, data=labels)</p>
-
-<p>#生成HDF5数据刿表</p>
-
-<p>with open(* data_h5.txt *,    * w *) as f:</p>
-
-<p>f.write(h5_filename)</p>
-
-<p>需要提一点的是Caffe中HDF5Data层读取的并不是HDF5数据本身，而是一个HDF5 文件的列表，所以我们除了生成data.h5外还生成了一个data_h5.txt作为HDF5Data层的数 据源。接下来开始定义网络和训练网络的train.prototxt。</p>
-
-<p>name:    &ldquo;SimpleMLP&rdquo;</p>
-
-<p>layer {</p>
-
-<p>name: &ldquo;data&rdquo; type: &ldquo;HDF5Data&rdquo; top: &ldquo;data&rdquo; top: &ldquo;label&rdquo; include {</p>
-
-<p>phase: TRAIN</p>
-
-<p>}</p>
-
-<p>hdf5_data_param {</p>
-
-<p>source: &ldquo;data_h5 . txt** batch_size:    41</p>
-
-<p>}</p>
-
-<p>}</p>
-
-<p>layer {</p>
-
-<p>name: &ldquo;fcl&rdquo; type: &ldquo;InnerProduct&rdquo; bottom:    &ldquo;data&rdquo;</p>
-
-<p>top: &ldquo;fcl&rdquo;</p>
-
-<p>inner_product_param {</p>
-
-<table>
-<thead>
-<tr>
-<th>num_output:    2</th>
-<th></th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>weight filler {</td>
-<td></td>
-</tr>
-
-<tr>
-<td>}}}layer {</td>
-<td>type:    &ldquo;uniform</td>
-</tr>
-
-<tr>
-<td>name:</td>
-<td>&ldquo;sigmoidl&rdquo;</td>
-</tr>
-
-<tr>
-<td>type:</td>
-<td>&ldquo;Sigmoid&rdquo;</td>
-</tr>
-
-<tr>
-<td>bottom:</td>
-<td>:,&lsquo;fcln</td>
-</tr>
-
-<tr>
-<td>top:    ”}layer {</td>
-<td>sigmoidl&rdquo;</td>
-</tr>
-</tbody>
-</table>
-
-<p>name:    &ldquo;fc2&rdquo;</p>
-
-<p>type:    &ldquo;InnerProduct&rdquo;</p>
-
-<p>bottom: &ldquo;sigmoidl&rdquo; top:    &ldquo;fc2&rdquo;</p>
-
-<p>inner_product_param { num_output:    2</p>
-
-<p>weight_filler {</p>
-
-<p>type: &ldquo;uniform&rdquo;</p>
-
-<p>}</p>
-
-<p>}</p>
-
-<p>}</p>
-
-<p>layer {</p>
-
-<p>name: &ldquo;loss&rdquo;</p>
-
-<p>type: &ldquo;SoftmaxWithLoss&rdquo;</p>
-
-<p>bottom:    &ldquo;fc2&rdquo;</p>
-
-<p>bottom: J* label*&rsquo; t</p>
-
-<p>top: &ldquo;loss&rdquo;</p>
-
-<p>}</p>
-
-<p>程序代码并不复杂，每一层的意思也比较明确，name是层的名字，type指定层的类型， bottom是输入blob的名字，top是输出blob的名字。最后根据类型的不同，每一层会有特 定的参数，比如InnterProduct，也就是全连接层中，num_output就是输出的数量，也就是 隐藏单元的个数。整体来看，这个prototxt文件中首先定义了 HDF5数据层，用于从HDF5 文件中读取数据。读取的数据按照顺序排列分别是data和label。因为在这个简单例子中， 我们把所有的数据用于训练,所以只有一个phase为TRAIN的HDF5数据层，并且batch^ize 就是所有样本的数量。在这个简单例子中只有全连接的InnerProduct层和激活函数的 Sigmoid层。在这里需要提的是weight_filler这个参数。在mxnet中，默认是用均匀分布的 随机数来初始化网络参数，所以没有专门指定。而在Caffe中，默认的初始化参数居然是0, 对于这个例子会很难收敛。所以我们专门把这个参数手动指定为uniform,这样会默认产生 0〜1之间的随机数用来初始化当前层，除了 weight_filler之外还有bias_filler用来初始化偏 置的值，不过因为默认值并不影响收敛，所以例子中略过了。最后用SoftmaxWithLoss层 来计算损失函数，这和7.1节MXNet的例子差不多。Caffe中自带专门用来可视化网络结 构的脚本，路径是caffe/python/draw_net.py,在控制台中执行如下指令：</p>
-
-<p>» python /path/to/caffe/python/draw_net.py train.prototxt mlp_train.png</p>
-
-<p>-rankdir BT</p>
-
-<p>就可以得到Caffe可视化后的网络结构并保存在mlp_train.png中，如图7-4所示。</p>
-
-<p>data (HDFSDala)</p>
-
-<p>图7-4用Caffe自带的draw net.py可视化的训练阶段网络结构</p>
-
-<p>和MXNet中可视化的底层实现一样，都是基于graphviz（graphviz是一个可视化图库）， 主要区别在于Caffe会把每个数据对应的blob都画出来。另外，默认情况下，网络结构的 绘制顺序是输入到输出从左至右绘制，为了方便排版，这里用一rankdir选项改成了从下向 上绘制。Caffe自带的draw_net.py效果并不是很美观，所以线上有一些开源的可视化Caffe 网络结构的工具，比较为人熟知的是github上的ethereon开发的netscope地址为： <a href="http://ethereon.github.io/netscope/quickstart.htmlo">http://ethereon.github.io/netscope/quickstart.htmlo</a></p>
-
-<p>在netscope基础上，github上的dgschwend又开发了可视化+分析网络参数、中间变量 等功能的加强版地址为：<a href="https://dgschwend.github.io/netscope/quickstart.html%ef%bc%8c%e6%af%94">https://dgschwend.github.io/netscope/quickstart.html</a><a href="https://dgschwend.github.io/netscope/quickstart.html%ef%bc%8c%e6%af%94">，比</a> draw net.py 好用很多。</p>
-
-<p>回到例子中，定义好网络结构后还需要定义用于梯度下降的solver.prototxt：</p>
-
-<p>net: &ldquo;train .prototxt’’</p>
-
-<p>momentum: 0.95</p>
-
-<p>snapshot_prefix: &ldquo;simple_mlp&rdquo; solver_mode: CPU</p>
-
-<p>这个文件很容易看懂，第一个net参数指定了训练用train.prototxt。base_lr是学习率， 这里设置为0.15。Impolicy是学习率随训练进行改变的策略，这里设置为fixed,意思是不 做任何改变。display是指每迭代这么多次数就显示一次训练进行的信息，比如当前loss的 值。maxjter是最大训练次数，达到这个次数就停止，同时产生当前模型的参数和solver 状态的备份。Momentum顾名思义是冲量的系数，snapshot_prefix是保存模型和solver状态 文件的名字前缀。solver_mode指定用CPU还是GPU进行训练，例子中先用CPU。</p>
-
-<p>现在数据和训练需要的配置文件都定义好了，接下来在控制台下执行下面命令：</p>
-
-<p>» /path/to/caffe/build/tools/caffe train -solver solver.prototxt</p>
-
-<p>就开始训练了，训练过程中会输出当前的迭代次数和对应的loss值，例如下面:</p>
-
-<table>
-<thead>
-<tr>
-<th>10102</th>
-<th>15:40:52.076025</th>
-<th>5821</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>10102</td>
-<td>15:40:52.076042</td>
-<td>5821</td>
-</tr>
-
-<tr>
-<td>10102</td>
-<td>15:40:52.076056</td>
-<td>5821</td>
-</tr>
-
-<tr>
-<td>fixed</td>
-<td></td>
-<td></td>
-</tr>
-
-<tr>
-<td>10102</td>
-<td>15:40:52.076231</td>
-<td>5821</td>
-</tr>
-</tbody>
-</table>
-
-<p>0.668031</p>
-
-<table>
-<thead>
-<tr>
-<th>10102    15:40:52.076267</th>
-<th>5821</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>#0: loss = 0.668031</td>
-<td>(* 1 =</td>
-</tr>
-
-<tr>
-<td>10102    15:40:52.076275</td>
-<td>5821</td>
-</tr>
-
-<tr>
-<td>0.15    -</td>
-<td></td>
-</tr>
-
-<tr>
-<td>10102    15:4(/:52.078455</td>
-<td>5821</td>
-</tr>
-
-<tr>
-<td>0.250734</td>
-<td></td>
-</tr>
-
-<tr>
-<td>10102    15:40:52.078527</td>
-<td>5821</td>
-</tr>
-
-<tr>
-<td>林0: loss =    0.250734</td>
-<td>(* 1 =</td>
-</tr>
-
-<tr>
-<td>10102    15:40:52.078536</td>
-<td>5821</td>
-</tr>
-
-<tr>
-<td>=0.15</td>
-<td></td>
-</tr>
-
-<tr>
-<td>10102    15:40:52.080875</td>
-<td>5821</td>
-</tr>
-
-<tr>
-<td>0.24788</td>
-<td></td>
-</tr>
-
-<tr>
-<td>10102    15:40:52.080978</td>
-<td>5821</td>
-</tr>
-</tbody>
-</table>
-
-<p>#0:</p>
-
-<p>loss = 0.24788</p>
-
-<p>caffe.cpp:251] Starting Optimization solver.cpp:291] Solving SimpleMLP</p>
-
-<table>
-<thead>
-<tr>
-<th>solver.cpp:292]</th>
-<th>Learning Rate</th>
-<th>Policy:</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>solver.cpp:240]</td>
-<td>Iteration 0,</td>
-<td>loss =</td>
-</tr>
-
-<tr>
-<td>solver.cpp:256] 0.668031 loss)</td>
-<td>Train net</td>
-<td>output</td>
-</tr>
-
-<tr>
-<td>sgd solver.cpp:106] Iteration 0</td>
-<td>,lr =</td>
-<td></td>
-</tr>
-
-<tr>
-<td>solver.cpp:240]</td>
-<td>Iteration 100,</td>
-<td>loss =</td>
-</tr>
-
-<tr>
-<td>solver.cpp:256] 0.250734 loss)</td>
-<td>Train net</td>
-<td>output</td>
-</tr>
-
-<tr>
-<td>sgd_solver.cpp:</td>
-<td>106] Iteration 100, lr</td>
-<td></td>
-</tr>
-
-<tr>
-<td>solver.cpp:240]</td>
-<td>Iteration 200,</td>
-<td>loss =</td>
-</tr>
-
-<tr>
-<td>solver.cpp:256]</td>
-<td>Train net</td>
-<td>output</td>
-</tr>
-</tbody>
-</table>
-
-<p>(*    1    =    0.24788 loss)</p>
-
-<p>如果不喜欢用控制台，也可以利用Python进行训练。</p>
-
-<p>import sys</p>
-
-<p>import numpy as np</p>
-
-<p>#将Caffe所在路径添加到sys .path以便导入 sys.path.append(*/opt/caffe/python&rsquo;) import caffe</p>
-
-<p># 初始化一个SGDSolver</p>
-
-<p>solver = caffe.SGDSolver(* solver.prototxt *) #开始训练 solver.solve()</p>
-
-<p>#获取训练好的网络</p>
-
-<p>net = solver.net</p>
-
-<p>#指定一个输入数据，比如取值范围平面的中心</p>
-
-<p>net.blobs[* data&rsquo;]    = np.array([[0.5,    0.5]])</p>
-
-<p>#执行前向计算</p>
-
-<p>output = net.forward()</p>
-
-<p>#输出结果</p>
-
-<p>print(output)</p>
-
-<p>将这段代码保存为文件然后执行，和前面在控制台下的训练效果一样。不过这样训练 完后并不能立刻使用，比如上面代码最后一行的print会输出下面结果：</p>
-
-<p>{•loss1: array(0.004321129061281681, dtype=float32)}</p>
-
-<p>这是一个字典，键是最后一层的blob名字，值是loss的值，是因为train.prototxt网络中我</p>
-
-<p>们定义的是训练用的网络，到了做推断(Inference)的阶段，还需要对这个结构做一些修</p>
-
-<p>改才可以。修改的主要部分是输入和输出部分，同时初始化网络权重的部分可有可无，完</p>
-
-<p>整的内容如下：</p>
-
-<p>name: &lsquo;’SimpleMLP&rdquo; input: &ldquo;data&rdquo; input_shape {</p>
-
-<p>dim: 1 dim: 2</p>
-
-<p>}</p>
-
-<p>layer {</p>
-
-<p>name: &ldquo;fcl&rdquo; type:    &ldquo;工 rmerProduct&rdquo;</p>
-
-<p>bottom: &ldquo;data&rdquo; top: &ldquo;fcl&rdquo;</p>
-
-<p>inner_product_param {</p>
-
-<p>num_output:    2    )</p>
-
-<p>} ~ &lsquo;</p>
-
-<p>}</p>
-
-<p>layer {</p>
-
-<p>name: &ldquo;sigmoidl&rdquo; type: &ldquo;Sigmoid&rdquo; bottom: &ldquo;fcl&rdquo; top: &ldquo;sigmoidl&rdquo;</p>
-
-<p>}</p>
-
-<p>layer {</p>
-
-<p>}</p>
-
-<p>}</p>
-
-<p>layer {</p>
-
-<p>name: &ldquo;softmax&rdquo; type:    &ldquo;Softmax&rdquo;</p>
-
-<p>bottom: nfc2&rdquo; top: &ldquo;prob&rdquo;</p>
-
-<p>}</p>
-
-<p>HDF5Data层没有了，取代的是i叩ut用来指定输入blob的名字，还有i叩ut_shape中</p>
-
-<p>指定输入数据的形状。最后一层也变成了 Softmax,最顶层输出取名为prob,表示属于某</p>
-
-<p>个类的概率。把这个用于推断的网络结构保存为testprototxt,然后用如下Python代码可以</p>
-
-<p>执行训练好的模型用于推断(Inference),最后生成-个和图7-3所示相似的可视化结果。</p>
-
-<p>import sys</p>
-
-<p>import pickle</p>
-
-<p>import numpy as np</p>
-
-<p>import matplotlib.pyplot as pit</p>
-
-<p>from mpl_toolkits.mplot3d import Axes3D</p>
-
-<p>sys.path.append(&lsquo;/opt/caffe/python&rsquo;)</p>
-
-<p>import caffe</p>
-
-<p>#构建一个网络用于Inference</p>
-
-<p># 网络结构是 test .prototxt，权重从训练好的 simple mlp iter 2000 . caf femodel 中 获取</p>
-
-<p>net = caffe.Net(1 test.prototxt <em>,    1simple_mlp_iter_2000.caffemodel</em>,</p>
-
-<p>caffe.TEST)</p>
-
-<p>#读取二维样本及标签</p>
-
-<p>with open (&rsquo; data. pkl&rsquo;,    * rb1) as f:</p>
-
-<p>samples, labels = pickle.load(f)</p>
-
-<p>samples = np.array(samples)</p>
-
-<p>labels = np.array(labels)</p>
-
-<p>#可视化，第一步可视化概率值平面</p>
-
-<p>X = np.arange (0z 1.05, 0.05)</p>
-
-<p>Y = np.arange(0, 1.05, 0.05)</p>
-
-<p>X, Y = np .meshgrid (X, Y)</p>
-
-<p>grids = np. array ([ [X [i] [j ] , Y [i] [ j ] ] for i in range (X. shape [0]) for j in range(X.shape[1])]) grid_probs =    []</p>
-
-<p>for grid in grids:</p>
-
-<p>net.blobs[* data *].data[&hellip;]    = grid.reshape((1,    2))[&hellip;]</p>
-
-<p>output = net.forward()</p>
-
-<p>grid一probs.append(output[* prob’] [0] [1])</p>
-
-<p>grid_probs = np.array(grid_probs).reshape(X.shape)</p>
-
-<p>fig = pit.figure(1 Sample Surface *)</p>
-
-<p>ax = fig.gca(projection=1 3d*)</p>
-
-<p>ax.plot_surface(X, Y, grid_probs, alpha=0.15, color= * k * A rstride=2, cstride=2, lw=0.5)</p>
-
-<p>#对所有样本及对应概率进行可视化</p>
-
-<p>samplesO = samples[labels==0]</p>
-
-<p>samples0_probs =    []</p>
-
-<p>for sample in samplesO :</p>
-
-<p>net.blobs[1 data *].data[&hellip;]    = sample.reshape( (1,    2))[&hellip;]</p>
-
-<p>output = net.forward()</p>
-
-<p>samples0_probs.append(output[&lsquo;prob1] [0] [1]) samples1    = samples[labels==l]</p>
-
-<p>samplesl_probs =    []</p>
-
-<p>for sample in samplesl:</p>
-
-<p>net.blobs[* data *].data[&hellip; ]    = sample.reshape((1,    2))[&hellip;]</p>
-
-<p>output = net.forward()</p>
-
-<p>samplesl_probs.append(output[&lsquo;prob *] [0] [1]) ax.scatter(samplesO[:,    0],    samplesO[:,    1],    samples0_probs,    c=1b1z</p>
-
-<p>marker=’八，，    s=50)</p>
-
-<p>ax.scatter(samplesl[:,    0],    samplesl[:,    1],    samplesl_probs,    c= * r * z</p>
-
-<p>marker= * o *,    s=50)</p>
-
-<p>pit.show()</p>
 
     </div>
 

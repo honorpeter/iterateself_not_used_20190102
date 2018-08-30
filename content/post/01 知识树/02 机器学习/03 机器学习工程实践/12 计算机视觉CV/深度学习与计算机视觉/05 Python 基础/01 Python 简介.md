@@ -3,7 +3,12 @@ title: 01 Python 简介
 toc: true
 date: 2018-08-29
 ---
-#### 第5章Python基础
+# 第5章Python基础
+
+## 需要补充的
+
+- <span style="color:red;">这个没有进行整理，把Python 部分的融合之后，这个合并进去</span>
+- 相关代码在 github 上是有的 https://github.com/frombeijingwithlove/dlcv_for_beginners
 
 Life is short, you need Python 人生苦短，你需要用Python
 
@@ -2021,3 +2026,11 @@ pit.show()
 本节只讲到了最基本和常用的图表及最简单的例子，更多有趣精美的例子可以在
 
  matplotlib 的官网找到，地址为 [http://matplotlib.org/gallery.html](http://matplotlib.org/gallery.html%e3%80%82)[。](http://matplotlib.org/gallery.html%e3%80%82)
+
+
+
+
+
+## 相关资料
+
+- 《深度学习与计算机视觉》

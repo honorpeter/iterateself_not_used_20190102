@@ -3,19 +3,26 @@ title: 01 OpenCV 简介
 toc: true
 date: 2018-08-29
 ---
-#### 6章 OpenCV基础
+
+# 6章 OpenCV基础
+
+## 需要补充的
+
+- <span style="color:red;">这部分简单看了下pdf，还是非常有意思的，是围绕数据增强提供了一些实现的方法，还有就是打标的工具，很nice。</span>
+- <span style="color:red;">这部分暂时还没有进行整理，对于 OpenCV 的使用我其实有一些了解，因此这部分在整合 OpenCV 相关的时候整理进去。</span>
+- 相关代码在 github 上是有的 https://github.com/frombeijingwithlove/dlcv_for_beginners
 
 在深度学习大行其道之前，提到计算机视觉的工具和框架，大多数人一定会最先想到 OpenCV。因为其丰富的接口，优秀的性能，商业友好的属性，OpenCV至今仍然是最流行 的计算机视觉库，并在各个计算机视觉领域发挥着巨大的作用。
 
 本章将介绍OpenCV的基本知识，以及Python下OpenCV的基础使用，并完成4个有 趣且实用的小例子。
 
-□延时摄影小程序。
+延时摄影小程序。
 
-□视频中截屏采样的小程序。
+视频中截屏采样的小程序。
 
-口图片数据增加（dataaugmentation）的小工具。
+图片数据增加（dataaugmentation）的小工具。
 
-□物体检测框标注小工具。
+物体检测框标注小工具。
 
 其中，后两个例子的代码可以在 <https://github.com/frombeijingwithlove/dlcv_for_> beginners上直接下载。
 

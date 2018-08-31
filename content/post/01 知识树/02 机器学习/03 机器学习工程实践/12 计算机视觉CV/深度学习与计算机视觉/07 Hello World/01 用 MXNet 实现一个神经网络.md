@@ -120,254 +120,296 @@ sudo python setup.py install
 
 ### MXNet 基本使用
 
-在第 3 章已经提到过，当描述一个神经网络或者一些计算公式及函数的时候，实质上 是在描述一种可以用图表示的计算关系。在MXNet中，这种计算关系可以有两种方式表 达和计算，即命令式(Imperative)和符号式(Symbolic)。比如(a+b)*c,命令式计算的代 码如下：
+在第 3 章已经提到过，当描述一个神经网络或者一些计算公式及函数的时候，实质上是在描述一种可以用图表示的计算关系。在MXNet中，这种计算关系可以有两种方式表达和计算，即命令式(Imperative)和符号式(Symbolic)。比如 (a+b)*c，命令式计算的代码如下：
 
-import mxnet as mx #申请内存并赋值，默认利用CPU
 
-a = mx.nd b = mx.nd c = mx.nd #执行计算 d = (a +
+```python
+import mxnet as mx
 
-array([1]) array([2]) array([3])
+# 申请内存并赋值，默认利用CPU
+a = mx.nd.array([1])
+b = mx.nd.array([2])
+c = mx.nd.array([3])
 
-b) * c
+# 执行计算
+d = (a + b) * c
 
-\#将结果以NumPy的array的形式表示， print(d.asnumpy())
+# 将结果以NumPy的array的形式表示 [9.]
+print(d.asnumpy())
+# 将结果以标量的形式表示 9.0
+print(d.asscalar())
+```
 
-[9.]
+和 NumPy 的 array 很像，其实 NDArray 里很多的操作和方法确实和 NumPy 是一样的。
 
-\#将结果以标量的形式表示，9.0 print(d.asscalar (>)
+回到正题，相应的符号式计算的代码如下：
 
-和NumPy的array很像，其实ND Array里很多的操作和方法确实和NumPy是一样的。
+```python
+import mxnet as mx
 
-回到正题，相应的符号式计算的代码如下： import mxnet as mx
+# 定义3个符号变量，注意符号变量都需要一个显式指定的名字
+a = mx.sys.Variable('a')
+b = mx.sys.Variable('b')
+c = mx.sys.Variable('c')
 
-\#定义3个符号变量，注意符号变量都需要一个显式指定的名字 a = mx.sym.Variable(* a') b = mx.sym.Variable(* b') c = mx.sym.Variable(•c*)
+# 定义计算关系
+d = (a + b) * c
 
-\#定义计算关系
+# 指定每个输入符号对应的输入
+input_args = {
+    'a': mx.nd.array([1]),
+    'b': mx.nd.array([2]),
+    'c': mx.nd.array([3]),
+}
 
-d = (a + b) * c #指定每个输入符号对应的输入
-
-| input args | ={      |                   |
-| ---------- | ------- | ----------------- |
-|            | 1 a':   | mx.nd.array([1]), |
-|            | 'b':    | mx.nd.array([2]), |
-| }          | * c * : | mx.nd.array([3])  |
-
-\# a、b、c和d定义的只是计算关系，执行计算(包括申请相应内存等操作)需要Executor
-
-\#用bind ()函数指定输入，d为输出，cpu ()指定计算在cpu上进行 executor = d.bind(ctx=mx.cpu(), args=input_args)
-
-\#执行计算
-
+# a、b、c和d定义的只是计算关系，执行计算(包括申请相应内存等操作)需要Executor
+# 用bind ()函数指定输入，d为输出，cpu ()指定计算在cpu上进行
+executor = d.bind(ctx=mx.cpu(), args=input_args)
+# 执行计算
 executor.forward()
+# 打印结果，[9.]
+print(executor.outputs[0].asnumpy())
+```
 
-\#打印结果，[9.]
+<span style="color:red;">这种方式看了有点眼熟，与 Tensorflow 感觉差不多类似的</span>
 
+可以看到，命令式计算非常灵活直接，每个变量的内存分配是即时完成的，计算也是即时完成。而符号式计算则是函数式编程的思路，计算也是延迟(lazy)的，符号变量只能定义计算关系。<span style="color:red;">这就是函数式编程的思路吗？想知道这个思路到底是什么？</span>
+
+这种计算关系在执行前需要通过 bind() 方法产生一个执行器(Executor), 用来把数据的 NDArray 和 Symbol 绑定起来，实际的计算发生在 Executor 调用时。
+
+符号式计算很明显要麻烦一些，不过优点是延迟计算和对计算图的优化能得到更优的性能。另外，在MXNet中通过符号式计算求导是非常方便的，继续接前面例子：<span style="color:red;">为什么对计算图的优化能得到更优的性能？</span>
+
+```python
+import mxnet as mx
+
+# 定义3个符号变量，注意符号变量都需要一个显式指定的名字
+a = mx.sys.Variable('a')
+b = mx.sys.Variable('b')
+c = mx.sys.Variable('c')
+
+# 定义计算关系
+d = (a + b) * c
+
+# 指定每个输入符号对应的输入
+input_args = {
+    'a': mx.nd.array([1]),
+    'b': mx.nd.array([2]),
+    'c': mx.nd.array([3]),
+}
+
+# a、b、c和d定义的只是计算关系，执行计算(包括申请相应内存等操作)需要Executor
+# 用bind ()函数指定输入，d为输出，cpu ()指定计算在cpu上进行
+executor = d.bind(ctx=mx.cpu(), args=input_args)
+# 执行计算
+executor.forward()
+# 打印结果，[9.]
 print(executor.outputs[0].asnumpy())
 
-可以看到，命令式计算非常灵活直接，每个变量的内存分配是即时完成的，计算也是 即时完成。而符号式计算则是函数式编程的思路，计算也是延迟(lazy)的，符号变量只 能定义计算关系。这种计算关系在执行前需要通过bind()方法产生一个执行器(Executor), 用来把数据的NDArray和Symbol绑定起来，实际的计算发生在Executor调用时。符号式 计算很明显要麻烦一些，不过优点是延迟计算和对计算图的优化能得到更优的性能。另外， 在MXNet中通过符号式计算求导是非常方便的，继续接前面例子：
+#定义一个变量用来保存关于a的梯度，随便初始化一下
+grad_a=mx.nd.empty(1)
 
-\#定义一个变量用来保存关于a的梯度，随便初始化一下
-
-grad_a = mx. nd. empty (1)    ..
-
-\#在bind ()函数中指定要求梯度的变量
-
-executor = d.bind( ctx=mx.cpu(), args=input_args, args_grad={* a *: grad_a}
-
+#在bind ()函数中指定要求梯度的变量
+executor=d.bind(
+    ctx=mx.cpu(),
+    args=input_args,
+    args_grad={'a':grad_a}
 )
+#因为梯度是传播的，所以最后输出节点的梯度需要指定，这里用1
+executor.backward(out_grags=mx.nd.ones(1))
+#计算出梯度为 3.0，也就是 c 的值，将自动刷新在 grad_a 中
+print(grad_a.asscalar())
+```
 
-\#因为梯度是传播的，所以最后输出节点的梯度需要指定，这里用1 executor.backward(out_grads=mx.nd.ones(1))
+<span style="color:red;">什么意思？上面的求导的过程没大看懂，为什么最后的输出的节点的梯度需要指定？而且 `args_grad={'a':grad_a}` 是用来做什么的？ </span>
 
-\#计算出梯度为3.0，也、就ic的值，将自动刷新在grad_a中 print(grad_a.asscalar())
 
-在MXNet中，第一段代码中，用于命令式计算的NDArray是一个非常基础的模块， 符号式计算的Symbolic模块结合NDArray 一起使用可以定义一些基础的计算关系并进行 计算。在这两个模块基础上可以搭建一些简单的计算关系，比如神经网络。但是如果每次 都像上面代码一样从底层搭建，并且自己指定计算梯度等操作，甚至更进一步比如在神经 网络中进行后向传播和梯度更新等，将是一件非常麻烦的事情。所以在NDArray和Symbolic 基础上，MXNet提供了一些接口进行封装来简化这些操作，包含通用性更好的Module模 块和更为简单的Model模块。
+在 MXNet 中，第一段代码中，用于命令式计算的 NDArray 是一个非常基础的模块，符号式计算的 Symbolic 模块结合 NDArray 一起使用可以定义一些基础的计算关系并进行计算。在这两个模块基础上可以搭建一些简单的计算关系，比如神经网络。但是如果每次都像上面代码一样从底层搭建，并且自己指定计算梯度等操作，甚至更进一步比如在神经 网络中进行后向传播和梯度更新等，将是一件非常麻烦的事情。所以在 NDArray 和 Symbolic 基础上，MXNet提供了一些接口进行封装来简化这些操作，包含通用性更好的 Module 模块和更为简单的 Model 模块。<span style="color:red;">嗯。</span>
 
-既然要训练模型，就不能避免与数据和机器打交道，所以MXNet也提供了数据读取 和处理的IO Data Loading模块和用来支持多GPU卡及分布式计算的KVStore模块。本书 作为一本入门书籍，将主要涉及6大模块中除了 KVStore以外的模块，神经网络模型的搭 建也主要基于Module和Model模块，而不需要从Symbolic开始进行复杂的底层编写。更 多关于这些模块的细节可以参考官方文档[http://mxnet.io/zh/api/python/](http://mxnet.io/zh/api/python/%e3%80%82)[。](http://mxnet.io/zh/api/python/%e3%80%82)
+既然要训练模型，就不能避免与数据和机器打交道，所以MXNet也提供了数据读取和处理的 IO Data Loading 模块和用来支持多 GPU 卡及分布式计算的 KVStore 模块。本书 作为一本入门书籍，将主要涉及 6 大模块中除了 KVStore 以外的模块，神经网络模型的搭 建也主要基于 Module 和 Model 模块，而不需要从 Symbolic 开始进行复杂的底层编写。更多关于这些模块的细节可以参考官方文档 http://mxnet.io/zh/api/python/ 。<span style="color:red;">嗯，这些模块都要总结，而且 KVStore 也要掌握，</span>
 
-7.1.4用MXNet实现一个两层神经网络
+## 用MXNet实现一个两层神经网络
 
-本节将基于Model模块实现本书中第一个神经网络。数据和网络的模型结构就是第3
+本节将基于 Model 模块实现本书中第一个神经网络。数据和网络的模型结构就是第 3 章中 3.2.2中的例子，产生数据的代码如下：
 
-章中3.2.2中的例子，产生数据的代码如下： import pickle import numpy as np
+```python
+import pickle
+import numpy as np
+import matplotlib.pyplot as plt
 
-\#划分类别的边界
 
+# 划分类别的边界
 def cos_curve(x):
+    return 0.25 * np.sin(2 * x * np.pi + 0.5 * np.pi) + 0.5
 
+
+# samples 保存二维点的坐标，labels 标明类别
+np.random.seed(123)
+samples = []
+labels = []
+
+# 单位样本空间内平均样本数为 50
+sample_density = 50
 for i in range(sample_density):
+    x1, x2 = np.random.random(2)
+    # 计算当前 x1 对应的分类边界
+    bound = cos_curve(x1)
+    # 为了方便可视化，舍弃太靠近边界的样本
+    if bound - 0.1 < x2 <= bound + 0.1:
+        continue
+    else:
+        samples.append((x1, x2))
+        # 上半部分标签为1，下半部分标签为0
+        if x2 > bound:
+            labels.append(1)
+        else:
+            labels.append(0)
 
-xl, x2 = np.random.random(2)
+# 讲生成的样本和标签保存
+with open('data.pkl', 'wb') as f:
+    pickle.dump((samples, labels), f)
 
-\#计算当前xl对应的分类边界 bound = cos_curve(xl)
+# 可视化
+for i, sample in enumerate(samples):
+    plt.plot(sample[0], sample[1],
+             'o' if labels[i] else '^',
+             mec='r' if labels[i] else 'b',
+             mfc='none',
+             markersize=10)
 
-\#为了方便可视 1 七，舍弃太靠近边界的样本 if bound -    0.1    < x2 <= bound. +    0.1:
+x1 = np.linspace(0, 1)
+plt.plot(x1, cos_curve(x1), 'k--')
+plt.show()
+```
 
-continue
 
-else :
+数据的二维可视化参照第3章的图3-7所示。
 
-samples.append((xl, x2))
+![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/mj98f4Kb59.png?imageslim)
 
-\#上半部分标签为1,下半部分标签为2 if x2 > bound:
+然后通过 MXNet 的 model 模块搭建一个两层神经网络，网络结构参照第3章的图3-8所示，
 
-labels.append(1)
+![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/2ba909hiCc.png?imageslim)
 
-else:
+代码如下：
 
-labels.append(0)
 
-\#将生成的样本和标签保存
+```python
+import pickle
+import logging
+import numpy as np
+import mxnet as mx
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
-with open (1 data. pkl *,    * wb *) as f:
+# Define the network
+# 定义 data
+data = mx.sym.Variable('data')
+# data 经过一个两输出的全连接层
+fc1 = mx.sym.FullyConnected(data=data, name='fc1', num_hidden=2)
+# 再经过一个 sigmoid 激活层
+sigmoid1 = mx.sym.Activation(data=fc1, name='sigmoid1', act_type='sigmoid')
+# 然后再经过一个全连接层
+fc2 = mx.sym.FullyConnected(data=sigmoid1, name='fc2', num_hidden=2)
+# 最后经过 Softmax 输出，SoftmaxOutput 还自带 NLL 作为loss 进行计算
+mlp = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
 
-pickle.dump((samples, labels), f)
 
-\#可视化
-
-import matplotlib.pyplot as pit for i, sample in enumerate(samples):
-
-pit.plot(sample[0], sample[1],    * o * if labels[i] else ' A * ,
-
-mec= * r * if labels[i] else *b *, mfc= * none *,
-
-markersize=l0) xl = np.linspace(0,    1)
-
-pit.plot(xl, cos_curve(xl) ,    'k--*)
-
-pit.show()
-
-数据的二维可视化参照第3章的图3-7所示。然后通过MXNet的model模块搭建一个
-
-两层神经网络，网络结构参照第3章的图3-8所示，代码如下： import numpy as np import mxnet as mx
-
-\#    定义data
-
-data = mx.sym.Variable(* data *)
-
-\#    data经过一个两输出的全连接层
-
-f cl = mx.sym.FullyConnected(data=data, name=,fcl,, num_hidden=2)
-
-\#再经过一个sigmoid激活层
-
-sigmoidl = mx.sym.Activation(data=fclz name= * sigmoidl*, act_type=* sigmoid*)
-
-\#然后再过一个全连接层
-
-fc2 = mx.sym.FullyConnected(data=sigmoidl, name= * fc2 *, num_hidden=2)
-
-\#最后经过Softmax输出，Sof tmaxOutput还自带NLL作为loss进行计算 mlp = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
-
-\#网络结构可视化，基于graphviz
-
+# 网络结构可视化，基于 graphviz
 shape = {'data': (2,)}
-
-mlp_dot = mx.viz.plot_network(symbol=mlp, shape=shape) mlp_dot.render(* simple_mlp.gv', view=True)
-
-程序执行后就定义好了计算关系，最后3行代码是网络结构的可视化，执行程序得到 如图7-2所示的结构图。
+mlp_dot = mx.viz.plot_network(symbol=mlp, shape=shape)
+mlp_dot.render('simple_mlp.gv', view=True)
 
 
+# 接着，我们就开始读取数据来训练这个模型
+# 用 pickle 读取数据
+with open('../data.pkl', 'rb') as f:
+    samples, labels = pickle.load(f)
 
-图7-2 MXNet可视化简单的二层神经网络
-
-有了网络，接下来可以读取数据训练模型了。对于内存中生成的数据，可以用 mxnet.io.NDArraylter来生成一个用于遍历训练数据和对应标签的迭代器，然后用model进
-
-行训练。代码如下： import pickle import logging #用pickle读取数据
-
-with open (* data. pkl *,    ' rb *) as f:
-
-samples, labels = pickle.load(f)
-
-\#设置logging级别，显示训练时的信息
-
+# 设置 logging 级别，显示训练时候的信息
 logging.getLogger().setLevel(logging.DEBUG)
 
-\#对于这个简单例子，就用全量梯度下降法
+# 对于这个简单例子，就用全量梯度下降法，整个数据集作为一个 batch
+batch_size = len(labels)
+samples = np.array(samples)
+labels = np.array(labels)
 
-batch_size = len(labels) samples = np.array(samples) labels = np.array(labels)
+# 生成训练数据迭代器
+train_iter = mx.io.NDArrayIter(samples, labels, batch_size)
 
-\#生成训练数据迭代器
+# 利用 mxnet.model.FeedForward.create 训练一个网络
+# 迭代 1000 代，学习率 0.1，冲量系数 0.99
+model = mx.model.FeedForward.create(
+    symbol=mlp,
+    X=train_iter,
+    num_epoch=1000,
+    learning_rate=0.1,
+    momentum=0.99)
 
-train_iter = mx.io.NDArraylter(samples, labels, batch_size)
-
-\# 利用 mxnet .model. FeedForward. create 训练一个网络 #迭代1000代，学习率0.1,冲量系数0.99
-
-model = mx.model.FeedForward.create( symbol=mlp,
-
-X=train_iter, num_epoch=l000, learning_rate=0.1, momentum=0.99)
-
-\# mxnet也提供先设置好参数，然后通过fit ()方法进行训练的方式 model = mx.model.FeedForward(
-
-symbol=mlpf num_epoch=1000, learning_rate=O.1, momentum=0.99)
-
+'''
+# mxnet 也提供先设置好参数，然后通过 fit() 方法进行训练的方式。
+model = mx.model.FeedForward(
+    symbol=mlp,
+    num_epoch=1000,
+    learning_rate=0.1,
+    momentum=0.99)
 model.fit(X=train_iter)
+'''
 
-f V V
+# 使用训练好的模型对一个点进行预测
+print(model.predict(mx.nd.array([[0.5, 0.5]])))
 
-\#训练好的模型进行预测，正中央一点属于类别1
+# 接下来对所有样本和取值范围的平面进行分类，并画出对应的概率可视化的图
 
-print(model.predict(mx.nd.array([[0.5,    0.5]])))
-
-训练过程中可以看到实时输出的loss信息，每迭代完一代（epoch）就进行一次重 新设置：
-
-INFO
-
-INFO
-
-INFO
-
-INFO
-
-INFO
-
-root
-
-root
-
-root
-
-root
-
-root
-
-Start training with [cpu (0)] Epoch[0] Resetting Data Iterator Epoch[0] Time cost=0.007
-
-Epoch[1] Resetting Data Iterator Epoch[1] Time cost=0.002
-
-接下来用训练好的模型对所有样本和取值范围的平面进行分类，并画出对应的概率可 视化的图，代码如下：
-
-import matplotlib.pyplot as pit from mpl_toolkits.mplot3d import Axes3D #定义取if范围平面的采样格点，以0.05为间隔 X = np.arange(0, 1.05, 0.05)
-
-Y = np.arange(0z 1.05, 0.05)
-
+# 定义取值范围平面的采样格点，以 0.05 为间隔
+X = np.arange(0, 1.05, 0.05)
+Y = np.arange(0, 1.05, 0.05)
 X, Y = np.meshgrid(X, Y)
 
-\#按照模型可以接受的格式生成每个格点的坐标
+# 按照模型可以接受的格式生成每个格点的坐标
+grids = mx.nd.array([[X[i][j], Y[i][j]] for i in range(X.shape[0]) for j in range(X.shape[1])])
+# 获取模型预测的结果，以标签 1 为结果
+grid_probs = model.predict(grids)[:, 1].reshape(X.shape)
 
-grids = mx.nd.array([ [X [i] [j], Y[i] [j]] for i in range(X.shape [0]) for j in range(X.shape[1])])
+# 定义图标
+fig = plt.figure('Sample Surface')
+ax = fig.gca(projection='3d')
 
-\#获取模型预测的结果，以标签1为结果
+# 画出整个结果的表面
+ax.plot_surface(X, Y, grid_probs, alpha=0.15, color='k', rstride=2, cstride=2, lw=0.5)
 
-grid_probs = model.predict(grids)[:,    1].reshape(X.shape)
+# 按照标签选出对应的样本
+samples0 = samples[labels==0]
+samples0_probs = model.predict(samples0)[:, 1]
+samples1 = samples[labels==1]
+samples1_probs = model.predict(samples1)[:, 1]
 
-\#定^图标
+# 按照标签画出散点图，标签为 0 的是红色圆，标签为 1 的是蓝色三角
+ax.scatter(samples0[:, 0], samples0[:, 1], samples0_probs, c='b', marker='^', s=50)
+ax.scatter(samples1[:, 0], samples1[:, 1], samples1_probs, c='r', marker='o', s=50)
 
-fig = pit.figure(* Sample Surface *) ax = fig.gca(projection= * 3d*)
+plt.show()
+```
 
-\#画出整个结果的表面
+说明：
 
-ax.plot_surface(X, Y, grid_probs, alpha=0.15, color= * k'z rstride=2, cstride=2, lw=0.5)
+1. 在执行程序的时候，我们会得到如图7-2所示的结构图。
+  ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/g95g1gk0BC.png?imageslim)
 
-\#按照标签选出对应样本
+2. 我们用的是 mxnet.io.NDArrayIter 来生成一个用于遍历训练数据和对应标签的迭代器，然后用model进行训练。<span style="color:red;">是不是一定要用这个？</span>
 
-samplesO = samples[labels==0]
+3. 训练过程中可以看到实时输出的loss信息，每迭代完一代（epoch）就进行一次重 新设置：
+```
+INFO:root:Start training with [cpu (0)]
+INFO:root:Epoch[0] Resetting Data Iterator
+INFO:root:Epoch[0] Time cost=0.007
+INFO:root:Epoch[1] Resetting Data Iterator
+INFO:root:Epoch[1] Time cost=0.002
+```
 
-pit.show()
+4. 我们会用训练好的模型对所有样本和取值范围的平面进行分类，并画出对应的三维的概率可视化的图如下：
+  ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/AcJGk9GCl5.png?imageslim)
 
-程序生成的三维可视化图如图7-3所示。
-
-注意这只是最简单的例子，目的是帮助了解MXNet的基本使用，并没有设置验证/测 试集，训练迭代1000次也只是随便定的。7.2节将用Caffe实现这个例子，而更加实际的 例子会从第8章开始。
-
+对于上面的程序有两个地方想知道：<span style="color:red;">SoftmaxOutput 还自带 NLL 作为loss 是什么意思？冲量系数是什么？了解下。</span>
 
 
-图7-3标签为1的概率在取值平面上的分布可视化
+注：这只是最简单的例子，目的是帮助了解 MXNet 的基本使用，并没有设置验证/测试集，训练迭代1000次也只是随便定的。7.2 节将用 Caffe 实现这个例子，而更加实际的例子会从第8章开始。<span style="color:red;">嗯。</span>

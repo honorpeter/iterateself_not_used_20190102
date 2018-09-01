@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 命令式 符号式 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 还是要系统的学习一下 Caffe，保证对于所有类型的项目，都能够熟练的做出来，别人的论文也能够熟练的重现出来。 MXNet 基本使用 在第 3 章已经" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/05-mxnet/03-%E5%91%BD%E4%BB%A4%E5%BC%8F-%E7%AC%A6%E5%8F%B7%E5%BC%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 命令式 符号式" />
+<meta property="og:description" content="需要补充的 还是要系统的学习一下 Caffe，保证对于所有类型的项目，都能够熟练的做出来，别人的论文也能够熟练的重现出来。 MXNet 基本使用 在第 3 章已经" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/05-mxnet/03-%E5%91%BD%E4%BB%A4%E5%BC%8F-%E7%AC%A6%E5%8F%B7%E5%BC%8F/" /><meta property="article:published_time" content="2018-09-01T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-09-01T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="03 命令式 符号式">
+<meta itemprop="description" content="需要补充的 还是要系统的学习一下 Caffe，保证对于所有类型的项目，都能够熟练的做出来，别人的论文也能够熟练的重现出来。 MXNet 基本使用 在第 3 章已经">
+
+
+<meta itemprop="datePublished" content="2018-09-01T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-01T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1546">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 命令式 符号式"/>
+<meta name="twitter:description" content="需要补充的 还是要系统的学习一下 Caffe，保证对于所有类型的项目，都能够熟练的做出来，别人的论文也能够熟练的重现出来。 MXNet 基本使用 在第 3 章已经"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 命令式 符号式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-09-01 </span>
+        
+        <span class="more-meta"> 1546 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#mxnet-基本使用">MXNet 基本使用</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>还是要系统的学习一下 Caffe，保证对于所有类型的项目，都能够熟练的做出来，别人的论文也能够熟练的重现出来。</li>
+</ul>
+
+<h1 id="mxnet-基本使用">MXNet 基本使用</h1>
+
+<p>在第 3 章已经提到过，当描述一个神经网络或者一些计算公式及函数的时候，实质上是在描述一种可以用图表示的计算关系。在MXNet中，这种计算关系可以有两种方式表达和计算，即命令式(Imperative)和符号式(Symbolic)。比如 (a+b)*c，命令式计算的代码如下：</p>
+
+<pre><code class="language-python">import mxnet as mx
+
+# 申请内存并赋值，默认利用CPU
+a = mx.nd.array([1])
+b = mx.nd.array([2])
+c = mx.nd.array([3])
+
+# 执行计算
+d = (a + b) * c
+
+# 将结果以NumPy的array的形式表示 [9.]
+print(d.asnumpy())
+# 将结果以标量的形式表示 9.0
+print(d.asscalar())
+</code></pre>
+
+<p>和 NumPy 的 array 很像，其实 NDArray 里很多的操作和方法确实和 NumPy 是一样的。</p>
+
+<p>回到正题，相应的符号式计算的代码如下：</p>
+
+<pre><code class="language-python">import mxnet as mx
+
+# 定义3个符号变量，注意符号变量都需要一个显式指定的名字
+a = mx.sys.Variable('a')
+b = mx.sys.Variable('b')
+c = mx.sys.Variable('c')
+
+# 定义计算关系
+d = (a + b) * c
+
+# 指定每个输入符号对应的输入
+input_args = {
+    'a': mx.nd.array([1]),
+    'b': mx.nd.array([2]),
+    'c': mx.nd.array([3]),
+}
+
+# a、b、c和d定义的只是计算关系，执行计算(包括申请相应内存等操作)需要Executor
+# 用bind ()函数指定输入，d为输出，cpu ()指定计算在cpu上进行
+executor = d.bind(ctx=mx.cpu(), args=input_args)
+# 执行计算
+executor.forward()
+# 打印结果，[9.]
+print(executor.outputs[0].asnumpy())
+</code></pre>
+
+<p><span style="color:red;">这种方式看了有点眼熟，与 Tensorflow 感觉差不多类似的</span></p>
+
+<p>可以看到，命令式计算非常灵活直接，每个变量的内存分配是即时完成的，计算也是即时完成。而符号式计算则是函数式编程的思路，计算也是延迟(lazy)的，符号变量只能定义计算关系。<span style="color:red;">这就是函数式编程的思路吗？想知道这个思路到底是什么？</span></p>
+
+<p>这种计算关系在执行前需要通过 bind() 方法产生一个执行器(Executor), 用来把数据的 NDArray 和 Symbol 绑定起来，实际的计算发生在 Executor 调用时。</p>
+
+<p>符号式计算很明显要麻烦一些，不过优点是延迟计算和对计算图的优化能得到更优的性能。另外，在MXNet中通过符号式计算求导是非常方便的，继续接前面例子：<span style="color:red;">为什么对计算图的优化能得到更优的性能？</span></p>
+
+<pre><code class="language-python">import mxnet as mx
+
+# 定义3个符号变量，注意符号变量都需要一个显式指定的名字
+a = mx.sys.Variable('a')
+b = mx.sys.Variable('b')
+c = mx.sys.Variable('c')
+
+# 定义计算关系
+d = (a + b) * c
+
+# 指定每个输入符号对应的输入
+input_args = {
+    'a': mx.nd.array([1]),
+    'b': mx.nd.array([2]),
+    'c': mx.nd.array([3]),
+}
+
+# a、b、c和d定义的只是计算关系，执行计算(包括申请相应内存等操作)需要Executor
+# 用bind ()函数指定输入，d为输出，cpu ()指定计算在cpu上进行
+executor = d.bind(ctx=mx.cpu(), args=input_args)
+# 执行计算
+executor.forward()
+# 打印结果，[9.]
+print(executor.outputs[0].asnumpy())
+
+#定义一个变量用来保存关于a的梯度，随便初始化一下
+grad_a=mx.nd.empty(1)
+
+#在bind ()函数中指定要求梯度的变量
+executor=d.bind(
+    ctx=mx.cpu(),
+    args=input_args,
+    args_grad={'a':grad_a}
+)
+#因为梯度是传播的，所以最后输出节点的梯度需要指定，这里用1
+executor.backward(out_grags=mx.nd.ones(1))
+#计算出梯度为 3.0，也就是 c 的值，将自动刷新在 grad_a 中
+print(grad_a.asscalar())
+</code></pre>
+
+<p><span style="color:red;">什么意思？上面的求导的过程没大看懂，为什么最后的输出的节点的梯度需要指定？而且 <code>args_grad={'a':grad_a}</code> 是用来做什么的？ </span></p>
+
+<p>在 MXNet 中，第一段代码中，用于命令式计算的 NDArray 是一个非常基础的模块，符号式计算的 Symbolic 模块结合 NDArray 一起使用可以定义一些基础的计算关系并进行计算。在这两个模块基础上可以搭建一些简单的计算关系，比如神经网络。但是如果每次都像上面代码一样从底层搭建，并且自己指定计算梯度等操作，甚至更进一步比如在神经 网络中进行后向传播和梯度更新等，将是一件非常麻烦的事情。所以在 NDArray 和 Symbolic 基础上，MXNet提供了一些接口进行封装来简化这些操作，包含通用性更好的 Module 模块和更为简单的 Model 模块。<span style="color:red;">嗯。</span></p>
+
+<p>既然要训练模型，就不能避免与数据和机器打交道，所以MXNet也提供了数据读取和处理的 IO Data Loading 模块和用来支持多 GPU 卡及分布式计算的 KVStore 模块。本书 作为一本入门书籍，将主要涉及 6 大模块中除了 KVStore 以外的模块，神经网络模型的搭 建也主要基于 Module 和 Model 模块，而不需要从 Symbolic 开始进行复杂的底层编写。更多关于这些模块的细节可以参考官方文档 <a href="http://mxnet.io/zh/api/python/">http://mxnet.io/zh/api/python/</a> 。<span style="color:red;">嗯，这些模块都要总结，而且 KVStore 也要掌握，</span></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>《深度学习与计算机视觉》</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E9%9D%99%E6%80%81%E5%9B%BE%E5%83%8F%E9%A2%86%E5%9F%9F/01-%E7%89%A9%E4%BD%93%E8%AF%86%E5%88%AB%E4%B8%8E%E6%A3%80%E6%B5%8B/10-%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/03-%E5%87%86%E5%A4%87-caffe-%E8%A6%81%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 准备 Caffe 要用的数据</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E9%9D%99%E6%80%81%E5%9B%BE%E5%83%8F%E9%A2%86%E5%9F%9F/01-%E7%89%A9%E4%BD%93%E8%AF%86%E5%88%AB%E4%B8%8E%E6%A3%80%E6%B5%8B/10-%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/10-%E5%9F%BA%E4%BA%8E-caffe-%E5%AE%9E%E7%8E%B0-lenet-5-%E7%BD%91%E7%BB%9C/">
+            <span class="next-text nav-default">10 基于 Caffe 实现 LeNet-5 网络</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

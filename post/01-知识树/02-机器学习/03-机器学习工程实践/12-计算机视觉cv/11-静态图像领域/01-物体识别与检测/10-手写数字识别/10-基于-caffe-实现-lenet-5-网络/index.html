@@ -60,7 +60,7 @@
 
 <meta itemprop="datePublished" content="2018-09-01T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-09-01T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="6388">
+<meta itemprop="wordCount" content="6407">
 
 
 
@@ -135,7 +135,7 @@
       <div class="post-meta">
         <span class="post-time"> 2018-09-01 </span>
         
-        <span class="more-meta"> 6388 words </span>
+        <span class="more-meta"> 6407 words </span>
         <span class="more-meta"> 13 mins read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
@@ -376,22 +376,19 @@ layer {
 </code></pre>
 
 <p><span style="color:red;">
-有很多想知道的：</p>
-
-<ol>
-<li>每个 layer 有多少种 type？</li>
-<li>而且，为什么第一个 layer 有两个top？top 和bottom 是什么意思？</li>
-<li>name 是用来做什么的？</li>
-<li>include { phase: TRAIN} 是什么意思？不同的 phase 有什么不同吗？</li>
-<li>为什么 验证阶段也放在里面了？验证阶段的 layer 在整个 网络中是出于什么位置？</li>
-<li>每个卷积层的两个 param 的 lr_mult 是什么意思？为什么偏置还有学习率？卷积核的学习率又要怎么定？</li>
-<li>weight_filler 有多少种方式？ xavier 是现在普遍使用的方式吗？要总结下。</li>
-<li>InnerProduct 是什么层？</li>
-<li>Accuracy 是什么层？</li>
-<li>SoftmaxWithLoss 这个层可以自定义吗？</li>
-<li>对整个这些层的连接和运转还是有些不清楚。
-</span></li>
-</ol>
+有很多想知道的：
+1. 每个 layer 有多少种 type？
+2. 而且，为什么第一个 layer 有两个top？top 和bottom 是什么意思？
+3. name 是用来做什么的？
+4. include { phase: TRAIN} 是什么意思？不同的 phase 有什么不同吗？
+5. 为什么 验证阶段也放在里面了？验证阶段的 layer 在整个 网络中是出于什么位置？
+6. 每个卷积层的两个 param 的 lr_mult 是什么意思？为什么偏置还有学习率？卷积核的学习率又要怎么定？
+7. weight_filler 有多少种方式？ xavier 是现在普遍使用的方式吗？要总结下。
+8. InnerProduct 是什么层？
+9. Accuracy 是什么层？
+10. SoftmaxWithLoss 这个层可以自定义吗？
+11. 对整个这些层的连接和运转还是有些不清楚。
+</span></p>
 
 <p>每一层的参数意义已经写在了注释中。另外就是引入了 TEST 的数据层，有专门用于验证的数据 val_lmdb。</p>
 
@@ -433,21 +430,18 @@ solver_mode: GPU
 </code></pre>
 
 <p><span style="color:red;">
-想要知道的：</p>
-
-<ol>
-<li><code>weight_decay</code> 这个是什么？</li>
-<li>什么是 <code>inv</code> 的学习策略？<code>lr=base_lr*(1+gamma*iter)^(-power)</code> 是什么？</li>
-<li>为什么要保存模型的参数和训练状态？这个之前就有这个疑问。</li>
-<li>对于这种 solver.prototxt ，想要知道更多可以配置的选项，要好好总结下。
-</span></li>
-</ol>
+想要知道的：
+1. <code>weight_decay</code> 这个是什么？
+2. 什么是 <code>inv</code> 的学习策略？<code>lr=base_lr*(1+gamma*iter)^(-power)</code> 是什么？
+3. 为什么要保存模型的参数和训练状态？这个之前就有这个疑问。
+4. 对于这种 solver.prototxt ，想要知道更多可以配置的选项，要好好总结下。
+</span></p>
 
 <p>本例和Caffe的官方例子区别不大，除了迭代次数有所变化之外。更多 Solver 的详细内容可以参考 Caffe 官网 <a href="http://caffe.berkeleyvision.org/tutorial/solver.html">http://caffe.berkeleyvision.org/tutorial/solver.html</a> 。<span style="color:red;">嗯。</span></p>
 
 <p>OK，现在万事俱备，调用下面命令就可以进行训练了。</p>
 
-<pre><code>/path/to/caffe/build/tools/caffe train -solver lenet_solver.prototxt -gpu 0 -log_dir . /
+<pre><code>/path/to/caffe/build/tools/caffe train -solver lenet_solver.prototxt -gpu 0 -log_dir ./
 </code></pre>
 
 <p>或者双短线开头的参数命令：</p>
@@ -743,16 +737,13 @@ with open(imglist, 'r') as f:
 </code></pre>
 
 <p><span style="color:red;">
-想要知道的：</p>
-
-<ol>
-<li><code>net = caffe.Net('lenet.prototxt', 'mnist_lenet_iter_36000.caffemodel', caffe.TEST)</code> 还是要好好总结下的。</li>
-<li><code>net.blobs['data'].reshape(1, 1, 28, 28)</code> 看来关于 caffe.Net 还是要好好总结下的，如果不是真的理解，那么根本不知道这里该怎么写，该写什么。</li>
-<li><code>image = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE).astype(np.float) - MEAN</code> 看来对 python 的 OpenCV 还是要好好整理的，要明确每一步得到的数据类型，以及数据内容，以及可以进行什么操作，可以转化成什么类型。这样你才能有底气对这个数据进行处理。</li>
-<li><code>net.blobs['data'].data[...] = image</code> 这个 <code>...</code> 一直没有怎么总结，一直都不是很明白这个指的是什么。</li>
-<li><code>pred_label = np.argmax(output['prob'][0])</code> 这个 <code>np.argmax</code> 还是有点不是很熟悉的，虽然我知道他是用来获得最大的数的 index 的。不过还是要更详细的理解。
-</span></li>
-</ol>
+想要知道的：
+1. <code>net = caffe.Net('lenet.prototxt', 'mnist_lenet_iter_36000.caffemodel', caffe.TEST)</code> 还是要好好总结下的。
+2. <code>net.blobs['data'].reshape(1, 1, 28, 28)</code> 看来关于 caffe.Net 还是要好好总结下的，如果不是真的理解，那么根本不知道这里该怎么写，该写什么。
+3. <code>image = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE).astype(np.float) - MEAN</code> 看来对 python 的 OpenCV 还是要好好整理的，要明确每一步得到的数据类型，以及数据内容，以及可以进行什么操作，可以转化成什么类型。这样你才能有底气对这个数据进行处理。
+4. <code>net.blobs['data'].data[...] = image</code> 这个 <code>...</code> 一直没有怎么总结，一直都不是很明白这个指的是什么。
+5. <code>pred_label = np.argmax(output['prob'][0])</code> 这个 <code>np.argmax</code> 还是有点不是很熟悉的，虽然我知道他是用来获得最大的数的 index 的。不过还是要更详细的理解。
+</span></p>
 
 <p>需要提一下的是 lenet.prototxt，开头几行和第7章中讲的对数据形状的定义不一样。</p>
 

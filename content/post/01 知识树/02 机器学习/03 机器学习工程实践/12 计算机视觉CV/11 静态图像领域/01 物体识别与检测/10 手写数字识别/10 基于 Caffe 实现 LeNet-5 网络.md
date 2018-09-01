@@ -209,6 +209,8 @@ layer {
 
 <span style="color:red;">
 有很多想知道的：
+</span>
+<span style="color:red;">
 1. 每个 layer 有多少种 type？
 2. 而且，为什么第一个 layer 有两个top？top 和bottom 是什么意思？
 3. name 是用来做什么的？
@@ -264,6 +266,8 @@ solver_mode: GPU
 
 <span style="color:red;">
 想要知道的：
+</span>
+<span style="color:red;">
 1. `weight_decay` 这个是什么？
 2. 什么是 `inv` 的学习策略？`lr=base_lr*(1+gamma*iter)^(-power)` 是什么？
 3. 为什么要保存模型的参数和训练状态？这个之前就有这个疑问。
@@ -585,6 +589,8 @@ with open(imglist, 'r') as f:
 
 <span style="color:red;">
 想要知道的：
+</span>
+<span style="color:red;">
 1. `net = caffe.Net('lenet.prototxt', 'mnist_lenet_iter_36000.caffemodel', caffe.TEST)` 还是要好好总结下的。
 2. `net.blobs['data'].reshape(1, 1, 28, 28)` 看来关于 caffe.Net 还是要好好总结下的，如果不是真的理解，那么根本不知道这里该怎么写，该写什么。
 3. `image = cv2.imread(imgpath, cv2.IMREAD_GRAYSCALE).astype(np.float) - MEAN` 看来对 python 的 OpenCV 还是要好好整理的，要明确每一步得到的数据类型，以及数据内容，以及可以进行什么操作，可以转化成什么类型。这样你才能有底气对这个数据进行处理。

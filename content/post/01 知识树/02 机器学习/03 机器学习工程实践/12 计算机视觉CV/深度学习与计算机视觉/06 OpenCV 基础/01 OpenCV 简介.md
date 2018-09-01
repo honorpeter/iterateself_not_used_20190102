@@ -1842,3 +1842,11 @@ dir_with_images = askdirectory(title='Where are y the images? *) labeling_task =
 
 
 图6-9标注小工具使用界面
+
+
+
+
+
+## 相关资料
+
+- 《深度学习与计算机视觉》

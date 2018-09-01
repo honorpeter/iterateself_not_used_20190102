@@ -1,12 +1,21 @@
 ---
-title: caffe 使用
+title: 03 Caffe 的使用
 toc: true
 date: 2018-08-18 21:45:23
 ---
-# caffe 使用
+
+# 需要补充的
+
+- 还是要找本书系统的学习一下，简单的了解在关键时候就只能疲于奔命查一些鸡毛蒜皮的东西。
+- 这个只是简单的看了下，没有自己实际操作，自己尝试过之后进行修正和补充。
+- 寒小阳的github上有对于caffe源码的解析。要自己走一遍。
 
 
-对caffe的使用进行总结：
+
+# Caffe 的使用
+
+
+对 Caffe 的使用进行总结：
 
 
 # 这种训练方式不用写代码
@@ -15,9 +24,6 @@ date: 2018-08-18 21:45:23
 2. 定义网络结构（编辑prototxt ）比如说多少层，每层什么样的参数
 3. 定义solver （编辑另一个prototxt ） 定义一些优化的方法
 4. 一行命令开始训练（可以基于已有的权重赋值）
-
-
-
 
 # 大体流程如下：
 
@@ -29,13 +35,7 @@ date: 2018-08-18 21:45:23
 
 ## 第1步：转化格式
 
-
-
-
 ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HjG5f77HLc.png?imageslim)
-
-
-
 
 ### 第2步：定义层次结构
 
@@ -63,16 +63,6 @@ date: 2018-08-18 21:45:23
 
 
 ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l8eLhd7jK4.png?imageslim)
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -339,16 +329,6 @@ python python/draw_net.py conv.prototxt my_net.png
 
 
 
+## 相关资料
 
-
-
-# COMMENT：
-
-
-**没有实际操作，需要自己操作下**
-
-**这个只是简单的看了下，没有自己实际操作，自己尝试过之后进行修正和补充。**
-
-
-
-**寒小阳的github上有对于caffe源码的解析。要自己走一遍。**
+- 七月在线 深度学习

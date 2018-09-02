@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 RNN 和 LSTM - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="下面，我们介绍下 RNN 和LSTM 的一些背景知识： 这块很重要。 首先，我们要能检测出图上的物体：Object Detection 因此需要一个 CNN： 然后，我们怎么把图" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/13-%E5%9B%BE%E5%83%8F%E6%8F%8F%E8%BF%B0-image-captioning/02-rnn-%E5%92%8C-lstm-/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 RNN 和 LSTM" />
+<meta property="og:description" content="下面，我们介绍下 RNN 和LSTM 的一些背景知识： 这块很重要。 首先，我们要能检测出图上的物体：Object Detection 因此需要一个 CNN： 然后，我们怎么把图" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/13-%E5%9B%BE%E5%83%8F%E6%8F%8F%E8%BF%B0-image-captioning/02-rnn-%E5%92%8C-lstm-/" /><meta property="article:published_time" content="2018-08-18T16:33:42&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-18T16:33:42&#43;00:00"/>
+<meta itemprop="name" content="02 RNN 和 LSTM">
+<meta itemprop="description" content="下面，我们介绍下 RNN 和LSTM 的一些背景知识： 这块很重要。 首先，我们要能检测出图上的物体：Object Detection 因此需要一个 CNN： 然后，我们怎么把图">
+
+
+<meta itemprop="datePublished" content="2018-08-18T16:33:42&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-18T16:33:42&#43;00:00" />
+<meta itemprop="wordCount" content="2024">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 RNN 和 LSTM"/>
+<meta name="twitter:description" content="下面，我们介绍下 RNN 和LSTM 的一些背景知识： 这块很重要。 首先，我们要能检测出图上的物体：Object Detection 因此需要一个 CNN： 然后，我们怎么把图"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 RNN 和 LSTM</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-18 </span>
+        
+        <span class="more-meta"> 2024 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>下面，我们介绍下 RNN 和LSTM 的一些背景知识：</p>
+
+<p>这块很重要。</p>
+
+<p>首先，我们要能检测出图上的物体：Object Detection</p>
+
+<p>因此需要一个 CNN：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/9512HG0b66.png?imageslim" alt="mark" /></p>
+
+<p>然后，我们怎么把图像和描述结合起来训练呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/G8BIkAIIkA.png?imageslim" alt="mark" /></p>
+
+<p>我们可以看到，这个地方也有一个 CNN，这个 CNN 把上面的 object detection 的 head 也就是 softmax 不要了。然后，提出来的 feature 作为START ，然后，开始了 RNN，输出的label 是man ，然后，这个man 作为下一个的输入，等等，然后输入 frisbee，输出一个状态 END。<span style="color:red;">嗯，感觉还是非常平常的，不过</span></p>
+
+<p>这个是相关的参考文献：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/EkKml44CIG.png?imageslim" alt="mark" /></p>
+
+<p>那么推荐大家几个比较好 RNN 的 tutorial：</p>
+
+<ul>
+<li><a href="http://www.wildml.com/2015/09/recurrent-neural-networkstutorial-part-1-introduction-to-rnns/">http://www.wildml.com/2015/09/recurrent-neural-networkstutorial-part-1-introduction-to-rnns/</a></li>
+<li><a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">http://colah.github.io/posts/2015-08-Understanding-LSTMs/</a>
+(highly recommended)</li>
+<li><a href="http://deeplearning.net/tutorial/lstm.html">http://deeplearning.net/tutorial/lstm.html</a></li>
+</ul>
+
+<p>第二个是极力推荐的，讲的非常非常好。老师的研究组里面介绍 LSTM 都是拿第二个来讲。<span style="color:red;">嗯，要看下。</span></p>
+
+<p>RNN 提供了很多的灵活性，很多应用都建立在RNN 基础上。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/c76kgbjai9.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>one to one 就是传统的CNN，就是做 cv 任务的</li>
+<li>one to many 就是 image captioning</li>
+<li>many to one Sentiment Classification sequence of words-&gt; sentiment  就是文本处理的，给了一堆话，比如说 Q&amp;A，最近google 有一篇文章是给一个文章然后做阅读理解</li>
+<li>many to many Machine Translation 就是比如从西班牙文翻译成中文。</li>
+<li>many to many Video classification on frame level 就是一个分颜色的是一个 image，</li>
+</ul>
+
+<p>我们看下 tutorial：</p>
+
+<p>RNN：</p>
+
+<p>什么是 RNN</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/i3A2GlG7aj.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/8ee7GIBBaG.png?imageslim" alt="mark" /></p>
+
+<p>前一帧的输出作为这一帧的输入：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/i9cH8ACgCG.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，是 state 和 input 的一个组合通过一个函数之后输出一个 state。</p>
+
+<p>有一点要注意：这个 RNN 虽然在不断的迭代，但是每次迭代的函数和参数都是相同的。注意，这个地方说的相同指的是已经训练好的RNN在使用的时候参数是相同的。</p>
+
+<p>传统的 RNN 是做什么的呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/jEHmkj7mjE.png?imageslim" alt="mark" /></p>
+
+<p>传统的 RNN ，类似 马尔科夫 或者 CRF，有一个隐变量在里面。</p>
+
+<p><span style="color:red;">为什么要通过一个 tanh呢？</span></p>
+
+<p>这些 W 就是要进行迭代的。</p>
+
+<p>下面举个例子：</p>
+
+<p>Character-level language model example</p>
+
+<p>假设我们的词库里面就有 helo 这四个字母，然后我想说一个 hello：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/7e2abeif5K.png?imageslim" alt="mark" /></p>
+
+<p>因此，我们的输入就是类似这样：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/jc2GdA4ekc.png?imageslim" alt="mark" /></p>
+
+<p>然后 隐含层就是这样：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180815/2BjjbCcmdd.png?imageslim" alt="mark" /></p>
+
+<p>W_xh 就是从 x 到h 的权重， W_hh 就是从 h 到 h 的权重。</p>
+
+<p>所以，根据上面这个公式，来迭代每次的隐含层。</p>
+
+<p>输出层是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/F0jhLghcAb.png?imageslim" alt="mark" /></p>
+
+<p>上面这个是最基本的 RNN，从这个出发，我们想一下</p>
+
+<p>Preview of fancier architectures</p>
+
+<p>RNN attends spatially to different parts of images while generating each word of the sentence</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/H8DGkfEl9m.png?imageslim" alt="mark" /></p>
+
+<p>这个论文就是 Show Attend and Tell .</p>
+
+<p>那么有没有什么更好的 RNN？</p>
+
+<p>我们正常的多层 RNN 就是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/a8FL6Jj4kG.png?imageslim" alt="mark" /></p>
+
+<p>但是 LSTM 是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/bhJBJbLI8l.png?imageslim" alt="mark" /></p>
+
+<p>绿色的后面又加了一些黄色的东西，这些就是 gate。</p>
+
+<p>OK，我们说一下这个 LSTM</p>
+
+<p>LSTM 是上世纪 90 年代的 97 年的</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/bFgK7Gmh92.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/lG5g9Ki9K0.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/19g3Lc4Hdb.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/672e4Ikf17.png?imageslim" alt="mark" /></p>
+
+<p>Long Short Term Memory</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/aKf5caLi1d.png?imageslim" alt="mark" /></p>
+
+<p>4n*2n 中的 4 是因为有 4 个 gate，即 i,f,o,g 。那么2 是因为有 x 和 h。</p>
+
+<p><span style="color:red;">上面这个图没有看明白</span></p>
+
+<p>第一步：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/lJlA6j74FG.png?imageslim" alt="mark" /></p>
+
+<p>前一个时刻的 cell 的状态就是 $c_{t-1}^l$ 。</p>
+
+<p>这个 x 就是我们之前说的 image 的feature ，假如说是 4096 。 这个 <img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/6ihcIG5h2C.png?imageslim" alt="mark" /> 是点运算。</p>
+
+<p><span style="color:red;">为什么是 c 乘以 f 呢？</span></p>
+
+<p>第二步：</p>
+
+<p>i 是前一个过程，g 也是前一个过程。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/KaDdFiBBBf.png?imageslim" alt="mark" /></p>
+
+<p>得到的这个 $c_t^l$ 就是当前的 cell state。</p>
+
+<p>第三步：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/4ibElA3kbk.png?imageslim" alt="mark" /></p>
+
+<p>当前的 cell state 过一个 tanh 之后，在经过一个 o 的 gate。</p>
+
+<p>第四步：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/7i1Lk80gLk.png?imageslim" alt="mark" /></p>
+
+<p>h 是下一个 higher layer ，也可以是 prediction，也就是说，如果这个 单元是 多层中的一层，那么输出就是到更高的一层，如果是最后一层，那么输出就是预测。</p>
+
+<p>为什么要做的这么复杂？有点模仿人的神经元之类的吧。</p>
+
+<p>每一个 gate 都有一个说法，具体的看一下 之前推荐的第二篇的 blog。</p>
+
+<p>OK，我们看一下相邻的两个时间戳的时候的状态的转化：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/Df18fdjL3b.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">上面这个图没有写出 h 传入的饿时候到哪里的，还是说传入的 h 并没有被用到，只是作为输出了？嗯，用到了，在第一步的第一个公式里，用来更新这四个门。哈哈，终于知道这个门是怎么更新的了，一直奇怪这门是怎么更新的。嗯，还想知道更多关于这个门的，公式写的带简略了。</span></p>
+
+<p><span style="color:red;">老师没想明白一个问题：为什么RNN 和 LSTM 里面不用 ReLU 呢？而是使用  sigmoid 呢？不知道这个有没有人解答过。</span></p>
+
+<p>OK，对比一下 LSTM 和 RNN ：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/FbG4bkD4DA.png?imageslim" alt="mark" /></p>
+
+<p>那么大家想一下 ResNet 与 LSTM 有什么区别？</p>
+
+<p>ResNet 对于平常的网络来说，相当于 LSTM 对于 RNN：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/JaBB2mJA5f.png?imageslim" alt="mark" /></p>
+
+<p>了解动态梯度变化：</p>
+
+<p>这个老师没有讲。</p>
+
+<p>Cute backprop signal video: <a href="http://imgur.com/gallery/vaNahKE">http://imgur.com/gallery/vaNahKE</a></p>
+
+<p>上面这个连接是 RNN 和LSTM 的动态的梯度变化。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/lB73d23b5L.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/gLj2hB3C19.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/38aib40d59.png?imageslim" alt="mark" /></p>
+
+<p>LSTM 的一些变种：LSTM  variants and friends：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180816/DLBCIlbcEI.png?imageslim" alt="mark" /></p>
+
+<p>这个GRU 是一个基于 LSTM 的一个变种，是图上的蓝色的线表示的，老师只用过LSTM，这个 GRU 不知道现在应用的怎么样，应该没有很火。</p>
+
+<p>OK，我们总结一下：</p>
+
+<ul>
+<li>RNNs  allow   a   lot of  flexibility in  architecture    design</li>
+<li>传统的RNN 很简单，但是效果不是很好</li>
+<li>Common    to  use LSTM    or  GRU:    their   additive    interactions    improve gradient    flow</li>
+<li>Backward  flow    of  gradients   in  RNN can explode or  vanish.
+Exploding   is  controlled  with    gradient    clipping.
+Vanishing   is  controlled  with    additive    interactions    (LSTM)</li>
+<li>Better/simpler    architectures   are a   hot topic   of  current research</li>
+<li>Better    understanding   (both   theoretical and empirical)  is  needed.</li>
+</ul>
+
+<p>为什么LSTM好呢？</p>
+
+<p>一个是对于梯度的把我比较好，exploding 和 vanishing 的问题都能控制住，如果梯度太小了，他的 gate 可以控制。</p>
+
+<p>有同学问 BNN 对梯度消失有影响吗？老师说：有的，batch norm 让样本尽量的不一致，每一个 batch 的样本尽量跟前面的样本不重叠，如果不重叠，相当于在network 里加了很强的 disturbance，那么你学出来的 loss 会很大，那么你 loss 大，间接的，你的 gradient 就会很大，这时候你的梯度就不会容易消失了。所以大家都在用 BNN 。<span style="color:red;">怎么突然有同学问了这个 BNN 的问题？什么是 BNN？大家都在用 BNN 是什么意思？</span></p>
+
+<p>老师又说 LSTM 用不用 BNN 不清楚。可能也用。<span style="color:red;">到底什么是 BNN？有没有使用？什么情况下使用？</span></p>
+
+<p>OK，上面我们就把 RNN 和 LSTM 简单的说了下，下面我们看下基于 RNN 和LSTM 的 image captioning 的具体做法。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/13-%E5%9B%BE%E5%83%8F%E6%8F%8F%E8%BF%B0-image-captioning/04-%E5%80%BC%E5%BE%97%E6%80%9D%E8%80%83%E7%9A%84%E9%97%AE%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 值得思考的问题</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/13-%E5%9B%BE%E5%83%8F%E6%8F%8F%E8%BF%B0-image-captioning/03-%E5%87%A0%E7%A7%8D%E6%9C%80%E6%96%B0%E6%96%B9%E6%B3%95/">
+            <span class="next-text nav-default">03 几种最新方法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

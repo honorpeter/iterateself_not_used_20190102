@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 目标检测算法简介 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="基于 PASCAL VOC 数据集训练 SSD 模型 本节一起来了解 MXNet 下的训练/测试 SSD 的官方例子，并试试 SSD 的效果。 MXNet 的 SSD 实现 MXNet 的 SSD 的实现其实就是把 SSD 作者 Wei Liu 基于 Caffe 的官方实" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/11-%E5%9F%BA%E4%BA%8E-pascal-voc-%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E7%BB%83%E4%B9%A0/%E4%BD%BF%E7%94%A8-mxnet-%E7%9A%84-ssd-%E6%A8%A1%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 目标检测算法简介" />
+<meta property="og:description" content="基于 PASCAL VOC 数据集训练 SSD 模型 本节一起来了解 MXNet 下的训练/测试 SSD 的官方例子，并试试 SSD 的效果。 MXNet 的 SSD 实现 MXNet 的 SSD 的实现其实就是把 SSD 作者 Wei Liu 基于 Caffe 的官方实" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/11-%E5%9F%BA%E4%BA%8E-pascal-voc-%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E7%BB%83%E4%B9%A0/%E4%BD%BF%E7%94%A8-mxnet-%E7%9A%84-ssd-%E6%A8%A1%E5%9E%8B/" /><meta property="article:published_time" content="2018-08-29T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-29T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="01 目标检测算法简介">
+<meta itemprop="description" content="基于 PASCAL VOC 数据集训练 SSD 模型 本节一起来了解 MXNet 下的训练/测试 SSD 的官方例子，并试试 SSD 的效果。 MXNet 的 SSD 实现 MXNet 的 SSD 的实现其实就是把 SSD 作者 Wei Liu 基于 Caffe 的官方实">
+
+
+<meta itemprop="datePublished" content="2018-08-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3432">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 目标检测算法简介"/>
+<meta name="twitter:description" content="基于 PASCAL VOC 数据集训练 SSD 模型 本节一起来了解 MXNet 下的训练/测试 SSD 的官方例子，并试试 SSD 的效果。 MXNet 的 SSD 实现 MXNet 的 SSD 的实现其实就是把 SSD 作者 Wei Liu 基于 Caffe 的官方实"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 目标检测算法简介</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-29 </span>
+        
+        <span class="more-meta"> 3432 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#基于-pascal-voc-数据集训练-ssd-模型">基于 PASCAL VOC 数据集训练 SSD 模型</a>
+<ul>
+<li><a href="#mxnet-的-ssd-实现">MXNet 的 SSD 实现</a></li>
+<li><a href="#下载pascal-voc数据集">下载PASCAL VOC数据集</a></li>
+<li><a href="#训练ssd模型">训练SSD模型</a></li>
+<li><a href="#测试和评估模型效果">测试和评估模型效果</a></li>
+<li><a href="#物体检测结果可视化">物体检测结果可视化</a></li>
+<li><a href="#制作自己的标注数据">制作自己的标注数据</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="基于-pascal-voc-数据集训练-ssd-模型">基于 PASCAL VOC 数据集训练 SSD 模型</h2>
+
+<p>本节一起来了解 MXNet 下的训练/测试 SSD 的官方例子，并试试 SSD 的效果。</p>
+
+<h3 id="mxnet-的-ssd-实现">MXNet 的 SSD 实现</h3>
+
+<p>MXNet 的 SSD 的实现其实就是把 SSD 作者 Wei Liu 基于 Caffe 的官方实现(网址为 <a href="https://github.com/weiliu89/caffe/tree/ssd">https://github.com/weiliu89/caffe/tree/ssd</a> )。在 MXNet 上的重新实现，原作者是 Missouri-Columbia 大学的博士生 Zhi (Joshua) Zhang。具体实现是在mxnet根目录中的 example\ssd目录下，如图11-8所示。<span style="color:red;">原作者的 Caffe 的实现也要总结进来。</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/glc9h1kIgC.png?imageslim" alt="mark" /></p>
+
+<p>其中：</p>
+
+<ul>
+<li>config 下是训练相关的一些设置，如随机镜像和检测及每个 epoch 的随机设置等;</li>
+<li>data 是默认存放数据或者数据软链接的地方；</li>
+<li>dataset 是数据迭代的实现，默认是支持 PASCAL VOC的数据格式。另外，训练的物体类别定义也是在dataset/pascal_voc.py中实 现，所以如果需要训练自己的数据，就要在这个文件中做相应修改；</li>
+<li>detect 中包含执行目标检测的代码和接口；</li>
+<li>evaludate 是封装目标检测代码并评估模型指标的脚本；</li>
+<li>model 文件夹默认用来存储模型结构和参数值；</li>
+<li>operator 是个比较关键的文件夹，里面是对 MXNet 默认不包含的底层操作的实现，如 Faster R-CNN 中的 Region Proposal，SSD 中的默认物体框和标注框的匹配，正负样本的选取，还有 NMS 等操作的实现代码都是在 operator 中;</li>
+<li>symbol 里是默认网络结构的定义；</li>
+<li>tools 里定义了一些其他的常用基本操作如随机裁剪和随机补边的实现等；</li>
+<li>train 文件夹则是定义了训练网络的基本操作，由根目录下的 train.py 调用。</li>
+<li>根目录下的其他文件后面再介绍。</li>
+</ul>
+
+<p><span style="color:red;">这个项目要仔细总结下。</span></p>
+
+<h3 id="下载pascal-voc数据集">下载PASCAL VOC数据集</h3>
+
+<p>PASCAL VOC数据集已经简要介绍过了，下载地址如下。</p>
+
+<ul>
+<li><a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar">http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar</a></li>
+<li><a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar">http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar</a></li>
+<li><a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtest_06-Nov-2007.tar">http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtest_06-Nov-2007.tar</a></li>
+</ul>
+
+<p>其中前两个分别是 2012 年和 2007 年的训练验证集下载地址，第 3 个是 2007 年版本的测试集下载地址，通常的用法是前两个数据作为训练验证数据，最后一个用来测试指标。</p>
+
+<p>下载完毕后，分别对三个文件执行 <code>tar -xvf</code>，就可以得到一个 VOCdevkit 的文件夹。VOCdevkit 包含两个文件夹 VOC2007 和 VOC2012 ，这两个文件夹下的文件结构基本一致，一共是 5 个子文件夹，分别是 Annotations、ImageSets、JPEGImages、SegmentationClass 和 SegmentationObject。</p>
+
+<p>对于目标检测任务，主要关心的是前 3 个文件夹：</p>
+
+<ul>
+<li>Annotations下是所有的标注信息， 格式为 XML，每个 XML 里的 <code>&lt;object&gt;</code> 就包含了标注物体的名称 <code>&lt;name&gt;</code> 和物体框的坐标 <code>&lt;bndbox&gt;</code> ;</li>
+<li>JPEGImages 文件夹下是和 Annotations 文件夹下的 XML 文件同名的 jpg 图片文件，与同名的 XML 的标注信息相对应；</li>
+<li>ImageSets/Main 下就包含了训练集、验证集和测试集的列表。</li>
+</ul>
+
+<p>如果想要自己制作数据，如用本书第 6 章的小工具标注的数据来训练模型。最简单的方式是按照这里说的规则，把所有标注信息放到 Annotations 里，图片做成 JPG 格式放到 JPEGImages 中，然后训练/验证/测试集的列表放到 ImageSets/Main 下，再修改 dataset/pascal_voc.py 下的相应代码并另存，其他步骤与训练 PASCAL VOC 区别不大了。<span style="color:red;">嗯，数据标注的小工具是一定要会做的，对各种数据标注的工具还是要总结下的。</span></p>
+
+<p>执行本书 github 代码仓库中的 prepare_voc_data.sh 可以自动完成下载到解压的步骤。</p>
+
+<pre><code class="language-sh">#!/bin/sh
+wget http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
+wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar
+wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtest_06-Nov-2007.tar
+tar -xvf VOCtrainval_11-May-2012.tar
+tar -xvf VOCtrainval_06-Nov-2007.tar
+tar -xvf VOCtest_06-Nov-2007.tar
+</code></pre>
+
+<h3 id="训练ssd模型">训练SSD模型</h3>
+
+<p>第 7 章已经讲过如何安装和配置 MXNet，不过默认下载并编译好的 MXNet 无法直接训练 SSD，原因就是 SSD 中有些操作是默认不被 MXNet 支持的。这些操作定义在 <code>operator</code> 文件夹下，所以我们需要做的是，找到根目录下的 make 文件夹，打开里面的 config.mk， 找到 <code>EXTRA_OPERATORS =</code> 这一行，修改为 ssd 中 <code>operator</code> 的路径：</p>
+
+<pre><code>EXTRA_OPERATORS = example/ssd/operator
+</code></pre>
+
+<p>如果使用的 MXNet 已经加入了自定义的 operator，则用下面语句：</p>
+
+<pre><code>EXTRA_OPERATORS += example/ssd/operator
+</code></pre>
+
+<p>然后到 MXNet 的根目录下，输入 make 命令，就得到了支持 SSD 的 MXNet 版本。<span style="color:red;">这个自定义的 operator 是怎么写的？是不是用 Caffe 会方便些？make 的过程中会有什么问题吗？</span></p>
+
+<p>当然用 Python 调用前别忘了再到 <code>mxnet\python</code> 目录下执行以下语句来更新 python 接口。<span style="color:red;">什么叫更新 python 接口？</span></p>
+
+<pre><code>python setup.py install
+</code></pre>
+
+<p>训练 SSD 并不是从头训起，而是从一个 ImageNet 数据集预训练好的简化版 VGG-16 模型开始，按照官网的说明，该模型可以从下面链接下载 <a href="https://dl.dropboxusercontent.eom/u/39265872/vggl6_reduced.zip">https://dl.dropboxusercontent.eom/u/39265872/vggl6_reduced.zip</a> ，国内的读者也可以选择到 链接：<a href="https://pan.baidu.com/s/1GCzJ1bqJza5CdpkmrCJ72g">https://pan.baidu.com/s/1GCzJ1bqJza5CdpkmrCJ72g</a> 密码：2nvs 下载。</p>
+
+<p>下载后解压得到定义网络结构的文件 <code>vgg16_reduced-symbol.json</code> 和对应的参数文件  <code>vggl6_reduced-0001.params</code>。把这两个文件放到 <code>example\ssd\model</code> 下，基础模型就准备好了。</p>
+
+<p>接下来把 11.2.2 节中准备好的 VOCdevkit 文件复制到 <code>example\ssd\data</code> 下，或者通过 <code>ln -s</code> 在 example | ssd | data下建立一个链接。</p>
+
+<p>现在万事俱备，直接到 ssd 目录下执行 train.py 就可以开始训练了，考虑到硬件配置的不同及训练效果等，可以通过修改 train.py 的参数执行训练，如笔者修改了 batch-size 和 epoch:</p>
+
+<pre><code>python train.py --batch-size=24 --epoch=20
+</code></pre>
+
+<p>训练过程中会得到实时的训练精度和 loss 的输出，每个 epoch 结束会在验证集上测试模型，输出例子如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/F55jI59gFl.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/I2DIGHGbHd.png?imageslim" alt="mark" /></p>
+
+<h3 id="测试和评估模型效果">测试和评估模型效果</h3>
+
+<p>因为训练比较耗时，笔者象征性地训练了一个 epoch，此外官网也很贴心地提供了训练好的模型（从原作者提供的模型转换而来），在相关资料里有对应的下载地址。</p>
+
+<p>下载后解压得到 <code>ssd_300-0000.params</code> 和 <code>ssd_300-symbol.json</code> 两个文件，放到 <code>example/ssd/model</code> 下。然后执行：</p>
+
+<pre><code>python evaluate.py
+</code></pre>
+
+<p>就会默认执行 vggl6_reduced, epoch 为 0 的模型在 VOC2007 测试集上的评估，输出每个类别的 AP
+ 和最后的 mAP。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/3BbkDij5KB.png?imageslim" alt="mark" /></p>
+
+<p>如果要评估别的模型可以在输入参数中指定，如下面命令评估训练完 3 个 epoch 得到的模型，并且 batch-size 指定为24。<span style="color:red;">什么意思？不是说评估别的模型吗？这个参数是用来评估的时候用的还是用来标识之前训练得到的这个模型的？</span></p>
+
+<pre><code>python evaluate.py --batch-size 24 --epoch 3
+</code></pre>
+
+<p>上段代码评估的模型文件实际上是用来训练和验证的模型，实际部署的时候，和训练相关的如 loss 等都是不需要的，对默认的 Vggl6 训练出的模型，可以用下面脚本生成用于部署的模型和参数文件。</p>
+
+<pre><code>python deploy --num-class 20
+</code></pre>
+
+<p>执行完该脚本，在 <code>model</code> 文件夹下生成的两个 <code>deploy_</code> 前缀的文件就是用来部署的模型结构和对应参数值，其中 <code>.params</code> 文件其实就复制了一遍而已。</p>
+
+<p><span style="color:red;">这个地方的部署还是有些不明白？还是要自己跑一遍</span></p>
+
+<h3 id="物体检测结果可视化">物体检测结果可视化</h3>
+
+<p>现在万事倶备，可以使用训练好（或是下载好）的模型执行检测任务了。MXNet 的 SSD 自带 demo，首先到 <code>data/demo</code> 下运行：</p>
+
+<pre><code>python download_demo_images.py
+</code></pre>
+
+<p>这个脚本会下载几张用于演示的图片，其中包括根目录下 demo.py 的默认演示图片 dog.jpg。回到 ssd 目录下，执行：</p>
+
+<pre><code>python demo.py
+</code></pre>
+
+<p>得到图11-9所示的结果。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/Ib8HEhaBB8.png?imageslim" alt="mark" /></p>
+
+<p>如果要指定图片就用-image选项，下面用前面也用过的照片来试试:</p>
+
+<pre><code>python demo.py --images beihong_village.jpg
+</code></pre>
+
+<p>得到结果如图11-10所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/4gdk9l4L0e.png?imageslim" alt="mark" /></p>
+
+<p>下面来简单看一下demo.py到底做了什么，demo.py 中主要就是一个交互的总逻辑，通过 <code>get_detector()</code> 获取了一个定义在 <code>detect</code> 文件夹下的 <code>Detector</code> 对象。在 <code>detect/detector.py</code> 中，定义了 <code>Detector</code> 的类。</p>
+
+<p>首先 <code>Detector</code> 的初始化阶段，和之前讲的 MXNet 做分类的代码没有什么不同，就是把一个 <code>symbol</code> 读进来，并进行 <code>bind</code> 用于后续计算。</p>
+
+<p>成员函数中的 <code>detect()</code> 用于执行前向计算，用 mod.predict() 执行前向计算之后，得到的结果 <code>detections</code> 是一个三维 的张量。其中第一个维度和 batch 相关，因为 demo.py 中默认 <code>batch-size</code> 为 1，所以所有结果都在 <code>detections[0]</code> 里，这个结果如看做是一个二维矩阵的话，每行就是一个检测到的物体框。第一列是物体框的类别下标，如果为 -1 说明是背景。第 2 列是类别的分数，第 3~6 列分别是 xmin、ymin、xmax 和 ymax 相对于画面宽高的百分比，所以物体框在画面中左上角的坐标就是 $( xmin\times 宽度，ymin\times 高度)$，右下角坐标是 $( xmax\times 宽度，ymax\times 高度)$。 <code>im_detect()</code> 函数是调用 <code>detect</code> 对读取的数据进行前向计算。<code>detect_and_visualize()</code> 函数会调用 <code>im_detect()</code> 函数返回的结果，然后在 <code>visualize_detection()</code> 函数中进行可视化，可视化的规则是取类别得分大于给定阈值的框进行可视化，detector.py 中，相关部分代码和注释如下:</p>
+
+<p>(代码中的省略号表示省略了部分代码)：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/39K094g3gE.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/gKFmH7lKlg.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/3j13ek0aK0.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">还是要自己跑一下，并且把全部的代码都总结进来。</span></p>
+
+<h3 id="制作自己的标注数据">制作自己的标注数据</h3>
+
+<p>本书第 6 章最后曾实现了一个简单的标注小工具，考虑到灵活性，该小工具是用自定义的格式保存了标注信息。但其实基本上现在的物体检测算法大都是默认支持 PASCAL VOC 的格式，本节提供一个进行转换的小脚本，可以把小工具标注好的数据转换为 PASCAL VOC 支持的 XML 格式，方便各种主流框架下训练自己标注的数据。<span style="color:red;">嗯。</span></p>
+
+<p>标注信息其实就是个 XML：对于目标检测而言，需要的最小信息是 <code>&lt;filename&gt;</code> 、 <code>&lt;size&gt;</code>  和 <code>&lt;object&gt;</code> 。</p>
+
+<ul>
+<li><code>&lt;filename&gt;</code> 就是标注对应的图片文件的名字；</li>
+<li><code>&lt;size&gt;</code> 中包含 <code>&lt;width&gt;</code> 、 <code>&lt;height&gt;</code>  和 <code>&lt;depth&gt;</code> 分别是图片像素的宽、高和通道数；</li>
+<li><code>&lt;object&gt;</code> 就是物体和对应标注框，其中 <code>&lt;name&gt;</code>  是物体的名称， <code>&lt;bndbox&gt;</code> 中 <code>&lt;xmin&gt;</code> 、 <code>&lt;ymin&gt;</code>、<code>&lt;xmax&gt;</code>、<code>&lt;ymax&gt;</code> 分别是左上角和右下角的像素位置坐标。</li>
+</ul>
+
+<p>使用 标注工具，以及转化成 PASCAL VOC 格式的数据代码在 “计算机视觉CV-&gt; 计算机视觉基础-&gt; 数据与数据标注-&gt; 数据标注” 文件夹中看到。</p>
+
+<p>其中 detection_anno_bbox2voc.py 会把小工具生成的信息转化为 XML 标注信息。</p>
+
+<p>用 Python 执行时第一个参数是包含图片和标注信息的文件夹，就可以根据第 6 章定义的后缀为 bbox 的标注信息，生成相应的 XML 标注信息并保存在同一文件夹下。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>《深度学习与计算机视觉》</li>
+<li>简化版 VGG-16 模型，和官方已经训练好的一个模型： <a href="https://pan.baidu.com/s/1GCzJ1bqJza5CdpkmrCJ72g">https://pan.baidu.com/s/1GCzJ1bqJza5CdpkmrCJ72g</a> 密码：2nvs</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/03-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8C%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/01-%E6%84%9F%E7%9F%A5%E6%9C%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 感知机</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%92%8C%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%A1%80%E6%95%B0%E5%AD%A6%E7%9F%A5%E8%AF%86/01-%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%E5%92%8C%E9%9D%9E%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2/">
+            <span class="next-text nav-default">01 线性变换和非线性变换</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

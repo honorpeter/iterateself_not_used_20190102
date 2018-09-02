@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 二进制数据格式 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="6.2 Binary Data Formats (二进制数据格式) 最简单的以二进制的格式来存储数据的方法（也被叫做serialization，序列化），就是用python内建的pi" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/02-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 二进制数据格式" />
+<meta property="og:description" content="6.2 Binary Data Formats (二进制数据格式) 最简单的以二进制的格式来存储数据的方法（也被叫做serialization，序列化），就是用python内建的pi" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/02-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F/" /><meta property="article:published_time" content="2018-07-08T13:50:11&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-08T13:50:11&#43;00:00"/>
+<meta itemprop="name" content="02 二进制数据格式">
+<meta itemprop="description" content="6.2 Binary Data Formats (二进制数据格式) 最简单的以二进制的格式来存储数据的方法（也被叫做serialization，序列化），就是用python内建的pi">
+
+
+<meta itemprop="datePublished" content="2018-07-08T13:50:11&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-08T13:50:11&#43;00:00" />
+<meta itemprop="wordCount" content="1968">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 二进制数据格式"/>
+<meta name="twitter:description" content="6.2 Binary Data Formats (二进制数据格式) 最简单的以二进制的格式来存储数据的方法（也被叫做serialization，序列化），就是用python内建的pi"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 二进制数据格式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-08 </span>
+        
+        <span class="more-meta"> 1968 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#6-2-binary-data-formats-二进制数据格式">6.2 Binary Data Formats (二进制数据格式)</a></li>
+<li><a href="#1-using-hdf5-format">1 Using HDF5 Format</a></li>
+<li><a href="#2-reading-microsoft-excel-files-读取微软的excel文件">2 Reading Microsoft Excel Files（读取微软的excel文件）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="6-2-binary-data-formats-二进制数据格式">6.2 Binary Data Formats (二进制数据格式)</h1>
+
+<p>最简单的以二进制的格式来存储数据的方法（也被叫做serialization，序列化），就是用python内建的pickle。所有的pandas object都有一个to_pickle方法，可以用来存储数据为pickle格式：</p>
+
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+</code></pre>
+
+<pre><code class="language-python">frame = pd.read_csv('../examples/ex1.csv')
+frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">frame.to_pickle('../examples/frame_pickle')
+</code></pre>
+
+<pre><code class="language-python">!ls ../examples/
+</code></pre>
+
+<pre><code>array_archive.npz          [31mmacrodata.csv[m[m
+
+array_compressed.npz       mydata.csv
+
+[31marray_ex.txt[m[m               [31mout.csv[m[m
+
+[31mcsv_mindex.csv[m[m             [31msegismundo.txt[m[m
+
+[31mex1.csv[m[m                    sink.txt
+
+[31mex1.xlsx[m[m                   some_array.npy
+
+[31mex2.csv[m[m                    [31mspx.csv[m[m
+
+[31mex3.csv[m[m                    [31mstinkbug.png[m[m
+
+[31mex3.txt[m[m                    [31mstock_px.csv[m[m
+
+[31mex4.csv[m[m                    [31mstock_px_2.csv[m[m
+
+[31mex5.csv[m[m                    [31mtest_file.csv[m[m
+
+[31mex6.csv[m[m                    [31mtips.csv[m[m
+
+[31mex7.csv[m[m                    tmp.txt
+
+[31mexample.json[m[m               [31mtseries.csv[m[m
+
+[31mfdic_failed_bank_list.html[m[m [31mvolume.csv[m[m
+
+frame_pickle               [31myahoo_price.pkl[m[m
+
+[31mipython_bug.py[m[m             [31myahoo_volume.pkl[m[m
+</code></pre>
+
+<p>用内建的pickle可以直接读取任何pickle文件，或者直接用pandas.read_pickle:</p>
+
+<pre><code class="language-python">pd.read_pickle('../examples/frame_pickle')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>注意：pickle只推荐用于短期存储。因为这种格式无法保证长期稳定；比如今天pickled的一个文件，可能在库文件更新后无法读取。</p>
+
+<p>python还支持另外两种二进制数据格式：HDF5和MessagePack。下面会介绍一个HDF5，但是我们鼓励你多尝试一个不同的文件格式，看看他们能有多快，是否符合你数据分析的要求。另外一些可用的存储格式有：bcolz 和 Feather。</p>
+
+<h1 id="1-using-hdf5-format">1 Using HDF5 Format</h1>
+
+<p>HDF5格式是用来存储大量的科学数组数据的。这种格式还能用于其他一些语言。其中HDF表示hierarchical data format。每一个HDF5格式能春初多个数据集，并支持metadata。</p>
+
+<blockquote>
+<p>元数据(meta data)——“data about data” 关于数据的数据，一般是结构化数据（如存储在数据库里的数据，规定了字段的长度、类型等）。元数据是指从信息资源中抽取出来的用于说明其特征、内容的结构化的数据(如题名,版本、出版数据、相关说明,包括检索点等)，用于组织、描述、检索、保存、管理信息和知识资源。</p>
+</blockquote>
+
+<p>HDF5 支持多种压缩模式的on-the-fly compression（即时压缩），能让数据中一些重复的部分存储地更有效。HDF5对于处理大数据集是一个很好的选择，因为他不会把所有数据一次性读取到内存里，我们可以从很大的数组中有效率地读取一小部分。</p>
+
+<p>能用PyTables或h5py来访问HDF5数据，pandas也有提供一个high-level的交互界面。HDFStore类像dict一样能用来处理low-level细节：</p>
+
+<pre><code class="language-python">frame = pd.DataFrame({'a': np.random.randn(100)})
+
+store = pd.HDFStore('../examples/mydata.h5')
+</code></pre>
+
+<pre><code class="language-python">frame.head()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.908968</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.589368</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.015493</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.029850</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.682180</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">cat ../examples/mydata.csv
+</code></pre>
+
+<pre><code>one;two;three
+
+1;2;3
+
+4;5;6
+
+7;8;9
+</code></pre>
+
+<pre><code class="language-python">store['obj1'] = frame
+
+store['obj1_col'] = frame['a']
+
+store
+</code></pre>
+
+<pre><code>&lt;class 'pandas.io.pytables.HDFStore'&gt;
+File path: ../examples/mydata.h5
+/obj1                frame        (shape-&gt;[100,1])
+/obj1_col            series       (shape-&gt;[100])
+</code></pre>
+
+<p>HDF5中的object能用像dict一样的API来提取：</p>
+
+<pre><code class="language-python">store['obj1']
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.908968</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.589368</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.015493</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.029850</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.682180</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.977549</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.806008</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-0.458852</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-0.833007</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.410430</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>-0.232093</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.002657</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>-0.642136</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>-1.772356</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>0.411567</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>1.259846</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>-0.730757</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>-1.401318</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>2.984850</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>-0.140144</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>-0.972235</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>-0.592930</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>1.538674</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>-0.052034</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>0.260698</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>-0.859609</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>1.119075</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>-0.898982</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>0.191869</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>1.013184</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>0.507719</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>-0.146967</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>0.694807</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>-0.482966</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>1.816455</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>0.535113</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>-1.006997</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>2.088429</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>-0.449548</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>1.133784</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>0.413018</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>0.324538</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>1.434230</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>0.767194</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>2.073305</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>-2.643750</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>2.330771</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>-1.683786</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>1.631209</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>0.036383</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>0.755447</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>-0.712269</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>-0.914963</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>-0.660928</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>1.465104</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>0.101968</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>0.669502</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>-0.210062</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>-0.453599</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>0.848008</td>
+    </tr>
+  </tbody>
+</table>
+<p>100 rows × 1 columns</p>
+</div>
+
+<p>HDFStore支持两种存储架构，fixed和table。后者通常更慢一些，但支持查询操作：</p>
+
+<pre><code class="language-python">store.put('obj2', frame, format='table')
+</code></pre>
+
+<pre><code class="language-python">store.select('obj2', where=['index &gt;= 10 and index &lt;= 15'])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>10</th>
+      <td>-1.186667</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.628998</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>-0.668921</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>0.775731</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>-1.329899</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>1.920832</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>put是存储的另一种写法，类似于之前的<code>store['obj2'] = frame</code>，但这种协防能让我们设置存储格式。</p>
+
+<p>pandas.read_hdf函数也很方便：</p>
+
+<pre><code class="language-python">frame.to_hdf('../examples/mydata.h5', 'obj3', format='table')
+</code></pre>
+
+<pre><code class="language-python">pd.read_hdf('../examples/mydata.h5', 'obj3', where=['index &lt; 5'])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.324210</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.770813</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.554799</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-1.741867</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-1.875071</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>注意：如果我们是把数据存在远端服务器上，比如Amazon S3或HDFS，使用一些为分布式存储实际的二进制格式会更适合一些，比如Apache Parquet。</p>
+
+<p>如果是在本地处理很大数据量的话，推荐尝试PyTables和h5py看是否符合你的要求。因为很多数据分析问题都受限于I/O，所以用HDF5这样的工具能加快应用。</p>
+
+<p>注意：HDF5不是数据库（database）。它最适合一次写入，多次读取的数据库。尽管数据可以在任何时间多次写入一个文件，如果多个使用者同时写入的话，文件会被破坏。</p>
+
+<h1 id="2-reading-microsoft-excel-files-读取微软的excel文件">2 Reading Microsoft Excel Files（读取微软的excel文件）</h1>
+
+<p>pandas支持读取表格型数据（excel 2003或更高）文件，使用ExcelFile class或pandas.read_excel函数。这些工具需要一些富家的包xlrd和openpyxl来分别读取XLS和XLSX文件。你可以通过pip或conda来安装。</p>
+
+<p>使用ExcelFile，创建一个instance，通过给xls或xlsx一个路径：</p>
+
+<pre><code class="language-python">xlsx = pd.ExcelFile('../examples/ex1.xlsx')
+</code></pre>
+
+<p>保存在sheet里的数据，可以通过parse来读取为DataFrame：</p>
+
+<pre><code class="language-python">pd.read_excel(xlsx, 'Sheet1')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果要读取一个文件中的多个sheet，用ExcelFile会更快。但让，你也能把文件名直接传递给pandas.read_excel:</p>
+
+<pre><code class="language-python">frame = pd.read_excel('../examples/ex1.xlsx', 'Sheet1')
+frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>message</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>hello</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>world</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+      <td>12</td>
+      <td>foo</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果要把pandas数据写为Excel格式，你必须先创建一个ExcelWrite，然后用to_excel方法：</p>
+
+<pre><code class="language-python">writer = pd.ExcelWriter('../examples/ex2.xlsx')
+</code></pre>
+
+<pre><code class="language-python">frame.to_excel(writer, 'Sheet1')
+</code></pre>
+
+<pre><code class="language-python">writer.save()
+</code></pre>
+
+<p>如果不适用ExcelWriter的话，可以直接传给to_excel一个path：</p>
+
+<pre><code class="language-python">frame.to_excel('../examples/ex2.xlsx')
+</code></pre>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/02-numpy/04-%E9%80%9A%E8%BF%87%E6%95%B0%E7%BB%84%E6%9D%A5%E8%BF%9B%E8%A1%8C%E6%96%87%E4%BB%B6%E7%9A%84%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 通过数组来进行文件的输入和输出</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/12-%E5%85%B6%E4%BB%96/01-%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8E%86%E5%8F%B2/">
+            <span class="next-text nav-default">01 使用命令行历史</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>8.1 Hierarchical Indexing（分层索引） - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="CHAPTER 8 Data Wrangling: Join, Combine, and Reshape（数据加工：连接, 合并, 整形） 在很多应用中，数据通常散落在不同的文件或数据库中，并不方便进行分析。这一章主要关注" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/05-%E6%95%B0%E6%8D%AE%E6%95%B4%E5%90%88-join-combine-reshape/01-hierarchical-indexing-%E5%88%86%E5%B1%82%E7%B4%A2%E5%BC%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="8.1 Hierarchical Indexing（分层索引）" />
+<meta property="og:description" content="CHAPTER 8 Data Wrangling: Join, Combine, and Reshape（数据加工：连接, 合并, 整形） 在很多应用中，数据通常散落在不同的文件或数据库中，并不方便进行分析。这一章主要关注" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/05-%E6%95%B0%E6%8D%AE%E6%95%B4%E5%90%88-join-combine-reshape/01-hierarchical-indexing-%E5%88%86%E5%B1%82%E7%B4%A2%E5%BC%95/" /><meta property="article:published_time" content="2018-07-08T13:32:45&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-08T13:32:45&#43;00:00"/>
+<meta itemprop="name" content="8.1 Hierarchical Indexing（分层索引）">
+<meta itemprop="description" content="CHAPTER 8 Data Wrangling: Join, Combine, and Reshape（数据加工：连接, 合并, 整形） 在很多应用中，数据通常散落在不同的文件或数据库中，并不方便进行分析。这一章主要关注">
+
+
+<meta itemprop="datePublished" content="2018-07-08T13:32:45&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-08T13:32:45&#43;00:00" />
+<meta itemprop="wordCount" content="2435">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="8.1 Hierarchical Indexing（分层索引）"/>
+<meta name="twitter:description" content="CHAPTER 8 Data Wrangling: Join, Combine, and Reshape（数据加工：连接, 合并, 整形） 在很多应用中，数据通常散落在不同的文件或数据库中，并不方便进行分析。这一章主要关注"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">8.1 Hierarchical Indexing（分层索引）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-08 </span>
+        
+        <span class="more-meta"> 2435 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#chapter-8-data-wrangling-join-combine-and-reshape-数据加工-连接-合并-整形">CHAPTER 8 Data Wrangling: Join, Combine, and Reshape（数据加工：连接, 合并, 整形）</a></li>
+<li><a href="#8-1-hierarchical-indexing-分层索引">8.1 Hierarchical Indexing（分层索引）</a></li>
+<li><a href="#1-reordering-and-sorting-levels-重排序和层级排序">1 Reordering and Sorting Levels（重排序和层级排序）</a></li>
+<li><a href="#2-summary-statistics-by-level-按层级来归纳统计数据">2 Summary Statistics by Level (按层级来归纳统计数据)</a></li>
+<li><a href="#3-indexing-with-a-dataframe-s-columns-利用dataframe的列来索引">3 Indexing with a DataFrame’s columns（利用DataFrame的列来索引）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="chapter-8-data-wrangling-join-combine-and-reshape-数据加工-连接-合并-整形">CHAPTER 8 Data Wrangling: Join, Combine, and Reshape（数据加工：连接, 合并, 整形）</h1>
+
+<p>在很多应用中，数据通常散落在不同的文件或数据库中，并不方便进行分析。这一章主要关注工具，能帮我们combine, join, rearrange数据。</p>
+
+<p>译者：本章中的一些操作名称翻译上容易混淆，为了清楚区别几个名字的翻译，这里对第八章中出现的一些操作做一个翻译对应表。虽然用不同名称指代，但主要是为了谋求一贯性，让读者容易区分。这些操作本身其实区别还是比较小的，不用纠结于翻译名称，记住英文即可。</p>
+
+<p>8.1中的操作名</p>
+
+<ul>
+<li>join：连接</li>
+<li>combine：合并</li>
+<li>reshape：整形</li>
+</ul>
+
+<p>8.2中的操作名
+- merge：归并
+- concatenate：串联</p>
+
+<p>8.3中的操作名
+- pivot：旋转
+- stack：堆叠</p>
+
+<blockquote>
+<p>我在整个第八章对这些翻译做了更新，其他章节可能没有统一，如果有发现到不统一的翻译，可以在issue里提出，也可以直接pull request</p>
+</blockquote>
+
+<h1 id="8-1-hierarchical-indexing-分层索引">8.1 Hierarchical Indexing（分层索引）</h1>
+
+<p>Hierarchical Indexing是pandas中一个重要的特性，能让我们在一个轴（axis）上有多个index levels（索引层级）。它可以让我们在低维格式下处理高维数据。这里给出一个简单的例子，构建一个series，其index是a list of lists:</p>
+
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+</code></pre>
+
+<pre><code class="language-python">data = pd.Series(np.random.randn(9),
+                 index=[['a', 'a', 'a', 'b', 'b', 'c', 'c', 'd', 'd'],
+                        [1, 2, 3, 1, 3, 1, 2, 2, 3]])
+</code></pre>
+
+<pre><code class="language-python">data
+</code></pre>
+
+<pre><code>a  1    0.636082
+   2   -1.413061
+   3   -0.530704
+b  1   -0.041634
+   3   -0.042303
+c  1    0.429911
+   2    0.783350
+d  2    0.284328
+   3   -0.360963
+dtype: float64
+</code></pre>
+
+<p>其中我们看到的是把MultiIndex作为index(索引)的，美化过后series。</p>
+
+<pre><code class="language-python">data.index
+</code></pre>
+
+<pre><code>MultiIndex(levels=[['a', 'b', 'c', 'd'], [1, 2, 3]],
+           labels=[[0, 0, 0, 1, 1, 2, 2, 3, 3], [0, 1, 2, 0, 2, 0, 1, 1, 2]])
+</code></pre>
+
+<p>对于这种分层索引对象，partial indexing（部分索引）也是能做到的，这种方法可以让我们简洁地选中数据的一部分：</p>
+
+<pre><code class="language-python">data['b']
+</code></pre>
+
+<pre><code>1   -0.041634
+3   -0.042303
+dtype: float64
+</code></pre>
+
+<pre><code class="language-python">data['b': 'c']
+</code></pre>
+
+<pre><code>b  1   -0.041634
+   3   -0.042303
+c  1    0.429911
+   2    0.783350
+dtype: float64
+</code></pre>
+
+<pre><code class="language-python">data.loc[['b', 'd']]
+</code></pre>
+
+<pre><code>b  1   -0.041634
+   3   -0.042303
+d  2    0.284328
+   3   -0.360963
+dtype: float64
+</code></pre>
+
+<p>selection（选中）对于一个内部层级（inner level）也是可能的：</p>
+
+<pre><code class="language-python">data.loc[:, 2]
+</code></pre>
+
+<pre><code>a   -1.413061
+c    0.783350
+d    0.284328
+dtype: float64
+</code></pre>
+
+<p>分层索引的作用是改变数据的形状，以及做一些基于组的操作（group-based）比如做一个数据透视表（pivot table）。例子，我们可以用unstack来把数据进行重新排列，产生一个DataFrame：</p>
+
+<pre><code class="language-python">data.unstack()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0.636082</td>
+      <td>-1.413061</td>
+      <td>-0.530704</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>-0.041634</td>
+      <td>NaN</td>
+      <td>-0.042303</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>0.429911</td>
+      <td>0.783350</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>NaN</td>
+      <td>0.284328</td>
+      <td>-0.360963</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>相反的操作是stack:</p>
+
+<pre><code class="language-python">data.unstack().stack()
+</code></pre>
+
+<pre><code>a  1    0.636082
+   2   -1.413061
+   3   -0.530704
+b  1   -0.041634
+   3   -0.042303
+c  1    0.429911
+   2    0.783350
+d  2    0.284328
+   3   -0.360963
+dtype: float64
+</code></pre>
+
+<p>之后的章节会对unstack和stack做更多介绍。</p>
+
+<p>对于dataframe，任何一个axis(轴)都可以有一个分层索引：</p>
+
+<pre><code class="language-python">frame = pd.DataFrame(np.arange(12).reshape((4, 3)),
+                     index=[['a', 'a', 'b', 'b'], [1, 2, 1, 2]],
+                     columns=[['Ohio', 'Ohio', 'Colorado'],
+                              ['Green', 'Red', 'Green']])
+frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">a</th>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">b</th>
+      <th>1</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>每一层级都可以有一个名字（字符串或任何python对象）。如果有的话，这些会显示在输出中：</p>
+
+<pre><code class="language-python">frame.index.names = ['key1', 'key2']
+</code></pre>
+
+<pre><code class="language-python">frame.columns.names = ['state', 'color']
+</code></pre>
+
+<pre><code class="language-python">frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+    <tr>
+      <th>key1</th>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">a</th>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">b</th>
+      <th>1</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这里我们要注意区分行标签(row label)中索引的名字&rsquo;state&rsquo;和&rsquo;color&rsquo;。</p>
+
+<p>如果想要选中部分列(partial column indexing)的话，可以选中一组列（groups of columns）:</p>
+
+<pre><code class="language-python">frame['Ohio']
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+    </tr>
+    <tr>
+      <th>key1</th>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">a</th>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">b</th>
+      <th>1</th>
+      <td>6</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>MultiIndex能被同名函数创建，而且可以重复被使用；在DataFrame中给列创建层级名可以通过以下方式：</p>
+
+<pre><code class="language-python">pd.MultiIndex.from_arrays([['Ohio', 'Ohio', 'Colorado'], ['Green', 'Red', 'Green']],
+                      names=['state', 'color'])
+</code></pre>
+
+<pre><code>MultiIndex(levels=[['Colorado', 'Ohio'], ['Green', 'Red']],
+           labels=[[1, 1, 0], [0, 1, 0]],
+           names=['state', 'color'])
+</code></pre>
+
+<h1 id="1-reordering-and-sorting-levels-重排序和层级排序">1 Reordering and Sorting Levels（重排序和层级排序）</h1>
+
+<p>有时候我们需要在一个axis（轴）上按层级进行排序，或者在一个层级上，根据值来进行排序。swaplevel会取两个层级编号或者名字，并返回一个层级改变后的新对象（数据本身并不会被改变）：</p>
+
+<pre><code class="language-python">frame.swaplevel('key1', 'key2')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+    <tr>
+      <th>key2</th>
+      <th>key1</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <th>a</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <th>a</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <th>b</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <th>b</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>另一方面，sort_index则是在一个层级上，按数值进行排序。比如在交换层级的时候，通常也会使用sort_index，来让结果按指示的层级进行排序：</p>
+
+<pre><code class="language-python">frame.sort_index(level=1)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+    <tr>
+      <th>key1</th>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <th>1</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>a</th>
+      <th>2</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">frame.sort_index(level='color') 
+frame.sort_index(level='state') 
+# 这两个语句都会报错
+</code></pre>
+
+<p>（按照我的理解，level指的是key1和key2，key1是level=0，key2是level=1。可以看到下面的结果和上面是一样的：）</p>
+
+<pre><code class="language-python">frame.sort_index(level='key2') 
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+    <tr>
+      <th>key1</th>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <th>1</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>a</th>
+      <th>2</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">frame.swaplevel(0, 1).sort_index(level=0) # 把key1余key2交换后，按key2来排序
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+    <tr>
+      <th>key2</th>
+      <th>key1</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">1</th>
+      <th>a</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">2</th>
+      <th>a</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果index是按词典顺序那种方式来排列的话（比如从外层到内层按a,b,c这样的顺序），在这种多层级的index对象上，数据选择的效果会更好一些。这是我们调用<code>sort_index(level=0) or sort_index()</code></p>
+
+<h1 id="2-summary-statistics-by-level-按层级来归纳统计数据">2 Summary Statistics by Level (按层级来归纳统计数据)</h1>
+
+<p>在DataFrame和Series中，一些描述和归纳统计数据都是有一个level选项的，这里我们可以指定在某个axis下，按某个level（层级）来汇总。比如上面的DataFrame，我们可以按 行 或 列的层级来进行汇总：</p>
+
+<pre><code class="language-python">frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th>state</th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+    <tr>
+      <th>key1</th>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">a</th>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">b</th>
+      <th>1</th>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>9</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">frame.sum(level='key2')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th>state</th>
+      <th colspan="2" halign="left">Ohio</th>
+      <th>Colorado</th>
+    </tr>
+    <tr>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+      <th>Green</th>
+    </tr>
+    <tr>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>6</td>
+      <td>8</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>12</td>
+      <td>14</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">frame.sum(level='color', axis=1)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>color</th>
+      <th>Green</th>
+      <th>Red</th>
+    </tr>
+    <tr>
+      <th>key1</th>
+      <th>key2</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">a</th>
+      <th>1</th>
+      <td>2</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>8</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">b</th>
+      <th>1</th>
+      <td>14</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>20</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="3-indexing-with-a-dataframe-s-columns-利用dataframe的列来索引">3 Indexing with a DataFrame’s columns（利用DataFrame的列来索引）</h1>
+
+<p>把DataFrame里的一列或多列作为行索引（row index）是一件很常见的事；另外，我们可能还希望把行索引变为列。这里有一个例子：</p>
+
+<pre><code class="language-python">frame = pd.DataFrame({'a': range(7), 'b': range(7, 0, -1),
+                      'c': ['one', 'one', 'one', 'two', 'two',
+                            'two', 'two'],
+                      'd': [0, 1, 2, 0, 1, 2, 3]})
+frame
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>7</td>
+      <td>one</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>6</td>
+      <td>one</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>5</td>
+      <td>one</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>4</td>
+      <td>two</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>3</td>
+      <td>two</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>2</td>
+      <td>two</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>1</td>
+      <td>two</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>DataFrame的set_index会把列作为索引，并创建一个新的DataFrame：</p>
+
+<pre><code class="language-python">frame2 = frame.set_index(['c', 'd'])
+frame2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+    <tr>
+      <th>c</th>
+      <th>d</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="3" valign="top">one</th>
+      <th>0</th>
+      <td>0</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">two</th>
+      <th>0</th>
+      <td>3</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>默认删除原先的列，当然我们也可以留着：</p>
+
+<pre><code class="language-python">frame.set_index(['c', 'd'], drop=False)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+    </tr>
+    <tr>
+      <th>c</th>
+      <th>d</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="3" valign="top">one</th>
+      <th>0</th>
+      <td>0</td>
+      <td>7</td>
+      <td>one</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>6</td>
+      <td>one</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>5</td>
+      <td>one</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">two</th>
+      <th>0</th>
+      <td>3</td>
+      <td>4</td>
+      <td>two</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>3</td>
+      <td>two</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>2</td>
+      <td>two</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6</td>
+      <td>1</td>
+      <td>two</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>另一方面，reset_index的功能与set_index相反，它会把多层级索引变为列：</p>
+
+<pre><code class="language-python">frame2.reset_index()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>c</th>
+      <th>d</th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>one</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>one</td>
+      <td>1</td>
+      <td>1</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>one</td>
+      <td>2</td>
+      <td>2</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>two</td>
+      <td>0</td>
+      <td>3</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>two</td>
+      <td>1</td>
+      <td>4</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>two</td>
+      <td>2</td>
+      <td>5</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>two</td>
+      <td>3</td>
+      <td>6</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/06-%E5%8F%AF%E8%A7%86%E5%8C%96/03-%E5%85%B6%E4%BB%96%E4%B8%80%E4%BA%9Bpython%E5%8F%AF%E8%A7%86%E5%8C%96%E5%B7%A5%E5%85%B7/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 其他一些Python可视化工具</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/05-%E6%95%B0%E6%8D%AE%E6%95%B4%E5%90%88-join-combine-reshape/03-reshaping-and-pivoting-%E6%95%B4%E5%BD%A2%E5%92%8C%E6%97%8B%E8%BD%AC/">
+            <span class="next-text nav-default">8.3 Reshaping and Pivoting（整形和旋转）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python CGI编程 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Python CGI编程 相关资料ERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 Python CGI编程 什么是CGI CGI 目前由NCSA维护，NCSA定义CGI如下：" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-%E5%9F%BA%E7%A1%80/python-cgi%E7%BC%96%E7%A8%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Python CGI编程" />
+<meta property="og:description" content="Python CGI编程 相关资料ERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 Python CGI编程 什么是CGI CGI 目前由NCSA维护，NCSA定义CGI如下：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-%E5%9F%BA%E7%A1%80/python-cgi%E7%BC%96%E7%A8%8B/" /><meta property="article:published_time" content="2018-07-27T17:16:26&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T17:16:26&#43;00:00"/>
+<meta itemprop="name" content="Python CGI编程">
+<meta itemprop="description" content="Python CGI编程 相关资料ERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 Python CGI编程 什么是CGI CGI 目前由NCSA维护，NCSA定义CGI如下：">
+
+
+<meta itemprop="datePublished" content="2018-07-27T17:16:26&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T17:16:26&#43;00:00" />
+<meta itemprop="wordCount" content="4661">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python CGI编程"/>
+<meta name="twitter:description" content="Python CGI编程 相关资料ERENCE python基础教程 w3cschool Python 3 教程 菜鸟教程 Python CGI编程 什么是CGI CGI 目前由NCSA维护，NCSA定义CGI如下："/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python CGI编程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 4661 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#python-cgi编程">Python CGI编程</a>
+<ul>
+<li><a href="#相关资料erence">相关资料ERENCE</a></li>
+<li><a href="#python-cgi编程-1">Python CGI编程</a></li>
+<li><a href="#什么是cgi">什么是CGI</a></li>
+<li><a href="#网页浏览">网页浏览</a></li>
+<li><a href="#cgi架构图">CGI架构图</a></li>
+<li><a href="#web服务器支持及配置">Web服务器支持及配置</a></li>
+<li><a href="#第一个cgi程序">第一个CGI程序</a></li>
+<li><a href="#http头部">HTTP头部</a></li>
+<li><a href="#cgi环境变量">CGI环境变量</a></li>
+<li><a href="#get和post方法">GET和POST方法</a>
+<ul>
+<li><a href="#使用get方法传输数据">使用GET方法传输数据</a></li>
+<li><a href="#简单的url实例-get方法">简单的url实例：GET方法</a></li>
+<li><a href="#简单的表单实例-get方法">简单的表单实例：GET方法</a></li>
+<li><a href="#使用post方法传递数据">使用POST方法传递数据</a></li>
+<li><a href="#通过cgi程序传递checkbox数据">通过CGI程序传递checkbox数据</a></li>
+<li><a href="#通过cgi程序传递radio数据">通过CGI程序传递Radio数据</a></li>
+<li><a href="#通过cgi程序传递-textarea-数据">通过CGI程序传递 Textarea 数据</a></li>
+<li><a href="#通过cgi程序传递下拉数据">通过CGI程序传递下拉数据</a></li>
+</ul></li>
+<li><a href="#cgi中使用cookie">CGI中使用Cookie</a>
+<ul>
+<li><a href="#cookie的语法">cookie的语法</a></li>
+</ul></li>
+<li><a href="#cookie设置">Cookie设置</a></li>
+<li><a href="#检索cookie信息">检索Cookie信息</a></li>
+<li><a href="#文件下载对话框">文件下载对话框</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="python-cgi编程">Python CGI编程</h1>
+
+<h2 id="相关资料erence">相关资料ERENCE</h2>
+
+<ol>
+<li><a href="https://www.w3cschool.cn/python/">python基础教程 w3cschool</a></li>
+<li><a href="http://www.runoob.com/python3/python3-tutorial.html">Python 3 教程 菜鸟教程</a></li>
+</ol>
+
+<h2 id="python-cgi编程-1">Python CGI编程</h2>
+
+<h2 id="什么是cgi">什么是CGI</h2>
+
+<p>CGI 目前由NCSA维护，NCSA定义CGI如下：</p>
+
+<p>CGI(Common Gateway Interface),通用网关接口,它是一段程序,运行在服务器上如：HTTP服务器，提供同客户端HTML页面的接口。</p>
+
+<hr />
+
+<h2 id="网页浏览">网页浏览</h2>
+
+<p>为了更好的了解CGI是如何工作的，我们可以从在网页上点击一个链接或URL的流程：</p>
+
+<ul>
+<li><p>1、使用你的浏览器访问URL并连接到HTTP web 服务器。</p></li>
+
+<li><p>2、Web服务器接收到请求信息后会解析URL，并查找访问的文件在服务器上是否存在，如果存在返回文件的内容，否则返回错误信息。</p></li>
+
+<li><p>3、浏览器从服务器上接收信息，并显示接收的文件或者错误信息。</p></li>
+</ul>
+
+<p>CGI程序可以是Python脚本，PERL脚本，SHELL脚本，C或者C++程序等。</p>
+
+<h2 id="cgi架构图">CGI架构图</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AIJ9ehE4C3.png?imageslim" alt="mark" /></p>
+
+<hr />
+
+<h2 id="web服务器支持及配置">Web服务器支持及配置</h2>
+
+<p>在你进行CGI编程前，确保您的Web服务器支持CGI及已经配置了CGI的处理程序。</p>
+
+<p>Apache 支持CGI 配置：</p>
+
+<p>设置好CGI目录：</p>
+
+<pre><code>&lt;code class=&quot;python hljs&quot;&gt;ScriptAlias /cgi-bin/ /var/www/cgi-bin/&lt;/code&gt;
+</code></pre>
+
+<p>所有的HTTP服务器执行CGI程序都保存在一个预先配置的目录。这个目录被称为CGI目录，并按照惯例，它被命名为/var/www/cgi-bin目录。</p>
+
+<p>CGI文件的扩展名为.cgi，python也可以使用.py扩展名。</p>
+
+<p>默认情况下，Linux服务器配置运行的cgi-bin目录中为/var/www。</p>
+
+<p>如果你想指定其他运行 CGI 脚本的目录，可以修改 httpd.conf 配置文件，如下所示：</p>
+
+<pre><code>&lt;Directory &quot;/var/www/cgi-bin&quot;&gt;
+   AllowOverride None
+   Options +ExecCGI
+   Order allow,deny
+   Allow from all
+&lt;/Directory&gt;
+</code></pre>
+
+<p>在 AddHandler 中添加 .py 后缀，这样我们就可以访问 .py 结尾的 python 脚本文件：</p>
+
+<pre><code>&lt;code class=&quot;python hljs&quot;&gt;AddHandler cgi-script .cgi .pl .py&lt;/code&gt;
+</code></pre>
+
+<hr />
+
+<h2 id="第一个cgi程序">第一个CGI程序</h2>
+
+<p>我们使用Python创建第一个CGI程序，文件名为hellp.py，文件位于/var/www/cgi-bin目录中，内容如下，修改文件的权限为755：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+print &quot;Content-type:text/html\r\n\r\n&quot;
+print '&lt;html&gt;'
+print '&lt;head&gt;'
+print '&lt;title&gt;Hello Word - First CGI Program&lt;/title&gt;'
+print '&lt;/head&gt;'
+print '&lt;body&gt;'
+print '&lt;h2&gt;Hello Word! This is my first CGI program&lt;/h2&gt;'
+print '&lt;/body&gt;'
+print '&lt;/html&gt;'
+</code></pre>
+
+<p>以上程序在浏览器访问显示结果如下：</p>
+
+<pre><code>Hello Word! This is my first CGI program
+</code></pre>
+
+<p>这个的hello.py脚本是一个简单的Python脚本，脚本第一行的输出内容&rdquo;Content-type:text/html\r\n\r\n&rdquo;发送到浏览器并告知浏览器显示的内容类型为&rdquo;text/html&rdquo;。</p>
+
+<hr />
+
+<h2 id="http头部">HTTP头部</h2>
+
+<p>hello.py文件内容中的&rdquo; Content-type:text/html\r\n\r\n&rdquo;即为HTTP头部的一部分，它会发送给浏览器告诉浏览器文件的内容类型。</p>
+
+<p>HTTP头部的格式如下：</p>
+
+<pre><code>HTTP 字段名: 字段内容
+</code></pre>
+
+<p>例如：</p>
+
+<pre><code>&lt;code class=&quot;python hljs&quot;&gt;Content-type: text/html&lt;/code&gt;
+</code></pre>
+
+<p>以下表格介绍了CGI程序中HTTP头部经常使用的信息：
+<table class="reference" >
+<tbody >
+<tr >
+头
+描述
+</tr>
+<tr ></p>
+
+<p><td >Content-type:
+</td></p>
+
+<p><td >请求的与实体对应的MIME信息。例如: Content-type:text/html
+</td>
+</tr>
+<tr ></p>
+
+<p><td >Expires: Date
+</td></p>
+
+<p><td >响应过期的日期和时间
+</td>
+</tr>
+<tr ></p>
+
+<p><td >Location: URL
+</td></p>
+
+<p><td >用来重定向接收方到非请求URL的位置来完成请求或标识新的资源
+</td>
+</tr>
+<tr ></p>
+
+<p><td >Last-modified: Date
+</td></p>
+
+<p><td >请求资源的最后修改时间
+</td>
+</tr>
+<tr ></p>
+
+<p><td >Content-length: N
+</td></p>
+
+<p><td >请求的内容长度
+</td>
+</tr>
+<tr ></p>
+
+<p><td >Set-Cookie: String
+</td></p>
+
+<p><td >设置Http Cookie
+</td>
+</tr>
+</tbody>
+</table></p>
+
+<hr />
+
+<h2 id="cgi环境变量">CGI环境变量</h2>
+
+<p>所有的CGI程序都接收以下的环境变量，这些变量在CGI程序中发挥了重要的作用：
+<table class="reference " >
+<tbody >
+<tr >
+变量名
+描述
+</tr>
+<tr ></p>
+
+<p><td >CONTENT_TYPE
+</td></p>
+
+<p><td >这个环境变量的值指示所传递来的信息的MIME类型。目前，环境变量CONTENT_TYPE一般都是：application/x-www-form-urlencoded,他表示数据来自于HTML表单。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >CONTENT_LENGTH
+</td></p>
+
+<p><td >如果服务器与CGI程序信息的传递方式是POST，这个环境变量即使从标准输入STDIN中可以读到的有效数据的字节数。这个环境变量在读取所输入的数据时必须使用。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >HTTP_COOKIE
+</td></p>
+
+<p><td >客户机内的 COOKIE 内容。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >HTTP_USER_AGENT
+</td></p>
+
+<p><td >提供包含了版本数或其他专有数据的客户浏览器信息。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >PATH_INFO
+</td></p>
+
+<p><td >这个环境变量的值表示紧接在CGI程序名之后的其他路径信息。它常常作为CGI程序的参数出现。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >QUERY_STRING
+</td></p>
+
+<p><td >如果服务器与CGI程序信息的传递方式是GET，这个环境变量的值即使所传递的信息。这个信息经跟在CGI程序名的后面，两者中间用一个问号&rsquo;?&lsquo;分隔。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >REMOTE_ADDR
+</td></p>
+
+<p><td >这个环境变量的值是发送请求的客户机的IP地址，例如上面的192.168.1.67。这个值总是存在的。而且它是Web客户机需要提供给Web服务器的唯一标识，可以在CGI程序中用它来区分不同的Web客户机。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >REMOTE_HOST
+</td></p>
+
+<p><td >这个环境变量的值包含发送CGI请求的客户机的主机名。如果不支持你想查询，则无需定义此环境变量。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >REQUEST_METHOD
+</td></p>
+
+<p><td >提供脚本被调用的方法。对于使用 HTTP/1.0 协议的脚本，仅 GET 和 POST 有意义。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >SCRIPT_FILENAME
+</td></p>
+
+<p><td >CGI脚本的完整路径
+</td>
+</tr>
+<tr ></p>
+
+<p><td >SCRIPT_NAME
+</td></p>
+
+<p><td >CGI脚本的的名称
+</td>
+</tr>
+<tr ></p>
+
+<p><td >SERVER_NAME
+</td></p>
+
+<p><td >这是你的 WEB 服务器的主机名、别名或IP地址。
+</td>
+</tr>
+<tr ></p>
+
+<p><td >SERVER_SOFTWARE
+</td></p>
+
+<p><td >这个环境变量的值包含了调用CGI程序的HTTP服务器的名称和版本号。例如，上面的值为Apache/2.2.14(Unix)
+</td>
+</tr>
+</tbody>
+</table>
+以下是一个简单的CGI脚本输出CGI的环境变量：</p>
+
+<pre><code>#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+# filename:test.py
+
+import os
+
+print &quot;Content-type: text/html&quot;
+print
+print &quot;&lt;meta charset=\&quot;utf-8\&quot;&gt;&quot;
+print &quot;&lt;b&gt;环境变量&lt;/b&gt;&lt;br&gt;&quot;;
+print &quot;&lt;ul&gt;&quot;
+for key in os.environ.keys():
+    print &quot;&lt;li&gt;&lt;span style='color:green'&gt;%30s &lt;/span&gt; : %s &lt;/li&gt;&quot; % (key,os.environ[key])
+print &quot;&lt;/ul&gt;&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="get和post方法">GET和POST方法</h2>
+
+<p>浏览器客户端通过两种方法向服务器传递信息，这两种方法就是 GET 方法和 POST 方法。</p>
+
+<h3 id="使用get方法传输数据">使用GET方法传输数据</h3>
+
+<p>GET方法发送编码后的用户信息到服务端，数据信息包含在请求页面的URL上，以&rdquo;?&ldquo;号分割, 如下所示：</p>
+
+<pre><code>http://www.test.com/cgi-bin/hello.py?key1=value1&amp;key2=value2
+</code></pre>
+
+<p>有关 GET 请求的其他一些注释：</p>
+
+<ul>
+<li><p>GET 请求可被缓存</p></li>
+
+<li><p>GET 请求保留在浏览器历史记录中</p></li>
+
+<li><p>GET 请求可被收藏为书签</p></li>
+
+<li><p>GET 请求不应在处理敏感数据时使用</p></li>
+
+<li><p>GET 请求有长度限制</p></li>
+
+<li><p>GET 请求只应当用于取回数据</p></li>
+</ul>
+
+<h3 id="简单的url实例-get方法">简单的url实例：GET方法</h3>
+
+<p>以下是一个简单的URL，使用GET方法向hello_get.py程序发送两个参数：</p>
+
+<pre><code>/cgi-bin/hello_get.py?first_name=ZARA&amp;last_name=ALI
+</code></pre>
+
+<p>以下为hello_get.py文件的代码：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# CGI处理模块
+import cgi, cgitb
+
+# 创建 FieldStorage 的实例化
+form = cgi.FieldStorage()
+
+# 获取数据
+first_name = form.getvalue('first_name')
+last_name  = form.getvalue('last_name')
+
+print &quot;Content-type:text/html\r\n\r\n&quot;
+print &quot;&lt;html&gt;&quot;
+print &quot;&lt;head&gt;&quot;
+print &quot;&lt;title&gt;Hello - Second CGI Program&lt;/title&gt;&quot;
+print &quot;&lt;/head&gt;&quot;
+print &quot;&lt;body&gt;&quot;
+print &quot;&lt;h2&gt;Hello %s %s&lt;/h2&gt;&quot; % (first_name, last_name)
+print &quot;&lt;/body&gt;&quot;
+print &quot;&lt;/html&gt;&quot;
+</code></pre>
+
+<p>浏览器请求输出结果：</p>
+
+<pre><code>Hello ZARA ALI
+</code></pre>
+
+<h3 id="简单的表单实例-get方法">简单的表单实例：GET方法</h3>
+
+<p>以下是一个通过HTML的表单使用GET方法向服务器发送两个数据，提交的服务器脚本同样是hello_get.py文件，代码如下：</p>
+
+<pre><code>&lt;form action=&quot;/cgi-bin/hello_get.py&quot; method=&quot;get&quot;&gt;
+First Name: &lt;input type=&quot;text&quot; name=&quot;first_name&quot;&gt;  &lt;br /&gt;
+
+Last Name: &lt;input type=&quot;text&quot; name=&quot;last_name&quot; /&gt;
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+
+<h3 id="使用post方法传递数据">使用POST方法传递数据</h3>
+
+<p>使用POST方法向服务器传递数据是更安全可靠的，像一些敏感信息如用户密码等需要使用POST传输数据。</p>
+
+<p>以下同样是hello_get.py ，它也可以处理浏览器提交的POST表单数据:</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# 引入 CGI 模块
+import cgi, cgitb
+
+# 创建 FieldStorage 实例
+form = cgi.FieldStorage()
+
+# 获取表单数据
+first_name = form.getvalue('first_name')
+last_name  = form.getvalue('last_name')
+
+print &quot;Content-type:text/html\r\n\r\n&quot;
+print &quot;&lt;html&gt;&quot;
+print &quot;&lt;head&gt;&quot;
+print &quot;&lt;title&gt;Hello - Second CGI Program&lt;/title&gt;&quot;
+print &quot;&lt;/head&gt;&quot;
+print &quot;&lt;body&gt;&quot;
+print &quot;&lt;h2&gt;Hello %s %s&lt;/h2&gt;&quot; % (first_name, last_name)
+print &quot;&lt;/body&gt;&quot;
+print &quot;&lt;/html&gt;&quot;
+</code></pre>
+
+<p>以下为表单通过POST方法向服务器脚本hello_get.py提交数据:</p>
+
+<pre><code>&lt;form action=&quot;/cgi-bin/hello_get.py&quot; method=&quot;post&quot;&gt;
+First Name: &lt;input type=&quot;text&quot; name=&quot;first_name&quot;&gt;&lt;br /&gt;
+Last Name: &lt;input type=&quot;text&quot; name=&quot;last_name&quot; /&gt;
+
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+
+<h3 id="通过cgi程序传递checkbox数据">通过CGI程序传递checkbox数据</h3>
+
+<p>checkbox用于提交一个或者多个选项数据，HTML代码如下：</p>
+
+<pre><code>&lt;form action=&quot;/cgi-bin/checkbox.cgi&quot; method=&quot;POST&quot; target=&quot;_blank&quot;&gt;
+&lt;input type=&quot;checkbox&quot; name=&quot;maths&quot; value=&quot;on&quot; /&gt; Maths
+&lt;input type=&quot;checkbox&quot; name=&quot;physics&quot; value=&quot;on&quot; /&gt; Physics
+&lt;input type=&quot;submit&quot; value=&quot;Select Subject&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>以下为 checkbox.cgi 文件的代码：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# 引入 CGI 处理模块
+import cgi, cgitb
+
+# 创建 FieldStorage的实例
+form = cgi.FieldStorage()
+
+# 接收字段数据
+if form.getvalue('maths'):
+   math_flag = &quot;ON&quot;
+else:
+   math_flag = &quot;OFF&quot;
+
+if form.getvalue('physics'):
+   physics_flag = &quot;ON&quot;
+else:
+   physics_flag = &quot;OFF&quot;
+
+print &quot;Content-type:text/html\r\n\r\n&quot;
+print &quot;&lt;html&gt;&quot;
+print &quot;&lt;head&gt;&quot;
+print &quot;&lt;title&gt;Checkbox - Third CGI Program&lt;/title&gt;&quot;
+print &quot;&lt;/head&gt;&quot;
+print &quot;&lt;body&gt;&quot;
+print &quot;&lt;h2&gt; CheckBox Maths is : %s&lt;/h2&gt;&quot; % math_flag
+print &quot;&lt;h2&gt; CheckBox Physics is : %s&lt;/h2&gt;&quot; % physics_flag
+print &quot;&lt;/body&gt;&quot;
+print &quot;&lt;/html&gt;&quot;
+</code></pre>
+
+<h3 id="通过cgi程序传递radio数据">通过CGI程序传递Radio数据</h3>
+
+<p>Radio只向服务器传递一个数据，HTML代码如下：</p>
+
+<pre><code>&lt;form action=&quot;/cgi-bin/radiobutton.py&quot; method=&quot;post&quot; target=&quot;_blank&quot;&gt;
+&lt;input type=&quot;radio&quot; name=&quot;subject&quot; value=&quot;maths&quot; /&gt; Maths
+&lt;input type=&quot;radio&quot; name=&quot;subject&quot; value=&quot;physics&quot; /&gt; Physics
+&lt;input type=&quot;submit&quot; value=&quot;Select Subject&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>radiobutton.py 脚本代码如下：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# Import modules for CGI handling
+import cgi, cgitb
+
+# Create instance of FieldStorage
+form = cgi.FieldStorage()
+
+# Get data from fields
+if form.getvalue('subject'):
+   subject = form.getvalue('subject')
+else:
+   subject = &quot;Not set&quot;
+
+print &quot;Content-type:text/html\r\n\r\n&quot;
+print &quot;&lt;html&gt;&quot;
+print &quot;&lt;head&gt;&quot;
+print &quot;&lt;title&gt;Radio - Fourth CGI Program&lt;/title&gt;&quot;
+print &quot;&lt;/head&gt;&quot;
+print &quot;&lt;body&gt;&quot;
+print &quot;&lt;h2&gt; Selected Subject is %s&lt;/h2&gt;&quot; % subject
+print &quot;&lt;/body&gt;&quot;
+print &quot;&lt;/html&gt;&quot;
+</code></pre>
+
+<h3 id="通过cgi程序传递-textarea-数据">通过CGI程序传递 Textarea 数据</h3>
+
+<p>Textarea向服务器传递多行数据，HTML代码如下：</p>
+
+<pre><code>&lt;form action=&quot;/cgi-bin/textarea.py&quot; method=&quot;post&quot; target=&quot;_blank&quot;&gt;
+&lt;textarea name=&quot;textcontent&quot; cols=&quot;40&quot; rows=&quot;4&quot;&gt;
+Type your text here...
+&lt;/textarea&gt;
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot; /&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>textarea.cgi脚本代码如下：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# Import modules for CGI handling
+import cgi, cgitb
+
+# Create instance of FieldStorage
+form = cgi.FieldStorage()
+
+# Get data from fields
+if form.getvalue('textcontent'):
+   text_content = form.getvalue('textcontent')
+else:
+   text_content = &quot;Not entered&quot;
+
+print &quot;Content-type:text/html\r\n\r\n&quot;
+print &quot;&lt;html&gt;&quot;
+print &quot;&lt;head&gt;&quot;;
+print &quot;&lt;title&gt;Text Area - Fifth CGI Program&lt;/title&gt;&quot;
+print &quot;&lt;/head&gt;&quot;
+print &quot;&lt;body&gt;&quot;
+print &quot;&lt;h2&gt; Entered Text Content is %s&lt;/h2&gt;&quot; % text_content
+print &quot;&lt;/body&gt;&quot;
+</code></pre>
+
+<h3 id="通过cgi程序传递下拉数据">通过CGI程序传递下拉数据</h3>
+
+<p>HTML下拉框代码如下：</p>
+
+<pre><code>&lt;form action=&quot;/cgi-bin/dropdown.py&quot; method=&quot;post&quot; target=&quot;_blank&quot;&gt;
+&lt;select name=&quot;dropdown&quot;&gt;
+&lt;option value=&quot;Maths&quot; selected&gt;Maths&lt;/option&gt;
+&lt;option value=&quot;Physics&quot;&gt;Physics&lt;/option&gt;
+&lt;/select&gt;
+&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;/&gt;
+&lt;/form&gt;
+</code></pre>
+
+<p>dropdown.py 脚本代码如下所示：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# Import modules for CGI handling
+import cgi, cgitb
+
+# Create instance of FieldStorage
+form = cgi.FieldStorage()
+
+# Get data from fields
+if form.getvalue('dropdown'):
+   subject = form.getvalue('dropdown')
+else:
+   subject = &quot;Not entered&quot;
+
+print &quot;Content-type:text/html\r\n\r\n&quot;
+print &quot;&lt;html&gt;&quot;
+print &quot;&lt;head&gt;&quot;
+print &quot;&lt;title&gt;Dropdown Box - Sixth CGI Program&lt;/title&gt;&quot;
+print &quot;&lt;/head&gt;&quot;
+print &quot;&lt;body&gt;&quot;
+print &quot;&lt;h2&gt; Selected Subject is %s&lt;/h2&gt;&quot; % subject
+print &quot;&lt;/body&gt;&quot;
+print &quot;&lt;/html&gt;&quot;
+</code></pre>
+
+<hr />
+
+<h2 id="cgi中使用cookie">CGI中使用Cookie</h2>
+
+<p>在http协议一个很大的缺点就是不作用户身份的判断，这样给编程人员带来很大的不便，</p>
+
+<p>而cookie功能的出现弥补了这个缺憾。</p>
+
+<p>所有cookie就是在客户访问脚本的同时，通过客户的浏览器，在客户硬盘上写入纪录数据 ，当下次客户访问脚本时取回数据信息，从而达到身份判别的功能，cookie常用在密码判断中 。</p>
+
+<h3 id="cookie的语法">cookie的语法</h3>
+
+<p>http cookie的发送是通过http头部来实现的，他早于文件的传递，头部set-cookie的语法如下：</p>
+
+<pre><code>Set-cookie:name=name;expires=date;path=path;domain=domain;secure
+</code></pre>
+
+<ul>
+<li><p>name=name: 需要设置cookie的值(name不能使用&rdquo;；&rdquo;和&rdquo;，&rdquo;号),有多个name值时用&rdquo;；&rdquo;分隔例如：name1=name1;name2=name2;name3=name3。</p></li>
+
+<li><p>expires=date: cookie的有效期限,格式： expires=&ldquo;Wdy,DD-Mon-YYYY HH:MM:SS&rdquo;</p></li>
+</ul>
+
+<p>*</p>
+
+<ul>
+<li><p>path=path: 设置cookie支持的路径,如果path是一个路径，则cookie对这个目录下的所有文件及子目录生效，例如： path=&ldquo;/cgi-bin/&ldquo;，如果path是一个文件，则cookie指对这个文件生效，例如：path=&rdquo;/cgi-bin/cookie.cgi&rdquo;。</p></li>
+
+<li><p>domain=domain: 对cookie生效的域名，例如：domain=&ldquo;www.chinalb.com&rdquo;</p></li>
+
+<li><p>secure: 如果给出此标志，表示cookie只能通过SSL协议的https服务器来传递。</p></li>
+
+<li><p>cookie的接收是通过设置环境变量HTTP_COOKIE来实现的，CGI程序可以通过检索该变量获取cookie信息。</p></li>
+</ul>
+
+<hr />
+
+<h2 id="cookie设置">Cookie设置</h2>
+
+<p>Cookie的设置非常简单，cookie会在http头部单独发送。以下实例在cookie中设置了UserID 和 Password：</p>
+
+<pre><code>&lt;pre&gt;
+#coding=utf-8
+#!/usr/bin/python
+
+print &quot;Set-Cookie:UserID=XYZ;\r\n&quot;
+print &quot;Set-Cookie:Password=XYZ123;\r\n&quot;
+print &quot;Set-Cookie:Expires=Tuesday, 31-Dec-2007 23:12:40 GMT&quot;;\r\n&quot;
+print &quot;Set-Cookie:Domain=www.w3cschool.cn;\r\n&quot;
+print &quot;Set-Cookie:Path=/perl;\n&quot;
+print &quot;Content-type:text/html\r\n\r\n&quot;
+...........Rest of the HTML Content....
+</code></pre>
+
+<p>以上实例使用了 Set-Cookie 头信息来设置Cookie信息，可选项中设置了Cookie的其他属性，如过期时间Expires，域名Domain，路径Path。这些信息设置在 &ldquo;Content-type:text/html\r\n\r\n&rdquo;之前。</p>
+
+<hr />
+
+<h2 id="检索cookie信息">检索Cookie信息</h2>
+
+<p>Cookie信息检索页非常简单，Cookie信息存储在CGI的环境变量HTTP_COOKIE中，存储格式如下：</p>
+
+<pre><code>key1=value1;key2=value2;key3=value3....
+</code></pre>
+
+<p>以下是一个简单的CGI检索cookie信息的程序：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# Import modules for CGI handling
+from os import environ
+import cgi, cgitb
+
+if environ.has_key('HTTP_COOKIE'):
+   for cookie in map(strip, split(environ['HTTP_COOKIE'], ';')):
+      (key, value ) = split(cookie, '=');
+      if key == &quot;UserID&quot;:
+         user_id = value
+
+      if key == &quot;Password&quot;:
+         password = value
+
+print &quot;User ID  = %s&quot; % user_id
+print &quot;Password = %s&quot; % password
+</code></pre>
+
+<p>以上脚本输出结果如下：</p>
+
+<pre><code>User ID = XYZ
+Password = XYZ123
+</code></pre>
+
+<p>文件上传实例：</p>
+
+<p>HTML设置上传文件的表单需要设置enctype 属性为multipart/form-data，代码如下所示：</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;w3cschool教程(w3cschool.cn)&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+ &lt;form enctype=&quot;multipart/form-data&quot; action=&quot;/cgi-bin/save_file.py&quot; method=&quot;post&quot;&gt;
+   &lt;p&gt;选中文件: &lt;input type=&quot;file&quot; name=&quot;filename&quot; /&gt;&lt;/p&gt;
+   &lt;p&gt;&lt;input type=&quot;submit&quot; value=&quot;上传&quot; /&gt;&lt;/p&gt;
+   &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>save_file.py脚本文件代码如下：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+import cgi, os
+import cgitb; cgitb.enable()
+
+form = cgi.FieldStorage()
+
+# 获取文件名
+fileitem = form['filename']
+
+# 检测文件是否上传
+if fileitem.filename:
+   # 设置文件路径
+   fn = os.path.basename(fileitem.filename)
+   open('/tmp/' + fn, 'wb').write(fileitem.file.read())
+
+   message = 'The file &quot;' + fn + '&quot; was uploaded successfully'
+
+else:
+   message = 'No file was uploaded'
+
+print &quot;&quot;&quot;\
+Content-Type: text/html\n
+&lt;html&gt;
+&lt;body&gt;
+   &lt;p&gt;%s&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&quot;&quot;&quot; % (message,)
+</code></pre>
+
+<p>如果你使用的系统是Unix/Linux，你必须替换文件分隔符，在window下只需要使用open()语句即可：</p>
+
+<pre><code>fn = os.path.basename(fileitem.filename.replace(&quot;\\&quot;, &quot;/&quot; ))
+</code></pre>
+
+<hr />
+
+<h2 id="文件下载对话框">文件下载对话框</h2>
+
+<p>如果我们需要为用户提供文件下载链接，并在用户点击链接后弹出文件下载对话框，我们通过设置HTTP头信息来实现这些功能，功能代码如下：</p>
+
+<pre><code>#coding=utf-8
+#!/usr/bin/python
+
+# HTTP Header
+print &quot;Content-Type:application/octet-stream; name=\&quot;FileName\&quot;\r\n&quot;;
+print &quot;Content-Disposition: attachment; filename=\&quot;FileName\&quot;\r\n\n&quot;;
+
+# Actual File Content will go hear.
+fo = open(&quot;foo.txt&quot;, &quot;rb&quot;)
+
+str = fo.read();
+print str
+
+# Close opend file
+fo.close()
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-%E5%9F%BA%E7%A1%80/python-%E4%B8%AD%E6%96%87%E7%BC%96%E7%A0%81/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Python 中文编码</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/07-c&#43;&#43;-%E6%B5%8B%E8%AF%95/c&#43;&#43;-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+            <span class="next-text nav-default">C&#43;&#43; 单元测试</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

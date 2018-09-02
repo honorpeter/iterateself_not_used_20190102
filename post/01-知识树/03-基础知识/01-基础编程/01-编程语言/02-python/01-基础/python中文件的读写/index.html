@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python中文件的读写 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-21 11:07:10&#43;00:00 layout: post link: http://106.15.37.116/2018/03/21/python-file-read-write/ slug: python-file-read-write title: python中文件的读写 wordpress_id: 498 categories: - 随想与反思 tags: - &amp;lsquo;@want_to_know&amp;rsquo; - python 缘由： 机器学习中经常涉及到文件的读写和处理，因此有必要总结下" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-%E5%9F%BA%E7%A1%80/python%E4%B8%AD%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python中文件的读写" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-21 11:07:10&#43;00:00 layout: post link: http://106.15.37.116/2018/03/21/python-file-read-write/ slug: python-file-read-write title: python中文件的读写 wordpress_id: 498 categories: - 随想与反思 tags: - &lsquo;@want_to_know&rsquo; - python 缘由： 机器学习中经常涉及到文件的读写和处理，因此有必要总结下" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-%E5%9F%BA%E7%A1%80/python%E4%B8%AD%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/" /><meta property="article:published_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta itemprop="name" content="python中文件的读写">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-21 11:07:10&#43;00:00 layout: post link: http://106.15.37.116/2018/03/21/python-file-read-write/ slug: python-file-read-write title: python中文件的读写 wordpress_id: 498 categories: - 随想与反思 tags: - &lsquo;@want_to_know&rsquo; - python 缘由： 机器学习中经常涉及到文件的读写和处理，因此有必要总结下">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="wordCount" content="813">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python中文件的读写"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-21 11:07:10&#43;00:00 layout: post link: http://106.15.37.116/2018/03/21/python-file-read-write/ slug: python-file-read-write title: python中文件的读写 wordpress_id: 498 categories: - 随想与反思 tags: - &lsquo;@want_to_know&rsquo; - python 缘由： 机器学习中经常涉及到文件的读写和处理，因此有必要总结下"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">python中文件的读写</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 813 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#python">- python</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#要点">要点：</a>
+<ul>
+<li><a href="#1-直接读取和写入">1.直接读取和写入：</a></li>
+<li><a href="#2-使用文件迭代器-用for循环的方法">2.使用文件迭代器，用for循环的方法</a></li>
+<li><a href="#3-使用文件上下文管理器-即with-open">3.使用文件上下文管理器，即with&hellip;open&hellip;</a></li>
+<li><a href="#4-读取二进制文件怎么读-比如把图片作为二进制文件读进来">4.读取二进制文件怎么读？比如把图片作为二进制文件读进来？</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-21 11:07:10+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/21/python-file-read-write/">http://106.15.37.116/2018/03/21/python-file-read-write/</a>
+slug: python-file-read-write
+title: python中文件的读写
+wordpress_id: 498
+categories:
+- 随想与反思
+tags:
+- &lsquo;@want_to_know&rsquo;</p>
+
+<h2 id="python">- python</h2>
+
+<!-- more -->
+
+<h2 id="缘由">缘由：</h2>
+
+<p>机器学习中经常涉及到文件的读写和处理，因此有必要总结下文件的读写的方法。</p>
+
+<h2 id="要点">要点：</h2>
+
+<h3 id="1-直接读取和写入">1.直接读取和写入：</h3>
+
+<pre><code># 注意如果文件不存在就会报错，FileNotFoundError: [Errno 2] No such file or directory: 'c3_two_sum1.py'
+file1 = open('c3_two_sum1.py')
+# 如果不标识 w 就会报错：io.UnsupportedOperation: not writable
+file2 = open('output.txt', 'w')
+while True:
+    line = file1.readline()
+    file2.write('&quot;' + line[:] + '&quot;' + &quot;,&quot;)
+    if not line:
+        break
+file1.close()  # 文件处理完之后记得关闭
+file2.close()
+</code></pre>
+
+<p>读文件有3种方法：</p>
+
+<ul>
+<li><p>read() 将文本文件所有行读到一个字符串中。</p></li>
+
+<li><p>readline() 是一行一行的读，优点是：可以在读行过程中跳过特定行。</p></li>
+
+<li><p>readlines() 是将文本文件中所有行读到一个list中，文本文件每一行是list的一个元素。</p></li>
+</ul>
+
+<p>备注：看来对file和directory的操作还是要整理一下，比如经常要用到对文件是否存在进行判断，经常要输出一些文件，这个时候的地址的相关拼接操作就必须熟练。</p>
+
+<h3 id="2-使用文件迭代器-用for循环的方法">2.使用文件迭代器，用for循环的方法</h3>
+
+<pre><code>file2=open('output.txt','w')
+for line in open('test.txt'):
+    file2.write('&quot;'+line[:]+'&quot;'+',')
+</code></pre>
+
+<p>这个方法看起来是个好方法</p>
+
+<h3 id="3-使用文件上下文管理器-即with-open">3.使用文件上下文管理器，即with&hellip;open&hellip;</h3>
+
+<pre><code># 读取文件
+with open('file.txt', 'r') as f:
+    data = f.read()
+with open('file.txt', 'r') as f:
+    for line in f:
+        # ...
+        pass
+
+# 写入文件
+text1 = &quot;qqqq&quot;
+with open('file.txt', 'w') as f:
+    f.write(text1)
+# 将要打印的line写入文件中
+# QUESTION 这个没明白，还可以这样做？？可以
+with open('file.txt', 'w') as f:
+    print(text1, file=f)
+</code></pre>
+
+<p>注：这个 print(text1,file=f) 之前没有看到过这样使用，看来print的用法还是很多样的</p>
+
+<h3 id="4-读取二进制文件怎么读-比如把图片作为二进制文件读进来">4.读取二进制文件怎么读？比如把图片作为二进制文件读进来？</h3>
+
+<pre><code>f=open('test.png','rb')
+print(f.read())
+</code></pre>
+
+<p>任何非标准的文本文件（对于Py2来说，标准是ASCII，对于Py3来说，标准是unicode），你就需要用二进制读入这个文件，然后再用 .decode(&lsquo;&hellip;&rsquo;)的方法来解码这个二进制文件，即假如文件使用的是一种somecode 这种编码格式写的 ，就可以先读进来二进制文件，然后进行解密，f.read().decode(&lsquo;somecode&rsquo;) <strong>这个地方需要确认下，并补充例子</strong></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-%E5%9F%BA%E7%A1%80/python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%94%9F%E6%88%90%E5%99%A8%E8%BF%AD%E4%BB%A3%E5%99%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python 可迭代，生成器，迭代器</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-%E5%9F%BA%E7%A1%80/python%E4%B8%AD%E7%9A%84dict/">
+            <span class="next-text nav-default">python中的dict</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

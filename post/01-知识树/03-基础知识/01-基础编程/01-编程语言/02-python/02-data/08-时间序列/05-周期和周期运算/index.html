@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 周期和周期运算 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="11.5 Periods and Period Arithmetic（周期和周期运算） Periods（周期）表示时间跨度（timespans），比如天，月，季，年。Period类表" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/05-%E5%91%A8%E6%9C%9F%E5%92%8C%E5%91%A8%E6%9C%9F%E8%BF%90%E7%AE%97/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 周期和周期运算" />
+<meta property="og:description" content="11.5 Periods and Period Arithmetic（周期和周期运算） Periods（周期）表示时间跨度（timespans），比如天，月，季，年。Period类表" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/05-%E5%91%A8%E6%9C%9F%E5%92%8C%E5%91%A8%E6%9C%9F%E8%BF%90%E7%AE%97/" /><meta property="article:published_time" content="2018-08-03T11:31:45&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:31:45&#43;00:00"/>
+<meta itemprop="name" content="05 周期和周期运算">
+<meta itemprop="description" content="11.5 Periods and Period Arithmetic（周期和周期运算） Periods（周期）表示时间跨度（timespans），比如天，月，季，年。Period类表">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:31:45&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:31:45&#43;00:00" />
+<meta itemprop="wordCount" content="2157">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 周期和周期运算"/>
+<meta name="twitter:description" content="11.5 Periods and Period Arithmetic（周期和周期运算） Periods（周期）表示时间跨度（timespans），比如天，月，季，年。Period类表"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 周期和周期运算</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 2157 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#11-5-periods-and-period-arithmetic-周期和周期运算">11.5 Periods and Period Arithmetic（周期和周期运算）</a></li>
+<li><a href="#1-period-frequency-conversion-周期频度转换">1 Period Frequency Conversion（周期频度转换）</a></li>
+<li><a href="#2-quarterly-period-frequencies-季度周期频度">2 Quarterly Period Frequencies（季度周期频度）</a></li>
+<li><a href="#3-converting-timestamps-to-periods-and-back-时间戳与周期相互转换">3 Converting Timestamps to Periods (and Back)（时间戳与周期相互转换）</a></li>
+<li><a href="#4-creating-a-periodindex-from-arrays-从数组中创建一个周期索引">4 Creating a PeriodIndex from Arrays（从数组中创建一个周期索引）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="11-5-periods-and-period-arithmetic-周期和周期运算">11.5 Periods and Period Arithmetic（周期和周期运算）</h1>
+
+<p>Periods（周期）表示时间跨度（timespans），比如天，月，季，年。Period类表示的就是这种数据类型，构建的时候需要用字符串或整数，以及一个频度（关于频度的代码可以看11.4中的表格）：</p>
+
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+</code></pre>
+
+<pre><code class="language-python">p = pd.Period(2007, freq='A-DEC')
+p
+</code></pre>
+
+<pre><code>Period('2007', 'A-DEC')
+</code></pre>
+
+<p>在这个李自力，Period对象代表了整个2007年一年的时间跨度，从1月1日到12月31日。在Period对象上进行加减，会有和对频度进行位移（shifting）一样的效果：</p>
+
+<pre><code class="language-python">p + 5
+</code></pre>
+
+<pre><code>Period('2012', 'A-DEC')
+</code></pre>
+
+<pre><code class="language-python">p - 2
+</code></pre>
+
+<pre><code>Period('2005', 'A-DEC')
+</code></pre>
+
+<p>如果两个周期有相同的频度，二者的区别就是它们之间有多少个单元（units）：</p>
+
+<pre><code class="language-python">pd.Period('2014', freq='A-DEC') - p
+</code></pre>
+
+<pre><code>7
+</code></pre>
+
+<p>固定范围的周期（Regular ranges of periods）可以通过period_range函数创建：</p>
+
+<pre><code class="language-python">rng = pd.period_range('2000-01-01', '2000-06-03', freq='M')
+rng
+</code></pre>
+
+<pre><code>PeriodIndex(['2000-01', '2000-02', '2000-03', '2000-04', '2000-05', '2000-06'], dtype='int64', freq='M')
+</code></pre>
+
+<p>PeriodIndex类能存储周期组成的序列，而且可以作为任何pandas数据结构中的轴索引（axis index）：</p>
+
+<pre><code class="language-python">pd.Series(np.random.randn(6), index=rng)
+</code></pre>
+
+<pre><code>2000-01    0.439035
+2000-02   -0.231125
+2000-03   -1.085106
+2000-04   -1.909902
+2000-05    1.478810
+2000-06    0.656713
+Freq: M, dtype: float64
+</code></pre>
+
+<p>如果我们有字符串组成的数组，可以使用PeriodIndex类：</p>
+
+<pre><code class="language-python">values = ['2001Q3', '2002Q2', '2003Q1']
+</code></pre>
+
+<pre><code class="language-python">index = pd.PeriodIndex(values, freq='Q-DEC')
+index
+</code></pre>
+
+<pre><code>PeriodIndex(['2001Q3', '2002Q2', '2003Q1'], dtype='int64', freq='Q-DEC')
+</code></pre>
+
+<h1 id="1-period-frequency-conversion-周期频度转换">1 Period Frequency Conversion（周期频度转换）</h1>
+
+<p>通过使用asfreq方法，Periods和PeriodIndex对象能被转换为其他频度。例如，假设我们有一个年度期间（annual period），并且想要转换为月度期间（monthly period），做法非常直观：</p>
+
+<pre><code class="language-python">p = pd.Period('2007', freq='A-DEC')
+p
+</code></pre>
+
+<pre><code>Period('2007', 'A-DEC')
+</code></pre>
+
+<pre><code class="language-python">p.asfreq('M', how='start')
+</code></pre>
+
+<pre><code>Period('2007-01', 'M')
+</code></pre>
+
+<pre><code class="language-python">p.asfreq('M', how='end')
+</code></pre>
+
+<pre><code>Period('2007-12', 'M')
+</code></pre>
+
+<p>我们可以认为<code>Period('2007', freq='A-DEC')</code>是某种指向时间跨度的光标，而这个时间跨度被细分为月度期间。可以看下面的图示：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/ejkdk04ie9.png?imageslim" alt="mark" /></p>
+
+<p>如果一个财政年度（fiscal year）是在1月结束，而不是12月，那么对应的月度期间会不一样：</p>
+
+<pre><code class="language-python">p = pd.Period('2007', freq='A-JUN')
+p
+</code></pre>
+
+<pre><code>Period('2007', 'A-JUN')
+</code></pre>
+
+<pre><code class="language-python">p.asfreq('M', 'start')
+</code></pre>
+
+<pre><code>Period('2006-07', 'M')
+</code></pre>
+
+<pre><code class="language-python">p.asfreq('M', 'end')
+</code></pre>
+
+<pre><code>Period('2007-06', 'M')
+</code></pre>
+
+<p>当我们转换高频度为低频度时，pandas会根据 subperiod（次周期；子周期）的归属来决定superperiod（超周期；母周期）。例如，在A-JUN频度中，月份Aug-2007其实是个2008周期的一部分：</p>
+
+<pre><code class="language-python">p = pd.Period('Aug-2007', 'M')
+</code></pre>
+
+<pre><code class="language-python">p.asfreq('A-JUN')
+</code></pre>
+
+<pre><code>Period('2008', 'A-JUN')
+</code></pre>
+
+<p>整个PeriodIndex对象或时间序列可以被转换为一样的语义（semantics）：</p>
+
+<pre><code class="language-python">rng = pd.period_range('2006', '2009', freq='A-DEC')
+</code></pre>
+
+<pre><code class="language-python">ts = pd.Series(np.random.randn(len(rng)), index=rng)
+ts
+</code></pre>
+
+<pre><code>2006    0.391629
+2007    0.497413
+2008   -1.685639
+2009    0.939885
+Freq: A-DEC, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">ts.asfreq('M', how='start')
+</code></pre>
+
+<pre><code>2006-01    0.391629
+2007-01    0.497413
+2008-01   -1.685639
+2009-01    0.939885
+Freq: M, dtype: float64
+</code></pre>
+
+<p>这里，年度周期可以用月度周期替换，对应的第一个月也会包含在每个年度周期里。如果我们想要每年的最后一个工作日的话，可以使用&rsquo;B&rsquo;频度，并指明我们想要周期的结尾：</p>
+
+<pre><code class="language-python">ts.asfreq('B', how='end')
+</code></pre>
+
+<pre><code>2006-12-29    0.391629
+2007-12-31    0.497413
+2008-12-31   -1.685639
+2009-12-31    0.939885
+Freq: B, dtype: float64
+</code></pre>
+
+<h1 id="2-quarterly-period-frequencies-季度周期频度">2 Quarterly Period Frequencies（季度周期频度）</h1>
+
+<p>季度数据经常出现在会计，经济等领域。大部分季度数据都与财政年度结束日（fiscal year end）相关，比如12月最后一个工作日。因此，根据财政年度结束的不同，周期2012Q4也有不同的意义。pandas支持所有12个周期频度，从Q-JAN到Q-DEC：</p>
+
+<pre><code class="language-python">p = pd.Period('2012Q4', freq='Q-JAN')
+p
+</code></pre>
+
+<pre><code>Period('2012Q4', 'Q-JAN')
+</code></pre>
+
+<p>如果是财政年度结束日在一月份，那么2012Q4代表从11月到1月，可以用日频度查看。可以看下面的图示帮助理解：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/ddHJJi4D8F.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">p.asfreq('D', 'start')
+</code></pre>
+
+<pre><code>Period('2011-11-01', 'D')
+</code></pre>
+
+<pre><code class="language-python">p.asfreq('D', 'end')
+</code></pre>
+
+<pre><code>Period('2012-01-31', 'D')
+</code></pre>
+
+<p>因此，做些简单的周期运算也是可能的，例如，获得每个季度的，第二个到最后一个工作日的，下午4点的时间戳：</p>
+
+<pre><code class="language-python">p4pm = (p.asfreq('B', 'e') - 1).asfreq('T', 's') + 16 * 60
+p4pm
+</code></pre>
+
+<pre><code>Period('2012-01-30 16:00', 'T')
+</code></pre>
+
+<pre><code class="language-python">p4pm.to_timestamp()
+</code></pre>
+
+<pre><code>Timestamp('2012-01-30 16:00:00')
+</code></pre>
+
+<p>还可以用period_range产生季度范围数据。运算方法也一样：</p>
+
+<pre><code class="language-python">rng = pd.period_range('2011Q3', '2012Q4', freq='Q-JAN')
+</code></pre>
+
+<pre><code class="language-python">ts = pd.Series(np.arange(len(rng)), index=rng)
+ts
+</code></pre>
+
+<pre><code>2011Q3    0
+2011Q4    1
+2012Q1    2
+2012Q2    3
+2012Q3    4
+2012Q4    5
+Freq: Q-JAN, dtype: int64
+</code></pre>
+
+<pre><code class="language-python">new_rng = (rng.asfreq('B', 'e') - 1).asfreq('T', 's') + 16 * 60
+</code></pre>
+
+<pre><code class="language-python">ts.index = new_rng.to_timestamp()
+ts
+</code></pre>
+
+<pre><code>2010-10-28 16:00:00    0
+2011-01-28 16:00:00    1
+2011-04-28 16:00:00    2
+2011-07-28 16:00:00    3
+2011-10-28 16:00:00    4
+2012-01-30 16:00:00    5
+dtype: int64
+</code></pre>
+
+<h1 id="3-converting-timestamps-to-periods-and-back-时间戳与周期相互转换">3 Converting Timestamps to Periods (and Back)（时间戳与周期相互转换）</h1>
+
+<p>用时间戳作为索引的Series和DataFrame对象，可以用to_period方法转变为周期：</p>
+
+<pre><code class="language-python">rng = pd.date_range('2000-01-01', periods=3, freq='M')
+</code></pre>
+
+<pre><code class="language-python">ts = pd.Series(np.random.randn(3), index=rng)
+ts
+</code></pre>
+
+<pre><code>2000-01-31    1.556049
+2000-02-29   -0.708661
+2000-03-31   -0.154767
+Freq: M, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">pts = ts.to_period()
+pts
+</code></pre>
+
+<pre><code>2000-01    1.556049
+2000-02   -0.708661
+2000-03   -0.154767
+Freq: M, dtype: float64
+</code></pre>
+
+<p>因为周期是不重复的时间跨度（non-overlapping timespans），一个时间戳只能属于一个有指定频度的单独周期。尽管默认情况下新的PeriodIndex的频度会从时间戳中来推测，但我们也可以自己设定想要的频度。结果中有重复的周期也没有关系：</p>
+
+<pre><code class="language-python">rng = pd.date_range('1/29/2000', periods=6, freq='D')
+rng
+</code></pre>
+
+<pre><code>DatetimeIndex(['2000-01-29', '2000-01-30', '2000-01-31', '2000-02-01',
+               '2000-02-02', '2000-02-03'],
+              dtype='datetime64[ns]', freq='D')
+</code></pre>
+
+<pre><code class="language-python">ts2 = pd.Series(np.random.randn(6), index=rng)
+ts2
+</code></pre>
+
+<pre><code>2000-01-29    1.115254
+2000-01-30   -1.813124
+2000-01-31    0.970670
+2000-02-01    1.306337
+2000-02-02    0.673274
+2000-02-03   -0.105436
+Freq: D, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">ts2.to_period('M')
+</code></pre>
+
+<pre><code>2000-01    1.115254
+2000-01   -1.813124
+2000-01    0.970670
+2000-02    1.306337
+2000-02    0.673274
+2000-02   -0.105436
+Freq: M, dtype: float64
+</code></pre>
+
+<p>想转换回时间戳的话，使用to_timestamp:</p>
+
+<pre><code class="language-python">pts = ts2.to_period()
+pts
+</code></pre>
+
+<pre><code>2000-01-29    1.115254
+2000-01-30   -1.813124
+2000-01-31    0.970670
+2000-02-01    1.306337
+2000-02-02    0.673274
+2000-02-03   -0.105436
+Freq: D, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">pts.to_timestamp(how='end')
+</code></pre>
+
+<pre><code>2000-01-29    1.115254
+2000-01-30   -1.813124
+2000-01-31    0.970670
+2000-02-01    1.306337
+2000-02-02    0.673274
+2000-02-03   -0.105436
+Freq: D, dtype: float64
+</code></pre>
+
+<h1 id="4-creating-a-periodindex-from-arrays-从数组中创建一个周期索引">4 Creating a PeriodIndex from Arrays（从数组中创建一个周期索引）</h1>
+
+<p>有固定频度的数据集，有时会在很多列上存储时间跨度信息。例如，在下面的宏观经济数据及上，年度和季度在不同的列：</p>
+
+<pre><code class="language-python">data = pd.read_csv('../examples/macrodata.csv')
+data.head()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>quarter</th>
+      <th>realgdp</th>
+      <th>realcons</th>
+      <th>realinv</th>
+      <th>realgovt</th>
+      <th>realdpi</th>
+      <th>cpi</th>
+      <th>m1</th>
+      <th>tbilrate</th>
+      <th>unemp</th>
+      <th>pop</th>
+      <th>infl</th>
+      <th>realint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1959.0</td>
+      <td>1.0</td>
+      <td>2710.349</td>
+      <td>1707.4</td>
+      <td>286.898</td>
+      <td>470.045</td>
+      <td>1886.9</td>
+      <td>28.98</td>
+      <td>139.7</td>
+      <td>2.82</td>
+      <td>5.8</td>
+      <td>177.146</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1959.0</td>
+      <td>2.0</td>
+      <td>2778.801</td>
+      <td>1733.7</td>
+      <td>310.859</td>
+      <td>481.301</td>
+      <td>1919.7</td>
+      <td>29.15</td>
+      <td>141.7</td>
+      <td>3.08</td>
+      <td>5.1</td>
+      <td>177.830</td>
+      <td>2.34</td>
+      <td>0.74</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1959.0</td>
+      <td>3.0</td>
+      <td>2775.488</td>
+      <td>1751.8</td>
+      <td>289.226</td>
+      <td>491.260</td>
+      <td>1916.4</td>
+      <td>29.35</td>
+      <td>140.5</td>
+      <td>3.82</td>
+      <td>5.3</td>
+      <td>178.657</td>
+      <td>2.74</td>
+      <td>1.09</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1959.0</td>
+      <td>4.0</td>
+      <td>2785.204</td>
+      <td>1753.7</td>
+      <td>299.356</td>
+      <td>484.052</td>
+      <td>1931.3</td>
+      <td>29.37</td>
+      <td>140.0</td>
+      <td>4.33</td>
+      <td>5.6</td>
+      <td>179.386</td>
+      <td>0.27</td>
+      <td>4.06</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1960.0</td>
+      <td>1.0</td>
+      <td>2847.699</td>
+      <td>1770.5</td>
+      <td>331.722</td>
+      <td>462.199</td>
+      <td>1955.5</td>
+      <td>29.54</td>
+      <td>139.6</td>
+      <td>3.50</td>
+      <td>5.2</td>
+      <td>180.007</td>
+      <td>2.31</td>
+      <td>1.19</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">data.year[:5]
+</code></pre>
+
+<pre><code>1959Q1    1959.0
+1959Q2    1959.0
+1959Q3    1959.0
+1959Q4    1959.0
+1960Q1    1960.0
+Freq: Q-DEC, Name: year, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">data.quarter[:5]
+</code></pre>
+
+<pre><code>1959Q1    1.0
+1959Q2    2.0
+1959Q3    3.0
+1959Q4    4.0
+1960Q1    1.0
+Freq: Q-DEC, Name: quarter, dtype: float64
+</code></pre>
+
+<p>通过把这些数组传递给PeriodIndex，并指定频度，我们可以把这些合并得到一个新的DataFrame：</p>
+
+<pre><code class="language-python">index = pd.PeriodIndex(year=data.year, quarter=data.quarter,
+                       freq='Q-DEC')
+index
+</code></pre>
+
+<pre><code>PeriodIndex(['1959Q1', '1959Q2', '1959Q3', '1959Q4', '1960Q1', '1960Q2',
+             '1960Q3', '1960Q4', '1961Q1', '1961Q2',
+             ...
+             '2007Q2', '2007Q3', '2007Q4', '2008Q1', '2008Q2', '2008Q3',
+             '2008Q4', '2009Q1', '2009Q2', '2009Q3'],
+            dtype='int64', length=203, freq='Q-DEC')
+</code></pre>
+
+<pre><code class="language-python">data.index = index
+</code></pre>
+
+<pre><code class="language-python">data.head()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>year</th>
+      <th>quarter</th>
+      <th>realgdp</th>
+      <th>realcons</th>
+      <th>realinv</th>
+      <th>realgovt</th>
+      <th>realdpi</th>
+      <th>cpi</th>
+      <th>m1</th>
+      <th>tbilrate</th>
+      <th>unemp</th>
+      <th>pop</th>
+      <th>infl</th>
+      <th>realint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1959Q1</th>
+      <td>1959.0</td>
+      <td>1.0</td>
+      <td>2710.349</td>
+      <td>1707.4</td>
+      <td>286.898</td>
+      <td>470.045</td>
+      <td>1886.9</td>
+      <td>28.98</td>
+      <td>139.7</td>
+      <td>2.82</td>
+      <td>5.8</td>
+      <td>177.146</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1959Q2</th>
+      <td>1959.0</td>
+      <td>2.0</td>
+      <td>2778.801</td>
+      <td>1733.7</td>
+      <td>310.859</td>
+      <td>481.301</td>
+      <td>1919.7</td>
+      <td>29.15</td>
+      <td>141.7</td>
+      <td>3.08</td>
+      <td>5.1</td>
+      <td>177.830</td>
+      <td>2.34</td>
+      <td>0.74</td>
+    </tr>
+    <tr>
+      <th>1959Q3</th>
+      <td>1959.0</td>
+      <td>3.0</td>
+      <td>2775.488</td>
+      <td>1751.8</td>
+      <td>289.226</td>
+      <td>491.260</td>
+      <td>1916.4</td>
+      <td>29.35</td>
+      <td>140.5</td>
+      <td>3.82</td>
+      <td>5.3</td>
+      <td>178.657</td>
+      <td>2.74</td>
+      <td>1.09</td>
+    </tr>
+    <tr>
+      <th>1959Q4</th>
+      <td>1959.0</td>
+      <td>4.0</td>
+      <td>2785.204</td>
+      <td>1753.7</td>
+      <td>299.356</td>
+      <td>484.052</td>
+      <td>1931.3</td>
+      <td>29.37</td>
+      <td>140.0</td>
+      <td>4.33</td>
+      <td>5.6</td>
+      <td>179.386</td>
+      <td>0.27</td>
+      <td>4.06</td>
+    </tr>
+    <tr>
+      <th>1960Q1</th>
+      <td>1960.0</td>
+      <td>1.0</td>
+      <td>2847.699</td>
+      <td>1770.5</td>
+      <td>331.722</td>
+      <td>462.199</td>
+      <td>1955.5</td>
+      <td>29.54</td>
+      <td>139.6</td>
+      <td>3.50</td>
+      <td>5.2</td>
+      <td>180.007</td>
+      <td>2.31</td>
+      <td>1.19</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">data.infl[:5]
+</code></pre>
+
+<pre><code>1959Q1    0.00
+1959Q2    2.34
+1959Q3    2.74
+1959Q4    0.27
+1960Q1    2.31
+Freq: Q-DEC, Name: infl, dtype: float64
+</code></pre>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/06-%E9%87%8D%E9%87%87%E6%A0%B7%E5%92%8C%E9%A2%91%E5%BA%A6%E8%BD%AC%E6%8D%A2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 重采样和频度转换</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-data/08-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/03-%E6%97%A5%E6%9C%9F%E8%8C%83%E5%9B%B4%E9%A2%91%E5%BA%A6%E5%92%8C%E4%BD%8D%E7%A7%BB/">
+            <span class="next-text nav-default">03 日期范围，频度，和位移</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

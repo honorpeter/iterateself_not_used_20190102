@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 角点检测 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="角点检测 Corner Detection: Basic Idea - We should easily recognize the point by looking through a small window - Shifting a window in any direction should give a large change in intensity “flat” region: no change in all directions “edge”: no change along the edge direction “corner”: significant" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/02-%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 角点检测" />
+<meta property="og:description" content="角点检测 Corner Detection: Basic Idea - We should easily recognize the point by looking through a small window - Shifting a window in any direction should give a large change in intensity “flat” region: no change in all directions “edge”: no change along the edge direction “corner”: significant" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/02-%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B/" /><meta property="article:published_time" content="2018-08-18T16:37:25&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-18T16:37:25&#43;00:00"/>
+<meta itemprop="name" content="02 角点检测">
+<meta itemprop="description" content="角点检测 Corner Detection: Basic Idea - We should easily recognize the point by looking through a small window - Shifting a window in any direction should give a large change in intensity “flat” region: no change in all directions “edge”: no change along the edge direction “corner”: significant">
+
+
+<meta itemprop="datePublished" content="2018-08-18T16:37:25&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-18T16:37:25&#43;00:00" />
+<meta itemprop="wordCount" content="1948">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 角点检测"/>
+<meta name="twitter:description" content="角点检测 Corner Detection: Basic Idea - We should easily recognize the point by looking through a small window - Shifting a window in any direction should give a large change in intensity “flat” region: no change in all directions “edge”: no change along the edge direction “corner”: significant"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 角点检测</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-18 </span>
+        
+        <span class="more-meta"> 1948 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#角点检测">角点检测</a>
+<ul>
+<li><a href="#原始的-moravec-算法">原始的 Moravec 算法</a></li>
+<li><a href="#harris-算法">Harris 算法</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="角点检测">角点检测</h2>
+
+<p>Corner Detection: Basic Idea
+- We should easily recognize the point by looking through a small window
+- Shifting a window in any direction should give a large change in intensity</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/6Ji9LgJC5c.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>“flat” region: no change in all directions</li>
+<li>“edge”: no change along the edge direction</li>
+<li>“corner”: significant change in all directions</li>
+</ul>
+
+<p>从角点检测最原始的思路开始：</p>
+
+<p>我们看第一个图，在不知道整幅图像的样子的时候，我们移动一个小区域来探索这个图像，
+- 当在第一个图的区域时，灰度没有任何变化，因此叫平坦区。
+- 当我们滑动到某个位置，当区域在一个方向上移动的时候，灰度变化明显，但是沿着另一个方向的时候，灰度变化不明显。
+- 当我们滑动叫角点的时候，任何一个方向的滑动，灰度变化都很大。这个时候，我们认为窗口在角点上，就是找到了角点。</p>
+
+<p>接下来是数学计算：</p>
+
+<p>Corner Detection: Mathematics
+Change in appearance of window w(x,y) for the shift [u,v]:</p>
+
+<h3 id="原始的-moravec-算法">原始的 Moravec 算法</h3>
+
+<p>根据上面的想法，我们得到了这么一个公式：Moravec</p>
+
+<p>$$E(u,v)=\sum_{x,y}^{}w(x,y)[I(x+u,y+v)-I(x,y)]^2$$</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/l95eCa55bl.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/HaB0LckJAj.png?imageslim" alt="mark" /></p>
+
+<p>我们在四个方向上讨论灰度变化值，把各个方向变化值最小的值作为角点响应值。</p>
+
+<p>E 就是原始的区域与移动后的绿色区域的灰度的变化，u 表示窗口在 x 方向移动的距离，v 表示窗口在 y 方向滑动的距离 ，w(x,y) 是一个窗口函数比如说在 x,y 的位置有一个 mask ， 这个 I 表示图像在 x,y 位置的灰度值，I(x+u,y+v) 表示窗口移动之后的灰度值，I(x,y) 表示窗口移动之前的灰度值。</p>
+
+<p>对于这个 Moravec 最原始的方法，u v 可能的取值是 ：(1,0),(1,1),(0,1),(-1,1) 在四个方向 0,45,90,135,180 找最小的 E 它的最小值要大于某个阈值，这样来判断我们的 x,y 的位置是否是角点。</p>
+
+<p>这个方法有两个缺点：</p>
+
+<p>一个是：他只考虑了四个方向。</p>
+
+<p>比如说，这个如果是一个端正的矩形，那么可以检测到四个点，如果是一个倾斜的矩形，那么在边上他都认为是角点。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/I1hG8dD86A.png?imageslim" alt="mark" /></p>
+
+<p>而且他找的还只是 E 的最小值，很容易受到噪声的污染.</p>
+
+<h3 id="harris-算法">Harris 算法</h3>
+
+<p>所以，我们对原始的 Moravec 进行改进，因此有了 Harris 算法，Harris 在 0,0 位置泰勒展开：</p>
+
+<p>$$E(u,v)=\sum_{x,y}^{}w(x,y)[I(x+u,y+v)-I(x,y)]^2$$</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/J1bddGBLBI.png?imageslim" alt="mark" /></p>
+
+<p>由于 Harris 使用的是泰勒展开式，因此可以计算在 0,0 位置的任意方向，就不仅仅是 4个方向，由于 泰勒展开是无限的，这里我们只取到了二阶导，后面的舍去了，这样就取到了一个近似结果。</p>
+
+<p>我们说明一下这个式子：</p>
+
+<p>我们只 推 u 方向：他对 u 方向的一个偏导，我们把 $E(u,v)$ 对 u 进行求偏导：$E<em>u=\sum</em>{z,y}^{} 2w[I(x+u,y+v)-I(x,y)]I_x(x+u,y+v)$ 为什么是 I_x 不是 I_u 呢？
+下面我们看下二阶导怎么算：</p>
+
+<p>$E<em>{uu}=\sum</em>{x,y}^{}2wI_x(x+u,y+v)I<em>x(x+u,y+v)+\sum</em>{x,y}^{}2w[I(x+u,y+v)-I(x,y)]I_{xx}(x+u,y+v)$</p>
+
+<p>我们在看一下混合二阶导怎么算：</p>
+
+<p>$E<em>{uv}=\sum</em>{x,y}^{}2wI_x(x+u,y+v)I<em>y(x+u,y+v)+\sum</em>{x,y}^{}2w[I(x+u,y+v)-I(x,y)]I_{xy}(x+u,y+v)$</p>
+
+<p>由于是在 0,0 处展开，E(0,0)=0</p>
+
+<p>然后一阶偏导也都是 0 ，所以最后就剩了二阶偏导：<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/I2c2lCb85l.png?imageslim" alt="mark" /></p>
+
+<p>然后，我们把 0,0 带进去，由于 $I(x+u,y+v)-I(x,y)$ 是 0，因此 $E<em>{uv}=\sum</em>{x,y}^{}2wI_x(x+u,y+v)I<em>y(x+u,y+v)$ 这些$E</em>{uu}$，$E<em>{vu}$，$E</em>{vv}$ 类似的带进去，就可以化简成：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/gmibA9kBCG.png?imageslim" alt="mark" /></p>
+
+<p>这个 把 E 用两个矩阵的相乘表示。其中这个 M 是一个协方差矩阵，也叫作二阶矩，表示的是所有方向上的强度变化率。</p>
+
+<p>where M is a second moment matrix computed from image
+derivatives:</p>
+
+<p>它是对可能的角点周围的小区域进行区域内求和，因为有了这个 $\sum$ ，我们把 $\sum$ 拿到外面，然后2与外面的 <sup>1</sup>&frasl;<sub>2</sub> 抵消了，所以变成这样：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/lJh0G23L7G.png?imageslim" alt="mark" /></p>
+
+<p>其中涉及了 $I_x$ $I_y$ 这是图像的一阶导数，上节课我们已经讲了用 sobel 来求图像的一阶导数。</p>
+
+<p>下面我们重点看一下这个协方差矩阵：</p>
+
+<p>Interpreting the second moment matrix</p>
+
+<p>First, consider the axis-aligned case (gradients are either horizontal or vertical)</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/0j1c4BkH6d.png?imageslim" alt="mark" /></p>
+
+<p>If either $\lambda$  is close to 0, then this is not a corner, so look for locations where both are large</p>
+
+<p>协方差矩阵会有两个特征值，他给出的就是最大平均强度的变化，以及垂直方向平均强度的变化，如果是一个椭圆，他会给出<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/AgCcI3Eb65.png?imageslim" alt="mark" /> 这两个方向，通过比较这两个特征值，如果说他在角点的位置的两个值的大小和平坦区的两个值的大小是不一样的，如果在角点，这两个值都会很大，如果是在平坦区或者边缘，他们会有一个是0，或者两个非常小。</p>
+
+<p>Interpreting the eigenvalues</p>
+
+<p>Classification of image points using eigenvalues of M:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/4d4ih18ig0.png?imageslim" alt="mark" /></p>
+
+<p>上面是在 paper 里面的截图，我们看右边的图，在不同的地方 $\lambda$ 的大小是不同的。</p>
+
+<p>接下来就要考虑，找两个 $\lambda$ 都大的就找到角点了。</p>
+
+<p>因此，Harris 就提出了这样一个 Harris 角点强度计算公式：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/EGFiEfDLGJ.png?imageslim" alt="mark" /></p>
+
+<p>$\alpha$ : constant (0.04 to 0.06) 通常取 0.05</p>
+
+<p>其中  det 就是 M 的行列式，trace 是迹。</p>
+
+<p>总结一下：</p>
+
+<p>Harris corner detector</p>
+
+<p>1) Compute M matrix for each image window to get their cornerness scores.
+2) Find points whose surrounding window gave large corner response (f&gt; threshold)
+3) Take the points of local maxima, i.e., perform nonmaximum suppression</p>
+
+<p>这个就就是  Harris 角点检测的方法。老师在这个地方强调了paper 第一作者的重要性，这个 Harris 是有两个作者的，但是我们根本不会知道这个第二个作者是谁。</p>
+
+<p>我们看一个例子：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/8ch6Fj9FKh.png?imageslim" alt="mark" /></p>
+
+<p>两张图像的光照不同，主体的位置也不同。</p>
+
+<p>然后，计算角点的强度公式，用伪彩色展示出来：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/ile436Ag1J.png?imageslim" alt="mark" /></p>
+
+<p>然后对角点强度进行阈值化：Find points with large corner response: R&gt;threshold</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/CD87G286cB.png?imageslim" alt="mark" /></p>
+
+<p>看到线条太粗，我们立马相想到做一个非极大值抑制：Take only the points of local maxima of R</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/eG9B5cHlFg.png?imageslim" alt="mark" /></p>
+
+<p>得到了精细的角点位置，之前其实做形态学滤波也可以。<span style="color:red;">什么是形态学滤波？</span></p>
+
+<p>我们把角点打在图像上看下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/DAHf62CCGb.png?imageslim" alt="mark" /></p>
+
+<p>我们发现，这些角点跟光照和主体的形状位置没有关系。比如鼻子对应鼻子，这说明角点非常有用。</p>
+
+<p>我们之前提到了 Harris 的 $\alpha$ 值要提前给的，很多人不喜欢给这个值，有个人提出了这样的一个方法：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/6cEa506keG.png?imageslim" alt="mark" /></p>
+
+<p>这就避免了人工输入 $\alpha$ 值。</p>
+
+<p>还有一个非常重要的：</p>
+
+<p>Shi-Tomasi, 2000</p>
+
+<p>$R=min(\lambda_1,\lambda_2)$</p>
+
+<p>他在 opencv 里面的实现是 goodFeaturesToTrack</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/eCL95Hb7Lm.png?imageslim" alt="mark" /></p>
+
+<p>这个在跟踪的时候用到的非常多，它的角点强度设置的是乘积的最小值。<span style="color:red;">老师只是提了下，还是要好好整理的</span></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/03-sift-features/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 SIFT Features</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/01-%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default">01 介绍</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

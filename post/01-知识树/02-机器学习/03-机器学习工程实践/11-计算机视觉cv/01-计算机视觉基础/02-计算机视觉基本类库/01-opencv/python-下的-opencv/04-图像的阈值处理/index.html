@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 图像的阈值处理 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="图像的阈值处理一般使得图像的像素值更单一、图像更简单。阈值可以分为全局性质的阈值，也可以分为局部性质的阈值，可以是单阈值的也可以是多阈值的。" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%BA%93/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/04-%E5%9B%BE%E5%83%8F%E7%9A%84%E9%98%88%E5%80%BC%E5%A4%84%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 图像的阈值处理" />
+<meta property="og:description" content="图像的阈值处理一般使得图像的像素值更单一、图像更简单。阈值可以分为全局性质的阈值，也可以分为局部性质的阈值，可以是单阈值的也可以是多阈值的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%BA%93/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/04-%E5%9B%BE%E5%83%8F%E7%9A%84%E9%98%88%E5%80%BC%E5%A4%84%E7%90%86/" /><meta property="article:published_time" content="2018-08-12T20:41:19&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:41:19&#43;00:00"/>
+<meta itemprop="name" content="04 图像的阈值处理">
+<meta itemprop="description" content="图像的阈值处理一般使得图像的像素值更单一、图像更简单。阈值可以分为全局性质的阈值，也可以分为局部性质的阈值，可以是单阈值的也可以是多阈值的。">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:41:19&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:41:19&#43;00:00" />
+<meta itemprop="wordCount" content="1805">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 图像的阈值处理"/>
+<meta name="twitter:description" content="图像的阈值处理一般使得图像的像素值更单一、图像更简单。阈值可以分为全局性质的阈值，也可以分为局部性质的阈值，可以是单阈值的也可以是多阈值的。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 图像的阈值处理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1805 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#一-简单阈值">（一）简单阈值</a></li>
+<li><a href="#二-自适应阈值">（二）自适应阈值：</a></li>
+<li><a href="#三-otsu-s二值化">（三）Otsu’s二值化</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<ul>
+<li>图像的阈值处理一般使得图像的像素值更单一、图像更简单。阈值可以分为全局性质的阈值，也可以分为局部性质的阈值，可以是单阈值的也可以是多阈值的。当然阈值越多是越复杂的。下面将介绍opencv下的三种阈值方法。</li>
+</ul>
+
+<h2 id="一-简单阈值">（一）简单阈值</h2>
+
+<p>简单阈值当然是最简单，选取一个全局阈值，然后就把整幅图像分成了非黑即白的二值图像了。函数为cv2.threshold()
+这个函数有四个参数，第一个原图像，第二个进行分类的阈值，第三个是高于（低于）阈值时赋予的新值，第四个是一个方法选择参数，常用的有：
+• cv2.THRESH_BINARY（黑白二值）
+• cv2.THRESH_BINARY_INV（黑白二值反转）
+• cv2.THRESH_TRUNC （得到的图像为多像素值）
+• cv2.THRESH_TOZERO
+• cv2.THRESH_TOZERO_INV
+该函数有两个返回值，第一个retVal（得到的阈值值（在后面一个方法中会用到）），第二个就是阈值化后的图像。
+一个实例如下：</p>
+
+<pre><code>import cv2
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+ret,thresh1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+ret,thresh2 = cv2.threshold(img,127,255,cv2.THRESH_BINARY_INV)
+ret,thresh3 = cv2.threshold(img,127,255,cv2.THRESH_TRUNC)
+ret,thresh4 = cv2.threshold(img,127,255,cv2.THRESH_TOZERO)
+ret,thresh5 = cv2.threshold(img,127,255,cv2.THRESH_TOZERO_INV)
+titles = ['img','BINARY','BINARY_INV','TRUNC','TOZERO','TOZERO_INV']
+images = [img,thresh1,thresh2,thresh3,thresh4,thresh5]
+for i in range(6):
+    plt.subplot(2,3,i+1),plt.imshow(images[i],'gray')
+    plt.title(titles[i])
+    plt.xticks([]),plt.yticks([])
+plt.show()12345678910111213141516
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/8D5BfbhE72.png?imageslim" alt="mark" /></p>
+
+<p>可以看到这里把阈值设置成了127，对于BINARY方法，当图像中的灰度值大于127的重置像素值为255.</p>
+
+<h2 id="二-自适应阈值">（二）自适应阈值：</h2>
+
+<p>前面看到简单阈值是一种全局性的阈值，只需要规定一个阈值值，整个图像都和这个阈值比较。而自适应阈值可以看成一种局部性的阈值，通过规定一个区域大小，比较这个点与区域大小里面像素点的平均值（或者其他特征）的大小关系确定这个像素点是属于黑或者白（如果是二值情况）。使用的函数为：cv2.adaptiveThreshold（）
+该函数需要填6个参数：</p>
+
+<ul>
+<li>第一个原始图像</li>
+<li>第二个像素值上限</li>
+<li>第三个自适应方法Adaptive Method:
+— cv2.ADAPTIVE_THRESH_MEAN_C ：领域内均值
+—cv2.ADAPTIVE_THRESH_GAUSSIAN_C ：领域内像素点加权和，权 重为一个高斯窗口</li>
+<li>第四个值的赋值方法：只有cv2.THRESH_BINARY 和cv2.THRESH_BINARY_INV</li>
+<li>第五个Block size:规定领域大小（一个正方形的领域）</li>
+<li>第六个常数C，阈值等于均值或者加权值减去这个常数（为0相当于阈值 就是求得领域内均值或者加权值）
+这种方法理论上得到的效果更好，相当于在动态自适应的调整属于自己像素点的阈值，而不是整幅图像都用一个阈值。</li>
+</ul>
+
+<p>一个实例如下：</p>
+
+<pre><code>mport cv2
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+ret,th1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+th2 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
+cv2.THRESH_BINARY,11,2) #换行符号 \
+th3 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+cv2.THRESH_BINARY,11,2) #换行符号 \
+images = [img,th1,th2,th3]
+plt.figure()
+for i in xrange(4):
+    plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')
+plt.show()1234567891011121314
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/Fi6fkEFD5I.png?imageslim" alt="mark" /></p>
+
+<p>可以看到上述窗口大小使用的为11，当窗口越小的时候，得到的图像越细。想想一下，如果把窗口设置足够大以后（不能超过图像大小），那么得到的结果可能就和第二幅图像的相同了。</p>
+
+<h2 id="三-otsu-s二值化">（三）Otsu’s二值化</h2>
+
+<p>我们前面说到，cv2.threshold函数是有两个返回值的，前面一直用的第二个返回值，也就是阈值处理后的图像，那么第一个返回值（得到图像的阈值）将会在这里用到。
+前面对于阈值的处理上，我们选择的阈值都是127，那么实际情况下，怎么去选择这个127呢？有的图像可能阈值不是127得到的效果更好。那么这里我们需要算法自己去寻找到一个阈值，而Otsu’s就可以自己找到一个认为最好的阈值。并且Otsu’s非常适合于图像灰度直方图具有双峰的情况，他会在双峰之间找到一个值作为阈值，对于非双峰图像，可能并不是很好用。那么经过Otsu’s得到的那个阈值就是函数cv2.threshold的第一个参数了。因为Otsu’s方法会产生一个阈值，那么函数cv2.threshold的的第二个参数（设置阈值）就是0了，并且在cv2.threshold的方法参数中还得加上语句cv2.THRESH_OTSU。那么什么是双峰图像（只能是灰度图像才有），就是图像的灰度统计图中可以明显看出只有两个波峰，比如下面一个图的灰度直方图就可以是双峰图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/je4DkHmbEF.png?imageslim" alt="mark" /></p>
+
+<p>好了现在对这个图进行Otsu’s阈值处理就非常的好，通过函数cv2.threshold会自动找到一个介于两波峰之间的阈值。一个实例如下：</p>
+
+<pre><code>import cv2
+import matplotlib.pyplot as plt
+
+img = cv2.imread('finger.jpg',0) #直接读为灰度图像
+#简单滤波
+ret1,th1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+#Otsu 滤波
+ret2,th2 = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+print ret2
+plt.figure()
+plt.subplot(221),plt.imshow(img,'gray')
+plt.subplot(222),plt.hist(img.ravel(),256)#.ravel方法将矩阵转化为一维
+plt.subplot(223),plt.imshow(th1,'gray')
+plt.subplot(224),plt.imshow(th2,'gray')1234567891011121314
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/ILCcae3JJ2.png?imageslim" alt="mark" /></p>
+
+<p>print ret2 得到的结果为122。可以看出似乎两个结果并没有很明显差别（素材也不太好弄~_~!），主要是两个阈值（127与122）太相近了，如果这两个隔得很远那么会很明显的。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://blog.csdn.net/on2way/article/details/46812121">Python下opencv使用笔记（四）（图像的阈值处理）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%BA%93/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/05-%E5%9B%BE%E5%83%8F%E7%9A%84%E5%B9%B3%E6%BB%91%E4%B8%8E%E6%BB%A4%E6%B3%A2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 图像的平滑与滤波</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%BA%93/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/02-%E7%AE%80%E5%8D%95%E5%87%A0%E4%BD%95%E5%9B%BE%E5%83%8F%E7%BB%98%E5%88%B6/">
+            <span class="next-text nav-default">02 简单几何图像绘制</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

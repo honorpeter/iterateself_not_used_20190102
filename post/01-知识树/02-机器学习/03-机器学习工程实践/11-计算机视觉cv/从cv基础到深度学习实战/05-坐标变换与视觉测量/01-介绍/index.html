@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 介绍 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="这节课的主要内容： 成像：相机几何模型 坐标系统转换（2D-2D， 2D-3D） 相机标定 计算两幅图像的投影关系 下面的主要内容是相机的几何模型。 需要" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/05-%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2%E4%B8%8E%E8%A7%86%E8%A7%89%E6%B5%8B%E9%87%8F/01-%E4%BB%8B%E7%BB%8D/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 介绍" />
+<meta property="og:description" content="这节课的主要内容： 成像：相机几何模型 坐标系统转换（2D-2D， 2D-3D） 相机标定 计算两幅图像的投影关系 下面的主要内容是相机的几何模型。 需要" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/05-%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2%E4%B8%8E%E8%A7%86%E8%A7%89%E6%B5%8B%E9%87%8F/01-%E4%BB%8B%E7%BB%8D/" /><meta property="article:published_time" content="2018-08-18T16:37:40&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-18T16:37:40&#43;00:00"/>
+<meta itemprop="name" content="01 介绍">
+<meta itemprop="description" content="这节课的主要内容： 成像：相机几何模型 坐标系统转换（2D-2D， 2D-3D） 相机标定 计算两幅图像的投影关系 下面的主要内容是相机的几何模型。 需要">
+
+
+<meta itemprop="datePublished" content="2018-08-18T16:37:40&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-18T16:37:40&#43;00:00" />
+<meta itemprop="wordCount" content="2066">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 介绍"/>
+<meta name="twitter:description" content="这节课的主要内容： 成像：相机几何模型 坐标系统转换（2D-2D， 2D-3D） 相机标定 计算两幅图像的投影关系 下面的主要内容是相机的几何模型。 需要"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 介绍</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-18 </span>
+        
+        <span class="more-meta"> 2066 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>这节课的主要内容：</p>
+
+<ul>
+<li>成像：相机几何模型</li>
+<li>坐标系统转换（2D-2D， 2D-3D）</li>
+<li>相机标定</li>
+<li>计算两幅图像的投影关系</li>
+</ul>
+
+<p>下面的主要内容是相机的几何模型。</p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>感觉理解的不够系统，看看需不需要进行系统的了解。</li>
+</ul>
+
+<p>首先，我们假设有一个胶片，</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180810/87B0mm154e.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">没看懂第一张图说的什么？</span></p>
+
+<p>胶片中的每一个像素点都独立于其他的像素点，通过一个小孔，胶片上的每个像素都是独立的，但是成像也是道理的。</p>
+
+<p>小孔成像</p>
+
+<p>然而我们发现这个小孔并不容易取：</p>
+
+<p>Limits for pinhole cameras</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/a7B7Ld3HFA.png?imageslim" alt="mark" /></p>
+
+<p>孔太大，图像很模糊，孔很小，图像也很模糊，而且孔太小的时候太暗。</p>
+
+<p>所以并不是孔越小越好。</p>
+
+<p>所以，这个小孔成像的模型还是有点问题的，因此我妈们介绍下面这个薄透镜模型：</p>
+
+<p>Thin Lens: Definition</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/469EEFB3fB.png?imageslim" alt="mark" /></p>
+
+<p>Spherical lens surface: Parallel rays are refracted to single point</p>
+
+<p>这个薄透镜模型一个特点就是引入了焦点的概念。平行光摄入的时候会汇聚到焦点。</p>
+
+<p>当我们在焦点后面放一个图想象平面的时候，比如感光元件 CZD/CMOS 就可以成像了：而且，我们发现这个完全可以实现小孔成像的理想。但是，如果这个东西</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/Kk4fD76Hfd.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/bBK9K8Ad3A.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/6A8FH1Kaj5.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/dmh7mddFLB.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/3a74G2EIcC.png?imageslim" alt="mark" /></p>
+
+<p>上面这个视频讲的是焦点是在焦内 还是 焦外。</p>
+
+<p>薄透镜还有一点，就是光可以从成像平面传回来在 lence 前面有一个 focus，两个焦距  f 是相同的，但是真实中是不同的。并不是对称的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/HJlf2D90bF.png?imageslim" alt="mark" /></p>
+
+<p>我们推到一下薄透镜模型的比例关系：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/8baLF3Lc36.png?imageslim" alt="mark" /></p>
+
+<p>简单讲解一下：后面自己补充下。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/1LAFemh99m.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/G6gI5aiD40.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/fGgEgGHkDL.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/817b30mcEC.png?imageslim" alt="mark" /></p>
+
+<p>因为有这个聚焦的问题，因此在实际中，我们在 lence后面加一个小孔。</p>
+
+<p>The depth-of-field 景深</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/eA8Ih9b4fm.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/flF4mD382C.png?imageslim" alt="mark" /></p>
+
+<p>从下图可以看出：如果小孔大，那么 in focus 焦内的距离就非常短，如果 小孔小，在焦内的距离就很大，这种距离大叫做大景深，浅景深的时候背景徐晃很厉害。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/8fAeb8Lc0H.png?imageslim" alt="mark" /></p>
+
+<p>然而我们这个 lence 并不是与我们的小孔成像模型是一样的。因为 CCD 与 lence 很难平行，因此会有各种的畸变。</p>
+
+<p>magnification/focal length different for different angles of inclination</p>
+
+<p>常见的有径向畸变，和切向畸变：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/kcjl1h5gE3.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/ehIfBlaI4l.png?imageslim" alt="mark" /></p>
+
+<p>两个径向畸变是由于透镜的形状导致的，比如说 barrel 孔型的，还有 pincushion 。</p>
+
+<p>这些畸变在知道他们的参数的时候，是可以把他们纠正过来的，后面我们讲摄像机标定的时候会提到。</p>
+
+<p>我们这还有一个颜色的色散的问题：Chromatic Aberration</p>
+
+<p>rays of different wavelengths focused in different planes</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/22aEAemFL7.png?imageslim" alt="mark" /></p>
+
+<p>因为我们的光的波长不同，因此在通过透镜的时候是发生色散的。比如说我们在拍照的时候会发现图像的边缘有红色的模糊</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/H3l6bm20G6.png?imageslim" alt="mark" /></p>
+
+<p>如果我们知道这个镜头的参数的时候，用 ps 是可以后期解决这个问题的，只要告诉我们  lence 的焦距就可以。当然也可以用多组镜片来解决这个问题。</p>
+
+<p>还有一种问题：</p>
+
+<p>如果用多组镜片的时候，会出现一个 暗角问题 Vignetting</p>
+
+<p>Effect: Darkens pixels near the image boundary</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/jEglaleFd5.png?imageslim" alt="mark" /></p>
+
+<p>以前的照片会有这种情况，现在我们有的电影做后期处理的时候，会修成这种风格：老照片的风格。</p>
+
+<p>它是什么原理呢？</p>
+
+<p>光鲜通过一组镜片之后，只有一部分通过了第二个镜片所以这个点在相片上就比较暗。</p>
+
+<p>所以，我们想解决这些畸变，最好的办法就是花钱买镜头</p>
+
+<p>尼康佳能都用很多组镜头来解决这些问题：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/9EmG4lgDLm.png?imageslim" alt="mark" /></p>
+
+<p>上面这个 尼康就用了 15 个镜片来消除各种畸变。</p>
+
+<p>前面我们讲了薄透镜模型是为了接近小孔成像模型：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/kLH294DklH.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/G7D9mD649I.png?imageslim" alt="mark" /></p>
+
+<p>我们把图像放在镜头前，我可以得到一个正立的图像。这在物理上不可行，但是在数学上是完全等价的。</p>
+
+<p>上面这个图是摄像机坐标系，k 是 z，j是x，i是y</p>
+
+<p>这样的一个摄像机坐标系，Q=(X,Y,Z) 就是在摄像机坐标系下的坐标。光线透过图像平面与图像的交点为：<code>(f*X/Z,f*Y/Z,f)</code> 我们把这个投影的平面正过来就得到了右边这个图像。</p>
+
+<p>常用的图像坐标系有两种，一种是图像的像素坐标系，一种使图像的物理坐标系，图像的像素坐标系单位是像素，图像的物理坐标系单位是毫米。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/f3LAEmmeJc.png?imageslim" alt="mark" /></p>
+
+<p>这个 UOV 坐标系就是图像像素坐标系，每个坐标表示像素在行列中的位置，就是在一开始讲在 opencv 中各种排列的像素点的坐标。每个单位长度就是一像素。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/4FBbeE7CE6.png?imageslim" alt="mark" /></p>
+
+<p>一般的时候这个 UOV 的角是 90度，但是在安装的由于安装等原因，一般不是 90度，一般是89.5度，我们称它为 $\theta$ 角。所以我们在后面标定的时候会考虑到这个问题。</p>
+
+<p>还有一个是图像物理坐标系：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/186jie05j1.png?imageslim" alt="mark" /></p>
+
+<p>这个是以物理单位表示出一个点在图像中的位置，它是以相机的光轴与图像的交点为原点建立图像物理坐标系。</p>
+
+<p>这个  x，y 与 UOV 都是平行的。</p>
+
+<p>下面讲了下图像坐标系和图像像素坐标系之间的变换关系：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/efGgCA3jeD.png?imageslim" alt="mark" /></p>
+
+<p>我们并没有说一个传感器是一个正方形。S_x S_y 是传感器的每个单元尺寸，因为我们的一个 pixel，并不是说是一个正方形。S_x 的单位是像素每毫米。f 单位是毫米。 $f_x=\frac{f}{S_x}$ 单位是 pixel。所以我们在标定的时候只需要得到 f_x 和  f_y 就行，我们不需要拆开相机来得到相机的真实焦距和每个传感元件的大小。</p>
+
+<p>由于我们之前已经得到了 X=f*Z/Z  Y=f*Y/Z</p>
+
+<p>我们简答看一下一个投影的关系：</p>
+
+<p>这个图是我们刚在已经知道的一维的透视投影的关系：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/H5fD7i33Ia.png?imageslim" alt="mark" /></p>
+
+<p>下面这个图可以很好地额解释为什么平行线在图像中会相交于一点：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/2CBBb28bfe.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/mb8Bg2A6h4.png?imageslim" alt="mark" /></p>
+
+<p>可见，点投影过来还是点，直线投影过来还是直线。</p>
+
+<p>Vanishing points</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/mkCEhafe3B.png?imageslim" alt="mark" /></p>
+
+<p>Different directions correspond to different vanishing points</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/7cDe4GJBe0.png?imageslim" alt="mark" /></p>
+
+<p>还有另外一个经常用的：若的透视镜</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/8D92hCdI3h.png?imageslim" alt="mark" /></p>
+
+<p>当我们的物体距离像平面很远的时候，移动物体的时候，在图像中成像的近大远小的效果就不明显了。</p>
+
+<p>在物体非常远的时候，近一点或者远一点，图像的大小基本是不变的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/K95jgIieb6.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180811/iDkFjA9h25.png?imageslim" alt="mark" /></p>
+
+<p>到这里我们结束了相机的成像原理和模型。</p>
+
+<p>下面我们开始介绍摄像机的标定问题。</p>
+
+<p>有同学提出了问题：</p>
+
+<p>首先对于小孔成像模型，为什么要引入透镜模型？</p>
+
+<p>因为加了透镜之后，会允许更广范围的光线进入，所以我们的薄透镜模型可以实现跟小孔成像同样的效果。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/05-%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2%E4%B8%8E%E8%A7%86%E8%A7%89%E6%B5%8B%E9%87%8F/02-%E5%9D%90%E6%A0%87%E7%B3%BB%E7%9A%84%E5%8F%98%E6%8D%A2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 坐标系的变换</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/03-sift-features/">
+            <span class="next-text nav-default">03 SIFT Features</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

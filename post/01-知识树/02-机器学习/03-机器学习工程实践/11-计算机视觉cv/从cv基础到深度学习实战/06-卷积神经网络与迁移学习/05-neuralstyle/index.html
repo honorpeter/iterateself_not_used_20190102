@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 NeuralStyle - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Neural Style 需要补充的 还是要好好看论文的，感觉现在的这种课程也只能讲到这了。 这个是 15年提出的，现在已经是基本比较平常了。 最早的论文：怎么做的呢？ 他" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/06-%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/05-neuralstyle/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 NeuralStyle" />
+<meta property="og:description" content="Neural Style 需要补充的 还是要好好看论文的，感觉现在的这种课程也只能讲到这了。 这个是 15年提出的，现在已经是基本比较平常了。 最早的论文：怎么做的呢？ 他" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/06-%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/05-neuralstyle/" /><meta property="article:published_time" content="2018-08-18T16:38:27&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-18T16:38:27&#43;00:00"/>
+<meta itemprop="name" content="05 NeuralStyle">
+<meta itemprop="description" content="Neural Style 需要补充的 还是要好好看论文的，感觉现在的这种课程也只能讲到这了。 这个是 15年提出的，现在已经是基本比较平常了。 最早的论文：怎么做的呢？ 他">
+
+
+<meta itemprop="datePublished" content="2018-08-18T16:38:27&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-18T16:38:27&#43;00:00" />
+<meta itemprop="wordCount" content="657">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 NeuralStyle"/>
+<meta name="twitter:description" content="Neural Style 需要补充的 还是要好好看论文的，感觉现在的这种课程也只能讲到这了。 这个是 15年提出的，现在已经是基本比较平常了。 最早的论文：怎么做的呢？ 他"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 NeuralStyle</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-18 </span>
+        
+        <span class="more-meta"> 657 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#neural-style">Neural Style</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="neural-style">Neural Style</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>还是要好好看论文的，感觉现在的这种课程也只能讲到这了。</li>
+</ul>
+
+<p>这个是 15年提出的，现在已经是基本比较平常了。</p>
+
+<p>最早的论文：<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/gFGH1aH3Lk.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/ac3fbed46f.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/jAA4IJl5cj.png?imageslim" alt="mark" /></p>
+
+<p>怎么做的呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/6gGd8GEljb.png?imageslim" alt="mark" /></p>
+
+<p>他开始的时候没有想做成这个文艺的东西，他在想，我们用图像的距离比对的时候一直用的是 L2 loss，他在想有没有更好的 loss function ，然后就做了一堆的试验。</p>
+
+<p>然后他发现了一个 loss ：style loss。居然能够定义两幅图风格维度的差异度。</p>
+
+<p>L2 loss 是评价两幅图在内容上的接近程度，style loss 是定义在抽象的风格上的差异度。</p>
+
+<p>既然我能定义风格上的差异度，有能定义内容上的差异度，那我把这两个东西合一下呢。</p>
+
+<p>一般的 CNN 的分类任务都是为了学习 这个 w，但是这个地方，他是把 VGG 或 AlexNet 拿过来，然后固定住这个 w 然后调这个 x，让损失最小。<span style="color:red;">惊了，脑洞啊。</span></p>
+
+<p>调 x 是为了满足我的内容与原始的 content 输入最接近，我的风格与 style 输入最接近。</p>
+
+<p>所以，我定义了两个loss。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/K9F3D7lH2a.png?imageslim" alt="mark" /></p>
+
+<p>说明一下这个公式：</p>
+
+<p>这个 loss 是分为 content 的 loss 和 style 的 loss。这个content loss 还是比较简单的，就看他的输出与输入的内容 的l2 loss。</p>
+
+<p>这个 style loss，我们都知道从卷积层出来之后就是很多个 feature map，假如说是 64*64*16 的矩阵，说明有 16个 64*64  的feature map，然后把每两个feature map之间做了一个点乘，这样就有了 16*16 个点乘的结果，这 16*16 个矩阵叫做 Gram matirx，语法矩阵，然后，我用两个语法矩阵去做相同的差值。<span style="color:red;">这个还是有些不清楚。</span></p>
+
+<p>这个 \alpha 和 \beta 是分别是内容更像一点还是 风格更像一点。</p>
+
+<p>调节权重:偏风格or偏内容</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/F575IDhKBh.png?imageslim" alt="mark" /></p>
+
+<p>老师还是推荐去看原始的论文。这个 neural style 没有多困难。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/07-%E5%9B%BE%E5%83%8F%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/01-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/06-%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%B8%8E%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/04-%E7%89%A9%E4%BD%93%E8%AF%86%E5%88%AB/">
+            <span class="next-text nav-default">04 物体识别</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>nlp 词嵌入 word2vec 与相关应用 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="nlp 词嵌入/word2vec 与相关应用 缘由： 对NLP进行总结： NLP常见任务： 自动摘要 ：搜索引擎，会想找到一些文字来作为对应网页的摘要。 指代消" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-nlp/01-%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/nlp-%E8%AF%8D%E5%B5%8C%E5%85%A5-word2vec-%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="nlp 词嵌入 word2vec 与相关应用" />
+<meta property="og:description" content="nlp 词嵌入/word2vec 与相关应用 缘由： 对NLP进行总结： NLP常见任务： 自动摘要 ：搜索引擎，会想找到一些文字来作为对应网页的摘要。 指代消" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/12-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86-nlp/01-%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/nlp-%E8%AF%8D%E5%B5%8C%E5%85%A5-word2vec-%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="nlp 词嵌入 word2vec 与相关应用">
+<meta itemprop="description" content="nlp 词嵌入/word2vec 与相关应用 缘由： 对NLP进行总结： NLP常见任务： 自动摘要 ：搜索引擎，会想找到一些文字来作为对应网页的摘要。 指代消">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="7023">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="nlp 词嵌入 word2vec 与相关应用"/>
+<meta name="twitter:description" content="nlp 词嵌入/word2vec 与相关应用 缘由： 对NLP进行总结： NLP常见任务： 自动摘要 ：搜索引擎，会想找到一些文字来作为对应网页的摘要。 指代消"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">nlp 词嵌入 word2vec 与相关应用</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 7023 words </span>
+        <span class="more-meta"> 15 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#nlp-词嵌入-word2vec-与相关应用">nlp 词嵌入/word2vec 与相关应用</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#nlp常见任务">NLP常见任务：</a></li>
+<li><a href="#nlp-处理方法">NLP 处理方法</a></li>
+<li><a href="#词编码需要保证词的相似性">词编码需要保证词的相似性</a>
+<ul>
+<li><a href="#简单-词-短语-翻译">简单 词/短语 翻译</a></li>
+<li><a href="#向量空间子结构">向量空间子结构</a></li>
+</ul></li>
+<li><a href="#离散表示">离散表示</a>
+<ul>
+<li><a href="#离散表示-one-hot表示">离散表示：One-hot表示</a></li>
+<li><a href="#one-hot-对句子的离散表示-bag-of-words-词袋">one-hot 对句子的离散表示：Bag of Words  词袋</a></li>
+<li><a href="#考虑顺序-的-n元组-bi-gram和n-gram">考虑顺序 的 N元组 Bi-gram和N-gram</a></li>
+<li><a href="#语言模型">语言模型：</a></li>
+<li><a href="#上面的离散表示存在的问题">上面的离散表示存在的问题</a></li>
+<li><a href="#新的表示方式-分布式表示-distributed-representation">新的表示方式 分布式表示 (Distributed representation)</a></li>
+<li><a href="#用一个词附近的其他词来表示该词">用一个词附近的其他词来表示该词</a></li>
+<li><a href="#共现矩阵-cocurrence-matrix">共现矩阵 (Cocurrence matrix)</a></li>
+<li><a href="#共现矩阵这种方法存在的问题">共现矩阵这种方法存在的问题</a></li>
+<li><a href="#那么怎么去构造低维度稠密的向量-最简单的-用svd">那么怎么去构造低维度稠密的向量：最简单的，用SVD</a></li>
+<li><a href="#那么svd降维有没有什么问题呢">那么SVD降维有没有什么问题呢？</a></li>
+</ul></li>
+<li><a href="#nnlm-neural-network-language-model">NNLM (Neural Network Language model)</a>
+<ul>
+<li><a href="#nnlm-介绍">NNLM：介绍</a></li>
+<li><a href="#nnlm-结构">NNLM：结构</a></li>
+<li><a href="#nnlm的计算复杂度">NNLM的计算复杂度</a></li>
+</ul></li>
+<li><a href="#word2vec-cbow-连续词袋-从这里开始没有看">word2vec: CBOW(连续词袋)  <strong>从这里开始没有看</strong></a>
+<ul>
+<li><a href="#cbow-层次softmax">CBOW：层次Softmax</a></li>
+<li><a href="#cbow-负例采样">CBOW 负例采样</a></li>
+<li><a href="#word2vec-skip-gram模型">Word2Vec:Skip-Gram模型</a></li>
+<li><a href="#word2vec-存在的问题">Word2Vec：存在的问题：</a>
+<ul>
+<li><a href="#词嵌入可视化-公司-ceo">词嵌入可视化: 公司 — CEO</a></li>
+<li><a href="#词嵌入可视化-词向">词嵌入可视化: 词向</a></li>
+<li><a href="#词嵌入可视化-比较级和最高级">词嵌入可视化: 比较级和最高级</a></li>
+<li><a href="#词嵌入效果评估-词类比任务">词嵌入效果评估: 词类比任务</a></li>
+<li><a href="#词嵌入效果评估-词相似度任务">词嵌入效果评估: 词相似度任务</a></li>
+</ul></li>
+<li><a href="#词嵌入效果评估-作为特征用于crf实体识别">词嵌入效果评估: 作为特征用于CRF实体识别</a></li>
+<li><a href="#glove与word2vec对比">GloVe与Word2Vec对比</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#工具google-word2vec">工具google word2vec</a></li>
+<li><a href="#工具gensim">工具gensim</a>
+<ul>
+<li><a href="#工具gensim中文处理案例">工具gensim中文处理案例</a></li>
+<li><a href="#word2vec-cnn做文本分类">Word2vec+CNN做文本分类</a></li>
+</ul></li>
+<li><a href="#作业">作业</a></li>
+<li><a href="#comment">COMMENT：</a>
+<ul>
+<li><a href="#相关资料">相关资料：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="nlp-词嵌入-word2vec-与相关应用">nlp 词嵌入/word2vec 与相关应用</h1>
+
+<h1 id="缘由">缘由：</h1>
+
+<p>对NLP进行总结：</p>
+
+<h1 id="nlp常见任务">NLP常见任务：</h1>
+
+<ul>
+<li>自动摘要 ：搜索引擎，会想找到一些文字来作为对应网页的摘要。</li>
+<li>指代消解：小明放学了，妈妈去接<strong>他  </strong></li>
+<li>机器翻译：小心地滑-&gt; Slide carefully</li>
+<li>词性标注：heat(v.) water(n.) in(p.) a (det.) pot(n.)</li>
+<li>分词（中文，日文等）：大水沟/很/难过  看起来是一个基础的任务，实际上会影响很多后续的NLP环节的准确度，比如分词对于翻译是有很大影响的</li>
+<li>主题识别</li>
+<li>文本分类</li>
+<li>..等等</li>
+</ul>
+
+<p><strong>看来上面的每个都要自己实践一遍，对相应的代码和使用的库以及原理都要清楚。</strong></p>
+
+<h1 id="nlp-处理方法">NLP 处理方法</h1>
+
+<ul>
+<li>传统：基于规则  rule based</li>
+<li>现代：基于统计学习，“规则”隐含在模型参数里
+
+<ul>
+<li>HMM，CRF，SVM，LDA，CNN，&hellip;</li>
+</ul></li>
+</ul>
+
+<h1 id="词编码需要保证词的相似性">词编码需要保证词的相似性</h1>
+
+<p>最细粒度的需要知道词是什么样的含义，这样就需要对词进行编码，编码成一个向量，你需要这些向量能够保持住词的一些信息，比如我希望它能保持住一些词的一些similarity，一些相似性，相关性。比如，下面的青蛙：这些词，实际上是有一些相关性的，我们希望这个在表示成最后的word vector的时候呢，希望它们能够保持这些相关性。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DK2DGl8lhB.png?imageslim" alt="mark" /></p>
+
+<h2 id="简单-词-短语-翻译">简单 词/短语 翻译</h2>
+
+<p>想要使向量空间分布具有相似性，能呈现对应的一个关系。<strong>这么厉害？真的有这种相似性吗？</strong></p>
+
+<p>左：英语                                                                              右：西班牙语</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6Ji2fEIF73.png?imageslim" alt="mark" /></p>
+
+<h2 id="向量空间子结构">向量空间子结构</h2>
+
+<p>而且我们想达到这样的一个功能：希望能捕捉到低层的一些similarity</p>
+
+<p>注意，这个地方的每个向量的维度是一致的，因为最后把它压缩成一个dense vector。<strong>这种向量是怎么构建的？</strong></p>
+
+<p>[V<em>{King}-V</em>{Queen}+V<em>{Women}=V</em>{Man}]</p>
+
+<p>[V<em>{Paris}-V</em>{France}+V<em>{German}=V</em>{Berlin}]</p>
+
+<p>所以，我们的最终目标是：词向量表示作为机器学习，特别是深度学习的输入和表示空间。<strong>怎么构建的？人工？</strong></p>
+
+<p>在计算机中表示一个词：
+<table style="width: 291.466px;" >
+<tbody >
+<tr ></p>
+
+<p><td style="width: 135px;" >猫
+</td></p>
+
+<p><td style="width: 136.466px;" >美丽
+</td>
+</tr>
+<tr ></p>
+
+<p><td style="width: 135px;" ></p>
+
+<ul>
+<li><p>动物</p></li>
+
+<li><p>胎生</p></li>
+
+<li><p>有毛</p></li>
+
+<li><p>弹跳性好</p></li>
+
+<li><p>体型小</p></li>
+
+<li><p>宠物</p></li>
+
+<li><p>吃肉</p></li>
+
+<li><p>会发声</p></li>
+</ul>
+
+<p></td></p>
+
+<p><td style="width: 136.466px;" ></p>
+
+<ul>
+<li><p>漂亮</p></li>
+
+<li><p>多姿</p></li>
+
+<li><p>靓丽</p></li>
+
+<li><p>好看</p></li>
+
+<li><p>俊俏</p></li>
+
+<li><p>迷人</p></li>
+
+<li><p>标志</p></li>
+
+<li><p>端庄</p></li>
+</ul>
+
+<p></td>
+</tr>
+<tr ></p>
+
+<p><td style="width: 135px;" >上位词
+</td></p>
+
+<p><td style="width: 136.466px;" >同义词
+</td>
+</tr>
+</tbody>
+</table>
+如果用人来标注的话：</p>
+
+<ol>
+<li><p>不能分辨细节的差别</p></li>
+
+<li><p>需要大量人为劳动</p></li>
+
+<li><p>主观</p></li>
+
+<li><p>无法发现新词</p></li>
+
+<li><p>难以精确计算词之间的相似度</p></li>
+</ol>
+
+<p>#</p>
+
+<p>#</p>
+
+<h1 id="离散表示">离散表示</h1>
+
+<h2 id="离散表示-one-hot表示">离散表示：One-hot表示</h2>
+
+<p>语料库：</p>
+
+<ul>
+<li><p>John likes to watch movies. Mary likes too.</p></li>
+
+<li><p>John also likes to watch football games.</p></li>
+</ul>
+
+<p>词典</p>
+
+<p>词典包含10个单词，每个单词有唯一索引，在词典中的顺序和在句子中的顺序没有关联，词典就是自己随便定的一个包含这些单词的字典。</p>
+
+<p>{&ldquo;John&rdquo;: 1, &ldquo;likes&rdquo;: 2, &ldquo;to&rdquo;: 3, &ldquo;watch&rdquo;: 4, &ldquo;movies&rdquo;: 5, &ldquo;also&rdquo;:6, &ldquo;football&rdquo;: 7, &ldquo;games&rdquo;: 8, &ldquo;Mary&rdquo;: 9, &ldquo;too&rdquo;: 10}</p>
+
+<p>One-hot表示：有多少个词就开多大的一个向量空间，只有这个词出现的编号为下标的那个位置为1，其他的地方为0。</p>
+
+<ul>
+<li><p>John: [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]</p></li>
+
+<li><p>likes: [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]</p></li>
+
+<li><p>…</p></li>
+
+<li><p>too : [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]</p></li>
+</ul>
+
+<p>one-hot 有好处也有坏处，one-hot 会产生一种对句子的离散的表示：bag of words</p>
+
+<h2 id="one-hot-对句子的离散表示-bag-of-words-词袋">one-hot 对句子的离散表示：Bag of Words  词袋</h2>
+
+<p><strong>词袋与词权重到底是什么关系？从属？</strong></p>
+
+<p>一种表示方法：文档的向量表示可以直接将各词的词向量表示加和。<strong>不错的方法，但是这样肯定会丢失信息把？次序信息？</strong></p>
+
+<ul>
+<li><p>John likes to watch movies. Mary likes too.-&gt; [1, 2, 1, 1, 1, 0, 0, 0, 1, 1]</p></li>
+
+<li><p>John also likes to watch football games.-&gt;[1, 1, 1, 1, 0, 1, 1, 1, 0, 0]</p></li>
+</ul>
+
+<p>但是，上面的方法存在一个问题，比如说John和likes它们的权重好像是一致的，看不出它们的差别。现在希望有个方式能体现出词与词之间的差异：即词权重</p>
+
+<p>词权重有两个方法：</p>
+
+<ul>
+<li><p>TF-IDF (Term Frequency - Inverse Document Frequency)  信息检索。一般用来考察分好的词与文章的相关度。词 t 的IDF 权重为： (log(1+\frac{N}{n_t}))  其中 N: 文档总数， (n_t) : 含有词t的文档数。所以，刚才看不出词与词之间的差别，但是现在能看到不同的词的权重的差别。 (n_t=0)怎么办？这说明了你的语料的容纳度是不够的，一般不会为0。  <strong>TF-IDF的计算公式是什么？这里只列了IDF的计算公式。</strong></p>
+
+<ul>
+<li>[0.693, 1.386, 0.693, 0.693, 1.099, 0, 0, 0, 0.693, 0.693] <strong>这个正确吗？怎么算的？</strong></li>
+</ul></li>
+
+<li><p>Binary weighting  短文本相似性，Bernoulli Naive Bayes  这个是上面的Bag of Words的一种简化形式，出现就是1，没有出现就是0 ，对于短文本的相似性用的比较多，尤其是你的词汇比较几种的时候。</p>
+
+<ul>
+<li>[1, 1, 1, 1, 1, 0, 0, 0, 1, 1]  <strong>什么意思？</strong></li>
+</ul></li>
+</ul>
+
+<p>上面这些无论是Bag of words 还是TF-IDF 还是 Binary weighting ，词在文档中的顺序order都没有被考虑。因此会出现：John likes mary 和Mary likes john 这两个是一样的。</p>
+
+<p>那么怎么将顺序保留下来呢？</p>
+
+<h2 id="考虑顺序-的-n元组-bi-gram和n-gram">考虑顺序 的 N元组 Bi-gram和N-gram</h2>
+
+<p>为2-gram建索引：把两个两个的词作为一个word：</p>
+
+<ul>
+<li><p>&ldquo;John likes”: 1,</p></li>
+
+<li><p>&ldquo;likes to”: 2,</p></li>
+
+<li><p>&ldquo;to watch”: 3,</p></li>
+
+<li><p>&ldquo;watch movies”: 4,</p></li>
+
+<li><p>&ldquo;Mary likes”: 5,</p></li>
+
+<li><p>&ldquo;likes too”: 6,</p></li>
+
+<li><p>&ldquo;John also”: 7,</p></li>
+
+<li><p>&ldquo;also likes”: 8,</p></li>
+
+<li><p>“watch football”: 9,</p></li>
+
+<li><p>&ldquo;football games&rdquo;: 10,</p></li>
+</ul>
+
+<p>则根据这样得到如下：</p>
+
+<ul>
+<li><p>John likes to watch movies. Mary likes too.-&gt;[1, 1, 1, 1, 1, 1, 0, 0, 0, 0]</p></li>
+
+<li><p>John also likes to watch football games.-&gt;[0, 1, 1, 0, 0, 0, 1, 1, 1, 1]</p></li>
+</ul>
+
+<p>这个东西就叫做 Bi-gram 即二元 即2-gram 。</p>
+
+<p>这种方式的优缺点如下：</p>
+
+<ul>
+<li><p>优点：考虑了词的顺序，顺序的问题得到一定程度的缓解</p></li>
+
+<li><p>缺点：词表的膨胀，维度极度爆炸</p></li>
+</ul>
+
+<p>而且模型参数数量与 n 的关系如下：如果是一篇20万词的文本：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8K5A5h3leF.png?imageslim" alt="mark" /></p>
+
+<p>可见，维度不仅极度增长，而且增长之后是一个非常sparse 稀疏的一个情况。那么有没有更好的办法呢？</p>
+
+<h2 id="语言模型">语言模型：</h2>
+
+<p><strong>语言模型与前面的N元组是什么关系？应用的时候是怎么与N元组配合使用的？还是独立使用的？</strong></p>
+
+<p>后一个词的出现是基于之前的已经出现的词的，因此整个句子出现的概率可以这样认为：</p>
+
+<p>[P(w_1,\cdots ,w<em>m)=\prod</em>{i=1}^{m}P(w_i|w<em>1,\cdots ,w</em>{i_1})]</p>
+
+<p>Unigram/1-gram 即后面出现的词并不依赖于之前出现的词：</p>
+
+<p>[\begin{align*}P(Mary\,likes\,too) &amp;= P(too | Mark, likes) * P(likes | Mary) * P(Mary)<br />
+&amp;= P(too) * P(likes) * P(Mary)\end{align*}]</p>
+
+<p>Bi-gram/2-gram 即只与它前面的这个词有依赖关系</p>
+
+<p>[\begin{align*}P(Mary\,likes\,too) &amp;= P(too | Mark, likes) * P(likes | Mary) * P(Mary)<br />
+&amp;= P(too | likes) * P(likes | Marry) * P(Mary)\end{align*}]</p>
+
+<p>这个就是语言模型，将词与词之间的顺序信息转嫁到出现的概率信息上。</p>
+
+<h2 id="上面的离散表示存在的问题">上面的离散表示存在的问题</h2>
+
+<ul>
+<li><p>无法衡量词向量之间的关系  各种度量（与或非，距离）都不合适 太稀疏，很难捕捉文本的含义</p>
+
+<ul>
+<li><p>酒店[0, 1, 0, 0, 0, 0, 0, 0, 0, 0]</p></li>
+
+<li><p>宾馆[0, 0, 0, 0, 1, 0, 0, 0, 0, 0]</p></li>
+
+<li><p>旅舍[0, 0, 0, 0, 0, 0, 0, 0, 1, 0]</p></li>
+</ul></li>
+
+<li><p>词表维度随着语料库增长膨胀，这样的话模型也就只能不断修改。</p></li>
+
+<li><p>n-gram词序列随语料库膨胀更快 <strong>是呀</strong></p></li>
+
+<li><p>数据稀疏问题</p></li>
+</ul>
+
+<p>那么这些问题怎么解决呢？</p>
+
+<h2 id="新的表示方式-分布式表示-distributed-representation">新的表示方式 分布式表示 (Distributed representation)</h2>
+
+<p><strong>这一节不是很明白？什么是分布式表示？怎么就分布了？</strong></p>
+
+<p>如果直接记忆的话：</p>
+
+<ul>
+<li><p>红色的大型卡车   memory unit 1   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0]</p></li>
+
+<li><p>黄色的中型SUV   memory unit 2   [0, 1, 0, 0, 0, 0, 0, 0, 0, 0]</p></li>
+
+<li><p>紫色的小型电动车   memory unit 3   [0, 0, 1, 0, 0, 0, 0, 0, 0, 0]</p></li>
+</ul>
+
+<p>但是可以分析出句子有一些 patten，把模型相同的拿出来，那么句子相当于是这写模式的组合。那么需要对这个东西进行存储时，就可以压缩到三个维度。做一个笛卡儿组合的：</p>
+
+<p>需要的记忆单元数=(颜色20)<em>(型号3)</em>(车型30)</p>
+
+<p>那么这个时候的分布式表示： <strong>什么意思？</strong></p>
+
+<p>(颜色记忆单元20)+(型号记忆单元3)+(车型记忆单元30)</p>
+
+<p>那么对于一个词来说，怎么表达这个词呢？可以用你附近的一些词来表示。</p>
+
+<h2 id="用一个词附近的其他词来表示该词">用一个词附近的其他词来表示该词</h2>
+
+<p>现代统计自然语言处理中最有创见的想法之一。</p>
+
+<p>banking附近的词将会代表banking的含义：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/D32BD2Fdg5.png?imageslim" alt="mark" /></p>
+
+<p>比如banking 就会牵涉到 government 等。</p>
+
+<h2 id="共现矩阵-cocurrence-matrix">共现矩阵 (Cocurrence matrix)</h2>
+
+<p>共现：指的是通过你周边的一些词汇可以来了解你这个词汇，然后到底想通过多少个词汇来了解你呢？这个就是window length。比如windows length=2，那么左边看两个词，右边看两个词。</p>
+
+<p>Word-Document 的共现矩阵主要用于发现主题(topic)，用于主题模型，如LSA (Latent Semantic Analysis)。<strong>什么是LSA？</strong></p>
+
+<p>局域窗中的Word - Word 共现矩阵可以挖掘语法和语义信息</p>
+
+<ul>
+<li><p>I  like  deep  learning.</p></li>
+
+<li><p>I  like  NLP.</p></li>
+
+<li><p>I  enjoy  flying.</p></li>
+</ul>
+
+<p>下图为 window  length设为1（一般设为5～10），使用对称的窗函数（左右window  length都为1)。</p>
+
+<p>如I的左右两边分别看1个词，左边没有，右边是有2个like，有1个enjoy。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/A63A0h77lg.png?imageslim" alt="mark" /></p>
+
+<p>可以看出，这个是一个对称的矩阵。</p>
+
+<p>而且，这个比较重要了：从上表可以认为，比如 I 这个单词，就可以使用对 I 应行或列的向量来表示。<strong>利害</strong></p>
+
+<p>所以，我们可以吧共现矩阵的行或列作为词向量。</p>
+
+<p><strong>那么生成的这个矩阵怎么使用呢？在真实的算法中？而且感觉文章很长的话这个也会很大吧？</strong></p>
+
+<h2 id="共现矩阵这种方法存在的问题">共现矩阵这种方法存在的问题</h2>
+
+<ul>
+<li><p>向量维数随着词典大小线性增长 <strong>是的</strong></p></li>
+
+<li><p>存储整个词典的空间消耗非常大  <strong>是呀</strong></p></li>
+
+<li><p>一些模型如文本分类模型会面临稀疏性问题。 即使它相对于one-hot的表示形式而言，已经有些dense了，但是还是比较sparse</p></li>
+
+<li><p>模型会欠稳定 。除非你的语料库非常大，不然，你新加一些语料的话，频次可能就会有变化。而频次的变化会导致表示的变化。</p></li>
+</ul>
+
+<p>所以，我需要去构造低维度稠密的向量作为词的分布式表示！ 一般是 25~1000 维 。<strong>为什么是 25~1000 维 ？</strong></p>
+
+<p>那么怎么变成低维度，稠密的向量呢？</p>
+
+<h2 id="那么怎么去构造低维度稠密的向量-最简单的-用svd">那么怎么去构造低维度稠密的向量：最简单的，用SVD</h2>
+
+<p>最直接的想法：用SVD对共现矩阵向量做降维</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EHmhjEBD5l.png?imageslim" alt="mark" /></p>
+
+<p>SVD分解的公式：<strong>没明白？之前的SVD的分解没有学到。学了之后这里补充下。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/77lAmEhi5a.png?imageslim" alt="mark" /></p>
+
+<p>然后分解后做一个可视化，为了可视化，对于每个词而言，我只取了前两个维度的信息。<strong>没明白？U是什么？前两个维度的信息指的是什么？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mDjfl64J36.png?imageslim" alt="mark" /></p>
+
+<p>从上面的图可发现：I与enjoy和like的距离好像是差不多的，而且距离like最近的好像就是enjoy。所以只是通过这样的简单的梳理，我就可以捕获到like和enjoy之间的similarity。<strong>利害。但是看到这里，我就想知道那个window length 到底取多少比较好？一般取多少？而且，对于中文来说怎么处理？是分次之后像这样进行处理吗？</strong></p>
+
+<h2 id="那么svd降维有没有什么问题呢">那么SVD降维有没有什么问题呢？</h2>
+
+<ul>
+<li><p>计算量随语料库和词典增长膨胀太快，对X(n,n)维的矩阵，计算量O(n^3)。 而对大型的语料库，n~400k，语料库大小1~60B token。<strong>SVD降维的算法还是要自己实现的，而且要清楚计算量O。</strong></p></li>
+
+<li><p>难以为词典中新加入的词分配词向量。<strong>为什么？是降维后的不能直接添加吗？</strong></p></li>
+
+<li><p>与其他深度学习模型框架差异大。为什么呢？因为我们希望DL的模型是一个end-to-end的，即数据一喂进去就能拿到想要的结果，也就是说不想要额外的一些东西，一般来说是一个层级的结构。如果与DL的模型框架差异太大，就只能先抽出一些东西，再放到这个模型中去做。</p></li>
+</ul>
+
+<p>那么还有没有更好的方法呢？</p>
+
+<h1 id="nnlm-neural-network-language-model">NNLM (Neural Network Language model)</h1>
+
+<h2 id="nnlm-介绍">NNLM：介绍</h2>
+
+<p>这个模型的本质不是用来产生词向量的。<strong>本质是什么？了解的不够</strong></p>
+
+<p>直接从语言模型出发，将模型最优化过程转化为求词向量表示的过程。首先，语言模型做的事情就是：我要去判断那些词之后出现那些词的概率是最高的。如果我们假设t对应的词只与前面的n-1个词相关：那么目标函数就是：</p>
+
+<p>[L(\theta )=\sum_{t}^{ }logP(w<em>t|w</em>{t-n+1},\cdots ,w_{t-1})]</p>
+
+<p>解释下上面的式子：对log进行求和，其实就是对P进行连乘。<strong>还有些没理解，n是多少？整个意思是不是每个词基于之前的所有词的概率的乘积？</strong></p>
+
+<p>使用了非对称的前向窗函数，窗长度为n-1。<strong>为什么使用的是非对称的？为什么窗口长度为n-1？</strong>滑动窗口遍历整个语料库求和，计算量正比于语料库大小。概率P满足归一化条件，这样不同位置t处的概率才能相加，即：之所以满足归一化条件，是因为第n个词无非是从字典里面取的，所有字典里面的词加在一起等于1 。<strong>没有很理解？</strong></p>
+
+<p>[\sum<em>{w\in {vocabulary} }^{ }P(w|w</em>{t-n+1},\cdots ,w_{t-1})=1]</p>
+
+<p>用神经网络来实现概率P。</p>
+
+<h2 id="nnlm-结构">NNLM：结构</h2>
+
+<p>是做什么的：我想用一个长度为N的滑动窗口在我的语料中滑动，当我每取出来N个连在一起的词的时候，我用前N-1个词去预测后面的一个词。所以如果文章很长，我就有很多的这种N个词的串，每个都可以进行一次训练。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gK221ffF00.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/K81j1g92cj.png?imageslim" alt="mark" /></p>
+
+<p>look-up Table 是一个查找表</p>
+
+<p>先说一下，对于每个输入的词的one-hot表示来说，是怎么压缩到D维的？</p>
+
+<ul>
+<li>假设字典有8万个词，每个都是one-hot表示，我输入的一个字就是 8万*1 的列向量，而我的权重矩阵是D*8万 的，那么 D*8万 的矩阵和输入的 8万*1 相乘之后的就得到D*1 的矩阵，这个矩阵就是压缩后的信息。这里面要注意的一点：因为输入的 8万*1 的列向量实际上只有一个位置是1，其余全是0，所以这个过程实际上就是相当于把D*8万的列向量中的其中一列取出来了。</li>
+</ul>
+
+<p>对每次输入的词压缩到D维之后做什么呢？</p>
+
+<ul>
+<li>在连接层对这些 D*1 的vector做了一个concat 拼接，比如说 ，我输入“我”，“是”，“中国”，“人” 这个句子，在每次得到这个字对应的D*1的矩阵之后，我依次把它拼接起来，这样就得到了一个4D*1的一个列向量。</li>
+</ul>
+
+<p>然后做什么呢？</p>
+
+<ul>
+<li>它有一个hidden layer ，它假如说有100个神经元，然后把刚刚生成的4D*1的矩阵与这些神经元做全连接。全连接以后用tanh激活。这100个神经元输出的100个结果与8万个结果做一个softmax，我最后拿到的是一个8万*1的一个概率向量，而标准答案这个时候只有一个，所以我可以用一个损失函数来衡量好还是不好，这个损失函数叫做交叉熵损失。那么我就可以通过最小化这个交叉熵损失，来通过BP和SGD来更新我的矩阵C，训练这个神经网络。</li>
+</ul>
+
+<p>也就是说：</p>
+
+<ul>
+<li>这个神经网络的程序本意是做语言模型 language model ，这个模型做好之后，我就可以根据 N-1 个词来预测后面的词。但是它有个中间产物：矩阵C，也就是稠密词向量表示。对于每个词而言，把 C 中的对应的那一列取出来就是它的词向量，而且它的维度是有限的，比如说 300 维。而不再是像刚才那样，随着语料的增加，维度上升的那种表示。<strong>利害</strong></li>
+</ul>
+
+<p>总结一下：</p>
+
+<ul>
+<li><p>(N-1)个前向词:one-hot表示</p></li>
+
+<li><p>采用线性映射将one-hot表示投影到稠密D维表示</p></li>
+
+<li><p>输出层:Softmax</p></li>
+
+<li><p>各层权重最优化:BP＋SGD</p></li>
+</ul>
+
+<h2 id="nnlm的计算复杂度">NNLM的计算复杂度</h2>
+
+<p>基本上是对上面的结构又介绍了下。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Kc2ki4e0bD.png?imageslim" alt="mark" /></p>
+
+<p>每个训练样本的计算复杂度：(N * D + N * D * H + H * V)</p>
+
+<p>一个简单模型在大数据量上的表现比复杂模型在少数据量上的表现会好</p>
+
+<h1 id="word2vec-cbow-连续词袋-从这里开始没有看">word2vec: CBOW(连续词袋)  <strong>从这里开始没有看</strong></h1>
+
+<p>在NNLM的基础上提出了word2vec，即用一个简化的模型去做上面的训练出词向量这种工作。又CBOW和CBOgrama 可以看一下源码，里面有各种各样的小技巧来帮助它们加速这个。使得这个东西最后的速度非常快。</p>
+
+<p>先理解一下原理，使用的话，可以直接调用。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IBb4Il04kA.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>无隐层</li>
+<li>使用双向上下文窗口</li>
+<li>上下文词序无关 (BoW)</li>
+<li>输入层直接使用低维稠密表示</li>
+<li>投影层简化为求和(平均)</li>
+</ul>
+
+<p>目标函数：</p>
+
+<p>$$J=\sum_{w\in corpus}^{ }P(w|context(w))$$</p>
+
+<p>$$J=\sum_{i\in corpus}^{ }log(\frac{exp(w_i^T\widetilde{w<em>I})}{\sum</em>{k=1}^{V}exp(w_i^T\widetilde{w_k})})$$</p>
+
+<p>$$J=\sum_{i\in corpus,j\in context(i)}^{ }log(\frac{exp(w_i^T\widetilde{w<em>I})}{\sum</em>{k=1}^{V}exp(w_i^T\widetilde{w_k})})$$</p>
+
+<h2 id="cbow-层次softmax">CBOW：层次Softmax</h2>
+
+<p>W=“足球”时的相关记号示意图</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AF70FBDJ91.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li><p>使用Huffman Tree来编码输出层的词典</p></li>
+
+<li><p>只需要计算路径上所有非叶子节点词向量的贡献即可</p></li>
+
+<li><p>计算量降为树的深度  (V=&gt;log_2(V))</p></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/9EGhlK668l.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li><p>Sigmoid函数(\sigma (x)=\frac{1}{1+e^{-x} })</p></li>
+
+<li><p>n(w,j)：Huffman数内部第j层的节点</p></li>
+
+<li><p>ch(n(w,j))：n节点的child节点</p></li>
+
+<li><p>[[n(w,j+1)=ch(n(w,j)]] 是选择函数，表明只选择从根节点到目标叶节点路径上的内部节点</p></li>
+</ul>
+
+<p>[\sum_{w=1}^{W}p(w|w_I)=1]</p>
+
+<p><strong>没明白</strong></p>
+
+<h2 id="cbow-负例采样">CBOW 负例采样</h2>
+
+<p>P(w|context(w))： 一个正样本，V-1个负样本，对负样本做采样</p>
+
+<p>[g(w)=\sigma (X<em>w^T\theta^w)\prod</em>{u\in N \,EG(w)}^{ }[1-\sigma(x_w^T\theta^u)]]</p>
+
+<ul>
+<li><p>(X_w)是context(w)中词向量的和</p></li>
+
+<li><p>(\theta^u)是词u对应的一个（辅助）</p></li>
+
+<li><p>向量 (NEG(w))是w的负样本采样子集</p></li>
+</ul>
+
+<p>损失函数：对语料库中所有词w求和：</p>
+
+<p>[L=\sum_{w\in C}^{ }log(g(w))]</p>
+
+<p>[sum_{w\in C}^{ }{log[\sigma(x<em>w^T\theta^w)]+\sum</em>{w\in NEG(w)}^{ }log[\sigma(-x_w^T\theta^u)]}]</p>
+
+<p>词典中的每一个词对应一条线段，所有词组成了[0，1]间的剖分</p>
+
+<p>(len(w)=\frac{counter(w)}{\sum_{u\in D}^{ }counter(u)})，实际使用中取counter(w)^(<sup>3</sup>&frasl;<sub>4</sub>)效果最好。</p>
+
+<p>(l_1,l_2,\cdots ,l_N)组成了[0,1]间的剖分</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aIB2Ial3dK.png?imageslim" alt="mark" /></p>
+
+<p>将[0,1]划分为M=10^8等分，每次随机生成一个[1,M-1]间的整数，看落在那个词对应的剖分上。</p>
+
+<h2 id="word2vec-skip-gram模型">Word2Vec:Skip-Gram模型</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3B25hLK90F.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>无隐层</li>
+<li>投影层也可省略</li>
+<li>每个词向量作为log-linear模型的输入</li>
+</ul>
+
+<p>目标函数：</p>
+
+<p>$$\frac{1}{T}\sum<em>{t=1}^{T}\sum</em>{-c\leq j\leq c,j\neq 0}^{ }log(p(w_{t+j}|w_t)$$</p>
+
+<p>概率密度由Softmax给出：</p>
+
+<p>$$p(w_k|w_t)=\frac{exp(\widetilde{w}_k^Tw<em>t)}{\sum</em>{m=1}^{V}exp(\widetilde{w}_m^Tw_t)}$$</p>
+
+<h2 id="word2vec-存在的问题">Word2Vec：存在的问题：</h2>
+
+<ul>
+<li>对每个local context window单独训练，没有利用包含在global co-currence矩阵中的统计信息</li>
+<li>对多义词无法很好的表示和处理，因为使用了唯一的词向量</li>
+</ul>
+
+<h3 id="词嵌入可视化-公司-ceo">词嵌入可视化: 公司 — CEO</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/a4eEL8e23m.png?imageslim" alt="mark" /></p>
+
+<h3 id="词嵌入可视化-词向">词嵌入可视化: 词向</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/95IhII0HEg.png?imageslim" alt="mark" /></p>
+
+<h3 id="词嵌入可视化-比较级和最高级">词嵌入可视化: 比较级和最高级</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2HCLadkEmC.png?imageslim" alt="mark" /></p>
+
+<h3 id="词嵌入效果评估-词类比任务">词嵌入效果评估: 词类比任务</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/9fFjak9cAi.png?imageslim" alt="mark" /></p>
+
+<p>19544个类比问题</p>
+
+<ul>
+<li><p>“Athens is to Greece as Berlin is to __?”</p></li>
+
+<li><p>“Bigger is to Big as Greater is to __?”</p></li>
+</ul>
+
+<h3 id="词嵌入效果评估-词相似度任务">词嵌入效果评估: 词相似度任务</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/60KihC5hD3.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>SVD：只保留出现次数最大的1万个词，记为(X_{trunc})</li>
+<li>SVD-S：(\sqrt{X_{trunc} })</li>
+<li>SVD-L：(log(1+X_{trunc}))</li>
+</ul>
+
+<h2 id="词嵌入效果评估-作为特征用于crf实体识别">词嵌入效果评估: 作为特征用于CRF实体识别</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cIlL7kfG62.png?imageslim" alt="mark" /></p>
+
+<p>NER任务</p>
+
+<ul>
+<li><p>437,905个离散特征</p></li>
+
+<li><p>额外的50维连续特征</p></li>
+
+<li><p>使用CRF模型训练</p></li>
+</ul>
+
+<h2 id="glove与word2vec对比">GloVe与Word2Vec对比</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/J1mKbHJdlc.png?imageslim" alt="mark" /></p>
+
+<p>GloVe随着迭代次数增加，精度提升</p>
+
+<p>Word2Vec未使用类似迭代次数的Epoch，用Negative Samples模拟</p>
+
+<h1 id="总结">总结</h1>
+
+<ul>
+<li><p>离散表示</p>
+
+<ul>
+<li><p>One-hot representation, Bag Of Words Unigram语言模型</p></li>
+
+<li><p>N-gram词向量表示和语言模型</p></li>
+
+<li><p>Co-currence矩阵的行(列)向量作为词向量</p></li>
+</ul></li>
+
+<li><p>分布式连续表示</p>
+
+<ul>
+<li><p>Co-currence矩阵的SVD降维的低维词向量表示</p></li>
+
+<li><p>Word2Vec: Continuous Bag of Words Model</p></li>
+
+<li><p>Word2Vec: Skip-Gram Model</p></li>
+</ul></li>
+</ul>
+
+<h1 id="工具google-word2vec">工具google word2vec</h1>
+
+<ul>
+<li><p>地址</p>
+
+<ul>
+<li><p><a href="https://code.google.com/archive/p/word2vec/">https://code.google.com/archive/p/word2vec/</a></p></li>
+
+<li><p>墙内用户请戳<a href="https://github.com/dav/word2vec">https://github.com/dav/word2vec</a></p></li>
+</ul></li>
+
+<li><p>安装步骤</p>
+
+<ul>
+<li><p>git clone <a href="https://github.com/dav/word2vec">https://github.com/dav/word2vec</a></p></li>
+
+<li><p>cd word2vec/src</p></li>
+
+<li><p>Make</p></li>
+
+<li><p>试试./demo-word.sh 和./demo-phrases.sh</p></li>
+</ul></li>
+</ul>
+
+<h1 id="工具gensim">工具gensim</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/H2f6ak8Jja.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HhjHimKjiL.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/C43dj1f98k.png?imageslim" alt="mark" /></p>
+
+<h2 id="工具gensim中文处理案例">工具gensim中文处理案例</h2>
+
+<p>数据下载，训练与测试的代码详情见
+<a href="https://www.zybuluo.com/hanxiaoyang/note/472184">https://www.zybuluo.com/hanxiaoyang/note/472184</a></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/g9JiGabKKB.png?imageslim" alt="mark" /></p>
+
+<h2 id="word2vec-cnn做文本分类">Word2vec+CNN做文本分类</h2>
+
+<ul>
+<li>论文详见《Convolutional Neural Networks for Sentence Classification》
+
+<ul>
+<li><a href="http://arxiv.org/abs/1408.5882">http://arxiv.org/abs/1408.5882</a></li>
+</ul></li>
+<li>Theano完成的代码版本：
+
+<ul>
+<li><a href="https://github.com/yoonkim/CNN_sentence">https://github.com/yoonkim/CNN_sentence</a></li>
+</ul></li>
+<li>TensorFlow改写的代码版本：
+
+<ul>
+<li><a href="https://github.com/dennybritz/cnn-text-classification-tf">https://github.com/dennybritz/cnn-text-classification-tf</a></li>
+</ul></li>
+<li>添加 分词和 中文词向量映射之后，可用于中文文本分类(情感分析)</li>
+</ul>
+
+<h1 id="作业">作业</h1>
+
+<p>仿照以下案例 ， 构建新闻数据集上的新闻词向量</p>
+
+<p><a href="https://www.zybuluo.com/hanxiaoyang/note/472184">https://www.zybuluo.com/hanxiaoyang/note/472184</a></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/j2B3IK4Am3.png?imageslim" alt="mark" /></p>
+
+<p>搜狗全网新闻语料地址 ：
+<a href="http://www.sogou.com/labs/resource/ca.php">http://www.sogou.com/labs/resource/ca.php</a></p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>从 word2vec: CBOW  开始没有看，等先看完机器学习的和RNN的再看这个。</strong></p>
+
+<p>还是很厉害的，感觉，很nice。要补充好。</p>
+
+<p><strong>。只看了PPT，感觉非常混乱，好像没有什么主次，没有什么分块，当然绝大部分是我的水平不够，看过视频之后进行补充和修正和分割。</strong></p>
+
+<p><strong>而且感觉NLP应该是一个很系统的东西，还是要拆分下。</strong></p>
+
+<p>文本映射乘一个dense vector 这种思想不仅在词嵌入中用到，而且在很多地方会用到，one-hot 的表示形式有时是很难处理的。</p>
+
+<h2 id="相关资料">相关资料：</h2>
+
+<ol>
+<li>七月在线 深度学习</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89cv/11-%E9%9D%99%E6%80%81%E5%9B%BE%E5%83%8F%E9%A2%86%E5%9F%9F/16-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB/cv-%E9%A3%8E%E6%A0%BC%E8%BF%81%E7%A7%BB-neural-style/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">cv 风格迁移 Neural Style</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/03-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E7%9B%B8%E5%85%B3/svm-%E4%B8%89%E9%87%8D/">
+            <span class="next-text nav-default">svm 三重</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

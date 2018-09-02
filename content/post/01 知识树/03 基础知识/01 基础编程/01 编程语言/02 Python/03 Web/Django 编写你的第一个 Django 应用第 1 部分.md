@@ -3,39 +3,11 @@ title: Django 编写你的第一个 Django 应用，第 1 部分
 toc: true
 date: 2018-06-22 22:00:01
 ---
----
-author: evo
-comments: true
-date: 2018-05-31 03:19:09+00:00
-layout: post
-link: http://106.15.37.116/2018/05/31/django-%e7%bc%96%e5%86%99%e4%bd%a0%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa-django-%e5%ba%94%e7%94%a8%ef%bc%8c%e7%ac%ac-1-%e9%83%a8%e5%88%86/
-slug: django-%e7%bc%96%e5%86%99%e4%bd%a0%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa-django-%e5%ba%94%e7%94%a8%ef%bc%8c%e7%ac%ac-1-%e9%83%a8%e5%88%86
-title: Django 编写你的第一个 Django 应用，第 1 部分
-wordpress_id: 7083
-categories:
-- 基础程序设计
-tags:
-- python
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。**
 
 
 ## 相关资料
 
-
-
-
-
-
-  1.
-
-
-[编写你的第一个 Django 应用](https://github.com/gatieme/CodingInterviews)  **这个非常好，就按这个来**
+- [编写你的第一个 Django 应用](https://github.com/gatieme/CodingInterviews)  **这个非常好，就按这个来**
 
 
 

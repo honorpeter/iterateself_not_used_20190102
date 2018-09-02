@@ -12,50 +12,19 @@ date: 2018-08-01 17:31:03
 
 
 
-  1. [配置手册 configure](http://docs.gunicorn.org/en/stable/configure.html) 官方配置手册，按手册来
+1. [配置手册 configure](http://docs.gunicorn.org/en/stable/configure.html) 官方配置手册，按手册来
 
 
-  2. [gunicorn github](https://github.com/benoitc/gunicorn/blob/master/examples/supervisor.conf) 这个时gunicorn 的开源的github，上面有 example ，有 supervisor.conf
+2. [gunicorn github](https://github.com/benoitc/gunicorn/blob/master/examples/supervisor.conf) 这个时gunicorn 的开源的github，上面有 example ，有 supervisor.conf
 
 
-  3. [Where is the Gunicorn config file?](https://stackoverflow.com/questions/12063463/where-is-the-gunicorn-config-file)
+3. [Where is the Gunicorn config file?](https://stackoverflow.com/questions/12063463/where-is-the-gunicorn-config-file)
 
 
-  4. [nginx uwsgi django supervisord Centos部署](https://my.oschina.net/u/198124/blog/817335)
+4. [nginx uwsgi django supervisord Centos部署](https://my.oschina.net/u/198124/blog/817335)
 
 
-  5. [在 CentOS7 上用 MySQL+Nginx+Gunicorn+Supervisor 部署 Django](https://me.iblogc.com/2016/12/08/%E5%9C%A8centos7%E4%BD%BF%E7%94%A8mysql-nginx-gunicorn+supervisor%E9%83%A8%E7%BD%B2django/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
-
-
-
-
-# INTRODUCTION
-
-
-
-
-
-
-  * aaa
+5. [在 CentOS7 上用 MySQL+Nginx+Gunicorn+Supervisor 部署 Django](https://me.iblogc.com/2016/12/08/%E5%9C%A8centos7%E4%BD%BF%E7%94%A8mysql-nginx-gunicorn+supervisor%E9%83%A8%E7%BD%B2django/)
 
 
 
@@ -65,16 +34,10 @@ date: 2018-08-01 17:31:03
 运行的时候 根据nginx 的配置都似乎可以的：
 
 
-  * nohup gunicorn blogproject.wsgi:application -b 127.0.0.1:8000 &
-
-
-  * gunicorn blogproject.wsgi:application -b 127.0.0.1:8000
-
-
-  * gunicorn blogproject.wsgi:application
-
-
-  * gunicorn --bind unix:/tmp/iterate.site.socket blogproject.wsgi:application
+* nohup gunicorn blogproject.wsgi:application -b 127.0.0.1:8000 &
+* gunicorn blogproject.wsgi:application -b 127.0.0.1:8000
+* gunicorn blogproject.wsgi:application
+* gunicorn --bind unix:/tmp/iterate.site.socket blogproject.wsgi:application
 
 
 但是，如果像 自动重启服务，那么就需要用到supervisor来监督它了，当网站down掉的时候，supervisor会自动运行 上面这些语句，来重启网站。

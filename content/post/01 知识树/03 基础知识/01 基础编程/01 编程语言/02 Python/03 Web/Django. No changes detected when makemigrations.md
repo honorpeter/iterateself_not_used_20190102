@@ -3,36 +3,10 @@ title: Django. No changes detected when makemigrations
 toc: true
 date: 2018-06-11 08:15:04
 ---
----
-author: evo
-comments: true
-date: 2018-06-05 11:34:34+00:00
-layout: post
-link: http://106.15.37.116/2018/06/05/django-no-changes-detected-when-makemigrations/
-slug: django-no-changes-detected-when-makemigrations
-title: Django. No changes detected when "makemigrations"
-wordpress_id: 7425
-categories:
-- 基础工具使用
-tags:
-- Django
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。**
-
 
 ## 相关资料
 
-
-
-
-
- 	
-  1. [Django. No changes detected when "makemigrations"](https://blog.csdn.net/stephen_wong/article/details/46351505)
+- [Django. No changes detected when "makemigrations"](https://blog.csdn.net/stephen_wong/article/details/46351505)
 
 
 
@@ -43,7 +17,7 @@ tags:
 
 
 
- 	
+
   * aaa
 
 
@@ -62,7 +36,7 @@ tags:
 
 
 
- 	
+
   * aaa
 
 
@@ -120,6 +94,3 @@ tags:
 
 
 # COMMENT
-
-
-

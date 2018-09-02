@@ -1,5 +1,5 @@
 ---
-title: 01 目标检测算法简介
+title: 使用 MXNet 的 SSD 模型
 toc: true
 date: 2018-08-29
 ---

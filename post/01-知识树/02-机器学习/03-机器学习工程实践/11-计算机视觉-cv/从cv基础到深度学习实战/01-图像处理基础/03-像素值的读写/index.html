@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 像素值的读写 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="像素值的读写 这个是重点 像素值的读写 1 这个是最简单的一种，双重 for 循环遍历。 对于单通道的图像的像素访问和遍历： uchar value = grayim.at&amp;lt;uchar&amp;gt;(i,j); for( int i = 0; i &amp;lt; grayim.rows; &#43;&#43;i) for( int j =" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/01-%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/03-%E5%83%8F%E7%B4%A0%E5%80%BC%E7%9A%84%E8%AF%BB%E5%86%99/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 像素值的读写" />
+<meta property="og:description" content="像素值的读写 这个是重点 像素值的读写 1 这个是最简单的一种，双重 for 循环遍历。 对于单通道的图像的像素访问和遍历： uchar value = grayim.at&lt;uchar&gt;(i,j); for( int i = 0; i &lt; grayim.rows; &#43;&#43;i) for( int j =" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/01-%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%9F%BA%E7%A1%80/03-%E5%83%8F%E7%B4%A0%E5%80%BC%E7%9A%84%E8%AF%BB%E5%86%99/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="03 像素值的读写">
+<meta itemprop="description" content="像素值的读写 这个是重点 像素值的读写 1 这个是最简单的一种，双重 for 循环遍历。 对于单通道的图像的像素访问和遍历： uchar value = grayim.at&lt;uchar&gt;(i,j); for( int i = 0; i &lt; grayim.rows; &#43;&#43;i) for( int j =">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="2816">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 像素值的读写"/>
+<meta name="twitter:description" content="像素值的读写 这个是重点 像素值的读写 1 这个是最简单的一种，双重 for 循环遍历。 对于单通道的图像的像素访问和遍历： uchar value = grayim.at&lt;uchar&gt;(i,j); for( int i = 0; i &lt; grayim.rows; &#43;&#43;i) for( int j ="/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 像素值的读写</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 2816 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#像素值的读写">像素值的读写</a>
+<ul>
+<li><a href="#像素值的读写-1">像素值的读写 1</a></li>
+<li><a href="#像素值的读写2">像素值的读写2</a></li>
+<li><a href="#像素值的读写-3">像素值的读写 3</a></li>
+<li><a href="#像素值的读写-4">像素值的读写 4</a></li>
+<li><a href="#像素值的读写-5">像素值的读写 5</a></li>
+<li><a href="#像素值的读写-6">像素值的读写 6</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="像素值的读写">像素值的读写</h2>
+
+<p><strong>这个是重点</strong></p>
+
+<h3 id="像素值的读写-1">像素值的读写 1</h3>
+
+<p>这个是最简单的一种，双重 for 循环遍历。</p>
+
+<p>对于单通道的图像的像素访问和遍历：</p>
+
+<pre><code class="language-cpp">uchar value = grayim.at&lt;uchar&gt;(i,j);
+
+for( int i = 0; i &lt; grayim.rows; ++i)
+    for( int j = 0; j &lt; grayim.cols; ++j )
+        grayim.at&lt;uchar&gt;(i,j) = (i+j)%255;
+</code></pre>
+
+<p>结果是：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/45EjIBHeKA.png?imageslim" alt="mark" /></p>
+
+<p>当我们使用 <code>.at</code> 来查找对应的像素的时候，要注意这个时候的 i，j 对应的位置：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/HAidfh56d7.png?imageslim" alt="mark" /></p>
+
+<p>对于三通道的图像的像素访问和遍历：</p>
+
+<pre><code class="language-cpp">for( int i = 0; i &lt; colorim.rows; ++i)
+    for( int j = 0; j &lt; colorim.cols; ++j )
+    {
+        Vec3b pixel;
+        pixel[0] = i%255; //Blue
+        pixel[1] = j%255; //Green
+        pixel[2] = 0; //Red
+        colorim.at&lt;Vec3b&gt;(i,j) = pixel;
+    }
+</code></pre>
+
+<p>结果是：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/L8mGLGh7aA.png?imageslim" alt="mark" /></p>
+
+<p>可见，这里使用的是 Vec3b 类，表示是三个元素，b 是 unchar，即实际上这个 Vec3b 里面存放的是3个 uchar，编号分别是 0，1，2。</p>
+
+<p>上图可以看出红色通道是 0 ，没有红色。</p>
+
+<p>这种方式，在连续扫描整幅图像的时候不建议使用，因为这种方式很慢，效率很低。</p>
+
+<h3 id="像素值的读写2">像素值的读写2</h3>
+
+<pre><code class="language-cpp">cv::Mat Iterator_&lt;uchar&gt; grayit, grayend;
+for( grayit = grayim.begin&lt;uchar&gt;(), grayend = grayim.end&lt;uchar&gt;();
+    grayit != grayend;
+    ++grayit){
+    *grayit = rand()%255;
+}
+</code></pre>
+
+<p>迭代器在 stl 库中还是经常说会用的，可以很方便的遍历所有的元素，mat 里面也增加了迭代器，来方便对 mat 进行遍历。</p>
+
+<p>这个跟上面的例子的功能是完全一样的，代码非常精简。</p>
+
+<p>迭代器 Iterateor_ 的下划线表明 Iterator_ 是一个模板类，之所以这样是因为通过迭代器来存取图像元素必须选择在编译期就必须知道图像类型。</p>
+
+<p>三通道图像例子如下：</p>
+
+<pre><code class="language-cpp">MatIterator_&lt;Vec3b&gt; colorit,colorend;
+for( colorit = colorim.begin&lt;Vec3b&gt;(), colorend = colorim.end&lt;Vec3b&gt;();
+    colorit != colorend;
+    ++colorit){
+      (*colorit)[0]=rand()%255;//Blue
+      (*colorit)[1]=rand()%255;//Green
+      (*colorit)[2]=rand()%255;//Red
+}
+</code></pre>
+
+<p>这里我们再强调一下 uchar 类型，uchar 是 0~255 的，我们后面使用机器学习的时候，需要用到 double 类型的，此时需要把图像转成 32f 或者 64f。转成 double 或 float 这个 rand()%255 就不适用了。<span style="color:red;">具体什么场景下回使用 double 或者float ？还是要确认下的，补充到这里来。</span></p>
+
+<p>这种方式不用指定行列来扫描，只需要指定一个迭代器，迭代器会自动换行。</p>
+
+<h3 id="像素值的读写-3">像素值的读写 3</h3>
+
+<p>这种事一种只针的方式：老师说他用的迭代器用的不是很习惯，因此用这种方式比较多</p>
+
+<pre><code class="language-cpp">for( int i = 0; i &lt; grayim.rows; ++i)
+{
+    // 获取第 i 行首像素指针
+    uchar * p = grayim.ptr&lt;uchar&gt;(i);
+    //对第 i 行的每个像素(byte)操作
+    for( int j = 0; j &lt; grayim.cols; ++j )
+        p[j] = (i+j)%255;
+}
+</code></pre>
+
+<p>我们使用指针访问的时候，实际上会可能出错的，而且也很难查找，这个的确，比如说通过指针处理图像像素，添加什么效果的时候，从最后的图像结果上很难看出到底什么地方出错了。</p>
+
+<p>所以，还是不建议使用指针寻址的。还是推荐使用 <code>.at</code> 的方式。但是指针的速度的确是要快一些，在讲究速度的时候还是可以考虑使用指针。</p>
+
+<p>上面这个地方是使用的 ptr 的模板函数，</p>
+
+<p><code>.ptr</code> 指向的是一行，<code>.at</code> 指向的是一个像素。</p>
+
+<p>对于三通道的图像处理：</p>
+
+<pre><code class="language-cpp">uchar* p;
+for (int i =0; i&lt; nRows; ++i){
+    p=I.ptr&lt;uchar&gt;(i);
+    for (int j=0;j&lt;nCols*3;++j){
+        p[j]=table[p[j]];
+    }
+}
+</code></pre>
+
+<p><span style="color:red;">对于这个三通道的例子，老师讲的么怎么听清楚，这个 <code>ptr&lt;uchar&gt;</code> 不能改成 <code>ptr&lt;Vec3b&gt;</code> 吗？为什么要用 <code>nCols*3</code>？改成 <code>ptr&lt;Vec3b&gt;</code> 是不是就不用乘以 3 了？感觉上应该是的，不过还是要确认下。</span></p>
+
+<p>后面的几种方法就比较麻烦了：</p>
+
+<h3 id="像素值的读写-4">像素值的读写 4</h3>
+
+<p>这种方式比较麻烦，但是也是很重要的：</p>
+
+<p>我们知道 mat 中有一个 *data 指针，指向的是数据在内存中的首地址，因此，我们可以通多这个地址和 mat 的结构来用指针访问每个位置。</p>
+
+<p>这个不常用，但是与其他程序的接口配合的时候可能会用到，比如机器学习的时候，可能是用其他的库得到的一个图像，他的矩阵不是 mat 类型，而是自己定义的一个类型，但是他的元素的存储方式都已经告诉你了。这个时候，你想把它转化成 mat 类型，然后用 opencv 进行处理，这个就需要使用这种方式了。</p>
+
+<p>可见，这种方法一般是不推荐使用的，毕竟用指针访问的时候不小心就会出错。</p>
+
+<p>因为比较麻烦，因此我们用两个例子来说明：</p>
+
+<p>例子 1：一个 dim=2 的图像</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/hjhK3L9C89.png?imageslim" alt="mark" /></p>
+
+<p>$$addr(M_{i_0,i<em>1,\cdots i</em>{m-1} }) = M.data + M.step[0] * i_0 + M.step[1] * i<em>1 + \cdots + M.step[m-1] * i</em>{m-1}$$</p>
+
+<p>其中 m 是 M 的维度 M.dims 。
+step[0] 表示的是第一维的长度。也就是行的长度。
+step[1] 表示的是每一个第一维度的第二维度的单位长度（在这里是每一行的列的大小，即一个元素的大小）</p>
+
+<p>假设我们的 channel 是3，那么 element 的 size 就等于 3，此时 <code>data+4*1+3*2</code> 就是这个地方的 $M_{1,2}的 B 的地址，然后 <code>data+4*1+3*2+1</code> 就是 G 的地址，然后 <code>data+4*1+3*2+1</code> 就是 R 的地址。</p>
+
+<p>例子 2：三维情况按面存储的时候</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/fA3I1g6Ekd.png?imageslim" alt="mark" /></p>
+
+<p><strong>首先，我们先注意下：在这种 dim &gt; 2 的情况下 ，row 和 col 都是 -1 ，因为这时候的 row 和 col 表达是有歧义的。</strong><span style="color:red;">是这样吗？确认下。</span></p>
+
+<p>这是一个 <code>3*4*6</code> 的矩阵，假如说我们的数据类型是 16SC4 。那么，我们可以得出：<span style="color:red;">忘记这个16 是什么含义了？</span></p>
+
+<ul>
+<li>由于是 short ，因此一个 element 的size 是 <code>2*4=8</code> 个 bit。</li>
+<li>这个时候的 <code>step[0]</code> 就是 <code>4*6*8</code> ，<code>step[1]</code> 就是 <code>6*8</code> ，<code>step[2]</code> 就是 <code>8</code> 。<span style="color:red;">说实话，看到这个图的时候，我对于 这个 <code>step[0]</code> 表示的是一个面的大小还是比较惊讶的。</span></li>
+</ul>
+
+<p>当然，实际使用的时候 mat 的 step 并不需要我们计算，只需要直接使用就行。<span style="color:red;">是不是？这句是我猜测的。要确定下。</span></p>
+
+<p>老师说，除了 step 数组还有一个 step1 数组，老师没有介绍。<span style="color:red;">还是要总结下的。之前好像看到过。</span></p>
+
+<p>代码例子 1：读取一个灰度图像</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/C6jKjAIJaJ.png?imageslim" alt="mark" /></p>
+
+<p>可见创建的是一个全黑的图像，他是先遍历的 col ，后遍历的 row。cout 的时候用了 int 来强制转换，因为，如果不转换，那么输出的是 char 类型的，也就是会打印出一个 ascii 码。因此强制转换了下。</p>
+
+<p>输出的是一个中间有白条的黑色图像。</p>
+
+<p>代码例子2：读取一个彩色图像</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/kfGKHD3KFK.png?imageslim" alt="mark" /></p>
+
+<p>可见，m.elemSize1 用起来还是很方便的。我们把指定部分的图像变成了全部蓝色的。cvWaitKey() 这里老师也提了下，在循环显示的时候，一般给一个 delay 的时长。</p>
+
+<p>再次说明，使用这种方法的时候一定要注意寻址不能够越界。</p>
+
+<p>OK，下面我们介绍另一种方式：</p>
+
+<h3 id="像素值的读写-5">像素值的读写 5</h3>
+
+<p>Mat_ 类</p>
+
+<p>我们先看一下这段代码：</p>
+
+<pre><code class="language-cpp">Mat M(600, 800, CV_8UC1);
+for( int i = 0; i &lt; M.rows; ++i)
+{
+    uchar * p = M.ptr&lt;uchar&gt;(i);
+    for( int j = 0; j &lt; M.cols; ++j )
+    {
+        double d1 = (double) ((i+j)%255);
+        M.at&lt;uchar&gt;(i,j) = d1;
+        double d2 = M.at&lt;double&gt;(i,j);
+    }
+}
+</code></pre>
+
+<p>这段代码有个问题，我把double 的 d1 放到了 uchar 里面，然后再读出来放到 double 的d2 里面，这时候有个问题，d1 和 d2 是不相等的。<span style="color:red;">说实话，这个代码还是比较好理解的，但是这个的应用场景是什么呢？为什么要把 double 存放到 uchar 里面然后再提取出来？</span></p>
+
+<p>OK，我们在看看使用 Mat_ 这个类：</p>
+
+<pre><code class="language-cpp">Mat_&lt;uchar&gt; M1 = (Mat_&lt;uchar&gt;&amp;)M;
+for( int i = 0; i &lt; M1.rows; ++i)
+{
+    uchar * p = M1.ptr(i);
+    for( int j = 0; j &lt; M1.cols; ++j )
+    {
+        double d1 = (double) ((i+j)%255);
+        M1(i,j) = d1;
+        double d2 = M1(i,j);
+    }
+}
+</code></pre>
+
+<p>使用这个 Mat_ 模板类的时候，我们在变量的声明的时候就指明了数据类型。然后，跟原来的M 共享了地址。上面的写法就没有问题了。可见，在指针的位置和读取元素的时候，都不需要指明是 uchar 类型还是 double 类型了。</p>
+
+<p>这是一个 opencv 的模板类。它在声明的时候指明了数据类型，后面就不需要指明了。</p>
+
+<p>说实话，这个double 的转换好像不是介绍的重点，重点是 Mat_ 的这种数据类型的声明方式吧？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180805/397EGd9CL5.png?imageslim" alt="mark" /></p>
+
+<h3 id="像素值的读写-6">像素值的读写 6</h3>
+
+<pre><code class="language-cpp">int divideWith=10;
+uchar table[256];
+for (int i = 0; i &lt; 256; ++i)
+    table[i] = divideWith* (i/divideWith);
+
+Mat lookUpTable(1, 256, CV_8U);
+uchar* p = lookUpTable.data;
+for( int i = 0; i &lt; 256; ++i)
+    p[i] = table[i];
+
+LUT(I, lookUpTable, Out);//LUT 是 opencv 自带的函数
+</code></pre>
+
+<p>说明一下：上面第一个函数，是把 255 个阶层将为了 <sup>255</sup>&frasl;<sub>10</sub> 个阶层。也就是 254、255 变成了 250、250</p>
+
+<p>再比如，我们把灰度图像转化成黑白图像，就可以创建一个 0~255 的 uchar 数组，然后，0~127 全部为0，,18~255 全部为 255。</p>
+
+<p>这时候，我们构建好这个查找表之后，想把一个灰度图像转化成黑白图像的时候，我们直接挨个像素把像素值拿出来到查找表中找到对应的。</p>
+
+<p>这样进行图像转换后，查找表的作用就体现出来了：降低灰度级，提升运算速度。</p>
+
+<p>上面这个 LUT 是 opencv 自带的一个函数，原图像和查找表输入，会输出一个图像。</p>
+
+<p>其实这种第六种方法是一个特例，只有在有映射关系的时候才会用到，正常读写像素的时候很难会用到。<span style="color:red;">还是要确认下这种降低灰度级的方法一般什么情况下会使用到？</span></p>
+
+<p>上面就是 6种读写像素的方式介绍。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/10-%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/02-%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E9%9A%8F%E6%9C%BA%E5%9C%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 马尔科夫随机场</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80/03-%E6%A6%82%E7%8E%87%E7%BB%9F%E8%AE%A1/03-%E5%A4%A7%E6%95%B0%E5%AE%9A%E5%BE%8B%E4%B8%8E%E4%B8%AD%E5%BF%83%E6%9E%81%E9%99%90%E5%AE%9A%E7%90%86/">
+            <span class="next-text nav-default">03 大数定律与中心极限定理</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 SIFT Features - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 基本没听懂，还是要先结合别的资料看下，然后再听，毕竟先知道大概是什么样的，再听的话会能理解些。 在第5节课的内容开始有17分钟这节课" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/03-sift-features/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 SIFT Features" />
+<meta property="og:description" content="需要补充的 基本没听懂，还是要先结合别的资料看下，然后再听，毕竟先知道大概是什么样的，再听的话会能理解些。 在第5节课的内容开始有17分钟这节课" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/03-sift-features/" /><meta property="article:published_time" content="2018-08-18T16:37:30&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-18T16:37:30&#43;00:00"/>
+<meta itemprop="name" content="03 SIFT Features">
+<meta itemprop="description" content="需要补充的 基本没听懂，还是要先结合别的资料看下，然后再听，毕竟先知道大概是什么样的，再听的话会能理解些。 在第5节课的内容开始有17分钟这节课">
+
+
+<meta itemprop="datePublished" content="2018-08-18T16:37:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-18T16:37:30&#43;00:00" />
+<meta itemprop="wordCount" content="2117">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 SIFT Features"/>
+<meta name="twitter:description" content="需要补充的 基本没听懂，还是要先结合别的资料看下，然后再听，毕竟先知道大概是什么样的，再听的话会能理解些。 在第5节课的内容开始有17分钟这节课"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 SIFT Features</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-18 </span>
+        
+        <span class="more-meta"> 2117 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>基本没听懂，还是要先结合别的资料看下，然后再听，毕竟先知道大概是什么样的，再听的话会能理解些。</li>
+<li>在第5节课的内容开始有17分钟这节课的内容回归，主要是针对没有听懂的说明，也是需要看下的。</li>
+</ul>
+
+<p>我们前面讲的都是单一图像中的寻找简要的信息。</p>
+
+<p>但是我们很多的任务是在多帧图像中找到对应的元素，比如说 match point ，这个就涉及到 图像匹配。</p>
+
+<p>在图像匹配中 最常用的就是 SIFT</p>
+
+<p>下面再提到角点、兴趣点、特征点 都表示的同一个意思，不进行区分了。</p>
+
+<p>比如说我找到了一个图像上的特征点：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/HdIC6e84ik.png?imageslim" alt="mark" /></p>
+
+<p>可是在真实的情况下，我们可能想找到不同尺度下的对应</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/3e1FmabHFc.png?imageslim" alt="mark" /></p>
+
+<p>所以我们想定义一个函数，这个函数可以在同样一个区域在不同尺度下的响应应该是一致的。</p>
+
+<p>我们为了实现这种多尺度下的图像匹配，我们使用了高斯滤波：</p>
+
+<p>高斯卷积核是进行多尺度变换的唯一的线性核。
+Gaussian Blur：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/ijj0B1EiBf.png?imageslim" alt="mark" /></p>
+
+<p>上面这个 G 就是尺度高斯函数，xy 是空间坐标， $\sigma$ 越大，说明模糊的程度越高，尺度越大，$\sigma$ 越小，模糊的程度越低，表示尺度越小，所以尺度是由我们的 $\sigma$ 决定的。</p>
+
+<p>利用不同大小的高斯核来得到不同的尺度，换句话说就是模拟人眼来看物体</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/4ELgia0Ffc.png?imageslim" alt="mark" /></p>
+
+<p>在 SIFT 里面，他用到了 Difference of Gaussians 这个函数来检测某一尺度上对 DOG 的响应值。</p>
+
+<p>正常使用 LOG，</p>
+
+<p>我们看这个图像，为什么说是 Block detection ，因为我们用 LOG 或DOG 与图像做卷积实际就是一种相关运算，什么情况下响应最剧烈？两个区域相似的时候。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/J6L0hHa7gB.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/Lk0jklB8h9.png?imageslim" alt="mark" /></p>
+
+<p>DOG 是 LOG 的近似，画成 2D 的图像：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/h5CC9Dchm8.png?imageslim" alt="mark" /></p>
+
+<p>在 DOG 里面，我们构造这样一个尺度空间，在三维空间上寻找极值，Detect maxima and minima of difference-of-Gaussian in scale space</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/LBk5ecIiBj.png?imageslim" alt="mark" /></p>
+
+<p>我们看一下 SIFT 是怎么实现的：</p>
+
+<p>对原图像进行高斯模糊：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/3lAdkE3I4B.png?imageslim" alt="mark" /></p>
+
+<p>然后 SIFT 里面构建了高斯金字塔，用不同的 $k\sigma$ 来模糊，模糊后做二倍的降采样，在模糊，在模糊，每一组叫做一个 octave。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180809/aKIcDf1508.png?imageslim" alt="mark" /></p>
+
+<p>我们不做下采样，只做高斯模糊就叫做 DOG 算子进行特征点检测。而 SIFT应用了 DOG，然后进行了下采样。</p>
+
+<p>后面会有同学看到有的人没有构建金字塔，直接对原图像进行高斯滤波，得到一组图像之后就进行特征点检测了。</p>
+
+<p>下面我们看一下尺度空间的构建：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180810/mK64Kd1gmF.png?imageslim" alt="mark" /></p>
+
+<p>Computation in Gaussian scale pyramid</p>
+
+<p>我们直接切入正题，以 SIFT 中的多尺度表达来讲一下</p>
+
+<p>首先，金字塔的组数，就是有多少个 octave 。我们先不看一个octave 里面有多少个图片，我们先看戏下 有多少个 octave，这个是由图像大小决定的，在opencv 里面，比如说，我们用的是 512*512 的图像，那么个数就是 $\frac{log(512)}{log(2)}-2$ 的，为什么要限制层数然后还要 减2 ？如果不退两层，最后就是 1*1 的，这个1*1 的做高斯模糊就没有意义，通常退到第六层 8*8 的，这个组数就是这么算出来的，</p>
+
+<p>在 SIFT 里面默认的是 4个 octave ，每个 octave里面是5组图像，在检测极值点对原始图像进行高斯平滑，有可能会导致图像信息丢失</p>
+
+<p>所以，SIFT 是 lowe，把原图像先扩展，比如原来是 216*216 的先扩展成 512 的，这样增多了特征点的个数，这个增大的这层定义成 -1 层，然后就是 0层等等。看到的时候不要觉得奇怪。</p>
+
+<p>然后看金字塔：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180810/GLK46KI2aB.png?imageslim" alt="mark" /></p>
+
+<p>第一层 octave 在程序里面定义了一个变量，intvl $\frac{intvl+3}{3}$ 金字塔里面最基本的有 三个图像，然后额外生成三个图像，后面我们会说为什么额外要生成三个图像。</p>
+
+<p><span style="color:red;">这个地方真的没看懂</span></p>
+
+<p>在每个 octave 内部，$\sigma$ 都是相同的，$\sigma$ 会每次都在 octave 中计算。</p>
+
+<p>比如说第0 层的第一个图像就是原始的 input ，然后第0层第2个图像就是 innput 做高斯卷积，卷积的参数就是 $\sigma_1$，然后第三个图像是用的第2个图像做得高斯卷积，每一个图都是使用的前一个图，而不是第一个图，</p>
+
+<p>我们看到的 octave2 的第一个图像是 octave1 的倒数第三个图像进行下采样得到的，这就是我们这个地方为什么定义一个 3，我们是把第三个图像下采样得到的。<span style="color:red;">没明白？</span></p>
+
+<p>这样构建出了整个高斯金字塔。为什么每一层内还要有很多图像？而且不同层还要进行下采样？主要是为了保证尺度的连续性。</p>
+
+<p>比如说，DOG空间是5个尺度，所以我在octave 里需要有 6个 高斯图像，因为第一幅最后一幅需要做差，所以 6-1=5 。</p>
+
+<p>为什么是尺度连续的呢？假设 s=3,$k=2^{<sup>1</sup>&frasl;<sub>3</sub>}$ 然后在 DOG 的空间里面，第一个分别是 $\sigma$ $k\sigma$ 第二个octave 两项分别是 $2\sigma$ 和 $2k\sigma$ 由于这样没办法比较极值，所以我们需要在中间添加一些高斯像，比如 $\sigma$ $k\sigma$ $k^2\sigma$ 所以终极爱你想是 k k^2 k^3 这样左右才都有极值，我们可以在第一个 octave 的中间三个里面选极值，尺度是怎么算的呢？是由于它的下采样得到的。比如说 $\sigma$ 的下采样是 $2k\sigma$ $2k^2\sigma$ $2k^3\sigma$ 首先，$2k\sigma$ 就等于 $2^{<sup>4</sup>&frasl;<sub>3</sub>}$ 刚好与 $k^3\sigma=2^{<sup>3</sup>&frasl;<sub>3</sub>}$ 是连续的，所以这样尺度就是连续的了。</p>
+
+<p>所以每次要在高斯的空间添三项，构建他每组塔有 3+3 的图像，对应的 DOG 空间有 3+2 的图像，这样我们的 DOG 空间才是连续的。</p>
+
+<p><span style="color:red;">基本没懂</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180810/93jClCdKEi.png?imageslim" alt="mark" /></p>
+
+<p>得到这样的图像，这样的图像在啊立体的空间中取极值，取到了这个极值他是离散的，在 SIFT 里面还要进行差值运算，这里面就不说了，用到的是一个 hession矩阵。</p>
+
+<p>把边界点去掉，我们会得到这样的一些图像上的特征点：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180810/I9dK21c9gd.png?imageslim" alt="mark" /></p>
+
+<p>他包括了 x y $sigma$</p>
+
+<p>这个时候，我们拿到了特征点，是具有尺度不变性的。</p>
+
+<p>接下来，我们看一下旋转不变性：</p>
+
+<ul>
+<li>How do we represent the patches around the interest points?</li>
+<li>How do we make sure that representation is invariant?</li>
+</ul>
+
+<p>我们只是找到了角点，我们不但要找到方向，还要找到周围像素对它的贡献。</p>
+
+<ul>
+<li>Compute orientation histogram</li>
+<li>Select dominant orientation</li>
+</ul>
+
+<p>Keypoint orientations</p>
+
+<ul>
+<li>Compute orientation histogram</li>
+<li>Select dominant orientation</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180810/4l75ak2f9h.png?imageslim" alt="mark" /></p>
+
+<p>采样是圆形的，说明一下，直方图是10度，总共 36个直方图，代表像素的梯度方向，柱子的长短代表梯度的幅值。</p>
+
+<p>基本听不懂了，从上面就听不懂了，从一开始的SIFT 就没明白。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/05-%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2%E4%B8%8E%E8%A7%86%E8%A7%89%E6%B5%8B%E9%87%8F/01-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/04-%E5%9B%BE%E5%83%8F%E5%B1%80%E9%83%A8%E7%89%B9%E5%BE%81/02-%E8%A7%92%E7%82%B9%E6%A3%80%E6%B5%8B/">
+            <span class="next-text nav-default">02 角点检测</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

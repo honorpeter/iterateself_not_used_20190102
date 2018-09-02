@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 CBIR 系统 案例 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个 VisualSearchServer、DeepVideoAnalytics 一定要看下。 CBIR 系统 刚才我们说了 CBIR 这个系统用 ANN 怎么去做" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/07-%E5%9B%BE%E5%83%8F%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/03-cbir-%E7%B3%BB%E7%BB%9F-%E6%A1%88%E4%BE%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 CBIR 系统 案例" />
+<meta property="og:description" content="需要补充的 这个 VisualSearchServer、DeepVideoAnalytics 一定要看下。 CBIR 系统 刚才我们说了 CBIR 这个系统用 ANN 怎么去做" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/07-%E5%9B%BE%E5%83%8F%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/03-cbir-%E7%B3%BB%E7%BB%9F-%E6%A1%88%E4%BE%8B/" /><meta property="article:published_time" content="2018-08-18T16:38:43&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-18T16:38:43&#43;00:00"/>
+<meta itemprop="name" content="03 CBIR 系统 案例">
+<meta itemprop="description" content="需要补充的 这个 VisualSearchServer、DeepVideoAnalytics 一定要看下。 CBIR 系统 刚才我们说了 CBIR 这个系统用 ANN 怎么去做">
+
+
+<meta itemprop="datePublished" content="2018-08-18T16:38:43&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-18T16:38:43&#43;00:00" />
+<meta itemprop="wordCount" content="1755">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 CBIR 系统 案例"/>
+<meta name="twitter:description" content="需要补充的 这个 VisualSearchServer、DeepVideoAnalytics 一定要看下。 CBIR 系统 刚才我们说了 CBIR 这个系统用 ANN 怎么去做"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 CBIR 系统 案例</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-18 </span>
+        
+        <span class="more-meta"> 1755 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#cbir-系统">CBIR 系统</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>这个 VisualSearchServer、DeepVideoAnalytics 一定要看下。</li>
+</ul>
+
+<h1 id="cbir-系统">CBIR 系统</h1>
+
+<p>刚才我们说了 CBIR 这个系统用 ANN 怎么去做一个快速的检索。</p>
+
+<p>现在我们看一下，能不能搭出来一个简易的 CBIR 系统。</p>
+
+<p>大概的效果是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/JchK60CgJE.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/eb60j3m1A8.png?imageslim" alt="mark" /></p>
+
+<p>要求给定一张图片，我们能得到这样的几张图片。</p>
+
+<p>康奈尔有一个开源的 CBIR 系统</p>
+
+<p><a href="https://github.com/AKSHAYUBHAT/VisualSearchServer">https://github.com/AKSHAYUBHAT/VisualSearchServer</a>
+上面这个不维护了，最新的是下面这个：
+<a href="https://github.com/akshayubhat/DeepVideoAnalytics">https://github.com/akshayubhat/DeepVideoAnalytics</a></p>
+
+<p>这个 VisualSearchServer 是一个图像检索的 server ，他把一整套的 server 代码都写好了，包括后台的特征的抽取，前台的直接的先计算特征然后匹配的过程。以及前台的界面 html 也写好了。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/BcKIFBLdFA.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/3h0LEc5dg1.png?imageslim" alt="mark" /></p>
+
+<p>可以看到对于每张图片，他会检索回来 12 张最接近的图片，可能因为他图片的数据集没有那么类似的，所以找回来这么一些。</p>
+
+<p>最核心的代码走在 inception.py 里面：</p>
+
+<pre><code class="language-python">
+import time,glob,re,sys,logging,os,tempfile
+import numpy as np
+import tensorflow as tf   # 用了 tensorflow
+from scipy import spatial #
+from settings import AWS,INDEX_PATH,CONFIG_PATH,DATA_PATH
+try:
+    from settings import DEMO
+except ImportError:
+    DEMO = None
+    pass
+from tensorflow.python.platform import gfile
+from nearpy import Engine  # 这个nearpy 就是我们之前讲的近似最近邻的一个库 老师认为 FLANN 会更好用一些。
+from nearpy.hashes import RandomBinaryProjections   #同样是把 vector 映射成一个 01 串。
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+                    datefmt='%m-%d %H:%M',
+                    filename='logs/worker.log',
+                    filemode='a')
+
+DIMENSIONS = 2048
+PROJECTIONBITS = 16
+# 启动了这么一个 引擎，这个引擎是用来做近似最近邻检索的。你会发现他有 26 bit 的串，也有 2611 bit 的串，也有 261 bit的串。这个取决于你的样本量，如果你的样本量大，你可以多切几刀。
+ENGINE = Engine(DIMENSIONS, lshashes=[RandomBinaryProjections('rbp', PROJECTIONBITS,rand_seed=2611),
+                                      RandomBinaryProjections('rbp', PROJECTIONBITS,rand_seed=261),
+                                      RandomBinaryProjections('rbp', PROJECTIONBITS,rand_seed=26)])
+
+
+
+
+class NodeLookup(object):
+    def __init__(self):
+        label_lookup_path = CONFIG_PATH+'/data/imagenet_2012_challenge_label_map_proto.pbtxt'
+        uid_lookup_path = CONFIG_PATH+'/data/imagenet_synset_to_human_label_map.txt'
+        self.node_lookup = self.load(label_lookup_path, uid_lookup_path)
+
+    # 这个 load 把该准备的准备好。
+    def load(self, label_lookup_path, uid_lookup_path):
+        proto_as_ascii_lines = gfile.GFile(uid_lookup_path).readlines()
+        uid_to_human = {}
+        p = re.compile(r'[n\d]*[ \S,]*')
+        for line in proto_as_ascii_lines:
+            parsed_items = p.findall(line)
+            uid = parsed_items[0]
+            human_string = parsed_items[2]
+            uid_to_human[uid] = human_string
+        node_id_to_uid = {}
+        proto_as_ascii = gfile.GFile(label_lookup_path).readlines()
+        for line in proto_as_ascii:
+            if line.startswith('  target_class:'):
+                target_class = int(line.split(': ')[1])
+            if line.startswith('  target_class_string:'):
+                target_class_string = line.split(': ')[1]
+                node_id_to_uid[target_class] = target_class_string[1:-2]
+        node_id_to_name = {}
+        for key, val in node_id_to_uid.items():
+            if val not in uid_to_human:
+                tf.logging.fatal('Failed to locate: %s', val)
+            name = uid_to_human[val]
+            node_id_to_name[key] = name
+        return node_id_to_name
+
+    def id_to_string(self, node_id):
+        if node_id not in self.node_lookup:
+            return ''
+        return self.node_lookup[node_id]
+
+
+# 神经网络是要先搭建起来的，所以这个就是把一个 tf 的神经网络搭起来，一会有用户请求过来的时候我用这个神经网络去抽取特征。这个地方是把 pb 文件直接 load 进来。
+def load_network(png=False):
+    with gfile.FastGFile(CONFIG_PATH+'/data/network.pb', 'rb') as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read())
+        if png:
+            png_data = tf.placeholder(tf.string, shape=[])
+            decoded_png = tf.image.decode_png(png_data, channels=3)
+            _ = tf.import_graph_def(graph_def, name='incept',input_map={'DecodeJpeg': decoded_png})
+            return png_data
+        else:
+            _ = tf.import_graph_def(graph_def, name='incept')
+
+
+# 他这里用的是第 3 个池化层的输出作为特征，即 feats_pool3 ，你可以选择其他的层作为特征，因为它这里面用的网络不是特别大。
+# 这个 load_index 就是把这 100 万张图片都过一下这个神经网络，注意，这个神经网络是一个针对你当前的这些图像样本去做图像识别训练好的这么一个神经网络。
+# 然后我用这么一个神经网络对图片抽取特征，抽取特征的过程就是做一遍 前向运算，所以这里面把做完前向运算的第三个池化层的输出拿出来作为 feature 存下来。数据量很大的话，我就一边读取，一边把数据加到刚才的近似最近邻的 engine 里面
+def load_index():
+    index,files,findex = [],{},0
+    print &quot;Using index path : {}&quot;.format(INDEX_PATH+&quot;*.npy&quot;)
+    for fname in glob.glob(INDEX_PATH+&quot;*.npy&quot;):
+        logging.info(&quot;Starting {}&quot;.format(fname))
+        try:
+            t = np.load(fname)
+            if max(t.shape) &gt; 0:
+                index.append(t)
+            else:
+                raise ValueError
+        except:
+            logging.error(&quot;Could not load {}&quot;.format(fname))
+            pass
+        else:
+            for i,f in enumerate(file(fname.replace(&quot;.feats_pool3.npy&quot;,&quot;.files&quot;)).readlines()):
+                files[findex] = f.strip()
+                ENGINE.store_vector(index[-1][i,:],&quot;{}&quot;.format(findex))
+                findex += 1
+            logging.info(&quot;Loaded {}&quot;.format(fname))
+    index = np.concatenate(index)
+    return index,files
+
+
+# 这个函数做得事情很粗暴，我们知道他的demo 是根据一张图片返回12张图片，所以 nearest 这个函数做得就是对5w张图片直接调用  spatial 计算 cos 距离，然后把距离直接 append 到 dist 里面。然后根据这个距离调用了 argsort 获得排序。
+def nearest(query_vector,index,files,n=12):
+    query_vector= query_vector[np.newaxis,:]
+    temp = []
+    dist = []
+    logging.info(&quot;started query&quot;)
+    for k in xrange(index.shape[0]):
+        temp.append(index[k])
+        if (k+1) % 50000 == 0:
+            temp = np.transpose(np.dstack(temp)[0])
+            dist.append(spatial.distance.cdist(query_vector,temp))
+            temp = []
+    if temp:
+        temp = np.transpose(np.dstack(temp)[0])
+        dist.append(spatial.distance.cdist(query_vector,temp))
+    dist = np.hstack(dist)
+    ranked = np.squeeze(dist.argsort())
+    logging.info(&quot;query finished&quot;)
+    return [files[k] for i,k in enumerate(ranked[:n])]
+
+# 这个就是 ANN 的方法，用的就是 nearpy 来找到这个 query_vector 的邻居。
+def nearest_fast(query_vector,index,files,n=12):
+    return [files[int(k)] for v,k,d in ENGINE.neighbours(query_vector)[:n]]
+
+
+# 就是训练的图片可以一批一批的训练。
+def get_batch(path,batch_size = 1000):
+    &quot;&quot;&quot;
+    Args:
+        path: directory containing images
+    Returns: Generator with dictionary  containing image_file_nameh : image_data, each with size =  BUCKET_SIZE
+    &quot;&quot;&quot;
+    path += &quot;/*&quot;
+    image_data = {}
+    logging.info(&quot;starting with path {}&quot;.format(path))
+    for i,fname in enumerate(glob.glob(path)):
+        try:
+            image_data[fname] = gfile.FastGFile(fname, 'rb').read()
+        except:
+            logging.info(&quot;failed to load {}&quot;.format(fname))
+            pass
+        if (i+1) % batch_size == 0:
+            logging.info(&quot;Loaded {}, with {} images&quot;.format(i,len(image_data)))
+            yield image_data
+            image_data = {}
+    yield image_data
+
+
+# 就是把图像的特征存下来。
+# 这个地方看老师的 90 个 commit 的程序，这个函数还洗了 if AWS 的时候，把数据丢到 aws 的 s3 上面。
+def store_index(features,files,count,index_dir):
+    feat_fname = &quot;{}/{}.feats_pool3.npy&quot;.format(index_dir,count)
+    files_fname = &quot;{}/{}.files&quot;.format(index_dir,count)
+    logging.info(&quot;storing in {}&quot;.format(index_dir))
+    with open(feat_fname,'w') as feats:
+        np.save(feats,np.array(features))
+    with open(files_fname,'w') as filelist:
+        filelist.write(&quot;\n&quot;.join(files))
+
+# 这个是图像的特征抽取，
+def extract_features(image_data,sess):
+    # 我们先得到  pool3
+    pool3 = sess.graph.get_tensor_by_name('incept/pool_3:0')
+    features = []
+    files = []
+    for fname,data in image_data.iteritems():
+        try:
+            # 我们对这幅图像做一个前项运算，就拿到了第三个池化层的 feature 然后，把这个向量存下啦。
+            pool3_features = sess.run(pool3,{'incept/DecodeJpeg/contents:0': data})
+            features.append(np.squeeze(pool3_features))
+            files.append(fname)
+        except:
+            logging.error(&quot;error while processing fname {}&quot;.format(fname))
+    return features,files
+
+# 他提供了计算好的数据给大家，可以从服务器上拉下来。
+def download(filename):
+    if DEMO:
+        command = 'aws s3api get-object --bucket aub3visualsearch --key &quot;{}/{}&quot; --request-payer requester appcode/static/examples/{}'.format(DEMO,filename,filename)
+        logging.info(command)
+        os.system(command)
+    else:
+        os.system(&quot;cp {}/{} appcode/static/examples/{}&quot;.format(DATA_PATH,filename.split(&quot;/&quot;)[-1],filename.split(&quot;/&quot;)[-1])) # this needlessly slows down the code, handle it elegantly by using the same directory as static dir in flask.
+
+
+</code></pre>
+
+<p>有的同学说，他也是直接抽取的 pooling 的输出作为特征，但是效果不是很好，这个老师说：这个网络是不是针对自己的场景训练的网络还是说直接 down 了一个 VGG 就直接用来抽特征。</p>
+
+<p>老师说：他只能告诉你，这套东西，电商在用。电商体系的一部分，这个效果还是可以的。</p>
+
+<p><span style="color:red;">感觉这个项目还是很有必要自己搭建一下的，最好是使用的新的 DeepVideoAnalytics，最起码要fork 下来自己注释分析一遍，看看他的整个架构是怎么样的。因为我以后像这样的项目一定要部署到我自己的server 上的。</span></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 opencv计算机视觉</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/07-%E5%9B%BE%E5%83%8F%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/04-%E4%BD%BF-cbir-%E6%9B%B4%E5%BF%AB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 使 CBIR 更快</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E4%BB%8Ecv%E5%9F%BA%E7%A1%80%E5%88%B0%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%AE%9E%E6%88%98/07-%E5%9B%BE%E5%83%8F%E6%A3%80%E7%B4%A2%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%BA%94%E7%94%A8/02-%E8%BF%91%E4%BC%BC%E6%9C%80%E8%BF%91%E9%82%BB-ann/">
+            <span class="next-text nav-default">02 近似最近邻 ANN</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

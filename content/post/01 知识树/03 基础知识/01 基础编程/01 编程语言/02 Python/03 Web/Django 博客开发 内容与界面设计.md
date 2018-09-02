@@ -1,5 +1,5 @@
 ---
-title: Django 博客开发：内容与界面设计
+title: Django 博客开发 内容与界面设计
 toc: true
 date: 2018-06-20 19:55:22
 ---
@@ -49,3 +49,4 @@ date: 2018-06-20 19:55:22
 
 
 # COMMENT
+

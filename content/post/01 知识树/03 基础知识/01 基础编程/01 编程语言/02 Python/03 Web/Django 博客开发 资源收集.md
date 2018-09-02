@@ -1,5 +1,5 @@
 ---
-title: Django 博客开发：资源收集
+title: Django 博客开发 资源收集
 toc: true
 date: 2018-06-11 08:15:04
 ---
@@ -149,3 +149,4 @@ date: 2018-06-11 08:15:04
 
 
 # COMMENT
+

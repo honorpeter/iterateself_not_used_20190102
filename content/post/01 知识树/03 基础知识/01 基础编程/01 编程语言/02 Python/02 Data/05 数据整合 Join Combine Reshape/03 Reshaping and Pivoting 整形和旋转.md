@@ -1,5 +1,5 @@
 ---
-title: 8.3 Reshaping and Pivoting（整形和旋转）
+title: 03 Reshaping and Pivoting 整形和旋转
 toc: true
 date: 2018-07-08 13:32:45
 ---
@@ -2037,5 +2037,8 @@ pd.melt(df, value_vars=['key','A', 'B'])
   </tbody>
 </table>
 </div>
+
+
+
 
 

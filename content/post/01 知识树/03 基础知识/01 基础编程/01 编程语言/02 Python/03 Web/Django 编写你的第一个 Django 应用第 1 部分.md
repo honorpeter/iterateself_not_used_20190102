@@ -1,5 +1,5 @@
 ---
-title: Django 编写你的第一个 Django 应用，第 1 部分
+title: Django 编写你的第一个 Django 应用第 1 部分
 toc: true
 date: 2018-06-22 22:00:01
 ---
@@ -280,3 +280,4 @@ path() 参数： name
 
 
 # COMMENT
+T

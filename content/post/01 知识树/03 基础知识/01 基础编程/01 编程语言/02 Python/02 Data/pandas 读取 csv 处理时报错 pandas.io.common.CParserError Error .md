@@ -1,5 +1,5 @@
 ---
-title: pandas读取csv处理时报错：pandas.io.common.CParserError Error 
+title: pandas 读取 csv 处理时报错 pandas.io.common.CParserError Error 
 toc: true
 date: 2018-06-12 13:08:12
 ---

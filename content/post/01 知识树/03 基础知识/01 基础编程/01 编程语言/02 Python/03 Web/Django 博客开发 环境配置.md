@@ -1,5 +1,5 @@
 ---
-title: Django 博客开发：环境配置
+title: Django 博客开发 环境配置
 toc: true
 date: 2018-06-11 08:15:04
 ---
@@ -160,3 +160,4 @@ date: 2018-06-11 08:15:04
 
 
 # COMMENT
+

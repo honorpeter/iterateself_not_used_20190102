@@ -1,5 +1,5 @@
 ---
-title: 8.1 Hierarchical Indexing（分层索引）
+title: 01 Hierarchical Indexing 分层索引
 toc: true
 date: 2018-07-08 13:32:45
 ---
@@ -1205,5 +1205,8 @@ frame2.reset_index()
   </tbody>
 </table>
 </div>
+
+
+
 
 

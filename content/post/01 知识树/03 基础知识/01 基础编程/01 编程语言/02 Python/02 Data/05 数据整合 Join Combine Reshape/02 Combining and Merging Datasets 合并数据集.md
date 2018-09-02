@@ -1,5 +1,5 @@
 ---
-title: 8.2 Combining and Merging Datasets（合并数据集）
+title: 02 Combining and Merging Datasets 合并数据集
 toc: true
 date: 2018-08-03 11:27:40
 ---
@@ -2980,3 +2980,4 @@ df1.combine_first(df2)
   </tbody>
 </table>
 </div>
+div>

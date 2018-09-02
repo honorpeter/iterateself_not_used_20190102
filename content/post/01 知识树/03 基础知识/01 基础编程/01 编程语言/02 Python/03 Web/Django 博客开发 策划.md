@@ -1,5 +1,5 @@
 ---
-title: Django 博客开发：策划
+title: Django 博客开发 策划
 toc: true
 date: 2018-06-11 08:15:04
 ---
@@ -86,3 +86,4 @@ date: 2018-06-11 08:15:04
 
 
 # COMMENT
+

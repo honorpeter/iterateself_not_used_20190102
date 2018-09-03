@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 案例1： - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="使用Logistic Regression做CTR预估 在这里，我们将要走一遍这整个过程，讨论为什么 LR 对于 CTR 这种任务来说是一个号的选择。 使用的数" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/04-%E6%A1%88%E4%BE%8B1/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 案例1：" />
+<meta property="og:description" content="使用Logistic Regression做CTR预估 在这里，我们将要走一遍这整个过程，讨论为什么 LR 对于 CTR 这种任务来说是一个号的选择。 使用的数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/04-%E6%A1%88%E4%BE%8B1/" /><meta property="article:published_time" content="2018-07-22T11:52:44&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-22T11:52:44&#43;00:00"/>
+<meta itemprop="name" content="04 案例1：">
+<meta itemprop="description" content="使用Logistic Regression做CTR预估 在这里，我们将要走一遍这整个过程，讨论为什么 LR 对于 CTR 这种任务来说是一个号的选择。 使用的数">
+
+
+<meta itemprop="datePublished" content="2018-07-22T11:52:44&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-22T11:52:44&#43;00:00" />
+<meta itemprop="wordCount" content="2666">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 案例1："/>
+<meta name="twitter:description" content="使用Logistic Regression做CTR预估 在这里，我们将要走一遍这整个过程，讨论为什么 LR 对于 CTR 这种任务来说是一个号的选择。 使用的数"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 案例1：</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-22 </span>
+        
+        <span class="more-meta"> 2666 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#使用logistic-regression做ctr预估">使用Logistic Regression做CTR预估</a>
+<ul>
+<li><a href="#step-1-读取和探索数据-这个是必须的">Step 1: 读取和探索数据 这个是必须的</a></li>
+<li><a href="#step-2-splitting-the-data">Step 2: Splitting the Data</a></li>
+<li><a href="#step-3-selecting-a-machine-learning-model">Step 3: Selecting a Machine Learning Model</a></li>
+<li><a href="#step-4-training-a-machine-learning-model">Step 4: Training a Machine Learning Model</a></li>
+<li><a href="#step-5-making-predictions">Step 5: Making Predictions</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="使用logistic-regression做ctr预估">使用Logistic Regression做CTR预估</h1>
+
+<p>在这里，我们将要走一遍这整个过程，讨论为什么 LR 对于 CTR 这种任务来说是一个号的选择。</p>
+
+<p>使用的数据：<a href="https://www.kaggle.com/c/avazu-ctr-prediction">https://www.kaggle.com/c/avazu-ctr-prediction</a>  click-through rate prediction sponsored by Avazu</p>
+
+<p>这个比赛的目标就是预测广告被点击的概率。</p>
+
+<h2 id="step-1-读取和探索数据-这个是必须的">Step 1: 读取和探索数据 这个是必须的</h2>
+
+<p>我们从下载的数据集里面抽取了一部分来演示。</p>
+
+<p>从 <a href="https://www.kaggle.com/c/avazu-ctr-prediction/data">https://www.kaggle.com/c/avazu-ctr-prediction/data</a> 下载之后，把 <code>train.gz</code> 解压出来，使用这句指令 <code>head -n100000 train.csv &gt; train_subset.csv</code> 来提取前 100,000 行。<span style="color:red;">这句指令是什么意思？在linux 上使用的吗？</span></p>
+
+<p>Our first step is to read the data into an SFrame, which is GraphLab&rsquo;s tabular data structure that is similar to a data frame in R or a pandas DataFrame in Python.</p>
+
+<p>This data happens to be stored in the popular CSV (comma separated value) format, but SFrames can be constructed from a variety of <a href="https://turi.com/products/create/docs/graphlab.data_structures.html#connectors">sources</a>. We&rsquo;ll use the <a href="https://turi.com/products/create/docs/generated/graphlab.SFrame.read_csv.html">read_csv</a> method to read in the data:</p>
+
+<pre><code class="language-python">#import pandas as pd
+#data = pandas.read_csv('train_subset.csv', verbose=False)
+import graphlab as gl
+data = gl.SFrame.read_csv('train_subset.csv', verbose=False)
+</code></pre>
+
+<p>Let&rsquo;s take a quick look at the first row of data, to see what we&rsquo;re working with:</p>
+
+<pre><code class="language-python">data.head(1)
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>click</th>
+<th>hour</th>
+<th>C1</th>
+<th>banner_pos</th>
+<th>site_id</th>
+<th>site_domain</th>
+<th>site_category</th>
+<th>app_id</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1000009418151094273</td>
+<td>0</td>
+<td>14102100</td>
+<td>1005</td>
+<td>0</td>
+<td>1fbe01fe</td>
+<td>f3845767</td>
+<td>28905ebd</td>
+<td>ecad2386</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>app_domain</th>
+<th>app_category</th>
+<th>device_id</th>
+<th>device_ip</th>
+<th>device_model</th>
+<th>device_type</th>
+<th>device_conn_type</th>
+<th>C14</th>
+<th>C15</th>
+<th>C16</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>7801e8d9</td>
+<td>07d7df22</td>
+<td>a99f214a</td>
+<td>ddd2926e</td>
+<td>44956a24</td>
+<td>1</td>
+<td>2</td>
+<td>15706</td>
+<td>320</td>
+<td>50</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>C17</th>
+<th>C18</th>
+<th>C19</th>
+<th>C20</th>
+<th>C21</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1722</td>
+<td>0</td>
+<td>35</td>
+<td>-1</td>
+<td>79</td>
+</tr>
+</tbody>
+</table>
+
+<p>[1 rows x 24 columns]</p>
+
+<p>From Kaggle&rsquo;s <a href="https://www.kaggle.com/c/avazu-ctr-prediction/data">data dictionary</a>, I know that click=0 means the ad was not clicked, and click=1 means the ad was clicked. The &ldquo;click&rdquo; column is therefore our target variable, and the other columns are our potential features!</p>
+
+<p>The first thing we want to know is what percentage of ads in the dataset were actually clicked. In this case, we can simply take the mean of the &ldquo;click&rdquo; column, since that is equivalent to adding up all of the ones (which is the number of clicks) and dividing by the total number of ads:</p>
+
+<pre><code class="language-python">data['click'].mean()
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>0.1749017490174896
+</code></pre>
+
+<p>We see that 17.5% of the ads were clicked, meaning the overall click-through rate is 17.5%. This is useful to keep in mind as a &ldquo;baseline&rdquo;, as we&rsquo;ll see later on.</p>
+
+<p>Before we start building a machine learning model, it&rsquo;s always useful to explore the dataset. One way to get started is by using the GraphLab Canvas, a browser-based visualization platform:</p>
+
+<pre><code class="language-python">gl.canvas.set_target('ipynb')
+data.show()
+</code></pre>
+
+<p>I noticed that &ldquo;device_type&rdquo; only has 4 unique values, and it makes intuitive sense that the type of device you&rsquo;re using when viewing an ad might affect your likelihood of clicking the ad, so let&rsquo;s explore it further.</p>
+
+<p>To understand the relationship between this feature and the target variable, we want to calculate the click-through rate for each value of device_type. We can accomplish this by &ldquo;grouping the data&rdquo; by device_type, and then calculating the mean of the click column for each group:</p>
+
+<pre><code class="language-python">data.groupby('device_type', {'CTR':gl.aggregate.MEAN('click')})
+</code></pre>
+
+<p>我们用 LR 这样的模型，线性模型，哪些特征比较重要，我们想看一下哪些特征比较重要，那么我们可以怎么做呢？其实我们可以看一下每个手机类型下面它的点击率的高低。 比如使用iphone 的人可能不会去点击比较便宜的车的广告。</p>
+
+<p>这里他们使用的是 groupmap ，实际上是可以使用 pandas 来完成的。</p>
+
+<p>上面这句就是先按照 <code>device_type</code> 来分组，然后统计不同的组里面的点击率。</p>
+
+<table>
+<thead>
+<tr>
+<th>device_type</th>
+<th>CTR</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>0.227499406317</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>0.0990566037736</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>0.0725075528701</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>0.175977623465</td>
+</tr>
+</tbody>
+</table>
+
+<p>[4 rows x 2 columns]</p>
+
+<p>看一下这个数据，我们可以看到不同的手机类型对于这个 CTR 的影响还是很大的，那说明手机型号这个特征是一个比较好的特征。</p>
+
+<p>We saw earlier that the baseline click-through rate is 17.5%, and it appears that there is a big difference in average click-through rate depending on device_type. This looks like a good feature!</p>
+
+<p>同样：我们可以看一下 C1 是不是一个好的特征：</p>
+
+<pre><code class="language-python">data.groupby('C1', {'CTR':gl.aggregate.MEAN('click')})
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>C1</th>
+<th>CTR</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1008</td>
+<td>0.4</td>
+</tr>
+
+<tr>
+<td>1005</td>
+<td>0.176174097389</td>
+</tr>
+
+<tr>
+<td>1001</td>
+<td>0.103448275862</td>
+</tr>
+
+<tr>
+<td>1010</td>
+<td>0.0742713882795</td>
+</tr>
+
+<tr>
+<td>1002</td>
+<td>0.227499406317</td>
+</tr>
+
+<tr>
+<td>1007</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>[6 rows x 2 columns]</p>
+
+<p>上面这两个只是给大家举个例子，如果我要用 LR，而且我想要了解我最后的每个特征有没有使用，我就可以通过简单的这种统计方法来知道。因为这个比赛的数据是做过脱敏处理的，所以我只能通过这个统计的方式来知道哪些特征是比较重要的。</p>
+
+<p>I also noticed that C15 and C16 appear to be the dimensions of the ad (width and height), which we would also imagine are good predictors of whether an ad is clicked:</p>
+
+<p>如果是针对时间，需要自己划分时间段，</p>
+
+<p>这个地方就要注意了：</p>
+
+<p>如果这个维度是 category 的，但是类别非常多。如果是针对含义比较明确的，比如时间，可以自己做，如果是针对含义不那么明确的，可以进行聚类。比如用户的 id，是比较稀疏的，但是用户与用户的行为还是可以做聚类的，然后给不同的聚类不同的 classid ，这样维度就降下来了。</p>
+
+<p>那想看一下单个feature 的出现的频次：</p>
+
+<pre><code class="language-python">data['C15'].sketch_summary().frequent_items()
+</code></pre>
+
+<pre><code>{120: 2, 216: 912, 300: 3935, 320: 95132, 728: 18}
+</code></pre>
+
+<pre><code class="language-python">data['C16'].sketch_summary().frequent_items()
+</code></pre>
+
+<pre><code>{20: 2, 36: 912, 50: 95620, 90: 18, 250: 3427, 480: 20}
+</code></pre>
+
+<p>出现频次非常多的，但是这个用处是什么呢？比如 50 出现了 95620 次。20 出现了2 次。那么我如果 One-hot 时候 20 也给一列的话，维度就会增长很大，第二个危险是，如果我只出现了两次，那么我这个One-hot 之后的 C16_20 这个特征就只有两个样本来学习这个权重，是学不到东西的。</p>
+
+<p>如果出现这种只出现 1,2 的频次非常低的样本，有时候我们会把它单独拿出来，看看本身是不是可以直接判定。</p>
+
+<p>或者我们可以把频次比较低的比如只出现1~10 次的这些类别只划分成一个特征比如 C16_low。</p>
+
+<p>For our initial model, we&rsquo;ll just use device_type, C1, C15, and C16 as our features.</p>
+
+<p>Note that when we built the SFrame from the CSV file, it simply guessed the data type of each column. Sometimes these data types need to be adjusted, so let&rsquo;s take a quick look at the column names and their associated types to see if there&rsquo;s anything we need to fix:</p>
+
+<pre><code class="language-python">zip(data.column_names(), data.column_types())
+</code></pre>
+
+<pre><code>[('id', str),
+ ('click', int),
+ ('hour', int),
+ ('C1', int),
+ ('banner_pos', int),
+ ('site_id', str),
+ ('site_domain', str),
+ ('site_category', str),
+ ('app_id', str),
+ ('app_domain', str),
+ ('app_category', str),
+ ('device_id', str),
+ ('device_ip', str),
+ ('device_model', str),
+ ('device_type', int),
+ ('device_conn_type', int),
+ ('C14', int),
+ ('C15', int),
+ ('C16', int),
+ ('C17', int),
+ ('C18', int),
+ ('C19', int),
+ ('C20', int),
+ ('C21', int)]
+</code></pre>
+
+<p>We know that both device_type and C1 are &ldquo;categorical variables&rdquo;, meaning that their numerical values represent categories. We&rsquo;ll convert the data type of both of those columns from integer to string, because we don&rsquo;t want our machine learning model to think there is a mathematical relationship between the category values:</p>
+
+<pre><code class="language-python">data['device_type'] = data['C1'].astype(str)
+data['C1'] = data['C1'].astype(str)
+</code></pre>
+
+<p>You could spend a lot more time on the exploratory phase, but let&rsquo;s move along to the next step in predictive modeling! If you want to learn how to manipulate SFrames in more depth, read through this example notebook, <a href="https://turi.com/learn/gallery/notebooks/introduction_to_sframes.html">Introduction to SFrames</a>.</p>
+
+<h2 id="step-2-splitting-the-data">Step 2: Splitting the Data</h2>
+
+<p>One of the keys to proper machine learning is model evaluation. The goal of model evaluation is to estimate how well your model will &ldquo;generalize&rdquo; to future data. In other words, we want to build a model that accurately predicts the future, not the past!</p>
+
+<p>One of the most common evaluation procedures is to split your data into a &ldquo;training set&rdquo; and a &ldquo;testing set&rdquo;.</p>
+
+<p>Let&rsquo;s use an <sup>80</sup>&frasl;<sub>20</sub> split, in which 80% of the data is used for training and 20% is used for testing:</p>
+
+<pre><code class="language-python">train_data, test_data = data.random_split(0.8, seed=1)
+</code></pre>
+
+<p>We now have two separate SFrames, called train_data and test_data.</p>
+
+<h2 id="step-3-selecting-a-machine-learning-model">Step 3: Selecting a Machine Learning Model</h2>
+
+<p>There are two main types of models: classification models, which are used when your target variable is categorical (such as yes/no), and regression models, which are used when your target variable is continuous (such as price). In this case, we&rsquo;ll need to use a classification model, since our target variable is categorical (click: yes or no).</p>
+
+<p>The specific model we&rsquo;re going to use in this case is logistic regression. In logistic regression, the probability that the target is True is modeled as a logistic function of a linear combination of the features. Thus, the model is predicting a probability (which is a continuous value), but that probability is used to choose the predicted target class. In other words, it&rsquo;s using regression to predict a continuous value, but we&rsquo;re using the continuous value that is output from the model to perform classification. (Pretty cool, right?)</p>
+
+<p>It can take a lot of study to truly understand a machine learning model, but a good introduction to logistic regression is available in the <a href="https://turi.com/learn/userguide/supervised-learning/logistic-regression.html">user guide</a>.</p>
+
+<p>So, why exactly did we choose logistic regression for this task, instead of any of the other <a href="https://turi.com/learn/userguide/supervised-learning/classifier.html">available classification models</a>? Well, it turns out that logistic regression has many nice properties. For starters, it is a very fast model, meaning that it does not take long to train the model or make predictions. As well, it is highly interpretable, meaning that you can understand exactly how it&rsquo;s making predictions. But the key consideration in this case is that logistic regression outputs &ldquo;well-calibrated&rdquo; predicted probabilities.</p>
+
+<h2 id="step-4-training-a-machine-learning-model">Step 4: Training a Machine Learning Model</h2>
+
+<p>Now that we&rsquo;ve selected our model, we can finally start the model training process! In GraphLab Create, this can be done in a single line. You simply pass in the training data, the name of the target column, and the names of the feature columns. And in fact, if you just replace <code>gl.logistic_classifier.create</code> with <code>gl.classifier.create</code>, GraphLab will choose the best model for you automatically (based on the properties of your data), meaning that you can skip Step 3 above!</p>
+
+<pre><code class="language-python">model = gl.logistic_classifier.create(train_data, target='click', features=['device_type', 'C1', 'C15', 'C16'])
+</code></pre>
+
+<pre><code>PROGRESS: Creating a validation set from 5 percent of training data. This may take a while.
+          You can set ``validation_set=None`` to disable validation tracking.
+
+PROGRESS: Logistic regression:
+PROGRESS: --------------------------------------------------------
+PROGRESS: Number of examples          : 76149
+PROGRESS: Number of classes           : 2
+PROGRESS: Number of feature columns   : 4
+PROGRESS: Number of unpacked features : 4
+PROGRESS: Number of coefficients    : 13
+PROGRESS: Starting Newton Method
+PROGRESS: --------------------------------------------------------
+PROGRESS: +-----------+----------+--------------+-------------------+---------------------+
+PROGRESS: | Iteration | Passes   | Elapsed Time | Training-accuracy | Validation-accuracy |
+PROGRESS: +-----------+----------+--------------+-------------------+---------------------+
+PROGRESS: | 1         | 2        | 1.074658     | 0.824095          | 0.819668            |
+PROGRESS: | 2         | 3        | 1.122571     | 0.824095          | 0.819668            |
+PROGRESS: | 3         | 4        | 1.168321     | 0.824095          | 0.819668            |
+PROGRESS: | 4         | 5        | 1.224780     | 0.824095          | 0.819668            |
+PROGRESS: | 5         | 6        | 1.274098     | 0.824095          | 0.819668            |
+PROGRESS: | 6         | 7        | 1.319348     | 0.824095          | 0.819668            |
+PROGRESS: +-----------+----------+--------------+-------------------+---------------------+
+
+PROGRESS: TERMINATED: Iteration limit reached.
+PROGRESS: This model may not be optimal. To improve it, consider increasing `max_iterations`.
+</code></pre>
+
+<p>Note that we didn&rsquo;t have to tell GraphLab how to handle each of the features, even though two features were numerical and the other two were categorical. The categorical features were automatically handled using &ldquo;dummy encoding&rdquo;, which is why the output above indicates that there were 4 features but 13 model coefficients. (A simple explanation of dummy encoding is available in the <a href="https://turi.com/learn/userguide/supervised-learning/linear-regression.html#linregr-categorical-features">user guide</a>.)</p>
+
+<h2 id="step-5-making-predictions">Step 5: Making Predictions</h2>
+
+<p>After training a model, the final step is to use the model to make predictions. In other words, the model has learned a mathematical relationship between the features and the target, and it will use that relationship to predict the target value for new data points.</p>
+
+<p>In this case, we pass the testing data to the &ldquo;fitted model&rdquo;, and ask it to output the predicted probability of a click:</p>
+
+<pre><code class="language-python">model.predict(test_data, output_type='probability').head(5)
+</code></pre>
+
+<pre><code>dtype: float
+Rows: 5
+[0.16537085227336723, 0.22480874210027335, 0.16537085227336723, 0.16537085227336723, 0.16537085227336723]
+</code></pre>
+
+<p>At this point, you would want to evaluate the model by comparing the predicted probabilities versus the actual target values, using an appropriate &ldquo;evaluation metric.&rdquo; The best metric to use in this case is probably <a href="https://www.kaggle.com/wiki/LogarithmicLoss">logarithmic loss</a>, which is commonly used when you care about having well-calibrated probabilities. In addition, you might inspect the ROC curve and compute other metrics such as the F1-score and AUC. (See this <a href="http://blog.turi.com/how-to-evaluate-machine-learning-models-part-2a-classification-metrics">blog post</a> for more details.)</p>
+
+<p>Now that we have these probabilities, we could find the ad that maximizes revenue by multiplying these probabilities by the cost-per-click, and finding the largest value.</p>
+
+<p>Although we&rsquo;re at the end of this notebook, this is really just the beginning! You can continue to add more features to the model, and then use the evaluation metric to compare the expected performance of each of your models. As well, you can use <a href="https://turi.com/learn/gallery/notebooks/feature-engineering.html">feature engineering</a> to create new features, you can try other models, and so much more!</p>
+
+<p>If you&rsquo;d like to read more about click-through rate prediction, there are readable papers on the topic by both <a href="http://people.csail.mit.edu/romer/papers/TISTRespPredAds.pdf">Criteo</a> and <a href="http://static.googleusercontent.com/media/research.google.com/ru//pubs/archive/41159.pdf">Google</a>.</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/02-%E6%A1%88%E4%BE%8B1display-advertising-challenge/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 案例1：Display Advertising Challenge</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/ipython-and-jupyter/">
+            <span class="next-text nav-default">IPython and Jupyter</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

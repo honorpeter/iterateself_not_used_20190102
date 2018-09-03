@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Part 4.1&amp;4.2 Linear Regression and Support Vector Regression - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="基本就是使用 线性回归和 svm 进行建模的过程，很详细，要仔细看下，其中 svm 使用了 gird_search 要总结成模板，方便以后使用。 #4 Prediction Using Different Machine Learning Methods 4.1 Linear Regression In this notebook, we&amp;rsquo;ll train a Linear Regression model" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-4.14.2-linear-regression-and-support-vector-regression/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Part 4.1&amp;4.2 Linear Regression and Support Vector Regression" />
+<meta property="og:description" content="基本就是使用 线性回归和 svm 进行建模的过程，很详细，要仔细看下，其中 svm 使用了 gird_search 要总结成模板，方便以后使用。 #4 Prediction Using Different Machine Learning Methods 4.1 Linear Regression In this notebook, we&rsquo;ll train a Linear Regression model" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-4.14.2-linear-regression-and-support-vector-regression/" /><meta property="article:published_time" content="2018-07-26T08:19:04&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-26T08:19:04&#43;00:00"/>
+<meta itemprop="name" content="Part 4.1&amp;4.2 Linear Regression and Support Vector Regression">
+<meta itemprop="description" content="基本就是使用 线性回归和 svm 进行建模的过程，很详细，要仔细看下，其中 svm 使用了 gird_search 要总结成模板，方便以后使用。 #4 Prediction Using Different Machine Learning Methods 4.1 Linear Regression In this notebook, we&rsquo;ll train a Linear Regression model">
+
+
+<meta itemprop="datePublished" content="2018-07-26T08:19:04&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-26T08:19:04&#43;00:00" />
+<meta itemprop="wordCount" content="2890">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Part 4.1&amp;4.2 Linear Regression and Support Vector Regression"/>
+<meta name="twitter:description" content="基本就是使用 线性回归和 svm 进行建模的过程，很详细，要仔细看下，其中 svm 使用了 gird_search 要总结成模板，方便以后使用。 #4 Prediction Using Different Machine Learning Methods 4.1 Linear Regression In this notebook, we&rsquo;ll train a Linear Regression model"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Part 4.1&amp;4.2 Linear Regression and Support Vector Regression</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-26 </span>
+        
+        <span class="more-meta"> 2890 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#4-1-linear-regression">4.1 Linear Regression</a></li>
+<li><a href="#daily-predictions">Daily Predictions</a>
+<ul>
+<li><a href="#daily-electricity-prediction">Daily Electricity Prediction</a></li>
+<li><a href="#daily-chilled-water-prediction">Daily Chilled Water Prediction</a></li>
+<li><a href="#daily-steam-prediction">Daily Steam Prediction</a></li>
+</ul></li>
+<li><a href="#hourly-prediction">Hourly Prediction</a>
+<ul>
+<li><a href="#hourly-electricity-prediction">Hourly Electricity Prediction</a></li>
+<li><a href="#hourly-chilled-water-prediction">Hourly Chilled Water Prediction</a></li>
+<li><a href="#hourly-steam-prediction">Hourly Steam Prediction</a></li>
+</ul></li>
+<li><a href="#4-2-support-vector-regression-and-cross-validation">4.2 Support Vector Regression and Cross Validation</a></li>
+<li><a href="#daily-prediction">Daily Prediction</a>
+<ul>
+<li><a href="#daily-electricity-prediction-1">Daily Electricity Prediction</a></li>
+<li><a href="#daily-chilled-water-prediction-1">Daily Chilled Water Prediction</a></li>
+<li><a href="#daily-steam-prediction-1">Daily Steam Prediction</a></li>
+</ul></li>
+<li><a href="#hourly-prediction-1">Hourly Prediction</a>
+<ul>
+<li><a href="#hourly-electricity-prediction-1">Hourly Electricity Prediction</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>基本就是使用 线性回归和 svm 进行建模的过程，很详细，要仔细看下，其中 svm 使用了 gird_search 要总结成模板，方便以后使用。</p>
+
+<p>#4 Prediction Using Different Machine Learning Methods</p>
+
+<h2 id="4-1-linear-regression">4.1 Linear Regression</h2>
+
+<p>In this notebook, we&rsquo;ll train a Linear Regression model for predicting building energy consumption based on historical enregy data, several weather variables, hour of the day, day of the week, weekends and holidays.</p>
+
+<p>To do this, we&rsquo;ll fit the model to daily and hourly energy and weather data from 2012-01-01 to 2014-10-31.</p>
+
+<pre><code class="language-python"># special IPython command to prepare the notebook for matplotlib
+%matplotlib inline
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+pd.options.display.mpl_style = 'default'
+</code></pre>
+
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
+dailyElectricity = pd.read_excel('Data/dailyElectricityWithFeatures.xlsx')
+dailyElectricity = dailyElectricity.drop('startDay', 1).drop('endDay', 1)
+
+dailyChilledWater = pd.read_excel('Data/dailyChilledWaterWithFeatures.xlsx')
+dailyChilledWater = dailyChilledWater.drop('startDay', 1).drop('endDay', 1)
+
+dailySteam = pd.read_excel('Data/dailySteamWithFeatures.xlsx')
+dailySteam = dailySteam.drop('startDay', 1).drop('endDay', 1)
+
+hourlyElectricity = pd.read_excel('Data/hourlyElectricityWithFeatures.xlsx')
+hourlyElectricity = hourlyElectricity.drop('startTime', 1).drop('endTime', 1)
+
+hourlyChilledWater = pd.read_excel('Data/hourlyChilledWaterWithFeatures.xlsx')
+hourlyChilledWater = hourlyChilledWater.drop('startTime', 1).drop('endTime', 1)
+
+hourlySteam = pd.read_excel('Data/hourlySteamWithFeatures.xlsx')
+hourlySteam = hourlySteam.drop('startTime', 1).drop('endTime', 1)
+
+#display a dataframe
+dailyElectricity.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>electricity-kWh</th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+<th>occupancy</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>2800.244977</td>
+<td>76.652174</td>
+<td>7.173913</td>
+<td>3.073913</td>
+<td>1004.956522</td>
+<td>95.260870</td>
+<td>236.086957</td>
+<td>4.118361</td>
+<td>0.004796</td>
+<td>0.086957</td>
+<td>7.826087</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>3168.974047</td>
+<td>55.958333</td>
+<td>5.833333</td>
+<td>-2.937500</td>
+<td>994.625000</td>
+<td>87.333333</td>
+<td>253.750000</td>
+<td>5.914357</td>
+<td>0.003415</td>
+<td>0.000000</td>
+<td>9.166667</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>5194.533376</td>
+<td>42.500000</td>
+<td>-3.208333</td>
+<td>-12.975000</td>
+<td>1002.125000</td>
+<td>95.708333</td>
+<td>302.916667</td>
+<td>6.250005</td>
+<td>0.001327</td>
+<td>0.000000</td>
+<td>18.208333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>5354.861935</td>
+<td>41.541667</td>
+<td>-7.083333</td>
+<td>-16.958333</td>
+<td>1008.250000</td>
+<td>98.750000</td>
+<td>286.666667</td>
+<td>5.127319</td>
+<td>0.000890</td>
+<td>0.000000</td>
+<td>22.083333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>5496.223993</td>
+<td>46.916667</td>
+<td>-0.583333</td>
+<td>-9.866667</td>
+<td>1002.041667</td>
+<td>90.750000</td>
+<td>258.333333</td>
+<td>5.162041</td>
+<td>0.001746</td>
+<td>0.000000</td>
+<td>15.583333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+
+<p>注意，有些数据是拿不到的，哈佛响应官方的号召来做这个事情，所以有这个权限接触到数据。</p>
+
+<p>中国的气象的数据是可以采集到的，能耗的数据应该是拿不到的。</p>
+
+<h2 id="daily-predictions">Daily Predictions</h2>
+
+<p>Adding new features to the dataframe: weekday, day of the year and week of the year.</p>
+
+<pre><code class="language-python">def addDailyTimeFeatures(df):
+    df['weekday'] = df.index.weekday
+    df['day'] = df.index.dayofyear
+    df['week'] = df.index.weekofyear
+    return df
+
+dailyElectricity = addDailyTimeFeatures(dailyElectricity)
+dailyChilledWater = addDailyTimeFeatures(dailyChilledWater)
+dailySteam = addDailyTimeFeatures(dailySteam)
+</code></pre>
+
+<h3 id="daily-electricity-prediction">Daily Electricity Prediction</h3>
+
+<pre><code class="language-python">df_elect = dailyElectricity[['weekday', 'day', 'week', 'occupancy', 'electricity-kWh']]
+
+elect_train = pd.DataFrame(data=df_elect, index=np.arange('2012-01', '2013-07', dtype='datetime64[D]')).dropna()
+elect_test = pd.DataFrame(data=df_elect, index=np.arange('2013-07', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_elect_train = elect_train.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+XX_elect_test = elect_test.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_elect_train = elect_train['electricity-kWh']
+YY_elect_test = elect_test['electricity-kWh']
+</code></pre>
+
+<pre><code class="language-python">lr_elect = LinearRegression()
+lr_elect.fit(XX_elect_train,YY_elect_train)
+
+y_lr = lr_elect.predict(XX_elect_test)
+
+print &quot;The test score R2: &quot;, lr_elect.score(XX_elect_test, YY_elect_test)
+
+print &quot;The Linear Regression coefficients are&quot;
+pd.DataFrame(zip(XX_elect_train.columns, lr_elect.coef_), columns = ['elect_features', 'linearRegr_Coefficients'])
+</code></pre>
+
+<pre><code>The test score R2:  0.608937488563
+The Linear Regression coefficients are
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>elect_features</th>
+<th>linearRegr_Coefficients</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>weekday</td>
+<td>-125.392163</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>day</td>
+<td>0.550121</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>week</td>
+<td>-11.553215</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>occupancy</td>
+<td>2830.298384</td>
+</tr>
+</tbody>
+</table>
+
+<p>要想清晰的表达结果的特征还是要考画图。业余选手会说，我的准确度是多少，专业选手会通过画图给出直观的对比。</p>
+
+<pre><code class="language-python">#Plot observed and Predicted electricity value
+fig = plt.figure(figsize=(15,7))
+plt.scatter(XX_elect_test.index, YY_elect_test, label='Observed', color='k')
+plt.plot(XX_elect_test.index, y_lr, label='Predicted', color='g')
+plt.legend(loc='upper right')
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x32b713c8&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/jJL2D8m17g.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot Observed vs. Linear Regression predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.plot(YY_elect_test, YY_elect_test, c='k')
+plt.scatter(YY_elect_test, y_lr, c='g')
+plt.xlabel('Observed Elec. Usage (kWh)')
+plt.ylabel(&quot;Predicted Elec. Usage (kWh): $\hat{Y}_i$&quot;)
+plt.title(&quot;Energy vs Predicted Elec.: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x365fab00&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/iIb0kehAjG.png?imageslim" alt="mark" /></p>
+
+<h3 id="daily-chilled-water-prediction">Daily Chilled Water Prediction</h3>
+
+<pre><code class="language-python">chilledw_train = pd.DataFrame(data=dailyChilledWater, index=np.arange('2012-01', '2013-07', dtype='datetime64[D]')).dropna()
+chilledw_test = pd.DataFrame(data=dailyChilledWater, index=np.arange('2013-07', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_chilledw_train = chilledw_train.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+XX_chilledw_test = chilledw_test.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_chilledw_train = chilledw_train['chilledWater-TonDays']
+YY_chilledw_test = chilledw_test['chilledWater-TonDays']
+</code></pre>
+
+<pre><code class="language-python">lr_chilledw = LinearRegression()
+lr_chilledw.fit(XX_chilledw_train,YY_chilledw_train)
+
+print &quot;The test score R2: &quot;, lr_chilledw.score(XX_chilledw_test, YY_chilledw_test)
+
+print &quot;The Linear Regression coefficients are&quot;
+pd.DataFrame(zip(XX_chilledw_train.columns, lr_chilledw.coef_), columns = ['chilledw_features', 'linearRegr_Coefficients'])
+</code></pre>
+
+<pre><code>The test score R2:  0.830709188732
+The Linear Regression coefficients are
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>chilledw_features</th>
+<th>linearRegr_Coefficients</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>RH-%</td>
+<td>0.464299</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>T-C</td>
+<td>6.062113</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Tdew-C</td>
+<td>-2.486768</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>pressure-mbar</td>
+<td>-0.095268</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>solarRadiation-W/m2</td>
+<td>0.042885</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>windDirection</td>
+<td>-0.025036</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>windSpeed-m/s</td>
+<td>-1.166902</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>humidityRatio-kg/kg</td>
+<td>1673.166705</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>coolingDegrees</td>
+<td>2.853128</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>heatingDegrees</td>
+<td>4.421394</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>dehumidification</td>
+<td>2999.125771</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>occupancy</td>
+<td>0.571356</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>weekday</td>
+<td>-2.461900</td>
+</tr>
+
+<tr>
+<td>13</td>
+<td>day</td>
+<td>-0.010718</td>
+</tr>
+
+<tr>
+<td>14</td>
+<td>week</td>
+<td>0.122757</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">#Plot observed and predicted electricity value
+y_lr = lr_chilledw.predict(XX_chilledw_test)
+fig = plt.figure(figsize=(15,7))
+plt.scatter(XX_chilledw_test.index, YY_chilledw_test, label='Observed', color='k')
+plt.plot(XX_chilledw_test.index, y_lr, label='Predicted', color='r')
+plt.legend(loc='upper right')
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x34131400&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h75Dh4dA36.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot observed vs. Predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.plot(YY_chilledw_test, YY_chilledw_test, c='k')
+plt.scatter(YY_chilledw_test, y_lr, c='r')
+plt.xlabel('Observed Chilled Water Usage (TonDays)')
+plt.ylabel(&quot;Predicted Chilled Water Usage (TonDays): $\hat{Y}_i$&quot;)
+plt.title(&quot;Observed vs Predicted Chilled Water: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x31a16c88&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/b5mAac9mak.png?imageslim" alt="mark" /></p>
+
+<h3 id="daily-steam-prediction">Daily Steam Prediction</h3>
+
+<pre><code class="language-python">steam_train = pd.DataFrame(data=dailySteam, index=np.arange('2012-01', '2013-07', dtype='datetime64[D]')).dropna()
+steam_test = pd.DataFrame(data=dailySteam, index=np.arange('2013-07', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_steam_train = steam_train.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+XX_steam_test = steam_test.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_steam_train = steam_train['steam-LBS']
+YY_steam_test = steam_test['steam-LBS']
+</code></pre>
+
+<pre><code class="language-python">lr_steam = LinearRegression()
+lr_steam.fit(XX_steam_train,YY_steam_train)
+
+print &quot;The test score R2: &quot;, lr_steam.score(XX_steam_test, YY_steam_test)
+
+print &quot;The Linear Regression coefficients are&quot;
+pd.DataFrame(zip(XX_steam_train.columns, lr_steam.coef_), columns = ['steam_features', 'linearRegr_Coefficients'])
+</code></pre>
+
+<pre><code>The test score R2:  0.942276415896
+The Linear Regression coefficients are
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>steam_features</th>
+<th>linearRegr_Coefficients</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>RH-%</td>
+<td>66.535470</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>T-C</td>
+<td>458.096751</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Tdew-C</td>
+<td>-951.521615</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>pressure-mbar</td>
+<td>-30.891470</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>solarRadiation-W/m2</td>
+<td>-18.446292</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>windDirection</td>
+<td>-7.828922</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>windSpeed-m/s</td>
+<td>251.824413</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>humidityRatio-kg/kg</td>
+<td>857001.445663</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>coolingDegrees</td>
+<td>-99.989152</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>heatingDegrees</td>
+<td>1794.351286</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>dehumidification</td>
+<td>-482120.622688</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>occupancy</td>
+<td>3150.501909</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>weekday</td>
+<td>-531.583401</td>
+</tr>
+
+<tr>
+<td>13</td>
+<td>day</td>
+<td>-1.499061</td>
+</tr>
+
+<tr>
+<td>14</td>
+<td>week</td>
+<td>-43.000664</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">#Plot observed and predicted electricity value
+y_lr = lr_steam.predict(XX_steam_test)
+fig = plt.figure(figsize=(15,7))
+plt.scatter(XX_steam_test.index, YY_steam_test, label='Observed', color='k')
+plt.plot(XX_steam_test.index, y_lr, label='Predicted', color='g')
+plt.legend(loc='upper right')
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x35b66d68&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/71i80DiLLd.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot actual vs. Predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.plot(YY_steam_test, YY_steam_test, c='k')
+plt.scatter(YY_steam_test, y_lr, c='g')
+plt.xlabel('Observed Steam Usage (LBS)')
+plt.ylabel(&quot;Predicted Steam Usage (LBS): $\hat{Y}_i$&quot;)
+plt.title(&quot;Observed vs Predicted Steam: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x3429a630&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/hF2GkfLem0.png?imageslim" alt="mark" /></p>
+
+<h2 id="hourly-prediction">Hourly Prediction</h2>
+
+<p>Adding new features to the dataframe: hour, weekday, day of the year and week of the year.</p>
+
+<pre><code class="language-python">def addHourlyTimeFeatures(df):
+    df['hour'] = df.index.hour
+    df['weekday'] = df.index.weekday
+    df['day'] = df.index.dayofyear
+    df['week'] = df.index.weekofyear
+    return df
+
+hourlyElectricity = addHourlyTimeFeatures(hourlyElectricity)
+</code></pre>
+
+<h3 id="hourly-electricity-prediction">Hourly Electricity Prediction</h3>
+
+<pre><code class="language-python">df_hourlyelect = hourlyElectricity[['hour', 'weekday', 'day', 'week', 'cosHour',
+                                                      'occupancy', 'electricity-kWh']]
+
+hourlyelect_train = pd.DataFrame(data=df_hourlyelect, index=np.arange('2014-01-01 00:00:00', '2014-10-01 00:00:00', dtype='datetime64[h]')).dropna()
+hourlyelect_test = pd.DataFrame(data=df_hourlyelect, index=np.arange('2014-10-01 00:00:00', '2014-11-01 00:00:00', dtype='datetime64[h]')).dropna()
+
+XX_hourlyelect_train = hourlyelect_train.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+XX_hourlyelect_test = hourlyelect_test.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_hourlyelect_train = hourlyelect_train['electricity-kWh']
+YY_hourlyelect_test = hourlyelect_test['electricity-kWh']
+</code></pre>
+
+<pre><code class="language-python">lr_hourlyelect = LinearRegression()
+lr_hourlyelect.fit(XX_hourlyelect_train,YY_hourlyelect_train)
+
+y_hourlyelect_lr = lr_hourlyelect.predict(XX_hourlyelect_test)
+
+print &quot;The test score R2: &quot;, lr_hourlyelect.score(XX_hourlyelect_test, YY_hourlyelect_test)
+
+print &quot;The Linear Regression coefficients are&quot;
+pd.DataFrame(zip(XX_hourlyelect_train.columns, lr_hourlyelect.coef_), columns = ['hourlyelect_features', 'linearRegr_Coefficients'])
+</code></pre>
+
+<pre><code>The test score R2:  0.714713369958
+The Linear Regression coefficients are
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>hourlyelect_features</th>
+<th>linearRegr_Coefficients</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>hour</td>
+<td>-0.287362</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>weekday</td>
+<td>-6.995868</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>day</td>
+<td>-0.309981</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>week</td>
+<td>0.955127</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>cosHour</td>
+<td>-81.049080</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>occupancy</td>
+<td>114.803110</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">#Plot observed and Predicted electricity value
+fig = plt.figure(figsize=(25,7))
+plt.scatter(XX_hourlyelect_test.index, YY_hourlyelect_test, label='Observed', color='k')
+plt.plot(XX_hourlyelect_test.index, y_hourlyelect_lr, label='Predicted', color='r')
+plt.legend(loc='upper right')
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x3416b710&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/C85bgGjDIJ.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot Observed vs. Predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.plot(YY_hourlyelect_test, YY_hourlyelect_test, c='k')
+plt.scatter(YY_hourlyelect_test, y_hourlyelect_lr, c='r')
+plt.xlabel('Observed Elec. Usage (kWh)')
+plt.ylabel(&quot;Predicted Elec. Usage (kWh): $\hat{Y}_i$&quot;)
+plt.title(&quot;Energy vs Predicted Elec.: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x33ea2fd0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/H7a6DE4aAd.png?imageslim" alt="mark" /></p>
+
+<h3 id="hourly-chilled-water-prediction">Hourly Chilled Water Prediction</h3>
+
+<pre><code class="language-python">hourlychilledw_train = pd.DataFrame(data=hourlyChilledWater, index=np.arange('2014-01-01 00:00:00', '2014-09-01 00:00:00', dtype='datetime64[h]')).dropna()
+hourlychilledw_test = pd.DataFrame(data=hourlyChilledWater, index=np.arange('2014-09-01 00:00:00', '2014-11-01 00:00:00', dtype='datetime64[h]')).dropna()
+
+XX_hourlychilledw_train = hourlychilledw_train.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+XX_hourlychilledw_test = hourlychilledw_test.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_hourlychilledw_train = hourlychilledw_train['chilledWater-TonDays']
+YY_hourlychilledw_test = hourlychilledw_test['chilledWater-TonDays']
+</code></pre>
+
+<pre><code class="language-python">lr_hourlychilledw = LinearRegression()
+lr_hourlychilledw.fit(XX_hourlychilledw_train,YY_hourlychilledw_train)
+
+y_hourlychilledw_lr = lr_hourlychilledw.predict(XX_hourlychilledw_test)
+
+print &quot;The test score R2: &quot;, lr_hourlychilledw.score(XX_hourlychilledw_test, YY_hourlychilledw_test)
+
+print &quot;The Linear Regression coefficients are&quot;
+pd.DataFrame(zip(XX_hourlychilledw_train.columns, lr_hourlychilledw.coef_), columns = ['hourlychilledw_features', 'linearRegr_Coefficients'])
+</code></pre>
+
+<pre><code>The test score R2:  0.709930521875
+The Linear Regression coefficients are
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>hourlychilledw_features</th>
+<th>linearRegr_Coefficients</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>RH-%</td>
+<td>-0.028198</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>T-C</td>
+<td>0.459533</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Tdew-C</td>
+<td>0.166999</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>pressure-mbar</td>
+<td>-0.007099</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>solarRadiation-W/m2</td>
+<td>0.001003</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>windDirection</td>
+<td>-0.000382</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>windSpeed-m/s</td>
+<td>0.004837</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>humidityRatio-kg/kg</td>
+<td>-91.425425</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>coolingDegrees</td>
+<td>-0.172407</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>heatingDegrees</td>
+<td>0.603195</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>dehumidification</td>
+<td>226.397306</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>occupancy</td>
+<td>0.483000</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>cosHour</td>
+<td>-0.562715</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">#Plot Observed and Predicted electricity value
+fig = plt.figure(figsize=(15,7))
+plt.scatter(XX_hourlychilledw_test.index, YY_hourlychilledw_test, label='Observed', color='k')
+plt.plot(XX_hourlychilledw_test.index, y_hourlychilledw_lr, label='Predicted', color='g')
+plt.legend(loc='upper right')
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x36eeeda0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/BIBBDdf142.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot Observed vs. Predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.plot(YY_hourlychilledw_test, YY_hourlychilledw_test, c='k')
+plt.scatter(YY_hourlychilledw_test, y_hourlychilledw_lr, c='g')
+plt.xlabel('Observed Chilled Water Usage (TonDays)')
+plt.ylabel(&quot;Predicted Chilled Water Usage (TonDays): $\hat{Y}_i$&quot;)
+plt.title(&quot;Observed vs Predicted Chilled Water: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x390844e0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ej2c55587h.png?imageslim" alt="mark" /></p>
+
+<h3 id="hourly-steam-prediction">Hourly Steam Prediction</h3>
+
+<pre><code class="language-python">hourlysteam_train = pd.DataFrame(data=hourlySteam, index=np.arange('2012-01-01 00:00:00', '2014-02-01 00:00:00', dtype='datetime64[h]')).dropna()
+hourlysteam_test = pd.DataFrame(data=hourlySteam, index=np.arange('2014-02-01 00:00:00', '2014-11-01 00:00:00', dtype='datetime64[h]')).dropna()
+
+XX_hourlysteam_train = hourlysteam_train.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+XX_hourlysteam_test = hourlysteam_test.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_hourlysteam_train = hourlysteam_train['steam-LBS']
+YY_hourlysteam_test = hourlysteam_test['steam-LBS']
+</code></pre>
+
+<pre><code class="language-python">lr_hourlysteam = LinearRegression()
+lr_hourlysteam.fit(XX_hourlysteam_train,YY_hourlysteam_train)
+
+y_hourlysteam_lr = lr_hourlysteam.predict(XX_hourlysteam_test)
+
+print &quot;The test score R2: &quot;, lr_hourlysteam.score(XX_hourlysteam_test, YY_hourlysteam_test)
+
+print &quot;The coefficients Linear Regression are&quot;
+pd.DataFrame(zip(XX_hourlysteam_train.columns, lr_hourlysteam.coef_), columns = ['hourlysteam_features', 'linearRegr_Coefficients'])
+</code></pre>
+
+<pre><code>The test score R2:  0.764295430491
+The coefficients Linear Regression are
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>hourlysteam_features</th>
+<th>linearRegr_Coefficients</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>RH-%</td>
+<td>5.367666</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>T-C</td>
+<td>8.577206</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Tdew-C</td>
+<td>-54.743326</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>pressure-mbar</td>
+<td>-0.279591</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>solarRadiation-W/m2</td>
+<td>0.138138</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>windDirection</td>
+<td>0.041451</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>windSpeed-m/s</td>
+<td>13.943372</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>humidityRatio-kg/kg</td>
+<td>75847.104324</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>coolingDegrees</td>
+<td>-31.597421</td>
+</tr>
+
+<tr>
+<td>9</td>
+<td>heatingDegrees</td>
+<td>57.903822</td>
+</tr>
+
+<tr>
+<td>10</td>
+<td>dehumidification</td>
+<td>-8088.312347</td>
+</tr>
+
+<tr>
+<td>11</td>
+<td>occupancy</td>
+<td>131.534596</td>
+</tr>
+
+<tr>
+<td>12</td>
+<td>cosHour</td>
+<td>-343.896782</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python">#Plot Observed and Predicted value
+fig = plt.figure(figsize=(15,7))
+plt.scatter(XX_hourlysteam_test.index, YY_hourlysteam_test, label='Observed', color='k')
+plt.plot(XX_hourlysteam_test.index, y_hourlysteam_lr, label='Predicted', color='r')
+plt.legend(loc='upper right')
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x3ad09438&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/3Gl7l2cJL5.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot Observed vs. Predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.plot(YY_hourlysteam_test, YY_hourlysteam_test, c='k')
+plt.scatter(YY_hourlysteam_test, y_hourlysteam_lr, c='r')
+plt.xlabel('Observed Steam Usage (LBS)')
+plt.ylabel(&quot;Predicted Steam Usage (LBS): $\hat{Y}_i$&quot;)
+plt.title(&quot;Observed vs Predicted Steam: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x3a6659b0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/hK19A3Gl69.png?imageslim" alt="mark" /></p>
+
+<h2 id="4-2-support-vector-regression-and-cross-validation">4.2 Support Vector Regression and Cross Validation</h2>
+
+<p>In this notebook, we&rsquo;ll train a Support Vector Regression(SVR) model for predicting building energy consumption based on historical energy data, several weather variables, hour of the day, day of the week, weekends and holidays.</p>
+
+<p>To do this, we&rsquo;ll fit the model to daily and hourly energy and weather data from 2012-01-01 to 2014-10-31 and compute the average squared residuals from predictions.</p>
+
+<p>During the design time, we&rsquo;ve used cross-validation to fine tune the SVR parameters. And since SVR take too much time to compute, in this final notebook we&rsquo;ll set the parameters to their optimal value that were found with cross validation. We&rsquo;ll still show the range of parameters that was provided as input to cross validation.</p>
+
+<pre><code class="language-python"># special IPython command to prepare the notebook for matplotlib
+%matplotlib inline
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.svm import SVR
+from sklearn.grid_search import GridSearchCV
+from sklearn import cross_validation
+from sklearn import grid_search
+
+pd.options.display.mpl_style = 'default'
+</code></pre>
+
+<pre><code class="language-python">dailyElectricity = pd.read_excel('Data/dailyElectricityWithFeatures.xlsx')
+dailyElectricity = dailyElectricity.drop('startDay', 1).drop('endDay', 1)
+
+dailyChilledWater = pd.read_excel('Data/dailyChilledWaterWithFeatures.xlsx')
+dailyChilledWater = dailyChilledWater.drop('startDay', 1).drop('endDay', 1)
+
+dailySteam = pd.read_excel('Data/dailySteamWithFeatures.xlsx')
+dailySteam = dailySteam.drop('startDay', 1).drop('endDay', 1)
+
+hourlyElectricity = pd.read_excel('Data/hourlyElectricityWithFeatures.xlsx')
+hourlyElectricity = hourlyElectricity.drop('startTime', 1).drop('endTime', 1)
+
+hourlyChilledWater = pd.read_excel('Data/hourlyChilledWaterWithFeatures.xlsx')
+hourlyChilledWater = hourlyChilledWater.drop('startTime', 1).drop('endTime', 1)
+
+hourlySteam = pd.read_excel('Data/hourlySteamWithFeatures.xlsx')
+hourlySteam = hourlySteam.drop('startTime', 1).drop('endTime', 1)
+
+#display one dataframe
+dailyElectricity.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>electricity-kWh</th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+<th>occupancy</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2012-01-01</td>
+<td>2800.244977</td>
+<td>76.652174</td>
+<td>7.173913</td>
+<td>3.073913</td>
+<td>1004.956522</td>
+<td>95.260870</td>
+<td>236.086957</td>
+<td>4.118361</td>
+<td>0.004796</td>
+<td>0.086957</td>
+<td>7.826087</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+
+<tr>
+<td>2012-01-02</td>
+<td>3168.974047</td>
+<td>55.958333</td>
+<td>5.833333</td>
+<td>-2.937500</td>
+<td>994.625000</td>
+<td>87.333333</td>
+<td>253.750000</td>
+<td>5.914357</td>
+<td>0.003415</td>
+<td>0.000000</td>
+<td>9.166667</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-03</td>
+<td>5194.533376</td>
+<td>42.500000</td>
+<td>-3.208333</td>
+<td>-12.975000</td>
+<td>1002.125000</td>
+<td>95.708333</td>
+<td>302.916667</td>
+<td>6.250005</td>
+<td>0.001327</td>
+<td>0.000000</td>
+<td>18.208333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-04</td>
+<td>5354.861935</td>
+<td>41.541667</td>
+<td>-7.083333</td>
+<td>-16.958333</td>
+<td>1008.250000</td>
+<td>98.750000</td>
+<td>286.666667</td>
+<td>5.127319</td>
+<td>0.000890</td>
+<td>0.000000</td>
+<td>22.083333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+
+<tr>
+<td>2012-01-05</td>
+<td>5496.223993</td>
+<td>46.916667</td>
+<td>-0.583333</td>
+<td>-9.866667</td>
+<td>1002.041667</td>
+<td>90.750000</td>
+<td>258.333333</td>
+<td>5.162041</td>
+<td>0.001746</td>
+<td>0.000000</td>
+<td>15.583333</td>
+<td>0</td>
+<td>0.3</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="daily-prediction">Daily Prediction</h2>
+
+<p>Adding new features to the dataframe: weekday, day of the year and week of the year.</p>
+
+<pre><code class="language-python">def addDailyTimeFeatures(df):
+    df['weekday'] = df.index.weekday
+    df['day'] = df.index.dayofyear
+    df['week'] = df.index.weekofyear
+    return df
+
+dailyElectricity = addDailyTimeFeatures(dailyElectricity)
+dailyChilledWater = addDailyTimeFeatures(dailyChilledWater)
+dailySteam = addDailyTimeFeatures(dailySteam)
+</code></pre>
+
+<h3 id="daily-electricity-prediction-1">Daily Electricity Prediction</h3>
+
+<pre><code class="language-python">df_elect = dailyElectricity[['weekday', 'day', 'week', 'occupancy', 'electricity-kWh']]
+
+elect_train = pd.DataFrame(data=df_elect, index=np.arange('2012-01', '2013-07', dtype='datetime64[D]')).dropna()
+elect_test = pd.DataFrame(data=df_elect, index=np.arange('2013-07', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_elect_train = elect_train.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+XX_elect_test = elect_test.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_elect_train = elect_train['electricity-kWh']
+YY_elect_test = elect_test['electricity-kWh']
+
+</code></pre>
+
+<p>使用了 grid_search 来寻找超参：</p>
+
+<pre><code class="language-python"># Input parameters ranges to cross validation
+gamma_range = [0.01, 0.001, 0.0001]
+epsilon_range = [x * 0.1 for x in range(0, 2)]
+C_range = range(1, 2500, 500)
+
+# To speed up, we first find the optimal paratemers for C and gamma and then set them directly in the method call
+tuned_parameters = [{
+    'kernel': ['rbf', 'linear'],
+#    'C': C_range,
+#    'gamma': gamma_range,
+    'epsilon': epsilon_range}]
+
+# search for the best parameters with crossvalidation.
+svr_elect = GridSearchCV(SVR(C=2000, gamma=0.01), param_grid = tuned_parameters, verbose = 0)
+
+# Fit regression model
+y_elect = svr_elect.fit(XX_elect_train, YY_elect_train).predict(XX_elect_test)
+
+print 'Optimum parameters C=2000 and gamma=0.01 for SVR'
+print 'Optimum parameters epsilon and kernel for SVR: ', svr_elect.best_params_
+
+print &quot;The test score R2 for SVR: &quot;, svr_elect.score(XX_elect_test, YY_elect_test)
+
+print(&quot;SVR mean squared error: %.2f&quot;
+      % np.mean((YY_elect_test - svr_elect.predict(XX_elect_test)) ** 2))
+</code></pre>
+
+<pre><code>Optimum parameters C=2000 and gamma=0.01 for SVR
+Optimum parameters epsilon and kernel for SVR:  {'epsilon': 0.1, 'kernel': 'rbf'}
+The test score R2 for RBF:  0.691753544427
+RBF mean squared error: 391582.21
+</code></pre>
+
+<pre><code class="language-python">#Plot time series of observed and predicted electricity demand over the testing period.
+fig = plt.figure(figsize=(15,7))
+plt.scatter(XX_elect_test.index, YY_elect_test, c='k', label='Observed')
+plt.plot(XX_elect_test.index, y_elect, c='r', label='Predicted')
+plt.xlabel('data')
+plt.ylabel('target')
+plt.title('Support Vector Regression')
+plt.legend()
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/55IhdE8jB1.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot Observed vs. predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.scatter(YY_elect_test, YY_elect_test, c='k')
+plt.scatter(YY_elect_test, y_elect, c='r')
+plt.xlabel('Observed Elec. Usage (kWh)')
+plt.ylabel(&quot;Predicted Elec. Usage (kWh): $\hat{Y}_i$&quot;)
+plt.title(&quot;Energy vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x1b5679e8&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/FG2C9kgJ9d.png?imageslim" alt="mark" /></p>
+
+<h3 id="daily-chilled-water-prediction-1">Daily Chilled Water Prediction</h3>
+
+<pre><code class="language-python">chilledw_train = pd.DataFrame(data=dailyChilledWater, index=np.arange('2012-01', '2013-07', dtype='datetime64[D]')).dropna()
+chilledw_test = pd.DataFrame(data=dailyChilledWater, index=np.arange('2013-07', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_chilledw_train = chilledw_train.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+XX_chilledw_test = chilledw_test.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_chilledw_train = chilledw_train['chilledWater-TonDays']
+YY_chilledw_test = chilledw_test['chilledWater-TonDays']
+</code></pre>
+
+<pre><code class="language-python"># Optimal parameters for the SVR regressor
+gamma_range = [0.1, 0.01, 0.001, 0.0001]
+epsilon_range = [x * 0.1 for x in range(0, 3)]
+C_range = range(1, 5, 2)
+
+# To speed up, we first find the optimal paratemers for C and gamma and then set them directly in the method call
+tuned_parameters = [{
+    'kernel': ['rbf', 'linear'],
+#    'C': C_range,
+#    'gamma': gamma_range,
+    'epsilon': epsilon_range}]
+
+# search for the best parameters with crossvalidation.
+svr_chilledw = GridSearchCV(SVR(C=3, gamma=0.0001), param_grid = tuned_parameters, verbose = 0)
+
+# Fit regression model
+y_chilledw = svr_chilledw.fit(XX_chilledw_train, YY_chilledw_train).predict(XX_chilledw_test)
+
+print 'Optimum parameters C=3 and gamma=0.1 for SVR'
+print 'Optimum epsilon and kernel: ', svr_chilledw.best_params_
+
+print &quot;The test score R2 for SVR: &quot;, svr_chilledw.score(XX_chilledw_test, YY_chilledw_test)
+
+print(&quot;SVR mean squared error: %.2f&quot;
+      % np.mean((YY_chilledw_test - svr_chilledw.predict(XX_chilledw_test)) ** 2))
+</code></pre>
+
+<pre><code>Optimum parameters C=3 and gamma=0.1 for SVR
+Optimum epsilon and kernel:  {'epsilon': 0.1, 'kernel': 'linear'}
+The test score R2 for SVR:  0.764904375769
+SVR mean squared error: 443.92
+</code></pre>
+
+<pre><code class="language-python">#Plot observed and predicted Chilled Water values with SVR
+fig = plt.figure(figsize=(15,10))
+plt.scatter(XX_chilledw_test.index, YY_chilledw_test, c='k', label='Observed')
+plt.plot(XX_chilledw_test.index, y_chilledw, c='g', label='Predicted')
+plt.xlabel('data')
+plt.ylabel('target')
+plt.title('Support Vector Regression')
+plt.legend()
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/2gf1Aki1LG.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot observed vs predicted energy usage
+fig = plt.figure(figsize=(6,6))
+plt.scatter(YY_chilledw_test, YY_chilledw_test, c='k')
+plt.scatter(YY_chilledw_test, y_chilledw, c='g')
+plt.xlabel('Observed Chilled Water Usage (TonDays)')
+plt.ylabel(&quot;Predicted Chilled Water Usage (TonDays): $\hat{Y}_i$&quot;)
+plt.title(&quot;Observed vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x1b9e7588&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/03iKj23A70.png?imageslim" alt="mark" /></p>
+
+<h3 id="daily-steam-prediction-1">Daily Steam Prediction</h3>
+
+<pre><code class="language-python">steam_train = pd.DataFrame(data=dailySteam, index=np.arange('2012-01', '2013-07', dtype='datetime64[D]')).dropna()
+steam_test = pd.DataFrame(data=dailySteam, index=np.arange('2013-07', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_steam_train = steam_train.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+XX_steam_test = steam_test.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_steam_train = steam_train['steam-LBS']
+YY_steam_test = steam_test['steam-LBS']
+</code></pre>
+
+<pre><code class="language-python"># Optimal parameters for the SVR regressor
+gamma_range = [0.1, 0.01, 0.001, 0.0001]
+epsilon_range = [x * 0.1 for x in range(0, 3)]
+C_range = range(1, 500, 50)
+
+tuned_parameters = [{
+    'kernel': ['rbf', 'linear'],
+#    'C': C_range,
+    'gamma': gamma_range,
+    'epsilon': epsilon_range}]
+
+# search for the best parameters with crossvalidation.
+svr_steam = GridSearchCV(SVR(C=50), param_grid = tuned_parameters, verbose = 0)
+
+# Fit regression model
+y_steam = svr_steam.fit(XX_steam_train, YY_steam_train).predict(XX_steam_test)
+
+print 'Optimum parameters C=50 for SVR'
+print 'Optimum epsilon, gamma and kernel: ', svr_steam.best_params_
+
+print &quot;The test score R2 for SVR: &quot;, svr_steam.score(XX_steam_test, YY_steam_test)
+
+print(&quot;SVR mean squared error: %.2f&quot;
+      % np.mean((YY_steam_test - svr_steam.predict(XX_steam_test)) ** 2))
+</code></pre>
+
+<pre><code>Optimum parameters C=50 for SVR
+Optimum epsilon, gamma and kernel:  {'epsilon': 0.2, 'gamma': 0.1, 'kernel': 'linear'}
+The test score R2 for SVR:  0.938467924325
+SVR mean squared error: 20632451.77
+</code></pre>
+
+<pre><code class="language-python">#Plot observed and predicted Steam values
+fig,ax = plt.subplots(1, 1,figsize=(20,10))
+plt.scatter(XX_steam_test.index, YY_steam_test, c='k', label='Observed')
+plt.plot(XX_steam_test.index, y_steam, c='r', label='Predicted')
+plt.xlabel('data')
+plt.ylabel('target')
+plt.title('Support Vector Regression')
+plt.legend()
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/F0CGIJ8B4k.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot Observed vs Predicted
+fig = plt.figure(figsize=(6,6))
+plt.scatter(YY_steam_test, YY_steam_test, c='k')
+plt.scatter(YY_steam_test, y_steam, c='r')
+plt.xlabel('Observed Steam Usage (LBS)')
+plt.ylabel(&quot;Predicted Steam Usage (LBS): $\hat{Y}_i$&quot;)
+plt.title(&quot;Observed vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x1b37b1d0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Ljm8kkBFCK.png?imageslim" alt="mark" /></p>
+
+<h2 id="hourly-prediction-1">Hourly Prediction</h2>
+
+<h3 id="hourly-electricity-prediction-1">Hourly Electricity Prediction</h3>
+
+<p>Adding new features to the dataframe: hour, weekday, day of the year and week of the year.</p>
+
+<pre><code class="language-python">def addHourlyTimeFeatures(df):
+    df['hour'] = df.index.hour
+    df['weekday'] = df.index.weekday
+    df['day'] = df.index.dayofyear
+    df['week'] = df.index.weekofyear
+    return df
+
+hourlyElectricity = addHourlyTimeFeatures(hourlyElectricity)
+</code></pre>
+
+<pre><code class="language-python">df_hourlyelect = hourlyElectricity[['hour', 'weekday', 'day', 'week', 'cosHour',
+                                                      'occupancy', 'electricity-kWh']]
+
+hourlyelect_train = pd.DataFrame(data=df_hourlyelect, index=np.arange('2014-01-01 00:00:00', '2014-10-01 00:00:00', dtype='datetime64[h]')).dropna()
+hourlyelect_test = pd.DataFrame(data=df_hourlyelect, index=np.arange('2014-10-01 00:00:00', '2014-11-01 00:00:00', dtype='datetime64[h]')).dropna()
+
+XX_hourlyelect_train = hourlyelect_train.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+XX_hourlyelect_test = hourlyelect_test.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_hourlyelect_train = hourlyelect_train['electricity-kWh']
+YY_hourlyelect_test = hourlyelect_test['electricity-kWh']
+</code></pre>
+
+<pre><code class="language-python"># Optimal parameters for the SVR regressor
+gamma_range = [0.01, 0.001, 0.0001]
+epsilon_range = [x * 0.1 for x in range(0, 2)]
+C_range = range(1, 5, 1)
+
+tuned_parameters = [{
+    'kernel': ['rbf', 'linear'],
+#    'C': C_range,
+#    'gamma': gamma_range,
+    'epsilon': epsilon_range}]
+
+# search for the best parameters with crossvalidation.
+svr_hourlyelect = GridSearchCV(SVR(C=1, gamma=0.01), param_grid = tuned_parameters, verbose = 0)
+
+# Fit regression model
+y_hourlyelect = svr_hourlyelect.fit(XX_hourlyelect_train, YY_hourlyelect_train).predict(XX_hourlyelect_test)
+
+print 'Optimum parameters C=1 and gamma=0.01 for SVR'
+print 'Optimum epsilon and kernel for SVR: ', svr_hourlyelect.best_params_
+
+print &quot;The test score R2: &quot;, svr_hourlyelect.score(XX_hourlyelect_test, YY_hourlyelect_test)
+
+print(&quot;SVR mean squared error: %.2f&quot;
+      % np.mean((YY_hourlyelect_test - svr_hourlyelect.predict(XX_hourlyelect_test)) ** 2))
+</code></pre>
+
+<pre><code>Optimum parameters C=1 and gamma=0.01 for SVR
+Optimum epsilon and kernel for SVR:  {'epsilon': 0.1, 'kernel': 'linear'}
+The test score R2:  0.747282383852
+SVR mean squared error: 1561.24
+</code></pre>
+
+<pre><code class="language-python">#Plot observed and predicted electricity value
+fig = plt.figure(figsize=(20,10))
+plt.scatter(XX_hourlyelect_test.index, YY_hourlyelect_test, label='Observed', color='k')
+plt.plot(XX_hourlyelect_test.index, y_hourlyelect, label='Predicted', color='g')
+plt.legend(loc='upper right')
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x1f4a6ef0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/LB43Hje8EJ.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#Plot Observed vs. Predicted usage.
+fig = plt.figure(figsize=(6,6))
+plt.plot(YY_hourlyelect_test, YY_hourlyelect_test, c='k')
+plt.scatter(YY_hourlyelect_test, y_hourlyelect, c='g')
+plt.xlabel('Observed Elec. Usage (kWh)')
+plt.ylabel(&quot;Predicted Elec. Usage (kWh): $\hat{Y}_i$&quot;)
+plt.title(&quot;Observed vs Predicted Elec.: $Y_i$ vs $\hat{Y}_i$&quot;)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x210e82b0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/K1lkLkE74F.png?imageslim" alt="mark" /></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/01-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/%E4%B8%8A%E4%BA%86%E8%AF%BE%E7%A8%8B%E4%B9%8B%E5%90%8E%E6%84%9F%E8%A7%89%E8%BF%98%E6%AC%A0%E7%BC%BA%E7%9A%84/">
+            <span class="next-text nav-default">上了课程之后，感觉还欠缺的</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

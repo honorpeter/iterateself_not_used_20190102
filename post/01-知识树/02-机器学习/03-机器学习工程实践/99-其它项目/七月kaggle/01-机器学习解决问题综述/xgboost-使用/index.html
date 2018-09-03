@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>xgboost 使用 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="非常不建议在XGBoost 里面用他的缺省值处理方法 还是要一个feature，一个feature 的手工做处理比较好。 这个可以知道每个特征的重要" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%BB%BC%E8%BF%B0/xgboost-%E4%BD%BF%E7%94%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="xgboost 使用" />
+<meta property="og:description" content="非常不建议在XGBoost 里面用他的缺省值处理方法 还是要一个feature，一个feature 的手工做处理比较好。 这个可以知道每个特征的重要" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%BB%BC%E8%BF%B0/xgboost-%E4%BD%BF%E7%94%A8/" /><meta property="article:published_time" content="2018-07-19T22:29:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-19T22:29:23&#43;00:00"/>
+<meta itemprop="name" content="xgboost 使用">
+<meta itemprop="description" content="非常不建议在XGBoost 里面用他的缺省值处理方法 还是要一个feature，一个feature 的手工做处理比较好。 这个可以知道每个特征的重要">
+
+
+<meta itemprop="datePublished" content="2018-07-19T22:29:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-19T22:29:23&#43;00:00" />
+<meta itemprop="wordCount" content="548">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="xgboost 使用"/>
+<meta name="twitter:description" content="非常不建议在XGBoost 里面用他的缺省值处理方法 还是要一个feature，一个feature 的手工做处理比较好。 这个可以知道每个特征的重要"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">xgboost 使用</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-19 </span>
+        
+        <span class="more-meta"> 548 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>非常不建议在XGBoost 里面用他的缺省值处理方法
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/C2DHI1elbg.png?imageslim" alt="mark" />
+还是要一个feature，一个feature 的手工做处理比较好。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/dhlD6kHgHc.png?imageslim" alt="mark" />
+这个可以知道每个特征的重要性。</p>
+
+<p>看起来 XGBoost 还是很好用的。
+最简单的例子：guide-python/basic_walkthrough.py 里面有讲一些基本的操作。
+然后guide-python 里面还有一些例子。比如custom_objective.py 这个是教你怎么自定义loss function 的。
+注意：
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/D710cdeHhD.png?imageslim" alt="mark" />
+如果你要自己制定loss function 的话，你要保证你的loss function 是可导的，而且，你要告诉他一阶导数 grad 和二阶倒数 hess。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/3klEbE2jHc.png?imageslim" alt="mark" />
+这个是交叉验证的使用案例。</p>
+
+<p>sklearn_parallel.py 这个是讲怎么用sklearn 并行的调用xgboost</p>
+
+<p>guide-python 里面基本覆盖了你一般会用到的一些功能</p>
+
+<p>课程文档里面的XGBoost model tuning 可以直接参考这个来进行调参。</p>
+
+<p>XGBoost 可以布置分布式的，基本上都在用，用到GBDT 的地方基本上都用它。大的公司会布置分布式的版本，在大的数据上训练是很快的。</p>
+
+<p>DL 基本上只在图像上有很多的应用，在别的东西上应用没有那么多。</p>
+
+<p>lightGBM 确实有一定程度的提升，但是没有它说的那么大的提升。现在用得少是因为没有python 的版本。</p>
+
+<p>目前boosting 的算法，除了 XGBoost 和lightGBM ，如果在非常大的数据集上进行训练，百度有 一个基于RF 的算法，比XGBoost 的效果要好</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%BB%BC%E8%BF%B0/00-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A7%A3%E5%86%B3%E5%AE%9E%E9%99%85%E9%97%AE%E9%A2%98%E7%9A%84%E6%B5%81%E7%A8%8B/09-%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">09 模型融合</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%BB%BC%E8%BF%B0/00-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A7%A3%E5%86%B3%E5%AE%9E%E9%99%85%E9%97%AE%E9%A2%98%E7%9A%84%E6%B5%81%E7%A8%8B/00-%E6%80%BB%E4%BD%93%E6%B5%81%E7%A8%8B/">
+            <span class="next-text nav-default">00 总体流程</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

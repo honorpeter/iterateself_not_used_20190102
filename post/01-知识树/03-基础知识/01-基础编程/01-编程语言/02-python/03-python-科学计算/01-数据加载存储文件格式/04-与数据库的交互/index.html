@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 与数据库的交互 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="6.4 Interacting with Databases(与数据库的交互) 如果在工作中，大部分数据并不会以text或excel的格式存储。最广泛使用的是SQL-based的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/04-%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%BA%A4%E4%BA%92/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 与数据库的交互" />
+<meta property="og:description" content="6.4 Interacting with Databases(与数据库的交互) 如果在工作中，大部分数据并不会以text或excel的格式存储。最广泛使用的是SQL-based的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/04-%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E4%BA%A4%E4%BA%92/" /><meta property="article:published_time" content="2018-07-08T13:31:18&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-08T13:31:18&#43;00:00"/>
+<meta itemprop="name" content="04 与数据库的交互">
+<meta itemprop="description" content="6.4 Interacting with Databases(与数据库的交互) 如果在工作中，大部分数据并不会以text或excel的格式存储。最广泛使用的是SQL-based的">
+
+
+<meta itemprop="datePublished" content="2018-07-08T13:31:18&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-08T13:31:18&#43;00:00" />
+<meta itemprop="wordCount" content="732">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 与数据库的交互"/>
+<meta name="twitter:description" content="6.4 Interacting with Databases(与数据库的交互) 如果在工作中，大部分数据并不会以text或excel的格式存储。最广泛使用的是SQL-based的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 与数据库的交互</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-08 </span>
+        
+        <span class="more-meta"> 732 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#6-4-interacting-with-databases-与数据库的交互">6.4 Interacting with Databases(与数据库的交互)</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="6-4-interacting-with-databases-与数据库的交互">6.4 Interacting with Databases(与数据库的交互)</h1>
+
+<p>如果在工作中，大部分数据并不会以text或excel的格式存储。最广泛使用的是SQL-based的关系型数据库（SQL Server，PostgreSQL，MySQL）。选择数据库通常取决于性能，数据整合性，实际应用的可扩展性。</p>
+
+<p>读取SQL到DataFrame非常直观，pandas中有一些函数能简化这个过程。举个例子，这里创建一个SQLite数据库，通过使用python内建的sqlite3 driver：</p>
+
+<pre><code class="language-python">import sqlite3
+import pandas as pd
+</code></pre>
+
+<pre><code class="language-python">query = &quot;&quot;&quot;
+CREATE TABLE test
+(a VARCHAR(20), b VARCHAR(20),
+ c REAL,        d INTEGER
+);&quot;&quot;&quot;
+</code></pre>
+
+<pre><code class="language-python">con = sqlite3.connect('../examples/mydata.sqlite')
+</code></pre>
+
+<pre><code class="language-python">con.execute(query)
+</code></pre>
+
+<pre><code>&lt;sqlite3.Cursor at 0x1049931f0&gt;
+</code></pre>
+
+<pre><code class="language-python">con.commit()
+</code></pre>
+
+<p>然后我们插入几行数据：</p>
+
+<pre><code class="language-python">data = [('Atlanta', 'Georgia', 1.25, 6),
+        ('Tallahassee', 'Florida', 2.6, 3),
+        ('Sacramento', 'California', 1.7, 5)]
+</code></pre>
+
+<pre><code class="language-python">stmt = &quot;INSERT INTO test VALUES(?, ?, ?, ?)&quot;
+</code></pre>
+
+<pre><code class="language-python">con.executemany(stmt, data)
+</code></pre>
+
+<pre><code>&lt;sqlite3.Cursor at 0x1049932d0&gt;
+</code></pre>
+
+<pre><code class="language-python">con.commit()
+</code></pre>
+
+<p>大部分python的SQL驱动(PyODBC, psycopg2, MySQLdb, pymssql, 等)返回a list of tuple，当从一个表格选择数据的时候：</p>
+
+<pre><code class="language-python">cursor = con.execute('select * from test')
+</code></pre>
+
+<pre><code class="language-python">rows = cursor.fetchall()
+</code></pre>
+
+<pre><code class="language-python">rows
+</code></pre>
+
+<pre><code>[('Atlanta', 'Georgia', 1.25, 6),
+ ('Tallahassee', 'Florida', 2.6, 3),
+ ('Sacramento', 'California', 1.7, 5)]
+</code></pre>
+
+<p>我们可以把list of tuples传递给DataFrame，但是我们也需要column names,包含cursor的description属性：</p>
+
+<pre><code class="language-python">cursor.description
+</code></pre>
+
+<pre><code>(('a', None, None, None, None, None, None),
+ ('b', None, None, None, None, None, None),
+ ('c', None, None, None, None, None, None),
+ ('d', None, None, None, None, None, None))
+</code></pre>
+
+<pre><code class="language-python">pd.DataFrame(rows, columns=[x[0] for x in cursor.description])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Atlanta</td>
+      <td>Georgia</td>
+      <td>1.25</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Tallahassee</td>
+      <td>Florida</td>
+      <td>2.60</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sacramento</td>
+      <td>California</td>
+      <td>1.70</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>我们不希望每次询问数据库的时候都重复以上步骤，这样对计算机很不好(mung,【计】逐步对计算机系统或文件做小改动导致大的损害)。SQLAlchemy计划是一个六星的Python SQL工具箱，它能抽象出不同SQL数据库之间的不同。pandas有一个read_sql函数，能让我们从SQLAlchemy connection从读取数据。这里我们用SQLAlchemy连接到同一个SQLite数据库，并从之前创建的表格读取数据：</p>
+
+<pre><code class="language-python">import sqlalchemy as sqla
+</code></pre>
+
+<pre><code class="language-python">db = sqla.create_engine('sqlite:///../examples/mydata.sqlite')
+</code></pre>
+
+<pre><code class="language-python">pd.read_sql('select * from test', db)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Atlanta</td>
+      <td>Georgia</td>
+      <td>1.25</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Tallahassee</td>
+      <td>Florida</td>
+      <td>2.60</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Sacramento</td>
+      <td>California</td>
+      <td>1.70</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/04-%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97%E5%92%8C%E5%87%86%E5%A4%87/02-%E6%95%B0%E6%8D%AE%E5%8F%98%E6%8D%A2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 数据变换</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/02-numpy/numpy/">
+            <span class="next-text nav-default">numpy</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 案例1：news stock - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="这个是第二讲的案例，老师放在这里讲了。 项目的说明和数据下载： https://www.kaggle.com/aaron7sun/stocknews/home 通过每日新闻判断股市涨跌，这个东西是完全不靠谱的。 但是可以作为一个自然语言处理" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/04-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B1%BB%E9%97%AE%E9%A2%98/02-%E6%A1%88%E4%BE%8B1news-stock/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 案例1：news stock" />
+<meta property="og:description" content="这个是第二讲的案例，老师放在这里讲了。 项目的说明和数据下载： https://www.kaggle.com/aaron7sun/stocknews/home 通过每日新闻判断股市涨跌，这个东西是完全不靠谱的。 但是可以作为一个自然语言处理" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/04-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B1%BB%E9%97%AE%E9%A2%98/02-%E6%A1%88%E4%BE%8B1news-stock/" /><meta property="article:published_time" content="2018-07-24T10:07:48&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-24T10:07:48&#43;00:00"/>
+<meta itemprop="name" content="02 案例1：news stock">
+<meta itemprop="description" content="这个是第二讲的案例，老师放在这里讲了。 项目的说明和数据下载： https://www.kaggle.com/aaron7sun/stocknews/home 通过每日新闻判断股市涨跌，这个东西是完全不靠谱的。 但是可以作为一个自然语言处理">
+
+
+<meta itemprop="datePublished" content="2018-07-24T10:07:48&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-24T10:07:48&#43;00:00" />
+<meta itemprop="wordCount" content="4111">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 案例1：news stock"/>
+<meta name="twitter:description" content="这个是第二讲的案例，老师放在这里讲了。 项目的说明和数据下载： https://www.kaggle.com/aaron7sun/stocknews/home 通过每日新闻判断股市涨跌，这个东西是完全不靠谱的。 但是可以作为一个自然语言处理"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 案例1：news stock</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-24 </span>
+        
+        <span class="more-meta"> 4111 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#用每日新闻预测金融市场变化-标准版">用每日新闻预测金融市场变化（标准版）</a>
+<ul>
+<li>
+<ul>
+<li><a href="#监视数据">监视数据</a></li>
+<li><a href="#分割测试-训练集">分割测试/训练集</a></li>
+<li><a href="#提取features">提取features</a></li>
+<li><a href="#训练模型">训练模型</a></li>
+<li><a href="#预测">预测</a></li>
+<li><a href="#验证准确度">验证准确度</a></li>
+</ul></li>
+<li><a href="#进阶版">进阶版</a>
+<ul>
+<li><a href="#文本预处理">文本预处理</a></li>
+</ul></li>
+<li><a href="#数据下载">数据下载</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>这个是第二讲的案例，老师放在这里讲了。</p>
+
+<p>项目的说明和数据下载：</p>
+
+<p><a href="https://www.kaggle.com/aaron7sun/stocknews/home">https://www.kaggle.com/aaron7sun/stocknews/home</a></p>
+
+<p>通过每日新闻判断股市涨跌，这个东西是完全不靠谱的。
+但是可以作为一个自然语言处理的训练。</p>
+
+<p>在 Redgdit 上，有个每日新闻的频道，每天都会有人 vote 今天最关注的新闻是什么。这样就可以免费得到大家认为的免费新闻。</p>
+
+<p>然后就提取了历史 8 年的每天的前 25 条新闻。</p>
+
+<p>对应的是道琼斯工业指数，直接在 yahoo 上可以得到。</p>
+
+<p>工业指数，之分成了两类：涨或者不涨。</p>
+
+<p>OK，我们先用最简单的方法来处理这类文本分类问题。</p>
+
+<h1 id="用每日新闻预测金融市场变化-标准版">用每日新闻预测金融市场变化（标准版）</h1>
+
+<p>TF-IDF + SVM 是文本分类问题的基准线。<span style="color:red;">嗯。</span></p>
+
+<p>这篇教程我直接用最简单直接的方式处理。</p>
+
+<p>高级版本的教程会在日后的课程中放出。</p>
+
+<pre><code class="language-python">from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer
+import pandas as pd
+import numpy as np
+from sklearn.svm import SVC
+from sklearn.metrics import roc_auc_score
+from datetime import date
+</code></pre>
+
+<h3 id="监视数据">监视数据</h3>
+
+<p>我们先读入数据。这里我提供了一个已经combine好了的数据。</p>
+
+<pre><code class="language-python">data = pd.read_csv('../input/Combined_News_DJIA.csv')
+</code></pre>
+
+<p>这时候，我们可以看一下数据长什么样子。<span style="color:red;">嗯，第一步一定是做这个。看一下数据</span></p>
+
+<pre><code class="language-python">data.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Date</th>
+<th>Label</th>
+<th>Top1</th>
+<th>Top2</th>
+<th>Top3</th>
+<th>Top4</th>
+<th>Top5</th>
+<th>Top6</th>
+<th>Top7</th>
+<th>Top8</th>
+<th>&hellip;</th>
+<th>Top16</th>
+<th>Top17</th>
+<th>Top18</th>
+<th>Top19</th>
+<th>Top20</th>
+<th>Top21</th>
+<th>Top22</th>
+<th>Top23</th>
+<th>Top24</th>
+<th>Top25</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>2008-08-08</td>
+<td>0</td>
+<td>b&rdquo;Georgia &lsquo;downs two Russian warplanes&rsquo; as cou&hellip;</td>
+<td>b&rsquo;BREAKING: Musharraf to be impeached.&rsquo;</td>
+<td>b&rsquo;Russia Today: Columns of troops roll into So&hellip;</td>
+<td>b&rsquo;Russian tanks are moving towards the capital&hellip;</td>
+<td>b&rdquo;Afghan children raped with &lsquo;impunity,&rsquo; U.N. &hellip;</td>
+<td>b&rsquo;150 Russian tanks have entered South Ossetia&hellip;</td>
+<td>b&rdquo;Breaking: Georgia invades South Ossetia, Rus&hellip;</td>
+<td>b&rdquo;The &lsquo;enemy combatent&rsquo; trials are nothing but&hellip;</td>
+<td>&hellip;</td>
+<td>b&rsquo;Georgia Invades South Ossetia - if Russia ge&hellip;</td>
+<td>b&rsquo;Al-Qaeda Faces Islamist Backlash&rsquo;</td>
+<td>b&rsquo;Condoleezza Rice: &ldquo;The US would not act to p&hellip;</td>
+<td>b&rsquo;This is a busy day: The European Union has &hellip;</td>
+<td>b&rdquo;Georgia will withdraw 1,000 soldiers from Ir&hellip;</td>
+<td>b&rsquo;Why the Pentagon Thinks Attacking Iran is a &hellip;</td>
+<td>b&rsquo;Caucasus in crisis: Georgia invades South Os&hellip;</td>
+<td>b&rsquo;Indian shoe manufactory - And again in a se&hellip;</td>
+<td>b&rsquo;Visitors Suffering from Mental Illnesses Ban&hellip;</td>
+<td>b&rdquo;No Help for Mexico&rsquo;s Kidnapping Surge&rdquo;</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>2008-08-11</td>
+<td>1</td>
+<td>b&rsquo;Why wont America and Nato help us? If they w&hellip;</td>
+<td>b&rsquo;Bush puts foot down on Georgian conflict&rsquo;</td>
+<td>b&rdquo;Jewish Georgian minister: Thanks to Israeli &hellip;</td>
+<td>b&rsquo;Georgian army flees in disarray as Russians &hellip;</td>
+<td>b&rdquo;Olympic opening ceremony fireworks &lsquo;faked&rsquo;&rdquo;</td>
+<td>b&rsquo;What were the Mossad with fraudulent New Zea&hellip;</td>
+<td>b&rsquo;Russia angered by Israeli military sale to G&hellip;</td>
+<td>b&rsquo;An American citizen living in S.Ossetia blam&hellip;</td>
+<td>&hellip;</td>
+<td>b&rsquo;Israel and the US behind the Georgian aggres&hellip;</td>
+<td>b&rsquo;&ldquo;Do not believe TV, neither Russian nor Geor&hellip;</td>
+<td>b&rsquo;Riots are still going on in Montreal (Canada&hellip;</td>
+<td>b&rsquo;China to overtake US as largest manufacturer&rsquo;</td>
+<td>b&rsquo;War in South Ossetia [PICS]&rsquo;</td>
+<td>b&rsquo;Israeli Physicians Group Condemns State Tort&hellip;</td>
+<td>b&rsquo; Russia has just beaten the United States ov&hellip;</td>
+<td>b&rsquo;Perhaps <em>the</em> question about the Georgia - R&hellip;</td>
+<td>b&rsquo;Russia is so much better at war&rsquo;</td>
+<td>b&rdquo;So this is what it&rsquo;s come to: trading sex fo&hellip;</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>2008-08-12</td>
+<td>0</td>
+<td>b&rsquo;Remember that adorable 9-year-old who sang a&hellip;</td>
+<td>b&rdquo;Russia &lsquo;ends Georgia operation&rsquo;&rdquo;</td>
+<td>b&rsquo;&ldquo;If we had no sexual harassment we would hav&hellip;</td>
+<td>b&rdquo;Al-Qa&rsquo;eda is losing support in Iraq because &hellip;</td>
+<td>b&rsquo;Ceasefire in Georgia: Putin Outmaneuvers the&hellip;</td>
+<td>b&rsquo;Why Microsoft and Intel tried to kill the XO&hellip;</td>
+<td>b&rsquo;Stratfor: The Russo-Georgian War and the Bal&hellip;</td>
+<td>b&rdquo;I&rsquo;m Trying to Get a Sense of This Whole Geor&hellip;</td>
+<td>&hellip;</td>
+<td>b&rsquo;U.S. troops still in Georgia (did you know t&hellip;</td>
+<td>b&rsquo;Why Russias response to Georgia was right&rsquo;</td>
+<td>b&rsquo;Gorbachev accuses U.S. of making a &ldquo;serious &hellip;</td>
+<td>b&rsquo;Russia, Georgia, and NATO: Cold War Two&rsquo;</td>
+<td>b&rsquo;Remember that adorable 62-year-old who led y&hellip;</td>
+<td>b&rsquo;War in Georgia: The Israeli connection&rsquo;</td>
+<td>b&rsquo;All signs point to the US encouraging Georgi&hellip;</td>
+<td>b&rsquo;Christopher King argues that the US and NATO&hellip;</td>
+<td>b&rsquo;America: The New Mexico?&rsquo;</td>
+<td>b&rdquo;BBC NEWS | Asia-Pacific | Extinction &lsquo;by man&hellip;</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>2008-08-13</td>
+<td>0</td>
+<td>b&rsquo; U.S. refuses Israel weapons to attack Iran:&hellip;</td>
+<td>b&rdquo;When the president ordered to attack Tskhinv&hellip;</td>
+<td>b&rsquo; Israel clears troops who killed Reuters cam&hellip;</td>
+<td>b&rsquo;Britain\&rsquo;s policy of being tough on drugs is&hellip;</td>
+<td>b&rsquo;Body of 14 year old found in trunk; Latest (&hellip;</td>
+<td>b&rsquo;China has moved 10 <em>million</em> quake survivors&hellip;</td>
+<td>b&rdquo;Bush announces Operation Get All Up In Russi&hellip;</td>
+<td>b&rsquo;Russian forces sink Georgian ships &lsquo;</td>
+<td>&hellip;</td>
+<td>b&rsquo;Elephants extinct by 2020?&rsquo;</td>
+<td>b&rsquo;US humanitarian missions soon in Georgia - i&hellip;</td>
+<td>b&rdquo;Georgia&rsquo;s DDOS came from US sources&rdquo;</td>
+<td>b&rsquo;Russian convoy heads into Georgia, violating&hellip;</td>
+<td>b&rsquo;Israeli defence minister: US against strike &hellip;</td>
+<td>b&rsquo;Gorbachev: We Had No Choice&rsquo;</td>
+<td>b&rsquo;Witness: Russian forces head towards Tbilisi&hellip;</td>
+<td>b&rsquo; Quarter of Russians blame U.S. for conflict&hellip;</td>
+<td>b&rsquo;Georgian president says US military will ta&hellip;</td>
+<td>b&rsquo;2006: Nobel laureate Aleksander Solzhenitsyn&hellip;</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>2008-08-14</td>
+<td>1</td>
+<td>b&rsquo;All the experts admit that we should legalis&hellip;</td>
+<td>b&rsquo;War in South Osetia - 89 pictures made by a &hellip;</td>
+<td>b&rsquo;Swedish wrestler Ara Abrahamian throws away &hellip;</td>
+<td>b&rsquo;Russia exaggerated the death toll in South O&hellip;</td>
+<td>b&rsquo;Missile That Killed 9 Inside Pakistan May Ha&hellip;</td>
+<td>b&rdquo;Rushdie Condemns Random House&rsquo;s Refusal to P&hellip;</td>
+<td>b&rsquo;Poland and US agree to missle defense deal. &hellip;</td>
+<td>b&rsquo;Will the Russians conquer Tblisi? Bet on it,&hellip;</td>
+<td>&hellip;</td>
+<td>b&rsquo;Bank analyst forecast Georgian crisis 2 days&hellip;</td>
+<td>b&rdquo;Georgia confict could set back Russia&rsquo;s US r&hellip;</td>
+<td>b&rsquo;War in the Caucasus is as much the product o&hellip;</td>
+<td>b&rsquo;&ldquo;Non-media&rdquo; photos of South Ossetia/Georgia &hellip;</td>
+<td>b&rsquo;Georgian TV reporter shot by Russian sniper &hellip;</td>
+<td>b&rsquo;Saudi Arabia: Mother moves to block child ma&hellip;</td>
+<td>b&rsquo;Taliban wages war on humanitarian aid workers&rsquo;</td>
+<td>b&rsquo;Russia: World &ldquo;can forget about&rdquo; Georgia\&rsquo;s&hellip;</td>
+<td>b&rsquo;Darfur rebels accuse Sudan of mounting major&hellip;</td>
+<td>b&rsquo;Philippines : Peace Advocate say Muslims nee&hellip;</td>
+</tr>
+</tbody>
+</table>
+
+<p>其实看起来特别的简单直观。如果是1，那么当日的DJIA就提高或者不变了。如果是1，那么DJIA那天就是跌了。</p>
+
+<p>接下来我们把每一天的 25 个 headlines 先合并起来。因为我们显然是需要考虑这一天的所有的 news 的。</p>
+
+<pre><code class="language-python">data[&quot;combined_news&quot;] = data.filter(regex=(&quot;Top.*&quot;)).apply(lambda x: ''.join(str(x.values)), axis=1)
+</code></pre>
+
+<p>把Top 开头的列都取出来，然后通过这个 lambda 表达式合并起来。通过这一步就得到了一个新的列 combined_news。</p>
+
+<h3 id="分割测试-训练集">分割测试/训练集</h3>
+
+<p>这下，我们可以把数据给分成 Training/Testing data</p>
+
+<pre><code class="language-python">train = data[data['Date'] &lt; '2015-01-01']
+test = data[data['Date'] &gt; '2014-12-31']
+</code></pre>
+
+<p><span style="color:red;">这样的切分效果不是很好吧？</span></p>
+
+<p>通过日期进行分割</p>
+
+<h3 id="提取features">提取features</h3>
+
+<p>也就是文本中的特征。这里一定要注意，fit你的model的时候，要用training set，不能一股脑的把所有的数据都放进来。（当然，现实中你可以这么做）因为我们要假设testing set我们在训练的时候是完全接触不到的，是不可知的。</p>
+
+<p>这里没有进行文本预处理 preprocessing ，是一个简单版教程，直接把我们的 feature 通过 tf-idf 这个方法提取出来。</p>
+
+<pre><code class="language-python">feature_extraction = TfidfVectorizer()
+X_train = feature_extraction.fit_transform(train[&quot;combined_news&quot;].values)
+</code></pre>
+
+<p>fit_transform 是两个步骤，fit 是把这里面的文本信息训练一遍，并且把它 transform 成我们所需要的 tf-idf 数字表达式。注意：fit_transform 一定只能用在训练集上。</p>
+
+<p>fit_transform 完成之后，feature_extraction 就记住了我们在训练集上训练的 tf-idf 模型的样子。</p>
+
+<p>所以<em>X_train</em> 搞完以后，直接给 <em>X_test</em> 做个Transform</p>
+
+<pre><code class="language-python">X_test = feature_extraction.transform(test[&quot;combined_news&quot;].values)
+</code></pre>
+
+<p>这样，就直接把它用在了测试集上，测试集是不会经过训练的，而是通过我训练集的fit之后的模型直接把测试集 transform 成他应该有的表达形式。也就是变成我们的 X_test。</p>
+
+<p>同理，y就是我们已经准备好的label</p>
+
+<pre><code class="language-python">y_train = train[&quot;Label&quot;].values
+y_test = test[&quot;Label&quot;].values
+</code></pre>
+
+<p>.values 的意思就是把它变成一个 numpy 。</p>
+
+<p>这时候，我们的 X_train X_test  y_train y_test 都已经齐全了。</p>
+
+<h3 id="训练模型">训练模型</h3>
+
+<pre><code class="language-python">clf = SVC(probability=True, kernel='rbf')
+</code></pre>
+
+<p>SVC 就是 svm 的分类版。<span style="color:red;">好吧，才知道。</span></p>
+
+<p>把你的*X_train*和*y_train*给fit进去</p>
+
+<pre><code class="language-python">clf.fit(X_train, y_train)
+</code></pre>
+
+<pre><code>SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=None, degree=3, gamma='auto', kernel='rbf',
+  max_iter=-1, probability=True, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+</code></pre>
+
+<h3 id="预测">预测</h3>
+
+<pre><code class="language-python">predictions = clf.predict_proba(X_test)
+</code></pre>
+
+<p>为什么要用 predict_proba 呢？因为在0-1 分类的问题中，如果你的参数调整的不好，没用sem 的话，可能输出的全是1 ，也可能全是0，因为，加入说你的样本不是均衡的 1非常多，那么我全输出1 结果就已经很好了。<span style="color:red;">这个地方使用 predict_proba 的原因还是美很清楚，有几句话没听清，尤其是 “没用 sem 的话” 不知道说的是不是 sem</span></p>
+
+<h3 id="验证准确度">验证准确度</h3>
+
+<p>按照我之前给的要求，用AUC作为binary classification的Metrics</p>
+
+<pre><code class="language-python">print('ROC-AUC yields ' + str(roc_auc_score(y_test, predictions[:,1])))
+</code></pre>
+
+<pre><code>ROC-AUC yields 0.574260752688
+</code></pre>
+
+<p>可见，我们用最直接简单的方法。什么预处理都没有做，直接把 tf-idf 取出来，然后就计算了。</p>
+
+<p>OK，我们看看添加了文本预处理之后的效果：</p>
+
+<h2 id="进阶版">进阶版</h2>
+
+<h3 id="文本预处理">文本预处理</h3>
+
+<p>我们这样直接把文本放进TF-IDF，虽然简单方便，但是还是不够严谨的。我们可以把原文本做进一步的处理。</p>
+
+<ul>
+<li>首先，我们把它小写化 / 分成小tokens，然后去除一些符号。</li>
+</ul>
+
+<pre><code class="language-python">X_train = train[&quot;combined_news&quot;].str.lower().str.replace('&quot;', '').str.replace(&quot;'&quot;, '').str.split()
+X_test = test[&quot;combined_news&quot;].str.lower().str.replace('&quot;', '').str.replace(&quot;'&quot;, '').str.split()
+print(X_test[1611])
+</code></pre>
+
+<pre><code>['[', 'most', 'cases', 'of', 'cancer', 'are', 'the', 'result', 'of', 'sheer', 'bad', 'luck', 'rather', 'than', 'unhealthy', 'lifestyles,', 'diet', 'or', 'even', 'inherited', 'genes,', 'new', 'research', 'suggests.', 'random', 'mutations', 'that', 'occur', 'in', 'dna', 'when', 'cells', 'divide', 'are', 'responsible', 'for', 'two', 'thirds', 'of', 'adult', 'cancers', 'across', 'a', 'wide', 'range', 'of', 'tissues.', 'iran', 'dismissed', 'united', 'states', 'efforts', 'to', 'fight', 'islamic', 'state', 'as', 'a', 'ploy', 'to', 'advance', 'u.s.', 'policies', 'in', 'the', 'region:', 'the', 'reality', 'is', 'that', 'the', 'united', 'states', 'is', 'not', 'acting', 'to', 'eliminate', 'daesh.', 'they', 'are', 'not', 'even', 'interested', 'in', 'weakening', 'daesh,', 'they', 'are', 'only', 'interested', 'in', 'managing', 'it', 'poll:', 'one', 'in', '8', 'germans', 'would', 'join', 'anti-muslim', 'marches', 'uk', 'royal', 'familys', 'prince', 'andrew', 'named', 'in', 'us', 'lawsuit', 'over', 'underage', 'sex', 'allegations', 'some', '40', 'asylum-seekers', 'refused', 'to', 'leave', 'the', 'bus', 'when', 'they', 'arrived', 'at', 'their', 'destination', 'in', 'rural', 'northern', 'sweden,', 'demanding', 'that', 'they', 'be', 'taken', 'back', 'to', 'malm', 'or', 'some', 'big', 'city.', 'pakistani', 'boat', 'blows', 'self', 'up', 'after', 'india', 'navy', 'chase.', 'all', 'four', 'people', 'on', 'board', 'the', 'vessel', 'from', 'near', 'the', 'pakistani', 'port', 'city', 'of', 'karachi', 'are', 'believed', 'to', 'have', 'been', 'killed', 'in', 'the', 'dramatic', 'episode', 'in', 'the', 'arabian', 'sea', 'on', 'new', 'years', 'eve,', 'according', 'to', 'indias', 'defence', 'ministry.', 'sweden', 'hit', 'by', 'third', 'mosque', 'arson', 'attack', 'in', 'a', 'week', '940', 'cars', 'set', 'alight', 'during', 'french', 'new', 'year', 'salaries', 'for', 'top', 'ceos', 'rose', 'twice', 'as', 'fast', 'as', 'average', 'canadian', 'since', 'recession:', 'study', 'norway', 'violated', 'equal-pay', 'law,', 'judge', 'says:', 'judge', 'finds', 'consulate', 'employee', 'was', 'unjustly', 'paid', '$30,000', 'less', 'than', 'her', 'male', 'counterpart', 'imam', 'wants', 'radical', 'recruiters', 'of', 'muslim', 'youth', 'in', 'canada', 'identified', 'and', 'dealt', 'with', 'saudi', 'arabia', 'beheaded', '83', 'people', 'in', '2014,', 'the', 'most', 'in', 'years', 'a', 'living', 'hell', 'for', 'slaves', 'on', 'remote', 'south', 'korean', 'islands', '-', 'slavery', 'thrives', 'on', 'this', 'chain', 'of', 'rural', 'islands', 'off', 'south', 'koreas', 'rugged', 'southwest', 'coast,', 'nurtured', 'by', 'a', 'long', 'history', 'of', 'exploitation', 'and', 'the', 'demands', 'of', 'trying', 'to', 'squeeze', 'a', 'living', 'from', 'the', 'sea.', 'worlds', '400', 'richest', 'get', 'richer,', 'adding', '$92bn', 'in', '2014', 'rental', 'car', 'stereos', 'infringe', 'copyright,', 'music', 'rights', 'group', 'says', 'ukrainian', 'minister', 'threatens', 'tv', 'channel', 'with', 'closure', 'for', 'airing', 'russian', 'entertainers', 'palestinian', 'president', 'mahmoud', 'abbas', 'has', 'entered', 'into', 'his', 'most', 'serious', 'confrontation', 'yet', 'with', 'israel', 'by', 'signing', 'onto', 'the', 'international', 'criminal', 'court.', 'his', 'decision', 'on', 'wednesday', 'gives', 'the', 'court', 'jurisdiction', 'over', 'crimes', 'committed', 'in', 'palestinian', 'lands.', 'israeli', 'security', 'center', 'publishes', 'names', 'of', '50', 'killed', 'terrorists', 'concealed', 'by', 'hamas', 'the', 'year', '2014', 'was', 'the', 'deadliest', 'year', 'yet', 'in', 'syrias', 'four-year', 'conflict,', 'with', 'over', '76,000', 'killed', 'a', 'secret', 'underground', 'complex', 'built', 'by', 'the', 'nazis', 'that', 'may', 'have', 'been', 'used', 'for', 'the', 'development', 'of', 'wmds,', 'including', 'a', 'nuclear', 'bomb,', 'has', 'been', 'uncovered', 'in', 'austria.', 'restrictions', 'on', 'web', 'freedom', 'a', 'major', 'global', 'issue', 'in', '2015', 'austrian', 'journalist', 'erich', 'mchel', 'delivered', 'a', 'presentation', 'in', 'hamburg', 'at', 'the', 'annual', 'meeting', 'of', 'the', 'chaos', 'computer', 'club', 'on', 'monday', 'december', '29,', 'detailing', 'the', 'various', 'locations', 'where', 'the', 'us', 'nsa', 'has', 'been', 'actively', 'collecting', 'and', 'processing', 'electronic', 'intelligence', 'in', 'vienna.', 'thousands', 'of', 'ukraine', 'nationalists', 'march', 'in', 'kiev', 'chinas', 'new', 'years', 'resolution:', 'no', 'more', 'harvesting', 'executed', 'prisoners', 'organs', 'authorities', 'pull', 'plug', 'on', 'russias', 'last', 'politically', 'independent', 'tv', 'station]']
+</code></pre>
+
+<ul>
+<li>然后，我们删除一些停止词</li>
+</ul>
+
+<pre><code class="language-python">from nltk.corpus import stopwords
+stop = stopwords.words('english')
+</code></pre>
+
+<ul>
+<li>删除数字</li>
+</ul>
+
+<pre><code class="language-python">import re
+def hasNumbers(inputString):
+    return bool(re.search(r'\d', inputString))
+</code></pre>
+
+<ul>
+<li>lemma 把所有的词型都归一成一种表达</li>
+</ul>
+
+<pre><code class="language-python">from nltk.stem import WordNetLemmatizer
+wordnet_lemmatizer = WordNetLemmatizer()
+</code></pre>
+
+<p>我们把这些处理过程合成一个 function:</p>
+
+<pre><code class="language-python">def check(word):
+    &quot;&quot;&quot;
+    如果需要这个单词，则True
+    如果应该去除，则False
+    &quot;&quot;&quot;
+    if word in stop:
+        return False
+    elif hasNumbers(word):
+        return False
+    else:
+        return True
+</code></pre>
+
+<p>然后我们把整个流程放进我们的 DF 中处理</p>
+
+<pre><code class="language-python">X_train = X_train.apply(lambda x: [wordnet_lemmatizer.lemmatize(item) for item in x if check(item)])
+X_test = X_test.apply(lambda x: [wordnet_lemmatizer.lemmatize(item) for item in x if check(item)])
+print(X_test[1611])
+</code></pre>
+
+<pre><code>['[', 'case', 'cancer', 'result', 'sheer', 'bad', 'luck', 'rather', 'unhealthy', 'lifestyles,', 'diet', 'even', 'inherited', 'genes,', 'new', 'research', 'suggests.', 'random', 'mutation', 'occur', 'dna', 'cell', 'divide', 'responsible', 'two', 'third', 'adult', 'cancer', 'across', 'wide', 'range', 'tissues.', 'iran', 'dismissed', 'united', 'state', 'effort', 'fight', 'islamic', 'state', 'ploy', 'advance', 'u.s.', 'policy', 'region:', 'reality', 'united', 'state', 'acting', 'eliminate', 'daesh.', 'even', 'interested', 'weakening', 'daesh,', 'interested', 'managing', 'poll:', 'one', 'german', 'would', 'join', 'anti-muslim', 'march', 'uk', 'royal', 'family', 'prince', 'andrew', 'named', 'u', 'lawsuit', 'underage', 'sex', 'allegation', 'asylum-seekers', 'refused', 'leave', 'bus', 'arrived', 'destination', 'rural', 'northern', 'sweden,', 'demanding', 'taken', 'back', 'malm', 'big', 'city.', 'pakistani', 'boat', 'blow', 'self', 'india', 'navy', 'chase.', 'four', 'people', 'board', 'vessel', 'near', 'pakistani', 'port', 'city', 'karachi', 'believed', 'killed', 'dramatic', 'episode', 'arabian', 'sea', 'new', 'year', 'eve,', 'according', 'india', 'defence', 'ministry.', 'sweden', 'hit', 'third', 'mosque', 'arson', 'attack', 'week', 'car', 'set', 'alight', 'french', 'new', 'year', 'salary', 'top', 'ceo', 'rose', 'twice', 'fast', 'average', 'canadian', 'since', 'recession:', 'study', 'norway', 'violated', 'equal-pay', 'law,', 'judge', 'says:', 'judge', 'find', 'consulate', 'employee', 'unjustly', 'paid', 'le', 'male', 'counterpart', 'imam', 'want', 'radical', 'recruiter', 'muslim', 'youth', 'canada', 'identified', 'dealt', 'saudi', 'arabia', 'beheaded', 'people', 'year', 'living', 'hell', 'slave', 'remote', 'south', 'korean', 'island', '-', 'slavery', 'thrives', 'chain', 'rural', 'island', 'south', 'korea', 'rugged', 'southwest', 'coast,', 'nurtured', 'long', 'history', 'exploitation', 'demand', 'trying', 'squeeze', 'living', 'sea.', 'world', 'richest', 'get', 'richer,', 'adding', 'rental', 'car', 'stereo', 'infringe', 'copyright,', 'music', 'right', 'group', 'say', 'ukrainian', 'minister', 'threatens', 'tv', 'channel', 'closure', 'airing', 'russian', 'entertainer', 'palestinian', 'president', 'mahmoud', 'abbas', 'entered', 'serious', 'confrontation', 'yet', 'israel', 'signing', 'onto', 'international', 'criminal', 'court.', 'decision', 'wednesday', 'give', 'court', 'jurisdiction', 'crime', 'committed', 'palestinian', 'lands.', 'israeli', 'security', 'center', 'publishes', 'name', 'killed', 'terrorist', 'concealed', 'hamas', 'year', 'deadliest', 'year', 'yet', 'syria', 'four-year', 'conflict,', 'killed', 'secret', 'underground', 'complex', 'built', 'nazi', 'may', 'used', 'development', 'wmds,', 'including', 'nuclear', 'bomb,', 'uncovered', 'austria.', 'restriction', 'web', 'freedom', 'major', 'global', 'issue', 'austrian', 'journalist', 'erich', 'mchel', 'delivered', 'presentation', 'hamburg', 'annual', 'meeting', 'chaos', 'computer', 'club', 'monday', 'december', 'detailing', 'various', 'location', 'u', 'nsa', 'actively', 'collecting', 'processing', 'electronic', 'intelligence', 'vienna.', 'thousand', 'ukraine', 'nationalist', 'march', 'kiev', 'china', 'new', 'year', 'resolution:', 'harvesting', 'executed', 'prisoner', 'organ', 'authority', 'pull', 'plug', 'russia', 'last', 'politically', 'independent', 'tv', 'station]']
+</code></pre>
+
+<p>到这里，文本预处理就结束了。</p>
+
+<p>因为外部库，比如sklearn 只支持string输入，所以我们把调整后的 list 再变回string。<span style="color:red;">嗯。</span></p>
+
+<pre><code class="language-python">X_train = X_train.apply(lambda x: ' '.join(x))
+X_test = X_test.apply(lambda x: ' '.join(x))
+print(X_test[1611])
+</code></pre>
+
+<pre><code>[ case cancer result sheer bad luck rather unhealthy lifestyles, diet even inherited genes, new research suggests. random mutation occur dna cell divide responsible two third adult cancer across wide range tissues. iran dismissed united state effort fight islamic state ploy advance u.s. policy region: reality united state acting eliminate daesh. even interested weakening daesh, interested managing poll: one german would join anti-muslim march uk royal family prince andrew named u lawsuit underage sex allegation asylum-seekers refused leave bus arrived destination rural northern sweden, demanding taken back malm big city. pakistani boat blow self india navy chase. four people board vessel near pakistani port city karachi believed killed dramatic episode arabian sea new year eve, according india defence ministry. sweden hit third mosque arson attack week car set alight french new year salary top ceo rose twice fast average canadian since recession: study norway violated equal-pay law, judge says: judge find consulate employee unjustly paid le male counterpart imam want radical recruiter muslim youth canada identified dealt saudi arabia beheaded people year living hell slave remote south korean island - slavery thrives chain rural island south korea rugged southwest coast, nurtured long history exploitation demand trying squeeze living sea. world richest get richer, adding rental car stereo infringe copyright, music right group say ukrainian minister threatens tv channel closure airing russian entertainer palestinian president mahmoud abbas entered serious confrontation yet israel signing onto international criminal court. decision wednesday give court jurisdiction crime committed palestinian lands. israeli security center publishes name killed terrorist concealed hamas year deadliest year yet syria four-year conflict, killed secret underground complex built nazi may used development wmds, including nuclear bomb, uncovered austria. restriction web freedom major global issue austrian journalist erich mchel delivered presentation hamburg annual meeting chaos computer club monday december detailing various location u nsa actively collecting processing electronic intelligence vienna. thousand ukraine nationalist march kiev china new year resolution: harvesting executed prisoner organ authority pull plug russia last politically independent tv station]
+</code></pre>
+
+<p>重新Fit一遍我们的clf</p>
+
+<pre><code class="language-python">feature_extraction = TfidfVectorizer(lowercase=False)
+X_train = feature_extraction.fit_transform(X_train.values)
+X_test = feature_extraction.transform(X_test.values)
+</code></pre>
+
+<p>再跑一遍</p>
+
+<pre><code class="language-python">clf = SVC(probability=True, kernel='rbf')
+clf.fit(X_train, y_train)
+predictions = clf.predict_proba(X_test)
+print('ROC-AUC yields ' + str(roc_auc_score(y_test, predictions[:,1])))
+</code></pre>
+
+<pre><code>ROC-AUC yields 0.539566532258
+</code></pre>
+
+<p>不小心发现，折腾一圈以后，这个结果还不如之前的简单版。是的。<span style="color:red;">而且，感觉文本预处理的过程对于这个问题来说没有什么实在意义。而且也说明了这个问题其实结果随机性很大。</span></p>
+
+<p><span style="color:red;">当然，这里面的模型没有进行调参，都是使用的默认的参数来跑的，也会有些偏差。调参可能会带来非常明显的效果。 grid-search 其实里面就是 loop 的。</span></p>
+
+<p>下面我们分析一下造成如此的原因有几种：</p>
+
+<ul>
+<li>数据点太少</li>
+</ul>
+
+<p>8年*365 2500  对于我们的 NLP 来说，几千条数据的数据量本身是量很少的。因为对于 NLP 来说，单词特征是非常多的，</p>
+
+<p>在大量的数据下，标准的文本预处理流程还是需要的，以提高机器学习的准确度。</p>
+
+<ul>
+<li>One-Off result</li>
+</ul>
+
+<p>我们到现在都只是跑了一次而已。如果我们像前面的例子一样，用 Cross Validation 来使用 z-folder 玩这组数据，说不定我们会发现，分数高的 clf 其实是 overfitted 了的。<span style="color:red;">好吧。</span></p>
+
+<p>所以，我们在做kaggle竞赛的时候，最好是要给自己的 clf 做好 Cross Validation 验证。<span style="color:red;">嗯，因为 overfitting 是没准的。</span></p>
+
+<p>OK，这个案例就讲完了。整个过程还是很清晰的，不过不是太完整，调参的过程没有讲，而且只是用了 tf-idf 没有使用个word2vec 什么的。</p>
+
+<h2 id="数据下载">数据下载</h2>
+
+<p>链接：<a href="https://pan.baidu.com/s/1l3Af9POz1i3HLQiyr9FHnw">https://pan.baidu.com/s/1l3Af9POz1i3HLQiyr9FHnw</a> 密码：7tl2</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/04-%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86%E7%B1%BB%E9%97%AE%E9%A2%98/03-%E6%A1%88%E4%BE%8B1news-stock-advance/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 案例1：news stock advance</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/03-%E6%8E%92%E5%BA%8F%E4%B8%8E-ctr%E9%A2%84%E4%BC%B0%E9%97%AE%E9%A2%98/01-%E6%A6%82%E8%BF%B0/">
+            <span class="next-text nav-default">01 概述</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

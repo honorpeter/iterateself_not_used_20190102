@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python 特殊方法与类的定制 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这些还是不是很清楚，要弄清楚 总结一下，有些与C&#43;&#43;和C#里面相似的功能，但是实现的话还是有区别的，使用的是str、iter、get" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python-%E7%89%B9%E6%AE%8A%E6%96%B9%E6%B3%95%E4%B8%8E%E7%B1%BB%E7%9A%84%E5%AE%9A%E5%88%B6/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Python 特殊方法与类的定制" />
+<meta property="og:description" content="需要补充的 这些还是不是很清楚，要弄清楚 总结一下，有些与C&#43;&#43;和C#里面相似的功能，但是实现的话还是有区别的，使用的是str、iter、get" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python-%E7%89%B9%E6%AE%8A%E6%96%B9%E6%B3%95%E4%B8%8E%E7%B1%BB%E7%9A%84%E5%AE%9A%E5%88%B6/" /><meta property="article:published_time" content="2018-06-11T22:49:35&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T22:49:35&#43;00:00"/>
+<meta itemprop="name" content="Python 特殊方法与类的定制">
+<meta itemprop="description" content="需要补充的 这些还是不是很清楚，要弄清楚 总结一下，有些与C&#43;&#43;和C#里面相似的功能，但是实现的话还是有区别的，使用的是str、iter、get">
+
+
+<meta itemprop="datePublished" content="2018-06-11T22:49:35&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T22:49:35&#43;00:00" />
+<meta itemprop="wordCount" content="693">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python 特殊方法与类的定制"/>
+<meta name="twitter:description" content="需要补充的 这些还是不是很清楚，要弄清楚 总结一下，有些与C&#43;&#43;和C#里面相似的功能，但是实现的话还是有区别的，使用的是str、iter、get"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python 特殊方法与类的定制</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 693 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#main-point">MAIN POINT</a>
+<ul>
+<li>
+<ul>
+<li><a href="#1-使用-str-控制打印类的时候的输出">1.使用 <strong>str</strong> 控制打印类的时候的输出</a></li>
+<li><a href="#2-使用-iter-做一个迭代器">2.使用 <strong>iter</strong> 做一个迭代器</a></li>
+<li><a href="#3-通过-getitem-来给类提供下标的支持">3.通过 <strong>getitem</strong> 来给类提供下标的支持</a></li>
+<li><a href="#4-使用-call-将class变成callable的">4.使用<strong>call</strong>将class变成callable的</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>这些还是不是很清楚，要弄清楚</strong></li>
+<li></li>
+</ul>
+
+<p>总结一下，有些与C++和C#里面相似的功能，但是实现的话还是有区别的，使用的是<strong>str</strong>、<strong>iter</strong>、<strong>getitem</strong>等，这些或多或少的会修改类的行为</p>
+
+<h1 id="main-point">MAIN POINT</h1>
+
+<h3 id="1-使用-str-控制打印类的时候的输出">1.使用 <strong>str</strong> 控制打印类的时候的输出</h3>
+
+<p>代码如下：</p>
+
+<pre><code>class MyClass1:
+    def __init__(self, name):
+        self.name = name
+</code></pre>
+
+<p>​<br />
+    class MyClass2:
+        def <strong>init</strong>(self, name):
+            self.name = name</p>
+
+<pre><code>    # 通过实现这个，可以控制这个类在print的时候显示的内容，这个相当于C#里面的接口
+    def __str__(self):
+        print('print will call __str__ first.')
+        return 'Hello ' + self.name + '!'
+</code></pre>
+
+<p>​<br />
+    print(MyClass1(&lsquo;Tom&rsquo;))
+    print(MyClass2(&lsquo;Tom&rsquo;))</p>
+
+<p>输出：</p>
+
+<pre><code>&lt;__main__.MyClass1 object at 0x0000017ADE1C8630&gt;
+print will call __str__ first.
+Hello Tom!
+</code></pre>
+
+<h3 id="2-使用-iter-做一个迭代器">2.使用 <strong>iter</strong> 做一个迭代器</h3>
+
+<pre><code># 使用iter和next可以支持for循环
+class Fib100:
+    def __init__(self):
+        self._1, self._2 = 0, 1
+
+    def __iter__(self):
+        return self  # 这个只需要返回
+
+    def __next__(self):
+        self._1, self._2 = self._2, self._1 + self._2
+        if self._1 &gt; 100:
+            raise StopIteration()  # 循环结束只需要raise一个StopIteration()的异常，系统会知道循环结束了
+        return self._1
+</code></pre>
+
+<p>​<br />
+    for i in Fib100():
+        print(i)</p>
+
+<p>输出：</p>
+
+<pre><code>1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+89
+</code></pre>
+
+<h3 id="3-通过-getitem-来给类提供下标的支持">3.通过 <strong>getitem</strong> 来给类提供下标的支持</h3>
+
+<pre><code>class Fib(object):
+    def __init__(self):
+        self.limit = 1000
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            # Get the start, stop, and step from the slice
+            return [self.get_fib(ii) for ii in range(*key.indices(1000))]
+        elif isinstance(key, int):
+            if key &gt; 1000:
+                raise IndexError(&quot;The index (%d) is out of range.&quot; % key)
+            return self.get_fib(key)
+        else:
+            raise TypeError(&quot;Invalid argument type.&quot;)
+
+    def get_fib(self, n):
+        a, b = 1, 1
+        for i in range(n):
+            a, b = b, a + b
+        return a
+</code></pre>
+
+<p>​<br />
+    f = Fib()
+    print(f[1])
+    print(f[5])
+    print(f[10])
+    print()
+    print(f[1:10:2])</p>
+
+<p>输出：</p>
+
+<pre><code>1
+8
+89
+
+[1, 3, 8, 21, 55]
+</code></pre>
+
+<p>注：对于slice类型还是第一次见，之前不知道slice也是一个类型。</p>
+
+<h3 id="4-使用-call-将class变成callable的">4.使用<strong>call</strong>将class变成callable的</h3>
+
+<pre><code># 为什么要将class变成callable的呢？
+# 在框架代码中经常看到？
+# 链式调用的时候用到？为什么什么样子的？
+
+class MyClass:
+    def __call__(self):
+        print('You can call cls() directly.')
+</code></pre>
+
+<p>​<br />
+    cls = MyClass()
+    cls()  # 没有<strong>call</strong>的话会报错：TypeError: &lsquo;MyClass&rsquo; object is not callable</p>
+
+<pre><code>print(callable(cls))
+print(callable(max))
+
+# 不可调用的
+print(callable([1, 2, 3]))
+print(callable(None))
+print(callable('str'))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>You can call cls() directly.
+True
+True
+False
+False
+False
+</code></pre>
+
+<p>注：<strong>为什么要将class变成callable的？在框架中经常看到的话是什么样子的？链式调用的时候为什么会用到？</strong></p>
+
+<h2 id="comment">COMMENT：</h2>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python-%E5%85%83%E7%BB%84/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Python 元组</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python-%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2/">
+            <span class="next-text nav-default">Python 项目部署</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

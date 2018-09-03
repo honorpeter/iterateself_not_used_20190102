@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06_compare_results - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="import pandas as pd import numpy as np import matplotlib.pyplot as plt import joblib from sklearn.ensemble import GradientBoostingRegressor from sklearn.cross_validation import train_test_split from sklearn.metrics import r2_score %matplotlib inline full = pd.read_csv(&#39;capital2001.csv&#39;) full[&#39;timestamp&#39;] = full.timestamp.apply(lambda x: pd.to_datetime(x)) full.columns Index([u&#39;Unnamed: 0&#39;, u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;, u&#39;humidity&#39;, u&#39;sealevelpressurein&#39;, u&#39;winddirection&#39;, u&#39;windspeedmph&#39;, u&#39;precipitationin&#39;, u&#39;dow&#39;, u&#39;doy&#39;, u&#39;day&#39;, u&#39;month&#39;, u&#39;hour&#39;, u&#39;minute&#39;, u&#39;year&#39;, u&#39;t_m1&#39;, u&#39;t_m24&#39;, u&#39;t_m48&#39;, u&#39;tdif&#39;, u&#39;summer&#39;, u&#39;discomfort_index&#39;, u&#39;ind&#39;], dtype=&#39;object&#39;) with_forecast.columns Index([u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;," />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/06_compare_results/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06_compare_results" />
+<meta property="og:description" content="import pandas as pd import numpy as np import matplotlib.pyplot as plt import joblib from sklearn.ensemble import GradientBoostingRegressor from sklearn.cross_validation import train_test_split from sklearn.metrics import r2_score %matplotlib inline full = pd.read_csv(&#39;capital2001.csv&#39;) full[&#39;timestamp&#39;] = full.timestamp.apply(lambda x: pd.to_datetime(x)) full.columns Index([u&#39;Unnamed: 0&#39;, u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;, u&#39;humidity&#39;, u&#39;sealevelpressurein&#39;, u&#39;winddirection&#39;, u&#39;windspeedmph&#39;, u&#39;precipitationin&#39;, u&#39;dow&#39;, u&#39;doy&#39;, u&#39;day&#39;, u&#39;month&#39;, u&#39;hour&#39;, u&#39;minute&#39;, u&#39;year&#39;, u&#39;t_m1&#39;, u&#39;t_m24&#39;, u&#39;t_m48&#39;, u&#39;tdif&#39;, u&#39;summer&#39;, u&#39;discomfort_index&#39;, u&#39;ind&#39;], dtype=&#39;object&#39;) with_forecast.columns Index([u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;," />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/06_compare_results/" /><meta property="article:published_time" content="2018-07-25T08:18:20&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-25T08:18:20&#43;00:00"/>
+<meta itemprop="name" content="06_compare_results">
+<meta itemprop="description" content="import pandas as pd import numpy as np import matplotlib.pyplot as plt import joblib from sklearn.ensemble import GradientBoostingRegressor from sklearn.cross_validation import train_test_split from sklearn.metrics import r2_score %matplotlib inline full = pd.read_csv(&#39;capital2001.csv&#39;) full[&#39;timestamp&#39;] = full.timestamp.apply(lambda x: pd.to_datetime(x)) full.columns Index([u&#39;Unnamed: 0&#39;, u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;, u&#39;humidity&#39;, u&#39;sealevelpressurein&#39;, u&#39;winddirection&#39;, u&#39;windspeedmph&#39;, u&#39;precipitationin&#39;, u&#39;dow&#39;, u&#39;doy&#39;, u&#39;day&#39;, u&#39;month&#39;, u&#39;hour&#39;, u&#39;minute&#39;, u&#39;year&#39;, u&#39;t_m1&#39;, u&#39;t_m24&#39;, u&#39;t_m48&#39;, u&#39;tdif&#39;, u&#39;summer&#39;, u&#39;discomfort_index&#39;, u&#39;ind&#39;], dtype=&#39;object&#39;) with_forecast.columns Index([u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;,">
+
+
+<meta itemprop="datePublished" content="2018-07-25T08:18:20&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-25T08:18:20&#43;00:00" />
+<meta itemprop="wordCount" content="1495">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06_compare_results"/>
+<meta name="twitter:description" content="import pandas as pd import numpy as np import matplotlib.pyplot as plt import joblib from sklearn.ensemble import GradientBoostingRegressor from sklearn.cross_validation import train_test_split from sklearn.metrics import r2_score %matplotlib inline full = pd.read_csv(&#39;capital2001.csv&#39;) full[&#39;timestamp&#39;] = full.timestamp.apply(lambda x: pd.to_datetime(x)) full.columns Index([u&#39;Unnamed: 0&#39;, u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;, u&#39;humidity&#39;, u&#39;sealevelpressurein&#39;, u&#39;winddirection&#39;, u&#39;windspeedmph&#39;, u&#39;precipitationin&#39;, u&#39;dow&#39;, u&#39;doy&#39;, u&#39;day&#39;, u&#39;month&#39;, u&#39;hour&#39;, u&#39;minute&#39;, u&#39;year&#39;, u&#39;t_m1&#39;, u&#39;t_m24&#39;, u&#39;t_m48&#39;, u&#39;tdif&#39;, u&#39;summer&#39;, u&#39;discomfort_index&#39;, u&#39;ind&#39;], dtype=&#39;object&#39;) with_forecast.columns Index([u&#39;timestamp&#39;, u&#39;load&#39;, u&#39;weathertime&#39;, u&#39;temperaturef&#39;, u&#39;dewpointf&#39;,"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06_compare_results</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-25 </span>
+        
+        <span class="more-meta"> 1495 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <pre><code class="language-python">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import joblib
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.cross_validation import train_test_split
+from sklearn.metrics import r2_score
+%matplotlib inline
+</code></pre>
+
+<pre><code class="language-python">full = pd.read_csv('capital2001.csv')
+full['timestamp'] = full.timestamp.apply(lambda x: pd.to_datetime(x))
+</code></pre>
+
+<pre><code class="language-python">full.columns
+</code></pre>
+
+<pre><code>Index([u'Unnamed: 0', u'timestamp', u'load', u'weathertime', u'temperaturef',
+       u'dewpointf', u'humidity', u'sealevelpressurein', u'winddirection',
+       u'windspeedmph', u'precipitationin', u'dow', u'doy', u'day', u'month',
+       u'hour', u'minute', u'year', u't_m1', u't_m24', u't_m48', u'tdif',
+       u'summer', u'discomfort_index', u'ind'],
+      dtype='object')
+</code></pre>
+
+<pre><code class="language-python">with_forecast.columns
+</code></pre>
+
+<pre><code>Index([u'timestamp', u'load', u'weathertime', u'temperaturef', u'dewpointf',
+       u'humidity', u'sealevelpressurein', u'winddirection', u'windspeedmph',
+       u'precipitationin', u'dow', u'doy', u'day', u'month', u'hour',
+       u'minute', u'year', u't_m1', u't_m24', u't_m48', u'tdif', u'summer',
+       u'discomfort_index', u'ind', u'zone', u'forecast', u'nyiso_mape'],
+      dtype='object')
+</code></pre>
+
+<p><span style="color:red;">这几个绘图函数可以当做模板使用。这里面的一些参数老师也不知道，他也是用的时候查的。</span></p>
+
+<pre><code class="language-python">def deviance_plot(est, X_test, y_test, ax = None, label = '', train_color='#2c7bb6', test_color = '#d7191c', alpha= 1.0, ylim = (0,60000)):
+
+    n_estimators = len(est.estimators_)
+    test_dev = np.empty(n_estimators)
+
+    for i, pred in enumerate(est.staged_predict(X_test)):
+        test_dev[i] = est.loss_(y_test, pred)
+
+    if ax is None:
+        fig = plt.figure(figsize = (18,6))
+        ax = plt.gca()
+
+    ax.plot(np.arange(n_estimators) + 1, test_dev, color= test_color, label = 'Test %s' % label, linewidth=2, alpha=alpha)
+    ax.plot(np.arange(n_estimators) + 1, est.train_score_, color = train_color, label= 'Train %s' % label, linewidth=2, alpha=alpha)
+    ax.set_ylabel('Error')
+    ax.set_xlabel('n_estimators')
+    ax.set_ylim(ylim)
+    ax.legend(loc='upper right')
+    return test_dev, ax
+
+def get_daily_values(X_test, y_test, gbr, full):
+    p = X_test.copy()
+    p['load'] = y_test
+    p['times'] = full[full.timestamp &gt;= pd.to_datetime('2014')]['timestamp']
+    p['prediction'] = gbr.predict(X_test)
+    p['error'] = np.abs(p['load'] - p['prediction'])
+    p = p.set_index(p.times)
+    daily_values = p.groupby(pd.TimeGrouper(freq='D')).aggregate(np.max)
+    return daily_values
+
+def plot_model_performance(X_test, y_test, gbr, full):
+    daily_values = get_daily_values(X_test, y_test, gbr, full)
+    times = daily_values.index
+    fig, ax1 = plt.subplots(figsize=(18, 6),)
+    ax1.plot(times, daily_values['load'], alpha=.5, color='blue', label='actual load' )
+    ax1.plot(times, daily_values['prediction'], alpha=.5, color='red', label=&quot;Dan's predicted load, %.3f&quot; %gbr.score(X_test, y_test))
+    ax1.plot(times, daily_values['error'], alpha=.5, color = 'green', label='error')
+    ax1.legend(loc='best')
+    ax2 = ax1.twinx()
+    ax2.plot(times, daily_values['temperaturef'], alpha = .5, color = 'orange', label='temperature')
+#     ax2.plot(times, daily_values['discomfort_index'], alpha = .5, color = 'brown', label='discomfort_index')
+
+#     ax2.plot(times, daily_values['dewpointf'], alpha = .5, color = 'yellow', label='dew point')
+#     ax2.plot(times, daily_values['precipitationin'], alpha = .5, color = 'brown', label='precip')
+    ax2.legend(loc='lower right')
+    return ax1, ax2
+
+def plot_days(gbr, full, day1='2016-02-29', day2='2016-03-02', weather=False):
+    test_day = full[full.timestamp &gt;= pd.to_datetime(day1)]
+    test_day = test_day[test_day.timestamp &lt; pd.to_datetime(day2)]
+    predictions = gbr.predict(test_day[features])
+    score = gbr.score(test_day[features], test_day['load'])
+
+    fig, ax = plt.subplots(figsize=(18, 6),)
+    ax.plot(test_day.timestamp.values, test_day.load.values, label = 'actual load', color = 'blue')
+    ax.plot(test_day.timestamp.values, predictions, label = &quot;Our predicted load. R^2 = %.2f&quot;%score, color= 'red')
+    if weather == True:
+        ax2 = ax.twinx()
+        ax2.plot(test_day.timestamp.values, test_day.temperaturef.values, label = 'temperature', color= 'orange')
+    ax.legend(loc='best')
+    ax.set_title(day1 + ' - '+ day2 + ' \n NYISO Capital Region ')
+    ax.set_xlabel('time')
+    ax.set_ylabel('load (megawatts)')
+    return ax
+
+</code></pre>
+
+<pre><code class="language-python">features = [\
+#           'dewpointf', \
+#           'humidity', \
+#           'sealevelpressurein', \
+#          'windspeedkmh', \
+            'year',\
+#           'precipitationmm',\
+            'doy',\
+            'dow', \
+#           'month',\
+#           'hour',\
+            'minute',\
+#           'summer',\
+#           't_m24', \
+#           't_m48', \
+#           't_m1',\
+#           'tdif'
+            'temperaturef',\
+         ]
+</code></pre>
+
+<pre><code class="language-python">X_train = full[full.timestamp &lt; pd.to_datetime('2014')][features]
+X_test = full[full.timestamp &gt;= pd.to_datetime('2014')][features]
+
+y_train = full[full.timestamp &lt; pd.to_datetime('2014')]['load']
+y_test = full[full.timestamp &gt;= pd.to_datetime('2014')]['load']
+</code></pre>
+
+<pre><code class="language-python">gbr = GradientBoostingRegressor(loss='ls', n_estimators=100, max_depth=4, verbose=1, warm_start=True)
+</code></pre>
+
+<pre><code class="language-python">gbr_fitted = gbr.fit(X_train, y_train)
+</code></pre>
+
+<pre><code>      Iter       Train Loss   Remaining Time
+         1       55349.2095            1.71m
+         2       48298.4598            1.76m
+         3       42467.5860            1.72m
+         4       37558.1722            1.69m
+         5       33448.5465            1.68m
+         6       30000.0388            1.68m
+         7       27198.0393            1.68m
+         8       24693.1320            1.65m
+         9       22674.2247            1.63m
+        10       20968.5704            1.61m
+        20       12386.0669            1.38m
+        30        9193.9095            1.18m
+        40        7786.2204           59.49s
+        50        7051.2982           48.80s
+        60        6540.1980           38.61s
+        70        6164.8151           28.72s
+        80        5940.8970           19.03s
+        90        5759.8818            9.46s
+       100        5615.4558            0.00s
+</code></pre>
+
+<pre><code class="language-python">gbr.score(X_test, y_test)
+</code></pre>
+
+<pre><code>0.86259835868993384
+</code></pre>
+
+<pre><code class="language-python">zip(features, [float(i) for i in gbr.feature_importances_])
+</code></pre>
+
+<pre><code>[('year', 0.11424954650926156),
+ ('doy', 0.26627317165301123),
+ ('dow', 0.07134777146326444),
+ ('minute', 0.34803720424607687),
+ ('temperaturef', 0.2000923061283858)]
+</code></pre>
+
+<pre><code class="language-python">fi = list(gbr.feature_importances_)
+
+fig, ax = plt.subplots(figsize=(10,5),)
+ax.barh(np.arange(len(fi)), fi, color = 'orange')
+for i, v in enumerate(fi):
+    ax.text(v, i + .25, str(round(v, 3)))
+ax.set_yticks(np.arange(len(fi)))
+ax.set_yticklabels(features)
+</code></pre>
+
+<pre><code>[&lt;matplotlib.text.Text at 0x139e9da50&gt;,
+ &lt;matplotlib.text.Text at 0x139ea7990&gt;,
+ &lt;matplotlib.text.Text at 0x13e2be150&gt;,
+ &lt;matplotlib.text.Text at 0x13e2be890&gt;,
+ &lt;matplotlib.text.Text at 0x13e2befd0&gt;,
+ &lt;matplotlib.text.Text at 0x13e2c7750&gt;]
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/i23hGJ4C4m.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">竟然是分钟最重要，真的没想到，可见，如果你没有加入这个特征，那么效果是非常差的。</span></p>
+
+<pre><code class="language-python">plot_days(gbr, full, '2015-02-28', '2015-03-02')
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x127475e90&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/adFdK9Ea8a.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">plot_days(gbr, full, '2015-07-31', '2015-08-02')
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x126e19b50&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/2Ik3BeBA3A.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">plot_days(gbr, full, '2015-10-30', '2015-11-03')
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x111930810&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/967EB2DliH.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">capital_forecast = pd.read_csv('../data/nyiso_dayahead_forecasts/capital_forecast.csv')
+capital_forecast['timestamp'] = capital_forecast.timestamp.apply(lambda x: pd.to_datetime(x))
+</code></pre>
+
+<pre><code class="language-python">subset_2014_2016 = full[full.timestamp &gt; pd.to_datetime('2014')]
+</code></pre>
+
+<pre><code class="language-python">subset_2014_2016 = subset_2014_2016[subset_2014_2016.minute % 60 == 0]
+</code></pre>
+
+<pre><code class="language-python">with_forecast = pd.merge(subset_2014_2016, capital_forecast, on='timestamp')
+</code></pre>
+
+<pre><code class="language-python">with_forecast.columns
+</code></pre>
+
+<pre><code>Index([u'Unnamed: 0', u'timestamp', u'load', u'weathertime', u'temperaturef',
+       u'dewpointf', u'humidity', u'sealevelpressurein', u'winddirection',
+       u'windspeedmph', u'precipitationin', u'dow', u'doy', u'day', u'month',
+       u'hour', u'minute', u'year', u't_m1', u't_m24', u't_m48', u'tdif',
+       u'summer', u'discomfort_index', u'ind', u'zone', u'forecast'],
+      dtype='object')
+</code></pre>
+
+<pre><code class="language-python">with_forecast.drop('Unnamed: 0', axis=1, inplace=True)
+</code></pre>
+
+<pre><code class="language-python">with_forecast['nyiso_mape'] = np.abs(with_forecast['load'] - with_forecast['forecast'])/with_forecast['load']
+</code></pre>
+
+<pre><code class="language-python">def compare_models(with_forecast, gbr, day1, day2, weather=False):
+    test_day = with_forecast[with_forecast.timestamp &gt;= pd.to_datetime(day1)]
+    test_day = test_day[test_day.timestamp &lt; pd.to_datetime(day2)]
+    predictions = gbr.predict(test_day[features])
+
+    end_day = (pd.to_datetime(day2) - pd.Timedelta('1 day')).strftime('%Y-%m-%d')
+
+    mape = np.mean(np.abs(predictions - test_day['load'])/test_day['load'])
+    score = gbr.score(test_day[features], test_day['load'])
+    nyiso_mape = np.mean(test_day['nyiso_mape'])
+    nyiso_score = gbr.score(test_day[features], test_day['forecast'])
+
+    fig, ax = plt.subplots(figsize=(18, 8),)
+
+    ax.plot(test_day.timestamp.values, test_day.load.values, label = 'actual load', color = 'blue', linewidth=3)
+
+    ax.plot(test_day.timestamp.values, predictions, ls= 'dashed', lw=2,\
+            label = &quot;Dan's predicted load,R^2 = {0:.3f}, MAPE = {1:.3f}&quot;.format(score,mape), color= 'red')
+
+    ax.plot(test_day.timestamp.values, test_day.forecast.values, ls='dashed', lw=2,\
+            label = 'NYISO day ahead forecast,  R^2 = {0:.3f}, MAPE = {1:.3f}'.format(nyiso_score, nyiso_mape), color = 'green')
+
+    if weather == True:
+        ax2 = ax.twinx()
+        ax2.plot(test_day.timestamp.values, test_day.temperaturef.values, label = 'temperature', color= 'orange')
+#     ax.legend(loc='best')
+#     ax.set_title(day1 + ' - '+ end_day + ' \n NYISO Capital Region ', fontsize=20)
+    ax.set_xlabel('time', fontsize=16)
+    ax.set_ylabel('load (megawatts)', fontsize=16)
+    ax.set_ylim(1000,2200)
+    return ax
+</code></pre>
+
+<pre><code class="language-python">compare_models(with_forecast, gbr, '2015-07-12', '2015-07-25', weather=False)
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x16f850910&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/EJddhHm1A6.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">compare_models(with_forecast, gbr, '2014-12-25', '2014-12-26')
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x127c28e90&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/G23hj54a1D.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">compare_models(with_forecast, gbr, '2014-07-25', '2014-07-29')
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11e46fa90&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h2da9BE49A.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">#48 hour temperature forecast for 3/29 - 3/30. Pulled 5pm, 3/28
+forecast_48 = [46,47,47,46,45,43,42,41,41,40,39,38,37,36,36,37,38,40,41,43,44,44,45,45,45,43,41,38,36,34,32,31,30,28,27,26,26,25,25,28,34,39,43,47,51,54,55,56,56,52,49,47,46,45,45,44,42,41,40,39,39,39,39,42,46,50,54,57,60,62,63,64]
+</code></pre>
+
+<pre><code class="language-python">phour = pd.Timedelta('1 hour')
+start_time = pd.to_datetime('2016-03-28, 17:00')
+</code></pre>
+
+<pre><code class="language-python">timestamp_48 = [(start_time + phour*i) for i in range(0,72)]
+</code></pre>
+
+<pre><code class="language-python">day_ahead = pd.DataFrame({'timestamp': timestamp_48, 'temperaturef':forecast_48})
+</code></pre>
+
+<pre><code class="language-python">[('year', 0.11424954650926156),
+ ('doy', 0.26627317165301123),
+ ('dow', 0.07134777146326444),
+ ('minute', 0.34803720424607687),
+ ('temperaturef', 0.2000923061283858)]
+</code></pre>
+
+<pre><code class="language-python">day_ahead['year'] = day_ahead.timestamp.apply(lambda x: x.year)
+day_ahead['doy'] = day_ahead.timestamp.apply(lambda x: x.dayofyear)
+day_ahead['dow'] = day_ahead.timestamp.apply(lambda x: x.dayofweek)
+day_ahead['minute'] = day_ahead.timestamp.apply(lambda x: x.hour* 60 + x.minute)
+day_ahead['gbr_prediction'] = gbr.predict(day_ahead[features])
+</code></pre>
+
+<pre><code class="language-python">forecast_48 = pd.read_csv('../data/nyiso_dayahead_forecasts/forecast_20160328.csv')
+</code></pre>
+
+<pre><code class="language-python">day_ahead['nyiso_forecast'] = forecast_48.forecast
+</code></pre>
+
+<pre><code class="language-python">rt_load = pd.read_csv('../data/nyiso_dayahead_forecasts/20160328_realtime.csv')
+</code></pre>
+
+<pre><code class="language-python">fig, ax1 = plt.subplots(figsize=(18, 8),)
+# ax1.plot(times, daily_values['load'], alpha=.5, color='navy', label='actual load', lw=3)
+ax1.plot(day_ahead.timestamp, day_ahead['gbr_prediction'], alpha=1, color='red', lw=3, ls='dashed')
+ax1.plot(day_ahead.timestamp, day_ahead['nyiso_forecast'], alpha=1, color = 'green', lw=3, ls='dashed')
+ax1.plot(rt_load.timestamp, rt_load.load, color = 'blue', lw=3)
+# ax1.legend(loc='best')
+ax1.set_xlabel('Monday March 28 - Thursday March 31', fontsize=15)
+ax1.tick_params(axis='x', labelsize=15)
+ax1.set_ylabel('Load (Megawatts)', fontsize=15)
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x169fb22d0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/35jli3bDFh.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">rt_load['timestamp'] = rt_load.timestamp.apply(lambda x: pd.to_datetime(x))
+rt_load['minute'] = rt_load.timestamp.apply(lambda x: x.minute)
+</code></pre>
+
+<pre><code class="language-python">scoring = rt_load[rt_load.minute % 60 ==0 ]
+</code></pre>
+
+<pre><code class="language-python">print &quot;For March 28-31 2016, my model's R2 = &quot;, r2_score(scoring.load, day_ahead['gbr_prediction'][:len(scoring)])
+print &quot;For March 28-31 2016, the NYISO R2 = &quot;, r2_score(scoring.load, day_ahead['nyiso_forecast'][:len(scoring)])
+</code></pre>
+
+<pre><code>For March 28-31 2016, my model's R2 =  0.690608092869
+For March 28-31 2016, the NYISO R2 =  0.512725506452
+</code></pre>
+
+<pre><code class="language-python">from sklearn.metrics import mean_absolute_error
+</code></pre>
+
+<pre><code class="language-python">print &quot;For March 28-31 2016, my model's MAE = &quot;, mean_absolute_error(scoring.load, day_ahead['gbr_prediction'][:len(scoring)])
+print &quot;For March 28-31 2016, the NYISO MAE = &quot;, mean_absolute_error(scoring.load, day_ahead['nyiso_forecast'][:len(scoring)])
+</code></pre>
+
+<pre><code>For March 28-31 2016, my model's MAE =  60.1585035707
+For March 28-31 2016, the NYISO MAE =  69.5581818182
+</code></pre>
+
+<pre><code class="language-python">def mean_absolute_percentage_error(y_true, y_pred):
+    ape = np.abs(y_true  - y_pred)/y_true
+#     for t, p in list(y_true.values), list(y_pred.values):
+#         ape.append(np.abs(t - p)/ t )
+#     y_true, y_pred = check_array(y_true, y_pred)
+
+    return np.mean(ape)*100
+</code></pre>
+
+<pre><code class="language-python">print &quot;For March 28-31 2016, my model's MAPE = &quot;, mean_absolute_percentage_error(scoring.load, day_ahead['gbr_prediction'][:len(scoring)])
+print &quot;For March 28-31 2016, the NYISO MAPE = &quot;, mean_absolute_percentage_error(scoring.load, day_ahead['nyiso_forecast'][:len(scoring)])
+</code></pre>
+
+<pre><code>For March 28-31 2016, my model's MAPE =  12.9092072325
+For March 28-31 2016, the NYISO MAPE =  12.5470372013
+</code></pre>
+
+<pre><code class="language-python">print &quot;For 2014-2016, my model's MAPE = &quot;, mean_absolute_percentage_error(with_forecast['load'], gbr.predict(with_forecast[features]))
+print &quot;For 2014-2016, the NYISO MAPE = &quot;, mean_absolute_percentage_error(with_forecast['load'], with_forecast['forecast'])
+</code></pre>
+
+<pre><code>For 2014-2016, my model's MAPE =  4.79558589766
+For 2014-2016, the NYISO MAPE =  4.67055917116
+</code></pre>
+
+<pre><code class="language-python">p = with_forecast.set_index(with_forecast.timestamp)
+
+nyiso_score = r2_score(with_forecast['load'], with_forecast['forecast'])
+model_score = r2_score(with_forecast['load'], gbr.predict(with_forecast[features]))
+
+daily_values = p.groupby(pd.TimeGrouper(freq='4D')).aggregate(np.median)
+daily_values.dropna(inplace=True)
+twoyear_prediction = gbr.predict(daily_values[features])
+times = daily_values.index
+
+
+fig, ax1 = plt.subplots(figsize=(18, 8),)
+ax1.plot(times, daily_values['load'], alpha=1, color='BLUE', label='actual load', lw=3)
+# ax1.plot(times, twoyear_prediction, alpha=1, color='red', label=&quot;GBR predicted load, 0.884&quot; %model_score, lw=2.5, ls='dashed')
+ax1.plot(times, daily_values['forecast'], alpha=1, color = 'darkgreen', label='NYISO forecast, %.3f' %nyiso_score, lw=2.5, ls='dashed')
+# ax1.legend(loc='best')
+# ax1.set_xlabel('Date', fontsize=14)
+ax1.tick_params(axis='x', labelsize=15)
+ax1.set_ylabel('Load (Megawatts)', fontsize=15)
+# ax2 = ax1.twinx()
+#     ax2.plot(times, daily_values['temperaturef'], alpha = .5, color = 'orange', label='temperature')
+#     ax2.plot(times, daily_values['discomfort_index'], alpha = .5, color = 'brown', label='discomfort_index')
+
+#     ax2.plot(times, daily_values['dewpointf'], alpha = .5, color = 'yellow', label='dew point')
+#     ax2.plot(times, daily_values['precipitationin'], alpha = .5, color = 'brown', label='precip')
+# ax2.legend(loc='lower right')
+
+</code></pre>
+
+<pre><code>&lt;matplotlib.text.Text at 0x16a0a02d0&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Ahfc6mKhbG.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">print nyiso_score
+print model_score
+</code></pre>
+
+<pre><code>0.882233047224
+0.862490890278
+</code></pre>
+
+<p><span style="color:red;">这种对于一个项目结束后的各种分析和绘图分析也是必须要掌握的。这样你才能全面的看到自己的模型哪里还存在问题。</span></p>
+
+<p>到这里整个项目就结束了，还是非常完整的。</p>
+
+<p>很多东西需要掌握，比如对于初始的什么都没有的时候，数据的寻找，然后拼接，然后组合出一些特征。这中间还是有比较多的操作的。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-1-3-project-overview-data-wrangling-and-exploratory-analysis-dec10/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Part 1-3 Project Overview, Data Wrangling and Exploratory Analysis-DEC10</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/05_gbm_modelling/">
+            <span class="next-text nav-default">05_GBM_modelling</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

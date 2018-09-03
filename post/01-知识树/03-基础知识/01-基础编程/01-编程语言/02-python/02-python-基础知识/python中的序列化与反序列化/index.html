@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python中的序列化与反序列化 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-22 04:37:00&#43;00:00 layout: post link: http://106.15.37.116/2018/03/22/python-pickling-unpickling/ slug: python-pickling-unpickling title: python中的序列化与反序列化 wordpress_id: 523 categories: - 随想与反思 tags: - &amp;lsquo;@todo&amp;rsquo; - python 缘由： 之前看一个人的视频中在教pandas的时候用到" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python%E4%B8%AD%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python中的序列化与反序列化" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-22 04:37:00&#43;00:00 layout: post link: http://106.15.37.116/2018/03/22/python-pickling-unpickling/ slug: python-pickling-unpickling title: python中的序列化与反序列化 wordpress_id: 523 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - python 缘由： 之前看一个人的视频中在教pandas的时候用到" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python%E4%B8%AD%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" /><meta property="article:published_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta itemprop="name" content="python中的序列化与反序列化">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-22 04:37:00&#43;00:00 layout: post link: http://106.15.37.116/2018/03/22/python-pickling-unpickling/ slug: python-pickling-unpickling title: python中的序列化与反序列化 wordpress_id: 523 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - python 缘由： 之前看一个人的视频中在教pandas的时候用到">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="wordCount" content="747">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python中的序列化与反序列化"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-22 04:37:00&#43;00:00 layout: post link: http://106.15.37.116/2018/03/22/python-pickling-unpickling/ slug: python-pickling-unpickling title: python中的序列化与反序列化 wordpress_id: 523 categories: - 随想与反思 tags: - &lsquo;@todo&rsquo; - python 缘由： 之前看一个人的视频中在教pandas的时候用到"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">python中的序列化与反序列化</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 747 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#python">- python</a></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#要点">要点：</a>
+<ul>
+<li><a href="#1-什么是序列化和反序列化-之前知道-这里再明确下-因为有点不是很清楚了">1.什么是序列化和反序列化？之前知道，这里再明确下，因为有点不是很清楚了：</a></li>
+<li><a href="#2-使用pickle库进行序列化与反序列化">2.使用pickle库进行序列化与反序列化</a></li>
+<li><a href="#3-使用json实现序列化和反序列化">3.使用Json实现序列化和反序列化</a></li>
+<li><a href="#4-使用pandas来进行序列化-推荐使用这个-支持的格式非常多">4.使用pandas来进行序列化，（<strong>推荐使用这个，支持的格式非常多</strong>）</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-22 04:37:00+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/22/python-pickling-unpickling/">http://106.15.37.116/2018/03/22/python-pickling-unpickling/</a>
+slug: python-pickling-unpickling
+title: python中的序列化与反序列化
+wordpress_id: 523
+categories:
+- 随想与反思
+tags:
+- &lsquo;@todo&rsquo;</p>
+
+<h2 id="python">- python</h2>
+
+<!-- more -->
+
+<h2 id="缘由">缘由：</h2>
+
+<p>之前看一个人的视频中在教pandas的时候用到了pickle的文件格式，之前没见到过，知道我这次在序列化与反序列化中看到了pickle的文件格式，因此对于序列化与反序列化的方法还是要记录下，毕竟与直接的文本的读写还是有些不同的，有很多存取的格式，且像pickle这样的占用的空间比较小。经常用的话是csv格式的。</p>
+
+<h2 id="要点">要点：</h2>
+
+<h3 id="1-什么是序列化和反序列化-之前知道-这里再明确下-因为有点不是很清楚了">1.什么是序列化和反序列化？之前知道，这里再明确下，因为有点不是很清楚了：</h3>
+
+<p>程序运行的过程中，所有变量都是在内存中操作的，当程序一旦执行完毕，结束退出后，变量占有的内存就被操作系统回收了。 因此我们需要将某些数据持久化存储到磁盘中，下次运行的时候从磁盘中读取相关数据。</p>
+
+<p>我们将变量从内存中变成可以存储或传输的过程称之为序列化，在Python中叫做pickling，在其它语言中也称之为 serialization、marshaling、flattening等等，说的都是一个意思。 反之，则为反序列化，称之为unpickling，把变量内容从序列化的对象重新读取到内存中。</p>
+
+<h3 id="2-使用pickle库进行序列化与反序列化">2.使用pickle库进行序列化与反序列化</h3>
+
+<p>序列化：</p>
+
+<pre><code>import pickle
+
+d = dict(name='aaa', age=29, score=80)
+str = pickle.dumps(d)#进行序列化处理
+print(str)
+
+with open('dump.txt', 'wb') as f:
+    pickle.dump(d, f)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>b'\x80\x03}q\x00(X\x04\x00\x00\x00nameq\x01X\x03\x00\x00\x00aaaq\x02X\x03\x00\x00\x00ageq\x03K\x1dX\x05\x00\x00\x00scoreq\x04KPu.'
+</code></pre>
+
+<p>反序列化：</p>
+
+<pre><code>import pickle
+
+with open('dump.txt', 'rb') as f:
+    d = pickle.load(f)  # 反序列化处理
+print(d)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>{'name': 'aaa', 'age': 29, 'score': 80}
+</code></pre>
+
+<p>注意：Py2与Py3中的pickle不一样</p>
+
+<p>为了保证2，3的和谐，可以使用这个方法：</p>
+
+<pre><code>try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+</code></pre>
+
+<h3 id="3-使用json实现序列化和反序列化">3.使用Json实现序列化和反序列化</h3>
+
+<p>Json还是经常使用的</p>
+
+<p>代码如下：</p>
+
+<pre><code>import json
+
+d1 = dict(name='aaa', age=20, score=80)
+print(d1)
+s = json.dumps(d1)  # 序列化
+print(s)
+
+d2 = json.loads(s)  # 反序列化
+print(d2)
+</code></pre>
+
+<h3 id="4-使用pandas来进行序列化-推荐使用这个-支持的格式非常多">4.使用pandas来进行序列化，（<strong>推荐使用这个，支持的格式非常多</strong>）</h3>
+
+<p><strong>这个后续进行补充</strong></p>
+
+<h2 id="comment">COMMENT：</h2>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python中的字符串</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python%E4%B8%AD%E7%9A%84%E6%8E%A8%E5%AF%BC%E5%BC%8F/">
+            <span class="next-text nav-default">python中的推导式</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

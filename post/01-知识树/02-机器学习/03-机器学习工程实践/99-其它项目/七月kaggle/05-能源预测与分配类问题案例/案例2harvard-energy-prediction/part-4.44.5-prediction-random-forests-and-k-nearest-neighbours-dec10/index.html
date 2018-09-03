@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Part 4.4&amp;4.5 Prediction-Random Forests and K-Nearest Neighbours-DEC10 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="#4 Prediction Using Different Machine Learning Methods
+4.4 Random Forests In this notebook, we&amp;rsquo;ll train a Random Forest Regression model for predicting building energy consumption based on historical enregy data and several weather variables. We&amp;rsquo;ll use daily energy data and weather data to predict energy consumption.
+%matplotlib inline import numpy as np import pandas as pd import matplotlib.pyplot as plt pd.options.display.mpl_style = &#39;default&#39;  import seaborn as sns import scipy as sp import sklearn import sklearn." />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-4.44.5-prediction-random-forests-and-k-nearest-neighbours-dec10/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Part 4.4&amp;4.5 Prediction-Random Forests and K-Nearest Neighbours-DEC10" />
+<meta property="og:description" content="#4 Prediction Using Different Machine Learning Methods
+4.4 Random Forests In this notebook, we&rsquo;ll train a Random Forest Regression model for predicting building energy consumption based on historical enregy data and several weather variables. We&rsquo;ll use daily energy data and weather data to predict energy consumption.
+%matplotlib inline import numpy as np import pandas as pd import matplotlib.pyplot as plt pd.options.display.mpl_style = &#39;default&#39;  import seaborn as sns import scipy as sp import sklearn import sklearn." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-4.44.5-prediction-random-forests-and-k-nearest-neighbours-dec10/" /><meta property="article:published_time" content="2018-07-25T20:18:49&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-25T20:18:49&#43;00:00"/>
+<meta itemprop="name" content="Part 4.4&amp;4.5 Prediction-Random Forests and K-Nearest Neighbours-DEC10">
+<meta itemprop="description" content="#4 Prediction Using Different Machine Learning Methods
+4.4 Random Forests In this notebook, we&rsquo;ll train a Random Forest Regression model for predicting building energy consumption based on historical enregy data and several weather variables. We&rsquo;ll use daily energy data and weather data to predict energy consumption.
+%matplotlib inline import numpy as np import pandas as pd import matplotlib.pyplot as plt pd.options.display.mpl_style = &#39;default&#39;  import seaborn as sns import scipy as sp import sklearn import sklearn.">
+
+
+<meta itemprop="datePublished" content="2018-07-25T20:18:49&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-25T20:18:49&#43;00:00" />
+<meta itemprop="wordCount" content="1779">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Part 4.4&amp;4.5 Prediction-Random Forests and K-Nearest Neighbours-DEC10"/>
+<meta name="twitter:description" content="#4 Prediction Using Different Machine Learning Methods
+4.4 Random Forests In this notebook, we&rsquo;ll train a Random Forest Regression model for predicting building energy consumption based on historical enregy data and several weather variables. We&rsquo;ll use daily energy data and weather data to predict energy consumption.
+%matplotlib inline import numpy as np import pandas as pd import matplotlib.pyplot as plt pd.options.display.mpl_style = &#39;default&#39;  import seaborn as sns import scipy as sp import sklearn import sklearn."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Part 4.4&amp;4.5 Prediction-Random Forests and K-Nearest Neighbours-DEC10</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-25 </span>
+        
+        <span class="more-meta"> 1779 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#4-4-random-forests">4.4 Random Forests</a></li>
+<li><a href="#4-5-k-nearest-neighbours">4.5 K-Nearest Neighbours</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>#4 Prediction Using Different Machine Learning Methods</p>
+
+<h2 id="4-4-random-forests">4.4 Random Forests</h2>
+
+<p>In this notebook, we&rsquo;ll train a Random Forest Regression model for predicting building energy consumption based on historical enregy data and several weather variables. We&rsquo;ll use daily energy data and weather data to predict energy consumption.</p>
+
+<pre><code class="language-python">%matplotlib inline
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+pd.options.display.mpl_style = 'default'
+</code></pre>
+
+<pre><code class="language-python">import seaborn as sns
+import scipy as sp
+import sklearn
+import sklearn.cross_validation
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.cross_validation import cross_val_score
+
+</code></pre>
+
+<p>In this notebook, we&rsquo;ll train a Random Forest Regression model for predicting building energy consumption based on historical enregy data and several weather variables. We&rsquo;ll use daily energy data and weather data to predict energy consumption.</p>
+
+<pre><code class="language-python"># read in original data:
+electricity = pd.read_excel('Data/dailyElectricityWithFeatures.xlsx')
+electricity = electricity.drop('startDay', 1).drop('endDay', 1)
+#electricity = electricity.drop('humidityRatio-kg/kg',1).drop('coolingDegrees',1).drop('heatingDegrees',1).drop('dehumidification',1).drop('occupancy',1)
+electricity = electricity.dropna()
+
+chilledWater = pd.read_excel('Data/dailyChilledWaterWithFeatures.xlsx')
+chilledWater = chilledWater.drop('startDay', 1).drop('endDay', 1)
+chilledWater = chilledWater.dropna()
+
+steam = pd.read_excel('Data/dailySteamWithFeatures.xlsx')
+steam = steam.drop('startDay', 1).drop('endDay', 1)
+steam = steam.dropna()
+</code></pre>
+
+<pre><code class="language-python"># normalize data:
+normalized_electricity = electricity - electricity.mean()
+normalized_chilledWater = chilledWater - chilledWater.mean()
+normalized_steam = steam - steam.mean()
+</code></pre>
+
+<p>Adding a new column to specify if working days or weekends and holidays. We&rsquo;ll set working days to 0, and weekends and holidays to 1. US public holidays are listed here, <a href="http://www.officeholidays.com/countries/usa/">http://www.officeholidays.com/countries/usa/</a> We may also remove vacations times when there is no school, but we&rsquo;ll do it since we don&rsquo;t have this information.</p>
+
+<pre><code class="language-python"># Initialization all days to 0
+normalized_electricity['day_type'] = np.zeros(len(normalized_electricity))
+normalized_chilledWater['day_type'] = np.zeros(len(normalized_chilledWater))
+normalized_steam['day_type'] = np.zeros(len(normalized_steam))
+
+# Set weekends to 1
+normalized_electricity['day_type'][(normalized_electricity.index.dayofweek==5)|(normalized_electricity.index.dayofweek==6)] = 1
+normalized_chilledWater['day_type'][(normalized_chilledWater.index.dayofweek==5)|(normalized_chilledWater.index.dayofweek==6)] = 1
+normalized_steam['day_type'][(normalized_steam.index.dayofweek==5)|(normalized_steam.index.dayofweek==6)] = 1
+
+# Set holidays to 1
+holidays = ['2014-01-01','2014-01-20','2014-05-26','2014-07-04','2014-09-01','2014-11-11','2014-11-27','2014-12-25','2013-01-01',
+            '2013-01-21','2013-05-27','2013-07-04','2013-09-02','2013-11-11','2013-11-27','2013-12-25','2012-01-01','2012-01-16',
+            '2012-05-28','2012-07-04','2012-09-03','2012-11-12','2012-11-22','2012-12-25']
+
+for i in range(len(holidays)):
+    normalized_electricity['day_type'][normalized_electricity.index.date==np.datetime64(holidays[i])] = 1
+    normalized_chilledWater['day_type'][normalized_chilledWater.index.date==np.datetime64(holidays[i])] = 1
+    normalized_steam['day_type'][normalized_steam.index.date==np.datetime64(holidays[i])] = 1
+</code></pre>
+
+<p>Analysis of electricity data.</p>
+
+<pre><code class="language-python"># Split train and test data:
+elect_train = pd.DataFrame(data=normalized_electricity, index=np.arange('2012-01', '2014-01', dtype='datetime64[D]')).dropna()
+elect_test = pd.DataFrame(data=normalized_electricity, index=np.arange('2014-01', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_elect_train = elect_train.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+XX_elect_test = elect_test.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_elect_train = elect_train['electricity-kWh']
+YY_elect_test = elect_test['electricity-kWh']
+
+print XX_elect_train.shape, XX_elect_test.shape
+</code></pre>
+
+<pre><code>(634, 13) (294, 13)
+</code></pre>
+
+<pre><code class="language-python">XX_elect_train.head()
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>RH-%</th>
+<th>T-C</th>
+<th>Tdew-C</th>
+<th>pressure-mbar</th>
+<th>solarRadiation-W/m2</th>
+<th>windDirection</th>
+<th>windSpeed-m/s</th>
+<th>humidityRatio-kg/kg</th>
+<th>coolingDegrees</th>
+<th>heatingDegrees</th>
+<th>dehumidification</th>
+<th>occupancy</th>
+<th>day_type</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>8.212490</td>
+<td>-4.533170</td>
+<td>-2.381563</td>
+<td>-6.369746</td>
+<td>-67.924759</td>
+<td>28.249822</td>
+<td>0.562182</td>
+<td>-0.001941</td>
+<td>-3.841443</td>
+<td>2.072677</td>
+<td>-0.000885</td>
+<td>-0.671879</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>-12.481350</td>
+<td>-5.873750</td>
+<td>-8.392976</td>
+<td>-16.701268</td>
+<td>-75.852295</td>
+<td>45.912866</td>
+<td>2.358178</td>
+<td>-0.003322</td>
+<td>-3.841443</td>
+<td>3.413256</td>
+<td>-0.000885</td>
+<td>-0.371879</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>-25.939684</td>
+<td>-14.915417</td>
+<td>-18.430476</td>
+<td>-9.201268</td>
+<td>-67.477295</td>
+<td>95.079532</td>
+<td>2.693826</td>
+<td>-0.005410</td>
+<td>-3.841443</td>
+<td>12.454923</td>
+<td>-0.000885</td>
+<td>-0.371879</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>-26.898017</td>
+<td>-18.790417</td>
+<td>-22.413809</td>
+<td>-3.076268</td>
+<td>-64.435629</td>
+<td>78.829532</td>
+<td>1.571140</td>
+<td>-0.005847</td>
+<td>-3.841443</td>
+<td>16.329923</td>
+<td>-0.000885</td>
+<td>-0.371879</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>-21.523017</td>
+<td>-12.290417</td>
+<td>-15.322143</td>
+<td>-9.284601</td>
+<td>-72.435629</td>
+<td>50.496199</td>
+<td>1.605862</td>
+<td>-0.004991</td>
+<td>-3.841443</td>
+<td>9.829923</td>
+<td>-0.000885</td>
+<td>-0.371879</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-python"># Find the optimal number of trees.
+scores = pd.DataFrame()
+for n in range(1,41):
+    RF = RandomForestRegressor(n_estimators=n, max_depth=None, min_samples_split=1, random_state=0)
+    score = cross_val_score(RF, XX_elect_train, YY_elect_train,cv=10)
+    scores[n] = score
+
+</code></pre>
+
+<pre><code class="language-python">sns.set_context(&quot;talk&quot;)
+sns.set_style(&quot;white&quot;)
+
+sns.boxplot(np.matrix(scores))
+plt.xlabel(&quot;Number of trees&quot;)
+plt.ylabel(&quot;Scores&quot;)
+plt.title(&quot;The scores of the Random Forests for different number of trees.&quot;)
+plt.xlim(0,41)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ah48jiBeDd.png?imageslim" alt="mark" /></p>
+
+<p>Choose number of trees as 20.</p>
+
+<pre><code class="language-python"># Use the optimal number of trees for prediction:
+RF_e = RandomForestRegressor(n_estimators=20, max_depth=None, min_samples_split=1, random_state=0)
+RF_e.fit(XX_elect_train,YY_elect_train)
+YY_elect_pred=RF_e.predict(XX_elect_test)
+
+fig,ax = plt.subplots(1, 1,figsize=(20,10))
+line1, =plt.plot(XX_elect_test.index, YY_elect_test, label='Actual consumption', color='k')
+line2, =plt.plot(XX_elect_test.index, YY_elect_pred, label='RF Regression Prediction', color='r')
+plt.xlabel('Feature index',fontsize=18)
+plt.ylabel('Normalized electricity usage (kWh)',fontsize=18)
+plt.title('Actual and RF predicted electricity usage',fontsize=20)
+plt.legend([line1, line2], ['Actual consumption', 'RF Regression Prediction'],fontsize=18)
+plt.show()
+
+
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/d2G5F9LDAl.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">print RF_e.score(XX_elect_test,YY_elect_test)
+</code></pre>
+
+<pre><code>0.679872383518
+</code></pre>
+
+<pre><code class="language-python">#Plot actual vs. prediced usage.
+fig = plt.figure(figsize=(8,8))
+plt.scatter(YY_elect_test, YY_elect_test, c='k')
+plt.scatter(YY_elect_test, YY_elect_pred, c='r')
+plt.xlabel('Actual Elec. Usage (kWh): $Y_i$',fontsize=18)
+plt.ylabel(&quot;Predicted Elec. Usage (kWh): $\hat{Y}_i$&quot;,fontsize=18)
+plt.title(&quot;Energy vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$&quot;,fontsize=20)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/6im2jgj784.png?imageslim" alt="mark" /></p>
+
+<p>Analysis of chilled water data.</p>
+
+<pre><code class="language-python">chilledw_train = pd.DataFrame(data=normalized_chilledWater, index=np.arange('2012-01', '2014-01', dtype='datetime64[D]')).dropna()
+chilledw_test = pd.DataFrame(data=normalized_chilledWater, index=np.arange('2014-01', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_chilledw_train = chilledw_train.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+XX_chilledw_test = chilledw_test.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_chilledw_train = chilledw_train['chilledWater-TonDays']
+YY_chilledw_test = chilledw_test['chilledWater-TonDays']
+
+print XX_chilledw_train.shape, XX_chilledw_test.shape
+</code></pre>
+
+<pre><code>(705, 13) (294, 13)
+</code></pre>
+
+<pre><code class="language-python"># Find the optimal number of trees.
+scores = pd.DataFrame()
+for n in range(1,41):
+    rf = RandomForestRegressor(n_estimators=n, max_depth=None, min_samples_split=1, random_state=0)
+    score = cross_val_score(rf, XX_chilledw_train, YY_chilledw_train,cv=10)
+    scores[n] = score
+
+</code></pre>
+
+<pre><code class="language-python">sns.set_context(&quot;talk&quot;)
+sns.set_style(&quot;white&quot;)
+
+sns.boxplot(np.matrix(scores))
+plt.xlabel(&quot;Number of trees&quot;)
+plt.ylabel(&quot;Scores&quot;)
+plt.title(&quot;The scores of the Random Forests for different number of trees.&quot;)
+plt.xlim(0,41)
+plt.ylim(-1,1)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Fg3I1m1jGl.png?imageslim" alt="mark" /></p>
+
+<p>Choose number of trees as 20.</p>
+
+<pre><code class="language-python"># Use the optimal number of trees for prediction:
+RF_w = RandomForestRegressor(n_estimators=20, max_depth=None, min_samples_split=1, random_state=0)
+RF_w.fit(XX_chilledw_train,YY_chilledw_train)
+YY_chilledw_pred=RF_w.predict(XX_chilledw_test)
+
+fig,ax = plt.subplots(1, 1,figsize=(20,10))
+line1, =plt.plot(XX_chilledw_test.index, YY_chilledw_test, label='Actual consumption', color='k')
+line2, =plt.plot(XX_chilledw_test.index, YY_chilledw_pred, label='RF Regression Prediction', color='r')
+plt.xlabel('Feature index',fontsize=18)
+plt.ylabel('Normalized chilled water usage (t)',fontsize=18)
+plt.title('Actual and RF predicted chilled water usage',fontsize=20)
+plt.legend([line1, line2], ['Actual consumption', 'RF Regression Prediction'],fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/efc23g655l.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">print RF_w.score(XX_chilledw_test,YY_chilledw_test)
+</code></pre>
+
+<pre><code>0.883316960112
+</code></pre>
+
+<pre><code class="language-python">#Plot actual vs. prediced usage.
+fig = plt.figure(figsize=(8,8))
+plt.scatter(YY_chilledw_test, YY_chilledw_test, c='k')
+plt.scatter(YY_chilledw_test, YY_chilledw_pred, c='r')
+plt.xlabel('Actual Water Usage (Ton): $Y_i$',fontsize=18)
+plt.ylabel(&quot;Predicted Water Usage (Ton): $\hat{Y}_i$&quot;,fontsize=18)
+plt.title(&quot;Water vs Predicted Water: $Y_i$ vs $\hat{Y}_i$&quot;,fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ea9eHEIGLe.png?imageslim" alt="mark" /></p>
+
+<p>Analysis of steam data.</p>
+
+<pre><code class="language-python">steam_train = pd.DataFrame(data=normalized_steam, index=np.arange('2012-01', '2014-01', dtype='datetime64[D]')).dropna()
+steam_test = pd.DataFrame(data=normalized_steam, index=np.arange('2014-01', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_steam_train = steam_train.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+XX_steam_test = steam_test.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_steam_train = steam_train['steam-LBS']
+YY_steam_test = steam_test['steam-LBS']
+
+print XX_steam_train.shape, XX_steam_test.shape
+</code></pre>
+
+<pre><code>(705, 13) (294, 13)
+</code></pre>
+
+<pre><code class="language-python"># Find the optimal number of trees.
+scores = pd.DataFrame()
+for n in range(1,41):
+    Rf = RandomForestRegressor(n_estimators=n, max_depth=None, min_samples_split=1, random_state=0)
+    score = cross_val_score(Rf, XX_steam_train, YY_steam_train,cv=10)
+    scores[n] = score
+</code></pre>
+
+<pre><code class="language-python">sns.set_context(&quot;talk&quot;)
+sns.set_style(&quot;white&quot;)
+
+sns.boxplot(np.matrix(scores))
+plt.xlabel(&quot;Number of trees&quot;)
+plt.ylabel(&quot;Scores&quot;)
+plt.title(&quot;The scores of the Random Forests for different number of trees.&quot;)
+plt.xlim(0,41)
+plt.ylim(-1,1)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/I2Dlm7kHfE.png?imageslim" alt="mark" /></p>
+
+<p>Choose number of trees as 21.</p>
+
+<pre><code class="language-python"># Use the optimal number of trees for prediction:
+RF_s = RandomForestRegressor(n_estimators=21, max_depth=None, min_samples_split=1, random_state=0)
+RF_s.fit(XX_steam_train,YY_steam_train)
+YY_steam_pred=RF_s.predict(XX_steam_test)
+
+fig,ax = plt.subplots(1, 1,figsize=(20,10))
+line1, =plt.plot(XX_steam_test.index, YY_steam_test, label='Actual consumption', color='k')
+line2, =plt.plot(XX_steam_test.index, YY_steam_pred, label='RF Regression Prediction', color='r')
+plt.xlabel('Feature index',fontsize=18)
+plt.ylabel('Normalized steam usage (LBS)',fontsize=18)
+plt.title('Actual and RF predicted steam usage',fontsize=20)
+plt.legend([line1, line2], ['Actual consumption', 'RF Regression Prediction'],fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ckChjk7KJg.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">print RF_s.score(XX_steam_test,YY_steam_test)
+</code></pre>
+
+<pre><code>0.960889669644
+</code></pre>
+
+<pre><code class="language-python">#Plot actual vs. prediced usage.
+fig = plt.figure(figsize=(8,8))
+plt.scatter(YY_steam_test, YY_steam_test, c='k')
+plt.scatter(YY_steam_test, YY_steam_pred, c='r')
+plt.xlabel('Actual Steam Usage (LBS): $Y_i$',fontsize=18)
+plt.ylabel(&quot;Predicted Steam Usage (LBS): $\hat{Y}_i$&quot;,fontsize=18)
+plt.title(&quot;Steam vs Predicted Steam: $Y_i$ vs $\hat{Y}_i$&quot;,fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/04lmAgaL6e.png?imageslim" alt="mark" /></p>
+
+<h2 id="4-5-k-nearest-neighbours">4.5 K-Nearest Neighbours</h2>
+
+<p>In this notebook, we&rsquo;ll train a KNN Regression model for predicting building energy consumption based on historical enregy data and several weather variables. We&rsquo;ll use daily energy data and weather data to predict energy consumption.</p>
+
+<pre><code class="language-python"># special IPython command to prepare the notebook for matplotlib
+%matplotlib inline
+import numpy as np
+import pandas as pd
+
+import matplotlib.pyplot as plt
+
+pd.options.display.mpl_style = 'default'
+</code></pre>
+
+<pre><code class="language-python">import seaborn as sns
+
+import sklearn
+import sklearn.datasets
+import sklearn.cross_validation
+import sklearn.decomposition
+import sklearn.grid_search
+import sklearn.neighbors
+import sklearn.metrics
+</code></pre>
+
+<p>Building a KNN Regression model to predict the electricity consumption from the average adjusted weather attributes. To do this, we&rsquo;ll fit the model to daily electricity data and weather data from 2012-01-01 and compute the average squared residuals from predictions.</p>
+
+<pre><code class="language-python"># read in original data:
+electricity = pd.read_excel('Data/dailyElectricityWithFeatures.xlsx')
+electricity = electricity.drop('startDay', 1).drop('endDay', 1)
+#electricity = electricity.drop('humidityRatio-kg/kg',1).drop('coolingDegrees',1).drop('heatingDegrees',1).drop('dehumidification',1).drop('occupancy',1)
+electricity = electricity.dropna()
+
+chilledWater = pd.read_excel('Data/dailyChilledWaterWithFeatures.xlsx')
+chilledWater = chilledWater.drop('startDay', 1).drop('endDay', 1)
+chilledWater = chilledWater.dropna()
+
+steam = pd.read_excel('Data/dailySteamWithFeatures.xlsx')
+steam = steam.drop('startDay', 1).drop('endDay', 1)
+steam = steam.dropna()
+</code></pre>
+
+<pre><code class="language-python"># normalize data:
+normalized_electricity = electricity - electricity.mean()
+normalized_chilledWater = chilledWater - chilledWater.mean()
+normalized_steam = steam - steam.mean()
+</code></pre>
+
+<p>Adding a new column to specify if working days or weekends and holidays. We&rsquo;ll set working days to 0, and weekends and holidays to 1. US public holidays are listed here, <a href="http://www.officeholidays.com/countries/usa/">http://www.officeholidays.com/countries/usa/</a> We may also remove vacations times when there is no school, but we&rsquo;ll do it since we don&rsquo;t have this information.</p>
+
+<pre><code class="language-python"># Initialization all days to 0
+normalized_electricity['day_type'] = np.zeros(len(normalized_electricity))
+normalized_chilledWater['day_type'] = np.zeros(len(normalized_chilledWater))
+normalized_steam['day_type'] = np.zeros(len(normalized_steam))
+
+# Set weekends to 1
+normalized_electricity['day_type'][(normalized_electricity.index.dayofweek==5)|(normalized_electricity.index.dayofweek==6)] = 1
+normalized_chilledWater['day_type'][(normalized_chilledWater.index.dayofweek==5)|(normalized_chilledWater.index.dayofweek==6)] = 1
+normalized_steam['day_type'][(normalized_steam.index.dayofweek==5)|(normalized_steam.index.dayofweek==6)] = 1
+
+# Set holidays to 1
+holidays = ['2014-01-01','2014-01-20','2014-05-26','2014-07-04','2014-09-01','2014-11-11','2014-11-27','2014-12-25','2013-01-01',
+            '2013-01-21','2013-05-27','2013-07-04','2013-09-02','2013-11-11','2013-11-27','2013-12-25','2012-01-01','2012-01-16',
+            '2012-05-28','2012-07-04','2012-09-03','2012-11-12','2012-11-22','2012-12-25']
+
+for i in range(len(holidays)):
+    normalized_electricity['day_type'][normalized_electricity.index.date==np.datetime64(holidays[i])] = 1
+    normalized_chilledWater['day_type'][normalized_chilledWater.index.date==np.datetime64(holidays[i])] = 1
+    normalized_steam['day_type'][normalized_steam.index.date==np.datetime64(holidays[i])] = 1
+</code></pre>
+
+<p>Analysis of electricity data.</p>
+
+<pre><code class="language-python"># Split train and test data:
+elect_train = pd.DataFrame(data=normalized_electricity, index=np.arange('2012-01', '2014-01', dtype='datetime64[D]')).dropna()
+elect_test = pd.DataFrame(data=normalized_electricity, index=np.arange('2014-01', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_elect_train = elect_train.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+XX_elect_test = elect_test.drop('electricity-kWh', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_elect_train = elect_train['electricity-kWh']
+YY_elect_test = elect_test['electricity-kWh']
+
+print XX_elect_train.shape, XX_elect_test.shape
+</code></pre>
+
+<pre><code>(634, 13) (294, 13)
+</code></pre>
+
+<pre><code class="language-python">def accuracy_for_k(k,x,y):
+    split_data=sklearn.cross_validation.train_test_split(x,y,test_size=0.33,random_state=99)
+    X_train,X_test,Y_train,Y_test=split_data
+    knn=sklearn.neighbors.KNeighborsRegressor(n_neighbors=k,weights='uniform')
+    knn.fit(X_train,Y_train)
+    #Y_hat=knn.predict(X_test)
+    value=knn.score(X_test,Y_test)
+    return value
+
+</code></pre>
+
+<pre><code class="language-python"># Find the optimal number of k in knn:
+k_values=range(1,101)
+scores=np.zeros(len(k_values))
+for k, c_k in zip(k_values,range(len(k_values))):
+    value=accuracy_for_k(k=k,x=XX_elect_train,y=YY_elect_train)
+    scores[c_k]=value
+
+k_opt=np.argmax(scores)+1
+print scores.max()
+print 'The optimal value of k is:',k_opt
+
+sns.tsplot(scores.T)
+#plt.xticks(range(len(k_values)),k_values)
+plt.xlabel('k',fontsize=18)
+plt.ylabel('Accuracy',fontsize=18)
+plt.title('Accuracy for different k values.',fontsize=18)
+plt.show()
+</code></pre>
+
+<pre><code>0.0305837055412
+The optimal value of k is: 30
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/IJimh8gdEH.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python"># Use the optimal k for prediction:
+knn_reg=sklearn.neighbors.KNeighborsRegressor(n_neighbors=31,weights='uniform')
+knn_reg.fit(XX_elect_train,YY_elect_train)
+YY_elect_pred=knn_reg.predict(XX_elect_test)
+
+fig,ax = plt.subplots(1, 1,figsize=(20,10))
+line1, =plt.plot(XX_elect_test.index, YY_elect_test, label='Actual consumption', color='k')
+line2, =plt.plot(XX_elect_test.index, YY_elect_pred, label='KNN Regression Prediction', color='r')
+plt.xlabel('Feature index',fontsize=18)
+plt.ylabel('Normalized electricity usage (kWh)',fontsize=18)
+plt.title('Actual and KNN predicted electricity usage',fontsize=20)
+plt.legend([line1, line2], ['Actual consumption', 'KNN Regression Prediction'],fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/jJe0LDkK72.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">print knn_reg.score(XX_elect_test,YY_elect_test)
+</code></pre>
+
+<pre><code>0.0450538207392
+</code></pre>
+
+<pre><code class="language-python">#Plot actual vs. prediced usage.
+fig = plt.figure(figsize=(8,8))
+plt.scatter(YY_elect_test, YY_elect_test, c='k')
+plt.scatter(YY_elect_test, YY_elect_pred, c='r')
+plt.xlabel('Actual Elec. Usage (kWh): $Y_i$',fontsize=18)
+plt.ylabel(&quot;Predicted Elec. Usage (kWh): $\hat{Y}_i$&quot;,fontsize=18)
+
+plt.title(&quot;Energy vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$&quot;,fontsize=20)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/DG17mD72ce.png?imageslim" alt="mark" /></p>
+
+<p>Analysis of chilled water data.</p>
+
+<pre><code class="language-python">chilledw_train = pd.DataFrame(data=normalized_chilledWater, index=np.arange('2012-01', '2014-01', dtype='datetime64[D]')).dropna()
+chilledw_test = pd.DataFrame(data=normalized_chilledWater, index=np.arange('2014-01', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_chilledw_train = chilledw_train.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+XX_chilledw_test = chilledw_test.drop('chilledWater-TonDays', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_chilledw_train = chilledw_train['chilledWater-TonDays']
+YY_chilledw_test = chilledw_test['chilledWater-TonDays']
+
+print XX_chilledw_train.shape, XX_chilledw_test.shape
+</code></pre>
+
+<pre><code>(705, 13) (294, 13)
+</code></pre>
+
+<pre><code class="language-python"># Find the optimal number of k in knn:
+k_values=range(1,101)
+scores=np.zeros(len(k_values))
+for k, c_k in zip(k_values,range(len(k_values))):
+    value=accuracy_for_k(k=k,x=XX_chilledw_train,y=YY_chilledw_train)
+    scores[c_k]=value
+
+k_opt=np.argmax(scores)+1
+print scores.max()
+print 'The optimal value of k is:',k_opt
+
+sns.tsplot(scores.T)
+#plt.xticks(range(len(k_values)),k_values)
+plt.xlabel('k',fontsize=18)
+plt.ylabel('Accuracy',fontsize=18)
+plt.title('Accuracy for different k values.',fontsize=18)
+plt.show()
+</code></pre>
+
+<pre><code>0.62985747618
+The optimal value of k is: 6
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/a5a6kdk9C6.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python"># Use the optimal k for prediction:
+knn_reg_w=sklearn.neighbors.KNeighborsRegressor(n_neighbors=6,weights='uniform')
+knn_reg_w.fit(XX_chilledw_train,YY_chilledw_train)
+YY_chilledw_pred=knn_reg_w.predict(XX_chilledw_test)
+
+fig,ax = plt.subplots(1, 1,figsize=(20,10))
+line1, =plt.plot(XX_chilledw_test.index, YY_chilledw_test, label='Actual consumption', color='k')
+line2, =plt.plot(XX_chilledw_test.index, YY_chilledw_pred, label='KNN Regression Prediction', color='r')
+plt.xlabel('Feature index',fontsize=18)
+plt.ylabel('Normalized chilled water usage (t)',fontsize=18)
+plt.title('Actual and KNN predicted chilled water usage',fontsize=20)
+plt.legend([line1, line2], ['Actual consumption', 'KNN Regression Prediction'],fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/eF8cJC5dBf.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">print knn_reg_w.score(XX_chilledw_test,YY_chilledw_test)
+</code></pre>
+
+<pre><code>0.50450369365
+</code></pre>
+
+<pre><code class="language-python">#Plot actual vs. prediced usage.
+fig = plt.figure(figsize=(8,8))
+plt.scatter(YY_chilledw_test, YY_chilledw_test, c='k')
+plt.scatter(YY_chilledw_test, YY_chilledw_pred, c='r')
+plt.xlabel('Actual Water Usage (Ton): $Y_i$',fontsize=18)
+plt.ylabel(&quot;Predicted Water Usage (Ton): $\hat{Y}_i$&quot;,fontsize=18)
+plt.title(&quot;Water vs Predicted Water: $Y_i$ vs $\hat{Y}_i$&quot;,fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/52kFEbeLkb.png?imageslim" alt="mark" /></p>
+
+<p>Analysis of steam data.</p>
+
+<pre><code class="language-python">steam_train = pd.DataFrame(data=normalized_steam, index=np.arange('2012-01', '2014-01', dtype='datetime64[D]')).dropna()
+steam_test = pd.DataFrame(data=normalized_steam, index=np.arange('2014-01', '2014-11', dtype='datetime64[D]')).dropna()
+
+XX_steam_train = steam_train.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+XX_steam_test = steam_test.drop('steam-LBS', axis = 1).reset_index().drop('index', axis = 1)
+
+YY_steam_train = steam_train['steam-LBS']
+YY_steam_test = steam_test['steam-LBS']
+
+print XX_steam_train.shape, XX_steam_test.shape
+</code></pre>
+
+<pre><code>(705, 13) (294, 13)
+</code></pre>
+
+<pre><code class="language-python"># Find the optimal number of k in knn:
+k_values=range(1,101)
+scores=np.zeros(len(k_values))
+for k, c_k in zip(k_values,range(len(k_values))):
+    value=accuracy_for_k(k=k,x=XX_steam_train,y=YY_steam_train)
+    scores[c_k]=value
+
+k_opt=np.argmax(scores)+1
+print scores.max()
+print 'The optimal value of k is:',k_opt
+
+sns.tsplot(scores.T)
+#plt.xticks(range(len(k_values)),k_values)
+plt.xlabel('k',fontsize=18)
+plt.ylabel('Accuracy',fontsize=18)
+plt.title('Accuracy for different k values.',fontsize=18)
+plt.show()
+</code></pre>
+
+<pre><code>0.760976988296
+The optimal value of k is: 3
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/I4KhD177Aa.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python"># Use the optimal k for prediction:
+knn_reg_s=sklearn.neighbors.KNeighborsRegressor(n_neighbors=3,weights='uniform')
+knn_reg_s.fit(XX_steam_train,YY_steam_train)
+YY_steam_pred=knn_reg_s.predict(XX_steam_test)
+
+fig,ax = plt.subplots(1, 1,figsize=(20,10))
+line1, =plt.plot(XX_steam_test.index, YY_steam_test, label='Actual consumption', color='k')
+line2, =plt.plot(XX_steam_test.index, YY_steam_pred, label='KNN Regression Prediction', color='r')
+plt.xlabel('Feature index',fontsize=18)
+plt.ylabel('Normalized steam usage (LBS)',fontsize=18)
+plt.title('Actual and KNN predicted steam usage',fontsize=20)
+plt.legend([line1, line2], ['Actual consumption', 'KNN Regression Prediction'],fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ChD5hh31l6.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">print knn_reg_s.score(XX_steam_test,YY_steam_test)
+</code></pre>
+
+<pre><code>0.787718743908
+</code></pre>
+
+<pre><code class="language-python">#Plot actual vs. prediced usage.
+fig = plt.figure(figsize=(8,8))
+plt.scatter(YY_steam_test/10000, YY_steam_test/10000, c='k')
+plt.scatter(YY_steam_test/10000, YY_steam_pred/10000, c='r')
+plt.xlabel('Actual Steam Usage ($10^4$LBS): $Y_i$',fontsize=16)
+plt.ylabel(&quot;Predicted Steam Usage ($10^4$LBS): $\hat{Y}_i$&quot;,fontsize=18)
+plt.title(&quot;Steam vs Predicted Steam: $Y_i$ vs $\hat{Y}_i$&quot;,fontsize=18)
+plt.show()
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/l7I0GdiH3d.png?imageslim" alt="mark" /></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B1%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B/01-collect-data/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 collect data</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/05-%E8%83%BD%E6%BA%90%E9%A2%84%E6%B5%8B%E4%B8%8E%E5%88%86%E9%85%8D%E7%B1%BB%E9%97%AE%E9%A2%98%E6%A1%88%E4%BE%8B/%E6%A1%88%E4%BE%8B2harvard-energy-prediction/part-1-3-project-overview-data-wrangling-and-exploratory-analysis-dec10/">
+            <span class="next-text nav-default">Part 1-3 Project Overview, Data Wrangling and Exploratory Analysis-DEC10</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

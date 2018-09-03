@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 特征工程 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="特征工程 主要有五大特征类： 用户特征、商户特征、优惠券特征、用户商户组合特征、用户优惠券组合特征，赛题包括online和offline的数据，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E5%A4%A9%E6%B1%A0/01-%E7%94%9F%E6%B4%BB%E5%A4%A7%E5%AE%9E%E6%83%A0o2o%E4%BC%98%E6%83%A0%E5%88%B8%E4%BD%BF%E7%94%A8%E9%A2%84%E6%B5%8B/04-%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 特征工程" />
+<meta property="og:description" content="特征工程 主要有五大特征类： 用户特征、商户特征、优惠券特征、用户商户组合特征、用户优惠券组合特征，赛题包括online和offline的数据，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E5%A4%A9%E6%B1%A0/01-%E7%94%9F%E6%B4%BB%E5%A4%A7%E5%AE%9E%E6%83%A0o2o%E4%BC%98%E6%83%A0%E5%88%B8%E4%BD%BF%E7%94%A8%E9%A2%84%E6%B5%8B/04-%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" /><meta property="article:published_time" content="2018-07-15T22:25:41&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-15T22:25:41&#43;00:00"/>
+<meta itemprop="name" content="04 特征工程">
+<meta itemprop="description" content="特征工程 主要有五大特征类： 用户特征、商户特征、优惠券特征、用户商户组合特征、用户优惠券组合特征，赛题包括online和offline的数据，">
+
+
+<meta itemprop="datePublished" content="2018-07-15T22:25:41&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-15T22:25:41&#43;00:00" />
+<meta itemprop="wordCount" content="1818">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 特征工程"/>
+<meta name="twitter:description" content="特征工程 主要有五大特征类： 用户特征、商户特征、优惠券特征、用户商户组合特征、用户优惠券组合特征，赛题包括online和offline的数据，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 特征工程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-15 </span>
+        
+        <span class="more-meta"> 1818 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>特征工程</p>
+
+<p>主要有五大特征类：</p>
+
+<ul>
+<li>用户特征、商户特征、优惠券特征、用户商户组合特征、用户优惠券组合特征，赛题包括online和offline的数据，由于里面只有部分用户重合，商户优惠券等并未有重合，个人臆测线上应该是淘宝天猫的购买消费数据，有一定关联，但关系微弱，因此只向其中提取了用户特征。而offline数据集就提取了所有五个特征类。一下是各部分特征：</li>
+</ul>
+
+<p>赛题提供了 online 和 offline 两份数据集，online 数据集可以提取到与用户相关的特征，offline 数据集可以提取到更加丰富的特征：用户相关的特征，商家相关的特征，优惠劵相关的特征，用户-商家交互特征。</p>
+
+<p>另外需要指出的是，赛题提供的预测集中，包含了同一个用户在整个7月份里的优惠券领取情况，这实际上是一种leakage，比如存在这种情况：某一个用户在7月10日领取了某优惠券，然后在7月12日和7月15日又领取了相同的优惠券，那么7月10日领取的优惠券被核销的可能性就很大了。我们在做特征工程时也注意到了这一点，提取了一些相关的特征。加入这部分特征后，AUC提升了10个百分点，相信大多数队伍都利用了这一leakage，但这些特征在实际业务中是无法获取到的。<span style="color:red;">厉害了。特征工程对于特征的发现，有些是数据信息外的，这些挖掘有什么方面和指导吗？比如说要与生活常理相结合，与人类行为相结合。</span></p>
+
+<p>以下简要地说明各部分特征：</p>
+
+<p><span style="color:red;">这些特征都是怎么得到的？想出来的？而且怎么确定这些特征是有用的？怎么从数据中提取这些特征？非常想知道，靠简单的python 数据操作吗？大批量数据怎么办？比如说几个 G 的csv 文件，无法装载到内存怎么办？</span></p>
+
+<ul>
+<li><p><strong>用户线下相关的特征</strong></p>
+
+<ul>
+<li>用户领取优惠券次数</li>
+<li>用户获得优惠券但没有消费的次数</li>
+<li>用户获得优惠券并核销次数</li>
+<li>用户领取优惠券后进行核销率</li>
+<li>用户满0<del><sup>50</sup>&frasl;<sub>50</sub></del><sup>200</sup>&frasl;<sub>200</sub>~500 减的优惠券核销率</li>
+<li>用户核销满0<del><sup>50</sup>&frasl;<sub>50</sub></del><sup>200</sup>&frasl;<sub>200</sub>~500减的优惠券占所有核销优惠券的比重</li>
+<li>用户核销优惠券的平均/最低/最高消费折率</li>
+<li>用户核销过优惠券的不同商家数量，及其占所有不同商家的比重</li>
+<li>用户核销过的不同优惠券数量，及其占所有不同优惠券的比重</li>
+<li>用户平均核销每个商家多少张优惠券</li>
+<li>用户核销优惠券中的平均/最大/最小用户-商家距离</li>
+</ul></li>
+
+<li><p><strong>用户线上相关的特征</strong></p>
+
+<ul>
+<li>用户线上操作次数</li>
+<li>用户线上点击率</li>
+<li>用户线上购买率</li>
+<li>用户线上领取率</li>
+<li>用户线上不消费次数</li>
+<li>用户线上优惠券核销次数</li>
+<li>用户线上优惠券核销率</li>
+<li>用户线下不消费次数占线上线下总的不消费次数的比重</li>
+<li>用户线下的优惠券核销次数占线上线下总的优惠券核销次数的比重</li>
+<li>用户线下领取的记录数量占总的记录数量的比重</li>
+</ul></li>
+
+<li><p><strong>商家相关的特征</strong></p>
+
+<ul>
+<li>商家优惠券被领取次数</li>
+<li>商家优惠券被领取后不核销次数</li>
+<li>商家优惠券被领取后核销次数</li>
+<li>商家优惠券被领取后核销率</li>
+<li>商家优惠券核销的平均/最小/最大消费折率</li>
+<li>核销商家优惠券的不同用户数量，及其占领取不同的用户比重</li>
+<li>商家优惠券平均每个用户核销多少张</li>
+<li>商家被核销过的不同优惠券数量</li>
+<li>商家被核销过的不同优惠券数量占所有领取过的不同优惠券数量的比重</li>
+<li>商家平均每种优惠券核销多少张</li>
+<li>商家被核销优惠券的平均时间率</li>
+<li>商家被核销优惠券中的平均/最小/最大用户-商家距离</li>
+</ul></li>
+
+<li><p><strong>用户-商家交互特征</strong></p>
+
+<ul>
+<li>用户领取商家的优惠券次数</li>
+<li>用户领取商家的优惠券后不核销次数</li>
+<li>用户领取商家的优惠券后核销次数</li>
+<li>用户领取商家的优惠券后核销率</li>
+<li>用户对每个商家的不核销次数占用户总的不核销次数的比重</li>
+<li>用户对每个商家的优惠券核销次数占用户总的核销次数的比重</li>
+<li>用户对每个商家的不核销次数占商家总的不核销次数的比重</li>
+<li>用户对每个商家的优惠券核销次数占商家总的核销次数的比重</li>
+</ul></li>
+
+<li><p><strong>优惠券相关的特征</strong></p>
+
+<ul>
+<li>优惠券类型(直接优惠为0, 满减为1)</li>
+<li>优惠券折率</li>
+<li>满减优惠券的最低消费</li>
+<li>历史出现次数</li>
+<li>历史核销次数</li>
+<li>历史核销率</li>
+<li>历史核销时间率</li>
+<li>领取优惠券是一周的第几天</li>
+<li>领取优惠券是一月的第几天</li>
+<li>历史上用户领取该优惠券次数</li>
+<li>历史上用户消费该优惠券次数</li>
+<li>历史上用户对该优惠券的核销率</li>
+</ul></li>
+
+<li><p><strong>其它特征</strong></p></li>
+</ul>
+
+<p>这部分特征利用了赛题leakage，都是在预测区间提取的。</p>
+
+<ul>
+<li>用户领取的所有优惠券数目</li>
+<li>用户领取的特定优惠券数目</li>
+<li>用户此次之后/前领取的所有优惠券数目</li>
+<li>用户此次之后/前领取的特定优惠券数目</li>
+<li>用户上/下一次领取的时间间隔</li>
+<li>用户领取特定商家的优惠券数目</li>
+<li>用户领取的不同商家数目</li>
+<li>用户当天领取的优惠券数目</li>
+<li>用户当天领取的特定优惠券数目</li>
+<li>用户领取的所有优惠券种类数目</li>
+<li>商家被领取的优惠券数目</li>
+<li>商家被领取的特定优惠券数目</li>
+<li>商家被多少不同用户领取的数目</li>
+<li>商家发行的所有优惠券种类数目</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E5%A4%A9%E6%B1%A0/01-%E7%94%9F%E6%B4%BB%E5%A4%A7%E5%AE%9E%E6%83%A0o2o%E4%BC%98%E6%83%A0%E5%88%B8%E4%BD%BF%E7%94%A8%E9%A2%84%E6%B5%8B/06-%E6%A8%A1%E5%9E%8B%E8%B0%83%E5%8F%82/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 模型调参</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E5%A4%A9%E6%B1%A0/01-%E7%94%9F%E6%B4%BB%E5%A4%A7%E5%AE%9E%E6%83%A0o2o%E4%BC%98%E6%83%A0%E5%88%B8%E4%BD%BF%E7%94%A8%E9%A2%84%E6%B5%8B/02-%E5%A4%A7%E6%A6%82%E7%9A%84%E6%A1%86%E6%9E%B6%E4%B8%8E%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/">
+            <span class="next-text nav-default">02 大概的框架与一些问题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python 可迭代，生成器，迭代器 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="缘由： 之前再书上看到过可迭代，生成器，迭代器，但是不大记得了，看视频又看到了，但是感觉讲的还是有点模糊，因此要总结下。 要点如下： # yield 还是不是" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%94%9F%E6%88%90%E5%99%A8%E8%BF%AD%E4%BB%A3%E5%99%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python 可迭代，生成器，迭代器" />
+<meta property="og:description" content="缘由： 之前再书上看到过可迭代，生成器，迭代器，但是不大记得了，看视频又看到了，但是感觉讲的还是有点模糊，因此要总结下。 要点如下： # yield 还是不是" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E7%94%9F%E6%88%90%E5%99%A8%E8%BF%AD%E4%BB%A3%E5%99%A8/" /><meta property="article:published_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta itemprop="name" content="python 可迭代，生成器，迭代器">
+<meta itemprop="description" content="缘由： 之前再书上看到过可迭代，生成器，迭代器，但是不大记得了，看视频又看到了，但是感觉讲的还是有点模糊，因此要总结下。 要点如下： # yield 还是不是">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="wordCount" content="711">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python 可迭代，生成器，迭代器"/>
+<meta name="twitter:description" content="缘由： 之前再书上看到过可迭代，生成器，迭代器，但是不大记得了，看视频又看到了，但是感觉讲的还是有点模糊，因此要总结下。 要点如下： # yield 还是不是"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">python 可迭代，生成器，迭代器</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 711 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#缘由">缘由：</a>
+<ul>
+<li><a href="#要点如下">要点如下：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="缘由">缘由：</h1>
+
+<p>之前再书上看到过可迭代，生成器，迭代器，但是不大记得了，看视频又看到了，但是感觉讲的还是有点模糊，因此要总结下。</p>
+
+<h2 id="要点如下">要点如下：</h2>
+
+<pre><code># yield 还是不是很明白
+
+
+# 生成器
+# 用到这个元素的时候再去做计算，没有用到的时候不做计算
+
+# 平方表
+# square_table = []
+# for i in range(1000000):
+#     square_table.append(i * i)
+# for i in range(10):
+#     print(square_table[i])
+
+# 生成器可以使用next和for来进行循环
+square_generator = (x * x for x in range(1000000))
+for i in range(10):
+    print(next(square_generator))
+
+# print(type(range(10)))  # 返回的是一个range类 ，因为range是一个生成器
+# g = range(10)
+# print(next(g))#'range' object is not an iterator
+
+# 生成器可以从第一个元素开始迭代，但是不能从第10个元素开始迭代
+
+# 生成器 和迭代器和可迭代不是一个概念。
+def fib(limit):
+    n, a, b = 0, 0, 1
+    while n&lt;limit:
+        yield b
+        a,b=b,a+b
+        n+=1
+    return 'done'
+
+import traceback
+f=fib(6)
+print(type(f))
+print(next(f))
+print(next(f))
+print(next(f))
+print(next(f))
+print(next(f))
+print(next(f))
+# 如果不是从yield中返回就是
+# 对于traceback的使用
+try:
+    print(next(f))
+except StopIteration:
+    traceback.print_exc()
+
+for i in fib(5):
+    print(i)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>0
+1
+4
+9
+16
+25
+36
+49
+64
+81
+&lt;class 'generator'&gt;
+1
+1
+2
+3
+5
+8
+1
+1
+2
+3
+5
+Traceback (most recent call last):
+  File &quot;E:/01.Learn/01.Python/01.PythonBasic/c3_8.py&quot;, line 46, in &lt;module&gt;
+    print(next(f))
+StopIteration: done
+</code></pre>
+
+<p>代码如下：</p>
+
+<pre><code># 可以直接作用于for循环的对象统称为可迭代对象 Iterable
+# 可以被next函数调用并不断返回下一个值的对象成为迭代器：Iterator(表示一个惰性计算的序列# )
+# 所有可以用for循环访问的都是可迭代，只有满足惰性计算才是迭代器
+# 迭代器强调的一点是：惰性计算，用到的时候才计算，而不是预先计算
+# 生成器肯定是个迭代器，因为生成器一定是惰性计算的。
+
+
+from collections import Iterable
+from collections import Iterator
+
+# 看看列表对象和字典对象是否是可迭代的
+
+print(isinstance([1, 2, 3], Iterable))
+print(isinstance({}, Iterable))
+
+print(isinstance(&quot;aaa&quot;, Iterable))
+print(isinstance(1, Iterable))
+
+print(isinstance([1, 2, 3], Iterator))  # 虽然是可迭代的，但是不是迭代器
+
+g = (x * x for x in range(10))
+print(type(g))
+print(isinstance(g, Iterable))  # 是可迭代的
+print(isinstance(g, Iterator))  # 而且是迭代器
+for i in g:
+    print(i)
+
+
+def fib(limit):
+    n, a, b = 0, 0, 1
+    while n &lt; limit:
+        yield b
+        a, b = b, a + b
+        n += 1
+    return 'done'
+
+
+f = fib(6)
+print(type(f))
+print(isinstance(f, Iterable))  # 也是可迭代的
+print(isinstance(f, Iterator))  # 也是一个迭代器
+for i in f:
+    print(i)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>True
+True
+True
+False
+False
+&lt;class 'generator'&gt;
+True
+True
+0
+1
+4
+9
+16
+25
+36
+49
+64
+81
+&lt;class 'generator'&gt;
+True
+True
+1
+1
+2
+3
+5
+8
+</code></pre>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-python-%E4%BB%8B%E7%BB%8D/05-python-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E4%B8%8E%E5%B7%A5%E5%85%B7/python-traceback/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python traceback</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python%E4%B8%AD%E6%96%87%E4%BB%B6%E7%9A%84%E8%AF%BB%E5%86%99/">
+            <span class="next-text nav-default">python中文件的读写</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

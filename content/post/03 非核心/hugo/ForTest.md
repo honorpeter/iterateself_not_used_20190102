@@ -62,7 +62,7 @@ benchmarkChart.setOption(option);
 {{% /admonition %}}
 
 
-OK，完成了 😂。你已经拥有了 CRUD 的 API 接口了，现在来试试吧。
+OK，现在来试试吧。
 
 {{% admonition warning "Warning" %}}
 请注意你的 JPA 及下文所述的注解最好放在 get 方法上，Elide 目前没有完全支持位于 field 上的注解。
@@ -83,4 +83,4 @@ JSON API 支持只删除关联而不删除实体，那么该注解是否于关�
 {{% /admonition %}}
 
 
-<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:400px;" src="https://www.processon.com/embed/mind/5ad211b6e4b0518eacaf908f"></iframe>
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:400px; height:400px;" src="https://www.processon.com/embed/mind/5ad211b6e4b0518eacaf908f"></iframe>

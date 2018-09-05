@@ -54,41 +54,7 @@ benchmarkChart.setOption(option);
 - optimizer : default(50)
 - source code : [olOwOlo/generation-type-benchmark](https://github.com/olOwOlo/generation-type-benchmark)
 
-```
-{{% alertNote %}}
-MyBatis Generator 1.3.6 及以上
-{{% /alertNote %}}
-
-{{% alertNote %}}
-1.3.6 在动态 SQL 模式下存在数个已修复的 BUG，由于 1.3.7 尚未发布，建议使用快照版本。
-{{% /alertNote %}}
-
-{{% admonition note "Note" %}}
-
-本文基于 elide-spring-boot-starter 1.4.0 & Spring Boot 2，请注意有一些功能并不是 Elide 所直接提供的，关于该 starter 的更多信息于 [Github 主页](https://github.com/illyasviel/elide-spring-boot)查看。
-
-{{% /admonition %}}
-
-
-OK，现在来试试吧。
-
-{{% admonition warning "Warning" %}}
-请注意你的 JPA 及下文所述的注解最好放在 get 方法上，Elide 目前没有完全支持位于 field 上的注解。
-{{% /admonition %}}
-标识**实体**是否可删除
-
-
-{{% admonition tip "Tip" %}}
-在开启 Spring 的依赖注入后（由 starter 提供，默认开启），你可以在实体类中使用 `@Autowired`，`@Inject` 等注解注入 Bean 以供触发器函数使用...个人建议你关掉它，用下面提到的 Function Hooks。
-{{% /admonition %}}
 
 
 
-标识**实体**是否可删除
-
-{{% admonition question "Question" %}}
-JSON API 支持只删除关联而不删除实体，那么该注解是否于关系字段仍然有效？可以自行尝试一下~
-{{% /admonition %}}
-```
-
-<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:400px; height:400px;" src="https://www.processon.com/embed/mind/5ad211b6e4b0518eacaf908f"></iframe>
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:400px;" src="https://www.processon.com/embed/mind/5ad211b6e4b0518eacaf908f"></iframe>

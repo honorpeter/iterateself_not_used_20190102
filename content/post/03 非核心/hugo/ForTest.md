@@ -54,25 +54,33 @@ benchmarkChart.setOption(option);
 - optimizer : default(50)
 - source code : [olOwOlo/generation-type-benchmark](https://github.com/olOwOlo/generation-type-benchmark)
 
-## APPENDIX
 
-### 16 threads
+{{% admonition note "Note" %}}
 
-Benchmark                                       | Mode | Cnt | Score |   Error | Units
------------------------------------------------ | ---- | --- | ----- | ------- | -----
-GenerationTypeBenchmark.identity                |   ss |  30 | 0.805 | ± 0.013 |  s/op
-GenerationTypeBenchmark.identityBatch           |   ss |  30 | 0.404 | ± 0.097 |  s/op
-GenerationTypeBenchmark.sequence                |   ss |  30 | 1.084 | ± 0.011 |  s/op
-GenerationTypeBenchmark.sequenceOptimizer       |   ss |  30 | 0.858 | ± 0.011 |  s/op
-GenerationTypeBenchmark.sequenceBatch           |   ss |  30 | 0.417 | ± 0.093 |  s/op
-GenerationTypeBenchmark.sequenceOptimizerBatch  |   ss |  30 | 0.193 | ± 0.064 |  s/op
-GenerationTypeBenchmark.table                   |   ss |   5 | 6.573 | ± 1.118 |  s/op
-GenerationTypeBenchmark.tableOptimizer          |   ss |  30 | 0.936 | ± 0.016 |  s/op
-GenerationTypeBenchmark.tableBatch              |   ss |   5 | 5.097 | ± 0.230 |  s/op
-GenerationTypeBenchmark.tableOptimizerBatch     |   ss |  30 | 0.257 | ± 0.048 |  s/op
+本文基于 elide-spring-boot-starter 1.4.0 & Spring Boot 2，请注意有一些功能并不是 Elide 所直接提供的，关于该 starter 的更多信息于 [Github 主页](https://github.com/illyasviel/elide-spring-boot)查看。
+
+{{% /admonition %}}
 
 
+OK，完成了 😂。你已经拥有了 CRUD 的 API 接口了，现在来试试吧。
+
+{{% admonition warning "Warning" %}}
+请注意你的 JPA 及下文所述的注解最好放在 get 方法上，Elide 目前没有完全支持位于 field 上的注解。
+{{% /admonition %}}
+标识**实体**是否可删除
+
+
+{{% admonition tip "Tip" %}}
+在开启 Spring 的依赖注入后（由 starter 提供，默认开启），你可以在实体类中使用 `@Autowired`，`@Inject` 等注解注入 Bean 以供触发器函数使用...个人建议你关掉它，用下面提到的 Function Hooks。
+{{% /admonition %}}
 
 
 
-<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:525px; height:245px;" src="https://www.processon.com/embed/mind/5ad211b6e4b0518eacaf908f"></iframe>
+标识**实体**是否可删除
+
+{{% admonition question "Question" %}}
+JSON API 支持只删除关联而不删除实体，那么该注解是否于关系字段仍然有效？可以自行尝试一下~
+{{% /admonition %}}
+
+
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:400px;" src="https://www.processon.com/embed/mind/5ad211b6e4b0518eacaf908f"></iframe>

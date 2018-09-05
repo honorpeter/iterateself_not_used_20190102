@@ -54,7 +54,7 @@ benchmarkChart.setOption(option);
 - optimizer : default(50)
 - source code : [olOwOlo/generation-type-benchmark](https://github.com/olOwOlo/generation-type-benchmark)
 
-
+```
 {{% alertNote %}}
 MyBatis Generator 1.3.6 及以上
 {{% /alertNote %}}
@@ -63,7 +63,6 @@ MyBatis Generator 1.3.6 及以上
 1.3.6 在动态 SQL 模式下存在数个已修复的 BUG，由于 1.3.7 尚未发布，建议使用快照版本。
 {{% /alertNote %}}
 
-```
 {{% admonition note "Note" %}}
 
 本文基于 elide-spring-boot-starter 1.4.0 & Spring Boot 2，请注意有一些功能并不是 Elide 所直接提供的，关于该 starter 的更多信息于 [Github 主页](https://github.com/illyasviel/elide-spring-boot)查看。

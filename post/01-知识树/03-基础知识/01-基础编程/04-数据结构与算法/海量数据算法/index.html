@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>海量数据算法 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="关于海量数据处理问题，通过最近的面试可以看出这是一个经常会问的问题。本篇文章基于实际的面试问题，总结关于海量数据处理的常用算法以及针对这些实" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%AE%97%E6%B3%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="海量数据算法" />
+<meta property="og:description" content="关于海量数据处理问题，通过最近的面试可以看出这是一个经常会问的问题。本篇文章基于实际的面试问题，总结关于海量数据处理的常用算法以及针对这些实" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E7%AE%97%E6%B3%95/" /><meta property="article:published_time" content="2018-08-03T14:15:53&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T14:15:53&#43;00:00"/>
+<meta itemprop="name" content="海量数据算法">
+<meta itemprop="description" content="关于海量数据处理问题，通过最近的面试可以看出这是一个经常会问的问题。本篇文章基于实际的面试问题，总结关于海量数据处理的常用算法以及针对这些实">
+
+
+<meta itemprop="datePublished" content="2018-08-03T14:15:53&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T14:15:53&#43;00:00" />
+<meta itemprop="wordCount" content="4354">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="海量数据算法"/>
+<meta name="twitter:description" content="关于海量数据处理问题，通过最近的面试可以看出这是一个经常会问的问题。本篇文章基于实际的面试问题，总结关于海量数据处理的常用算法以及针对这些实"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">海量数据算法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 4354 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#一-海量数据处理">一、海量数据处理</a>
+<ul>
+<li>
+<ul>
+<li><a href="#那解决办法呢">那解决办法呢?</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#二-算法-数据结构基础">二、算法/数据结构基础</a>
+<ul>
+<li><a href="#1-bloom-filter">1.Bloom Filter</a>
+<ul>
+<li><a href="#适用范围">适用范围</a></li>
+</ul></li>
+<li><a href="#2-hash">2.Hash</a></li>
+<li><a href="#3-bit-map">3. Bit-map</a></li>
+<li><a href="#4-堆">4.堆</a></li>
+<li><a href="#5-trie树">5.trie树</a></li>
+<li><a href="#6-外排序">6.外排序</a></li>
+</ul></li>
+<li><a href="#三-面试问题解决">三、面试问题解决</a>
+<ul>
+<li>
+<ul>
+<li><a href="#①-海量日志数据-提取出某日访问百度次数最多的那个ip">①、海量日志数据，提取出某日访问百度次数最多的那个IP。</a></li>
+<li><a href="#②-搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来-每个查询串的长度为1-255字节-假设目前有一千万个记录-这些查询串的重复度比较高-虽然总数是1千万-但如果除去重复后-不超过3百万个-一个查询串的重复度越高-说明查询它的用户越多-也就是越热门-请你统计最热门的10个查询串-要求使用的内存不能超过1g">②、 搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。），请你统计最热门的10个查询串，要求使用的内存不能超过1G。</a></li>
+<li><a href="#③-有一个1g大小的一个文件-里面每一行是一个词-词的大小不超过16字节-内存限制大小是1m-返回频数最高的100个词">③、有一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16字节，内存限制大小是1M。返回频数最高的100个词。</a></li>
+<li><a href="#④-有10个文件-每个文件1g-每个文件的每一行存放的都是用户的query-每个文件的query都可能重复-要求你按照query的频度排序">④、有10个文件，每个文件1G，每个文件的每一行存放的都是用户的query，每个文件的query都可能重复。要求你按照query的频度排序。</a></li>
+<li><a href="#⑤-给定a-b两个文件-各存放50亿个url-每个url各占64字节-内存限制是4g-让你找出a-b文件共同的url">⑤、 给定a、b两个文件，各存放50亿个url，每个url各占64字节，内存限制是4G，让你找出a、b文件共同的url</a></li>
+<li><a href="#⑥-在2-5亿个整数中找出不重复的整数-注-内存不足以容纳这2-5亿个整数">⑥、在2.5亿个整数中找出不重复的整数，注，内存不足以容纳这2.5亿个整数。</a></li>
+<li><a href="#⑦-给40亿个不重复的unsigned-int的整数-没排过序的-然后再给一个数-如何快速判断这个数是否在那40亿个数当中">⑦、给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？</a></li>
+<li><a href="#参考文章">参考文章：</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<blockquote>
+<p>关于海量数据处理问题，通过最近的面试可以看出这是一个经常会问的问题。本篇文章基于实际的面试问题，总结关于海量数据处理的常用算法以及针对这些实际面试问题提出解决方案。</p>
+</blockquote>
+
+<h3 id="一-海量数据处理">一、海量数据处理</h3>
+
+<p>所谓海量数据处理，无非就是基于海量数据上的存储、处理、操作。何谓海量，<strong>就是数据量太大，所以导致要么是无法在较短时间内迅速解决，要么是数据太大，导致无法一次性装入内存。</strong></p>
+
+<h5 id="那解决办法呢">那解决办法呢?</h5>
+
+<p>针对时间，我们可以采用巧妙的算法搭配合适的数据结构，如Bloom filter/Hash/bit-map/堆/trie树。</p>
+
+<p>针对空间，无非就一个办法：大而化小，分而治之（hash映射）。</p>
+
+<h3 id="二-算法-数据结构基础">二、算法/数据结构基础</h3>
+
+<h4 id="1-bloom-filter">1.Bloom Filter</h4>
+
+<p>Bloom Filter（BF）是一种空间效率很高的随机数据结构，<strong>它利用位数组很简洁地表示一个集合，并能判断一个元素是否属于这个集合。</strong>它是一个判断元素是否存在集合的快速的概率算法。Bloom Filter有可能<strong>会出现错误判断，但不会漏掉判断。</strong>也就是Bloom Filter<strong>判断元素不再集合，那肯定不在。如果判断元素存在集合中，有一定的概率判断错误。</strong>因此，Bloom Filter不适合那些“零错误”的应用场合。
+ 而在能容忍低错误率的应用场合下，Bloom Filter比其他常见的算法（如hash，折半查找）极大节省了空间。</p>
+
+<h5 id="适用范围">适用范围</h5>
+
+<p>可以用来实现数据字典，进行数据的判重，或者集合求交集</p>
+
+<p>具体参考：<a href="https://link.jianshu.com?t=http://blog.csdn.net/v_july_v/article/details/6685894">海量数据处理之Bloom Filter详解</a></p>
+
+<h4 id="2-hash">2.Hash</h4>
+
+<p>Hash，一般翻译做“散列”，也有直接音译为“哈希”的，就是<strong>把任意长度的输入（又叫做预映射， pre-image），通过散列算法，变换成固定长度的输出，该输出就是散列值。</strong>这种转换是一种压缩映射，也就是，散列值的空间通常远小于输入的空间，不同的输入可能会散列成相同的输出，而不可能从散列值来唯一的确定输入值。简单的说就是一种将任意长度的消息压缩到某一固定长度的消息摘要的函数。</p>
+
+<p>具体参考：<a href="https://link.jianshu.com?t=http://blog.csdn.net/v_july_v/article/details/6256463">十一、从头到尾解析Hash表算法</a></p>
+
+<h4 id="3-bit-map">3. Bit-map</h4>
+
+<p>所谓的Bit-map就是用一个bit位来标记某个元素对应的值。由于采用了Bit为单位来存储数据，因此在存储空间方面，可以大大节省。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/3B50kdIhhD.png?imageslim" alt="mark" /></p>
+
+<p>然后遍历这5个元素，首先第一个元素是4，那么就把4对应的位置为1（可以这样操作 p+(i/8)|(0x01&lt;&lt;(i%8)) 当然了这里的操作涉及到Big-ending和Little-ending的情况，这里默认为Big-ending）,因为是从零开始的，所以要把第五位置为一（如下图）：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/a12KLlH79e.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/8flFK2hfBD.png?imageslim" alt="mark" /></p>
+
+<p>具体参考：<a href="https://link.jianshu.com?t=http://blog.csdn.net/wypblog/article/details/8237956">数据结构：位图法</a></p>
+
+<h4 id="4-堆">4.堆</h4>
+
+<p>堆是一种特殊的二叉树，具备以下两种性质
+ 1）每个节点的值都大于（或者都小于，称为最小堆）其子节点的值
+ 2）树是完全平衡的，并且最后一层的树叶都在最左边这样就定义了一个最大堆。
+ 如下图用一个数组来表示堆：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/amBfCLEHbB.png?imageslim" alt="mark" /></p>
+
+<h4 id="5-trie树">5.trie树</h4>
+
+<p>下面我们有and,as,at,cn,com这些关键词，那么如何构建trie树呢？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/8H30acmiAD.png?imageslim" alt="mark" /></p>
+
+<p>从上面的图中，我们或多或少的可以发现一些好玩的特性。</p>
+
+<p>第一：根节点不包含字符，除根节点外的每一个子节点都包含一个字符。</p>
+
+<p>第二：从根节点到某一节点，路径上经过的字符连接起来，就是该节点对应的字符串。</p>
+
+<p>第三：每个单词的公共前缀作为一个字符节点保存。</p>
+
+<p><strong>适用范围：</strong></p>
+
+<p>前缀统计，词频统计。</p>
+
+<p>具体参考：<a href="https://link.jianshu.com?t=http://www.cnblogs.com/huangxincheng/archive/2012/11/25/2788268.html">6天通吃树结构—— 第五天 Trie树</a></p>
+
+<h4 id="6-外排序">6.外排序</h4>
+
+<p><strong>适用范围：</strong></p>
+
+<p>大数据的排序，去重</p>
+
+<p>** 基本原理及要点：**</p>
+
+<p>外部排序的两个独立阶段：</p>
+
+<p>1）首先按内存大小，将外存上含n个记录的文件分成若干长度L的子文件或段。依次读入内存并利用有效的内部排序对他们进行排序，并将排序后得到的有序字文件重新写入外存，通常称这些子文件为归并段。</p>
+
+<p>2）对这些归并段进行逐趟归并，使归并段逐渐由小到大，直至得到整个有序文件为之。</p>
+
+<p>外排序的优化方法：置换选择 败者树原理，最优归并树</p>
+
+<p>具体参考：<a href="https://link.jianshu.com?t=http://www.cnblogs.com/benjamin-t/p/3325401.html">选择置换+败者树搞定外部排序</a></p>
+
+<h3 id="三-面试问题解决">三、面试问题解决</h3>
+
+<h5 id="①-海量日志数据-提取出某日访问百度次数最多的那个ip">①、海量日志数据，提取出某日访问百度次数最多的那个IP。</h5>
+
+<p><strong>算法思想：分而治之+Hash</strong></p>
+
+<p>1.IP地址最多有2^32=4G种取值情况，所以不能完全加载到内存中处理；
+ 2.可以考虑采用“分而治之”的思想，按照IP地址的Hash(IP)%1024值，把海量IP日志分别存储到1024个小文件中。这样，每个小文件最多包含4MB个IP地址；
+ 3.对于每一个小文件，可以构建一个IP为key，出现次数为value的Hash map，同时记录当前出现次数最多的那个IP地址；
+ 4.可以得到1024个小文件中的出现次数最多的IP，再依据常规的排序算法得到总体上出现次数最多的IP；</p>
+
+<h5 id="②-搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来-每个查询串的长度为1-255字节-假设目前有一千万个记录-这些查询串的重复度比较高-虽然总数是1千万-但如果除去重复后-不超过3百万个-一个查询串的重复度越高-说明查询它的用户越多-也就是越热门-请你统计最热门的10个查询串-要求使用的内存不能超过1g">②、 搜索引擎会通过日志文件把用户每次检索使用的所有检索串都记录下来，每个查询串的长度为1-255字节。假设目前有一千万个记录（这些查询串的重复度比较高，虽然总数是1千万，但如果除去重复后，不超过3百万个。一个查询串的重复度越高，说明查询它的用户越多，也就是越热门。），请你统计最热门的10个查询串，要求使用的内存不能超过1G。</h5>
+
+<p><strong>可以在内存中处理，典型的Top K算法</strong></p>
+
+<p><strong>算法思想：hashmap+堆</strong></p>
+
+<p>1.先对这批海量数据预处理，在O（N）的时间内用Hash表完成<strong>统计</strong>；
+ 2.借助堆这个数据结构，找出Top K，时间复杂度为O(N*logK)。</p>
+
+<p>或者：采用trie树，关键字域存该查询串出现的次数，没有出现为0。最后用10个元素的最小推来对出现频率进行排序。</p>
+
+<h5 id="③-有一个1g大小的一个文件-里面每一行是一个词-词的大小不超过16字节-内存限制大小是1m-返回频数最高的100个词">③、有一个1G大小的一个文件，里面每一行是一个词，词的大小不超过16字节，内存限制大小是1M。返回频数最高的100个词。</h5>
+
+<p><strong>算法思想：分而治之 + hash统计 + 堆排序</strong></p>
+
+<p>1.顺序读文件中，对于每个词x，取hash(x)%5000，然后按照该值存到5000个小文件（记为x0,x1,&hellip;x4999）中。这样每个文件大概是200k左右。如果其中的有的文件超过了1M大小，还可以按照类似的方法继续往下分，直到分解得到的小文件的大小都不超过1M。</p>
+
+<p>2.对每个小文件，采用trie树/hash_map等统计每个文件中出现的词以及相应的频率。</p>
+
+<p>3.取出出现频率最大的100个词（可以用含100个结点的最小堆）后，再把100个词及相应的频率存入文件，这样又得到了5000个文件。最后就是把这5000个文件进行归并（类似于归并排序）的过程了。</p>
+
+<h5 id="④-有10个文件-每个文件1g-每个文件的每一行存放的都是用户的query-每个文件的query都可能重复-要求你按照query的频度排序">④、有10个文件，每个文件1G，每个文件的每一行存放的都是用户的query，每个文件的query都可能重复。要求你按照query的频度排序。</h5>
+
+<p><strong>方案1：</strong></p>
+
+<p><strong>算法思想：分而治之 + hash统计 + 堆排序</strong></p>
+
+<p>顺序读取10个文件，按照hash(query)%10的结果将query写入到另外10个文件中。这样新生成的文件每个的大小大约也1G，大于1G继续按照上述思路分。</p>
+
+<p>找一台内存在2G左右的机器，依次对用hash_map(query, query_count)来统计每个query出现的次数。利用快速/堆/归并排序按照出现次数进行排序。将排序好的query和对应的query_cout输出到文件中。这样得到了10个排好序的文件（记为）。</p>
+
+<p>对这10个文件进行归并排序（内排序与外排序相结合）。</p>
+
+<p><strong>方案2：</strong></p>
+
+<p><strong>算法思想：hashmap+堆</strong></p>
+
+<p>一般query的总量是有限的，只是重复的次数比较多而已，可能对于所有的query，一次性就可以加入到内存了。这样，我们就可以采用trie树/hash_map等直接来统计每个query出现的次数，然后按出现次数做快速/堆/归并排序就可以了。</p>
+
+<h5 id="⑤-给定a-b两个文件-各存放50亿个url-每个url各占64字节-内存限制是4g-让你找出a-b文件共同的url">⑤、 给定a、b两个文件，各存放50亿个url，每个url各占64字节，内存限制是4G，让你找出a、b文件共同的url</h5>
+
+<p><strong>方案1：</strong>可以估计每个文件安的大小为5G×64=320G，远远大于内存限制的4G。所以不可能将其完全加载到内存中处理。考虑采取分而治之的方法。</p>
+
+<p>**算法思想：分而治之 + hash统计 **</p>
+
+<p>遍历文件a，对每个url求取hash(url)%1000，然后根据所取得的值将url分别存储到1000个小文件（记为a0,a1,&hellip;,a999）中。这样每个小文件的大约为300M。</p>
+
+<p>遍历文件b，采取和a相同的方式将url分别存储到1000小文件（记为b0,b1,&hellip;,b999）。这样处理后，所有可能相同的url都在对应的小文件（a0vsb0,a1vsb1,&hellip;,a999vsb999）中，不对应的小文件不可能有相同的url。然后我们只要求出1000对小文件中相同的url即可。</p>
+
+<p>求每对小文件中相同的url时，可以把其中一个小文件的url存储到hash_set中。然后遍历另一个小文件的每个url，看其是否在刚才构建的hash_set中，如果是，那么就是共同的url，存到文件里面就可以了。</p>
+
+<p><strong>方案2：</strong>如果允许有一定的错误率，可以使用Bloom filter，4G内存大概可以表示340亿bit。将其中一个文件中的url使用Bloom filter映射为这340亿bit，然后挨个读取另外一个文件的url，检查是否与Bloom filter，如果是，那么该url应该是共同的url（注意会有一定的错误率）。</p>
+
+<h5 id="⑥-在2-5亿个整数中找出不重复的整数-注-内存不足以容纳这2-5亿个整数">⑥、在2.5亿个整数中找出不重复的整数，注，内存不足以容纳这2.5亿个整数。</h5>
+
+<p>采用2-Bitmap（每个数分配2bit，00表示不存在，01表示出现一次，10表示多次，11无意义）进行，共需内存2^32 * 2 bit=1 GB内存，还可以接受。然后扫描这2.5亿个整数，查看Bitmap中相对应位，如果是00变01，01变10，10保持不变。所描完事后，查看bitmap，把对应位是01的整数输出即可。</p>
+
+<h5 id="⑦-给40亿个不重复的unsigned-int的整数-没排过序的-然后再给一个数-如何快速判断这个数是否在那40亿个数当中">⑦、给40亿个不重复的unsigned int的整数，没排过序的，然后再给一个数，如何快速判断这个数是否在那40亿个数当中？</h5>
+
+<p><strong>方案1：</strong>申请512M的内存，一个bit位代表一个unsigned int值。读入40亿个数，设置相应的bit位，读入要查询的数，查看相应bit位是否为1，为1表示存在，为0表示不存在。</p>
+
+<p><strong>方案2：</strong>因为2^32为40亿多，所以给定一个数可能在，也可能不在其中；
+ 这里我们把40亿个数中的每一个用32位的二进制来表示
+ 假设这40亿个数开始放在一个文件中。</p>
+
+<p>然后将这40亿个数分成两类:
+ 1.最高位为0
+ 2.最高位为1
+ 并将这两类分别写入到两个文件中，其中一个文件中数的个数&lt;=20亿，而另一个&gt;=20亿（这相当于折半了）；
+ 与要查找的数的最高位比较并接着进入相应的文件再查找</p>
+
+<p>再然后把这个文件为又分成两类:
+ 1.次最高位为0
+ 2.次最高位为1</p>
+
+<p>并将这两类分别写入到两个文件中，其中一个文件中数的个数&lt;=10亿，而另一个&gt;=10亿（这相当于折半了）；
+ 与要查找的数的次最高位比较并接着进入相应的文件再查找。
+ &hellip;&hellip;.
+ 以此类推，就可以找到了。</p>
+
+<h5 id="参考文章">参考文章：</h5>
+
+<p><a href="https://link.jianshu.com?t=http://blog.csdn.net/hguisu/article/details/7856239">海量数据处理 算法总结</a>
+ <a href="https://link.jianshu.com?t=http://blog.csdn.net/v_july_v/article/details/6279498">十道海量数据处理面试题与十个方法大总结</a>
+ <a href="https://link.jianshu.com?t=http://blog.csdn.net/v_july_v/article/details/7382693">教你如何迅速秒杀掉：99%的海量数据处理面试题</a></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://www.jianshu.com/p/ac5cad6d64a8">面试必备之海量数据处理</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/02-%E6%95%B0%E7%BB%84/08-%E7%9F%A9%E9%98%B5%E7%9B%B8%E4%B9%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">08 矩阵相乘</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/">
+            <span class="next-text nav-default">算法：二维数组中的查找</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

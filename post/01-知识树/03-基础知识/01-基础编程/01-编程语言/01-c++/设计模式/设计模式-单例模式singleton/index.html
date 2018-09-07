@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 单例模式（Singleton） - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 10:19:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89&amp;rsquo; title: 设计模式 单例模式（Singleton） wordpress_id: 7147 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8Fsingleton/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 单例模式（Singleton）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 10:19:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89&rsquo; title: 设计模式 单例模式（Singleton） wordpress_id: 7147 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8Fsingleton/" /><meta property="article:published_time" content="2018-07-27T17:55:35&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T17:55:35&#43;00:00"/>
+<meta itemprop="name" content="设计模式 单例模式（Singleton）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 10:19:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89&rsquo; title: 设计模式 单例模式（Singleton） wordpress_id: 7147 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL">
+
+
+<meta itemprop="datePublished" content="2018-07-27T17:55:35&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T17:55:35&#43;00:00" />
+<meta itemprop="wordCount" content="2295">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 单例模式（Singleton）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 10:19:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89&rsquo; title: 设计模式 单例模式（Singleton） wordpress_id: 7147 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 单例模式（Singleton）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 2295 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#什么时候使用单例模式">什么时候使用单例模式？</a></li>
+<li><a href="#singleton-模式介绍">Singleton 模式介绍</a></li>
+<li><a href="#完整代码">完整代码</a>
+<ul>
+<li><a href="#代码如下">代码如下</a></li>
+<li><a href="#代码说明">代码说明</a></li>
+</ul></li>
+<li><a href="#singleton-的优缺点">Singleton 的优缺点</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 10:19:46+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89/">http://106.15.37.116/2018/05/31/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e5%8d%95%e4%be%8b%e6%a8%a1%e5%bc%8f%ef%bc%88singleton%ef%bc%89&rsquo;
+title: 设计模式 单例模式（Singleton）
+wordpress_id: 7147
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="什么时候使用单例模式">什么时候使用单例模式？</h1>
+
+<p>Singleton 模式应该是最常用到的了。</p>
+
+<p>它解决的问题十分常见：怎么创建一个唯一的变量(对象)？</p>
+
+<p>实际上，在基于过程的设计中我们是可以通过创建一个全局变量（对象）来实现的，在面向对象和面向过程结合的设计范式（如C++）中，我们也还是可以通过一个全局变量实现这一点。</p>
+
+<p>但是，当我们到了纯粹的面向对象的范式中的时候，就只能通过 Singleton 模式来实现了。<strong>为什么这个时候我不能还是设置一个全局变量？</strong></p>
+
+<h1 id="singleton-模式介绍">Singleton 模式介绍</h1>
+
+<p>Singleton模式结构图如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gk9emjI3C9.png?imageslim" alt="mark" /></p>
+
+<p>可以看到，我们是通过维护一个 static 的成员变量来记录这个唯一的对象实例的。然后通过提供一个 staitc 的接口 instance 来获得这个唯一的实例。</p>
+
+<h1 id="完整代码">完整代码</h1>
+
+<h2 id="代码如下">代码如下</h2>
+
+<p>singleton.h：</p>
+
+<pre><code>#ifndef DESIGN_PATTERNS_SINGLETON_H
+#define DESIGN_PATTERNS_SINGLETON_H
+
+
+#include &lt;thread&gt;
+#include &lt;mutex&gt;
+
+class Singleton {
+private:
+  Singleton() {};
+public:
+  static Singleton* GetInstance();
+
+private:
+  static Singleton* instance;
+  static std::mutex mtx;
+};
+
+
+#endif //DESIGN_PATTERNS_SINGLETON_H
+</code></pre>
+
+<p>singleton.cpp：</p>
+
+<pre><code>#include &quot;singleton.h&quot;
+
+// 初始化 static 变量
+Singleton* Singleton::instance = NULL;
+std::mutex Singleton::mtx;
+
+//这个锁是不是有问题的，确认下
+Singleton* Singleton::GetInstance() {
+    if (instance == NULL) {
+        mtx.lock();
+        if (instance == NULL) {
+            instance = new Singleton();
+        }
+        mtx.unlock();
+    }
+    return instance;
+}
+</code></pre>
+
+<p>main.cpp：</p>
+
+<pre><code>#include &quot;singleton.h&quot;
+
+
+int main() {
+
+    Singleton* instance1;
+    Singleton* instance2;
+
+    instance1 = Singleton::GetInstance();
+    instance2 = Singleton::GetInstance();
+
+    delete instance1;
+    if (instance1 != instance2) {
+        delete instance2;
+    }
+
+    return 0;
+}
+</code></pre>
+
+<p><strong>确认下，这个锁写的是不是OK的。</strong></p>
+
+<h2 id="代码说明">代码说明</h2>
+
+<p>有一点需要注意：由于 Singleton 不能被实例化，因此 我们将其构造函数声明为 protected 或者直接声明为 private 。</p>
+
+<h1 id="singleton-的优缺点">Singleton 的优缺点</h1>
+
+<p>Singleton 模式在开发中经常用到，比如：</p>
+
+<ul>
+<li><p>因为有些变量必须是唯一的，比如说打印机的实例等。</p></li>
+
+<li><p>比如某个线程要是唯一的。</p></li>
+
+<li><p>有时候，某个 Factory（AbstractFactory）也要是唯一的，比如说连接数据库的时候，factory 可能对应了 sql 和access，但是我们同一个时刻只会对应一个 ，这时候也会用到 singleton 。</p></li>
+</ul>
+
+<p><strong>感觉对 singleton 的理解还是不够，要再不从下，比如有什么特殊的东西或者例子，也要整合进来。</strong></p>
+
+<p>前几天因为某些事情，和在ATC工作的一位朋友S聊了些技术方面的问题。S在学校 的时候就是很，那种传说中的N人，S在Review我之前写的Visual CMCS的一些代码，就 问到其中一个类为什么要使用 Singleton 模式？代码是几个月前写的，写的时候正是自己对 设计模式有一些学习积累和思考的时候，因此里面用到了不少的设计模式。当时简单的考虑 就是因为那是一个工厂类，我在程序生命周期内仅需要一个该工厂类的对象就可以了，因此 很直观地使用了 Singleton模式。当然我当时的回答就是因为仅需要提供一个对象就可以，S 马上就问那为什么不用一个全局变量来实现？我知道，在纯面向对象支持的编程语言（例如</p>
+
+<p>C#Java）中，这个问题可以很简单地理解为没有全局变量这样一个概念支持，但是对于向 C++等这种支持面向过程的编程语言中这个回答就不是很合适了（至少像在找借口）。</p>
+
+<p>实际上这个问题的答案并不重要（虽然是这个文档的主题），更加重要的是我们在作设 计的时候实际上要好好综合考虑，为什么要使用这种设计模式，也就是要防止滥用设计模式 的情况。Singleton模式可能可以说是最简单的设计模式了，其应用的场景和示例实在是没 有太多可以再重复，但是以下的两个问题还是需要我们进一步的审视：</p>
+
+<p>1）    Singleton模式VS全局变量。很多情况下，我们使用Singleton模式达到的效果和 全局变量达到的效果类似。但是，全局变量不能防止实例化多个对象。GoF在《设计模式》 中给出了 Singleton 模式的意图“保证一个类仅有一个对象，并提供一个访问它的全局访问 点”，因此全局变量可以达到后面半句的效果，但是却不能保证仅有一个对象被实例化。另 外，使用全局变量将使得对象在无论是否用到都要被创建，而 Singleton 模式则没有这个瑕 疵。</p>
+
+<p>2）    Singleton的子类化问题。一般来说Singleton的子类并不是Singleton，因此在保证 Singleton的正确子类化，在实现上要注意以下几点（C++实现）：</p>
+
+<p>①    父类Singleton的构造函数为Protected，目的是为了要让Singleton子类访问，而</p>
+
+<p>不让Client程序访问（防止被其他方式实例化类）;Singleton子类构造函数声明为private</p>
+
+<p>或者protected，并且将父类Singleton声明为子类Singleton的友元，目的是在父类</p>
+
+<p>Singleton中可以实例化子类Singleton，而Client程序不可访问（防止被其他方式实例</p>
+
+<p>化类）。</p>
+
+<p>②    我们必须改写父类Singleton中的Instance方法（获得唯一实例方法）。因为Instance</p>
+
+<p>是static的成眼函数，不能以多态的方式实现之。因此我们必须在父类Singleton中就是</p>
+
+<p>提供真正实例化Singleton子类的信息。我们可以通过到某一个专门的地方获取Singleton</p>
+
+<p>子类的信息，例如提供一个获取函数，在 Instance 实例化 Singleton 子类之前获得这个</p>
+
+<p>信息，再根据这个信息去实例化具体的 Singleton 子类。我这里提供的示例程序中是，</p>
+
+<p>提供一个全局的GetSingletionType （），返回应该实例化的Singleton具体子类。具体的</p>
+
+<p>实现则是是通过随机数来确定的方式，详细请参看代码。以下就将整个代码给出：</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+<ol>
+<li><p>单例模式：让类自身保证它只有一个实例，并提供一个全局访问点。</p></li>
+
+<li><p>多线程下单例模式可能失效，需要采取双重锁定的的方式，确保被锁定的代码同一时刻只被一个进程访问。</p></li>
+
+<li><p>饿汉式单例：即静态初始化方式，在类初始化时产生私有单例对象，会提前占用资源；渴汉式单例：在第一次被引用时将自己初始化，会产生多线程访问安全问题，需要添加双重锁定。</p></li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8Fprototype/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 原型模式（Prototype）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8Fflyweight/">
+            <span class="next-text nav-default">设计模式 享元模式（Flyweight）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

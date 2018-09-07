@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 最长回文子串 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="最长回文子串 题目描述 给定一个字符串，求它的最长回文子串的长度。 分析与解法 最容易想到的办法是枚举所有的子串，分别判断其是否为回文。这个思路初看" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/01-%E5%AD%97%E7%AC%A6%E4%B8%B2/05-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 最长回文子串" />
+<meta property="og:description" content="最长回文子串 题目描述 给定一个字符串，求它的最长回文子串的长度。 分析与解法 最容易想到的办法是枚举所有的子串，分别判断其是否为回文。这个思路初看" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/01-%E5%AD%97%E7%AC%A6%E4%B8%B2/05-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/" /><meta property="article:published_time" content="2018-08-03T11:41:55&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:41:55&#43;00:00"/>
+<meta itemprop="name" content="05 最长回文子串">
+<meta itemprop="description" content="最长回文子串 题目描述 给定一个字符串，求它的最长回文子串的长度。 分析与解法 最容易想到的办法是枚举所有的子串，分别判断其是否为回文。这个思路初看">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:41:55&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:41:55&#43;00:00" />
+<meta itemprop="wordCount" content="1836">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 最长回文子串"/>
+<meta name="twitter:description" content="最长回文子串 题目描述 给定一个字符串，求它的最长回文子串的长度。 分析与解法 最容易想到的办法是枚举所有的子串，分别判断其是否为回文。这个思路初看"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 最长回文子串</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 1836 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#最长回文子串">最长回文子串</a>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+<li><a href="#分析与解法">分析与解法</a>
+<ul>
+<li><a href="#解法一">解法一</a></li>
+<li><a href="#解法二-o-n-解法">解法二、O(N)解法</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="最长回文子串">最长回文子串</h2>
+
+<h3 id="题目描述">题目描述</h3>
+
+<p>给定一个字符串，求它的最长回文子串的长度。</p>
+
+<h3 id="分析与解法">分析与解法</h3>
+
+<p>最容易想到的办法是枚举所有的子串，分别判断其是否为回文。这个思路初看起来是正确的，但却做了很多无用功，如果一个长的子串包含另一个短一些的子串，那么对子串的回文判断其实是不需要的。</p>
+
+<h4 id="解法一">解法一</h4>
+
+<p>那么如何高效的进行判断呢？我们想想，如果一段字符串是回文，那么以某个字符为中心的前缀和后缀都是相同的，例如以一段回文串“aba”为例，以b为中心，它的前缀和后缀都是相同的，都是a。</p>
+
+<p>那么，我们是否可以可以枚举中心位置，然后再在该位置上用扩展法，记录并更新得到的最长的回文长度呢？答案是肯定的，参考代码如下：</p>
+
+<pre><code class="language-cpp">int LongestPalindrome(const char *s, int n)
+{
+	int i, j, max,c;
+	if (s == 0 || n &lt; 1)
+		return 0;
+	max = 0;
+
+	for (i = 0; i &lt; n; ++i) { // i is the middle point of the palindrome
+		for (j = 0; (i - j &gt;= 0) &amp;&amp; (i + j &lt; n); ++j){ // if the length of the palindrome is odd
+			if (s[i - j] != s[i + j])
+				break;
+			c = j * 2 + 1;
+		}
+		if (c &gt; max)
+			max = c;
+		for (j = 0; (i - j &gt;= 0) &amp;&amp; (i + j + 1 &lt; n); ++j){ // for the even case
+			if (s[i - j] != s[i + j + 1])
+				break;
+			c = j * 2 + 2;
+		}
+		if (c &gt; max)
+			max = c;
+	}
+	return max;
+}
+</code></pre>
+
+<p>代码稍微难懂一点的地方就是内层的两个 for 循环，它们分别对于以 i 为中心的，长度为奇数和偶数的两种情况，整个代码遍历中心位置 i 并以之扩展，找出最长的回文。</p>
+
+<h4 id="解法二-o-n-解法">解法二、O(N)解法</h4>
+
+<p>在上文的解法一：枚举中心位置中，我们需要特别考虑字符串的长度是奇数还是偶数，所以导致我们在编写代码实现的时候要把奇数和偶数的情况分开编写，是否有一种方法，可以不用管长度是奇数还是偶数，而统一处理呢？比如是否能把所有的情况全部转换为奇数处理？</p>
+
+<p>答案还是肯定的。这就是下面我们将要看到的Manacher算法，且这个算法求最长回文子串的时间复杂度是线性O(N)的。</p>
+
+<p>首先通过在每个字符的两边都插入一个特殊的符号，将所有可能的奇数或偶数长度的回文子串都转换成了奇数长度。比如 abba 变成 #a#b#b#a#， aba变成 #a#b#a#。</p>
+
+<p>此外，为了进一步减少编码的复杂度，可以在字符串的开始加入另一个特殊字符，这样就不用特殊处理越界问题，比如$#a#b#a#。</p>
+
+<p>以字符串12212321为例，插入#和$这两个特殊符号，变成了 S[] = &ldquo;$#1#2#2#1#2#3#2#1#&ldquo;，然后用一个数组 P[i] 来记录以字符S[i]为中心的最长回文子串向左或向右扩张的长度（包括S[i]）。</p>
+
+<p>比如S和P的对应关系：</p>
+
+<ul>
+<li>S  #  1  #  2  #  2  #  1  #  2  #  3  #  2  #  1  #</li>
+<li>P  1  2  1  2  5  2  1  4  1  2  1  6  1  2  1  2  1</li>
+</ul>
+
+<p>可以看出，P[i]-1正好是原字符串中最长回文串的总长度，为5。</p>
+
+<p>接下来怎么计算P[i]呢？Manacher算法增加两个辅助变量id和mx，其中id表示最大回文子串中心的位置，mx则为id+P[id]，也就是最大回文子串的边界。得到一个很重要的结论：
+- 如果mx &gt; i，那么P[i] &gt;= Min(P[2 * id - i], mx - i)</p>
+
+<p>C代码如下：</p>
+
+<pre><code class="language-c">//mx &gt; i，那么P[i] &gt;= MIN(P[2 * id - i], mx - i)
+//故谁小取谁
+if (mx - i &gt; P[2*id - i])
+    P[i] = P[2*id - i];
+else  //mx-i &lt;= P[2*id - i]
+    P[i] = mx - i;
+</code></pre>
+
+<p>下面，令j = 2*id - i，也就是说j是i关于id的对称点。</p>
+
+<p>当 mx - i &gt; P[j] 的时候，以S[j]为中心的回文子串包含在以S[id]为中心的回文子串中，由于i和j对称，以S[i]为中心的回文子串必然包含在以S[id]为中心的回文子串中，所以必有P[i] = P[j]；</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/cdi2mKE42a.png?imageslim" alt="mark" /></p>
+
+<p>当 P[j] &gt;= mx - i 的时候，以S[j]为中心的回文子串不一定完全包含于以S[id]为中心的回文子串中，但是基于对称性可知，下图中两个绿框所包围的部分是相同的，也就是说以S[i]为中心的回文子串，其向右至少会扩张到mx的位置，也就是说 P[i] &gt;= mx - i。至于mx之后的部分是否对称，再具体匹配。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/9eJeIk0I55.png?imageslim" alt="mark" /></p>
+
+<p>此外，对于 mx &lt;= i 的情况，因为无法对 P[i]做更多的假设，只能让P[i] = 1，然后再去匹配。</p>
+
+<p>综上，关键代码如下：</p>
+
+<pre><code class="language-c">//输入，并处理得到字符串s
+int p[1000], mx = 0, id = 0;
+memset(p, 0, sizeof(p));
+for (i = 1; s[i] != '\0'; i++)
+{
+	p[i] = mx &gt; i ? min(p[2 * id - i], mx - i) : 1;
+	while (s[i + p[i]] == s[i - p[i]])
+		p[i]++;
+	if (i + p[i] &gt; mx)
+	{
+		mx = i + p[i];
+		id = i;
+	}
+}
+//找出p[i]中最大的
+</code></pre>
+
+<p>此Manacher算法使用id、mx做配合，可以在每次循环中，直接对P[i]的快速赋值，从而在计算以i为中心的回文子串的过程中，不必每次都从1开始比较，减少了比较次数，最终使得求解最长回文子串的长度达到线性O(N)的时间复杂度。</p>
+
+<p>参考：<a href="http://www.felix021.com/blog/read.php?2040">http://www.felix021.com/blog/read.php?2040</a> 。另外，这篇文章也不错：<a href="http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html">http://leetcode.com/2011/11/longest-palindromic-substring-part-ii.html</a> 。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/01-%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/03-simhash%E7%AE%97%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 simhash算法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/12-%E5%85%B6%E4%BB%96/05-%E9%AB%98%E7%BA%A7ipython%E7%89%B9%E6%80%A7/">
+            <span class="next-text nav-default">05 高级IPython特性</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

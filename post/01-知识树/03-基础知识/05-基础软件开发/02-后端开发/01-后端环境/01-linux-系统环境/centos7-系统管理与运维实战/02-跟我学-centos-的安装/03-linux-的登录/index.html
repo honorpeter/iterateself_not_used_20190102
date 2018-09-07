@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 Linux 的登录 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Linux的登录 CentOS安装完之后，需要第一次配置并登录使用，Linux系统的登录方式有多种，本节主要介绍Linux的常见登录方式，如本" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/02-%E8%B7%9F%E6%88%91%E5%AD%A6-centos-%E7%9A%84%E5%AE%89%E8%A3%85/03-linux-%E7%9A%84%E7%99%BB%E5%BD%95/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 Linux 的登录" />
+<meta property="og:description" content="Linux的登录 CentOS安装完之后，需要第一次配置并登录使用，Linux系统的登录方式有多种，本节主要介绍Linux的常见登录方式，如本" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/02-%E8%B7%9F%E6%88%91%E5%AD%A6-centos-%E7%9A%84%E5%AE%89%E8%A3%85/03-linux-%E7%9A%84%E7%99%BB%E5%BD%95/" /><meta property="article:published_time" content="2018-07-12T14:49:08&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-12T14:49:08&#43;00:00"/>
+<meta itemprop="name" content="03 Linux 的登录">
+<meta itemprop="description" content="Linux的登录 CentOS安装完之后，需要第一次配置并登录使用，Linux系统的登录方式有多种，本节主要介绍Linux的常见登录方式，如本">
+
+
+<meta itemprop="datePublished" content="2018-07-12T14:49:08&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-12T14:49:08&#43;00:00" />
+<meta itemprop="wordCount" content="1511">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 Linux 的登录"/>
+<meta name="twitter:description" content="Linux的登录 CentOS安装完之后，需要第一次配置并登录使用，Linux系统的登录方式有多种，本节主要介绍Linux的常见登录方式，如本"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 Linux 的登录</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-12 </span>
+        
+        <span class="more-meta"> 1511 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#linux的登录">Linux的登录</a>
+<ul>
+<li><a href="#3-1-首次配置与本地登录">3.1 首次配置与本地登录</a></li>
+</ul></li>
+<li><a href="#3-2远程登录">3.2远程登录</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="linux的登录">Linux的登录</h2>
+
+<p>CentOS安装完之后，需要第一次配置并登录使用，Linux系统的登录方式有多种，本节主要介绍Linux的常见登录方式，如本地登录或通过相关软件远程连接等。</p>
+
+<h3 id="3-1-首次配置与本地登录">3.1 首次配置与本地登录</h3>
+
+<p>在前面的章节中，主要介绍了如何使用不同的方法安装 CentOS 7，本小节将简要介绍 CentOS 7 的首次配置和本地登录等内容。</p>
+
+<p><strong>(l)</strong> CentOS7安装完成后重启即可使用，首次进入时还需要做一些简单的配置，如图 2.30 所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/7djGme7KHL.png?imageslim" alt="mark" /></p>
+
+<p>首次进入系统会要求用户确认许可信息，单击“许可信息”，接受CentOS的许可证进入下一步设置。接下来会要求用户确认是否启用 Kdump，如图2.31所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/0CHJ7JaDg3.png?imageslim" alt="mark" /></p>
+
+<p>Kdump主要用来调试系统内核和相关软件，对用户和生产环境几乎没有任何帮助，启用与否均无太大影响。<span style="color:red;">好吧。</span>设置完Kdump单击“前进”按钮，即可完成设置进入登录界面，如图2.32 所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/gDF4cjh1ei.png?imageslim" alt="mark" /></p>
+
+<p>在登录界面的右上角可以做一些辅助设置，例如语言设置、声音和开关机等。此时单击屏幕中间的用户名后在弹出的窗口中输入密码，然后单击“登录”按钮，如果用户名、密码校验 通过则可顺利登录Linux系统。</p>
+
+<p><strong>(2)</strong> 首次进入桌面环境，CentOS会弹出窗口要求用户进行一些使用习惯上的配置，如图 2.33所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/EcCBdIGFDE.png?imageslim" alt="mark" /></p>
+
+<p>从图中可以看到，系统会首先要求用户设置系统默认语言，接下来还会提示用户设置输入源(即输入法)、云账号等内容，这些内容可按实际情况设置，此处不做赘述。</p>
+
+<p><strong>(3)</strong> 如想切换到命令模式，可进入系统后在桌面单击右键选择“在终端中打开”，然后在其中输入“init3”，即可完成运行级别的转变。Linux运行级别如表2.1所示。<span style="color:red;">一定要改运行级别吗？为什么会有运行级别这种设置？</span></p>
+
+<p>表2.1 Linux运行级别</p>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>停机</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>单用户模式</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>多用户</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>完全多用户模式，服务器一般运行在此级别</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>一般不用，在一些特殊情况下使用</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>X11 模式，一般发行版默认的运行级别，可以启动图形桌面系统</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>重新启动</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="3-2远程登录">3.2远程登录</h2>
+
+<p>远程登录是Linux系统中最常见的一种登录方式，多为运维工程师所用，远程登录可以使用 VNC 图形界面、ssh 等方法。其中以使用 ssh 登录为多，其原因是运维工程师管理和维护的系统通常没有图形界面，且 ssh 使用的加密方案比较安全。本小节以 ssh 登录为例简要介绍如何远程登录。</p>
+
+<p><strong>(1)</strong> 如果需要在虚拟机中使用远程登录，首先网络必须互通，如果虚拟机已使用了 Host-Only 模式(仅主机模式)或桥接模式，则可以直接在宿主机登录。<span style="color:red;">嗯。</span></p>
+
+<p>本例中将采用仅主机模式演示登录过程，首先我们需要先查看 Host-Only 模式使用的IP 地址段。以 Windows 7为例，在开始菜单中单击“控制面板”，然后在控制面板中找到并单击 “网络和Internet” 下面的 “查看网络状态和任务”。此时将进入 “网络和共享中心” ，在其界面的左侧单击 “更改适配器设置” ，此时将进入 “网络连接” 界面。找到 “VMware Network Adapter VMnet8” 并右击，在弹出的菜单中选择“状态”，然后在状态对话框中单击“详细信息”，出 现如图2.34所示的界面。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/AGJa3FHjE2.png?imageslim" alt="mark" /></p>
+
+<p>如图2.34所示查看其IP地址，只有虚拟机 Host-Only 网卡的IP地址与此IP地址在同一网段方可进行远程登录。</p>
+
+<p><strong>(2)</strong> 在虚拟机中查看IP地址可以使用 <code>ifconfig</code> 命令，如图2.35所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/bGmAeaiK7m.png?imageslim" alt="mark" /></p>
+
+<p>可以看到网卡eno 16777736的 IP 地址与 Windows 中的 IP 地址属于同一网段，因此可以使用远程连接。如果使用以上命令没有查看到此 IP 地址，就需要重启网络连接或对网络连接进行配置。<span style="color:red;">没看懂。关于IP一直不是很清楚。</span></p>
+
+<p><strong>(3)</strong> 由于CentOS7 默认开启 ssh ，因此可直接通过 PuTTY 等工具连接，如图2.36所示。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/ehHDmCjJeL.png?imageslim" alt="mark" /></p>
+
+<p>在PuTTY中填入CentOS7 的 IP 地址，并选择 “SSH”，单击 “Open” ，输入用户名和密码即可远程登录到Linux系统中。<span style="color:red;">关于PuTTY 和 Xshell 还是需要介绍下的，比如要怎么使用，哪个比较好。有哪些快捷键等。 </span></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/02-%E8%B7%9F%E6%88%91%E5%AD%A6-centos-%E7%9A%84%E5%AE%89%E8%A3%85/04-%E4%BB%8E-centos6.5-%E5%8D%87%E7%BA%A7%E5%88%B0-centos7/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 从 CentOS6.5 升级到 CentOS7</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/02-%E8%B7%9F%E6%88%91%E5%AD%A6-centos-%E7%9A%84%E5%AE%89%E8%A3%85/02-%E5%AE%89%E8%A3%85-centos/">
+            <span class="next-text nav-default">02 安装 CentOS</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

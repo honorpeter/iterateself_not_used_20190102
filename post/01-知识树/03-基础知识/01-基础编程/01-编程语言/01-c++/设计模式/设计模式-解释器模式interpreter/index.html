@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 解释器模式（Interpreter） - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 23:48:50&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89&amp;rsquo; title: 设计模式 解释器模式（Interpreter） wordpress_id: 7196 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8Finterpreter/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 解释器模式（Interpreter）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 23:48:50&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89&rsquo; title: 设计模式 解释器模式（Interpreter） wordpress_id: 7196 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%A3%E9%87%8A%E5%99%A8%E6%A8%A1%E5%BC%8Finterpreter/" /><meta property="article:published_time" content="2018-07-27T19:45:59&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T19:45:59&#43;00:00"/>
+<meta itemprop="name" content="设计模式 解释器模式（Interpreter）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 23:48:50&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89&rsquo; title: 设计模式 解释器模式（Interpreter） wordpress_id: 7196 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已">
+
+
+<meta itemprop="datePublished" content="2018-07-27T19:45:59&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T19:45:59&#43;00:00" />
+<meta itemprop="wordCount" content="1284">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 解释器模式（Interpreter）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 23:48:50&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89&rsquo; title: 设计模式 解释器模式（Interpreter） wordpress_id: 7196 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 解释器模式（Interpreter）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 1284 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#解释器模式-interpreter">解释器模式（Interpreter）</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 23:48:50+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89/">http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%a7%a3%e9%87%8a%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88interpreter%ef%bc%89&rsquo;
+title: 设计模式 解释器模式（Interpreter）
+wordpress_id: 7196
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="解释器模式-interpreter">解释器模式（Interpreter）</h1>
+
+<ol>
+<li><p>解释器模式：给定一种语言，定义它文法的一种表示，再定义一个解释器，使用该表示来解释语言中的句子。</p></li>
+
+<li><p>如果一种特定类型发生的频率足够高，就可以将其实例表达为一个句子，构建解释器来解析。</p></li>
+
+<li><p>解释器模式就是用“迷你语言”来表现程序要解决的问题，将句子抽象为语法树。由于各个节电的类大体相同，便于修改、扩展和实现。</p></li>
+
+<li><p>解释器为文法中的每条规则定义了一个类，当文法过多时将难以维护，建议使用其他技术如语法分析程序或编译器生成器处理。</p></li>
+</ol>
+
+<p>Interpreter 模式
+■问题
+一些应用提供了内建（Build-In）的脚本或者宏语言来让用户可以定义他们能够在系统 中进行的操作。Interpreter模式的目的就是使用一个解释器为用户提供一个一门定义语言的 语法表示的解释器，然后通过这个解释器来解释语言中的句子。</p>
+
+<p>Interpreter 模式提供了这样的一个实现语法解释器的框架，笔者曾经也正在构建一个编 译系统Visual CMCS，现在己经发布了 Visual CMCS1.0 （Beta），请大家访问Visual CMCS网 站获取详细信息。</p>
+
+<p>■模式选择
+Interpreter模式典型的结构图为:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EGHh6J9e1D.png?imageslim" alt="mark" /></p>
+
+<p>图 2-1: Interpreter Pattern 结构图</p>
+
+<p>Interpreter 模式中，提供了 TerminalExpression 和 NonterminalExpression 两种表达式的角军 释方式，Context类用于为解释过程提供一些附加的信息（例如全局的信息）。</p>
+
+<p>-实现
+♦完整代码示例(code)</p>
+
+<p>interpreter.h</p>
+
+<pre><code>#ifndef DESIGN_PATTERNS_INTERPRETER_H
+#define DESIGN_PATTERNS_INTERPRETER_H
+
+#include &lt;string&gt;
+
+class Context {
+public:
+  void SetText(std::string);
+  std::string GetText();
+
+private:
+  std::string text_;
+};
+
+class Expression {
+public:
+  virtual ~Expression() {}
+  void Interprete(Context*);
+
+protected:
+  virtual void Excute(std::string, double) = 0;
+};
+
+class Scale: public Expression {
+private:
+  void Excute(std::string, double);
+};
+
+class Note: public Expression {
+private:
+  void Excute(std::string, double);
+};
+
+class ExpressionFactory {
+public:
+  Expression* CreateExpression(Context*);
+};
+
+#endif //DESIGN_PATTERNS_INTERPRETER_H
+</code></pre>
+
+<p>interpreter.cpp</p>
+
+<pre><code>#include &quot;interpreter.h&quot;
+#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+
+std::string Context::GetText() {
+  return text_;
+}
+
+void Context::SetText(std::string text) {
+  text_ = text;
+}
+
+void Expression::Interprete(Context *context) {
+  std::stringstream ss;
+  std::string key;
+  double value;
+  std::string remain_text = context-&gt;GetText();
+  ss &lt;&lt; remain_text;
+  ss &gt;&gt; key &gt;&gt; value;
+  remain_text = remain_text.substr(remain_text.find(&quot; &quot;)+1);
+  remain_text = remain_text.substr(remain_text.find(&quot; &quot;)+1);
+  if(remain_text.length() &lt; 3){
+    remain_text = &quot;&quot;;
+  }
+  context-&gt;SetText(remain_text);
+  Excute(key, value);
+}
+
+void Scale::Excute(std::string key, double value) {
+  switch ((int)value){
+    case 1:
+      std::cout &lt;&lt; &quot;bass &quot; &lt;&lt; std::endl;
+      break;
+    case 2:
+      std::cout &lt;&lt; &quot;alto &quot; &lt;&lt; std::endl;
+      break;
+    case 3:
+      std::cout &lt;&lt; &quot;treble &quot; &lt;&lt; std::endl;
+      break;
+    default:
+      break;
+  }
+}
+
+void Note::Excute(std::string key, double value) {
+  std::cout &lt;&lt; key[0] &lt;&lt; std::endl;
+}
+
+Expression* ExpressionFactory::CreateExpression(Context *context) {
+  char key = context-&gt;GetText()[0];
+  if(key == 'O') {
+    return new Scale();
+  } else {
+    return new Note();
+  }
+}
+</code></pre>
+
+<p>main.cpp</p>
+
+<pre><code>#include &quot;interpreter.h&quot;
+#include &lt;iostream&gt;
+
+
+int main() {
+    Context *context_;
+    ExpressionFactory *expression_factory_;
+    Expression *expression_;
+
+    expression_factory_ = new ExpressionFactory();
+    context_ = new Context();
+    context_-&gt;SetText(&quot;O 2 E 0.5 G 0.5 A 3&quot;);
+    while (context_-&gt;GetText().length()) {
+        expression_ = expression_factory_-&gt;CreateExpression(context_);
+        expression_-&gt;Interprete(context_);
+        delete expression_;
+    }
+    delete context_;
+    delete expression_factory_;
+
+
+    return 0;
+}
+</code></pre>
+
+<p>♦代码说明</p>
+
+<p>Interpreter 模式的示例代码很简单，只是为了说明模式的组织和使用，实际的解释 Interpret逻辑没有实际提供。</p>
+
+<p>■讨论
+XML 格式的数据解析是一个在应用开发中很常见并且有时候是很难处理的事情，虽然 目前很多的开发平台、语言都提供了对XML格式数据的解析，但是例如到了移动终端设备 上，由于处理速度、计算能力、存储容量的原因解析XML格式的数据却是很复杂的一件事 情，最近也提出了很多的移动设备的XML格式解析器，但是总体上在项目开发时候还是需 要自己去设计和实现这一个过程（笔者就有过这个方面的痛苦经历）。</p>
+
+<p>Interpreter模式则提供了一种很好的组织和设计这种解析器的架构。</p>
+
+<p>Interpreter 模式中使用类来表示文法规则，因此可以很容易实现文法的扩展。另外对于 终结符我们可以使用Flyweight模式来实现终结符的共享。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8Fcomposite/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 组合模式（Composite）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8Fobserver/">
+            <span class="next-text nav-default">设计模式 观察者模式（Observer）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

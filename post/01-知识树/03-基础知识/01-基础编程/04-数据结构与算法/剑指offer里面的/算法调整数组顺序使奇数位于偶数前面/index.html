@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：调整数组顺序使奇数位于偶数前面 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-16 00:49:33&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2&amp;rsquo; title: 算法：调整数组顺序使奇数位于偶数前面 wordpress_id: 5811 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E8%B0%83%E6%95%B4%E6%95%B0%E7%BB%84%E9%A1%BA%E5%BA%8F%E4%BD%BF%E5%A5%87%E6%95%B0%E4%BD%8D%E4%BA%8E%E5%81%B6%E6%95%B0%E5%89%8D%E9%9D%A2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：调整数组顺序使奇数位于偶数前面" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-16 00:49:33&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2&rsquo; title: 算法：调整数组顺序使奇数位于偶数前面 wordpress_id: 5811 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E8%B0%83%E6%95%B4%E6%95%B0%E7%BB%84%E9%A1%BA%E5%BA%8F%E4%BD%BF%E5%A5%87%E6%95%B0%E4%BD%8D%E4%BA%8E%E5%81%B6%E6%95%B0%E5%89%8D%E9%9D%A2/" /><meta property="article:published_time" content="2018-06-11T08:14:51&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:51&#43;00:00"/>
+<meta itemprop="name" content="算法：调整数组顺序使奇数位于偶数前面">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-16 00:49:33&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2&rsquo; title: 算法：调整数组顺序使奇数位于偶数前面 wordpress_id: 5811 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:51&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:51&#43;00:00" />
+<meta itemprop="wordCount" content="1811">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：调整数组顺序使奇数位于偶数前面"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-16 00:49:33&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2&rsquo; title: 算法：调整数组顺序使奇数位于偶数前面 wordpress_id: 5811 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：调整数组顺序使奇数位于偶数前面</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 1811 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#not-add">- NOT_ADD</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+<li><a href="#样例输入">样例输入</a></li>
+<li><a href="#样例输出">样例输出</a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#暴力解法">暴力解法</a></li>
+<li><a href="#冒泡解法">冒泡解法</a></li>
+<li><a href="#辅助数组完成">辅助数组完成</a></li>
+<li><a href="#如果不要求相对位置不变-那么有一种高效的方法">如果不要求相对位置不变，那么有一种高效的方法</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-16 00:49:33+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2/">http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e8%b0%83%e6%95%b4%e6%95%b0%e7%bb%84%e9%a1%ba%e5%ba%8f%e4%bd%bf%e5%a5%87%e6%95%b0%e4%bd%8d%e4%ba%8e%e5%81%b6%e6%95%b0%e5%89%8d%e9%9d%a2&rsquo;
+title: 算法：调整数组顺序使奇数位于偶数前面
+wordpress_id: 5811
+categories:
+- 随想与反思
+tags:</p>
+
+<h2 id="not-add">- NOT_ADD</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li></li>
+</ol>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。嗯。</p>
+
+<h2 id="样例输入">样例输入</h2>
+
+<p>5 1 2 3 4 5</p>
+
+<h2 id="样例输出">样例输出</h2>
+
+<p>1 3 5 2 4</p>
+
+<p>下面我们考虑算法复杂度的同时还会考虑其稳定性，（<strong>排序的稳定型则是指相同元素在数组中的相对位置是否发生变化</strong>），这里的稳定性我们理解为，顺序交换后，各个奇数（或者偶数）在数组中的相对位置是否发生变化</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="暴力解法">暴力解法</h2>
+
+<p>OK，看到这个题，最简单的就是从头到尾扫描一遍数组，每遇见一个偶数时，就拿出这个数字，并把位于这个数字之后的所有数字往前挪动一位,然后把当前这个偶数放到最后。</p>
+
+<p>这样每次遇到一个偶数就要挪动 (O(n)) 个数字，因此总的时间复杂度是 (O(n^2))</p>
+
+<p>这种方法可行，但是需要复杂的挪动工作。</p>
+
+<h2 id="冒泡解法">冒泡解法</h2>
+
+<p>OK，我们看一下冒泡排序，每次循环时，如果遇到前偶后奇就进行交换。如果某次循环时没有发现要交换的数据，这说明数组已经符合要求。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+
+class Solution {
+public:
+    void reOrderArray(vector&lt;int&gt; &amp;array) {
+        if (array.size() &lt;= 1) {
+            return;
+        }
+        bool isSwap = false;
+        for (int i = 0; i &lt; array.size(); i++) {
+            isSwap = false;
+            //对于冒泡算法理解的不深入，为什么这里时从高到低呢？而且下限是 i？
+            for (int j = array.size() - 1; j &gt; i; j--) {
+                if (array[j] % 2 == 1 &amp;&amp; array[j - 1] % 2 == 0) //前偶后奇就交换
+                {
+                    swap(array[j], array[j - 1]);
+                    isSwap = true;
+                }
+            }
+            if (isSwap == false) {
+                break;
+            }
+        }
+    }
+};
+
+
+
+int main() {
+    //准备一些数
+    int array[] = { 1, 2, 3, 4, 5, 6, 7 };
+    vector&lt;int&gt; vec(array, array + 7);
+    for (int i = 0; i &lt; 7; i++) {
+        cout &lt;&lt; vec[i] &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+    //进行排序
+    Solution solu;
+    solu.reOrderArray(vec);
+    for (int i = 0; i &lt; 7; i++) {
+        cout &lt;&lt; vec[i] &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>1 2 3 4 5 6 7
+1 3 5 7 2 4 6
+</code></pre>
+
+<p>由于冒泡法是比较相邻的两个元素，因此奇数或者偶数的相对顺序不会改变，因此是稳定的。</p>
+
+<h2 id="辅助数组完成">辅助数组完成</h2>
+
+<p>如果我们有一个辅助空间，那么就会比较简单了：</p>
+
+<p>在原来的数组中遇到偶数就放进新数组中，然后将该偶数从原来数组中删除，当整个遍历结束后，原来数组中只剩下奇数，新的数组中只剩下偶数，最后我们将新的数组追加在原来数组的末尾即可。</p>
+
+<p>代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+
+class Solution {
+public:
+    void reOrderArray(vector&lt;int&gt; &amp;arr_origin) {
+
+        if (arr_origin.size() &lt;= 1) {
+            return;
+        }
+
+        //遇见偶数，就保存到新数组，同时从原数组中删除
+        vector&lt;int&gt;::iterator ib_origin;
+        ib_origin = arr_origin.begin();
+        vector&lt;int&gt; array_temp;
+        for (; ib_origin != arr_origin.end();) {
+            if (*ib_origin % 2 == 0) {
+                array_temp.push_back(*ib_origin);
+                ib_origin = arr_origin.erase(ib_origin);
+            }
+            else {
+                ib_origin++;
+            }
+        }
+
+        //将新数组的数添加到老数组
+        vector&lt;int&gt;::iterator ib_temp, ie_temp;
+        ib_temp = array_temp.begin();
+        ie_temp = array_temp.end();
+        for (; ib_temp != ie_temp; ib_temp++) {
+            arr_origin.push_back(*ib_temp);
+        }
+    }
+};
+
+
+
+int main() {
+    //准备一些数
+    int array[] = { 1, 2, 3, 4, 5, 6, 7 };
+    vector&lt;int&gt; vec(array, array + 7);
+    for (int i = 0; i &lt; 7; i++) {
+        cout &lt;&lt; vec[i] &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+    //进行排序
+    Solution solu;
+    solu.reOrderArray(vec);
+    for (int i = 0; i &lt; 7; i++) {
+        cout &lt;&lt; vec[i] &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>1 2 3 4 5 6 7
+1 3 5 7 2 4 6
+</code></pre>
+
+<p>这种算法也是稳定的。</p>
+
+<h2 id="如果不要求相对位置不变-那么有一种高效的方法">如果不要求相对位置不变，那么有一种高效的方法</h2>
+
+<p>如果题目中只要求记奇数在偶数之前，而不需要保持相对位置不变，那么我们就可以：</p>
+
+<ul>
+<li><p>维护两个索引或者指针，一个指向数组的第一个元素，并向后移动，一个指向数组的最后一个元素，并向前移动。</p></li>
+
+<li><p>如果第一个指针指向的元素是偶数，而第二个指针指向的元素是奇数，说明偶数在奇数前面，那么就交换这两个数。</p></li>
+
+<li><p>直到两个指针相遇为止</p></li>
+</ul>
+
+<p>这样一趟后就满足要求了。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+
+class Solution {
+public:
+    void reOrderArray(vector&lt;int&gt; &amp;array) {
+        if (array.size() &lt;= 1) {
+            return;
+        }
+        //两个指针
+        vector&lt;int&gt;::iterator left = array.begin();
+        vector&lt;int&gt;::iterator right = array.end() - 1;
+
+        // 三种顺序容器中只有deque和vector容器的迭代器支持大小的比较和算术运算。
+        while (left &lt; right) {
+            //  left向后移动指向第一个偶数
+            while (left &lt; right &amp;&amp; (*left &amp; 0x01) == 1) {//这个(*left &amp; 0x01) == 1 是什么意思？找偶数的意思。利害了
+                left++;
+            }
+
+            // right向前移动指向第一个奇数
+            while (left &lt; right &amp;&amp; (*right &amp; 0x01) == 0) {
+                right--;
+            }
+            cout &lt;&lt; &quot;left = &quot; &lt;&lt; *left &lt;&lt; &quot;, right = &quot; &lt;&lt; *right &lt;&lt; endl;
+
+            if (left &lt; right) {
+                swap(*left, *right);
+            }
+        }
+    }
+};
+
+
+int main() {
+    //准备数据
+    int array[] = { 1, 2, 3, 4, 5, 6, 7 };
+    vector&lt;int&gt; vec(array, array + 7);
+    for (int i = 0; i &lt; 7; i++) {
+        cout &lt;&lt; vec[i] &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+    //进行排序
+    Solution solu;
+    solu.reOrderArray(vec);
+    //打印结果
+    for (int i = 0; i &lt; 7; i++) {
+        cout &lt;&lt; vec[i] &lt;&lt; &quot; &quot;;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>1 2 3 4 5 6 7
+left = 2, right = 7
+left = 4, right = 5
+left = 4, right = 4
+1 7 3 5 4 6 2
+</code></pre>
+
+<p>很明显，这种算法不能保证相同类型数据的相对位置不变，因此不稳定。比如：</p>
+
+<ul>
+<li><p>测试用例：[1,2,3,4,5,6,7]</p></li>
+
+<li><p>对应的稳定输出：[1,3,5,7,2,4,6]</p></li>
+
+<li><p>我们算法的输出：[1,7,3,5,4,6,2]</p></li>
+</ul>
+
+<p><strong>这种解法的代码中，提到了 三种顺序容器中只有deque和vector容器的迭代器支持大小的比较和算术运算。看来deque和vector还是要好好总结一下的。而且用 (*left &amp; 0x01) == 1 来判断是不是偶数也有些厉害。</strong></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%89%93%E5%8D%B01%E5%88%B0%E6%9C%80%E5%A4%A7%E7%9A%84n%E4%BD%8D%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：打印1到最大的N位数</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E7%BB%93%E7%82%B9/">
+            <span class="next-text nav-default">算法：链表中倒数第k个结点</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

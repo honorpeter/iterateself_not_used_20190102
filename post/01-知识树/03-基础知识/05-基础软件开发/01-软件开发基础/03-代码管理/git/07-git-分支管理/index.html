@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>07 Git 分支管理 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Git 分支管理 一直想知道到底怎么看分支？分支冲突怎么办？怎么消解冲突？嗯，这一章都有讲。还是很清楚的。 Git 分支介绍 几乎每一种版本控制系统都以某种形" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/03-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/07-git-%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="07 Git 分支管理" />
+<meta property="og:description" content="Git 分支管理 一直想知道到底怎么看分支？分支冲突怎么办？怎么消解冲突？嗯，这一章都有讲。还是很清楚的。 Git 分支介绍 几乎每一种版本控制系统都以某种形" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/03-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/07-git-%E5%88%86%E6%94%AF%E7%AE%A1%E7%90%86/" /><meta property="article:published_time" content="2018-07-09T21:07:21&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-09T21:07:21&#43;00:00"/>
+<meta itemprop="name" content="07 Git 分支管理">
+<meta itemprop="description" content="Git 分支管理 一直想知道到底怎么看分支？分支冲突怎么办？怎么消解冲突？嗯，这一章都有讲。还是很清楚的。 Git 分支介绍 几乎每一种版本控制系统都以某种形">
+
+
+<meta itemprop="datePublished" content="2018-07-09T21:07:21&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-09T21:07:21&#43;00:00" />
+<meta itemprop="wordCount" content="1953">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="07 Git 分支管理"/>
+<meta name="twitter:description" content="Git 分支管理 一直想知道到底怎么看分支？分支冲突怎么办？怎么消解冲突？嗯，这一章都有讲。还是很清楚的。 Git 分支介绍 几乎每一种版本控制系统都以某种形"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">07 Git 分支管理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-09 </span>
+        
+        <span class="more-meta"> 1953 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#git-分支管理">Git 分支管理</a>
+<ul>
+<li><a href="#git-分支介绍">Git 分支介绍</a></li>
+<li><a href="#git-分支管理-1">Git 分支管理</a>
+<ul>
+<li><a href="#列出分支">列出分支</a></li>
+<li><a href="#删除分支">删除分支</a></li>
+<li><a href="#分支合并">分支合并</a></li>
+<li><a href="#合并冲突">合并冲突</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="git-分支管理">Git 分支管理</h1>
+
+<p>一直想知道到底怎么看分支？分支冲突怎么办？怎么消解冲突？嗯，这一章都有讲。还是很清楚的。</p>
+
+<h2 id="git-分支介绍">Git 分支介绍</h2>
+
+<p>几乎每一种版本控制系统都以某种形式支持分支。使用分支意味着你可以从开发主线上分离开来，然后在不影响主线的同时继续工作。</p>
+
+<p>有人把 Git 的分支模型称为&rdquo;必杀技特性&rdquo;，而正是因为它，将 Git 从版本控制系统家族里区分出来。<span style="color:red;">拿到别的没有分支功能吗？</span></p>
+
+<p>创建分支命令：</p>
+
+<pre><code>git branch branchname
+</code></pre>
+
+<p>切换分支命令:</p>
+
+<pre><code>git checkout branchname
+</code></pre>
+
+<p>当你切换分支的时候，Git 会用该分支的最后提交的快照替换你的工作目录的内容， 所以多个分支不需要多个目录。<span style="color:red;">嗯。</span></p>
+
+<p>合并分支命令:</p>
+
+<pre><code>git merge
+</code></pre>
+
+<p><span style="color:red;">merge 后面可以加别的分支，它的意思是把别的分支 merge 到当前的分支里面。</span></p>
+
+<p>你可以多次合并到同一分支， 也可以选择在合并之后直接删除被并入的分支。</p>
+
+<h2 id="git-分支管理-1">Git 分支管理</h2>
+
+<h3 id="列出分支">列出分支</h3>
+
+<p>列出分支基本命令：</p>
+
+<pre><code>git branch
+</code></pre>
+
+<p>没有参数时，git branch 会列出你在本地的分支。</p>
+
+<pre><code>$ git branch
+* master
+</code></pre>
+
+<p>此例的意思就是，我们有一个叫做&rdquo;master&rdquo;的分支，并且该分支是当前分支。<span style="color:red;">嗯。</span></p>
+
+<p>当你执行 git init 的时候，缺省情况下 Git 就会为你创建&rdquo;master&rdquo;分支。<span style="color:red;">origin是什么分支？一直想知道</span></p>
+
+<p>如果我们要手动创建一个分支，可以执行 <code>git branch branchname</code> 。</p>
+
+<pre><code>$ git branch testing
+$ git branch
+* master
+  testing
+</code></pre>
+
+<p>现在我们可以看到，有了一个新分支 testing。</p>
+
+<p>当你以此方式在上次提交更新之后创建了新分支，如果后来又有更新提交， 然后又切换到了&rdquo;testing&rdquo;分支，Git 将还原你的工作目录到你创建分支时候的样子</p>
+
+<p>接下来我们将演示如何切换分支，我们用 git checkout (branch) 切换到我们要修改的分支。</p>
+
+<pre><code>$ ls
+README
+$ echo 'w3cschool.cn' &gt; test.txt
+$ git add .
+$ git commit -m 'add test.txt'
+[master 048598f] add test.txt
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+ delete mode 100644 hello.php
+ create mode 100644 test.txt
+$ ls
+README       test.txt
+$ git checkout testing
+Switched to branch 'testing'
+$ ls
+README      hello.php
+</code></pre>
+
+<p>当我们切换到 &ldquo;testing&rdquo; 分支的时候，我们添加的新文件 test.txt 被移除了, 原来被删除的文件 hello.php 文件又出现了。切换回 &ldquo;master&rdquo; 分支的时候，它们有重新出现了。</p>
+
+<pre><code>$ git checkout master
+Switched to branch 'master'
+$ ls
+README        test.txt
+</code></pre>
+
+<p>我们也可以使用 <code>git checkout -b branchname</code> 命令来创建新分支并立即切换到该分支下，从而在该分支中操作。</p>
+
+<pre><code>$ git checkout -b newtest
+Switched to a new branch 'newtest'
+$ git rm test2.txt
+rm 'test2.txt'
+$ ls
+README      test.txt
+$ git commit -am 'removed test2.txt'
+[newtest 556f0a0] removed test2.txt
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 test2.txt
+$ git checkout master
+Switched to branch 'master'
+$ ls
+README        test.txt    test2.txt
+</code></pre>
+
+<p>如你所见，我们创建了一个分支，在该分支的上下文中移除了一些文件，然后切换回我们的主分支，那些文件又回来了。</p>
+
+<p>使用分支将工作切分开来，从而让我们能够在不同上下文中做事，并来回切换。</p>
+
+<h3 id="删除分支">删除分支</h3>
+
+<p>删除分支命令：</p>
+
+<pre><code>git branch -d (branchname)
+</code></pre>
+
+<p>例如我们要删除&rdquo;testing&rdquo;分支：</p>
+
+<pre><code>$ git branch
+* master
+  testing
+$ git branch -d testing
+Deleted branch testing (was 85fc7e7).
+$ git branch
+* master
+</code></pre>
+
+<h3 id="分支合并">分支合并</h3>
+
+<p>一旦某分支有了独立内容，你终究会希望将它合并回到你的主分支。 你可以使用以下命令将任何分支合并到当前分支中去：<span style="color:red;">什么叫任何分支？</span></p>
+
+<pre><code>git merge
+</code></pre>
+
+<pre><code>$ git branch
+* master
+  newtest
+$ ls
+README       test.txt    test2.txt
+$ git merge newtest
+Updating 2e082b7..556f0a0
+Fast-forward
+ test2.txt | 1 -
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 test2.txt
+$ ls
+README      test.txt
+</code></pre>
+
+<p><span style="color:red;">对呀，肯定要带参数的把？不带参数可以吗？确认下。</span></p>
+
+<p>以上实例中我们将 newtest 分支合并到主分支去，test2.txt 文件被删除。</p>
+
+<h3 id="合并冲突">合并冲突</h3>
+
+<p>合并并不仅仅是简单的文件添加、移除的操作，Git 也会合并修改。</p>
+
+<pre><code>$ git branch
+* master
+$ cat test.txt
+w3cschool.cn
+</code></pre>
+
+<p>首先，我们创建一个叫做&rdquo;change_site&rdquo;的分支，切换过去，我们将内容改为 www.w3cschool.cn 。</p>
+
+<pre><code>$ git checkout -b change_site
+Switched to a new branch 'change_site'
+$ vim test.txt
+$ head -1 test.txt
+www.w3cschool.cn
+$ git commit -am 'changed the site'
+[change_site d7e7346] changed the site
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+</code></pre>
+
+<p>将修改的内容提交到 &ldquo;change_site&rdquo; 分支中。 现在，假如切换回 &ldquo;master&rdquo; 分支我们可以看内容恢复到我们修改前的，我们再次修改test.txt文件。</p>
+
+<pre><code>$ git checkout master
+Switched to branch 'master'
+$ head -1 test.txt
+w3cschool.cn
+$ vim test.txt
+$ cat test.txt
+w3cschool.cn
+新增加一行
+$ git diff
+diff --git a/test.txt b/test.txt
+index 704cce7..f84c2a4 100644
+--- a/test.txt
++++ b/test.txt
+@@ -1 +1,2 @@
+ w3cschool.cn
++新增加一行
+$ git commit -am '新增加一行'
+[master 14b4dca] 新增加一行
+ 1 file changed, 1 insertion(+)
+</code></pre>
+
+<p>现在这些改变已经记录到我的 &ldquo;master&rdquo; 分支了。接下来我们将 &ldquo;change_site&rdquo; 分支合并过来。</p>
+
+<pre><code> $ git merge change_site
+Auto-merging test.txt
+CONFLICT (content): Merge conflict in test.txt
+Automatic merge failed; fix conflicts and then commit the result.
+$ cat test.txt
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD w3cschool.cn 新增加一行 ======= www.w3cschool.cn &gt;&gt;&gt;&gt;&gt;&gt;&gt; change_site
+</code></pre>
+
+<p>我们将前一个分支合并到 &ldquo;master&rdquo; 分支，一个合并冲突就出现了，接下来我们需要手动去修改它。<span style="color:red;">是的呀，冲突怎么修改呢？</span></p>
+
+<p><span style="color:red;">注意，这个时候，在git 上的状态是：(master|MERGING) 而不再是 (master)，说明这个时候还在merging。因此可以进行下面的一些操作：</span></p>
+
+<pre><code>$ vim test.txt
+$ cat test.txt
+www.w3cschool.cn
+新增加一行
+$ git diff
+diff --cc test.txt
+index f84c2a4,bccb7c2..0000000
+--- a/test.txt
++++ b/test.txt
+@@@ -1,2 -1,1 +1,2 @@@
+- w3cschool.cn
++ www.w3cschool.cn
+ +新增加一行
+</code></pre>
+
+<p><span style="color:red;">注意，之前我不知道，我自己试了之后，才知道我用vim test.txt 的时候，打开的 vim 文件里面已经写了这一行 HEAD 是什么内容，change_site 分支是什么内容，因此手动修改起来还是很方便的。没有我之前想的那么麻烦。</span></p>
+
+<p><span style="color:red;">好吧，竟然是手动把冲突的分支的文件的内容重新在这里写了。。实际的场景中也是这样吗？</span></p>
+
+<p>在 Git 中，我们可以用 <code>git add</code> 要告诉 Git 文件冲突已经解决。<span style="color:red;">嗯。</span></p>
+
+<pre><code>$ git status -s
+UU test.txt
+$ git add test.txt
+$ git status -s
+M  test.txt
+$ git commit
+[master 88afe0e] Merge branch 'change_site'
+</code></pre>
+
+<p>现在我们成功解决了合并中的冲突，并提交了结果。<span style="color:red;">不错不错，破除了我长时间对这个的担心。还是很清楚的。</span></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://www.w3cschool.cn/git/">Git教程</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/03-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/09-git-%E6%A0%87%E7%AD%BE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">09 Git 标签</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/03-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/05-git-%E5%88%9B%E5%BB%BA%E4%BB%93%E5%BA%93/">
+            <span class="next-text nav-default">05 Git 创建仓库</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

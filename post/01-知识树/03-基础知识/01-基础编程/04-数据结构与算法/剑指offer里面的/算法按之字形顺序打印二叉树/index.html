@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：按之字形顺序打印二叉树 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-30 00:42:12&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91&amp;rsquo; title: 算法：按之字形顺序打印二叉树 wordpress_id: 7008 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%8C%89%E4%B9%8B%E5%AD%97%E5%BD%A2%E9%A1%BA%E5%BA%8F%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：按之字形顺序打印二叉树" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-30 00:42:12&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91&rsquo; title: 算法：按之字形顺序打印二叉树 wordpress_id: 7008 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%8C%89%E4%B9%8B%E5%AD%97%E5%BD%A2%E9%A1%BA%E5%BA%8F%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/" /><meta property="article:published_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta itemprop="name" content="算法：按之字形顺序打印二叉树">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-30 00:42:12&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91&rsquo; title: 算法：按之字形顺序打印二叉树 wordpress_id: 7008 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="wordCount" content="1664">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：按之字形顺序打印二叉树"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-30 00:42:12&#43;00:00 layout: post link: http://106.15.37.116/2018/05/30/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91&rsquo; title: 算法：按之字形顺序打印二叉树 wordpress_id: 7008 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：按之字形顺序打印二叉树</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 1664 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ordinary-algorithm">- ordinary algorithm</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#层次遍历后结果之按字输出">层次遍历后结果之按字输出</a></li>
+<li><a href="#层次遍历用双端队列存储">层次遍历用双端队列存储</a></li>
+<li><a href="#层次遍历双栈模拟顺序逆序">层次遍历双栈模拟顺序逆序</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-30 00:42:12+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/30/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91/">http://106.15.37.116/2018/05/30/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8c%89%e4%b9%8b%e5%ad%97%e5%bd%a2%e9%a1%ba%e5%ba%8f%e6%89%93%e5%8d%b0%e4%ba%8c%e5%8f%89%e6%a0%91&rsquo;
+title: 算法：按之字形顺序打印二叉树
+wordpress_id: 7008
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="ordinary-algorithm">- ordinary algorithm</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li></li>
+</ol>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="层次遍历后结果之按字输出">层次遍历后结果之按字输出</h2>
+
+<p>其实我们可以借鉴层次遍历时候的思路，参见 <a href="http://106.15.37.116/2018/05/30/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%8a%8a%e4%ba%8c%e5%8f%89%e6%a0%91%e6%89%93%e5%8d%b0%e6%88%90%e5%a4%9a%e8%a1%8c/">把二叉树打印成多行</a> ，我们把层次遍历的结果保存在vector&lt; vector &gt; 中每一层保存在一个 vector 中，那么我们输出的时候就可以进行调整，按照之字形输出即可。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x = 0)
+        :val(x), left(NULL), right(NULL) {
+    }
+};
+
+class Solution {
+private:
+    vector&lt; vector&lt;int&gt; &gt; ans;
+public:
+    vector&lt; vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
+        LevelOrder(pRoot, 0);
+        for (int i = 0; i &lt; ans.size(); i++) {
+            if (i &amp; 1) {        //利害，用这种来判断
+                reverse(ans[i].begin(), ans[i].end());//翻转 vector
+            }
+        }
+        return ans;
+    }
+    void LevelOrder(TreeNode *pRoot, int p) {
+        if (pRoot == NULL) {
+            return;
+        }
+        if (ans.size() == p) {
+            ans.push_back(vector&lt;int&gt;());
+        }
+        ans[p].push_back(pRoot-&gt;val);//存放到对应的vector里面
+        LevelOrder(pRoot-&gt;left, p + 1);
+        LevelOrder(pRoot-&gt;right, p + 1);
+    }
+};
+
+int main() {
+    TreeNode tree[7];
+    tree[0].val = 8;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+    tree[1].val = 6;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+    tree[2].val = 10;
+    tree[2].left = &amp;tree[5];
+    tree[2].right = &amp;tree[6];
+    tree[3].val = 5;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+    tree[5].val = 9;
+    tree[5].left = NULL;
+    tree[5].right = NULL;
+    tree[6].val = 11;
+    tree[6].left = NULL;
+    tree[6].right = NULL;
+
+    Solution solu;
+    vector&lt; vector&lt;int&gt; &gt; res = solu.Print(tree);
+    for (int i = 0; i &lt; res.size(); i++) {
+        for (int j = 0; j &lt; res[i].size(); j++) {
+            cout &lt;&lt; res[i][j];
+        }
+        cout &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>8
+106
+57911
+</code></pre>
+
+<h2 id="层次遍历用双端队列存储">层次遍历用双端队列存储</h2>
+
+<p><strong>没看懂，再看一下。</strong></p>
+
+<p>上面那种方法是在层次遍历完成后的输出过程进行转换，这种处理对于海量数据就很鸡肋了。</p>
+
+<p>其实我们可以在层次遍历的过程中就进行转换，在层次遍历的过程中, 将元素的输出顺序即插入顺序与其层数相关联。</p>
+
+<p>我们之前提到过，层次遍历有多种方法, 我们可以在对二叉树进行层次遍历的时候，设置一个标识层数，奇数层时从前向后遍历，偶数层时从后向前遍历。用双端队列 deque 存储最为方便。</p>
+
+<p>关于层次遍历的方法我们这里不再详述，我们这里采用的方式是在每层的结束插入一个特殊标识(NULL)，来表示一层的结束</p>
+
+<p>当然可以有其他方法，但是基本思路相同，而且层次遍历只是本题的一部分，关键是如何实现之字访问。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;deque&gt;
+
+using namespace std;
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x = 0)
+        :val(x), left(NULL), right(NULL) {
+    }
+};
+
+class Solution {
+public:
+    vector&lt;vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
+        vector&lt; vector&lt;int&gt; &gt; ret;
+        if (pRoot == NULL) {
+            return ret;
+        }
+        vector&lt;int&gt; curr;//当前的一行
+        deque&lt;TreeNode *&gt; deq;
+        deq.push_back(NULL);//层分隔符
+        deq.push_back(pRoot);
+        bool leftToRight = true;
+        while (deq.size() != 1) {
+            TreeNode* node = deq.front();
+            deq.pop_front();
+
+            //  到达每层分隔符
+            if (node == NULL) {
+                if (leftToRight == true) {
+                    //  从前向后遍历
+                    deque&lt;TreeNode *&gt;::iterator iter;
+                    for (iter = deq.begin(); iter != deq.end(); iter++) {
+                        curr.push_back((*iter)-&gt;val);
+                    }
+                }
+                else {
+                    //  从后往前遍历
+                    deque&lt;TreeNode *&gt;::reverse_iterator riter;
+                    for (riter = deq.rbegin(); riter &lt; deq.rend(); riter++) {
+                        curr.push_back((*riter)-&gt;val);
+                    }
+                }
+                leftToRight = !leftToRight;
+
+                ret.push_back(curr);
+                curr.clear();
+                deq.push_back(NULL);//添加层分隔符
+                continue;//一定要continue
+            }
+            if (node-&gt;left != NULL) {
+                deq.push_back(node-&gt;left);
+            }
+            if (node-&gt;right != NULL) {
+                deq.push_back(node-&gt;right);
+            }
+        }
+        return ret;
+    }
+};
+
+int main() {
+    TreeNode tree[7];
+    tree[0].val = 8;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+    tree[1].val = 6;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+    tree[2].val = 10;
+    tree[2].left = &amp;tree[5];
+    tree[2].right = &amp;tree[6];
+    tree[3].val = 5;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+    tree[5].val = 9;
+    tree[5].left = NULL;
+    tree[5].right = NULL;
+    tree[6].val = 11;
+    tree[6].left = NULL;
+    tree[6].right = NULL;
+
+    Solution solu;
+    vector&lt; vector&lt;int&gt; &gt; res = solu.Print(tree);
+    for (int i = 0; i &lt; res.size(); i++) {
+        for (int j = 0; j &lt; res[i].size(); j++) {
+            cout &lt;&lt; res[i][j];
+        }
+        cout &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>8
+106
+57911
+</code></pre>
+
+<h2 id="层次遍历双栈模拟顺序逆序">层次遍历双栈模拟顺序逆序</h2>
+
+<p>也可以用两个栈来保存节点的每一层,</p>
+
+<ul>
+<li><p>一个实现先进先出，即入栈顺序为右子节点、左子节点</p></li>
+
+<li><p>一个实现后进先出，即入栈顺序为左子节点、右子节点</p>
+
+<p>#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <stack></p>
+
+<p>using namespace std;</p>
+
+<p>struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x = 0)
+        :val(x), left(NULL), right(NULL) {
+    }
+};</p>
+
+<p>class Solution {</p>
+
+<p>#define LEFT_TO_RIGHT 1 //  先左后右访问, 意味着先右后左入栈
+#define RIGHT_TO_LEFT 0 //  先右后左访问, 意味着先左后右入栈</p>
+
+<p>public:</p>
+
+<pre><code>vector&lt; vector&lt;int&gt; &gt; Print(TreeNode* pRoot) {
+    vector&lt; vector&lt;int&gt; &gt; res;
+    if (pRoot == NULL) {
+        return res;
+    }
+    vector&lt;int&gt; curr;
+    stack&lt;TreeNode *&gt; levels[2];
+    int current = LEFT_TO_RIGHT;
+    int next = RIGHT_TO_LEFT;
+    levels[current].push(pRoot);
+
+    while (levels[LEFT_TO_RIGHT].empty() != true
+        || levels[RIGHT_TO_LEFT].empty() != true) {
+        TreeNode *pNode = levels[current].top();
+        levels[current].pop();
+
+        curr.push_back(pNode-&gt;val);
+
+        /*  当前层次current是先左后右访问
+        *  则下一层次应该先右后左访问
+        *  即next从左往右入栈
+        */
+        if (current == LEFT_TO_RIGHT) {
+            if (pNode-&gt;left != NULL) {
+                levels[next].push(pNode-&gt;left);
+            }
+            if (pNode-&gt;right != NULL) {
+                levels[next].push(pNode-&gt;right);
+            }
+        }
+        else {
+            //  先右后左入栈
+            if (pNode-&gt;right != NULL) {
+                levels[next].push(pNode-&gt;right);
+            }
+            if (pNode-&gt;left != NULL) {
+                levels[next].push(pNode-&gt;left);
+            }
+        }
+        if (levels[current].empty() == true) {
+            res.push_back(curr);
+            curr.clear();
+            current = 1 - current;
+            next = 1 - next;
+        }
+    }
+    return res;
+}
+</code></pre>
+
+<p>};</p>
+
+<p>int main() {
+    TreeNode tree[7];
+    tree[0].val = 8;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+    tree[1].val = 6;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+    tree[2].val = 10;
+    tree[2].left = &amp;tree[5];
+    tree[2].right = &amp;tree[6];
+    tree[3].val = 5;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+    tree[5].val = 9;
+    tree[5].left = NULL;
+    tree[5].right = NULL;
+    tree[6].val = 11;
+    tree[6].left = NULL;
+    tree[6].right = NULL;</p>
+
+<pre><code>Solution solu;
+vector&lt; vector&lt;int&gt; &gt; res = solu.Print(tree);
+for (int i = 0; i &lt; res.size(); i++) {
+    for (int j = 0; j &lt; res[i].size(); j++) {
+        cout &lt;&lt; res[i][j];
+    }
+    cout &lt;&lt; endl;
+}
+return 0;
+</code></pre>
+
+<p>}</p></li>
+</ul>
+
+<p>输出：</p>
+
+<pre><code>8
+106
+57911
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%8A%8A%E4%BA%8C%E5%8F%89%E6%A0%91%E6%89%93%E5%8D%B0%E6%88%90%E5%A4%9A%E8%A1%8C/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：把二叉树打印成多行</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/">
+            <span class="next-text nav-default">算法：滑动窗口的最大值</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>SLAM 的前世今生 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="这个是 2016年的文章了，不知道现在发展的怎么样了。 张一茗。速感科技CTO。毕业于北京航空航天大学，师从中国惯性技术领域的著名专家冯培德院士" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/15-%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/01-%E4%BB%8B%E7%BB%8D/slam-%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="SLAM 的前世今生" />
+<meta property="og:description" content="这个是 2016年的文章了，不知道现在发展的怎么样了。 张一茗。速感科技CTO。毕业于北京航空航天大学，师从中国惯性技术领域的著名专家冯培德院士" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/15-%E8%87%AA%E5%8A%A8%E9%A9%BE%E9%A9%B6/01-%E4%BB%8B%E7%BB%8D/slam-%E7%9A%84%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F/" /><meta property="article:published_time" content="2018-08-29T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-29T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="SLAM 的前世今生">
+<meta itemprop="description" content="这个是 2016年的文章了，不知道现在发展的怎么样了。 张一茗。速感科技CTO。毕业于北京航空航天大学，师从中国惯性技术领域的著名专家冯培德院士">
+
+
+<meta itemprop="datePublished" content="2018-08-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="4679">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SLAM 的前世今生"/>
+<meta name="twitter:description" content="这个是 2016年的文章了，不知道现在发展的怎么样了。 张一茗。速感科技CTO。毕业于北京航空航天大学，师从中国惯性技术领域的著名专家冯培德院士"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">SLAM 的前世今生</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-29 </span>
+        
+        <span class="more-meta"> 4679 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#slam的前世">SLAM的前世</a></li>
+<li><a href="#离不开这两类传感器">▌离不开这两类传感器</a></li>
+<li><a href="#最近流行的结构光和tof">▌最近流行的结构光和TOF</a></li>
+<li><a href="#slam算法实现的4要素">▌SLAM算法实现的4要素</a></li>
+<li><a href="#以vslam举个栗子">▌以VSLAM举个栗子</a></li>
+<li><a href="#slam的今生-还存在着问题">▌SLAM的今生——还存在着问题</a></li>
+<li><a href="#最后一个问题">▌最后一个问题</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>这个是 2016年的文章了，不知道现在发展的怎么样了。</p>
+
+<p><strong>张一茗。速感科技CTO。毕业于北京航空航天大学，师从中国惯性技术领域的著名专家冯培德院士，多年组合导航定位系统研究经验。热爱技术和研发，摘得过许多诸如Intel iot创客马拉松、清华创客马拉松等创客比赛第一名。速感科技经过多年历练，发展出一套以视觉SLAM为核心，集探索、导航、定位、避障、路径规划为一体的成熟化机器人无源导航算法。</strong></p>
+
+<p>SLAM作为一种基础技术，从最早的军事用途（核潜艇海底定位就有了SLAM的雏形）到今天，已经逐步走入人们的视野，过去几年扫地机器人的盛行让它名声大噪，近期基于三维视觉的VSLAM又让它越来越显主流，许多人不得不关注它，但根据雷锋网(公众号：雷锋网)的调查，了解它并能真正把它说清楚的国内大牛并不多，今天，我们请来了速感科技的CTO，张一茗，从SLAM的前世今生开始，彻底扫清我们心中的疑惑。</p>
+
+<h2 id="slam的前世">SLAM的前世</h2>
+
+<p>我之前从本科到研究生，一直在导航与定位领域学习，一开始偏重于高精度的惯性导航、卫星导航、星光制导及其组合导航。出于对实现无源导航的执念，我慢慢开始研究视觉导航中的SLAM方向，并与传统的惯性器件做组合，实现独立设备的自主导航定位。</p>
+
+<p>定位、定向、测速、授时是人们惆怅千年都未能完全解决的问题，最早的时候，古人只能靠夜观天象和司南来做简单的定向。直至元代，出于对定位的需求，才华横溢的中国人发明了令人叹为观止的牵星术，用牵星板测量星星实现纬度估计。</p>
+
+<p>1964年美国投入使用GPS，突然就打破了大家的游戏规则。军用的P码可以达到1-2米级精度，开放给大众使用的CA码也能够实现5-10米级的精度。</p>
+
+<p>后来大家一方面为了突破P码封锁，另一方面为了追求更高的定位定姿精度，想出了很多十分具有创意的想法来挺升GPS的精度。利用RTK的实时相位差分技术，甚至能实现厘米的定位精度，基本上解决了室外的定位和定姿问题。</p>
+
+<p>但是室内这个问题就难办多了，为了实现室内的定位定姿，一大批技术不断涌现，其中，SLAM技术逐渐脱颖而出。SLAM是一个十分交叉学科的领域，我先从它的传感器讲起。</p>
+
+<h2 id="离不开这两类传感器">▌离不开这两类传感器</h2>
+
+<p>目前用在SLAM上的Sensor主要分两大类，激光雷达和摄像头。（待会儿发的部分素材摘自官网、论文、专利，侵删）。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/l4fG47Hef8.png?imageslim" alt="mark" /></p>
+
+<p>这里面列举了一些常见的雷达和各种深度摄像头。激光雷达有单线多线之分，角分辨率及精度也各有千秋。SICK、velodyne、Hokuyo以及国内的北醒光学、Slamtech是比较有名的激光雷达厂商。他们可以作为SLAM的一种输入形式。</p>
+
+<p>这个小视频里展示的就是一种简单的2D SLAM。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/6aJjhLJ8c4.gif" alt="mark" /></p>
+
+<p>这个小视频是宾大的教授kumar做的特别有名的一个demo，是在无人机上利用二维激光雷达做的SLAM。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/3LKdmLDH8m.gif" alt="mark" /></p>
+
+<p>而VSLAM则主要用摄像头来实现，摄像头品种繁多，主要分为单目、双目、单目结构光、双目结构光、ToF几大类。他们的核心都是获取RGB和depth map(深度信息)。简单的单目和双目（Zed、leapmotion）我这里不多做解释，我主要解释一下结构光和ToF。</p>
+
+<h2 id="最近流行的结构光和tof">▌最近流行的结构光和TOF</h2>
+
+<p>结构光原理的深度摄像机通常具有激光投射器、光学衍射元件（DOE）、红外摄像头三大核心器件。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/f1CeCg1lbi.png?imageslim" alt="mark" /></p>
+
+<p>这个图（下图）摘自primesense的专利。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/ImgiLJgIkc.png?imageslim" alt="mark" /></p>
+
+<p>可以看到primesense的doe是由两部分组成的，一个是扩散片，一个是衍射片。先通过扩散成一个区域的随机散斑，然后复制成九份，投射到了被摄物体上。根据红外摄像头捕捉到的红外散斑，PS1080这个芯片就可以快速解算出各个点的深度信息。</p>
+
+<p>这儿还有两款结构光原理的摄像头。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/1b0h1b0AJ7.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/k8ajakH7c5.png?imageslim" alt="mark" /></p>
+
+<p>第一页它是由两幅十分规律的散斑组成，最后同时被红外相机获得，精度相对较高。但据说DOE成本也比较高。</p>
+
+<p>还有一种比较独特的方案（最后一幅图），它采用mems微镜的方式，类似DLP投影仪，将激光器进行调频，通过微镜反射出去，并快速改变微镜姿态，进行行列扫描，实现结构光的投射。（产自ST，ST经常做出一些比较炫的黑科技）。</p>
+
+<p>ToF（time of flight）也是一种很有前景的深度获取方法。</p>
+
+<p>传感器发出经调制的近红外光，遇物体后反射，传感器通过计算光线发射和反射时间差或相位差，来换算被拍摄景物的距离，以产生深度信息。类似于雷达，或者想象一下蝙蝠，softkinetic的DS325采用的就是ToF方案（TI设计的），但是它的接收器微观结构比较特殊，有2个或者更多快门，测ps级别的时间差，但它的单位像素尺寸通常在100um的尺寸，所以目前分辨率不高。<strong>以后也会有不错的前景，但我觉得并不是颠覆性的。</strong></p>
+
+<p>好，那在有了深度图之后呢，SLAM算法就开始工作了，由于Sensor和需求的不同，SLAM的呈现形式略有差异。大致可以分为激光SLAM（也分2D和3D）和视觉SLAM（也分Sparse、semiDense、Dense）两类，但其主要思路大同小异。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/b75fL53ej4.png?imageslim" alt="mark" /></p>
+
+<p>这个是Sparse（稀疏）的</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/haAh02jbBJ.gif" alt="mark" /></p>
+
+<p>这个偏Dense（密集）的</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/aHi8FEcg4I.gif" alt="mark" /></p>
+
+<h2 id="slam算法实现的4要素">▌SLAM算法实现的4要素</h2>
+
+<p>SLAM算法在实现的时候主要要考虑以下4个方面吧：</p>
+
+<blockquote>
+<p>\1. 地图表示问题，比如dense和sparse都是它的不同表达方式，这个需要根据实际场景需求去抉择</p>
+
+<p>\2. 信息感知问题，需要考虑如何全面的感知这个环境，RGBD摄像头FOV通常比较小，但激光雷达比较大</p>
+
+<p>\3. 数据关联问题，不同的sensor的数据类型、时间戳、坐标系表达方式各有不同，需要统一处理</p>
+
+<p>\4. 定位与构图问题，就是指怎么实现位姿估计和建模，这里面涉及到很多数学问题，物理模型建立，状态估计和优化</p>
+</blockquote>
+
+<p>其他的还有回环检测问题，探索问题（exploration），以及绑架问题（kidnapping）。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/efL1h2EceG.gif" alt="mark" /></p>
+
+<p>这个是一个比较有名的SLAM算法，这个回环检测就很漂亮。但这个调用了cuda，gpu对运算能力要求挺高，效果看起来比较炫。</p>
+
+<h2 id="以vslam举个栗子">▌以VSLAM举个栗子</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/hGL7I21l71.png?imageslim" alt="mark" /></p>
+
+<p>我大概讲一种比较流行的VSLAM方法框架。</p>
+
+<p><strong>整个SLAM大概可以分为前端和后端</strong>，前端相当于VO（视觉里程计），研究帧与帧之间变换关系。首先提取每帧图像特征点，利用相邻帧图像，进行特征点匹配，然后利用RANSAC去除大噪声，然后进行匹配，得到一个pose信息（位置和姿态），同时可以利用IMU（Inertial measurement unit惯性测量单元）提供的姿态信息进行滤波融合</p>
+
+<p>后端则主要是对前端出结果进行优化，利用滤波理论（EKF、UKF、PF）、或者优化理论TORO、G2O进行树或者图的优化。最终得到最优的位姿估计。</p>
+
+<p><strong>后端这边难点比较多，涉及到的数学知识也比较多，总的来说大家已经慢慢抛弃传统的滤波理论走向图优化去了。</strong></p>
+
+<p>因为基于滤波的理论，滤波器稳度增长太快，这对于需要频繁求逆的EKF（扩展卡尔曼滤波器），PF压力很大。而基于图的SLAM，通常以keyframe（关键帧）为基础，建立多个节点和节点之间的相对变换关系，比如仿射变换矩阵，并不断地进行关键节点的维护，保证图的容量，在保证精度的同时，降低了计算量。</p>
+
+<p>列举几个目前比较有名的SLAM算法：<strong>PTAM,MonoSLAM, ORB-SLAM,RGBD-SLAM,RTAB-SLAM,LSD-SLAM。</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/8fgh3ga78K.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/ih8fFJKdfb.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/H6CmfdGIHl.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/I2k3EGc0Cm.gif" alt="mark" /></p>
+
+<p>所以大家如果想学习SLAM的话，各个高校提高的素材是很多的，比如宾大、MIT、ETH、香港科技大学、帝国理工等等都有比较好的代表作品，还有一个比较有前景的就是三维的机器视觉，普林斯顿大学的肖剑雄教授结合SLAM和Deep Learning做一些三维物体的分类和识别， 实现一个对场景深度理解的机器人感知引擎。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/8Ge5eKIAd5.png?imageslim" alt="mark" /></p>
+
+<p><a href="http://robots.princeton.edu/talks/2016_MIT/RobotPerception.pdf">http://robots.princeton.edu/talks/2016_MIT/RobotPerception.pdf</a>  这是他们的展示。</p>
+
+<p>总的来说，SLAM技术从最早的军事用途（核潜艇海底定位就有了SLAM的雏形）到今天，已经逐步走入人们的视野，扫地机器人的盛行更是让它名声大噪。同时基于三维视觉的VSLAM越来越显主流。在地面/空中机器人、VR/AR/MR、汽车/AGV自动驾驶等领域，都会得到深入的发展，同时也会出现越来越多的细分市场等待挖掘。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180829/0Dh441HkcE.png?imageslim" alt="mark" /></p>
+
+<p>这个是occipital团队出的一个产品，是个很有意思的应用，国内卖4000+，大概一个月1000出货量吧（虽然不是很多，但是效果不错，pad可玩）虚拟家居、无人飞行／驾驶、虚拟试衣、3D打印、刑侦现场记录、沉浸式游戏、增强现实、商场推送、设计辅助、地震救援、工业流水线、GIS采集等等，都等待着VSLAM技术一展宏图</p>
+
+<h2 id="slam的今生-还存在着问题">▌SLAM的今生——还存在着问题</h2>
+
+<p>多传感器融合、优化数据关联与回环检测、与前端异构处理器集成、提升鲁棒性和重定位精度都是SLAM技术接下来的发展方向，但这些都会随着消费刺激和产业链的发展逐步解决。就像手机中的陀螺仪一样，在不久的将来，也会飞入寻常百姓家，改变人类的生活。</p>
+
+<p>不过说实话，SLAM在全面进入消费级市场的过程中，也面对着一些阻力和难题。比如Sensor精度不高、计算量大、Sensor应用场景不具有普适性等等问题。</p>
+
+<p>多传感器融合、优化数据关联与回环检测、与前端异构处理器集成、提升鲁棒性和重定位精度都是SLAM技术接下来的发展方向，但这些都会随着消费刺激和产业链的发展逐步解决。就像手机中的陀螺仪一样，在不久的将来，也会飞入寻常百姓家，改变人类的生活。</p>
+
+<p>（激光雷达和摄像头两种 SLAM 方式各有什么优缺点呢，有没有一种综合的方式互补各自的缺点的呢？）</p>
+
+<p>激光雷达优点是可视范围广，但是缺点性价比低，低成本的雷达角分辨率不够高，影响到建模精度。vSLAM的话缺点就是FOV通常不大，50-60degree，这样高速旋转时就容易丢，解决方案有的，我们公司就在做vSLAM跟雷达还有IMU的组合。</p>
+
+<p>（请问目前基于视觉的SLAM的计算量有多大？嵌入式系统上如果要做到实时30fps，是不是只有Nvidia的芯片（支持cuda）才可以？）</p>
+
+<p>第一个问题，虽然基于视觉的SLAM计算量相对较大，但在嵌入式系统上是可以跑起来的，Sparse的SLAM可以达到30-50hz（也不需要GPU和Cuda），如果dense的话就比较消耗资源，根据点云还有三角化密度可调，10－20hz也是没有问题。</p>
+
+<p>并不一定要用cuda，一些用到cuda和GPU的算法主要是用来加速SIFT、ICP，以及后期三角化和mesh的过程，即使不用cuda可以采用其他的特征点提取和匹配策略也是可以的。</p>
+
+<h2 id="最后一个问题">▌最后一个问题</h2>
+
+<p>（今年8月，雷锋网将在深圳举办“全球人工智能与机器人创新大会”（简称：GAIR）。想了解下，您对机器人的未来趋势怎么看？）</p>
+
+<p>这个问题就比较大了。</p>
+
+<p>机器人产业是个很大的Ecosystem，短时间来讲，可能产业链不够完整，消费级市场缺乏爆点爆款。虽然大家都在谈论做机器人，但是好多公司并没有解决用户痛点，也没有为机器人产业链创造什么价值。</p>
+
+<p>但是大家可以看到， 大批缺乏特色和积淀的机器人公司正在被淘汰，行业格局越来越清晰，分工逐渐完善，一大批细分市场成长起来。</p>
+
+<p>从机器人的感知部分来说，传感器性能提升、前端处理（目前的sensor前端处理做的太少，给主CPU造成了很大的负担）、多传感器融合是一个很大的增长点。</p>
+
+<p>现在人工智能也开始扬头，深度学习、神经网络专用的分布式异构处理器及其协处理器成为紧急需求，我个人很希望国内有公司能把这块做好。</p>
+
+<p>也有好多创业公司做底层工艺比如高推重比电机、高能量密度电池、复合材料，他们和机器人产业的对接，也会加速机器人行业的发展。整个机器人生态架构会越来越清晰，从硬件层到算法层到功能层到SDK 再到应用层，每一个细分领域都有公司切入，随着这些产业节点的完善，能看到机器人行业的前景还是很棒的，相信不久之后就会迎来堪比互联网的指数式增长！</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://www.leiphone.com/news/201605/5etiwlnkWnx7x0zb.html">SLAM的前世今生 终于有人说清楚了</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E9%A2%98%E7%9B%AE/26-%E4%B8%80%E4%BA%9B%E5%A5%87%E6%80%AA%E7%9A%84%E9%A2%98%E7%9B%AE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">26 一些奇怪的题目</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/%E4%B8%80%E4%BA%9B%E9%A2%98%E7%9B%AE/">
+            <span class="next-text nav-default">一些题目</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

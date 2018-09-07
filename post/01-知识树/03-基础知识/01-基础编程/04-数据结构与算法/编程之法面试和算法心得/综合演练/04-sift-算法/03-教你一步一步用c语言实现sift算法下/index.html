@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 教你一步一步用c语言实现sift算法、下 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="#教你一步一步用c语言实现sift算法、下 本文接上，教你一步一步用c语言实现sift算法、上而来： ###函数编写 ok，接上文，咱们一个一个的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/04-sift-%E7%AE%97%E6%B3%95/03-%E6%95%99%E4%BD%A0%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0sift%E7%AE%97%E6%B3%95%E4%B8%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 教你一步一步用c语言实现sift算法、下" />
+<meta property="og:description" content="#教你一步一步用c语言实现sift算法、下 本文接上，教你一步一步用c语言实现sift算法、上而来： ###函数编写 ok，接上文，咱们一个一个的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/04-sift-%E7%AE%97%E6%B3%95/03-%E6%95%99%E4%BD%A0%E4%B8%80%E6%AD%A5%E4%B8%80%E6%AD%A5%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0sift%E7%AE%97%E6%B3%95%E4%B8%8B/" /><meta property="article:published_time" content="2018-07-08T12:14:06&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-08T12:14:06&#43;00:00"/>
+<meta itemprop="name" content="03 教你一步一步用c语言实现sift算法、下">
+<meta itemprop="description" content="#教你一步一步用c语言实现sift算法、下 本文接上，教你一步一步用c语言实现sift算法、上而来： ###函数编写 ok，接上文，咱们一个一个的">
+
+
+<meta itemprop="datePublished" content="2018-07-08T12:14:06&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-08T12:14:06&#43;00:00" />
+<meta itemprop="wordCount" content="7535">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 教你一步一步用c语言实现sift算法、下"/>
+<meta name="twitter:description" content="#教你一步一步用c语言实现sift算法、下 本文接上，教你一步一步用c语言实现sift算法、上而来： ###函数编写 ok，接上文，咱们一个一个的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 教你一步一步用c语言实现sift算法、下</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-08 </span>
+        
+        <span class="more-meta"> 7535 words </span>
+        <span class="more-meta"> 16 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>#教你一步一步用c语言实现sift算法、下</p>
+
+<p>本文接上，<a href="10.01.02.md">教你一步一步用c语言实现sift算法、上</a>而来：</p>
+
+<p>###<strong>函数编写</strong></p>
+
+<p>ok，接上文，咱们一个一个的来编写main函数中所涉及到所有函数，这也是本文的关键部分：</p>
+
+<pre><code class="language-c">//下采样原来的图像，返回缩小2倍尺寸的图像
+CvMat * halfSizeImage(CvMat * im)
+{
+	unsigned int i,j;
+	int w = im-&gt;cols/2;
+	int h = im-&gt;rows/2;
+	CvMat *imnew = cvCreateMat(h, w, CV_32FC1);
+
+#define Im(ROW,COL) ((float *)(im-&gt;data.fl + im-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define Imnew(ROW,COL) ((float *)(imnew-&gt;data.fl + imnew-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	for ( j = 0; j &lt; h; j++)
+		for ( i = 0; i &lt; w; i++)
+			Imnew(j,i)=Im(j*2, i*2);
+	return imnew;
+}
+
+//上采样原来的图像，返回放大2倍尺寸的图像
+CvMat * doubleSizeImage(CvMat * im)
+{
+	unsigned int i,j;
+	int w = im-&gt;cols*2;
+	int h = im-&gt;rows*2;
+	CvMat *imnew = cvCreateMat(h, w, CV_32FC1);
+
+#define Im(ROW,COL) ((float *)(im-&gt;data.fl + im-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define Imnew(ROW,COL) ((float *)(imnew-&gt;data.fl + imnew-&gt;step/sizeof(float) *(ROW)))[(COL)]
+
+	for ( j = 0; j &lt; h; j++)
+		for ( i = 0; i &lt; w; i++)
+			Imnew(j,i)=Im(j/2, i/2);
+
+	return imnew;
+}
+
+//上采样原来的图像，返回放大2倍尺寸的线性插值图像
+CvMat * doubleSizeImage2(CvMat * im)
+{
+	unsigned int i,j;
+	int w = im-&gt;cols*2;
+	int h = im-&gt;rows*2;
+	CvMat *imnew = cvCreateMat(h, w, CV_32FC1);
+
+#define Im(ROW,COL) ((float *)(im-&gt;data.fl + im-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define Imnew(ROW,COL) ((float *)(imnew-&gt;data.fl + imnew-&gt;step/sizeof(float) *(ROW)))[(COL)]
+
+	// fill every pixel so we don't have to worry about skipping pixels later
+	for ( j = 0; j &lt; h; j++)
+	{
+		for ( i = 0; i &lt; w; i++)
+		{
+			Imnew(j,i)=Im(j/2, i/2);
+		}
+	}
+	/*
+	A B C
+	E F G
+	H I J
+	pixels A C H J are pixels from original image
+	pixels B E G I F are interpolated pixels
+	*/
+	// interpolate pixels B and I
+	for ( j = 0; j &lt; h; j += 2)
+		for ( i = 1; i &lt; w - 1; i += 2)
+			Imnew(j,i)=0.5*(Im(j/2, i/2)+Im(j/2, i/2+1));
+	// interpolate pixels E and G
+	for ( j = 1; j &lt; h - 1; j += 2)
+		for ( i = 0; i &lt; w; i += 2)
+			Imnew(j,i)=0.5*(Im(j/2, i/2)+Im(j/2+1, i/2));
+	// interpolate pixel F
+	for ( j = 1; j &lt; h - 1; j += 2)
+		for ( i = 1; i &lt; w - 1; i += 2)
+			Imnew(j,i)=0.25*(Im(j/2, i/2)+Im(j/2+1, i/2)+Im(j/2, i/2+1)+Im(j/2+1, i/2+1));
+	return imnew;
+}
+
+//双线性插值，返回像素间的灰度值
+float getPixelBI(CvMat * im, float col, float row)
+{
+	int irow, icol;
+	float rfrac, cfrac;
+	float row1 = 0, row2 = 0;
+	int width=im-&gt;cols;
+	int height=im-&gt;rows;
+#define ImMat(ROW,COL) ((float *)(im-&gt;data.fl + im-&gt;step/sizeof(float) *(ROW)))[(COL)]
+
+	irow = (int) row;
+	icol = (int) col;
+
+	if (irow &lt; 0 || irow &gt;= height
+		|| icol &lt; 0 || icol &gt;= width)
+		return 0;
+	if (row &gt; height - 1)
+		row = height - 1;
+	if (col &gt; width - 1)
+		col = width - 1;
+	rfrac = 1.0 - (row - (float) irow);
+	cfrac = 1.0 - (col - (float) icol);
+	if (cfrac &lt; 1)
+	{
+		row1 = cfrac * ImMat(irow,icol) + (1.0 - cfrac) * ImMat(irow,icol+1);
+	}
+	else
+	{
+		row1 = ImMat(irow,icol);
+	}
+	if (rfrac &lt; 1)
+	{
+		if (cfrac &lt; 1)
+		{
+			row2 = cfrac * ImMat(irow+1,icol) + (1.0 - cfrac) * ImMat(irow+1,icol+1);
+		} else
+		{
+			row2 = ImMat(irow+1,icol);
+		}
+	}
+	return rfrac * row1 + (1.0 - rfrac) * row2;
+}
+
+//矩阵归一化
+void normalizeMat(CvMat* mat)
+{
+#define Mat(ROW,COL) ((float *)(mat-&gt;data.fl + mat-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	float sum = 0;
+
+	for (unsigned int j = 0; j &lt; mat-&gt;rows; j++)
+		for (unsigned int i = 0; i &lt; mat-&gt;cols; i++)
+			sum += Mat(j,i);
+	for ( j = 0; j &lt; mat-&gt;rows; j++)
+		for (unsigned int i = 0; i &lt; mat-&gt;rows; i++)
+			Mat(j,i) /= sum;
+}
+
+//向量归一化
+void normalizeVec(float* vec, int dim)
+{
+	unsigned int i;
+	float sum = 0;
+	for ( i = 0; i &lt; dim; i++)
+		sum += vec[i];
+	for ( i = 0; i &lt; dim; i++)
+		vec[i] /= sum;
+}
+
+//得到向量的欧式长度，2-范数
+float GetVecNorm( float* vec, int dim )
+{
+	float sum=0.0;
+	for (unsigned int i=0;i&lt;dim;i++)
+		sum+=vec[i]*vec[i];
+	return sqrt(sum);
+}
+
+//产生1D高斯核
+float* GaussianKernel1D(float sigma, int dim)
+{
+
+	unsigned int i;
+	//printf(&quot;GaussianKernel1D(): Creating 1x%d vector for sigma=%.3f gaussian kernel/n&quot;, dim, sigma);
+
+	float *kern=(float*)malloc( dim*sizeof(float) );
+	float s2 = sigma * sigma;
+	int c = dim / 2;
+	float m= 1.0/(sqrt(2.0 * CV_PI) * sigma);
+	double v;
+	for ( i = 0; i &lt; (dim + 1) / 2; i++)
+	{
+		v = m * exp(-(1.0*i*i)/(2.0 * s2)) ;
+		kern[c+i] = v;
+		kern[c-i] = v;
+	}
+	//   normalizeVec(kern, dim);
+	// for ( i = 0; i &lt; dim; i++)
+	//  printf(&quot;%f  &quot;, kern[i]);
+	//  printf(&quot;/n&quot;);
+	return kern;
+}
+
+//产生2D高斯核矩阵
+CvMat* GaussianKernel2D(float sigma)
+{
+	// int dim = (int) max(3.0f, GAUSSKERN * sigma);
+	int dim = (int) max(3.0f, 2.0 * GAUSSKERN *sigma + 1.0f);
+	// make dim odd
+	if (dim % 2 == 0)
+		dim++;
+	//printf(&quot;GaussianKernel(): Creating %dx%d matrix for sigma=%.3f gaussian/n&quot;, dim, dim, sigma);
+	CvMat* mat=cvCreateMat(dim, dim, CV_32FC1);
+#define Mat(ROW,COL) ((float *)(mat-&gt;data.fl + mat-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	float s2 = sigma * sigma;
+	int c = dim / 2;
+	//printf(&quot;%d %d/n&quot;, mat.size(), mat[0].size());
+	float m= 1.0/(sqrt(2.0 * CV_PI) * sigma);
+	for (int i = 0; i &lt; (dim + 1) / 2; i++)
+	{
+		for (int j = 0; j &lt; (dim + 1) / 2; j++)
+		{
+			//printf(&quot;%d %d %d/n&quot;, c, i, j);
+			float v = m * exp(-(1.0*i*i + 1.0*j*j) / (2.0 * s2));
+			Mat(c+i,c+j) =v;
+			Mat(c-i,c+j) =v;
+			Mat(c+i,c-j) =v;
+			Mat(c-i,c-j) =v;
+		}
+	}
+	// normalizeMat(mat);
+	return mat;
+}
+
+//x方向像素处作卷积
+float ConvolveLocWidth(float* kernel, int dim, CvMat * src, int x, int y)
+{
+#define Src(ROW,COL) ((float *)(src-&gt;data.fl + src-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	unsigned int i;
+	float pixel = 0;
+	int col;
+	int cen = dim / 2;
+	//printf(&quot;ConvolveLoc(): Applying convoluation at location (%d, %d)/n&quot;, x, y);
+	for ( i = 0; i &lt; dim; i++)
+	{
+		col = x + (i - cen);
+		if (col &lt; 0)
+			col = 0;
+		if (col &gt;= src-&gt;cols)
+			col = src-&gt;cols - 1;
+		pixel += kernel[i] * Src(y,col);
+	}
+	if (pixel &gt; 1)
+		pixel = 1;
+	return pixel;
+}
+
+//x方向作卷积
+void Convolve1DWidth(float* kern, int dim, CvMat * src, CvMat * dst)
+{
+#define DST(ROW,COL) ((float *)(dst-&gt;data.fl + dst-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	unsigned int i,j;
+
+	for ( j = 0; j &lt; src-&gt;rows; j++)
+	{
+		for ( i = 0; i &lt; src-&gt;cols; i++)
+		{
+			//printf(&quot;%d, %d/n&quot;, i, j);
+			DST(j,i) = ConvolveLocWidth(kern, dim, src, i, j);
+		}
+	}
+}
+
+//y方向像素处作卷积
+float ConvolveLocHeight(float* kernel, int dim, CvMat * src, int x, int y)
+{
+#define Src(ROW,COL) ((float *)(src-&gt;data.fl + src-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	unsigned int j;
+	float pixel = 0;
+	int cen = dim / 2;
+	//printf(&quot;ConvolveLoc(): Applying convoluation at location (%d, %d)/n&quot;, x, y);
+	for ( j = 0; j &lt; dim; j++)
+	{
+		int row = y + (j - cen);
+		if (row &lt; 0)
+			row = 0;
+		if (row &gt;= src-&gt;rows)
+			row = src-&gt;rows - 1;
+		pixel += kernel[j] * Src(row,x);
+	}
+	if (pixel &gt; 1)
+		pixel = 1;
+	return pixel;
+}
+
+//y方向作卷积
+void Convolve1DHeight(float* kern, int dim, CvMat * src, CvMat * dst)
+{
+#define Dst(ROW,COL) ((float *)(dst-&gt;data.fl + dst-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	unsigned int i,j;
+	for ( j = 0; j &lt; src-&gt;rows; j++)
+	{
+		for ( i = 0; i &lt; src-&gt;cols; i++)
+		{
+			//printf(&quot;%d, %d/n&quot;, i, j);
+			Dst(j,i) = ConvolveLocHeight(kern, dim, src, i, j);
+		}
+	}
+}
+
+//卷积模糊图像
+int BlurImage(CvMat * src, CvMat * dst, float sigma)
+{
+	float* convkernel;
+	int dim = (int) max(3.0f, 2.0 * GAUSSKERN * sigma + 1.0f);
+	CvMat *tempMat;
+	// make dim odd
+	if (dim % 2 == 0)
+		dim++;
+	tempMat = cvCreateMat(src-&gt;rows, src-&gt;cols, CV_32FC1);
+	convkernel = GaussianKernel1D(sigma, dim);
+
+	Convolve1DWidth(convkernel, dim, src, tempMat);
+	Convolve1DHeight(convkernel, dim, tempMat, dst);
+	cvReleaseMat(&amp;tempMat);
+	return dim;
+}
+</code></pre>
+
+<p>###<strong>五个步骤</strong></p>
+
+<p>ok，接下来，进入重点部分，咱们依据上文介绍的sift算法的几个步骤，来一一实现这些函数。</p>
+
+<p>为了版述清晰，再贴一下，主函数，顺便再加强下对sift 算法的五个步骤的认识：</p>
+
+<p>1、 SIFT算法第一步：图像预处理</p>
+
+<p>CvMat *ScaleInitImage(CvMat * im) ;                  //金字塔初始化</p>
+
+<p>2、 SIFT算法第二步：建立高斯金字塔函数</p>
+
+<p>ImageOctaves* BuildGaussianOctaves(CvMat * image) ;  //建立高斯金字塔</p>
+
+<p>3、 SIFT算法第三步：特征点位置检测，最后确定特征点的位置</p>
+
+<p>int DetectKeypoint(int numoctaves, ImageOctaves *GaussianPyr);</p>
+
+<p>4、 SIFT算法第四步：计算高斯图像的梯度方向和幅值，计算各个特征点的主方向</p>
+
+<p>void ComputeGrad_DirecandMag(int numoctaves, ImageOctaves *GaussianPyr);</p>
+
+<p>5、 SIFT算法第五步：抽取各个特征点处的特征描述字</p>
+
+<p>void ExtractFeatureDescriptors(int numoctaves, ImageOctaves *GaussianPyr);</p>
+
+<p>ok，接下来一一具体实现这几个函数：</p>
+
+<p>####<strong>SIFT算法第一步</strong></p>
+
+<p>SIFT算法第一步：扩大图像，预滤波剔除噪声，得到金字塔的最底层-第一阶的第一层：</p>
+
+<pre><code class="language-c">CvMat *ScaleInitImage(CvMat * im)
+{
+	double sigma,preblur_sigma;
+	CvMat *imMat;
+	CvMat * dst;
+	CvMat *tempMat;
+	//首先对图像进行平滑滤波，抑制噪声
+	imMat = cvCreateMat(im-&gt;rows, im-&gt;cols, CV_32FC1);
+	BlurImage(im, imMat, INITSIGMA);
+	//针对两种情况分别进行处理：初始化放大原始图像或者在原图像基础上进行后续操作
+	//建立金字塔的最底层
+	if (DOUBLE_BASE_IMAGE_SIZE)
+	{
+		tempMat = doubleSizeImage2(imMat);//对扩大两倍的图像进行二次采样，采样率为0.5，采用线性插值
+#define TEMPMAT(ROW,COL) ((float *)(tempMat-&gt;data.fl + tempMat-&gt;step/sizeof(float) * (ROW)))[(COL)]
+
+		dst = cvCreateMat(tempMat-&gt;rows, tempMat-&gt;cols, CV_32FC1);
+		preblur_sigma = 1.0;//sqrt(2 - 4*INITSIGMA*INITSIGMA);
+		BlurImage(tempMat, dst, preblur_sigma);
+
+		// The initial blurring for the first image of the first octave of the pyramid.
+		sigma = sqrt( (4*INITSIGMA*INITSIGMA) + preblur_sigma * preblur_sigma );
+		//  sigma = sqrt(SIGMA * SIGMA - INITSIGMA * INITSIGMA * 4);
+		//printf(&quot;Init Sigma: %f/n&quot;, sigma);
+		BlurImage(dst, tempMat, sigma);       //得到金字塔的最底层-放大2倍的图像
+		cvReleaseMat( &amp;dst );
+		return tempMat;
+	}
+	else
+	{
+		dst = cvCreateMat(im-&gt;rows, im-&gt;cols, CV_32FC1);
+		//sigma = sqrt(SIGMA * SIGMA - INITSIGMA * INITSIGMA);
+		preblur_sigma = 1.0;//sqrt(2 - 4*INITSIGMA*INITSIGMA);
+		sigma = sqrt( (4*INITSIGMA*INITSIGMA) + preblur_sigma * preblur_sigma );
+		//printf(&quot;Init Sigma: %f/n&quot;, sigma);
+		BlurImage(imMat, dst, sigma);        //得到金字塔的最底层：原始图像大小
+		return dst;
+	}
+}
+</code></pre>
+
+<p>####<strong>SIFT算法第二步</strong></p>
+
+<p>SIFT第二步，建立Gaussian金字塔，给定金字塔第一阶第一层图像后，计算高斯金字塔其他尺度图像，
+每一阶的数目由变量SCALESPEROCTAVE决定，给定一个基本图像，计算它的高斯金字塔图像，返回外部向量是阶梯指针，内部向量是每一个阶梯内部的不同尺度图像。</p>
+
+<pre><code class="language-c">//SIFT算法第二步
+ImageOctaves* BuildGaussianOctaves(CvMat * image)
+{
+	ImageOctaves *octaves;
+	CvMat *tempMat;
+	CvMat *dst;
+	CvMat *temp;
+
+	int i,j;
+	double k = pow(2, 1.0/((float)SCALESPEROCTAVE));  //方差倍数
+	float preblur_sigma, initial_sigma , sigma1,sigma2,sigma,absolute_sigma,sigma_f;
+	//计算金字塔的阶梯数目
+	int dim = min(image-&gt;rows, image-&gt;cols);
+	int numoctaves = (int) (log((double) dim) / log(2.0)) - 2;    //金字塔阶数
+	//限定金字塔的阶梯数
+	numoctaves = min(numoctaves, MAXOCTAVES);
+	//为高斯金塔和DOG金字塔分配内存
+	octaves=(ImageOctaves*) malloc( numoctaves * sizeof(ImageOctaves) );
+	DOGoctaves=(ImageOctaves*) malloc( numoctaves * sizeof(ImageOctaves) );
+
+	printf(&quot;BuildGaussianOctaves(): Base image dimension is %dx%d/n&quot;, (int)(0.5*(image-&gt;cols)), (int)(0.5*(image-&gt;rows)) );
+	printf(&quot;BuildGaussianOctaves(): Building %d octaves/n&quot;, numoctaves);
+
+	// start with initial source image
+	tempMat=cvCloneMat( image );
+	// preblur_sigma = 1.0;//sqrt(2 - 4*INITSIGMA*INITSIGMA);
+	initial_sigma = sqrt(2);//sqrt( (4*INITSIGMA*INITSIGMA) + preblur_sigma * preblur_sigma );
+	//   initial_sigma = sqrt(SIGMA * SIGMA - INITSIGMA * INITSIGMA * 4);
+
+	//在每一阶金字塔图像中建立不同的尺度图像
+	for ( i = 0; i &lt; numoctaves; i++)
+	{
+		//首先建立金字塔每一阶梯的最底层，其中0阶梯的最底层已经建立好
+		printf(&quot;Building octave %d of dimesion (%d, %d)/n&quot;, i, tempMat-&gt;cols,tempMat-&gt;rows);
+		//为各个阶梯分配内存
+		octaves[i].Octave= (ImageLevels*) malloc( (SCALESPEROCTAVE + 3) * sizeof(ImageLevels) );
+		DOGoctaves[i].Octave= (ImageLevels*) malloc( (SCALESPEROCTAVE + 2) * sizeof(ImageLevels) );
+		//存储各个阶梯的最底层
+		(octaves[i].Octave)[0].Level=tempMat;
+
+		octaves[i].col=tempMat-&gt;cols;
+		octaves[i].row=tempMat-&gt;rows;
+		DOGoctaves[i].col=tempMat-&gt;cols;
+		DOGoctaves[i].row=tempMat-&gt;rows;
+		if (DOUBLE_BASE_IMAGE_SIZE)
+			octaves[i].subsample=pow(2,i)*0.5;
+		else
+			octaves[i].subsample=pow(2,i);
+
+		if(i==0)
+		{
+			(octaves[0].Octave)[0].levelsigma = initial_sigma;
+			(octaves[0].Octave)[0].absolute_sigma = initial_sigma;
+			printf(&quot;0 scale and blur sigma : %f /n&quot;, (octaves[0].subsample) * ((octaves[0].Octave)[0].absolute_sigma));
+		}
+		else
+		{
+			(octaves[i].Octave)[0].levelsigma = (octaves[i-1].Octave)[SCALESPEROCTAVE].levelsigma;
+			(octaves[i].Octave)[0].absolute_sigma = (octaves[i-1].Octave)[SCALESPEROCTAVE].absolute_sigma;
+			printf( &quot;0 scale and blur sigma : %f /n&quot;, ((octaves[i].Octave)[0].absolute_sigma) );
+		}
+		sigma = initial_sigma;
+		//建立本阶梯其他层的图像
+		for ( j =  1; j &lt; SCALESPEROCTAVE + 3; j++)
+		{
+			dst = cvCreateMat(tempMat-&gt;rows, tempMat-&gt;cols, CV_32FC1);//用于存储高斯层
+			temp = cvCreateMat(tempMat-&gt;rows, tempMat-&gt;cols, CV_32FC1);//用于存储DOG层
+			// 2 passes of 1D on original
+			//   if(i!=0)
+			//   {
+			//       sigma1 = pow(k, j - 1) * ((octaves[i-1].Octave)[j-1].levelsigma);
+			//          sigma2 = pow(k, j) * ((octaves[i].Octave)[j-1].levelsigma);
+			//       sigma = sqrt(sigma2*sigma2 - sigma1*sigma1);
+			sigma_f= sqrt(k*k-1)*sigma;
+			//   }
+			//   else
+			//   {
+			//       sigma = sqrt(SIGMA * SIGMA - INITSIGMA * INITSIGMA * 4)*pow(k,j);
+			//   }
+			sigma = k*sigma;
+			absolute_sigma = sigma * (octaves[i].subsample);
+			printf(&quot;%d scale and Blur sigma: %f  /n&quot;, j, absolute_sigma);
+
+			(octaves[i].Octave)[j].levelsigma = sigma;
+			(octaves[i].Octave)[j].absolute_sigma = absolute_sigma;
+			//产生高斯层
+			int length=BlurImage((octaves[i].Octave)[j-1].Level, dst, sigma_f);//相应尺度
+			(octaves[i].Octave)[j].levelsigmalength = length;
+			(octaves[i].Octave)[j].Level=dst;
+			//产生DOG层
+			cvSub( ((octaves[i].Octave)[j]).Level, ((octaves[i].Octave)[j-1]).Level, temp, 0 );
+			//         cvAbsDiff( ((octaves[i].Octave)[j]).Level, ((octaves[i].Octave)[j-1]).Level, temp );
+			((DOGoctaves[i].Octave)[j-1]).Level=temp;
+		}
+		// halve the image size for next iteration
+		tempMat  = halfSizeImage( ( (octaves[i].Octave)[SCALESPEROCTAVE].Level ) );
+	}
+	return octaves;
+}
+</code></pre>
+
+<p>####<strong>SIFT算法第三步</strong></p>
+
+<p>SIFT算法第三步，特征点位置检测，最后确定特征点的位置检测DOG金字塔中的局部最大值，找到之后，还要经过两个检验才能确认为特征点：一是它必须有明显的差异，二是他不应该是边缘点，（也就是说，在极值点处的主曲率比应该小于某一个阈值）。</p>
+
+<pre><code class="language-c">//SIFT算法第三步，特征点位置检测，
+int DetectKeypoint(int numoctaves, ImageOctaves *GaussianPyr)
+{
+	//计算用于DOG极值点检测的主曲率比的阈值
+	double curvature_threshold;
+	curvature_threshold= ((CURVATURE_THRESHOLD + 1)*(CURVATURE_THRESHOLD + 1))/CURVATURE_THRESHOLD;
+#define ImLevels(OCTAVE,LEVEL,ROW,COL) ((float *)(DOGoctaves[(OCTAVE)].Octave[(LEVEL)].Level-&gt;data.fl + DOGoctaves[(OCTAVE)].Octave[(LEVEL)].Level-&gt;step/sizeof(float) *(ROW)))[(COL)]
+
+	int   keypoint_count = 0;
+	for (int i=0; i&lt;numoctaves; i++)
+	{
+		for(int j=1;j&lt;SCALESPEROCTAVE+1;j++)//取中间的scaleperoctave个层
+		{
+			//在图像的有效区域内寻找具有显著性特征的局部最大值
+			//float sigma=(GaussianPyr[i].Octave)[j].levelsigma;
+			//int dim = (int) (max(3.0f, 2.0*GAUSSKERN *sigma + 1.0f)*0.5);
+			int dim = (int)(0.5*((GaussianPyr[i].Octave)[j].levelsigmalength)+0.5);
+			for (int m=dim;m&lt;((DOGoctaves[i].row)-dim);m++)
+				for(int n=dim;n&lt;((DOGoctaves[i].col)-dim);n++)
+				{
+					if ( fabs(ImLevels(i,j,m,n))&gt;= CONTRAST_THRESHOLD )
+					{
+
+						if ( ImLevels(i,j,m,n)!=0.0 )  //1、首先是非零
+						{
+							float inf_val=ImLevels(i,j,m,n);
+							if(( (inf_val &lt;= ImLevels(i,j-1,m-1,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m  ,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m+1,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m-1,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m  ,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m+1,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m-1,n+1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m  ,n+1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j-1,m+1,n+1))&amp;&amp;    //底层的小尺度9
+
+								(inf_val &lt;= ImLevels(i,j,m-1,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j,m  ,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j,m+1,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j,m-1,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j,m+1,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j,m-1,n+1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j,m  ,n+1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j,m+1,n+1))&amp;&amp;     //当前层8
+
+								(inf_val &lt;= ImLevels(i,j+1,m-1,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m  ,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m+1,n-1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m-1,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m  ,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m+1,n  ))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m-1,n+1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m  ,n+1))&amp;&amp;
+								(inf_val &lt;= ImLevels(i,j+1,m+1,n+1))     //下一层大尺度9
+								) ||
+								( (inf_val &gt;= ImLevels(i,j-1,m-1,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m  ,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m+1,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m-1,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m  ,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m+1,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m-1,n+1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m  ,n+1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j-1,m+1,n+1))&amp;&amp;
+
+								(inf_val &gt;= ImLevels(i,j,m-1,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j,m  ,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j,m+1,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j,m-1,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j,m+1,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j,m-1,n+1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j,m  ,n+1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j,m+1,n+1))&amp;&amp;
+
+								(inf_val &gt;= ImLevels(i,j+1,m-1,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m  ,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m+1,n-1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m-1,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m  ,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m+1,n  ))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m-1,n+1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m  ,n+1))&amp;&amp;
+								(inf_val &gt;= ImLevels(i,j+1,m+1,n+1))
+								) )      //2、满足26个中极值点
+							{
+								//此处可存储
+								//然后必须具有明显的显著性，即必须大于CONTRAST_THRESHOLD=0.02
+								if ( fabs(ImLevels(i,j,m,n))&gt;= CONTRAST_THRESHOLD )
+								{
+									//最后显著处的特征点必须具有足够的曲率比，CURVATURE_THRESHOLD=10.0，首先计算Hessian矩阵
+									// Compute the entries of the Hessian matrix at the extrema location.
+									/*
+									1   0   -1
+									0   0   0
+									-1   0   1         *0.25
+									*/
+									// Compute the trace and the determinant of the Hessian.
+									//Tr_H = Dxx + Dyy;
+									//Det_H = Dxx*Dyy - Dxy^2;
+									float Dxx,Dyy,Dxy,Tr_H,Det_H,curvature_ratio;
+									Dxx = ImLevels(i,j,m,n-1) + ImLevels(i,j,m,n+1)-2.0*ImLevels(i,j,m,n);
+									Dyy = ImLevels(i,j,m-1,n) + ImLevels(i,j,m+1,n)-2.0*ImLevels(i,j,m,n);
+									Dxy = ImLevels(i,j,m-1,n-1) + ImLevels(i,j,m+1,n+1) - ImLevels(i,j,m+1,n-1) - ImLevels(i,j,m-1,n+1);
+									Tr_H = Dxx + Dyy;
+									Det_H = Dxx*Dyy - Dxy*Dxy;
+									// Compute the ratio of the principal curvatures.
+									curvature_ratio = (1.0*Tr_H*Tr_H)/Det_H;
+									if ( (Det_H&gt;=0.0) &amp;&amp; (curvature_ratio &lt;= curvature_threshold) )  //最后得到最具有显著性特征的特征点
+									{
+										//将其存储起来，以计算后面的特征描述字
+										keypoint_count++;
+										Keypoint k;
+										/* Allocate memory for the keypoint. */
+										k = (Keypoint) malloc(sizeof(struct KeypointSt));
+										k-&gt;next = keypoints;
+										keypoints = k;
+										k-&gt;row = m*(GaussianPyr[i].subsample);
+										k-&gt;col =n*(GaussianPyr[i].subsample);
+										k-&gt;sy = m;    //行
+										k-&gt;sx = n;    //列
+										k-&gt;octave=i;
+										k-&gt;level=j;
+										k-&gt;scale = (GaussianPyr[i].Octave)[j].absolute_sigma;
+									}//if &gt;curvature_thresh
+								}//if &gt;contrast
+							}//if inf value
+						}//if non zero
+					}//if &gt;contrast
+				}  //for concrete image level col
+		}//for levels
+	}//for octaves
+	return keypoint_count;
+}
+
+//在图像中，显示SIFT特征点的位置
+void DisplayKeypointLocation(IplImage* image, ImageOctaves *GaussianPyr)
+{
+
+	Keypoint p = keypoints; // p指向第一个结点
+	while(p) // 没到表尾
+	{
+		cvLine( image, cvPoint((int)((p-&gt;col)-3),(int)(p-&gt;row)),
+			cvPoint((int)((p-&gt;col)+3),(int)(p-&gt;row)), CV_RGB(255,255,0),
+			1, 8, 0 );
+		cvLine( image, cvPoint((int)(p-&gt;col),(int)((p-&gt;row)-3)),
+			cvPoint((int)(p-&gt;col),(int)((p-&gt;row)+3)), CV_RGB(255,255,0),
+			1, 8, 0 );
+		//  cvCircle(image,cvPoint((uchar)(p-&gt;col),(uchar)(p-&gt;row)),
+		//   (int)((GaussianPyr[p-&gt;octave].Octave)[p-&gt;level].absolute_sigma),
+		//   CV_RGB(255,0,0),1,8,0);
+		p=p-&gt;next;
+	}
+}
+
+// Compute the gradient direction and magnitude of the gaussian pyramid images
+void ComputeGrad_DirecandMag(int numoctaves, ImageOctaves *GaussianPyr)
+{
+	// ImageOctaves *mag_thresh ;
+	mag_pyr=(ImageOctaves*) malloc( numoctaves * sizeof(ImageOctaves) );
+	grad_pyr=(ImageOctaves*) malloc( numoctaves * sizeof(ImageOctaves) );
+	// float sigma=( (GaussianPyr[0].Octave)[SCALESPEROCTAVE+2].absolute_sigma ) / GaussianPyr[0].subsample;
+	// int dim = (int) (max(3.0f, 2 * GAUSSKERN *sigma + 1.0f)*0.5+0.5);
+#define ImLevels(OCTAVE,LEVEL,ROW,COL) ((float *)(GaussianPyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;data.fl + GaussianPyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	for (int i=0; i&lt;numoctaves; i++)
+	{
+		mag_pyr[i].Octave= (ImageLevels*) malloc( (SCALESPEROCTAVE) * sizeof(ImageLevels) );
+		grad_pyr[i].Octave= (ImageLevels*) malloc( (SCALESPEROCTAVE) * sizeof(ImageLevels) );
+		for(int j=1;j&lt;SCALESPEROCTAVE+1;j++)//取中间的scaleperoctave个层
+		{
+			CvMat *Mag = cvCreateMat(GaussianPyr[i].row, GaussianPyr[i].col, CV_32FC1);
+			CvMat *Ori = cvCreateMat(GaussianPyr[i].row, GaussianPyr[i].col, CV_32FC1);
+			CvMat *tempMat1 = cvCreateMat(GaussianPyr[i].row, GaussianPyr[i].col, CV_32FC1);
+			CvMat *tempMat2 = cvCreateMat(GaussianPyr[i].row, GaussianPyr[i].col, CV_32FC1);
+			cvZero(Mag);
+			cvZero(Ori);
+			cvZero(tempMat1);
+			cvZero(tempMat2);
+#define MAG(ROW,COL) ((float *)(Mag-&gt;data.fl + Mag-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define ORI(ROW,COL) ((float *)(Ori-&gt;data.fl + Ori-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define TEMPMAT1(ROW,COL) ((float *)(tempMat1-&gt;data.fl + tempMat1-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define TEMPMAT2(ROW,COL) ((float *)(tempMat2-&gt;data.fl + tempMat2-&gt;step/sizeof(float) *(ROW)))[(COL)]
+			for (int m=1;m&lt;(GaussianPyr[i].row-1);m++)
+				for(int n=1;n&lt;(GaussianPyr[i].col-1);n++)
+				{
+					//计算幅值
+					TEMPMAT1(m,n) = 0.5*( ImLevels(i,j,m,n+1)-ImLevels(i,j,m,n-1) );  //dx
+					TEMPMAT2(m,n) = 0.5*( ImLevels(i,j,m+1,n)-ImLevels(i,j,m-1,n) );  //dy
+					MAG(m,n) = sqrt(TEMPMAT1(m,n)*TEMPMAT1(m,n)+TEMPMAT2(m,n)*TEMPMAT2(m,n));  //mag
+					//计算方向
+					ORI(m,n) =atan( TEMPMAT2(m,n)/TEMPMAT1(m,n) );
+					if (ORI(m,n)==CV_PI)
+						ORI(m,n)=-CV_PI;
+				}
+				((mag_pyr[i].Octave)[j-1]).Level=Mag;
+				((grad_pyr[i].Octave)[j-1]).Level=Ori;
+				cvReleaseMat(&amp;tempMat1);
+				cvReleaseMat(&amp;tempMat2);
+		}//for levels
+	}//for octaves
+}
+</code></pre>
+
+<p>####<strong>SIFT算法第四步</strong></p>
+
+<pre><code class="language-c">//SIFT算法第四步：计算各个特征点的主方向，确定主方向
+void AssignTheMainOrientation(int numoctaves, ImageOctaves *GaussianPyr,ImageOctaves *mag_pyr,ImageOctaves *grad_pyr)
+{
+	// Set up the histogram bin centers for a 36 bin histogram.
+	int num_bins = 36;
+	float hist_step = 2.0*PI/num_bins;
+	float hist_orient[36];
+	for (int i=0;i&lt;36;i++)
+		hist_orient[i]=-PI+i*hist_step;
+	float sigma1=( ((GaussianPyr[0].Octave)[SCALESPEROCTAVE].absolute_sigma) ) / (GaussianPyr[0].subsample);//SCALESPEROCTAVE+2
+	int zero_pad = (int) (max(3.0f, 2 * GAUSSKERN *sigma1 + 1.0f)*0.5+0.5);
+	//Assign orientations to the keypoints.
+#define ImLevels(OCTAVES,LEVELS,ROW,COL) ((float *)((GaussianPyr[(OCTAVES)].Octave[(LEVELS)].Level)-&gt;data.fl + (GaussianPyr[(OCTAVES)].Octave[(LEVELS)].Level)-&gt;step/sizeof(float) *(ROW)))[(COL)]
+
+	int keypoint_count = 0;
+	Keypoint p = keypoints; // p指向第一个结点
+
+	while(p) // 没到表尾
+	{
+		int i=p-&gt;octave;
+		int j=p-&gt;level;
+		int m=p-&gt;sy;   //行
+		int n=p-&gt;sx;   //列
+		if ((m&gt;=zero_pad)&amp;&amp;(m&lt;GaussianPyr[i].row-zero_pad)&amp;&amp;
+			(n&gt;=zero_pad)&amp;&amp;(n&lt;GaussianPyr[i].col-zero_pad) )
+		{
+			float sigma=( ((GaussianPyr[i].Octave)[j].absolute_sigma) ) / (GaussianPyr[i].subsample);
+			//产生二维高斯模板
+			CvMat* mat = GaussianKernel2D( sigma );
+			int dim=(int)(0.5 * (mat-&gt;rows));
+			//分配用于存储Patch幅值和方向的空间
+#define MAT(ROW,COL) ((float *)(mat-&gt;data.fl + mat-&gt;step/sizeof(float) *(ROW)))[(COL)]
+
+			//声明方向直方图变量
+			double* orienthist = (double *) malloc(36 * sizeof(double));
+			for ( int sw = 0 ; sw &lt; 36 ; ++sw)
+			{
+				orienthist[sw]=0.0;
+			}
+			//在特征点的周围统计梯度方向
+			for (int x=m-dim,mm=0;x&lt;=(m+dim);x++,mm++)
+				for(int y=n-dim,nn=0;y&lt;=(n+dim);y++,nn++)
+				{
+					//计算特征点处的幅值
+					double dx = 0.5*(ImLevels(i,j,x,y+1)-ImLevels(i,j,x,y-1));  //dx
+					double dy = 0.5*(ImLevels(i,j,x+1,y)-ImLevels(i,j,x-1,y));  //dy
+					double mag = sqrt(dx*dx+dy*dy);  //mag
+					//计算方向
+					double Ori =atan( 1.0*dy/dx );
+					int binIdx = FindClosestRotationBin(36, Ori);                   //得到离现有方向最近的直方块
+					orienthist[binIdx] = orienthist[binIdx] + 1.0* mag * MAT(mm,nn);//利用高斯加权累加进直方图相应的块
+				}
+				// Find peaks in the orientation histogram using nonmax suppression.
+				AverageWeakBins (orienthist, 36);
+				// find the maximum peak in gradient orientation
+				double maxGrad = 0.0;
+				int maxBin = 0;
+				for (int b = 0 ; b &lt; 36 ; ++b)
+				{
+					if (orienthist[b] &gt; maxGrad)
+					{
+						maxGrad = orienthist[b];
+						maxBin = b;
+					}
+				}
+				// First determine the real interpolated peak high at the maximum bin
+				// position, which is guaranteed to be an absolute peak.
+				double maxPeakValue=0.0;
+				double maxDegreeCorrection=0.0;
+				if ( (InterpolateOrientation ( orienthist[maxBin == 0 ? (36 - 1) : (maxBin - 1)],
+					orienthist[maxBin], orienthist[(maxBin + 1) % 36],
+					&amp;maxDegreeCorrection, &amp;maxPeakValue)) == false)
+					printf(&quot;BUG: Parabola fitting broken&quot;);
+
+				// Now that we know the maximum peak value, we can find other keypoint
+				// orientations, which have to fulfill two criterias:
+				//
+				//  1. They must be a local peak themselves. Else we might add a very
+				//     similar keypoint orientation twice (imagine for example the
+				//     values: 0.4 1.0 0.8, if 1.0 is maximum peak, 0.8 is still added
+				//     with the default threshhold, but the maximum peak orientation
+				//     was already added).
+				//  2. They must have at least peakRelThresh times the maximum peak
+				//     value.
+				bool binIsKeypoint[36];
+				for ( b = 0 ; b &lt; 36 ; ++b)
+				{
+					binIsKeypoint[b] = false;
+					// The maximum peak of course is
+					if (b == maxBin)
+					{
+						binIsKeypoint[b] = true;
+						continue;
+					}
+					// Local peaks are, too, in case they fulfill the threshhold
+					if (orienthist[b] &lt; (peakRelThresh * maxPeakValue))
+						continue;
+					int leftI = (b == 0) ? (36 - 1) : (b - 1);
+					int rightI = (b + 1) % 36;
+					if (orienthist[b] &lt;= orienthist[leftI] || orienthist[b] &lt;= orienthist[rightI])
+						continue; // no local peak
+					binIsKeypoint[b] = true;
+				}
+				// find other possible locations
+				double oneBinRad = (2.0 * PI) / 36;
+				for ( b = 0 ; b &lt; 36 ; ++b)
+				{
+					if (binIsKeypoint[b] == false)
+						continue;
+					int bLeft = (b == 0) ? (36 - 1) : (b - 1);
+					int bRight = (b + 1) % 36;
+					// Get an interpolated peak direction and value guess.
+					double peakValue;
+					double degreeCorrection;
+
+					double maxPeakValue, maxDegreeCorrection;
+					if (InterpolateOrientation ( orienthist[maxBin == 0 ? (36 - 1) : (maxBin - 1)],
+						orienthist[maxBin], orienthist[(maxBin + 1) % 36],
+						°reeCorrection, &amp;peakValue) == false)
+					{
+						printf(&quot;BUG: Parabola fitting broken&quot;);
+					}
+
+					double degree = (b + degreeCorrection) * oneBinRad - PI;
+					if (degree &lt; -PI)
+						degree += 2.0 * PI;
+					else if (degree &gt; PI)
+						degree -= 2.0 * PI;
+					//存储方向，可以直接利用检测到的链表进行该步主方向的指定;
+					//分配内存重新存储特征点
+					Keypoint k;
+					/* Allocate memory for the keypoint Descriptor. */
+					k = (Keypoint) malloc(sizeof(struct KeypointSt));
+					k-&gt;next = keyDescriptors;
+					keyDescriptors = k;
+					k-&gt;descrip = (float*)malloc(LEN * sizeof(float));
+					k-&gt;row = p-&gt;row;
+					k-&gt;col = p-&gt;col;
+					k-&gt;sy = p-&gt;sy;    //行
+					k-&gt;sx = p-&gt;sx;    //列
+					k-&gt;octave = p-&gt;octave;
+					k-&gt;level = p-&gt;level;
+					k-&gt;scale = p-&gt;scale;
+					k-&gt;ori = degree;
+					k-&gt;mag = peakValue;
+				}//for
+				free(orienthist);
+		}
+		p=p-&gt;next;
+	}
+}
+
+//寻找与方向直方图最近的柱，确定其index
+int FindClosestRotationBin (int binCount, float angle)
+{
+	angle += CV_PI;
+	angle /= 2.0 * CV_PI;
+	// calculate the aligned bin
+	angle *= binCount;
+	int idx = (int) angle;
+	if (idx == binCount)
+		idx = 0;
+	return (idx);
+}
+
+// Average the content of the direction bins.
+void AverageWeakBins (double* hist, int binCount)
+{
+	// todo: make some tests what number of passes is the best. (its clear
+	// one is not enough, as we may have something like
+	// ( 0.4, 0.4, 0.3, 0.4, 0.4 ))
+	for (int sn = 0 ; sn &lt; 2 ; ++sn)
+	{
+		double firstE = hist[0];
+		double last = hist[binCount-1];
+		for (int sw = 0 ; sw &lt; binCount ; ++sw)
+		{
+			double cur = hist[sw];
+			double next = (sw == (binCount - 1)) ? firstE : hist[(sw + 1) % binCount];
+			hist[sw] = (last + cur + next) / 3.0;
+			last = cur;
+		}
+	}
+}
+
+// Fit a parabol to the three points (-1.0 ; left), (0.0 ; middle) and
+// (1.0 ; right).
+// Formulas:
+// f(x) = a (x - c)^2 + b
+// c is the peak offset (where f'(x) is zero), b is the peak value.
+// In case there is an error false is returned, otherwise a correction
+// value between [-1 ; 1] is returned in 'degreeCorrection', where -1
+// means the peak is located completely at the left vector, and -0.5 just
+// in the middle between left and middle and &gt; 0 to the right side. In
+// 'peakValue' the maximum estimated peak value is stored.
+bool InterpolateOrientation (double left, double middle,double right, double *degreeCorrection, double *peakValue)
+{
+	double a = ((left + right) - 2.0 * middle) / 2.0;   //抛物线捏合系数a
+	// degreeCorrection = peakValue = Double.NaN;
+
+	// Not a parabol
+	if (a == 0.0)
+		return false;
+	double c = (((left - middle) / a) - 1.0) / 2.0;
+	double b = middle - c * c * a;
+	if (c &lt; -0.5 || c &gt; 0.5)
+		return false;
+	*degreeCorrection = c;
+	*peakValue = b;
+	return true;
+}
+
+//显示特征点处的主方向
+void DisplayOrientation (IplImage* image, ImageOctaves *GaussianPyr)
+{
+	Keypoint p = keyDescriptors; // p指向第一个结点
+	while(p) // 没到表尾
+	{
+		float scale=(GaussianPyr[p-&gt;octave].Octave)[p-&gt;level].absolute_sigma;
+		float autoscale = 3.0;
+		float uu=autoscale*scale*cos(p-&gt;ori);
+		float vv=autoscale*scale*sin(p-&gt;ori);
+		float x=(p-&gt;col)+uu;
+		float y=(p-&gt;row)+vv;
+		cvLine( image, cvPoint((int)(p-&gt;col),(int)(p-&gt;row)),
+			cvPoint((int)x,(int)y), CV_RGB(255,255,0),
+			1, 8, 0 );
+		// Arrow head parameters
+		float alpha = 0.33; // Size of arrow head relative to the length of the vector
+		float beta = 0.33;  // Width of the base of the arrow head relative to the length
+
+		float xx0= (p-&gt;col)+uu-alpha*(uu+beta*vv);
+		float yy0= (p-&gt;row)+vv-alpha*(vv-beta*uu);
+		float xx1= (p-&gt;col)+uu-alpha*(uu-beta*vv);
+		float yy1= (p-&gt;row)+vv-alpha*(vv+beta*uu);
+		cvLine( image, cvPoint((int)xx0,(int)yy0),
+			cvPoint((int)x,(int)y), CV_RGB(255,255,0),
+			1, 8, 0 );
+		cvLine( image, cvPoint((int)xx1,(int)yy1),
+			cvPoint((int)x,(int)y), CV_RGB(255,255,0),
+			1, 8, 0 );
+		p=p-&gt;next;
+	}
+}
+</code></pre>
+
+<p>####<strong>SIFT算法第五步</strong></p>
+
+<p>SIFT算法第五步：抽取各个特征点处的特征描述字，确定特征点的描述字。描述字是Patch网格内梯度方向的描述，旋转网格到主方向，插值得到网格处梯度值。</p>
+
+<p>一个特征点可以用2*2*8=32维的向量，也可以用4*4*8=128维的向量更精确的进行描述。</p>
+
+<pre><code class="language-c">void ExtractFeatureDescriptors(int numoctaves, ImageOctaves *GaussianPyr)
+{
+	// The orientation histograms have 8 bins
+	float orient_bin_spacing = PI/4;
+	float orient_angles[8]={-PI,-PI+orient_bin_spacing,-PI*0.5, -orient_bin_spacing,
+		0.0, orient_bin_spacing, PI*0.5,  PI+orient_bin_spacing};
+	//产生描述字中心各点坐标
+	float *feat_grid=(float *) malloc( 2*16 * sizeof(float));
+	for (int i=0;i&lt;GridSpacing;i++)
+	{
+		for (int j=0;j&lt;2*GridSpacing;++j,++j)
+		{
+			feat_grid[i*2*GridSpacing+j]=-6.0+i*GridSpacing;
+			feat_grid[i*2*GridSpacing+j+1]=-6.0+0.5*j*GridSpacing;
+		}
+	}
+	//产生网格
+	float *feat_samples=(float *) malloc( 2*256 * sizeof(float));
+	for ( i=0;i&lt;4*GridSpacing;i++)
+	{
+		for (int j=0;j&lt;8*GridSpacing;j+=2)
+		{
+			feat_samples[i*8*GridSpacing+j]=-(2*GridSpacing-0.5)+i;
+			feat_samples[i*8*GridSpacing+j+1]=-(2*GridSpacing-0.5)+0.5*j;
+		}
+	}
+	float feat_window = 2*GridSpacing;
+	Keypoint p = keyDescriptors; // p指向第一个结点
+	while(p) // 没到表尾
+	{
+		float scale=(GaussianPyr[p-&gt;octave].Octave)[p-&gt;level].absolute_sigma;
+
+		float sine = sin(p-&gt;ori);
+		float cosine = cos(p-&gt;ori);
+		//计算中心点坐标旋转之后的位置
+		float *featcenter=(float *) malloc( 2*16 * sizeof(float));
+		for (int i=0;i&lt;GridSpacing;i++)
+		{
+			for (int j=0;j&lt;2*GridSpacing;j+=2)
+			{
+				float x=feat_grid[i*2*GridSpacing+j];
+				float y=feat_grid[i*2*GridSpacing+j+1];
+				featcenter[i*2*GridSpacing+j]=((cosine * x + sine * y) + p-&gt;sx);
+				featcenter[i*2*GridSpacing+j+1]=((-sine * x + cosine * y) + p-&gt;sy);
+			}
+		}
+		// calculate sample window coordinates (rotated along keypoint)
+		float *feat=(float *) malloc( 2*256 * sizeof(float));
+		for ( i=0;i&lt;64*GridSpacing;i++,i++)
+		{
+			float x=feat_samples[i];
+			float y=feat_samples[i+1];
+			feat[i]=((cosine * x + sine * y) + p-&gt;sx);
+			feat[i+1]=((-sine * x + cosine * y) + p-&gt;sy);
+		}
+		//Initialize the feature descriptor.
+		float *feat_desc = (float *) malloc( 128 * sizeof(float));
+		for (i=0;i&lt;128;i++)
+		{
+			feat_desc[i]=0.0;
+			// printf(&quot;%f  &quot;,feat_desc[i]);
+		}
+		//printf(&quot;/n&quot;);
+		for ( i=0;i&lt;512;++i,++i)
+		{
+			float x_sample = feat[i];
+			float y_sample = feat[i+1];
+			// Interpolate the gradient at the sample position
+			/*
+			0   1   0
+			1   *   1
+			0   1   0   具体插值策略如图示
+			*/
+			float sample12=getPixelBI(((GaussianPyr[p-&gt;octave].Octave)[p-&gt;level]).Level, x_sample, y_sample-1);
+			float sample21=getPixelBI(((GaussianPyr[p-&gt;octave].Octave)[p-&gt;level]).Level, x_sample-1, y_sample);
+			float sample22=getPixelBI(((GaussianPyr[p-&gt;octave].Octave)[p-&gt;level]).Level, x_sample, y_sample);
+			float sample23=getPixelBI(((GaussianPyr[p-&gt;octave].Octave)[p-&gt;level]).Level, x_sample+1, y_sample);
+			float sample32=getPixelBI(((GaussianPyr[p-&gt;octave].Octave)[p-&gt;level]).Level, x_sample, y_sample+1);
+			//float diff_x = 0.5*(sample23 - sample21);
+			//float diff_y = 0.5*(sample32 - sample12);
+			float diff_x = sample23 - sample21;
+			float diff_y = sample32 - sample12;
+			float mag_sample = sqrt( diff_x*diff_x + diff_y*diff_y );
+			float grad_sample = atan( diff_y / diff_x );
+			if(grad_sample == CV_PI)
+				grad_sample = -CV_PI;
+			// Compute the weighting for the x and y dimensions.
+			float *x_wght=(float *) malloc( GridSpacing * GridSpacing * sizeof(float));
+			float *y_wght=(float *) malloc( GridSpacing * GridSpacing * sizeof(float));
+			float *pos_wght=(float *) malloc( 8*GridSpacing * GridSpacing * sizeof(float));;
+			for (int m=0;m&lt;32;++m,++m)
+			{
+				float x=featcenter[m];
+				float y=featcenter[m+1];
+				x_wght[m/2] = max(1 - (fabs(x - x_sample)*1.0/GridSpacing), 0);
+				y_wght[m/2] = max(1 - (fabs(y - y_sample)*1.0/GridSpacing), 0);
+
+			}
+			for ( m=0;m&lt;16;++m)
+				for (int n=0;n&lt;8;++n)
+					pos_wght[m*8+n]=x_wght[m]*y_wght[m];
+			free(x_wght);
+			free(y_wght);
+			//计算方向的加权，首先旋转梯度场到主方向，然后计算差异
+			float diff[8],orient_wght[128];
+			for ( m=0;m&lt;8;++m)
+			{
+				float angle = grad_sample-(p-&gt;ori)-orient_angles[m]+CV_PI;
+				float temp = angle / (2.0 * CV_PI);
+				angle -= (int)(temp) * (2.0 * CV_PI);
+				diff[m]= angle - CV_PI;
+			}
+			// Compute the gaussian weighting.
+			float x=p-&gt;sx;
+			float y=p-&gt;sy;
+			float g = exp(-((x_sample-x)*(x_sample-x)+(y_sample-y)*(y_sample-y))/(2*feat_window*feat_window))/(2*CV_PI*feat_window*feat_window);
+
+			for ( m=0;m&lt;128;++m)
+			{
+				orient_wght[m] = max((1.0 - 1.0*fabs(diff[m%8])/orient_bin_spacing),0);
+				feat_desc[m] = feat_desc[m] + orient_wght[m]*pos_wght[m]*g*mag_sample;
+			}
+			free(pos_wght);
+		}
+		free(feat);
+		free(featcenter);
+		float norm=GetVecNorm( feat_desc, 128);
+		for (int m=0;m&lt;128;m++)
+		{
+			feat_desc[m]/=norm;
+			if (feat_desc[m]&gt;0.2)
+				feat_desc[m]=0.2;
+		}
+		norm=GetVecNorm( feat_desc, 128);
+		for ( m=0;m&lt;128;m++)
+		{
+			feat_desc[m]/=norm;
+			printf(&quot;%f  &quot;,feat_desc[m]);
+		}
+		printf(&quot;/n&quot;);
+		p-&gt;descrip = feat_desc;
+		p=p-&gt;next;
+	}
+	free(feat_grid);
+	free(feat_samples);
+}
+
+//为了显示图象金字塔，而作的图像水平拼接
+CvMat* MosaicHorizen( CvMat* im1, CvMat* im2 )
+{
+	int row,col;
+	CvMat *mosaic = cvCreateMat( max(im1-&gt;rows,im2-&gt;rows),(im1-&gt;cols+im2-&gt;cols),CV_32FC1);
+#define Mosaic(ROW,COL) ((float*)(mosaic-&gt;data.fl + mosaic-&gt;step/sizeof(float)*(ROW)))[(COL)]
+#define Im11Mat(ROW,COL) ((float *)(im1-&gt;data.fl + im1-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define Im22Mat(ROW,COL) ((float *)(im2-&gt;data.fl + im2-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	cvZero(mosaic);
+	/* Copy images into mosaic1. */
+	for ( row = 0; row &lt; im1-&gt;rows; row++)
+		for ( col = 0; col &lt; im1-&gt;cols; col++)
+			Mosaic(row,col)=Im11Mat(row,col) ;
+	for (  row = 0; row &lt; im2-&gt;rows; row++)
+		for (  col = 0; col &lt; im2-&gt;cols; col++)
+			Mosaic(row, (col+im1-&gt;cols) )= Im22Mat(row,col) ;
+	return mosaic;
+}
+
+//为了显示图象金字塔，而作的图像垂直拼接
+CvMat* MosaicVertical( CvMat* im1, CvMat* im2 )
+{
+	int row,col;
+	CvMat *mosaic = cvCreateMat(im1-&gt;rows+im2-&gt;rows,max(im1-&gt;cols,im2-&gt;cols), CV_32FC1);
+#define Mosaic(ROW,COL) ((float*)(mosaic-&gt;data.fl + mosaic-&gt;step/sizeof(float)*(ROW)))[(COL)]
+#define Im11Mat(ROW,COL) ((float *)(im1-&gt;data.fl + im1-&gt;step/sizeof(float) *(ROW)))[(COL)]
+#define Im22Mat(ROW,COL) ((float *)(im2-&gt;data.fl + im2-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	cvZero(mosaic);
+
+	/* Copy images into mosaic1. */
+	for ( row = 0; row &lt; im1-&gt;rows; row++)
+		for ( col = 0; col &lt; im1-&gt;cols; col++)
+			Mosaic(row,col)= Im11Mat(row,col) ;
+	for ( row = 0; row &lt; im2-&gt;rows; row++)
+		for ( col = 0; col &lt; im2-&gt;cols; col++)
+			Mosaic((row+im1-&gt;rows),col)=Im22Mat(row,col) ;
+
+	return mosaic;
+}
+</code></pre>
+
+<p>ok，为了版述清晰，再贴一下上文所述的主函数（注，上文已贴出，此是为了版述清晰，重复造轮）：</p>
+
+<pre><code class="language-c">int main( void )
+{
+	//声明当前帧IplImage指针
+	IplImage* src = NULL;
+	IplImage* image1 = NULL;
+	IplImage* grey_im1 = NULL;
+	IplImage* DoubleSizeImage = NULL;
+
+	IplImage* mosaic1 = NULL;
+	IplImage* mosaic2 = NULL;
+
+	CvMat* mosaicHorizen1 = NULL;
+	CvMat* mosaicHorizen2 = NULL;
+	CvMat* mosaicVertical1 = NULL;
+
+	CvMat* image1Mat = NULL;
+	CvMat* tempMat=NULL;
+
+	ImageOctaves *Gaussianpyr;
+	int rows,cols;
+
+#define Im1Mat(ROW,COL) ((float *)(image1Mat-&gt;data.fl + image1Mat-&gt;step/sizeof(float) *(ROW)))[(COL)]
+
+	//灰度图象像素的数据结构
+#define Im1B(ROW,COL) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*3]
+#define Im1G(ROW,COL) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*3+1]
+#define Im1R(ROW,COL) ((uchar*)(image1-&gt;imageData + image1-&gt;widthStep*(ROW)))[(COL)*3+2]
+
+	storage = cvCreateMemStorage(0);
+
+	//读取图片
+	if( (src = cvLoadImage( &quot;street1.jpg&quot;, 1)) == 0 )  // test1.jpg einstein.pgm back1.bmp
+		return -1;
+
+	//为图像分配内存
+	image1 = cvCreateImage(cvSize(src-&gt;width, src-&gt;height),  IPL_DEPTH_8U,3);
+	grey_im1 = cvCreateImage(cvSize(src-&gt;width, src-&gt;height),  IPL_DEPTH_8U,1);
+	DoubleSizeImage = cvCreateImage(cvSize(2*(src-&gt;width), 2*(src-&gt;height)),  IPL_DEPTH_8U,3);
+
+	//为图像阵列分配内存，假设两幅图像的大小相同，tempMat跟随image1的大小
+	image1Mat = cvCreateMat(src-&gt;height, src-&gt;width, CV_32FC1);
+	//转化成单通道图像再处理
+	cvCvtColor(src, grey_im1, CV_BGR2GRAY);
+	//转换进入Mat数据结构,图像操作使用的是浮点型操作
+	cvConvert(grey_im1, image1Mat);
+
+	double t = (double)cvGetTickCount();
+	//图像归一化
+	cvConvertScale( image1Mat, image1Mat, 1.0/255, 0 );
+
+	int dim = min(image1Mat-&gt;rows, image1Mat-&gt;cols);
+	numoctaves = (int) (log((double) dim) / log(2.0)) - 2;    //金字塔阶数
+	numoctaves = min(numoctaves, MAXOCTAVES);
+
+	//SIFT算法第一步，预滤波除噪声，建立金字塔底层
+	tempMat = ScaleInitImage(image1Mat) ;
+	//SIFT算法第二步，建立Guassian金字塔和DOG金字塔
+	Gaussianpyr = BuildGaussianOctaves(tempMat) ;
+
+	t = (double)cvGetTickCount() - t;
+	printf( &quot;the time of build Gaussian pyramid and DOG pyramid is %.1f/n&quot;, t/(cvGetTickFrequency()*1000.) );
+
+#define ImLevels(OCTAVE,LEVEL,ROW,COL) ((float *)(Gaussianpyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;data.fl + Gaussianpyr[(OCTAVE)].Octave[(LEVEL)].Level-&gt;step/sizeof(float) *(ROW)))[(COL)]
+	//显示高斯金字塔
+	for (int i=0; i&lt;numoctaves;i++)
+	{
+		if (i==0)
+		{
+			mosaicHorizen1=MosaicHorizen( (Gaussianpyr[0].Octave)[0].Level, (Gaussianpyr[0].Octave)[1].Level );
+			for (int j=2;j&lt;SCALESPEROCTAVE+3;j++)
+				mosaicHorizen1=MosaicHorizen( mosaicHorizen1, (Gaussianpyr[0].Octave)[j].Level );
+			for ( j=0;j&lt;NUMSIZE;j++)
+				mosaicHorizen1=halfSizeImage(mosaicHorizen1);
+		}
+		else if (i==1)
+		{
+			mosaicHorizen2=MosaicHorizen( (Gaussianpyr[1].Octave)[0].Level, (Gaussianpyr[1].Octave)[1].Level );
+			for (int j=2;j&lt;SCALESPEROCTAVE+3;j++)
+				mosaicHorizen2=MosaicHorizen( mosaicHorizen2, (Gaussianpyr[1].Octave)[j].Level );
+			for ( j=0;j&lt;NUMSIZE;j++)
+				mosaicHorizen2=halfSizeImage(mosaicHorizen2);
+			mosaicVertical1=MosaicVertical( mosaicHorizen1, mosaicHorizen2 );
+		}
+		else
+		{
+			mosaicHorizen1=MosaicHorizen( (Gaussianpyr[i].Octave)[0].Level, (Gaussianpyr[i].Octave)[1].Level );
+			for (int j=2;j&lt;SCALESPEROCTAVE+3;j++)
+				mosaicHorizen1=MosaicHorizen( mosaicHorizen1, (Gaussianpyr[i].Octave)[j].Level );
+			for ( j=0;j&lt;NUMSIZE;j++)
+				mosaicHorizen1=halfSizeImage(mosaicHorizen1);
+			mosaicVertical1=MosaicVertical( mosaicVertical1, mosaicHorizen1 );
+		}
+	}
+	mosaic1 = cvCreateImage(cvSize(mosaicVertical1-&gt;width, mosaicVertical1-&gt;height),  IPL_DEPTH_8U,1);
+	cvConvertScale( mosaicVertical1, mosaicVertical1, 255.0, 0 );
+	cvConvertScaleAbs( mosaicVertical1, mosaic1, 1, 0 );
+
+	//  cvSaveImage(&quot;GaussianPyramid of me.jpg&quot;,mosaic1);
+	cvNamedWindow(&quot;mosaic1&quot;,1);
+	cvShowImage(&quot;mosaic1&quot;, mosaic1);
+	cvWaitKey(0);
+	cvDestroyWindow(&quot;mosaic1&quot;);
+	//显示DOG金字塔
+	for ( i=0; i&lt;numoctaves;i++)
+	{
+		if (i==0)
+		{
+			mosaicHorizen1=MosaicHorizen( (DOGoctaves[0].Octave)[0].Level, (DOGoctaves[0].Octave)[1].Level );
+			for (int j=2;j&lt;SCALESPEROCTAVE+2;j++)
+				mosaicHorizen1=MosaicHorizen( mosaicHorizen1, (DOGoctaves[0].Octave)[j].Level );
+			for ( j=0;j&lt;NUMSIZE;j++)
+				mosaicHorizen1=halfSizeImage(mosaicHorizen1);
+		}
+		else if (i==1)
+		{
+			mosaicHorizen2=MosaicHorizen( (DOGoctaves[1].Octave)[0].Level, (DOGoctaves[1].Octave)[1].Level );
+			for (int j=2;j&lt;SCALESPEROCTAVE+2;j++)
+				mosaicHorizen2=MosaicHorizen( mosaicHorizen2, (DOGoctaves[1].Octave)[j].Level );
+			for ( j=0;j&lt;NUMSIZE;j++)
+				mosaicHorizen2=halfSizeImage(mosaicHorizen2);
+			mosaicVertical1=MosaicVertical( mosaicHorizen1, mosaicHorizen2 );
+		}
+		else
+		{
+			mosaicHorizen1=MosaicHorizen( (DOGoctaves[i].Octave)[0].Level, (DOGoctaves[i].Octave)[1].Level );
+			for (int j=2;j&lt;SCALESPEROCTAVE+2;j++)
+				mosaicHorizen1=MosaicHorizen( mosaicHorizen1, (DOGoctaves[i].Octave)[j].Level );
+			for ( j=0;j&lt;NUMSIZE;j++)
+				mosaicHorizen1=halfSizeImage(mosaicHorizen1);
+			mosaicVertical1=MosaicVertical( mosaicVertical1, mosaicHorizen1 );
+		}
+	}
+	//考虑到DOG金字塔各层图像都会有正负，所以，必须寻找最负的，以将所有图像抬高一个台阶去显示
+	double min_val=0;
+	double max_val=0;
+	cvMinMaxLoc( mosaicVertical1, &amp;min_val, &amp;max_val,NULL, NULL, NULL );
+	if ( min_val&lt;0.0 )
+		cvAddS( mosaicVertical1, cvScalarAll( (-1.0)*min_val ), mosaicVertical1, NULL );
+	mosaic2 = cvCreateImage(cvSize(mosaicVertical1-&gt;width, mosaicVertical1-&gt;height),  IPL_DEPTH_8U,1);
+	cvConvertScale( mosaicVertical1, mosaicVertical1, 255.0/(max_val-min_val), 0 );
+	cvConvertScaleAbs( mosaicVertical1, mosaic2, 1, 0 );
+
+	//  cvSaveImage(&quot;DOGPyramid of me.jpg&quot;,mosaic2);
+	cvNamedWindow(&quot;mosaic1&quot;,1);
+	cvShowImage(&quot;mosaic1&quot;, mosaic2);
+	cvWaitKey(0);
+
+	//SIFT算法第三步：特征点位置检测，最后确定特征点的位置
+	int keycount=DetectKeypoint(numoctaves, Gaussianpyr);
+	printf(&quot;the keypoints number are %d ;/n&quot;, keycount);
+	cvCopy(src,image1,NULL);
+	DisplayKeypointLocation( image1 ,Gaussianpyr);
+
+	cvPyrUp( image1, DoubleSizeImage, CV_GAUSSIAN_5x5 );
+	cvNamedWindow(&quot;image1&quot;,1);
+	cvShowImage(&quot;image1&quot;, DoubleSizeImage);
+	cvWaitKey(0);
+	cvDestroyWindow(&quot;image1&quot;);
+
+	//SIFT算法第四步：计算高斯图像的梯度方向和幅值，计算各个特征点的主方向
+	ComputeGrad_DirecandMag(numoctaves, Gaussianpyr);
+	AssignTheMainOrientation( numoctaves, Gaussianpyr,mag_pyr,grad_pyr);
+	cvCopy(src,image1,NULL);
+	DisplayOrientation ( image1, Gaussianpyr);
+
+	//  cvPyrUp( image1, DoubleSizeImage, CV_GAUSSIAN_5x5 );
+	cvNamedWindow(&quot;image1&quot;,1);
+	//  cvResizeWindow(&quot;image1&quot;, 2*(image1-&gt;width), 2*(image1-&gt;height) );
+	cvShowImage(&quot;image1&quot;, image1);
+	cvWaitKey(0);
+
+	//SIFT算法第五步：抽取各个特征点处的特征描述字
+	ExtractFeatureDescriptors( numoctaves, Gaussianpyr);
+	cvWaitKey(0);
+
+	//销毁窗口
+	cvDestroyWindow(&quot;image1&quot;);
+	cvDestroyWindow(&quot;mosaic1&quot;);
+	//释放图像
+	cvReleaseImage(&amp;image1);
+	cvReleaseImage(&amp;grey_im1);
+	cvReleaseImage(&amp;mosaic1);
+	cvReleaseImage(&amp;mosaic2);
+	return 0;
+}
+</code></pre>
+
+<p>最后，再看一下，运行效果：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/B22lDg0DCK.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/9kDeD1HDb0.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/JHhIBj972c.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/2gf4de0kjI.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/ccH59j9hcA.png?imageslim" alt="mark" /></p>
+
+<p>完。</p>
+
+<p><strong>updated</strong></p>
+
+<p>有很多朋友都在本文评论下要求要本程序的完整源码包（注：本文代码未贴全，复制粘贴编译肯定诸多错误），但由于时隔太久，这份代码我自己也找不到了，不过，我可以提供一份sift + KD + BBF，且可以编译正确的代码供大家参考学习，有pudn帐号的朋友可以前去下载：<a href="tp://www.pudn.com/downloads340/sourcecode/graph/texture_mapping/detail1486667.html">http://www.pudn.com/downloads340/sourcecode/graph/texture_mapping/detail1486667.html </a>（没有pudn账号的同学请加群：169056165，验证信息：sift，至群共享下载），然后用两幅不同的图片做了下匹配（当然，运行结果显示是不匹配的），效果还不错：[<a href="http://weibo.com/1580904460/yDmzAEwcV#1348475194313](">http://weibo.com/1580904460/yDmzAEwcV#1348475194313](</a> )! July、二零一二年十月十一日。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/01-%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/07-bitmap/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">07 Bitmap</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%B3%95%E9%9D%A2%E8%AF%95%E5%92%8C%E7%AE%97%E6%B3%95%E5%BF%83%E5%BE%97/%E7%BB%BC%E5%90%88%E6%BC%94%E7%BB%83/05-%E5%85%B6%E4%BB%96/hash%E8%A1%A8%E7%AE%97%E6%B3%95/">
+            <span class="next-text nav-default">hash表算法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

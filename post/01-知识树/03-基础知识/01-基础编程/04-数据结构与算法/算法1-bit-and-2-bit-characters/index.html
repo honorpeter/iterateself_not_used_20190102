@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：1-bit and 2-bit Characters - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="题目地址： https://leetcode.com/problems/1-bit-and-2-bit-characters/description/ Description: We have two special characters. The first character can be represented by one bit 0. The second character can be represented by two bits (10 or 11). Now given a string represented by several bits. Return whether the last character must be a one-bit character or not. The given string will always end with a zero. Example 1: Input: bits = [1, 0," />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%951-bit-and-2-bit-characters/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：1-bit and 2-bit Characters" />
+<meta property="og:description" content="题目地址： https://leetcode.com/problems/1-bit-and-2-bit-characters/description/ Description: We have two special characters. The first character can be represented by one bit 0. The second character can be represented by two bits (10 or 11). Now given a string represented by several bits. Return whether the last character must be a one-bit character or not. The given string will always end with a zero. Example 1: Input: bits = [1, 0," />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%951-bit-and-2-bit-characters/" /><meta property="article:published_time" content="2018-07-09T16:13:18&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-09T16:13:18&#43;00:00"/>
+<meta itemprop="name" content="算法：1-bit and 2-bit Characters">
+<meta itemprop="description" content="题目地址： https://leetcode.com/problems/1-bit-and-2-bit-characters/description/ Description: We have two special characters. The first character can be represented by one bit 0. The second character can be represented by two bits (10 or 11). Now given a string represented by several bits. Return whether the last character must be a one-bit character or not. The given string will always end with a zero. Example 1: Input: bits = [1, 0,">
+
+
+<meta itemprop="datePublished" content="2018-07-09T16:13:18&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-09T16:13:18&#43;00:00" />
+<meta itemprop="wordCount" content="571">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：1-bit and 2-bit Characters"/>
+<meta name="twitter:description" content="题目地址： https://leetcode.com/problems/1-bit-and-2-bit-characters/description/ Description: We have two special characters. The first character can be represented by one bit 0. The second character can be represented by two bits (10 or 11). Now given a string represented by several bits. Return whether the last character must be a one-bit character or not. The given string will always end with a zero. Example 1: Input: bits = [1, 0,"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：1-bit and 2-bit Characters</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-09 </span>
+        
+        <span class="more-meta"> 571 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#题目地址">题目地址：</a></li>
+<li><a href="#description">Description:</a></li>
+<li><a href="#我的想法">我的想法：</a></li>
+<li><a href="#我的解法">我的解法：</a></li>
+<li><a href="#别人的解法">别人的解法：</a>
+<ul>
+<li>
+<ul>
+<li><a href="#49-ms">49 ms</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#别人的解法的思路">别人的解法的思路：</a></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="题目地址">题目地址：</h2>
+
+<p><a href="https://leetcode.com/problems/1-bit-and-2-bit-characters/description/">https://leetcode.com/problems/1-bit-and-2-bit-characters/description/</a></p>
+
+<h2 id="description">Description:</h2>
+
+<p>We have two special characters. The first character can be represented by one bit <code>0</code>. The second character can be represented by two bits (<code>10</code> or <code>11</code>).</p>
+
+<p>Now given a string represented by several bits. Return whether the last character must be a one-bit character or not. The given string will always end with a zero.</p>
+
+<p><strong>Example 1:</strong></p>
+
+<pre><code>Input:
+bits = [1, 0, 0]
+Output: True
+Explanation:
+The only way to decode it is two-bit character and one-bit character. So the last character is one-bit character.
+</code></pre>
+
+<p><strong>Example 2:</strong></p>
+
+<pre><code>Input:
+bits = [1, 1, 1, 0]
+Output: False
+Explanation:
+The only way to decode it is two-bit character and two-bit character. So the last character is NOT one-bit character.
+</code></pre>
+
+<p><strong>Note:</strong></p>
+
+<ul>
+<li><p><code>1 &lt;= len(bits) &lt;= 1000</code>.</p></li>
+
+<li><p><code>bits[i]</code> is always <code>0</code> or <code>1</code>.</p></li>
+</ul>
+
+<h2 id="我的想法">我的想法：</h2>
+
+<p>创造一个递归函数，将各种可能性进行遍历，然后将所有的无论是可拆解还是不可拆解的结果存放到一个列表中，如果有True的结果，说明是存在可拆解的结果。</p>
+
+<h2 id="我的解法">我的解法：</h2>
+
+<pre><code>class Solution:
+    def isOneBitCharacter(self, bits):
+        &quot;&quot;&quot;
+        :type bits: List[int]
+        :rtype: bool
+        &quot;&quot;&quot;
+        if len(bits)==1:
+            return True
+        bits_t=bits[:(len(bits)-1)]
+
+        result_list=[]
+        def try_to_split(bit_list):
+            if len(bit_list)==1 :
+                if bit_list[0]==1:
+                    result_list.append(False)
+                    return
+                else:
+                    result_list.append(True)
+                    return
+            elif len(bit_list)==2 and bit_list[0]==1:
+                    result_list.append(True)
+                    return
+            else:
+                if bit_list[0]==0:
+                    return try_to_split(bit_list[1:])
+                else:
+                    return try_to_split(bit_list[2:])
+
+        try_to_split(bits_t)
+        if True in result_list:
+            return True
+        else:
+            return False
+</code></pre>
+
+<p>Runtime: <strong>80 ms</strong></p>
+
+<h2 id="别人的解法">别人的解法：</h2>
+
+<pre><code>class Solution:
+    def isOneBitCharacter(self, bits):
+        &quot;&quot;&quot;
+        :type bits: List[int]
+        :rtype: bool
+        &quot;&quot;&quot;
+        if len(bits) == 1:
+            return True
+
+        s = 0
+        i = len(bits) - 2
+
+        while bits[i] == 1 and i &gt;= 0:
+            s += 1
+            i -= 1
+        return s%2 == 0
+</code></pre>
+
+<h4 id="49-ms">49 ms</h4>
+
+<h2 id="别人的解法的思路">别人的解法的思路：</h2>
+
+<p>除去最后一位，然后从后往前计算连续的1的个数，如果是偶数个1，那么就可拆解，如果是奇数个1，那么就不可拆解。嗯比如从0开始：</p>
+
+<p>0个1，也就说结尾是00，那么是可拆解的，无论之前是什么</p>
+
+<p>1个1，也就说结尾是010，那么是不可拆解的，因为10肯定要连在一起</p>
+
+<p>2个1，也就是说结尾是0110，那么是可拆解的，因为第一个0的前面无论是1还是0都是可以被消掉的，然后11消掉，然后就是0</p>
+
+<p>3个1，也就是说01110，分析依次如上。</p>
+
+<h2 id="comment">COMMENT：</h2>
+
+<p>但是我还是没明白怎没想到的这个解法的？</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/%E7%BF%BB%E5%A2%99/%E5%9C%A8-centos-%E4%B8%8A%E5%AE%89%E8%A3%85-shadowsocks/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">在 CentOS 上安装 shadowsocks</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/03-python-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/python-000--3-%E7%9A%84%E9%97%AE%E9%A2%98/">
+            <span class="next-text nav-default">python [[0,0,0]]  3 的问题</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

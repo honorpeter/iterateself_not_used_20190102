@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：两个链表的第一个公共结点 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-27 00:56:21&#43;00:00 layout: post link: http://106.15.37.116/2018/05/27/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9&amp;rsquo; title: 算法：两个链表的第一个公共结点 wordpress_id: 6785 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%85%AC%E5%85%B1%E7%BB%93%E7%82%B9/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：两个链表的第一个公共结点" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-27 00:56:21&#43;00:00 layout: post link: http://106.15.37.116/2018/05/27/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9&rsquo; title: 算法：两个链表的第一个公共结点 wordpress_id: 6785 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%85%AC%E5%85%B1%E7%BB%93%E7%82%B9/" /><meta property="article:published_time" content="2018-06-11T08:14:58&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:58&#43;00:00"/>
+<meta itemprop="name" content="算法：两个链表的第一个公共结点">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-27 00:56:21&#43;00:00 layout: post link: http://106.15.37.116/2018/05/27/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9&rsquo; title: 算法：两个链表的第一个公共结点 wordpress_id: 6785 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:58&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:58&#43;00:00" />
+<meta itemprop="wordCount" content="2089">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：两个链表的第一个公共结点"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-27 00:56:21&#43;00:00 layout: post link: http://106.15.37.116/2018/05/27/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9&rsquo; title: 算法：两个链表的第一个公共结点 wordpress_id: 6785 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：两个链表的第一个公共结点</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 2089 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ordinary-algorithm">- ordinary algorithm</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#暴力方法">暴力方法</a></li>
+<li><a href="#右对齐两个链表">右对齐两个链表</a>
+<ul>
+<li><a href="#长链表先走-实现右对齐">长链表先走，实现右对齐</a></li>
+<li><a href="#将两个链表拼接起来实现右对齐">将两个链表拼接起来实现右对齐</a></li>
+<li><a href="#栈的后进先出实现右对齐">栈的后进先出实现右对齐</a></li>
+<li><a href="#利用高效的数据结构实现查找结点">利用高效的数据结构实现查找结点</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-27 00:56:21+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/27/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9/">http://106.15.37.116/2018/05/27/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%b8%a4%e4%b8%aa%e9%93%be%e8%a1%a8%e7%9a%84%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%85%ac%e5%85%b1%e7%bb%93%e7%82%b9&rsquo;
+title: 算法：两个链表的第一个公共结点
+wordpress_id: 6785
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="ordinary-algorithm">- ordinary algorithm</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li></li>
+</ol>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>输入两个链表，找出它们的第一个公共结点。</p>
+
+<p>注意：公共结点是指同一个结点，而不仅仅是值相同的结点。当有第一个公共结点之后，后面的结点也必然是公共的。</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="暴力方法">暴力方法</h2>
+
+<p>最简单直接的方法就是，对于第一个链表的每个节点，我们依次判断其是不是第二条链表的结点。</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+
+struct ListNode {
+public:
+    int val;
+    struct ListNode *next;
+};
+
+
+class Solution {
+public:
+    ListNode* FindFirstCommonNode(ListNode *leftHead, ListNode *rightHead) {
+        ListNode *left = NULL;
+        ListNode *right = NULL;
+        //  循环第一个链表的每个结点
+        for (left = leftHead;left != NULL;left = left-&gt;next) {
+            cout &lt;&lt; endl &lt;&lt; left-&gt;val &lt;&lt; &quot; : &quot;;
+            //  依次判断其在不在第二条链表中
+            for (right = rightHead;right != NULL;right = right-&gt;next) {
+                cout &lt;&lt; right-&gt;val &lt;&lt; &quot;, &quot;;
+                if (left == right) {
+                    break;
+                }
+            }
+            if (left == right) {
+                break;
+            }
+        }
+        return left;
+    }
+};
+
+int main() {
+    ListNode common[2];
+    common[0].val = 6;
+    common[0].next = &amp;common[1];
+    common[1].val = 7;
+    common[1].next = NULL;
+
+    ListNode left[3];
+    left[0].val = 1;
+    left[0].next = &amp;left[1];
+    left[1].val = 2;
+    left[1].next = &amp;left[2];
+    left[2].val = 3;
+    left[2].next = &amp;common[0];
+
+    ListNode right[2];
+    right[0].val = 4;
+    right[0].next = &amp;right[1];
+    right[1].val = 5;
+    right[1].next = &amp;common[0];
+
+    Solution solu;
+    ListNode *node = solu.FindFirstCommonNode(left, right);
+    cout &lt;&lt; endl;
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val &lt;&lt; &quot; &quot;;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>1 : 4, 5, 6, 7,
+2 : 4, 5, 6, 7,
+3 : 4, 5, 6, 7,
+6 : 4, 5, 6,
+6 7
+</code></pre>
+
+<h2 id="右对齐两个链表">右对齐两个链表</h2>
+
+<p>实际上，如果两个链表有公共节点，那么它们的形状必然是一个Y字形。</p>
+
+<p>也就是说，如果这两个链表的长度相等，则我们就可以直接同步遍历这两个链表，找能到公共节点。</p>
+
+<p>OK，那么对于现在这两个不知道长度是否相等的链表怎么办呢？</p>
+
+<h3 id="长链表先走-实现右对齐">长链表先走，实现右对齐</h3>
+
+<p>OK，我们可以先分别遍历求出这两个链表的长度，然后得到长度差 n，然后我们再遍历那个长的链表 n 个节点，这样两个链表长度就想通了，这时候，我们再同步遍历这两个链表就可以了。</p>
+
+<p>代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+
+struct ListNode {
+public:
+    int val;
+    struct ListNode *next;
+};
+
+class Solution {
+public:
+    ListNode* FindFirstCommonNode(ListNode *leftHead, ListNode *rightHead) {
+        ListNode *left = leftHead;
+        ListNode *right = rightHead;
+        int leftLength = 0;
+        int rightLength = 0;
+
+        // 首先计算两个链表的长度
+        leftLength = GetListLength(left);
+        rightLength = GetListLength(right);
+
+        // 对齐两个链表
+        int length = 0;
+
+        if (leftLength &lt; rightLength) {
+            // 右链表长
+            length = rightLength - leftLength;
+            while (right != NULL &amp;&amp; length &gt; 0) {
+                right = right-&gt;next;
+                length--;
+            }
+        }
+        else {
+            // 左链表长
+            length = leftLength - rightLength;
+            while (left != NULL &amp;&amp; length &gt; 0) {
+                left = left-&gt;next;
+                length--;
+            }
+        }
+
+        //  两个指针同步移动即可找到共同的结点
+        while (left != NULL &amp;&amp; right != NULL) {
+            if (left == right) {
+                break;
+            }
+            left = left-&gt;next;
+            right = right-&gt;next;
+        }
+
+        return ((left == right) ? left : NULL);
+    }
+
+    int GetListLength(ListNode *head) {
+        ListNode *node = head;
+        int length = 0;
+        while (node != NULL) {
+            length++;
+            node = node-&gt;next;
+        }
+        return length;
+    }
+};
+
+int main() {
+    ListNode common[2];
+    common[0].val = 6;
+    common[0].next = &amp;common[1];
+    common[1].val = 7;
+    common[1].next = NULL;
+
+    ListNode left[3];
+    left[0].val = 1;
+    left[0].next = &amp;left[1];
+    left[1].val = 2;
+    left[1].next = &amp;left[2];
+    left[2].val = 3;
+    left[2].next = &amp;common[0];
+
+    ListNode right[2];
+    right[0].val = 4;
+    right[0].next = &amp;right[1];
+    right[1].val = 5;
+    right[1].next = &amp;common[0];
+
+    Solution solu;
+    ListNode *node = solu.FindFirstCommonNode(left, right);
+    cout &lt;&lt; endl;
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val &lt;&lt; &quot; &quot;;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>6 7
+</code></pre>
+
+<p>嗯，还是很清晰的。</p>
+
+<h3 id="将两个链表拼接起来实现右对齐">将两个链表拼接起来实现右对齐</h3>
+
+<p>前面那个思路中，长的链表先走一个长度差来保证两个链表是右对齐的，这种是可以的，但是我们需要多次扫描这两个链表，因为我们要通过扫描来获取链表的长度。</p>
+
+<p>那么有没有不需要多次扫描就可将两个链表对齐的方法呢？</p>
+
+<p>其实我们可以将两个链表拼接在一起来实现：</p>
+
+<ul>
+<li><p>newleft : left -&gt; right  即：直接把right链表接在left链表后面</p></li>
+
+<li><p>newright : right -&gt; left</p></li>
+</ul>
+
+<p>OK，这样结出来的两个链表都是长度为 M+N 的，而且，关键的是，这时候的公共部分虽然中间都有一节，但是最后也都有一节，而且这时候的两个链表是对齐的。</p>
+
+<p>嗯，挺利害的。</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+
+struct ListNode {
+public:
+    int val;
+    struct ListNode *next;
+};
+
+class Solution {
+public:
+    ListNode* FindFirstCommonNode(ListNode *leftHead, ListNode *rightHead) {
+        ListNode *left = leftHead;
+        ListNode *right = rightHead;
+
+        while (left != right) {
+            left = (left == NULL ? rightHead : left-&gt;next);//厉害了，通过这种来模仿拼接的操作
+            right = (right == NULL ? leftHead : right-&gt;next);
+            cout &lt;&lt; (left == NULL ? -1 : left-&gt;val) &lt;&lt; &quot;, &quot;;
+            cout &lt;&lt; (right == NULL ? -1 : right-&gt;val) &lt;&lt; endl;
+        }
+        return left;
+    }
+};
+
+int main() {
+    ListNode common[2];
+    common[0].val = 6;
+    common[0].next = &amp;common[1];
+    common[1].val = 7;
+    common[1].next = NULL;
+
+    ListNode left[3];
+    left[0].val = 1;
+    left[0].next = &amp;left[1];
+    left[1].val = 2;
+    left[1].next = &amp;left[2];
+    left[2].val = 3;
+    left[2].next = &amp;common[0];
+
+    ListNode right[2];
+    right[0].val = 4;
+    right[0].next = &amp;right[1];
+    right[1].val = 5;
+    right[1].next = &amp;common[0];
+
+    Solution solu;
+    ListNode *node = solu.FindFirstCommonNode(left, right);
+    cout &lt;&lt; endl;
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val &lt;&lt; &quot; &quot;;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>2, 5
+3, 6
+6, 7
+7, -1
+-1, 1
+4, 2
+5, 3
+6, 6
+
+6 7
+</code></pre>
+
+<p>代码中，是通过切换链表来模仿拼接的操作的。嗯。</p>
+
+<h3 id="栈的后进先出实现右对齐">栈的后进先出实现右对齐</h3>
+
+<p>由于栈是后进先出的，因此我们将两个链表分别入栈，那么栈顶的元素一定是最后一个元素。从而两个链表是右对齐的，那么我们将两个栈同步弹出，当两个栈顶的节点不相同时候，即是开始合并的前一个节点。嗯利害的。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stack&gt;
+
+using namespace std;
+
+
+struct ListNode {
+public:
+    int val;
+    struct ListNode *next;
+};
+
+class Solution {
+public:
+    ListNode* FindFirstCommonNode(ListNode *leftHead, ListNode *rightHead) {
+        ListNode *left = leftHead;
+        ListNode *right = rightHead;
+
+        stack&lt;ListNode *&gt; leftStack;
+        stack&lt;ListNode *&gt; rightStack;
+
+        // 结点依次入栈
+        while (left != NULL) {
+            leftStack.push(left);
+            left = left-&gt;next;
+        }
+        while (right != NULL) {
+            rightStack.push(right);
+            right = right-&gt;next;
+        }
+
+        // 开始同步弹出元素
+        while (leftStack.empty() != true &amp;&amp; rightStack.empty() != true) {
+            left = leftStack.top();
+            right = rightStack.top();
+            if (left != right) {
+                break;
+            }
+            leftStack.pop();
+            rightStack.pop();
+        }
+
+        // 不相同元素的下一个结点就是共同结点
+        if (left != right) {
+            return left-&gt;next;
+        }
+        else {
+            return NULL;
+        }
+    }
+};
+
+int main() {
+    ListNode common[2];
+    common[0].val = 6;
+    common[0].next = &amp;common[1];
+    common[1].val = 7;
+    common[1].next = NULL;
+
+    ListNode left[3];
+    left[0].val = 1;
+    left[0].next = &amp;left[1];
+    left[1].val = 2;
+    left[1].next = &amp;left[2];
+    left[2].val = 3;
+    left[2].next = &amp;common[0];
+
+    ListNode right[2];
+    right[0].val = 4;
+    right[0].next = &amp;right[1];
+    right[1].val = 5;
+    right[1].next = &amp;common[0];
+
+    Solution solu;
+    ListNode *node = solu.FindFirstCommonNode(left, right);
+    cout &lt;&lt; endl;
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val &lt;&lt; &quot; &quot;;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>6 7
+</code></pre>
+
+<h3 id="利用高效的数据结构实现查找结点">利用高效的数据结构实现查找结点</h3>
+
+<p>我们先将第一个链表插入到 hash 或者 map 里，然后依次判断第二个链表的节点在不在map中，即可查找到第一个共同结点。</p>
+
+<p>我们可以利用 unordered_map，这个模板类是基于 hash 表实现的，速度与 map 、hashmap 相比较快。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stack&gt;
+#include &lt;unordered_map&gt;
+
+using namespace std;
+
+
+struct ListNode {
+public:
+    int val;
+    struct ListNode *next;
+};
+
+class Solution {
+public:
+    ListNode* FindFirstCommonNode(ListNode *leftHead, ListNode *rightHead) {
+        unordered_map&lt;ListNode*, bool&gt; umap;
+        ListNode* left = leftHead;
+        //将左链表放到 map 里
+        while (left != NULL) {
+            umap.insert(make_pair(left, 1));
+            left = left-&gt;next;
+        }
+
+        //确认map里是不是有右链表的某个 node
+        ListNode* right = rightHead;
+        while (right) {
+            if (umap.count(right) &gt; 0) {
+                return right;
+            }
+            right = right-&gt;next;
+        }
+        return NULL;
+    }
+};
+
+int main() {
+    ListNode common[2];
+    common[0].val = 6;
+    common[0].next = &amp;common[1];
+    common[1].val = 7;
+    common[1].next = NULL;
+
+    ListNode left[3];
+    left[0].val = 1;
+    left[0].next = &amp;left[1];
+    left[1].val = 2;
+    left[1].next = &amp;left[2];
+    left[2].val = 3;
+    left[2].next = &amp;common[0];
+
+    ListNode right[2];
+    right[0].val = 4;
+    right[0].next = &amp;right[1];
+    right[1].val = 5;
+    right[1].next = &amp;common[0];
+
+    Solution solu;
+    ListNode *node = solu.FindFirstCommonNode(left, right);
+    cout &lt;&lt; endl;
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val &lt;&lt; &quot; &quot;;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>6 7
+</code></pre>
+
+<p>嗯，也是利害的方法。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E7%BF%BB%E8%BD%AC%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D%E9%A1%BA%E5%BA%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：翻转字符串中的单词顺序</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%B7%B1%E5%BA%A6/">
+            <span class="next-text nav-default">算法：二叉树的深度</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

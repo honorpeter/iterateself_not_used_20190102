@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：最小的K个数 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-19 15:45:50&#43;00:00 layout: post link: http://106.15.37.116/2018/05/19/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0&amp;rsquo; title: 算法：最小的K个数 wordpress_id: 6042 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：最小的K个数" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-19 15:45:50&#43;00:00 layout: post link: http://106.15.37.116/2018/05/19/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0&rsquo; title: 算法：最小的K个数 wordpress_id: 6042 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%9C%80%E5%B0%8F%E7%9A%84k%E4%B8%AA%E6%95%B0/" /><meta property="article:published_time" content="2018-06-11T08:14:54&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:54&#43;00:00"/>
+<meta itemprop="name" content="算法：最小的K个数">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-19 15:45:50&#43;00:00 layout: post link: http://106.15.37.116/2018/05/19/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0&rsquo; title: 算法：最小的K个数 wordpress_id: 6042 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:54&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:54&#43;00:00" />
+<meta itemprop="wordCount" content="3808">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：最小的K个数"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-19 15:45:50&#43;00:00 layout: post link: http://106.15.37.116/2018/05/19/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0&rsquo; title: 算法：最小的K个数 wordpress_id: 6042 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：最小的K个数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 3808 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ordinary-algorithm">- ordinary algorithm</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#方法一-排序">方法一：排序</a></li>
+<li><a href="#方法二-选择或者交换排序">方法二：选择或者交换排序</a></li>
+<li><a href="#方法三-最小堆">方法三：最小堆</a></li>
+<li><a href="#方法四-快速排序的分治划分-中位数作为枢轴">方法四：快速排序的分治划分（中位数作为枢轴）</a></li>
+<li><a href="#方法五-快速排序的分治划分-随机枢轴">方法五：快速排序的分治划分（随机枢轴）</a></li>
+<li><a href="#方法六-线性排序">方法六：线性排序</a></li>
+<li><a href="#方法七-最小堆与优先队列">方法七：最小堆与优先队列</a></li>
+<li><a href="#方法八-提取最小堆的元素">方法八：提取最小堆的元素</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-19 15:45:50+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/19/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0/">http://106.15.37.116/2018/05/19/%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e6%9c%80%e5%b0%8f%e7%9a%84k%e4%b8%aa%e6%95%b0&rsquo;
+title: 算法：最小的K个数
+wordpress_id: 6042
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="ordinary-algorithm">- ordinary algorithm</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li></li>
+</ol>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><p><strong>从最小堆开始后面的几种方法都没有仔细看，需要看下。</strong></p></li>
+
+<li><p><strong>这里遇到堆相关的了，要整理一下堆相关的一些东西，很多都不清楚。</strong></p></li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>输入 n 个整数，找出其中最小的 K 个数。</p>
+
+<p>例如输入 4,5,1,6,2,7,3,8 这 8 个数字， 则最小的 4 个数字是 1,2,3,4 。</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<p>有八种方法，分别如下：</p>
+
+<ul>
+<li><p>方法一：排序</p></li>
+
+<li><p>方法二：选择或者交换排序</p></li>
+
+<li><p>方法三：最小堆</p></li>
+
+<li><p>方法四：快速排序的分治划分（中位数作为枢轴）</p></li>
+
+<li><p>方法五：快速排序的分治划分（随机枢轴）</p></li>
+
+<li><p>方法六：线性排序</p></li>
+
+<li><p>方法七：最小堆与优先队列</p></li>
+
+<li><p>方法八：提取最小堆的元素</p></li>
+</ul>
+
+<p>OK，我们依次看下：</p>
+
+<h2 id="方法一-排序">方法一：排序</h2>
+
+<p>看到说要求一个序列中最小的 K 个数，那么按照惯有的思维方式，我们可以直接先对这个序列从小到大排序，然后输出前面的最小的K个数即可。</p>
+
+<p>至于选取什么样的排序方法，第一时间应该想到的是快速排序，我们知道，快速排序平均时间复杂度为 O(nlogn) ，然后再遍历输出序列中前 K 个元素即可，总的时间复杂度为 O(nlogn + K) = O(nlogn)。</p>
+
+<h2 id="方法二-选择或者交换排序">方法二：选择或者交换排序</h2>
+
+<p>再进一步想想，其实题目并没有要求要查找的 K 个数，甚至是后面的 n-K 个数是有序的，既然这样，咱们又何必对所有的n个数都进行排序呢？是的。</p>
+
+<p>这个时候，我们可以这样：</p>
+
+<ul>
+<li><p>我们遍历这 n 个数，把最先遍历到的 K 个数存入大小为 K 的数组之中，对这 K 个数，利用选择或交换排序，找到 K 个数中的最大数 Kmax ( Kmax 为这 K 个元素的数组中最大的元素 )，这个操作使用的时间为 O(K)（你应该知道，插入或选择排序查找操作需要 O(K) 的时间），</p></li>
+
+<li><p>然后我们再继续遍历后 n-K 个数，每个 x 与 Kmax 比较：如果 x&lt; Kmax ，则 x 代替 Kmax ，并再次重新找出 K 个元素的数组中的最大元素 Kmax&rsquo;；如果 x&gt;Kmax ，则不更新数组。</p></li>
+</ul>
+
+<p>按照这样，每次更新和不更新数组所用的时间为 O(K) 或 O(0)，而整趟下来，总的时间复杂度平均下来为：nO(K) = O(nK)。<strong>可见，K 比较小的时候，这个比排序法要快一些的。</strong></p>
+
+<h2 id="方法三-最小堆">方法三：最小堆</h2>
+
+<p>当然，还有更好的办法：</p>
+
+<p>原理其实与上面的第 2 个方案一致，不过这里我们维护的是一个 K 个元素的大顶堆，我们先用这个大顶堆存储最先遍历到的 K 个数，并假设它们即是最小的 K 个数（建堆需要 O(K) ），然后我们继续遍历数列，每次遍历一个元素 x，与堆顶元素比较，除非小于大顶堆的最大值，否则不更新堆。</p>
+
+<p>由于堆的性质，因此这样下来，总费时 O(K+(n-K)logK) = O(nlogK) 。<strong>要确认下。关于堆 很多都不清楚，需要好好总结下。</strong></p>
+
+<p>这个方法得益于在堆中，查找等各项操作时间复杂度均为 logK。</p>
+
+<h2 id="方法四-快速排序的分治划分-中位数作为枢轴">方法四：快速排序的分治划分（中位数作为枢轴）</h2>
+
+<p>我们可以使用一种类似快速排序的划分方法：</p>
+
+<ul>
+<li><p>我们把 N 个数存储在数组 S 中，再从数组中随机选取一个数 X（随机选取枢纽元，可做到线性期望时间O(N)的复杂度），把数组划分为 Sa 和 Sb 两部分，且 Sa&lt;= X &lt;=Sb。<strong>这个划分怎么实现的？</strong></p>
+
+<ul>
+<li><p>如果要查找的 K 个小的元素小于Sa 中的元素个数，则返回 Sa 中较小的 K 个元素，</p></li>
+
+<li><p>否则返回 Sa 中 K 个小的元素 + Sb中小的K-|Sa|个元素。</p></li>
+</ul></li>
+</ul>
+
+<p>像上述过程一样，这个运用类似快速排序的 partition 的快速选择 Select 算法寻找最小的 K 个元素，在最坏的情况下亦能做到 O(N) 的复杂度。</p>
+
+<p>不过值得一提的是，这个快速选 Select 算法是选择数组中 “中位数的中位数” 作为枢纽元，而非随机选择枢纽元。</p>
+
+<h2 id="方法五-快速排序的分治划分-随机枢轴">方法五：快速排序的分治划分（随机枢轴）</h2>
+
+<p>Randomized-Select，每次都是随机选择数列中的一个元素作为主元，在O(n)的时间内找到第K小的元素，然后遍历输出前面的K个小的元素。如果能的话，那么总的时间复杂度为线性期望时间：O(n+k) = O(n)（当n比较小时）；</p>
+
+<h2 id="方法六-线性排序">方法六：线性排序</h2>
+
+<p>线性时间的排序，即计数排序，时间复杂度虽能达到O(n)，但是，限制条件太多了，不常用；</p>
+
+<h2 id="方法七-最小堆与优先队列">方法七：最小堆与优先队列</h2>
+
+<p>”可以用最小堆初始化数组，然后取这个优先队列前k个值。复杂度为O(n)+k_O(logn)“。意思是针对整个数组序列建立最小堆，建堆所用时间为O(n)，然后取堆中的前k个数，即总的时间复杂度为：O(n+k_logn)。</p>
+
+<h2 id="方法八-提取最小堆的元素">方法八：提取最小堆的元素</h2>
+
+<p>与上述思路7类似，不同的是在对元素数组原地建立最小堆O(n)后，然后提取K次，但是每次提取时，换到顶部的元素只需要下移顶多K次就足够了，下移次数逐次减少（而上述思路7每次提取都需要logn，所有提取K次，思路7需要K*logn，而本思路8只需要K^2）；</p>
+
+<p>完整代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+
+class Solution {
+protected:
+    vector&lt;int&gt; m_res;
+public:
+
+    vector&lt;int&gt; GetLeastNumbers_Solution(vector&lt;int&gt; numbers, int k) {
+        m_res.clear();
+
+        if (numbers.size() == 0 || numbers.size() &lt; k) {
+            return m_res;
+        }
+
+        cout &lt;&lt; &quot;****************  方法1：排序   ***************&quot; &lt;&lt; endl;
+        m_res.clear();
+        LeastKNumbers_BySort(numbers, k);
+        PrintResVector();
+
+
+        cout &lt;&lt; &quot;*********  方法2：把 numbers 中的数转化为 index   ********&quot; &lt;&lt; endl;
+        m_res.clear();
+        LeastKNumbers_ByCountSort(numbers, k);
+        PrintResVector();
+
+        cout &lt;&lt; &quot;********* 方法3：采用选择排序法, K趟找出前K个数字   ********&quot; &lt;&lt; endl;
+        m_res.clear();
+        LeastKNumbers_BySelectSort(numbers, k);
+        PrintResVector();
+
+
+        //
+        //        m_res.clear( );
+        //        LeastKNumbers_ByBubbleSort(numbers, k);
+
+
+
+
+        return m_res;
+    }
+    void PrintResVector() {
+        for each (int var in m_res) {
+            cout &lt;&lt; var &lt;&lt; &quot; &quot;;
+        }
+        cout &lt;&lt; endl;
+    }
+    //直接排序后输出前K个数字 
+    vector&lt;int&gt; LeastKNumbers_BySort(vector&lt;int&gt; numbers, int k) {
+        sort(numbers.begin(), numbers.end());//先进行排序
+        for (int i = 0; i &lt; k; i++) {
+            m_res.push_back(numbers[i]);//把最小的几个数直接放到m_res里面
+        }
+        return m_res;
+    }
+    //把 numbers 中的数转化为 index
+    vector&lt;int&gt; LeastKNumbers_ByCountSort(vector&lt;int&gt; numbers, int k) {
+        int i, count;
+        int num[1000];
+        memset(num, '\0', 1000);
+        //把 numbers 里的数作为 num 的 index ，然后把这个地方设定为 1 
+        for (i = 0; i &lt; numbers.size(); i++) {
+            num[numbers[i]] = 1; //把这个数对应的index地方的数设置为1
+        }
+
+        //OK，既然已经设定好了，那么最小的 k 个index 就是 numbers里面的最小的 k 个数。
+        for (i = 0, count = 0; i &lt; 1000 &amp;&amp; count &lt; k; i++) {
+            if (num[i] != 0) {
+                count++;
+                m_res.push_back(i);//将统计到的 index 存放到 m_res 里面 , 这就是numbers里面最小的几个数
+            }
+        }
+        return m_res;
+    }
+
+
+    //采用选择排序法, K趟找出前K个数字
+    //由于选择排序每趟结束后前 i 个数字都有序，因此 K 趟即可找出前 K 小的数字
+    vector&lt;int&gt; LeastKNumbers_BySelectSort(vector&lt;int&gt; numbers, int k) {
+        int i, j, index;
+        int length = numbers.size() - 1;
+        // 循环每趟排序
+        for (i = 0; i &lt; k/*length*/; i++) {
+            index = i;
+            for (j = i + 1; j &lt; length; j++) {
+                if (numbers[j] &lt; numbers[index]) {
+                    index = j;                 // 找到当前极值元素的下标
+                }
+            }
+            if (index != i) {
+                swap(numbers[i], numbers[index]);     // 将极值保存到应该填入的位置
+            }
+            m_res.push_back(numbers[i]);
+
+            cout &lt;&lt; &quot;pos = &quot; &lt;&lt; index &lt;&lt; &quot;, num = &quot; &lt;&lt; numbers[i] &lt;&lt; endl;
+            cout &lt;&lt; &quot;when &quot; &lt;&lt; i &lt;&lt; &quot; select sort, the least &quot; &lt;&lt; i &lt;&lt; &quot; numbers is sorted&quot; &lt;&lt; endl;
+
+            for (int pos = 0; pos &lt;= i; pos++) {
+                cout &lt;&lt; numbers[pos] &lt;&lt; &quot; &quot;;
+            }
+            cout &lt;&lt; endl;
+        }
+        return m_res;
+    }
+
+    ///  采用冒泡排序法, K趟找出前K个数字
+    vector&lt;int&gt; LeastKNumbers_ByBubbleSort(vector&lt;int&gt; numbers, int k) {
+        cout &lt;&lt; endl &lt;&lt; &quot;line &quot; &lt;&lt; __LINE__ &lt;&lt; &quot; in function : &quot; &lt;&lt; __FUNCTION__ &lt;&lt; endl &lt;&lt; endl;
+
+        int j/*控制每趟循环*/, i/*控制相邻数据的比较循环*/;
+        // 排序过程
+        int length = numbers.size();
+        for (i = 0; i &lt; k/*length - 1*/; i++)        // 共计进行length-1趟循环
+        {
+            for (j = length - i - 1; j &gt; 0; j--)   // 每趟循环比较length-1-j次
+            {
+                if (numbers[j - 1] &gt; numbers[j])    // 如果当前的元素与后一个元素不满足排序规则
+                {
+                    swap(numbers[j - 1], numbers[j]);
+                }
+
+            }
+            m_res.push_back(numbers[i]);
+
+            cout &lt;&lt; &quot;pos = &quot; &lt;&lt; i &lt;&lt; &quot;, num = &quot; &lt;&lt; numbers[i] &lt;&lt; endl;
+            cout &lt;&lt; &quot;when &quot; &lt;&lt; i &lt;&lt; &quot; bubble sort, the least &quot; &lt;&lt; i &lt;&lt; &quot; numbers is sorted&quot; &lt;&lt; endl;
+
+            for (int pos = 0; pos &lt;= i; pos++) {
+                cout &lt;&lt; numbers[pos] &lt;&lt; &quot; &quot;;
+            }
+            cout &lt;&lt; endl;
+        }
+
+        return m_res;
+    }
+
+
+
+    vector&lt;int&gt; GetLeastNumbers_ByFindKth(vector&lt;int&gt; numbers, int k) {
+        int kth;
+        vector&lt;int&gt; res;
+        for (int i = 0; i &lt; k; i++) {
+            kth = FindKth(numbers, 0, numbers.size() - 1, i);
+            cout &lt;&lt; i &lt;&lt; &quot; th is &quot; &lt;&lt; kth &lt;&lt; endl;
+            res.push_back(kth);
+        }
+        return res;
+    }
+    //待查找元素所在的数组 left 数据起始元素的位置 right 数据终止元素的位置 k 第K大的元素 
+    int FindKth(vector&lt;int&gt; &amp;numbers, int left, int right, int k) {
+        int res;
+        int pivotIndex = left + 1;
+
+        if (left == right) {
+            cout &lt;&lt; &quot;left == right&quot; &lt;&lt; numbers[left] &lt;&lt; endl;
+            return numbers[left];
+        }
+        pivotIndex = Partition(numbers, left, right);
+
+        if (pivotIndex &lt; k)          //  当前查找到的比第K个数小
+        {
+            // 第K大的的在pivot之前, 在[pivotIndex + 1, right]之间查找
+            cout &lt;&lt; &quot;K is in [&quot; &lt;&lt; pivotIndex + 1 &lt;&lt; &quot;, &quot; &lt;&lt; right &lt;&lt; &quot;]&quot; &lt;&lt; endl;
+            return FindKth(numbers, pivotIndex + 1, right, k);
+        }
+        else if (pivotIndex &gt; k)     //  当前查找到的比第K个数大
+        {
+            // 第K小的在pivot之前, 在[left, pivotIndex - 1]之间查找
+            cout &lt;&lt; &quot;K is in [&quot; &lt;&lt; left &lt;&lt; &quot;, &quot; &lt;&lt; pivotIndex - 1 &lt;&lt; &quot;]&quot; &lt;&lt; endl;
+            return FindKth(numbers, left, pivotIndex - 1, k);
+        }
+        else      //  这里返回的是其位置
+        {
+            /// return pivotIndex; ///  error
+            cout &lt;&lt; &quot;pivotIndex == k, &quot; &lt;&lt; numbers[pivotIndex] &lt;&lt; endl;
+            return numbers[pivotIndex];
+        }
+    }
+    //快速排序的划分函数, 返回枢轴(left下标元素)在排序的数组中应该所处的位置, 即下标为left的元素是第几大的元素
+    int Partition(vector&lt;int&gt; &amp;numbers, int left, int right) {
+        int i = left, j = right;
+
+        ///  我们选择第一个元素作为基准
+        ///  这个也可以随机选择
+        int pivotIndex = left, pivotNum = numbers[pivotIndex];
+
+        cout &lt;&lt; &quot;pivotNum = &quot; &lt;&lt; pivotNum &lt;&lt; endl;
+        while (i &lt; j) {
+            while (i &lt; j &amp;&amp; numbers[j] &gt;= pivotNum) {
+                cout &lt;&lt; &quot;[&quot; &lt;&lt; i &lt;&lt; &quot;, &quot; &lt;&lt; j &lt;&lt; &quot;] &quot; &lt;&lt; numbers[j] &lt;&lt; &quot; &gt;= &quot; &lt;&lt; pivotNum &lt;&lt; endl;
+                j--;
+            }
+            cout &lt;&lt; &quot;now we find i = &quot; &lt;&lt; i &lt;&lt; &quot;, posJ = &quot; &lt;&lt; j &lt;&lt; &quot;, num = &quot; &lt;&lt; numbers[j] &lt;&lt; &quot; &lt; &quot; &lt;&lt; pivotNum &lt;&lt; endl;;
+            numbers[i] = numbers[j];        // 将找到的那个比枢轴小的数，放在枢轴左侧I的位置
+            //swap(numbers[i], numbers[j]); // 也可以使用交换, 但是没有必要, 因为枢轴的位置并没有最后确定
+
+            while (i &lt; j &amp;&amp; numbers[i] &lt;= pivotNum) {
+                cout &lt;&lt; &quot;[&quot; &lt;&lt; i &lt;&lt; &quot;, &quot; &lt;&lt; j &lt;&lt; &quot;] &quot; &lt;&lt; numbers[i] &lt;&lt; &quot; &lt;= &quot; &lt;&lt; pivotNum &lt;&lt; endl;
+                i++;
+            }
+
+            cout &lt;&lt; &quot;now we find j = &quot; &lt;&lt; i &lt;&lt; &quot;, posI = &quot; &lt;&lt; j &lt;&lt; &quot;, num = &quot; &lt;&lt; numbers[i] &lt;&lt; &quot; &gt; &quot; &lt;&lt; pivotNum &lt;&lt; endl;;
+            numbers[j] = numbers[i];        // 将找到的那个比枢轴大的数，放在枢轴右侧J的位置
+            //swap(numbers[i], numbers[j]); // 也可以使用交换, 但是没有必要, 因为枢轴的位置并没有最后确定
+        }
+
+        numbers[i] = pivotNum;              //  最后的位置 i == j 就是枢轴的位置
+
+
+        cout &lt;&lt; pivotNum &lt;&lt; &quot; 's post is&quot; &lt;&lt; i &lt;&lt; endl;
+        for (int pos = left; pos &lt;= right; pos++) {
+            cout &lt;&lt; numbers[pos] &lt;&lt; &quot; &quot;;
+        }
+        cout &lt;&lt; endl;
+
+
+        return i;
+    }
+
+
+
+
+    //竟然可以这样
+    class greater_class {
+    public:
+        bool operator()(int a, int b) {
+            return a &gt; b;
+        }
+    };
+    vector&lt;int&gt; LeastKNumbers_ByMinHeap(vector&lt;int&gt; numbers, int k) {
+        vector&lt;int&gt; res;
+
+        if (numbers.size() == 0 || numbers.size() &lt; k) {
+            return res;
+        }
+        make_heap(numbers.begin(), numbers.end(), greater_class());
+
+        for (int i = 0; i &lt; k; i++) {
+            //  最小的元素在栈顶
+            cout &lt;&lt; numbers[0] &lt;&lt; &quot; &quot;;
+            res.push_back(numbers[0]);
+
+            ///  一下两种操作均可以
+            // [1]  --  清除它, 然后重新排序堆
+            //numbers.erase(numbers.begin( ));
+            //sort_heap(numbers.begin( ), numbers.end( ));
+
+            // [2]  --  当然从堆出弹出这个栈顶元素
+            pop_heap(numbers.begin(), numbers.end(), greater_class());   // 弹出一个元素后，剩下的又重建了 heap，仍保持heap的性质
+            numbers.pop_back();         // vector 删除末尾元素
+        }
+
+        return res;
+    }
+
+};
+
+
+int main() {
+    int arr[] = { 4, 5, 1, 6, 2, 7, 13, 8 };
+    std::vector&lt;int&gt; vec(arr, arr + 8);
+    Solution solu;
+    solu.GetLeastNumbers_Solution(vec, 4);
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>****************  方法1：排序   ***************
+1 2 4 5
+*********  方法2：把 numbers 中的数转化为 index   ********
+1 2 4 5
+********* 方法3：采用选择排序法, K趟找出前K个数字   ********
+pos = 2, num = 1
+when 0 select sort, the least 0 numbers is sorted
+1
+pos = 4, num = 2
+when 1 select sort, the least 1 numbers is sorted
+1 2
+pos = 2, num = 4
+when 2 select sort, the least 2 numbers is sorted
+1 2 4
+pos = 4, num = 5
+when 3 select sort, the least 3 numbers is sorted
+1 2 4 5
+1 2 4 5
+</code></pre>
+
+<p><strong>从方法3开始没有看，而且原来的代码跟上面的讲解也是不是很对应的，要自己都整理一下。</strong></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E6%95%B0%E7%BB%84%E4%B8%AD%E5%87%BA%E7%8E%B0%E6%AC%A1%E6%95%B0%E8%B6%85%E8%BF%87%E4%B8%80%E5%8D%8A%E7%9A%84%E6%95%B0%E5%AD%97/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：数组中出现次数超过一半的数字</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/04-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/rl-on-policy%E6%8E%A7%E5%88%B6%E7%9A%84%E8%BF%91%E4%BC%BC%E6%96%B9%E6%B3%95/">
+            <span class="next-text nav-default">RL on-policy控制的近似方法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

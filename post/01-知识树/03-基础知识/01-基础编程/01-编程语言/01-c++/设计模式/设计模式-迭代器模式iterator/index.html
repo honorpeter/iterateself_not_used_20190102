@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 迭代器模式（Iterator） - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 23:46:07&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89&amp;rsquo; title: 设计模式 迭代器模式（Iterator） wordpress_id: 7183 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8Fiterator/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 迭代器模式（Iterator）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 23:46:07&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89&rsquo; title: 设计模式 迭代器模式（Iterator） wordpress_id: 7183 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8Fiterator/" /><meta property="article:published_time" content="2018-07-27T20:05:57&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T20:05:57&#43;00:00"/>
+<meta itemprop="name" content="设计模式 迭代器模式（Iterator）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 23:46:07&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89&rsquo; title: 设计模式 迭代器模式（Iterator） wordpress_id: 7183 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL">
+
+
+<meta itemprop="datePublished" content="2018-07-27T20:05:57&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T20:05:57&#43;00:00" />
+<meta itemprop="wordCount" content="1029">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 迭代器模式（Iterator）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 23:46:07&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89&rsquo; title: 设计模式 迭代器模式（Iterator） wordpress_id: 7183 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 迭代器模式（Iterator）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 1029 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#迭代器模式-iterator">迭代器模式（Iterator）</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 23:46:07+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89/">http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e8%bf%ad%e4%bb%a3%e5%99%a8%e6%a8%a1%e5%bc%8f%ef%bc%88iterator%ef%bc%89&rsquo;
+title: 设计模式 迭代器模式（Iterator）
+wordpress_id: 7183
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="迭代器模式-iterator">迭代器模式（Iterator）</h1>
+
+<ol>
+<li><p>迭代器模式：提供一种方法顺序遍历一个聚集对象，为不同的聚集结构提供遍历所需接口，而不暴露对象内部的表示。</p></li>
+
+<li><p>在高级编程语言如c#、c++、java等，都已经把迭代器模式设计进语言的一部分。</p></li>
+
+<li><p>迭代器模式分离了对象的遍历行为，既不暴露内部结构又可以让外部代码透明的访问集合内部的数据。</p></li>
+</ol>
+
+<p>3.10 Iterator 模式
+-问题
+Iterator 模式应该是最为熟悉的模式了，最简单的证明就是我在实现 Composite 模式、 Flyweight模式、Observer模式中就直接用到了 STL提供的Iterator来遍历Vector或者List</p>
+
+<p>数据结构。</p>
+
+<p>Iterator 模式也正是用来解决对一个聚合对象的遍历问题，将对聚合的遍历封装到一个</p>
+
+<p>类中进行，这样就避免了暴露这个聚合对象的内部表示的可能。</p>
+
+<p>■模式选择
+Iterator模式典型的结构图为:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jK5G7k7ic1.png?imageslim" alt="mark" /></p>
+
+<p>图 2-1： Iterator Pattern 结构图</p>
+
+<p>Iterator 模式中定义的对外接口可以视客户成员的便捷定义，但是基本的接口在图中的 Iterator中已经给出了（参考STL的Iterator就知道了）。</p>
+
+<p>-实现
+♦完整代码示例（code）</p>
+
+<p>iterator.h</p>
+
+<pre><code>#ifndef DESIGN_PATTERNS_AGGREGATE_H
+#define DESIGN_PATTERNS_AGGREGATE_H
+
+#include &lt;vector&gt;
+
+class Iterator;
+
+class Aggregate {
+public:
+  virtual ~Aggregate() {}
+  virtual Iterator* CreateIterator() = 0;
+};
+
+class List: public Aggregate {
+public:
+  Iterator* CreateIterator();
+  int Count();
+  int operator[] (int) const;
+  void Insert(int);
+
+private:
+  std::vector &lt;int&gt; items_;
+};
+
+class Iterator {
+public:
+  virtual int First() = 0;
+  virtual int Next() = 0;
+  virtual bool IsDone() = 0;
+  virtual int CurrentItem() = 0;
+};
+
+class ListIterator: public Iterator {
+public:
+  ListIterator() {}
+  ListIterator(List*);
+  int First();
+  int Next();
+  bool IsDone();
+  int CurrentItem();
+
+private:
+  int current_;
+  List *aggregate_;
+};
+
+
+#endif //DESIGN_PATTERNS_AGGREGATE_H
+</code></pre>
+
+<p>iterator.cpp</p>
+
+<pre><code>#include &quot;iterator_.h&quot;
+
+Iterator* List::CreateIterator() {
+  return new ListIterator(this);
+}
+
+int List::Count() {
+  return (int)items_.size();
+}
+
+int List::operator[] (int index) const {
+  return items_[index];
+}
+
+void List::Insert(int value) {
+  items_.push_back(value);
+}
+
+ListIterator::ListIterator(List *aggregate): aggregate_(aggregate), current_(0) {}
+
+int ListIterator::First() {
+  return (*aggregate_)[0];
+}
+
+int ListIterator::Next() {
+  int next = -1;
+  if(++current_ &lt; aggregate_-&gt;Count())
+    next =  (*aggregate_)[current_];
+  return next;
+}
+
+bool ListIterator::IsDone() {
+  return current_ &gt;= aggregate_-&gt;Count();
+}
+
+int ListIterator::CurrentItem() {
+  return (*aggregate_)[current_];
+}
+</code></pre>
+
+<p>main.cpp</p>
+
+<pre><code>#include &quot;iterator_.h&quot;
+#include &lt;iostream&gt;
+
+
+int main() {
+    List *list_;
+    Iterator *list_iterator_;
+    list_ = new List();
+    list_-&gt;Insert(1);
+    list_-&gt;Insert(2);
+    list_-&gt;Insert(3);
+    list_iterator_ = list_-&gt;CreateIterator();
+    std::cout &lt;&lt; list_iterator_-&gt;CurrentItem() &lt;&lt; std::endl;
+    std::cout &lt;&lt; list_iterator_-&gt;First() &lt;&lt; std::endl;
+    std::cout &lt;&lt; list_iterator_-&gt;Next() &lt;&lt; std::endl;
+    std::cout &lt;&lt; list_iterator_-&gt;IsDone() &lt;&lt; std::endl;
+    std::cout &lt;&lt; list_iterator_-&gt;Next() &lt;&lt; std::endl;
+    std::cout &lt;&lt; list_iterator_-&gt;Next() &lt;&lt; std::endl;
+    std::cout &lt;&lt; list_iterator_-&gt;IsDone() &lt;&lt; std::endl;
+    delete list_;
+    delete list_iterator_;
+
+
+
+    return 0;
+}
+</code></pre>
+
+<p>♦代码说明</p>
+
+<p>Iterator模式的实现代码很简单，实际上为了更好地保护Aggregate的状态，我们可以尽</p>
+
+<p>量减小Aggregate的public接口，而通过将Iterator对象声明位Aggregate的友元来给予Iterator 一些特权，获得访问Aggregate私有数据和方法的机会。</p>
+
+<p>■讨论
+Iterator模式的应用很常见，我们在开发中就经常会用到STL中预定义好的Iterator来对 STL类进行遍历（Vector、Set等）。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8Fadapter/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 适配器模式（Adapter）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8Fvisitor/">
+            <span class="next-text nav-default">设计模式 访问者模式（Visitor）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

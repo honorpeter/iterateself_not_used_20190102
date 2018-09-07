@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>设计模式 桥接模式（Bridge） - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-31 23:40:57&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89&amp;rsquo; title: 设计模式 桥接模式（Bridge） wordpress_id: 7170 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8Fbridge/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="设计模式 桥接模式（Bridge）" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-31 23:40:57&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89&rsquo; title: 设计模式 桥接模式（Bridge） wordpress_id: 7170 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8Fbridge/" /><meta property="article:published_time" content="2018-07-27T19:08:30&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T19:08:30&#43;00:00"/>
+<meta itemprop="name" content="设计模式 桥接模式（Bridge）">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 23:40:57&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89&rsquo; title: 设计模式 桥接模式（Bridge） wordpress_id: 7170 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为">
+
+
+<meta itemprop="datePublished" content="2018-07-27T19:08:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T19:08:30&#43;00:00" />
+<meta itemprop="wordCount" content="1990">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="设计模式 桥接模式（Bridge）"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 23:40:57&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89&rsquo; title: 设计模式 桥接模式（Bridge） wordpress_id: 7170 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">设计模式 桥接模式（Bridge）</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 1990 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#design-patterns">- Design Patterns</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#桥接模式-bridge-是用来解决什么问题的">桥接模式（Bridge）是用来解决什么问题的？</a></li>
+<li><a href="#bridge-模式介绍">Bridge 模式介绍</a></li>
+<li><a href="#完整代码">完整代码</a>
+<ul>
+<li><a href="#代码如下">代码如下</a></li>
+</ul></li>
+<li><a href="#bridge-桥接模式讨论">Bridge 桥接模式讨论</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-31 23:40:57+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89/">http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89/</a>
+slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e6%a1%a5%e6%8e%a5%e6%a8%a1%e5%bc%8f%ef%bc%88bridge%ef%bc%89&rsquo;
+title: 设计模式 桥接模式（Bridge）
+wordpress_id: 7170
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="design-patterns">- Design Patterns</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
+
+<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
+
+<li><p><a href="https://www.cnblogs.com/gousheng107/p/8005692.html">一天学习一个设计模式之桥接模式</a></p></li>
+
+<li><p>《大话设计模式》作者 程杰</p></li>
+</ol>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="桥接模式-bridge-是用来解决什么问题的">桥接模式（Bridge）是用来解决什么问题的？</h1>
+
+<p>面向对象系统设计的时候很注意：</p>
+
+<ul>
+<li><p>尽可能地提高系统模块内部的内聚（Cohesion）</p></li>
+
+<li><p>尽可能降低模块间的耦合（Coupling）。</p></li>
+</ul>
+
+<p>但是这两点还是很难把握的，比如，我们经常会：</p>
+
+<ol>
+<li><p>客户给了你一个需求，于是使用一个类来实现 A ;</p></li>
+
+<li><p>OK，现在客户需求变化了，想要添加一个算法，于是我们改变设计，抽象出一个基类 A0，然后再定义两个具体类 A01 和 A02 来实现不同的算法;</p></li>
+
+<li><p>OK，现在客户又说，要可以对应不同的操作系统，于是我们再抽象一个层次，作为一个抽象基类 A，再分别为每个操作系统派生具体类 A0和 A1 来实现不同的操作系统上的客户需求，然后再 A0、A1 对应的操作系统上再分别实现算法 A00、A01、A10、A11。</p></li>
+
+<li><p>OK，现在客户又要添加一种新的算法 &hellip;&hellip;..</p></li>
+
+<li><p>这样我们陷入了一个需求变化的郁闷当中，也因此带来了类的迅速膨胀。</p></li>
+</ol>
+
+<p>Bridge模式则正是解决了这类问题。<strong>是这样吗？怎么解决的？</strong></p>
+
+<h1 id="bridge-模式介绍">Bridge 模式介绍</h1>
+
+<p>Bridge 模式的结构图为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lECJF29fEK.png?imageslim" alt="mark" /></p>
+
+<p>从结构图我们可以看到，系统被分为两个相对独立的部分，左边是抽象部分，右边是实现部分，这两个部分可以互相独立地进行修改。</p>
+
+<p>例如，在上面的问题中：<strong>没明白这一段？</strong></p>
+
+<ul>
+<li><p>当客户的需求变化的时候，比如用户需要从 Abstraction 派生一个具体子类时候，并不需要像上面通过继承的方式实现的时候需要添加子类 A01 和 A02 了。</p></li>
+
+<li><p>另外当算法添加的时候也只需要改变右边的实现，即添加一个具体化子类，而左边不用在变化，也不用添加具体子类了。</p></li>
+</ul>
+
+<h1 id="完整代码">完整代码</h1>
+
+<p>比如说，我现在想开发一些手机软件，我们可以按手机品牌来实现：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HAECF29clG.png?imageslim" alt="mark" /></p>
+
+<p>也可以按软件分类来实现：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AA2mcB1iF1.png?imageslim" alt="mark" /></p>
+
+<p>由于实现的方式有多种，桥接模式的核心意图就是把这些实现独立出来，让它们各自地变化。这就可以使每种实现的变化不会影响其他实现，从而达到应对变化的目的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/JehDDCkFCf.png?imageslim" alt="mark" /></p>
+
+<h2 id="代码如下">代码如下</h2>
+
+<p>bridge.h：</p>
+
+<pre><code class="language-cpp">#ifndef DESIGN_PATTERNS_BRIDGE_H
+#define DESIGN_PATTERNS_BRIDGE_H
+
+
+//手机软件
+class HandsetSoft {
+public:
+  virtual void run() {}
+};
+//手机游戏
+class HandsetGame: public HandsetSoft {
+public:
+  void run();
+};
+//手机通讯录
+class HandsetAddressList: public HandsetSoft {
+public:
+  void run();
+};
+
+
+
+//手机牌子
+class HandsetBrand {
+public:
+  HandsetBrand() {}
+  HandsetBrand(HandsetSoft *);
+  virtual ~HandsetBrand() {}
+  virtual void run() {}
+protected:
+  HandsetSoft *handset_soft_;
+};
+class HandsetBrandM: public HandsetBrand {
+public:
+  HandsetBrandM() {}
+  HandsetBrandM(HandsetSoft *);
+  ~HandsetBrandM();
+  //这里虽然是调用的手机软件的run，但是这个环境是M牌手机的，
+  //也就是说，这个类给这个游戏提供了一个运行的环境。
+  //这样，游戏就不用考虑它是用在什么环境下的，对于环境的支持在这个地方实现了
+  void run();
+};
+class HandsetBrandN: public HandsetBrand {
+public:
+  HandsetBrandN() {}
+  HandsetBrandN(HandsetSoft *);
+  ~HandsetBrandN();
+  void run();
+};
+
+
+#endif //DESIGN_PATTERNS_BRIDGE_H
+</code></pre>
+
+<p>bridge.cpp：</p>
+
+<pre><code class="language-cpp">#include &quot;bridge.h&quot;
+#include &lt;iostream&gt;
+
+void HandsetGame::run() {
+  std::cout &lt;&lt; &quot;run game&quot; &lt;&lt; std::endl;
+}
+void HandsetAddressList::run() {
+  std::cout &lt;&lt; &quot;run address list&quot; &lt;&lt; std::endl;
+}
+
+
+
+
+HandsetBrand::HandsetBrand(HandsetSoft *handset_soft): handset_soft_(handset_soft) {}
+
+HandsetBrandM::HandsetBrandM(HandsetSoft *handset_soft): HandsetBrand(handset_soft) {}
+HandsetBrandM::~HandsetBrandM() {
+  delete handset_soft_;
+}
+void HandsetBrandM::run() {
+  std::cout &lt;&lt; &quot;handset brand M: &quot;;
+  handset_soft_-&gt;run();
+}
+
+HandsetBrandN::HandsetBrandN(HandsetSoft *handset_soft): HandsetBrand(handset_soft) {}
+HandsetBrandN::~HandsetBrandN() {
+  delete handset_soft_;
+}
+void HandsetBrandN::run() {
+  std::cout &lt;&lt; &quot;handset brand N: &quot;;
+  handset_soft_-&gt;run();
+}
+</code></pre>
+
+<p>main.cpp：</p>
+
+<pre><code>#include &quot;bridge.h&quot;
+
+
+
+//可见，当开发一个新的手机软件的时候，也不用考虑它是用在哪种手机上的，因为环境已经都在Brand里了。
+//当想要支持新的手机的时候，也只需要提供一个这个手机的环境，这时手机软件都可以移植过来了。
+//可见，这样就吧手机软件和软件运行的环境区分开了
+int main() {
+    HandsetBrand *handset_brand_;
+
+    //给牌子M开发的两个软件
+    handset_brand_ = new HandsetBrandM(new HandsetGame);
+    handset_brand_-&gt;run();
+    handset_brand_ = new HandsetBrandM(new HandsetAddressList);
+    handset_brand_-&gt;run();
+
+    //给牌子N开发的两个软件
+    handset_brand_ = new HandsetBrandN(new HandsetGame);
+    handset_brand_-&gt;run();
+    handset_brand_ = new HandsetBrandN(new HandsetAddressList);
+    handset_brand_-&gt;run();
+
+
+    delete handset_brand_;
+
+
+
+    return 0;
+}
+</code></pre>
+
+<p>可见：</p>
+
+<ul>
+<li><p>当开发一个新的手机软件的时候，也不用考虑它是用在哪种手机上的，因为环境已经都在 Brand 里了。</p></li>
+
+<li><p>当想要支持新的手机的时候，也只需要提供一个这个手机的环境，这时手机软件都可以移植过来了。</p></li>
+</ul>
+
+<p>这样就吧手机软件和软件运行的环境区分开了</p>
+
+<h1 id="bridge-桥接模式讨论">Bridge 桥接模式讨论</h1>
+
+<p>桥接是一个接口，它与一方应该是绑定的，也就是解耦的双方中的一方必然是继承这个接口的，这一方就是实现方，而另一方正是要与这一方解耦的抽象方。</p>
+
+<p>如果不采用桥接模式，一般我们的处理方式是直接使用继承来实现，这样双方之间处于强链接，类之间关联性极强，如要进行扩展，必然导致类结构急剧膨胀。</p>
+
+<p>采用桥接模式，正是为了避免这一情况的发生，将一方与桥绑定，即实现桥接口，另一方在抽象类中调用桥接口（指向的实现类），这样桥方可以通过实现桥接口进行单方面扩展，而另一方可以继承抽象类而单方面扩展，而之间的调用就从桥接口来作为突破口，不会受到双方扩展的任何影响。<strong>厉害的。</strong></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+<ol>
+<li><p>对象的继承关系编译时已确定，所以无法在运行时修改从父类继承的实现。由于紧耦合，父类中任何的改变必然会导致子类发生变化。当需要复用子类，但继承下来的方法不合适时，必须重写父类或用其他类替代。这种依赖性限制了灵活性和复用性。</p></li>
+
+<li><p>合成／聚合复用原则：尽量使用合成和聚合而不是继承。可以保证每个类封装集中在单个任务上，不会出现规模太大的类及继承结构。</p></li>
+
+<li><p>桥接模式：抽象类和其派生类分离，各自实现自己的对象。若系统可以从多角度分类，且每种分类都可能变化，则把多角度分离独立出来，降低耦合。</p></li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8Ftemplate-method/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">设计模式 模板方法模式（Template Method）</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8Fabstract-factory/">
+            <span class="next-text nav-default">设计模式 抽象工厂模式（Abstract Factory）</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

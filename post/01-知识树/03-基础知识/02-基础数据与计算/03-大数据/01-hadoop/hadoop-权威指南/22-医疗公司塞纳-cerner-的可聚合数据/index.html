@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>22 医疗公司塞纳 (Cerner) 的可聚合数据 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第22章 第23章 第24章 医疗公司Cerner的可聚合数据 生物数据科学：用软件拯救生命 开源项目Cascading （作者：Ryan Brush 与 Micah Whit" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/03-%E5%A4%A7%E6%95%B0%E6%8D%AE/01-hadoop/hadoop-%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/22-%E5%8C%BB%E7%96%97%E5%85%AC%E5%8F%B8%E5%A1%9E%E7%BA%B3-cerner-%E7%9A%84%E5%8F%AF%E8%81%9A%E5%90%88%E6%95%B0%E6%8D%AE/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="22 医疗公司塞纳 (Cerner) 的可聚合数据" />
+<meta property="og:description" content="第22章 第23章 第24章 医疗公司Cerner的可聚合数据 生物数据科学：用软件拯救生命 开源项目Cascading （作者：Ryan Brush 与 Micah Whit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/03-%E5%A4%A7%E6%95%B0%E6%8D%AE/01-hadoop/hadoop-%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/22-%E5%8C%BB%E7%96%97%E5%85%AC%E5%8F%B8%E5%A1%9E%E7%BA%B3-cerner-%E7%9A%84%E5%8F%AF%E8%81%9A%E5%90%88%E6%95%B0%E6%8D%AE/" /><meta property="article:published_time" content="2018-06-27T07:51:29&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-27T07:51:29&#43;00:00"/>
+<meta itemprop="name" content="22 医疗公司塞纳 (Cerner) 的可聚合数据">
+<meta itemprop="description" content="第22章 第23章 第24章 医疗公司Cerner的可聚合数据 生物数据科学：用软件拯救生命 开源项目Cascading （作者：Ryan Brush 与 Micah Whit">
+
+
+<meta itemprop="datePublished" content="2018-06-27T07:51:29&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-27T07:51:29&#43;00:00" />
+<meta itemprop="wordCount" content="5639">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="22 医疗公司塞纳 (Cerner) 的可聚合数据"/>
+<meta name="twitter:description" content="第22章 第23章 第24章 医疗公司Cerner的可聚合数据 生物数据科学：用软件拯救生命 开源项目Cascading （作者：Ryan Brush 与 Micah Whit"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">22 医疗公司塞纳 (Cerner) 的可聚合数据</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-27 </span>
+        
+        <span class="more-meta"> 5639 words </span>
+        <span class="more-meta"> 12 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#22-1从多cpu到语义集成">22.1从多CPU到语义集成</a></li>
+<li><a href="#22-2-进入-apache-crunch">22.2 进入 Apache Crunch</a></li>
+<li><a href="#22-3建立全貌">22.3建立全貌</a></li>
+<li><a href="#22-4集成健康医疗数据">22.4集成健康医疗数据</a></li>
+<li><a href="#22-5框架之上的可组合性">22.5框架之上的可组合性</a></li>
+<li><a href="#22-6-下一步">22.6 下一步</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>第22章 第23章 第24章</p>
+
+<p>医疗公司Cerner的可聚合数据 生物数据科学：用软件拯救生命 开源项目Cascading</p>
+
+<p>（作者：Ryan Brush 与 Micah Whitacre）</p>
+
+<p>一直以来，健康医疗信息技术所做的事情是将现有流程用自动化的方式来实现。 然而这一切正在发生改变。随着人们对提高治疗质量和控制医疗成本的诉求日益 增长，迫切需要有更好的系统来支撑这些目标。接下来，我们将看Cerner公司是 如何用Hadoop生态系统来理解健康医疗的概念并构建方案来解决这些问题的。</p>
+
+<h5 id="22-1从多cpu到语义集成">22.1从多CPU到语义集成</h5>
+
+<p>Cerner公司长期致力于将技术应用于健康医疗，并在很长的一段时间里将重点放在电 子医疗记录上。然而，新的问题需要一种更宽泛的方法，这驱使我们去研究Hadoop。</p>
+
+<p>2009年时，我们需要为医疗记录建立更好的搜索索引。由此而引出的处理需求无 法通过其他架构简单解决。搜索索引需要以高昂的代价处理临床文挡：从文档中 抽取术语，并解析其与其他术语的关系。例如，如果用户键入“心脏病” 一词， 我们希望返回的是探讨心肌梗塞的文档。这一处理，代价相当高，比如大文档， 它需要占用数秒钟的CPU时间，而我们想要将其应用于数以百万计的文档。简而 言之，我们需要投入许多CPU来处理这个问题，并且希望处理过程能够经济合算。</p>
+
+<p>在其他可选方案中，我们曾经考虑过用一种基于分段式事件驱动架构（SEDA，staged</p>
+
+<p>event-driven architecture）的方法来成规模地抽取文档。但是Hadoop在满足一项重 要需求方面脱颖而出：我们需要在数小时或者更快的时间内频繁地反复处理数以 百万计的文档。面向临床文档的知识抽取的逻辑在快速改进中，我们需要将这种 改进迅速推向世界。在Hadoop中，这仅仅意味着在已有的数据之上运行一个新版 本的MapReduce作业，然后处理文档被载入一个Apache Solr服务器集群以支持 应用查询。</p>
+
+<p>这些早期的成功为后期更多涉足的项目打好了基础。这一系统类型及其数据可被 用作经验基础，以帮助控制成本以及改善全部人口的医疗水平。由于健康医疗数 据经常以碎片化的形式分布在各系统和机构中，我们需要首先收集所有这些数据 并理解其含义。</p>
+
+<p>当有了大量的数据源和格式，甚至标准化的数据模型有待解析时，我们面临着一 个庞大的语义集成问题。最大的挑战并非来自数据的规模一一众所周知Hadoop可 以根据需要扩展一一而是来自于为满足我们的需求，对数据进行清理、管理和转 换所带来的极端复杂性。我们需要更高级的工具来管理这一复杂性。</p>
+
+<h5 id="22-2-进入-apache-crunch">22.2 进入 Apache Crunch</h5>
+
+<p>收集并分析这些各不相干的数据集会引发出许多需求，其中以下几点最为突出。</p>
+
+<p>•需要将许多处理步骤分割成模块，这些模块可被轻易地组装进一条复杂 的管线。</p>
+
+<p>•需要提供一个比原始MapReduce更高级的编程模型。</p>
+
+<p>•需要处理医疗记录的复杂结构，该结构具有数百个独一无二的字段和数 级嵌套子结构。</p>
+
+<p>在这一案例中，我们尝试过多种选择，包括Pig、Hive和Cascading,每一种效果 都不错。我们继续使用Hive进行一些特别的分析处理，然而当把任意逻辑应用于 我们的复杂数据结构时，Hive却变得很不灵便。然后我们听说了 Crunch（参见第 18章），Josh Wills®领导的一个项目，与Google的FlumeJava系统相类似。Crunch 提供了一个简单的基于Java的编程模型以及对记录的静态类型检查，完美贴合我 们Java开发者社区的需求以及所处理的数据类型。</p>
+
+<p>①编注：前谷歌广告系统工程师，曾经专门写书讲述了工业界和学术界在机器学习方面的异 同，现为著名信息聚合平台Slack的首席数据工程师。</p>
+
+<h5 id="22-3建立全貌">22.3建立全貌</h5>
+
+<p>规模化的理解和管理健康医疗需要大量干净、规范化和可靠的数据。不幸的是， 这样的数据通常分布在许多数据源中，合并起来较为困难且易于出错。医院、医 生办公室、诊所和药房各自拥有个人记录的一部分，以行业标准的格式，诸如 CCDs(Continuity of Care Documents), HL7(Health Level 7，一种健康医疗数据交换 格式)、CSV文件或专有格式存储。</p>
+
+<p>我们面临的挑战是，如何获取这一数据，将其转换为一种干净、集成的表现形 式，并使用它创建注册信息，以帮助患者管理明确的病情、度量健康医疗的可操 作方面，并支持各种分析，如图22-1所示。</p>
+
+<p>Sources    Applications</p>
+
+<p>22-1.可操作的数据流</p>
+
+<p>一个至关重要的步骤是，创建一个我们可以依赖的干净的、语义集成的基础，这 也是本章实例学习的聚焦点。我们先将数据规范化为一种通用结构。这一系统的 早期版本使用了不同的模型，但是后来都已经迁移至Avro以便在各处理步骤之间 存储和共享数据。范例22-1给出了一个简化的Avro IDL以描述我们提出的通用 结构。</p>
+
+<p>范例22-1.用于通用数据类型的Avro IDL</p>
+
+<p>@namespace( &ldquo;com. cerner • example1*) protocol PersonProtocol {</p>
+
+<p>record Demographics { string firstName; string lastName; string dob;</p>
+
+<p>}</p>
+
+<p>record LabResult { string personld; string labDate; int labld; int labTypeld; int value;</p>
+
+<p>}</p>
+
+<p>record Medication { string personld; string medicationld; string dose; string doseUnits; string frequency;</p>
+
+<p>•    •參</p>
+
+<p>}</p>
+
+<p>record Diagnosis { string personld; string diagnosisld; string date;</p>
+
+<p>•    •參</p>
+
+<p>}</p>
+
+<p>record Allergy { string personld; int allergyld; int substanceld;</p>
+
+<p>}</p>
+
+<p>/**</p>
+
+<p>* Represents a person&rsquo;s record from a single source */</p>
+
+<p>record PersonRecord { string personld;</p>
+
+<p>Demographics demographics; array<LabResult> labResults; array<Allergy> allergies; array<Medication> medications; array<Diagnosis> diagnoses;</p>
+
+<p>• • •</p>
+
+<p>}</p>
+
+<p>注意，这里多种数据类型都嵌套在一条通用个人记录中，而不是分散在不同数据 集中。这种结构支持对这类数椐的最常见的使用模式(查看一条完整的记录)无需对 数据集进行大量昂贵的连接操作。</p>
+
+<p>将数据写入PCollection<PersonRecord>使用了一系列Crunch管线，这样可以</p>
+
+<p>隐藏每个源的复杂性，并提供了一个与原始规范化记录数据进行交互的简单接 口。在幕后，每个PersonRecord可以存储在HDFS中或者作为HBase的一行存 储，其中每个人的数据元素分布在列簇(column families)和列描述(column qualifiers) 中。聚合的结果看起来如表22-1所示。</p>
+
+<p>表22-1.聚合数据</p>
+
+<table>
+<thead>
+<tr>
+<th>源医生办公室</th>
+<th>个人ID12345</th>
+<th>个人统计信息Abraham Lincoln&hellip;</th>
+<th>数据糖尿病诊断，实验室结果</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>医院</td>
+<td>98765</td>
+<td>Abe Lincoln &hellip;</td>
+<td>流感诊断</td>
+</tr>
+
+<tr>
+<td>药房</td>
+<td>98765</td>
+<td>Abe Lincoln &hellip;</td>
+<td>过敏，药物</td>
+</tr>
+
+<tr>
+<td>诊所</td>
+<td>76543</td>
+<td>A，Lincoln &hellip;</td>
+<td>实验室结果</td>
+</tr>
+</tbody>
+</table>
+
+<p>希望从一些获得授权的源中检索数据的用户调用一个“retriever” API，就可以轻 松地为被请求数据生成一个Crunch PCollection：</p>
+
+<p>Set<String> sources =&hellip;;</p>
+
+<p>PCollection<PersonRecord> personRecords = RecordRetriever.getData(pipeline, sources);</p>
+
+<p>这种retriever模式允许用户载入数据集，而无需知道这些数据集物理上是如何及 在哪里存储的。在本书编写的同时，这一模式的某些用途正被新兴的Kite SDK(<a href="http://kitesdk.org/">http://kitesdk.org/)</a>%e6%89%80%e5%8f%96%e4%bb%a3%ef%bc%8c%e7%94%a8%e4%ba%8e%e5%9c%a8Hadoop%e4%b8%ad%e7%ae%a1%e7%90%86%e6%95%b0%e6%8d%ae%e3%80%82%e6%a3%80%e7%b4%a2%e5%88%b0%e7%9a%84)<a href="http://kitesdk.org/">所取代，用于在Hadoop中管理数据。检索到的</a>%e6%89%80%e5%8f%96%e4%bb%a3%ef%bc%8c%e7%94%a8%e4%ba%8e%e5%9c%a8Hadoop%e4%b8%ad%e7%ae%a1%e7%90%86%e6%95%b0%e6%8d%ae%e3%80%82%e6%a3%80%e7%b4%a2%e5%88%b0%e7%9a%84) PCollection<PersonRecord>中的每个条目代表了一个人在单一源中的完整医疗</p>
+
+<p>记录。</p>
+
+<h5 id="22-4集成健康医疗数据">22.4集成健康医疗数据</h5>
+
+<p>从原始数据到健康医疗相关的问题答案之间，有着许多处理步骤。这里我们讨论 其中一个步骤：将来自多个源的、关于同一个人的数据集中起来。</p>
+
+<p>不幸的是，在美国缺乏通用的病人标识符，再加上噪声数据的影响，例如不同系 统中个人姓名和统计资料的变异，使得跨越多个源将一个人的数据精确地统一起 来非常困难。分布在多个源中的信息可能看起来如表22-2所示。</p>
+
+<table>
+<thead>
+<tr>
+<th>表22-2.来自多个源的数据</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>源室</td>
+<td>个人ID12345</td>
+<td>名Abraham</td>
+<td>姓Lincoln</td>
+<td>地址• * &lsquo;* &lsquo; ；• * t    J A • .    •广、&rsquo; 1- •1600 Pennsylvania Ave.</td>
+<td>别性M</td>
+</tr>
+
+<tr>
+<td>医院</td>
+<td>98765</td>
+<td>Abe</td>
+<td>Lincoln</td>
+<td>Washington, DC</td>
+<td>M</td>
+</tr>
+
+<tr>
+<td>医院</td>
+<td>45678</td>
+<td>Mary Todd</td>
+<td>Lincoln</td>
+<td>1600 Pennsylvania Ave.</td>
+<td>F</td>
+</tr>
+
+<tr>
+<td>诊所</td>
+<td>76543</td>
+<td>A.</td>
+<td>Lincoln</td>
+<td>Springfield，IL</td>
+<td>M</td>
+</tr>
+</tbody>
+</table>
+
+<p>在健康医疗领域，上述数据统一问题通常是通过一个称为“企业级患者主索引” (EMPI, Enterprise Master Patient Index)的系统来解决的。一个EMPI可以从多个系</p>
+
+<p>统中获取数据，并确定哪些记录确实是对应了同一个人。有很多途径可以达到这 种目的，例如，明确声明各自关系的人类，或是能够识别共性的复杂算法。</p>
+
+<p>在某些情况下，我们可以从外部系统载入EMPI信息，而在另一些情况下，我们 可以在Hadoop内对其进行计算。关键在于我们可以将这一信息提供给基于 Crunch的管线使用。其结果便是PCollection<EMPIRecord>，数据结构如下：</p>
+
+<p>@namespace(Hcom.cerner.example&rdquo;) protocol EMPIProtocol {</p>
+
+<p>record PersonRecordld { string sourceld; string personld }</p>
+
+<p>/**</p>
+
+<p>*■ Represents an EMPI match.</p>
+
+<p>*/</p>
+
+<p>record EMPIRecOrd { string empild;</p>
+
+<p>array<PersonRecordld> personlds;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>给定这一结构中数据的EMPI信息，PCollection<EMPIRecord>将会包含类似于</p>
+
+<p>表22-3. EMPI数据</p>
+
+<p>EMPI标识符    卜人记录旧(&lt;源ID,个人ID&gt;)</p>
+
+<dl>
+<dt>EMPI-1    :offc-135,    12345〉</dt>
+</dl>
+
+<p>:hspt-246, 98765〉</p>
+
+<p>_:clnc-791，76543〉</p>
+
+<p>EMPI-2    :hspt-802,    45678〉</p>
+
+<p>为了将所提供的 PCollection<EMPIRecord>和 PCollection<PersonRecord> 里属于同一个人的医疗记录组合起来，必须将所收集的数据转换成PTable,并采 用一个通用键做为键。在这种情况下，PairxString,String〉(其中第一个值为 sourceld,第二个值为personld)将确保采用唯一的键值进行连接。</p>
+
+<p>第一步是从所收集的数据中的每个EMPIRecord里提取通用键:</p>
+
+<p>PCollection<EMPIRecord> empiRecords =</p>
+
+<p>PTable<Pair<String> String〉， EMPIRecord〉 keyedEmpiRecords = empiRecords.parallelDo(</p>
+
+<p>new DoFn<EMPIRecord, Pair<Pair<String> String〉, EMPIRecord&gt;&gt;() {</p>
+
+<p>^Override</p>
+
+<p>public void process(EMPIRecord input,</p>
+
+<p>Emitter&lt;Pair&lt;Pair&lt;StringJ String〉， EMPIRecord〉〉 emitter) {</p>
+
+<p>for (PersonRecordld recordld: input•getPersonlds()) { emitter.emit(Pair.of(</p>
+
+<p>Pair.of(recordld.getSourceld(), recordld.getPersonld()), input));</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>tableOf(pairs(strings()， strings()), records(EMPIRecord.class)</p>
+
+<p>);</p>
+
+<p>下一步，需要从每个PersonRecord里提取相同的键：</p>
+
+<p>PCollection<PersonRecord> personRecords =</p>
+
+<p>PTable<Pair<String, String〉, PersonRecord> keyedPersonRecords = personRecords.by(</p>
+
+<p>new MapFn<PersonRecord, Pair<StringJ String>&gt;() {</p>
+
+<p>^Override</p>
+
+<p>public Pair<String> String〉 map(PersonRecord input) { return Pair.of(input.getSourceldO^ input.getPersonld());</p>
+
+<p>}</p>
+
+<p>}, pairs(strings(), strings()));</p>
+
+<p>连接这两个 PTable 对象将返回 PTable<Pair<String，String〉,PairxEMPIRecord, PersonRecord>&gt;。此时，原键不再有用，于是我们用EMPI标识符作为该表 的键：</p>
+
+<p>PTable<String, PersonRecord> personRecordKeyedByEMPI = keyedPersonRecords .join(keyedEmpiRecords)</p>
+
+<p>.values()</p>
+
+<p>•by(new MapFn<Pair<PersonRecord, EMPIRecord>&gt;() {</p>
+
+<p>^Override</p>
+
+<p>public String map(Pair&lt;PersonRecord, EMPIRecord〉 input) { return input.second().getEmpiId();</p>
+
+<p>}</p>
+
+<p>strings。))；</p>
+
+<p>最后一步是通过键将表进行分组，以保证所有要作为一个完整集合处理的数据被 聚合在一起：</p>
+
+<p>PGroupedTable<String> PersonRecord&gt; groupedPersonRecords = personRecordKeyedByEMPI.groupByKey();</p>
+
+<p>PGroupedTable将包含类似表22-4中的数据</p>
+
+<p>这种将数据源进行统一的逻辑只是一个更大规模执行流程的第一步。其他一些 Crunch下游功能基于这些步骤构建，以满足众多客户需求。在一个常见应用案例 中，通过将统一的PersonRecord的内容载入一个基于规则的处理模型以发布新 的临床诊断知识，这种方式解决了大量问题。例如，我们可以在那些记录之上运 行规则，从而判断一个糖尿病患者是否正在接受推荐疗法，并指出可以改进之 处。相似的规则集为了各种需求而存在，从一般健康问题到复杂病情管理。这种 逻辑可以是复杂的，并且对于不同的应用案例会存在许多变种，但逻辑的实现全 都依赖于构成Crunch管线的各功能模块。</p>
+
+<p>表22-4.已组合的EMPI数据</p>
+
+<p>EMPI标识符    可迭代的个人记录</p>
+
+<p>EMPI-1    {</p>
+
+<p>&ldquo;personld&rdquo;: &ldquo;12345&rdquo;,</p>
+
+<p>&ldquo;demographics&rdquo;: {</p>
+
+<p>&ldquo;firstName&rdquo;: &ldquo;Abraham&rdquo;, &ldquo;lastName&rdquo;: &ldquo;Lincoln&rdquo;, •</p>
+
+<p>&ldquo;labResults&rdquo;: [•••]</p>
+
+<p>h</p>
+
+<p>{</p>
+
+<p>&ldquo;personld&rdquo;: &ldquo;98765&rdquo;,</p>
+
+<p>&ldquo;demographics&rdquo;: {</p>
+
+<p>&ldquo;firstName11: &ldquo;Abe&rdquo;, &ldquo;lastName&rdquo;: &ldquo;Lincoln&rdquo;,&hellip;</p>
+
+<p>h</p>
+
+<p>■’diagnoses••:[…]</p>
+
+<p>{</p>
+
+<p>&ldquo;personld&rdquo;: &ldquo;98765&rdquo;,</p>
+
+<p>&ldquo;demographics&rdquo;: {</p>
+
+<p>&ldquo;firstName&rdquo;: nAbe’\ &ldquo;lastName&rdquo;: &ldquo;Lincoln&rsquo; .</p>
+
+<p>h</p>
+
+<p>&ldquo;medications&rdquo;: [&ldquo;.]},</p>
+
+<p>{</p>
+
+<p>&ldquo;personld&rdquo;: &ldquo;76543&rdquo;,</p>
+
+<p>■■demographics••: {</p>
+
+<p>&ldquo;firstName&rdquo;: ’’A.&rsquo; &ldquo;lastName&rdquo;: &ldquo;Lincoln&rsquo; •</p>
+
+<p>}</p>
+
+<p><em>1</em></p>
+
+<p>EMPI-2    {</p>
+
+<p>&ldquo;personld&rdquo;: &ldquo;45678&rdquo;,</p>
+
+<p>&ldquo;demographics&rdquo;: {</p>
+
+<p>•■firstName&rdquo;: HMary TodcT, &ldquo;lastName&rdquo;: &ldquo;Lincoln&rdquo;, .</p>
+
+<p>}</p>
+
+<h5 id="22-5框架之上的可组合性">22.5框架之上的可组合性</h5>
+
+<p>这里所描述的模式，呈现了以个人为中心的健康医疗的一个特定类别的问题。然 而，这一数据也可用作理解健康医疗的可操作性和系统性的基础，这对我们转换 和分析它的能力提出了新的要求。</p>
+
+<p>像Crunch这样的库能够帮助我们应对新兴的需求，因为它们有助于将我们的数据 和处理逻辑变得可组合化。相比单一、静态的数据处理框架，我们能够将功能和 数据集模块化，并且在新需求出现时对其进行重用。图22-2展示了组件如何以新 的方式彼此连接，其中每个方框作为一个或多个Crunch DoFns来实现。这里，我 们利用个人记录来识别糖尿病患者，推荐健康管理计划，同时采用那些可组合部 件来整合可操作的数据并推动健康系统分析。</p>
+
+<p>22-2.可组合的数据集和功能</p>
+
+<p>可组合性也使得对新问题空间的迭代变得更简单。当创建一种新的数据视图以回 答一类新问题时，我们能够借助现有的数据集和转换过程，发布我们的新版本。 随着问题变得更易于理解，该视图可以被迭代替换或更新。最终，这些新功能和 数据集对历史资产做出贡献，并被用于新的需求。其结果便是一个不断增长的数 据集目录，以支持不断增长的理解数据的需求。</p>
+
+<p>处理过程需要与Oozie相互协调。每当新的数据到达，在HDFS中的一个明确定 义的位置，将创建一个具有唯一标识符的新数据集。Oozie协调器(Oozie coordinators)观察该位置，并简单地发起Crunch任务来创建下游数据集，该数据 集随后可被其他协调器获得。在本书写作时，数据集和更新由UUIDs标识以保持 其唯一性。然而，我们正在进行一项处理，即将新数据放置在基于时间戳的分区 (timestamp-based partitions)中，以便更好地与Oozie的标称时间模型(Oozie’s nominal time model)—起工作0</p>
+
+<h5 id="22-6-下一步">22.6 下一步</h5>
+
+<p>我们正在关注两个主要步骤，从而更高效地将这一系统的价值最大化。</p>
+
+<p>首先，我们想要创建关于Hadoop生态系统及其支持库的规范化实践。本书和其他 地方都定义了很多优秀的实践，但是经常需要重要的专业知识来有效实现这些实 践。我们正在使用和建立库，从而使此类模式对于更大规模的受众来说变得明晰 且易得。</p>
+
+<p>通过将各种连接和处理模式构建进库，Crunch提供了一些好的例子。</p>
+
+<p>其次，我们不断增长的数据集目录引发了对简单且规范的数据管理的需求，这也 是对Crunch提供的处理特性的一个补充。在一些使用案例中，我们已采纳Kite SDK来满足这一需求，并希望有朝一日扩展其用途。</p>
+
+<p>最终目标为一个安全、可扩展的数据目录，以支持健康医疗领域的众多需求，包 括尚未出现的问题。事实证明Hadoop能够满足我们对数据和处理的需求，而更高 级的库正在使Hadoop广泛适用于更大规模的受众，以解决诸多问题。</p>
+
+<p><img src="Hadoop43010757_2cdb48_2d8748-276.jpg" alt="img" /></p>
+
+<p><img src="Hadoop43010757_2cdb48_2d8748-277.jpg" alt="img" /></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/03-%E5%A4%A7%E6%95%B0%E6%8D%AE/01-hadoop/hadoop-%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/20-%E5%85%B3%E4%BA%8Ehbase/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">20 关于HBase</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/03-%E5%A4%A7%E6%95%B0%E6%8D%AE/01-hadoop/hadoop-%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/25-%E5%85%B6%E4%BB%96/">
+            <span class="next-text nav-default">25 其他</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

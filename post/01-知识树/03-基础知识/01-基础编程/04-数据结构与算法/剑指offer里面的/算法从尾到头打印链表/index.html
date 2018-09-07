@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：从尾到头打印链表 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="相关资料 CodingInterviews 需要补充的 aaa MOTIVE aaa 题目 题目描述 输入一个链表，从尾到头打印链表每个节点的值。 输入描述 输入为链表的表头 输出描述 输出为需要打印的“新链表”" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：从尾到头打印链表" />
+<meta property="og:description" content="相关资料 CodingInterviews 需要补充的 aaa MOTIVE aaa 题目 题目描述 输入一个链表，从尾到头打印链表每个节点的值。 输入描述 输入为链表的表头 输出描述 输出为需要打印的“新链表”" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/" /><meta property="article:published_time" content="2018-06-27T08:01:33&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-27T08:01:33&#43;00:00"/>
+<meta itemprop="name" content="算法：从尾到头打印链表">
+<meta itemprop="description" content="相关资料 CodingInterviews 需要补充的 aaa MOTIVE aaa 题目 题目描述 输入一个链表，从尾到头打印链表每个节点的值。 输入描述 输入为链表的表头 输出描述 输出为需要打印的“新链表”">
+
+
+<meta itemprop="datePublished" content="2018-06-27T08:01:33&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-27T08:01:33&#43;00:00" />
+<meta itemprop="wordCount" content="1076">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：从尾到头打印链表"/>
+<meta name="twitter:description" content="相关资料 CodingInterviews 需要补充的 aaa MOTIVE aaa 题目 题目描述 输入一个链表，从尾到头打印链表每个节点的值。 输入描述 输入为链表的表头 输出描述 输出为需要打印的“新链表”"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：从尾到头打印链表</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-27 </span>
+        
+        <span class="more-meta"> 1076 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+<li><a href="#输入描述">输入描述</a></li>
+<li><a href="#输出描述">输出描述</a></li>
+</ul></li>
+<li><a href="#问题解决">问题解决</a>
+<ul>
+<li><a href="#首先我们想到的就是-反转链表">首先我们想到的就是<strong>反转链表</strong></a></li>
+<li><a href="#然后我们想到-是不是可以用栈呢-先进后出">然后我们想到，是不是可以用栈呢？先进后出</a></li>
+<li><a href="#既然用栈-那么可不可以递归呢">既然用栈，那么可不可以递归呢？</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ul>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>输入一个链表，从尾到头打印链表每个节点的值。</p>
+
+<h2 id="输入描述">输入描述</h2>
+
+<p>输入为链表的表头</p>
+
+<h2 id="输出描述">输出描述</h2>
+
+<p>输出为需要打印的“新链表”的表头</p>
+
+<h1 id="问题解决">问题解决</h1>
+
+<h2 id="首先我们想到的就是-反转链表">首先我们想到的就是<strong>反转链表</strong></h2>
+
+<p>首先我们想到的就是<strong>反转链表</strong>了，如果把链表反转了，然后再返回头，这样再次遍历的时候就相当于从尾到头打印了。嗯，是这样，但是有个问题：</p>
+
+<p>修改输入数据真的可行么？</p>
+
+<p>在面试时候，如果我们打算修改输入的数据，最好先问问面试官是不是允许修改</p>
+
+<p>因为这里的打印通常只是一个只读操作，因此我们实际上肯定不希望输入时候修改链表的内容的。</p>
+
+<h2 id="然后我们想到-是不是可以用栈呢-先进后出">然后我们想到，是不是可以用栈呢？先进后出</h2>
+
+<p>看到题目中的要求：从尾往头输出，好像可以把链表结点先放在栈里，然后再读出来。如下：</p>
+
+<p>每经过一个结点的时候，把该结点放到一个栈中。当遍历完整个链表后，再从栈顶开始逐个输出结点的值，此时输出的结点的顺序已经反转过来了。嗯，也是个不错的方法</p>
+
+<p>代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+#include &lt;stack&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+
+struct ListNode
+{
+public:
+    int val;
+    struct ListNode *next;
+
+    /*ListNode(int x) :
+    val(x), next(NULL)
+    {
+    }*/
+};
+
+
+class Solution
+{
+public:
+    vector&lt;int&gt; printListFromTailToHead(struct ListNode* head)
+    {
+        ListNode *node = head;
+        stack&lt;int&gt; st;
+        int count = 0;
+        //将值放在stack中
+        while (node != NULL)
+        {
+            cout &lt;&lt; node-&gt;val &lt;&lt; &quot;in stack&quot; &lt;&lt; endl;
+            st.push(node-&gt;val);
+            count++;
+            node = node-&gt;next;
+        }
+
+        //  为了效率我们静态vector开辟空间
+        vector&lt;int&gt; res(count);
+        cout &lt;&lt; &quot;count = &quot; &lt;&lt; count &lt;&lt; endl;
+        for (int i = 0; i &lt; count &amp;&amp; st.empty() != true; i++)
+        {
+            cout &lt;&lt; st.top() &lt;&lt; &quot;in vector&quot; &lt;&lt; endl;
+            // 如果静态开辟vector不能使用push_back 否则会在原来数据的基础上增加。的确的，看来vector还是需要总结下
+            // res.push_back(st.top( ));
+            res[i] = st.top();
+            st.pop();
+        }
+        return res;
+    }
+};
+
+
+
+
+
+int main()
+{
+    //初始化listNode
+    ListNode list[4];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = NULL;
+
+    Solution solu;
+    vector&lt;int&gt; res = solu.printListFromTailToHead(list);
+    //打印排序结果
+    cout &lt;&lt; &quot;there are &quot; &lt;&lt; res.size() &lt;&lt; &quot;datas in vector&quot; &lt;&lt; endl;
+    for (size_t i = 0; i &lt; res.size(); i++)
+    {
+        cout &lt;&lt; res[i] &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>1in stack
+2in stack
+3in stack
+4in stack
+count = 4
+4in vector
+3in vector
+2in vector
+1in vector
+there are 4datas in vector
+4
+3
+2
+1
+</code></pre>
+
+<h2 id="既然用栈-那么可不可以递归呢">既然用栈，那么可不可以递归呢？</h2>
+
+<p>递归在本质上就是一个栈结构，一般用栈可以解决的，也可以尝试使用递归，于是很自然地想到用递归来实现。因此我们可以这样：</p>
+
+<p>每访问到一个结点的时候，先递归输出它后面的结点，再输出该结点自身，这样链表的输出结构就反过来了。嗯</p>
+
+<p>算法流程如下</p>
+
+<ul>
+<li><p>只要当前节点不为NULL，也就是链表没到头，就一直递归</p></li>
+
+<li><p>在递归结束时，将元素压入</p></li>
+</ul>
+
+<p>这样当递归结束进行返回时，会将递归栈中的数据依次压入 vector 中，而压入的顺序就是栈中的顺序，即从尾到头。</p>
+
+<p>代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+
+#include &lt;stack&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+
+struct ListNode
+{
+public:
+    int val;
+    struct ListNode *next;
+
+    /*ListNode(int x) :
+    val(x), next(NULL)
+    {
+    }*/
+};
+
+class Solution
+{
+public:
+    vector&lt;int&gt; res;
+    vector&lt;int&gt; printListFromTailToHead(struct ListNode* head)
+    {
+        if (head != NULL)
+        {
+            printListFromTailToHead(head-&gt;next);
+            res.push_back(head-&gt;val);
+        }
+        return res;
+    }
+};
+
+
+
+int main()
+{
+    //初始化listNode
+    ListNode list[4];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = NULL;
+
+    Solution solu;
+    vector&lt;int&gt; res = solu.printListFromTailToHead(list);
+    //打印排序结果
+    cout &lt;&lt; &quot;there are &quot; &lt;&lt; res.size() &lt;&lt; &quot;datas in vector&quot; &lt;&lt; endl;
+    for (size_t i = 0; i &lt; res.size(); i++)
+    {
+        cout &lt;&lt; res[i] &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>there are 4datas in vector
+4
+3
+2
+1
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E5%85%A5%E9%97%A8%E7%BB%8F%E5%85%B8/02-%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 循环结构程序设计</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/03-%E5%A4%A7%E6%95%B0%E6%8D%AE/01-hadoop/hadoop-%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/24-%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEcascading/">
+            <span class="next-text nav-default">24 开源项目Cascading</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：二叉树的镜像 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-16 04:56:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f&amp;rsquo; title: 算法：二叉树的镜像 wordpress_id: 5820 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：二叉树的镜像" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-16 04:56:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f&rsquo; title: 算法：二叉树的镜像 wordpress_id: 5820 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%95%9C%E5%83%8F/" /><meta property="article:published_time" content="2018-08-03T14:09:40&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T14:09:40&#43;00:00"/>
+<meta itemprop="name" content="算法：二叉树的镜像">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-16 04:56:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f&rsquo; title: 算法：二叉树的镜像 wordpress_id: 5820 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原">
+
+
+<meta itemprop="datePublished" content="2018-08-03T14:09:40&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T14:09:40&#43;00:00" />
+<meta itemprop="wordCount" content="2397">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：二叉树的镜像"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-16 04:56:46&#43;00:00 layout: post link: http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f&rsquo; title: 算法：二叉树的镜像 wordpress_id: 5820 categories: - 随想与反思 tags: - NOT_ADD [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：二叉树的镜像</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 2397 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#not-add">- NOT_ADD</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+<li><a href="#输入描述"><strong>输入描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#遍历二叉树-交换每个结点的左右孩子">遍历二叉树，交换每个结点的左右孩子</a>
+<ul>
+<li><a href="#递归写法">递归写法</a></li>
+<li><a href="#非递归写法">非递归写法</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-16 04:56:46+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f/">http://106.15.37.116/2018/05/16/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%ba%8c%e5%8f%89%e6%a0%91%e7%9a%84%e9%95%9c%e5%83%8f&rsquo;
+title: 算法：二叉树的镜像
+wordpress_id: 5820
+categories:
+- 随想与反思
+tags:</p>
+
+<h2 id="not-add">- NOT_ADD</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<p>1.</p>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>操作给定的二叉树，将其变换为源二叉树的镜像。</p>
+
+<h2 id="输入描述"><strong>输入描述</strong></h2>
+
+<p>二叉树的镜像定义：源二叉树</p>
+
+<p>8
+6  10
+5  7  9  11</p>
+
+<p>镜像二叉树</p>
+
+<p>8
+10  6
+11  9  7  5</p>
+
+<p>需要注意的是，Mirror的时候，不是node里的值发生了变化，而是指向node的指针发生了变化，比如，对于根节点来说，它原先的左指针指向的 node 的 val 是 10，现在我这个左指针指向了之前的右边的 node，val 是10 。这个过程中 node本身的 val 并没有变，</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<p>通过画图，可知二叉树的镜像类似中间像放置了一面镜子，将源二叉树投射在镜子中。</p>
+
+<p>OK，我们立马想到，只要遍历二叉树，交换每个节点的左右孩子就行了。</p>
+
+<h2 id="遍历二叉树-交换每个结点的左右孩子">遍历二叉树，交换每个结点的左右孩子</h2>
+
+<h3 id="递归写法">递归写法</h3>
+
+<p>OK，递归方法如下：</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+};
+
+
+class Solution {
+public:
+	//注意，交换的是node，而不是交换node里面的值，这意味着只是node之间的指针发生了变化
+	void Mirror(TreeNode *pRoot) {
+		if (pRoot == NULL) {
+			return;
+		}
+		swap(pRoot-&gt;left, pRoot-&gt;right);
+		Mirror(pRoot-&gt;left);
+		Mirror(pRoot-&gt;right);
+	}
+};
+
+
+
+int main() {
+
+	//准备两个树
+	TreeNode tree[8];
+	tree[0].val = 8;
+	tree[0].left = &amp;tree[1];
+	tree[0].right = &amp;tree[2];
+	tree[1].val = 6;
+	tree[1].left = &amp;tree[3];
+	tree[1].right = &amp;tree[4];
+	tree[2].val = 10;
+	tree[2].left = &amp;tree[5];
+	tree[2].right = &amp;tree[6];
+	tree[3].val = 5;
+	tree[3].left = NULL;
+	tree[3].right = NULL;
+	tree[4].val = 7;
+	tree[4].left = NULL;
+	tree[4].right = NULL;
+	tree[5].val = 9;
+	tree[5].left = NULL;
+	tree[5].right = NULL;
+	tree[6].val = 11;
+	tree[6].left = NULL;
+	tree[6].right = NULL;
+
+	//打印出二叉树
+	cout &lt;&lt; &quot;原始二叉树&quot; &lt;&lt; endl;
+	cout &lt;&lt; tree[0].val &lt;&lt; endl;
+	cout &lt;&lt; tree[0].left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].right-&gt;val &lt;&lt; endl;
+	cout &lt;&lt; tree[0].left-&gt;left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].left-&gt;right-&gt;val &lt;&lt; &quot;  &quot;
+		&lt;&lt; tree[0].right-&gt;left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].right-&gt;right-&gt;val &lt;&lt; endl;
+
+
+
+	Solution solu;
+	solu.Mirror(tree);//比如，原来的tree[0].left 指向的是tree[1]，但是现在已经指向了tree[2]了。
+	cout &lt;&lt; &quot;Mirror 二叉树 &quot; &lt;&lt; endl;
+	cout &lt;&lt; tree[0].val &lt;&lt; endl;
+	cout &lt;&lt; tree[0].left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].right-&gt;val &lt;&lt; endl;
+	cout &lt;&lt; tree[0].left-&gt;left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].left-&gt;right-&gt;val &lt;&lt; &quot;  &quot;
+		&lt;&lt; tree[0].right-&gt;left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].right-&gt;right-&gt;val &lt;&lt; endl;
+
+	return 0;
+}
+</code></pre>
+
+<p>输出如下：</p>
+
+<pre><code>原始二叉树
+8
+6  10
+5  7  9  11
+Mirror 二叉树
+8
+10  6
+11  9  7  5
+</code></pre>
+
+<p>注：上面的代码，在打印tree的时候，不能再用tree[1]、tree[2] 等了，因为tree[0]指向的node已经不再是之前的node了，因此要通过-&gt;right -&gt;left 来输出。</p>
+
+<p>可见递归的版本还是很方便的。</p>
+
+<p>OK，我们再看下一些非递归的版本：</p>
+
+<p>于是我们实现了下面的递归，非递归的函数版本，其本质是相同的，就是把前序中序，后序遍历中的打印节点的过程，编程交换左右子树的过程，其中需要注意一点，就是交换后左右子树进行了交换，再往下走的时候，往左走往右走的过程需改变，原来的向右走，现在应该是向左走，</p>
+
+<h3 id="非递归写法">非递归写法</h3>
+
+<p>非递归的话，就是要自己遍历，有前序、中序、后续 三种，而且有广度优先和深度优先。</p>
+
+<p>代码如下：</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;stack&gt;
+using namespace std;
+
+
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+};
+
+
+class Solution {
+public:
+
+	//前序遍历 根左右
+	//注意：由于根后面才对左右子树进行访问，因此我们访问的是根左右，但是对应原来的tree的根右左
+	void MirrorPre(TreeNode *root) {
+		if (root == NULL) {
+			return;
+		}
+
+		stack&lt;TreeNode *&gt; nstack;
+		TreeNode *node = root;
+		while (node != NULL || nstack.empty() != true) {
+			while (node != NULL) {
+				//处理根结点
+				if (node-&gt;left != NULL || node-&gt;right != NULL) {
+					swap(node-&gt;left, node-&gt;right);
+				}
+				//注意，上面这个时候已经把左右调换了，所以下面这个left，实际上是对应原始tree的right
+				//实际上，我们不用管它对应的原始的tree的left还是right，因为对于新的tree来说的确是left。
+				nstack.push(node);//把根结点放到stack里面
+				node = node-&gt;left;//往左走
+			}
+			//已经往左走到头了，开始看看stack的最后一个的右。
+			if (nstack.empty() != true) {
+				node = nstack.top();
+				nstack.pop();
+				node = node-&gt;right;
+			}
+		}
+	}
+	//前序遍历 根左右 广度优先方法
+	void MirrorPreBFS(TreeNode *root) {
+		if (root == NULL) {
+			return;
+		}
+
+		stack&lt;TreeNode *&gt; nstack;
+		nstack.push(root);
+		//这样的话实际上从stack取出来的时候是根右左吧？对应原始的tree的根左右？
+		TreeNode *node = root;
+		while (nstack.empty() != true) {
+			node = nstack.top();
+			nstack.pop();
+			//  先交换, 然后递归左，接着递归右
+			//  相当与一次前序遍历
+			if (node-&gt;left != NULL || node-&gt;right != NULL) {
+				swap(node-&gt;left, node-&gt;right);
+			}
+			if (node-&gt;left != NULL) {
+				nstack.push(node-&gt;left);
+			}
+			if (node-&gt;right != NULL) {
+				nstack.push(node-&gt;right);
+			}
+		}
+	}
+
+
+	//中序遍历 左根右
+	//注意：由于访问后，依然要向右走，所以交换后，变成了向左走
+	void MirrorIn(TreeNode *root) {
+		if (root == NULL) {
+			cout &lt;&lt; &quot;The tree is NULL...&quot; &lt;&lt; endl;
+			return;
+		}
+
+		stack&lt;TreeNode *&gt; nstack;
+		TreeNode *node = root;
+
+		while (node != NULL || nstack.empty() != true) {
+			// 不输出当前根节点，但是递归直至当前根节点node的最左端
+			while (node != NULL) {
+				nstack.push(node);
+				node = node-&gt;left;
+			}
+
+			if (nstack.empty() != true) {
+				node = nstack.top();
+				if (node-&gt;left != NULL || node-&gt;right != NULL) {
+					swap(node-&gt;left, node-&gt;right);
+				}
+
+				nstack.pop();
+				//  中序遍历输出根后，向右转向
+				//  但是，由于左右子树交换，因此原来的右子树是其左子树，向左转向
+				node = node-&gt;left;
+			}
+		}
+	}
+
+	//后序遍历 左右根
+	void MirrorPost(TreeNode *root) {
+
+		if (root == NULL) {
+			cout &lt;&lt; &quot;The tree is NULL...&quot; &lt;&lt; endl;
+			return;
+		}
+		stack&lt;TreeNode *&gt; nstack;
+
+		TreeNode *cur;                      //当前结点
+		TreeNode *pre = NULL;                 //前一次访问的结点
+		nstack.push(root);
+
+		while (nstack.empty() != true) {
+			cur = nstack.top();
+
+			// 如果左右结点均是 NULL，说明这个结点是根结点，直接把它pop出去
+			// 如果之前的结点不是NULL，而且之前的结点就是现在这个结点的左节点或者右结点，那么说明这个节点也是根结点，所以，先交换，然后再 pop 出去。
+			if ((cur-&gt;left == NULL &amp;&amp; cur-&gt;right == NULL)
+				|| (pre != NULL &amp;&amp; ((pre == cur-&gt;left) || pre == cur-&gt;right)))
+
+			{
+				if (cur-&gt;left != NULL || cur-&gt;right != NULL) {
+					swap(cur-&gt;left, cur-&gt;right);
+				}
+				nstack.pop();
+				pre = cur;
+			}
+			else {
+				// 由于栈是先进后出，因此先入右孩子, 再左孩子可以保证递归返回时先遍历左孩子
+				if (cur-&gt;right != NULL) {
+					nstack.push(cur-&gt;right);
+				}
+				if (cur-&gt;left != NULL) {
+					nstack.push(cur-&gt;left);
+				}
+			}
+		}
+	}
+
+};
+
+
+void PrintTree(string treeName, TreeNode *tree) {
+	cout &lt;&lt; treeName &lt;&lt; endl;
+	cout &lt;&lt; tree[0].val &lt;&lt; endl;
+	cout &lt;&lt; tree[0].left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].right-&gt;val &lt;&lt; endl;
+	cout &lt;&lt; tree[0].left-&gt;left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].left-&gt;right-&gt;val &lt;&lt; &quot;  &quot;
+		&lt;&lt; tree[0].right-&gt;left-&gt;val &lt;&lt; &quot;  &quot; &lt;&lt; tree[0].right-&gt;right-&gt;val &lt;&lt; endl;
+	cout &lt;&lt; endl;
+}
+
+int main() {
+
+	//准备两个树
+	TreeNode tree[8];
+	tree[0].val = 8;
+	tree[0].left = &amp;tree[1];
+	tree[0].right = &amp;tree[2];
+	tree[1].val = 6;
+	tree[1].left = &amp;tree[3];
+	tree[1].right = &amp;tree[4];
+	tree[2].val = 10;
+	tree[2].left = &amp;tree[5];
+	tree[2].right = &amp;tree[6];
+	tree[3].val = 5;
+	tree[3].left = NULL;
+	tree[3].right = NULL;
+	tree[4].val = 7;
+	tree[4].left = NULL;
+	tree[4].right = NULL;
+	tree[5].val = 9;
+	tree[5].left = NULL;
+	tree[5].right = NULL;
+	tree[6].val = 11;
+	tree[6].left = NULL;
+	tree[6].right = NULL;
+
+	//打印出二叉树
+
+	PrintTree(&quot;原始树&quot;, tree);
+
+
+	Solution solu;
+	solu.MirrorPre(tree);//比如，原来的tree[0].left 指向的是tree[1]，但是现在已经指向了tree[2]了。
+	PrintTree(&quot;交换1次，使用 MirrorPre&quot;, tree);
+	solu.MirrorPreBFS(tree);
+	PrintTree(&quot;交换2次，使用 MirrorPreBFS&quot;, tree);
+	solu.MirrorIn(tree);
+	PrintTree(&quot;交换3次，使用 MirrorIn&quot;, tree);
+	solu.MirrorPost(tree);
+	PrintTree(&quot;交换4次，使用 MirrorPost&quot;, tree);
+
+	return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>原始树
+8
+6  10
+5  7  9  11
+
+交换1次，使用 MirrorPre
+8
+10  6
+11  9  7  5
+
+交换2次，使用 MirrorPreBFS
+8
+6  10
+5  7  9  11
+
+交换3次，使用 MirrorIn
+8
+10  6
+11  9  7  5
+
+交换4次，使用 MirrorPost
+8
+6  10
+5  7  9  11
+</code></pre>
+
+<p><strong>还是需要再看下。感觉还有些不是很明确。</strong></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：二维数组中的查找</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/01-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/04-%E5%93%88%E5%B8%8C%E8%A1%A8-hash/">
+            <span class="next-text nav-default">04 哈希表 hash</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

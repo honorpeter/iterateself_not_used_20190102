@@ -1,0 +1,2818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 函数和递归 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="4.1 自定义函数和结构体 4.2 函数调用与参数传递 4.3 递归 4.4 竞赛题目选讲 A B C D E 4.5 注解与习题 第4章 函数和递归 学习目标 叵掌握多参数、单返回值的数学函数的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E5%85%A5%E9%97%A8%E7%BB%8F%E5%85%B8/04-%E5%87%BD%E6%95%B0%E5%92%8C%E9%80%92%E5%BD%92/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 函数和递归" />
+<meta property="og:description" content="4.1 自定义函数和结构体 4.2 函数调用与参数传递 4.3 递归 4.4 竞赛题目选讲 A B C D E 4.5 注解与习题 第4章 函数和递归 学习目标 叵掌握多参数、单返回值的数学函数的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E5%85%A5%E9%97%A8%E7%BB%8F%E5%85%B8/04-%E5%87%BD%E6%95%B0%E5%92%8C%E9%80%92%E5%BD%92/" /><meta property="article:published_time" content="2018-06-27T08:59:34&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-27T08:59:34&#43;00:00"/>
+<meta itemprop="name" content="04 函数和递归">
+<meta itemprop="description" content="4.1 自定义函数和结构体 4.2 函数调用与参数传递 4.3 递归 4.4 竞赛题目选讲 A B C D E 4.5 注解与习题 第4章 函数和递归 学习目标 叵掌握多参数、单返回值的数学函数的">
+
+
+<meta itemprop="datePublished" content="2018-06-27T08:59:34&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-27T08:59:34&#43;00:00" />
+<meta itemprop="wordCount" content="26003">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 函数和递归"/>
+<meta name="twitter:description" content="4.1 自定义函数和结构体 4.2 函数调用与参数传递 4.3 递归 4.4 竞赛题目选讲 A B C D E 4.5 注解与习题 第4章 函数和递归 学习目标 叵掌握多参数、单返回值的数学函数的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 函数和递归</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-27 </span>
+        
+        <span class="more-meta"> 26003 words </span>
+        <span class="more-meta"> 52 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <nav>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#4-1-自定义函数和结构体">4.1 自定义函数和结构体</a></li>
+<li><a href="#4-2-函数调用与参数传递">4.2 函数调用与参数传递</a></li>
+<li><a href="#4-3-递归">4.3 递归</a></li>
+<li><a href="#4-4-竞赛题目选讲">4.4 竞赛题目选讲</a></li>
+<li><a href="#a-b-c-d-e">A B C D E</a></li>
+<li><a href="#4-5-注解与习题">4.5 注解与习题</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+
+<p>第4章 函数和递归</p>
+
+<p>学习目标</p>
+
+<p>叵掌握多参数、单返回值的数学函数的定义和使用方法 E学会用typedef定义结构体 叵理解函数调用时用实参给形参赋值的过程 叵学会定义局部变量和全局变量 叵理解调用栈和栈帧，学会用gdb查看调用栈并选择栈帧 叵理解地址和指针 叵理解递归定义和递归函数 E理解可执行文件中的正文段、数据段和BSS段 叵熟悉堆栈段，了解栈溢出的常见原因</p>
+
+<p>运用前3章的知识尽管在理论上已经足以写出所有算法程序了，但实际上稍微复杂一点 的程序往往由多个函数组成。函数是“过程式程序设计”的自然产物，但也产生了局部变量、 参数传递方式、递归等诸多新的知识点。本章的主要目的在于理解这纷繁复杂的、最后的语 法。同时，通过gdb ,可以从根本上帮助读者理解，看清事物的本质。最后，通过一些实际 的竞赛题目帮助读者学习编写算法程序的一般方法和技巧。</p>
+
+<h6 id="4-1-自定义函数和结构体">4.1 自定义函数和结构体</h6>
+
+<p>我们已经用过了许多数学函数，如cos、sqrt等。能不能自己写一个呢？没问题。下面就</p>
+
+<p>编写一个计算两点欧几里德距离的函数：</p>
+
+<p>double dist（double x1, double y1, double x2, double y2）</p>
+
+<p>｛</p>
+
+<p>return sqrt((x1-x2)<em>(x1-x2)+(y1-y2)</em>(y1-y2));</p>
+
+<p>}</p>
+
+<p>提示4-1 : C语言中的数学函数可以定义成“返回类型函数名（参数列表）｛函数体｝”， 其中函数体的最后一条语句应该是“return表达式；”。</p>
+
+<p>这里，参数和返回值的类型一般是前面介绍过的“一等公民”，如int或者double，也可以 是char。可不可以是数组呢？也不是不可以，但是比较麻烦，稍后再考虑。有时，函数并不 需要返回任何值，例如，它只是用printf向屏幕输出一些内容。这时只需定义函数返回类型为 void， 并且无须使用 return（ 除非希望在函数运行中退出函数）。</p>
+
+<p>提示4-2 :函数的参数和返回值最好是“一等公民〃，如int、char或者double等。其他“非 一等公民”作为参数和返回值要复杂一些。如果函数不需要返回值，则返回类型应写成</p>
+
+<p>void。</p>
+
+<p>注意这里的return是一个动作，而不是描述。</p>
+
+<p>提示4-3 :如果在执行函数的过程中碰到了return语句，将直接退出这个函数，不去执 行后面的语句。相反，如果在执行过程中始终没有return语句，则会返回一个不确定的值。 幸好，-Wall可以捕捉到这一可疑情况并产生警告。</p>
+
+<p>顺便说一句，main函数也是有返回值的！到目前为止，我们总是让它返回0，这个0是什 么意思呢？尽管没有专门说明，读者应该已经发现了，main函数是整个程序的入口。换句话 说，有一个“其他的程序”来调用这个main函数——如操作系统、IDE、调试器，甚至自动评 测系统。这个0代表“正常结束”，即返回给调用者。在算法竞赛中，除了有特殊规定之外， 请总是让其返回0，以免评测系统错误地认为程序异常退出了。</p>
+
+<p>提示4-4 :在算法竞赛中，请总是让main函数返回0。</p>
+
+<p>函数不一定要一步得出结果。下面是上述函数的另一种写法：</p>
+
+<p>double dist(double x1, double y1, double x2, double y2) {</p>
+
+<p>double dx = x1-x2; double dy = y1-y2; return hypot(dx, dy);</p>
+
+<p>}</p>
+
+<p>这里用到了一个新的数学函数——hypot，相信读者能猜到它的意思<a href="#bookmark3">m</a>。这个例子也说 明，一个函数也可以调用其他函数——在自定义函数中写代码和在main函数中写代码并没有 什么区别，以前讲过的知识都适用。</p>
+
+<p>下面来思考一个问题：这个函数是否好用？通常，x1和y1在语义上属于一个整体 (x1,y1)，而x2和y2属于另一个整体(x2,y2)，代表两个点的坐标。那么能否设计一个函数，其 参数是明显的两个点，而不是4个double型的坐标值呢？</p>
+
+<p>struct Point{ double x, y; };</p>
+
+<p>double dist(struct Point a, struct Point b)</p>
+
+<p>return hypot(a.x-b.x, a.y-b.y);</p>
+
+<p>}</p>
+
+<p>这里出现了一个新内容。上述代码中定义了一个称为Point的结构体，包含两个域： double型的x和y。</p>
+
+<p>提示4-5 :在C语言中，定义结构体的方法为“struct结构体名称{域定义};〃，注意花括 号的后面还有一个分号。</p>
+
+<p>这样用起来有些不合习惯：所有用到Point的地方都得写一个struct。有一个方法可以避 开这些struct，让结构体用起来和int、double这样的“原生”类型更接近：</p>
+
+<p>typedef struct{ double x, y; }Point;</p>
+
+<p>double dist(Point a, Point b)</p>
+
+<p>代码中虽然没少几个字符，但是看上去清爽多了！</p>
+
+<p>提示4-6 :为了使用方便，往往用“typedef struct ｛域定义；｝类型名;〃的方式定义一个 新类型名。这样，就可以像原生数据类型一样使用这个自定义类型。</p>
+
+<p>计算组合数。编写函数，参数是两个非负整数《和讲，返回组合数：=_-_，其</p>
+
+<p>zn!(n -/«)!</p>
+
+<p>中m&lt;^&lt;25。例如，n=25 , m=12时答案为5200300。</p>
+
+<p>【分析】</p>
+
+<p>既然题目中的公式多次出现n!,将其作为一个函数编写是比较合理的：</p>
+
+<p>程序4-1 组合数(有问题)</p>
+
+<p>long long factorial(int n){ long long m = 1; for(int i = 1; i &lt;= n; i++)</p>
+
+<p>m *= i; return m;</p>
+
+<p>}</p>
+
+<p>long long C(int n, int m)</p>
+
+<p>{</p>
+
+<p>return factorial(n)/(factorial(m)*factorial(n-m)));</p>
+
+<p>}</p>
+
+<p>由此可见，编写函数并不困难。写完之后的函数可以像cos、sqrt等库函数一样被调用。</p>
+
+<p>“别忘了测试！”如果你这样说，请为自己鼓掌。还记得第2章那个“阶乘”之和的第一个 程序吗？那个程序溢出了。那这个程序呢？很不幸：n=21 , rn=1的返回值竟然是-1。手算不 难得到：n=21 , rn=1的正确结果是21 ,显然结果不符。</p>
+
+<p>提示4-7 ：即使最终答案在所选择的数据类型范围之内，计算的中间结果仍然可能溢</p>
+
+<p>出。</p>
+
+<p>这个题目还说明：即使认为题目在“暗示”你使用某种语言特性，也应该深入分析，不能 贸然行事。如何避免中间结果溢出？办法是进行“约分”。一个简单的方法是利用《!/rn!=(m+1) (m+2)&hellip;(«-1)心虽然不能完全避免中间结果溢出，但是对于题目给出的范围已经可以保证得 到正确的结果了。代码如下：</p>
+
+<p>程序4-2 组合数</p>
+
+<p>long long C(int n, int m) { if(m &lt; n-m) m = n-m; long long ans = 1;</p>
+
+<p>for(int i = m+1; i &lt;= n; i++) ans *= i; for(int i = 1; i &lt;= n-m; i++) ans /= i; return ans;</p>
+
+<p>}</p>
+
+<p>上述代码还有一个小技巧：当m&lt;n-m时把m变成n-m。请读者思考这样做的意图。另外， 这个函数里笔者改变了参数m的值。这样做并不会影响到函数的调用者，具体原因会在4.2节</p>
+
+<p>详细讨论。</p>
+
+<p>提示4-8：对复杂的表达式进行化简有时不仅能减少计算量，还能减少甚至避免中间结</p>
+
+<p>果溢出。</p>
+
+<p>素数判定。编写函数，参数是一个正整数n，如果它是素数，返回1，否则返回0。</p>
+
+<p>【分析】</p>
+
+<p>根据定义，被1和它自身整除的、大于1的整数称为素数。这种“判断一个事物是否具有 某一性质”的函数还有一个学术名称——谓词(predicate )，下面程序中将写一个谓词。</p>
+
+<p>程序4-3 素数判定(有问题)</p>
+
+<p>//n=1或者n太大时请勿调用</p>
+
+<p>int is_prime(int n)</p>
+
+<p>{</p>
+
+<p>for(int i = 2; i*i &lt;= n; i++)</p>
+
+<p>if(n % i</p>
+
+<p>0) return 0;</p>
+
+<p>注意这里用到了两个小技巧。一是只判断不超过sqrt（x）的整数i （想一想，为什么）。二 是及时退出：一旦发现x有一个大于1的因子，立刻返回0 （假），只有最后才返回1 （真）。 函数名的选取是有章可循的，“is_prime”取自英文“is it a prime ? ”（它是素数吗？）。</p>
+
+<p>提示4-9 :建议把谓词（用来判断某事物是否具有某种特性的函数）命名成“is_xxx〃的 形式，返回int值，非0表示真，0表示假。</p>
+
+<p>注意程序4-2中is_prime函数上方的注释：不要用在n=1或者n太大时调用。这是为什么 呢？ n太小时不难解释：n=1会被错误地判断为素数（因为确实没有其他因子）。n太大时的 理由则不明显：i*i可能会溢出！如果n是一个接近int的最大值的素数，则当循环到i=46340 时，i*i=2147395600&lt;n ;但i=46341 时，i*i=2147488281，超过了int的最大值，溢出变成负 数，仍然满足i*i&lt;n。若n不是太大，可能出现101128442溢出后等于2147483280，终止循环； 但如果n= 2147483647，循环将一直进行下去。</p>
+
+<p>提示4-10：编写函数时，应尽量保证该函数能对任何合法参数得到正确的结果。如若</p>
+
+<p>不然，应在显著位置标明函数的缺陷，以避免误用。</p>
+
+<p>下面是改进之后的版本：</p>
+
+<p>程序4-4 素数判定（ 2）</p>
+
+<p>int is_prime(int n)</p>
+
+<p>{</p>
+
+<p>if(n &lt;= 1) return 0;</p>
+
+<p>int m = floor(sqrt(n) + 0.5);</p>
+
+<p>for(int i = 2; i &lt;= m; i++)</p>
+
+<p>if(n % i == 0) return 0; return 1;</p>
+
+<p>}</p>
+
+<p>除了特判n&lt;1的情况外，程序中还使用了变量m，—方面避免了每次重复计算sqrt（n），另 一方面也通过四舍五入避免了浮点误差——正如前面所说，如果sqrt将某个本应是整数的值</p>
+
+<p>变成了xxx.99999 ,也将被修正，但若直接写m= sqrt(n) , “ 99999”会被直接截掉。</p>
+
+<p>为什么is_prime的参数不是long long型呢？因为当n很大时，上述函数并不能很快计算出</p>
+
+<p>结果。对此，在竞赛篇会有更详细的讨论。</p>
+
+<h6 id="4-2-函数调用与参数传递">4.2 函数调用与参数传递</h6>
+
+<p>4.1节介绍的数学函数的特点是：做计算，然后返回一个值。但有时要做的并不是“计</p>
+
+<p>算”——如交换两个变量；而有时则需要返回两个甚至更多的值——如解一个二元一次方程</p>
+
+<p>组，函数仍然能满足需求，但是规则会更复杂。根据笔者的经验，这部分知识没搞清楚的初</p>
+
+<p>学者很容易在实战时出错，所以这里介绍一些原理性的知识，虽然有些枯燥，但能帮助读者</p>
+
+<p>更好地理解。</p>
+
+<p>4.2.1 形参与实参</p>
+
+<p>程序4-5 用函数交换变量(错误)</p>
+
+<p>#include<stdio.h></p>
+
+<p>void swap(int a, int b)</p>
+
+<p>{</p>
+
+<p>int t = a; a = b; b = t;</p>
+
+<p>}</p>
+
+<p>int main()</p>
+
+<p>{</p>
+
+<p>int a = 3, b = 4; swap(3, 4);</p>
+
+<p>printf(&ldquo;%d %d\n&rdquo;, a, b); return 0;</p>
+
+<p>}</p>
+
+<p>读者应当还记得，这就是三变量交换算法。下面测试一下这个函数是否好用。很不幸， 输出是“3 4”，而不是“4 3”。事实上，a和b并没有被交换。为什么会这样呢？为了理解这一 问题，请回忆“赋值”这个重要概念的含义。“诡异”的赋值语句a = a+1是这样解释的：分为两 步，首先计算赋值符号右边的a+1，然后把它装入变量a，覆盖原来的值。那函数调用的过程 又是怎样的呢？</p>
+
+<p>第1步，计算参数的值。在上面的例子中，因为a=3，b=4，所以swap(a,b)等价于swap(3, 4)。这里的3和4被称为实际参数(简称实参)。</p>
+
+<p>第2步，把实参赋值给函数声明中的a和b。注意，这里的a和b与调用时的a和b是完全不</p>
+
+<p>同的。前面已经说过，实参最后将算出具体的值，swap函数知道调用它的参数是3和4 ,却不 知道是怎么算出来的。函数声明中的a和b称为形式参数(简称形参)。</p>
+
+<p>稍等一下，这里有个问题！这样一来，程序里有两个变量a , —个在main函数里定义， 一个是swap的形参，二者不会混淆吗？不会。函数(包括main函数)的形参和在该函数里定 义的变量都被称为该函数的局部变量( local variable)。 不同函数的局部变量相互独 立，即 无法访问其他函数的局部变量。需要注意的是，局部变量的存储空间是临时分配的，函数执 行完毕时，局部变量的空间将被释放，其中的值无法保留到下次使用。与此对应的是全局变 量( global variable) ：此变量在函数外声明，可以在任何时候，由任何函数访问。需要注意 的是，应该谨慎使用全局变量。</p>
+
+<p>提示4-11 ：函数的形参和在函数内声明的变量都是该函数的局部变量。无法访问其他 函数的局部变量。局部变量的存储空间是临时分配的，函数执行完毕时，局部变量的空间将 被释放，其中的值无法保留到下次使用。在函数外声明的变量是全局变量，可以被任何函数 使用。操作全局变量有风险，应谨慎使用。</p>
+
+<p>这样一来，函数的调用过程就可以简单理解成计算实参的值，赋值给对应的形参，然后 把“当前代码行”转移到函数的首部。换句话说，在swap函数刚开始执行时，局部变量 a=3 , b=4 ,二者的值是在函数调用时，由实参复制而来。</p>
+
+<p>那么执行完毕后，函数又做了些什么呢？把返回值返回给调用它的函数，然后再次修</p>
+
+<p>改“当前代码行”，恢复到调用它的地方继续执行。等一下！函数是如何知道该返回到哪里继</p>
+
+<p>续执行的呢？为了解释这一问题，下面需要暂时把讨论变得学术一些——不要紧张，很快就</p>
+
+<p>会结束。</p>
+
+<p>4.2.2 调用栈</p>
+
+<p>还记得在讲解for循环时，笔者是如何建议的吗？多演示程序执行的过程，把注意力集中 在“当前代码行”的转移和变量值的变化。这个建议同样适用于对函数的学习，只是要增加一 项内容——调用栈( Call Stack)。</p>
+
+<p>调用栈描述的是函数之间的调用关系。它由多个栈帧( Stack Frame )组成，每个栈帧对 应着一个未运行完的函数。栈帧中保存了该函数的返回地址和局部变量，因而不仅能在执行 完毕后找到正确的返回地址，还很自然地保证了不同函数间的局部变量互不相干——因为不 同函数对应着不同的栈帧。</p>
+
+<p>提示4-12 : C语言用调用栈(Call Stack )来描述函数之间的调用关系。调用栈由栈帧 (Stack    Frame )组成，每个栈帧对应着一个未运行完的函数。在gd<a href="#bookmark11">b^</a>中可以用</p>
+
+<p>backtrace (简称bt)命令打印所有栈帧信息。若要用p命令打印一个非当前栈帧的局部变 量，可以用frame命令选择另一个栈帧。</p>
+
+<p>在继续学习之前，建议读者试着调试一下刚才几个程序，除了关心“当前代码行”和变量 的变化之外，再看看调用栈的变化。强烈建议读者在执行完swap函数的主体但还没有返回 main函数之前，先看一下swap和main函数所对应的栈帧中a和b的值。如果受条件限制，在阅 读到这里时没有办法完成这个实验，下面给出了用gdb完成上述操作的命令和结果。</p>
+
+<p>第1步：编译程序。 gcc swap.c -std=c99 -g</p>
+
+<p>生成可执行程序a.exe (在Linux下是a.out )。编译选项-g告诉编译器生成调试信息。编译 选项-std=c99告诉编译器按照C99标准编译代码。</p>
+
+<p>第2步：运行gdb。</p>
+
+<p>gdb a.exe</p>
+
+<p>这样，gdb在运行时会自动装入刚才生成的可执行程序。</p>
+
+<p>第3步：查看源码。</p>
+
+<p>(gdb) l</p>
+
+<p>1    #include<stdio.h></p>
+
+<p>2    void swap(int a, int b){</p>
+
+<p>3 int t = a; a = b; b = t;</p>
+
+<p>4    }</p>
+
+<p>5</p>
+
+<p>6    int main(){</p>
+
+<p>7    int a = 3, b = 4;</p>
+
+<p>8    swap(3, 4);</p>
+
+<p>9    printf(&ldquo;%d %d\n&rdquo;,    a, b);</p>
+
+<p>10</p>
+
+<p>return 0;</p>
+
+<p>这里(gdb)是gdb的提示符，字母l是输入的命令，为list (列出程序清单)的缩写。正如代 码所示，swap函数的最后一行是第4行，当执行到这一行时，swap函数的主体已经结束，但 函数还没有返回。</p>
+
+<p>第4步：加断点并运行。</p>
+
+<p>(gdb) b 4</p>
+
+<p>Breakpoint 1 at 0x401308: file swap.c, line 4. (gdb) r</p>
+
+<p>Starting program: D:\a.exe</p>
+
+<p>Breakpoint 1, swap (a=4, b=3) at swap.c:4</p>
+
+<p>4 }</p>
+
+<p>其中，b命令把断点设在了第4行，r命令运行程序，之后碰到了断点并停止。 第5步：查看调用栈。</p>
+
+<p>(gdb) bt</p>
+
+<p>#0 swap (a=4, b=3) at swap.c:4</p>
+
+<p>#1    0x00401356 in main () at swap.c:8</p>
+
+<p>(gdb) p a</p>
+
+<p>$1 = 4</p>
+
+<p>(gdb) p b</p>
+
+<p>$2 = 3</p>
+
+<p>(gdb) up</p>
+
+<p>#1    0x00401356 in main () at swap.c:8</p>
+
+<p>8 swap(3, 4);</p>
+
+<p>(gdb) p a</p>
+
+<p>$3 = 3</p>
+
+<p>(gdb) p b</p>
+
+<p>$4 = 4</p>
+
+<p>这一步是关键。根据bt命令，调用栈中包含两个栈帧：#0和#1，其中0号是当前栈帧 -swap函数，1号是其“上一个”栈帧-main函数。这里甚至能看到swap函数的返回地址 0x00401356 ,尽管不明确其具体含义。</p>
+
+<p>使用p命令可以打印变量值。首先查看当前栈帧中a和b的值，分别等于4和3——这正是 用三变量法交换后的结果。接下来用up命令选择上一个栈帧，再次使用p命令查看a和b的 值，这次却得到3和4 ,为main函数中的a和b。前面讲过，在函数调用时，a、b只起到了“计 算实参”的作用。但实参被赋值到形参之后，main函数中的a和b也完成了它们的使命。swap 函数甚至无法知道main函数中也有着和形参同名的a和b变量，当然也就无法对其进行修改。 最后要用q命令退出gdb。</p>
+
+<p>用了这么多篇幅解释调用栈和栈帧，是因为无数的经验告诉笔者：理解它们对于今后的</p>
+
+<p>学习和编程是至关重要的，特别是递归——初学者学习语言的最大障碍之一，调用栈将有助</p>
+
+<p>于理解。</p>
+
+<p>4.2.3 用指针作参数</p>
+
+<p>在了解了刚才的swap函数不能奏效的原因后，应该如何编写swap函数呢？答案是用指</p>
+
+<p>针。</p>
+
+<p>程序4-6 用函数交换变量(正确)</p>
+
+<p>#include<stdio.h></p>
+
+<p>void swap(int* a, int* b)</p>
+
+<p>{</p>
+
+<p>int t = *a; *a = *b; *b = t;</p>
+
+<p>}</p>
+
+<p>int main()</p>
+
+<p>{</p>
+
+<p>int a = 3, b = 4; swap(&amp;a, &amp;b);</p>
+
+<p>printf(&ldquo;%d %d\n&rdquo;, a, b); return 0;</p>
+
+<p>怎么样，是不是觉得不太习惯，却又有点似曾相识呢？不太习惯的是int和a中间的乘 号，而似曾相识的是swap(&amp;a, &amp;b)这种变量名前面加“&amp;”的用法——到目前为止，唯一采取</p>
+
+<p>这种用法的是scanf系列函数，而只有它改变了实参的值！</p>
+
+<p>变量名前面加“&amp;”得到的是该变量的地址。什么是“地址”呢？</p>
+
+<p>提示4-13 : C语言的变量都是放在内存中的，而内存中的每个字节都有一个称为地址 (address )的编号。每个变量都占有一定数目的字节(可用sizeof运算符获得)，其中第一 个字节的地址称为变量的地址。</p>
+
+<p>下面用gdb来调试上面的程序，看看它和程序4-5有什么不同。前4步是一样的，可直接 看调用栈。</p>
+
+<p>(gdb) bt</p>
+
+<p>#0 swap (a=0x22ff74, b=0x22ff70) at swap2.c:4 #1 0x0040135c in main() at swap2.c:8 (gdb) p a</p>
+
+<p>$1 = (int *) 0x22ff74</p>
+
+<p>(gdb) p b</p>
+
+<p>$2 = (int *) 0x22ff70</p>
+
+<p>(gdb) p *a</p>
+
+<p>$3 = 4</p>
+
+<p>(gdb) p *b</p>
+
+<p>$4 = 3</p>
+
+<p>(gdb) up</p>
+
+<p>#1 0x0040135c in main() at swap2.c:8</p>
+
+<p>8 swap(&amp;a, &amp;b);</p>
+
+<p>(gdb) p a</p>
+
+<p>$5 = 4</p>
+
+<p>(gdb) p b</p>
+
+<p>$6 = 3</p>
+
+<p>(gdb) p &amp;a</p>
+
+<p>$7 = (int *) 0x22ff74</p>
+
+<p>(gdb) p &amp;b</p>
+
+<p>$8</p>
+
+<p>(int *) 0x22ff70</p>
+
+<p>在打印a和b的值时，得到了诡异的结果-(int *) 0x22ff74和(int *) 0x22ff70。数值</p>
+
+<p>0x22ff74和0x22ff70是两个地址(以0x开头的整数以十六进制表示，在这里暂时不需了解细 节)，而前面的(int *)表明a和b是指向int类型的指针。</p>
+
+<p>提示4-14 :用int* a声明的变量a是指向int型变量的指针。赋值a = &amp;b的含义是把变量 b的地址存放在指针a中，表达式*a代表a指向的变量，既可以放在赋值符号的左边(左 值)，也可以放在右边(右值)。</p>
+
+<p>注意：*a是指“a指向的变量〃，而不仅是“a指向的变量所拥有的值〃。理解这一点相当重 要。例如，*a = *a + 1就是让a指向的变量自增1。甚至可以把它写成(*a)++。注意不要写 成*a++，因为“++〃运算符的优先级高于“取内容&rdquo;运算符“<em>〃，实际上会被解释成</em>(a++)。</p>
+
+<p>有了指针，C语言变得复杂了很多。一方面，需要了解更多底层的内容才能彻底解释一 些问题，包括运行时的地址空间布局，以及操作系统的内存管理方式等。另一方面，指针的</p>
+
+<p>存在，使得C语言中变量的说明变得异常复杂-你能轻易地说出用char * const *(*next)()声</p>
+
+<p>明的next是什么类型的吗<a href="#bookmark15">您</a>？毫不夸张地说，指针是程序员(不仅是初学者)杀手。</p>
+
+<p>既然如此，那应当如何使用指针呢？别忘了本书的背景——算法竞赛。算法竞赛的核心</p>
+
+<p>是算法，没有必要纠缠如此复杂的语言特性。了解底层的细节是有益的(事实上，前面已经</p>
+
+<p>介绍了一些底层细节)，但在编程时应尽量避开，只遵守一些注意事项即可。</p>
+
+<p>提示4-15：千万不要滥用指针，这不仅会把自己搞糊涂，还会让程序产生各种奇怪的</p>
+
+<p>错误。事实上，本书的程序会很少使用指针。</p>
+
+<p>再次回到对正确swap程序的调试。在swap程序中，a和b都是局部变量，在函数执行完毕 以后就不复存在了，但是a和b里保存的地址却依然有效——它们是main函数中的局部变量a 和b的地址。在main函数执行完毕之前，这两个地址将始终有效，并且分别指向main函数的 局部变量a和b。程序交换的是*a**b，也就是main函数中的局部变量a和b。</p>
+
+<p>4.2.4 初学者易犯的错误</p>
+
+<p>这个swap函数看似简单，但初学者还是很容易写错。一种典型的错误写法是：</p>
+
+<p>void swap(int* a, int* b)</p>
+
+<p>int *t</p>
+
+<p>a; a</p>
+
+<p>b; b</p>
+
+<p>t;</p>
+
+<p>此写法交换了swap函数的局部变量a*b （辅助变量t必须是指针。int t = a是错误的） 但却始终没有修改它们指向的内容，因此main函数中的a和b不会改变。另一种错误写法是：</p>
+
+<p>void swap（int* a, int* b） int *t;</p>
+
+<p>*t = *a; *a = *b; *b = *t;</p>
+
+<p>}</p>
+
+<p>这个程序错在哪里？t是一个指向int型的指针，因此*t是一个整数。用一个整数作为辅助 变量去交换两个整数有何不妥？事实上，如果用这个函数去替换程序4-6，很可能会得到“4 3”的正确结果。为什么笔者要坚持说它是错误的呢？</p>
+
+<p>问题在于，t存储的地址是什么？也就是说t指向哪里？因为t是一个变量（指针也是一个 变量，只不过类型是“指针”），所以根据规则，它在赋值之前是不确定的。如果这个“不确 定的值”所代表的内存单元恰好是能写入的，那么这段程序将正常工作；但如果它是只读 的，程序可能会崩溃。读者可尝试赋初值int *t = 0 ,看看内存地址“0”能不能写。</p>
+
+<p>至此，终于初步理解了地址和指针。尽管只是初步理解，但是为将来的学习奠定了良好</p>
+
+<p>的基础。指针有很多巧妙但又令人困惑的用法。如果有一种语法，但在完整地学习了本书后</p>
+
+<p>始终没有看到此语法被使用，那么这通常意味着这个语法不必学（至少在算法竞赛中不必用</p>
+
+<p>到）。事实上，笔者在编写本书的例程时，首先考虑的是要通俗易懂，避开复杂的语言特</p>
+
+<p>性，其次才是简洁和效率。</p>
+
+<p>4.2.5 数组作为参数和返回值</p>
+
+<p>如何把数组作为参数传递给函数？先来看下面的例子。</p>
+
+<p>程序4-7 计算数组的元素和（错误）</p>
+
+<p>int sum（int a[]） { int ans = 0;</p>
+
+<p>for(int i</p>
+
+<p>0; i &lt; sizeof(a); i++)</p>
+
+<p>ans += a[i]; return ans;</p>
+
+<p>这个函数是错误的，因为sizeof(a)无法得到数组的大小。为什么会这样？因为把数组作 为参数传递给函数时，实际上只有数组的首地址作为指针传递给了函数。换句话说，在函数 定义中的int a[]等价于int *a。在只有地址信息的情况下，是无法知道数组里有多少个元素 的。</p>
+
+<p>正确的做法是加一个参数，即数组的元素个数。</p>
+
+<p>程序4-8 计算数组的元素和(正确)</p>
+
+<p>int sum(int* a, int n) { int ans = 0;</p>
+
+<p>for(int i = 0; i &lt; n; i++) ans += a[i];</p>
+
+<p>return ans;</p>
+
+<p>在上面的代码中，直接把参数a写成了int* a，暗示a实际上是一个地址。在函数调用时a 不一定非要传递一个数组，例如：</p>
+
+<p>int main() {</p>
+
+<p>int a[] = {1, 2, 3, 4}; printf(&ldquo;%d\n&rdquo;, sum(a+1, 3)); return 0;</p>
+
+<p>提示4-16：以数组为参数调用函数时，实际上只有数组首地址传递给了函数，需要另</p>
+
+<p>加一个参数表示元素个数。除了把数组首地址本身作为实参外，还可以利用指针加减法把其</p>
+
+<p>他元素的首地址传递给函数。</p>
+
+<p>指针a+1指向a[1]，即2这个元素(数组元素从0开始编号)。因此函数sum“看到”{2, 3, 4} 这个数组，因此返回9。一般地，若p是指针，k是正整数，则p+k就是指针p后面第k个元 素，p-k是p前面的第k个元素，而如果p1和p2是类型相同的指针，则p2-p1是从p1到p2的元素</p>
+
+<p>个数（不含p2 ）。下面是sum函数的另外两种写法。</p>
+
+<p>程序4-9 计算左闭右开区间内的元素和(两种写法)</p>
+
+<p>写法一：</p>
+
+<p>int sum(int* begin, int* end) { int n = end - begin; int ans = 0;</p>
+
+<p>for(int i = 0; i &lt; n; i++) ans += begin[i];</p>
+
+<p>return ans;</p>
+
+<p>}</p>
+
+<p>写法二：</p>
+
+<p>int sum(int* begin, int* end) { int *p = begin; int ans = 0;</p>
+
+<p>for(int *p = begin; p != end; p++) ans += *p;</p>
+
+<p>return ans;</p>
+
+<p>}</p>
+
+<p>其中写法一先进行了一次指针减法，算出了从begin到end （不含end ）的元素个数n ,然 后再像前面那样把begin作为“数组名”进行累加。写法二看起来更“高级”，事实上也更具一般 性，用一个新指针p作为循环变量，同时累加其指向的值。这两个函数的调用方式与之前相 似，例如，声明了一个长度为10的数组a ,则它的元素之和就是sum（a, a+10）;若要计算a[i], a[i+1],…，a[j],则需要调用sum（a+i，a+j+1）。</p>
+
+<p>sum的最后两种写法及其调用方式非常重要（将在第5章中继续讨论），请读者仔细体 会。</p>
+
+<p>把数组作为指针传递给函数时，数组内容是可以修改的。因此如果要写一个“返回数</p>
+
+<p>组”的函数，可以加一个数组参数，然后在函数内修改这个数组的内容。不过在算法竞赛中</p>
+
+<p>经常采取其他做法，原因在第5章会做进一步的说明。</p>
+
+<p>4.2.6 把函数作为函数的参数</p>
+
+<p>把函数作为函数的参数？看上去挺奇怪的，但实际上有一个非常典型的应用——排序。</p>
+
+<p>例题4-1 古老的密码(Ancient Cipher, NEERC 2004, UVa1339 )</p>
+
+<p>给定两个长度相同且不超过100的字符串，判断是否能把其中一个字符串的各个字母重 排，然后对26个字母做一个一一映射，使得两个字符串相同。例如，JWPUDJSTVP重排后可 以得到WJDUPSJPVT，然后把每个字母映射到它前一个字母(B-&gt;A, C-&gt;B,…，Z-&gt;Y, A-&gt;Z)，得到VICTORIOUS。输入两个字符串，输出YES或者NO。</p>
+
+<p>【分析】</p>
+
+<p>既然字母可以重排，则每个字母的位置并不重要，重要的是每个字母出现的次数。这样 可以先统计出两个字符串中各个字母出现的次数，得到两个数组cnt1[26]和cnt2[26]。下一步 需要一点想象力：只要两个数组排序之后的结果相同，输入的两个串就可以通过重排和一一 映射变得相同。这样，问题的核心就是排序。</p>
+
+<p>C语言的stdlib.h中有一个叫qsort的库函数，实现了著名的快速排序算法。它的声明是这 样的：</p>
+
+<p>void qsort ( void * base, size_t num, size_t size, int ( * comparator ) ( const void *, const void *</p>
+
+<p>) );</p>
+
+<p>前3个参数不难理解，分别是待排序的数组起始地址、元素个数和每个元素的大小。最</p>
+
+<p>后一个参数比较特别，是一个指向函数的指针，该函数应当具有这样的形式：</p>
+
+<p>int cmp(const void *, const void *) { … }</p>
+
+<p>这里的新内容是指向常数的“万能”的指针 ：const void *， 它可以通过强制类型转化变成 任意类型的指针。对于本题来说，排序的对象是整型数组，因此要这样写：</p>
+
+<p>int cmp ( const void *a , const void *b ) {</p>
+
+<p>return *(int *)a - *(int *)b;</p>
+
+<p>一般地，需要先把参数a和b转化为真实的类型，然后让cmp函数当a<b、a=b和a>b时分别 返回负数、 0和正数即可。学会排序之后，本题的主程序并不难编写，读者不妨一试。</p>
+
+<p>是不是觉得上面那个cmp看起来非常别扭？的确如此。虽然qsort是C语言的标准库函 数，但在算法竞赛中一般不使用它，而是使用C++中的sort函数。此函数将在第5章中介绍。 本节的主要目的是告诉读者， “将一个函数作为参数传递给另外一个函数”是很有用的。</p>
+
+<h6 id="4-3-递归">4.3 递归</h6>
+
+<p>终于到了本书C语言部分的最后一站——递归了。很多人都认为递归是语言中最难理解 的内容之一，但也不要紧张：如果认真理解了4.2节中的指针、地址和调用栈，会发现递归 其实是一个很自然的东西。</p>
+
+<p>4.3.1 递归定义</p>
+
+<p>递归的定义如下：</p>
+
+<p>递归：</p>
+
+<p>参见“递归”。</p>
+
+<p>什么？这个定义什么也没有说啊！好吧，改一下：</p>
+
+<p>递归：</p>
+
+<p>如果还是没明白递归是什么意思，参见“递归”。</p>
+
+<p>噢，也许这次你明白了，原来递归就是“自己用到自己”的意思。这个定义显然比上一个</p>
+
+<p>要好些，因为当你终于悟出其中的道理后，就不必继续“参见”下去了。事实上，递归的含义</p>
+
+<p>比这要广泛。</p>
+
+<p>A经理：“这事不归我管，去找B经理。”于是你去找B经理。</p>
+
+<p>B经理：“这事不归我管，去找A经理。”于是你又回到了A经理这儿。</p>
+
+<p>接下来发生的事情就不难想到了。只要两个经理的说辞不变，你又始终听话，你将会永 远往返于两个经理之间。这叫做无限递归 ( Infinite Recursion)。 尽管在这里，A经理并没有 让你找他自己，但还是回到了他这里。换句话说， “间接地用到自己”也算递归。</p>
+
+<p>回忆一下，正整数是如何定义的？正整数是1,2,3,……这些数。这样的定义也许对于小 学生来说是没有任何问题的，但当你开始觉得这个定义“不太严密”时，你或许会喜欢这样的 定义：</p>
+
+<p>( 1) 1是正整数。</p>
+
+<p>(2)    如果《是正整数，《+1也是正整数。</p>
+
+<p>(3)    只有通过(1)、(2)定义出来的才是正整数<a href="#bookmark5">凶</a></p>
+
+<p>这样的定义也是递归的：在“正整数”还没有定义完时，就用到了“正整数”的定义。这和</p>
+
+<p>前面的“参见递归”在本质上是相同的，只是没有它那么直接和明显。</p>
+
+<p>同样地，可以递归定义“常量表达式”(以下简称表达式)：</p>
+
+<p>( 1)整数和浮点数都是表达式。</p>
+
+<p>(2 )如果A是表达式，则(A )是表达式。</p>
+
+<p>(3 )如果A和B都是表达式，则A+B、A-B、 A*B、A/B都是表达式。</p>
+
+<p>( 4)只有通过( 1)、( 2)、( 3)定义出来的才是表达式。 简洁而严密，这就是递归定义的优点。</p>
+
+<p>4.3.2 递归函数</p>
+
+<p>数学函数也可以递归定义。例如，阶乘函数f(n)=n !可以定义为：</p>
+
+<p>f/(0) = 1</p>
+
+<p>对应的程序如下：</p>
+
+<p>程序4-10 用递归法计算阶乘</p>
+
+<p>#include<stdio.h></p>
+
+<p>int f(int n)</p>
+
+<p>{</p>
+
+<p>return n == 0 ? 1 : f(n-1)*n;</p>
+
+<p>int main()</p>
+
+<p>printf(&ldquo;%d\n&rdquo;, f(3)); return 0;</p>
+
+<p>}</p>
+
+<p>提示4-17 : C语言支持递归，即函数可以直接或间接地调用自己。但要注意为递归函数</p>
+
+<p>编写终止条件，否则将产生无限递归。</p>
+
+<p>4.3.3 C语言对递归的支持</p>
+
+<p>尽管从概念上可以理解阶乘的递归定义，但在C语言中函数为什么真的可以“自己调用自 己”呢？下面再次借助gdb来调试这段程序。</p>
+
+<p>首先用b f命令设置断点——除了可以按行号设置外，也可以直接给出函数名，断点将设 置在函数的开头。下面用r命令运行程序，并在断点处停下来。接下来用s命令单步执行：</p>
+
+<p>(gdb) r</p>
+
+<p>Starting program: C:\a.exe</p>
+
+<table>
+<thead>
+<tr>
+<th>Breakpoint</th>
+<th>1, f</th>
+<th>(n=3)</th>
+<th>at factorial.c:3</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>3</td>
+<td>return</td>
+<td>n ==</td>
+<td>0 ? 1 : f(n-1)*n;</td>
+</tr>
+
+<tr>
+<td>(gdb) s</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Breakpoint</td>
+<td>1, f</td>
+<td>(n=2)</td>
+<td>at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>return</td>
+<td>n ==</td>
+<td>0 ? 1 : f(n-1)*n;</td>
+</tr>
+
+<tr>
+<td>(gdb) s</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Breakpoint</td>
+<td>1, f</td>
+<td>(n=1)</td>
+<td>at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>return</td>
+<td>n ==</td>
+<td>0 ? 1 : f(n-1)*n;</td>
+</tr>
+
+<tr>
+<td>(gdb) s</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Breakpoint</td>
+<td>1, f</td>
+<td>(n=0)</td>
+<td>at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>return</td>
+<td>n ==</td>
+<td>0 ? 1 : f(n-1)*n;</td>
+</tr>
+</tbody>
+</table>
+
+<p>(gdb) s</p>
+
+<p>看到了吗？在第一次断点处，n=3 ( 3是main函数中的调用参数)，接下来将调用f(3-1),即f(2),因此单步一次后显示n=2。由于n==0仍然不成立，继续递归调用，直到n=0。这 时不再递归调用了，执行一次s命令以后会到达函数的结束位置。</p>
+
+<p>接下来该做什么？没错！好好看看下面的调用栈吧！</p>
+
+<p>(gdb) bt</p>
+
+<table>
+<thead>
+<tr>
+<th>#0</th>
+<th>f (n=0) at</th>
+<th>factorial.c:4</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>#1</td>
+<td>0x00401308</td>
+<td>in f (n=1) at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>#2</td>
+<td>0x00401308</td>
+<td>in f (n=2) at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>#3</td>
+<td>0x00401308</td>
+<td>in f (n=3) at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>#4</td>
+<td>0x00401359</td>
+<td>in main () at factorial.c:6</td>
+</tr>
+</tbody>
+</table>
+
+<p>(gdb) s</p>
+
+<table>
+<thead>
+<tr>
+<th>4</th>
+<th>}</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>(gdb) bt</td>
+<td></td>
+</tr>
+
+<tr>
+<td>#0</td>
+<td>f (n=1) at factorial.c:4</td>
+</tr>
+
+<tr>
+<td>#1</td>
+<td>0x00401308 in f (n=2) at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>#2</td>
+<td>0x00401308 in f (n=3) at factorial.c:3</td>
+</tr>
+
+<tr>
+<td>#3</td>
+<td>0x00401359 in main () at factorial.c:6</td>
+</tr>
+
+<tr>
+<td>(gdb) s</td>
+<td></td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>}</td>
+</tr>
+
+<tr>
+<td>(gdb) bt</td>
+<td></td>
+</tr>
+
+<tr>
+<td>#0</td>
+<td>f (n=2) at factorial.c:4</td>
+</tr>
+
+<tr>
+<td>#1</td>
+<td>0x00401308 in f (n=3) at factorial.c:3</td>
+</tr>
+</tbody>
+</table>
+
+<p>#2 0x00401359 in main() at factorial.c:6 (gdb) s</p>
+
+<p>4 }</p>
+
+<p>(gdb) bt</p>
+
+<p>#0 f (n=3) at factorial.c:4</p>
+
+<p>#1 0x00401359 in main() at factorial.c:6 (gdb) s</p>
+
+<p>main() at factorial.c:7</p>
+
+<p>7 return 0;</p>
+
+<p>(gdb) bt</p>
+
+<p>#0 main() at factorial.c:7</p>
+
+<p>每次执行完s指令，都会有一层递归调用终止，直到返回main函数。事实上，如果在递 归调用初期查看调用栈，则会发现每次递归调用都会多一个栈帧——和普通的函数调用并没 有什么不同。确实如此。由于使用了调用栈，匚语言自然支持了递归。在C语言的函数中，</p>
+
+<p>调用自己和调用其他函数并没有任何本质区别，都是建立新栈帧，传递参数并修改当前代码</p>
+
+<p>行。在函数体执行完毕后删除栈帧，处理返回值并修改当前代码行。</p>
+
+<p>提示4-18 :由于使用了调用栈，C语言支持递归。在C语言中，调用自己和调用其他函 数并没有本质不同。</p>
+
+<p>如果仍然无法理解上面的调用栈，可以作如下的比喻。</p>
+
+<p>皇帝(拥有main函数的栈巾贞)：大臣，你给我算一下f(3)。</p>
+
+<p>大臣(拥有f(3)的栈帧)：知府，你给我算一下f(2)。</p>
+
+<p>知府(拥有f(2)的栈帧)：县令，你给我算一下f(1)。</p>
+
+<p>县令(拥有f(1)的栈帧)：师爷，你给我算一下f(0)。</p>
+
+<p>师爷(拥有f(0)的栈帧)：回老爷，f(0)=1。</p>
+
+<p>县令：(心算f(1)=f(0)*1=1 )回知府大人，f(1)=1。</p>
+
+<p>知府：(心算f(2)=f(1)*2=2 )回大人，f(2)=2。</p>
+
+<p>大臣：(心算f(3)=f(2)*3=6 )回皇上，f(3)=6。</p>
+
+<p>皇帝满意了。</p>
+
+<p>虽然比喻不甚恰当，但也可以说明一些问题。递归调用时新建了一个栈帧，并且跳转到</p>
+
+<p>了函数开头处执行，就好比皇帝找大臣、大臣找知府这样的过程。尽管同一时刻可以有多个</p>
+
+<p>栈帧(皇帝、大臣、知府同时处于“等待下级回话”的状态)，但“当前代码行”只有一个。</p>
+
+<p>读者如果理解了这个比喻，但仍不理解调用栈，不必强求，知道递归为什么能正常工作</p>
+
+<p>即可。设计递归程序的重点在于给下级安排工作。</p>
+
+<p>4.3.4 段错误与栈溢出</p>
+
+<p>至此，对C语言的介绍已近尾声。别忘了，我们还没有测试涵数。也许你会说：不必 了，我知道乘法会溢出——算阶乘时，乘法老是会溢出。可这次不一样了。把main函数的 f(3)换成f(100000000)试试(别数了，有8个0 )。什么？没有输出？不对呀，即使溢出，也应 该是个负数或者其他“显然不对”的值，不应该没有输出啊！</p>
+
+<p>gdb再次帮了我们的忙。用-g编译后用gdb载入，二话不说就用r执行。结果发现gdb报错</p>
+
+<p>了！</p>
+
+<p>(gdb) r</p>
+
+<p>Starting program: C:\a.exe</p>
+
+<p>Program received signal SIGSEGV, Segmentation fault.</p>
+
+<p>0x00401303 in f (n=99869708) at 4-6.c:3</p>
+
+<p>3 return n == 0 ? 1 : f(n-1)*n;</p>
+
+<p>gdb中显示程序收到了 SIGSEGV信号——段错误。这太让人沮丧了！眼看本章就要结束 了，怎么又遇到一个段错误？别急，让我们慢慢分析。我保证，这是本章最后的难点。</p>
+
+<p>你有没有想过，编译后产生的可执行文件里都保存着些什么内容？答案是和操作系统相 关。例如，UNIX/Linux用的ELF格式，DOS下用的是COFF格式，而Windows用的是PE文件格 式(由COFF扩充而来)。这些格式不尽相同，但都有一个共同的概念——段。</p>
+
+<p>“段”(segmentation)是指二进制文件内的区域，所有某种特定类型信息被保存在里面。 可以用size程序<a href="#bookmark13">m</a>得到可执行文件中各个段的大小。如刚才的factorial.c，编译出a.exe以后执 行size的结果是：</p>
+
+<p>D:&gt;size a.exe</p>
+
+<p>text    data    bss    dec    hex filename</p>
+
+<p>2756 740    224    3720    e88 a.exe</p>
+
+<p>此结果表示a.exe由正文段、数据段和bss段组成，总大小是3720，用十六进制表示为</p>
+
+<p>e88。这些段是什么意思呢？</p>
+
+<p>提示4-19 :在可执行文件中，正文段(Text Segment)用于储存指令，数据段(Data Segment)用于储存已初始化的全局变量，BSS段(BSS Segment)用于储存未赋值的全局 变量所需的空间。</p>
+
+<p>是不是少了点什么？调用栈在哪里？它并不储存在可执行文件中，而是在运行时创建。 调用栈所在的段称为堆栈段(Stack Segment )。和其他段一样，堆栈段也有自己的大小，不 能被越界访问，否则就会出现段错误( Segmentation Fault)。</p>
+
+<p>这样，前面的错误就不难理解了：每次递归调用都需要往调用栈里增加一个栈帧，久而 久之就越界了。这种情况叫做栈溢出( Stack Overflow)。</p>
+
+<p>提示4-20 ：在运行时，程序会动态创建一个堆栈段，里面存放着调用栈，因此保存着 函数的调用关系和局部变量。</p>
+
+<p>那么栈空间究竟有多大呢？这和操作系统相关。在Linux中，栈大小是由系统命令ulimit 指定的，例如，ulimit -a显示当前栈大小，而ulimit -s 32768将把栈大小指定为32MB。但在 Windows    .小是储存在可执行文件中的。使用gcc可以这样指定可执行文件的栈大小：</p>
+
+<p>gcc -Wl,&ndash;stack=16777216<a href="#bookmark15">(</a><a href="#bookmark15">6)</a>，这样栈大小就变为 16MB。</p>
+
+<p>提示4-21 :在Linux中，栈大小并没有储存在可执行程序中，只能用ulimit命令修改；</p>
+
+<p>在Windows中，栈大小储存在可执行程序中，用gcc编译时可以通过-Wl,&ndash;stack=<byte count> 指定。</p>
+
+<p>聪明的读者，现在你能理解为什么在介绍数组时，建议“把较大的数组放在main函数 外”了吗？别忘了，局部变量也是放在堆栈段的。栈溢出不一定是递归调用太多，也可能是 局部变量太大。只要总大小超过了允许的范围，就会产生栈溢出。</p>
+
+<h6 id="4-4-竞赛题目选讲">4.4 竞赛题目选讲</h6>
+
+<p>从技术上讲，不用函数和递归也可以写出所有程序<a href="#bookmark18">m</a>。但是从实用的角度来讲，函数和</p>
+
+<p>递归能帮我们大忙。人毕竟不是机器，代码的可读性和可维护性是相当重要的。很多初学者</p>
+
+<p>渴望学习到更好的调试技巧，但在此之前，笔者却总是建议他们先学习如何更好地写程序。</p>
+
+<p>如果方法得当，不仅能更快地写出更短的程序，而且调试起来也更轻松，隐含的错误也会更</p>
+
+<p>少。本节的题目并不涉及新的知识点，但在程序组织和调试技巧上会给读者一些新的启示。</p>
+
+<p>例题 4-2 刽子手游戏(Hangman Judge, UVa 489 )</p>
+
+<p>刽子手游戏其实是一款猜单词游戏，如图4-</p>
+
+<p>1所示。游戏规则是这样的：计算机想一个单词</p>
+
+<p>让你猜，你每次可以猜一个字母。如果单词里有</p>
+
+<p>那个字母，所有该字母会显示出来；如果没有那</p>
+
+<p>个字母，则计算机会在一幅“刽子手”画上填一</p>
+
+<p>笔。这幅画一共需要7笔就能完成，因此你最多</p>
+
+<p>只能错6次。注意，猜一个已经猜过的字母也算</p>
+
+<p>错。</p>
+
+<p>在本题中，你的任务是编写一个“裁判”程</p>
+
+<p>序，输入单词和玩家的猜测，判断玩家赢了</p>
+
+<p>( You win.)、 输了 ( You lose. )还是放弃了 ( You chickened out.)。 每组数据包含3行，第1</p>
+
+<p>行是游戏编号( -1为输入结束标记)，第2行是</p>
+
+<p>计算机想的单词，第3行是玩家的猜测。后两行</p>
+
+<p>保证只含小写字母。</p>
+
+<p>样例输入：</p>
+
+<p>1</p>
+
+<p><img src="97d5de5b65e8cf78082c24809 (97d57a2f0ee16f66de5b)-16.jpg" alt="img" /></p>
+
+<p>cheese</p>
+
+<p>chese</p>
+
+<p>cheese</p>
+
+<p>abcdefg</p>
+
+<p>3</p>
+
+<p>cheese</p>
+
+<p>abcdefgij</p>
+
+<p>-1</p>
+
+<p>样例输出:</p>
+
+<p>Round 1 You win.</p>
+
+<p>Round 2</p>
+
+<p>You chickened out. Round 3</p>
+
+<p>You lose.</p>
+
+<p>【分析】</p>
+
+<p>一般而言，程序不是直接从第一行开始写到最后一行结束，而是遵循两种常见的顺序之 一：自顶向下和自底向上。什么叫自顶向下呢？简单地说，就是先写框架，再写细节。实际 上，之前已经用过这个方法了，就是先写“伪代码”，然后转化成实际的代码。有了“函数”这 个工具之后，可以更好地贯彻这个方法：先写主程序，包括对函数的调用，再实现函数本 身。自底向上和这个顺序相反，是先写函数，再写主程序。对于编写复杂软件来说，自底向 下的构建方式有它独特的优势<a href="#bookmark22">m</a>。但在算法竞赛中，这样做的选手并不多见<a href="#bookmark24">@</a>。</p>
+
+<p>程序4-11 刽子手游戏——程序框架</p>
+
+<p>#include<stdio.h> #include<string.h></p>
+
+<p>#define maxn 100</p>
+
+<p>//还需要猜left个位置，错chance次之后就会输 //答案是字符串s,玩家猜的字母序列是s2 //win=1表示已经臝了； lose=1表示已经输了</p>
+
+<p>int left, chance;</p>
+
+<p>char s[maxn], s2[maxn]; int win, lose;</p>
+
+<p>void guess(char ch) { … }</p>
+
+<p>int main() { int rnd;</p>
+
+<p>while(scanf(&ldquo;%d%s%s&rdquo;, &amp;rnd, s, s2) == 3 &amp;&amp; rnd != -1) {</p>
+
+<p>printf(&ldquo;Round %d\n&rdquo;, rnd);</p>
+
+<p>win = lose = 0;    // 求解一组新数据之前要初始化</p>
+
+<p>left = strlen(s); chance = 7;</p>
+
+<p>for(int i = 0; i &lt; strlen(s2); i++) {</p>
+
+<p>guess(s2[i]);    //猜一个字母</p>
+
+<p>if(win || lose) break;    / / 检查状态</p>
+
+<p>}</p>
+
+<p>// 根据结果进行输出</p>
+
+<p>if(win) printf(&ldquo;You win.\n&rdquo;);</p>
+
+<p>else if(lose) printf(&ldquo;You lose.\n&rdquo;);</p>
+
+<p>else printf(&ldquo;You chickened out.\n&rdquo;);</p>
+
+<p>}</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>有一些细节需要说明。</p>
+
+<p>一是变量名的选取。那个rnd本应叫round ,但是有一个库函数也叫round ,所以改名叫rnd 了。当然，改成Round也可以，因为C语言的标识符是区分大小写的。这里改成rnd只是个人 习惯。毕竟这个代码很短，而且rnd这个变量的作用域很小，很容易搞清楚它的含义。在第5 章学习完STL之后，这种“被用过的常用名字”还会增加，例如count、min、max等都是STL已 经使用的名字，程序中最好避开它们。</p>
+
+<p>二是变量的使用。全局变量本应该尽量少用，但是对于本题来说，需要维护的内容比较</p>
+
+<p>多，例如，是否赢了，是否输了，以及剩余的机会数等。如果不用全局变量，则它们都需要 传递给函数guess。更麻烦的是，其中有些参数还需要被guess修改，只能传指针，但这会让 代码变“丑<sup class="footnote-ref" id="fnref:bookmark26"><a href="#fn:bookmark26">0</a></sup>”。所以笔者最终选择了使用全局变量。读者完全可以对此持不同看法，刚才的 文字只是想说明：变量和函数调用方式的设计是一个需要思考的问题。如果设计出的方案还 未写出便觉得别扭，恐怕写出来的程序会既不优美，也不好调试，甚至容易隐藏bug。</p>
+
+<p>下一步是实现guess函数。在编写这个函数时，可能会注意到一个问题：题目中说了猜过</p>
+
+<p>的字母再猜一次算错，可是似乎并没有保存哪些字母已经猜过。一个解决方案是在程序框架</p>
+
+<p>中增加一个字符数组int guessed[256]，让guessed[ch]标识字母ch是否已经猜过。但其实还有一 个更简单的方法，就是将猜对的字符改成空格，像这样：</p>
+
+<p>程序4-12刽子手游戏-guess函数</p>
+
+<p>void guess(char ch) {</p>
+
+<table>
+<thead>
+<tr>
+<th>int bad =</th>
+<th>1;</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>for(int i</td>
+<td>= 0; i &lt;</td>
+<td>strlen(s); i++)</td>
+<td></td>
+</tr>
+
+<tr>
+<td>if(s[i]</td>
+<td>== ch) {</td>
+<td>left&ndash;; s[i] = &lsquo;</td>
+<td>&rsquo;; bad = 0;</td>
+</tr>
+
+<tr>
+<td>if(bad) -</td>
+<td>chance;</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>if(!chance) lose =</td>
+<td>1;</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>if(!left)</td>
+<td>win = 1;</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>这样，程序就完整了。如何调试呢？每猜完一个字母之后打印出s、left、chance等重要 变量的值，很容易就能发现程序出错的位置，读者不妨一试。另一方面，如果刚才加上了 guessed数组，每次打印的调试信息就会多出这样一个庞大的数组，不仅数据多，而且不直 观，会给调试带来麻烦。一般来说，减少变量的个数对于编程和调试都会有帮助。</p>
+
+<p>例题4-3 救济金发放(The Dole Queue, UVa 133 )</p>
+
+<p>«(«&lt;20)个人站成一圈，逆时针编号为1 ~«。有两个官员，A从1开始逆时针数，丑从《开 始顺时针数。在每一轮中，官员A数&amp;个就停下来，官员B数m个就停下来(注意有可能两个 官员停在同一个人上)。接下来被官员选中的人( 1个或者2个)离开队伍。</p>
+
+<p>输入《，A，rn输出每轮里被选中的人的编号(如果有两个人，先输出被A选中的)。例 如，n=10，A=4，m=3，输出为4 8, 9 5, 3 1, 2 6, 10, 7。注意：输出的每个数应当恰好占3列。</p>
+
+<p>【分析】</p>
+
+<p>仍然采用自顶向下的方法编写程序。用一个大小为0的数组表示人站成的圈。为了避免</p>
+
+<p>人走之后移动数组元素，用0表示离开队伍的人，数数时跳过即可。主程序如下：</p>
+
+<p>#include<stdio.h></p>
+
+<p>#define maxn 25</p>
+
+<p>int n, k, m, a[maxn];</p>
+
+<p>//逆时针走t步，步长是d (-1表示顺时针走)，返回新位置</p>
+
+<p>int go(int p, int d, int t) { … }</p>
+
+<p>int main() {</p>
+
+<p>while(scanf(&ldquo;%d%d%d&rdquo;, &amp;n, &amp;k, &amp;m) == 3 &amp;&amp; n) { for(int i = 1; i &lt;= n; i++) a[i] = i;</p>
+
+<p>int left = n; //还剩下的人数</p>
+
+<p>int p1 = n, p2 = 1; while(left) {</p>
+
+<p>p1 = go(p1, 1, k); p2 = go(p2, -1, m); printf(&ldquo;%3d&rdquo;, p1); left&ndash;;</p>
+
+<p>if(p2 != p1) { printf(&ldquo;%3d&rdquo;, p2); left&ndash;; } a[p1] = a[p2] = 0; if(left) printf(&ldquo;,&rdquo;);</p>
+
+<p>}</p>
+
+<p>printf(&rdquo;\n&rdquo;);</p>
+
+<p>}</p>
+
+<p>return 0;</p>
+
+<p>注意go这个函数。当然也可以写两个函数：逆时针go和顺时针go，但是仔细思考后发现</p>
+
+<p>这两个函数可以合并：逆时针和顺时针数数的唯一区别只是下标是加1还是减1。把这个+1/-1抽象为“步长”参数，就可以把两个go统一了。代码如下：</p>
+
+<p>int go（int p, int d, int t） { while（t&ndash;） {</p>
+
+<p>do { p = （p+d+n-1） % n + 1; } while（a[p] == 0）; //走到下一个非0数字</p>
+
+<p>}</p>
+
+<p>return p;</p>
+
+<p>例题4-4 信息解码(Message Decoding, ACM/ICPC World Finals 1991, UVa 213 )</p>
+
+<p>考虑下面的01串序列：</p>
+
+<p>0, 00, 01, 10, 000, 001, 010, 011, 100, 101, 110, 0000, 0001, …, 1101, 1110, 00000, …</p>
+
+<p>首先是长度为1的串，然后是长度为2的串，依此类推。如果看成二进制，相同长度的后</p>
+
+<p>一个串等于前一个串加1。注意上述序列中不存在全为1的串。</p>
+
+<p>你的任务是编写一个解码程序。首先输入一个编码头（例如AB#TANCnrtXc ）,则上述 序列的每个串依次对应编码头的每个字符。例如，0对应A , 00对应B , 01对应#，…，110对 应X , 0000对应c。接下来是编码文本（可能由多行组成，你应当把它们拼成一个长长的01 串）。编码文本由多个小节组成，每个小节的前3个数字代表小节中每个编码的长度（用二 进制表示，例如010代表长度为2），然后是各个字符的编码，以全1结束（例如，编码长度 为2的小节以11结束）。编码文本以编码长度为000的小节结束。</p>
+
+<p>例如，编码头为$#**\，编码文本为0100000101101100011100101000，应这样解码：</p>
+
+<p>010（编码长度为2）00（#）00（#）10（*）11（小节结束）011（编码长度为3）000（\）111（小节结束）001（编码</p>
+
+<p>长度为1）0（$）1（小节结束）000（编码结束）。</p>
+
+<p>【分析】</p>
+
+<p>还记得二进制吗？如果不记得，请重新翻阅第3章的最后部分。有了二进制，就不必以</p>
+
+<p>字符串的形式保存这一大串编码了，只需把编码理解成二进制，用（len, value）这个二元组来 表示一个编码，其中len是编码长度，value是编码对应的十进制值。如果用codes[len][value] 保存这个编码所对应的字符，则主程序看上去应该是这个样子的。</p>
+
+<p>#include<string . h> / /使用memset int readchar() { … } int readint(int c) { … } int code[8][1&lt;&lt;8]; int readcodes() { … }</p>
+
+<p>int main() {</p>
+
+<p>while(readcodes()) { / /无法读取更多编码头时退出</p>
+
+<p>//printcodes();</p>
+
+<p>for(;;) {</p>
+
+<p>int len = readint(3);</p>
+
+<p>if(len == 0) break;</p>
+
+<p>/ /printf(&ldquo;l en=%d\n&rdquo;, len);</p>
+
+<p>for(;;) {</p>
+
+<p>int v = readint(len);</p>
+
+<p>/ /printf(&ldquo;v=%d\n&rdquo;, v);</p>
+
+<p>if(v == (1 &lt;&lt; len)-1) break; putchar(code[l en][v]);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>putchar(&rsquo;\n&rsquo;);</p>
+
+<p>}</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>主程序里接连使用了两个还没有介绍的函数：readcodes和readint。前者用来读取编码， 后者读取c位二进制字符（即0和1 ），并转化为十进制整数。</p>
+
+<p>本题的调试方法也很有代表性。上面的代码中已经包含了几条注释掉的printf语句，用于 打印出一些关键变量的值。如果程序的输出不是想要的结果，题目中的举例就派上用场了： 只需把举例中的解释和程序输出的中间结果一一对照，就能知道问题出在哪里。</p>
+
+<p>编写readint时会遇到同一个问题：如何处理“编码文本可以由多行组成”这个问题？方法 有很多种，笔者的方案是再编写一个“跨行读字符”的函数readchar。</p>
+
+<p>int readchar() { for(;;) {</p>
+
+<p>int ch = getchar();</p>
+
+<p>if(ch != &lsquo;\n&rsquo; &amp;&amp; ch != &lsquo;\r&rsquo;) return ch; // 一直读到非换行符为止</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>int readint(int c) { int v = 0;</p>
+
+<p>while(c&ndash;) v = v * 2 + readchar() - &lsquo;0&rsquo;; return v;</p>
+
+<p>下面是函数readcodes。首先使用memset清空数组(这是个好习惯。还记得之前讲过的多 数据题目的常见错误吗？)，编码头自身占一行，所以应该用readchar读取第一个字符，而 用普通的getchar读取剩下的字符，直到\n。这样做，代码比较简单，但有些读者可能会觉得 有些别扭。没关系，你完全可以使用另外一套自己觉得更清晰的方法。</p>
+
+<p>int readcodes() {</p>
+
+<p>memset(code, 0, sizeof(code)); // 清空数组</p>
+
+<p>code [1][0] = readchar () ; //直接调到下一行开始读取。如果输入已经结束，会读到EOF</p>
+
+<p>for(int len = 2; len &lt;= 7; len++) {</p>
+
+<p>for(int i = 0; i &lt; (1&lt;&lt;len)-1; i++) {</p>
+
+<p>int ch = getchar(); if(ch == EOF) return 0;</p>
+
+<p>if(ch == &lsquo;\n&rsquo; || ch == &lsquo;\r&rsquo;) return 1; code[len][i] = ch;</p>
+
+<p>return 1;</p>
+
+<p>最后是前面提到的prmtcodes函数。这个函数对于解题来说不是必需的，但对于调试却是 有用的。</p>
+
+<p>void printcodes() {</p>
+
+<p>for(int len = 1; len &lt;= 7; len++)</p>
+
+<p>for(int i = 0; i &lt; (1&lt;&lt;len)-1; i++) { if(code[len][i] == 0) return;</p>
+
+<p>printf(&ldquo;code[%d][%d] = %c\n&rdquo;, len, i, code[len][i]);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>由于每次读取编码头时把codes数组清空了，所以只要遇到字符为0的情况，就表示编码 头已经结束。</p>
+
+<p>例题4-5 踪电子表格中的单元格(Spreadsheet Tracking, ACM/ICPC World Finals</p>
+
+<p>1997, UVa512)</p>
+
+<p>有一个r行c列(1分，c&lt;50 )的电子表格，行从上到下编号为卜r，列从左到右编号为1 〜c。如图4-2 ( a )所示，如果先删除第1、5行，然后删除第3, 6, 7, 9列，结果如图4-2 ( b ) 所示。</p>
+
+<h6 id="a-b-c-d-e">A B C D E</h6>
+
+<p>}</p>
+
+<p>ABCDEFGHI</p>
+
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>22</th>
+<th>55</th>
+<th>66</th>
+<th>77</th>
+<th>88</th>
+<th>99</th>
+<th>10</th>
+<th>12</th>
+<th>14</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>24：</td>
+<td>6</td>
+<td>8</td>
+<td>22</td>
+<td>12</td>
+<td>14</td>
+<td>16</td>
+<td>18</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>18</td>
+<td>19</td>
+<td>20</td>
+<td>21</td>
+<td>22</td>
+<td>23</td>
+<td>24</td>
+<td>25</td>
+<td>26</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>24</td>
+<td>25</td>
+<td>26</td>
+<td>67</td>
+<td>22</td>
+<td>69</td>
+<td>70</td>
+<td>71</td>
+<td>77</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>68</td>
+<td>78</td>
+<td>79</td>
+<td>80</td>
+<td>22</td>
+<td>25</td>
+<td>28</td>
+<td>29</td>
+<td>30</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>16</td>
+<td>12</td>
+<td>11</td>
+<td>10</td>
+<td>22</td>
+<td>56</td>
+<td>57</td>
+<td>58</td>
+<td>59</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>33</td>
+<td>34</td>
+<td>35</td>
+<td>36</td>
+<td>22</td>
+<td>38</td>
+<td>39</td>
+<td>40</td>
+<td>41</td>
+</tr>
+</tbody>
+</table>
+
+<p>(a)</p>
+
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>2</th>
+<th>24</th>
+<th>8</th>
+<th>22</th>
+<th>16</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>2</td>
+<td>18</td>
+<td>19</td>
+<td>21</td>
+<td>22</td>
+<td>25</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>24</td>
+<td>25</td>
+<td>67</td>
+<td>22</td>
+<td>71</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>16</td>
+<td>12</td>
+<td>10</td>
+<td>22</td>
+<td>58</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>33</td>
+<td>34</td>
+<td>36</td>
+<td>22</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>(b)</p>
+
+<p>图4-2 删除行、列</p>
+
+<p>接下来在第2、 3、 5行前各插入一个空行，然后在第3列前插入一个空列，会得到如图4-3所示结果。</p>
+
+<p>图4-3 插入行、列</p>
+
+<p>你的任务是模拟这样的《个操作。具体来说一共有5种操作：</p>
+
+<p>J EX r1 c1 r2 c2交换单元格（r1，c1），（r2，c2）。</p>
+
+<p>□〈command〉A xz x2…xA插入或删除A行或列（DC-删除列，DR-删除行，IC-插入 列，IR-插入行，1SAS10 ）。</p>
+
+<p>在插入/删除指令后，各个x值不同，且顺序任意。接下来是个查询，每个查询格式 为“r c”，表示查询原始表格的单元格（r，c）。对于每个查询，输出操作执行完后该单元格的新 位置。输入保证在任意时刻行列数均不超过50。</p>
+
+<p>【分析】</p>
+
+<p>最直接的思路就是首先模拟操作，算出最后的电子表格，然后在每次查询时直接在电子</p>
+
+<p>表格中找到所求的单元格。为了锻炼读者的代码阅读能力，此处不对代码进行任何解释：</p>
+
+<p>#include<stdio.h></p>
+
+<p>#include<string.h></p>
+
+<p>#define maxd 100</p>
+
+<p>#define BIG 10000</p>
+
+<p>int r, c, n, d[maxd][maxd], d2[maxd][maxd], ans[maxd][maxd], cols[maxd];</p>
+
+<p>void copy(char type, int p, int q) {</p>
+
+<p>if(type</p>
+
+<p>&lsquo;R&rsquo;) {</p>
+
+<p>for(int i</p>
+
+<p>d[p][i]</p>
+
+<p>} else { for(int i</p>
+
+<p>d[i][p]</p>
+
+<p>}</p>
+
+<p>1; i &lt;= c; i++) d2[q][i];</p>
+
+<p>1; i &lt;= r; i++) d2[i][q];</p>
+
+<p>void del(char type) {</p>
+
+<p>memcpy(d2, d, sizeof(d));</p>
+
+<p>int cnt = type == &lsquo;R&rsquo; ? r : c, cnt2 = 0; for(int i = 1; i &lt;= cnt; i++) {</p>
+
+<p>if(!cols[i]) copy(type, ++cnt2, i);</p>
+
+<p>}</p>
+
+<p>if(type == &lsquo;R&rsquo;) r = cnt2; else c = cnt2;</p>
+
+<p>} void ins(char type) {</p>
+
+<p>memcpy(d2, d, sizeof(d));</p>
+
+<p>int cnt = type == &lsquo;R&rsquo; ? r : c, cnt2 = 0; for(int i = 1; i &lt;= cnt; i++) {</p>
+
+<p>if(cols[i]) copy(type, ++cnt2, 0); copy(type, ++cnt2, i);</p>
+
+<p>}</p>
+
+<p>if(type == &lsquo;R&rsquo;) r = cnt2; else c = cnt2;</p>
+
+<p>}</p>
+
+<p>int main() {</p>
+
+<p>int r1, c1, r2, c2, q, kase = 0;</p>
+
+<p>char cmd[10]; memset(d, 0, sizeof(d));</p>
+
+<p>while (scanf (&ldquo;%d%d%d&rdquo;, &amp;r, &amp;c, &amp;n) == 3 &amp;&amp; r) {</p>
+
+<p>int r0 = r, c0 = c; for(int i = 1; i &lt;= r; i++)</p>
+
+<p>for(int j = 1; j &lt;= c; j++)</p>
+
+<p>d[i][j] = i*BIG + j; while(n&ndash;) {</p>
+
+<p>scanf ( &ldquo;%s&rdquo;, cmd); if(cmd[0] == &lsquo;E&rsquo;) {</p>
+
+<p>scanf(&ldquo;%d%d%d%d&rdquo;, &amp;r1, &amp;c1, &amp;r2, &amp;c2);</p>
+
+<p>int t = d[r1][c1]; d[r1][c1] = d[r2][c2]; d[r2][c2] = t;</p>
+
+<p>} else { int a, x; scanf(&ldquo;%d&rdquo;, &amp;a); memset(cols, 0, sizeof(cols));</p>
+
+<p>for(int i = 0; i &lt; a; i++) { scanf(&ldquo;%d&rdquo;, &amp;x); cols[x] = 1; }</p>
+
+<p>if(cmd[0] == &rsquo;D&rsquo;) del(cmd[1]); else ins(cmd[1]);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>memset(ans, 0, sizeof(ans));</p>
+
+<p>for(int i = 1; i &lt;= r; i++)</p>
+
+<p>for(int j = 1; j &lt;= c; j++) {</p>
+
+<p>ans[d[i][j]/BIG][d[i][j]%BIG] = i*BIG+j;</p>
+
+<p>}</p>
+
+<p>if(kase &gt; 0) printf (&rdquo;\n&rdquo;) ; printf(&ldquo;Spreadsheet #%d\n&rdquo;, ++kase); scanf(&ldquo;%d&rdquo;, &amp;q);</p>
+
+<p>while(q&ndash;) {</p>
+
+<p>scanf(&ldquo;%d%d&rdquo;, &amp;r1, &amp;c1);</p>
+
+<p>printf(&ldquo;Cell data in (%d,%d) &ldquo;, r1, c1); if(ans[r1][c1] == 0) printf ( &ldquo;GONE\n&rdquo; ) ;</p>
+
+<p>else printf(&ldquo;moved to (%d,%d)\n&rdquo;, ans[r1][c1]/BIG, ans[r1][c1]%BIG);</p>
+
+<p>}</p>
+
+<p>} return 0;</p>
+
+<p>另一个思路是将所有操作保存，然后对于每个查询重新执行每个操作，但不需要计算整</p>
+
+<p>个电子表格的变化，而只需关注所查询的单元格的位置变化。对于题目给定的规模来说，这</p>
+
+<p>个方法不仅更好写，而且效率更高。代码如下：</p>
+
+<p>#include<stdio.h></p>
+
+<p>#include<string.h></p>
+
+<p>#define maxd 10000</p>
+
+<p>struct Command { char c[5]; int r1, c1, r2, c2; int a, x[20];</p>
+
+<p>} cmd[maxd];</p>
+
+<p>int r, c, n;</p>
+
+<p>int simulate(int* r0, int* c0) { for(int i = 0; i &lt; n; i++) {</p>
+
+<p>if(cmd[i].c[0] == &lsquo;E&rsquo;) {</p>
+
+<p>if(cmd[i].r1 == *r0 &amp;&amp; cmd[i].c1 == *c0) { *r0 = cmd[i].r2; *c0 = cm else if(cmd[i].r2 == *r0 &amp;&amp; cmd[i].c2 == *c0) { *r0 = cmd[i].r1; *c0</p>
+
+<p>} else {</p>
+
+<p>else {</p>
+
+<p>if(cmd[i]</p>
+
+<p>if(cmd[i]</p>
+
+<p>c[1] == &lsquo;R&rsquo; c[1] == &lsquo;C&rsquo;</p>
+
+<p>&amp;&amp; x == *r0) &amp;&amp; x == *c0)</p>
+
+<p>return 0; return 0;</p>
+
+<p>int dr = 0, dc = 0;</p>
+
+<table>
+<thead>
+<tr>
+<th>for(int j = 0; j &lt;</th>
+<th>cmd[i]</th>
+<th>.a;</th>
+<th>j++)</th>
+<th>{</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>int x = cmd[i].x</td>
+<td>[j];</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>if(cmd[i].c[0] =</td>
+<td>= &lsquo;I&rsquo;)</td>
+<td>{</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>if(cmd[i].c[1]</td>
+<td>== &lsquo;R&rsquo;</td>
+<td>&amp;&amp;</td>
+<td>x &lt;=</td>
+<td>*r0)</td>
+</tr>
+
+<tr>
+<td>if(cmd[i].c[1]</td>
+<td>== &lsquo;C&rsquo;</td>
+<td>&amp;&amp;</td>
+<td>x &lt;=</td>
+<td>*c0)</td>
+</tr>
+</tbody>
+</table>
+
+<p>dr++;</p>
+
+<p>dc++;</p>
+
+<p>}</p>
+
+<table>
+<thead>
+<tr>
+<th>if(cmd[i].c[1] ==</th>
+<th>&lsquo;R&rsquo;</th>
+<th>&amp;&amp; x &lt; *r0)</th>
+<th>dr&ndash;;</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>if(cmd[i].}</td>
+<td>c[1]    ==</td>
+<td>&lsquo;C&rsquo;</td>
+<td>&amp;&amp; x &lt; *c0)</td>
+<td>dc&ndash;;</td>
+</tr>
+
+<tr>
+<td>}*r0 += dr; *c0</td>
+<td>+= dc;</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>return 1;</p>
+
+<p>}</p>
+
+<p>int main() {</p>
+
+<p>int r0, c0, q, kase = 0;</p>
+
+<p>while(scanf(&ldquo;%d%d%d&rdquo;, &amp;r, &amp;c, &amp;n) == 3 &amp;&amp; r) { for(int i = 0; i &lt; n; i++) {</p>
+
+<p>scanf (&ldquo;%s&rdquo;, cmd[i].c);</p>
+
+<p>if(cmd[i].c[0] == &lsquo;E&rsquo;) {</p>
+
+<p>scanf (&ldquo;%d%d%d%d&rdquo;, &amp;cmd[i].r1, &amp;cmd[i].c1, &amp;cmd[i].r2, &amp;cmd[i].c2);</p>
+
+<p>} else {</p>
+
+<p>scanf(&ldquo;%d&rdquo;, &amp;cmd[i].a);</p>
+
+<p>for(int j = 0; j &lt; cmd[i].a; j++) scanf(&ldquo;%d&rdquo;, &amp;cmd[i].x[j]);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>if(kase &gt; 0) printf ( &ldquo;\n&rdquo; ) ; printf(&ldquo;Spreadsheet #%d\n&rdquo;, ++kase);</p>
+
+<p>scanf(&ldquo;%d&rdquo;, &amp;q); while(q&ndash;) {</p>
+
+<p>scanf (&ldquo;%d%d&rdquo;, &amp;r0, &amp;c0);</p>
+
+<p>printf(&ldquo;Cell data in (%d,%d) &ldquo;, r0, c0); if(!simulate(&amp;r0, &amp;c0)) printf(&ldquo;GONE\n&rdquo;); else printf(&ldquo;moved to (%d,%d)\n&rdquo;, r0, c0);</p>
+
+<p>有没有觉得simulate函数不是特别自然？因为所有用到r0和c0的地方都要加上一个星号。 幸运的是，C++语言中有另外一个语法，可以更自然地表达这种“需要被修改的参数”，详见</p>
+
+<p>第5章中的“引用”部分。</p>
+
+<p>例题 4-6 师兄帮帮忙( A Typical Homework (a.k.a Shi Xiong Bang Bang Mang), Rujia Liu&rsquo;s Present 5, UVa 12412)</p>
+
+<p>（题目背景略，有兴趣的读者请自行阅读原题）</p>
+
+<p>编写一个成绩管理系统（SPMS ）。最多有100个学生，每个学生有如下属性。</p>
+
+<p>□    SID :学生编号，包含10位数字。</p>
+
+<p>□    CID :班级编号，为不超过20的正整数。</p>
+
+<p>□姓名：不超过10的字母和数字组成，第一个字符为大写字母。名字中不能有空白字符。</p>
+
+<p>□    4门课程（语文、数学、英语、编程）成绩，均为不超过100的非负整数。</p>
+
+<p>进入SPMS后，应显示王菜单：</p>
+
+<p>Welcome to Student Performance Management System (SPMS) .</p>
+
+<p>1 - Add</p>
+
+<p>2    - Remove</p>
+
+<p>3    - Query</p>
+
+<p>4    - Show ranking</p>
+
+<p>5    - Show Statistics</p>
+
+<p>0 - Exit</p>
+
+<p>选择1之后，会出现添加学生记录的提示信息：</p>
+
+<p>Please enter the SID, CID, name and four scores. Enter 0 to fi ni sh.</p>
+
+<p>然后等待输入。本题保证输入总是合法的（不会有非法的SID、CID，并且恰好有4个分 数等），但可能会输入重复SID。在这种情况下，需要输出一行提示：</p>
+
+<p>Duplicated SID.</p>
+
+<p>不过名字是可以重复的。你的程序应当不停地打印前述提示信息，直到用户输入单个</p>
+
+<p>0。然后应当再次打印主菜单。</p>
+
+<p>选择2之后，会出现如下提示信息：</p>
+
+<p>Please enter SID or name. Enter 0 to finish.</p>
+
+<p>然后等待输入，在数据库中删除能匹配上述SID或者名字的所有学生，并且打印如下信 息（xx可以等于0 ）:</p>
+
+<p>xx student（s） removed.</p>
+
+<p>你的程序应当不停地打印前述提示信息，直到用户输入单个0，然后再次打印主菜单。</p>
+
+<p>选择3之后，会出现如下提示信息：</p>
+
+<p>Please enter SID or name. Enter 0 to finish.</p>
+
+<p>然后等待输入。如果数据库中没有能匹配上述SID或者名字的学生，什么都不要做；否</p>
+
+<p>则输出所有满足条件的学生，按照进入数据库的顺序排列。输出格式和添加的格式相同，但</p>
+
+<p>增加3列：年级排名（第一列）、总分和平均分（最后两列）。所有班级中总分最高的学生</p>
+
+<p>获得第1名，如果有两个学生并列第2名，则下一个学生的排名为4（而非3）。你的程序应当</p>
+
+<p>不停地打印前述提示信息，直到用户输入单个0。然后应当再次打印主菜单。</p>
+
+<p>选择4之后，会出现如下提示信息：</p>
+
+<p>Showing the ranklist hurts students&rsquo; self-esteem. Don&rsquo;t do that.</p>
+
+<p>然后自动返回主菜单。</p>
+
+<p>选择5之后，会出现如下提示信息：</p>
+
+<p>Chinese</p>
+
+<p>Average Score: xx.xx</p>
+
+<p>Number of passed students: xx</p>
+
+<p>Number of failed students: xx</p>
+
+<table>
+<thead>
+<tr>
+<th>Overall:</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Number</td>
+<td>of</td>
+<td>students</td>
+<td>who</td>
+<td>passed</td>
+<td>all subjects: xx</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Number</td>
+<td>of</td>
+<td>students</td>
+<td>who</td>
+<td>passed</td>
+<td>3</td>
+<td>or more</td>
+<td>subjects:</td>
+<td>xx</td>
+</tr>
+
+<tr>
+<td>Number</td>
+<td>of</td>
+<td>students</td>
+<td>who</td>
+<td>passed</td>
+<td>2</td>
+<td>or more</td>
+<td>subjects:</td>
+<td>xx</td>
+</tr>
+
+<tr>
+<td>Number</td>
+<td>of</td>
+<td>students</td>
+<td>who</td>
+<td>passed</td>
+<td>1</td>
+<td>or more</td>
+<td>subjects:</td>
+<td>xx</td>
+</tr>
+
+<tr>
+<td>Number</td>
+<td>of</td>
+<td>students</td>
+<td>who</td>
+<td>failed</td>
+<td>all subjects: xx</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>然后自动回到主菜单。</p>
+
+<p>选择0之后，程序终止。注意，单科成绩和总分都应格式化为整数，但平均分应恰好保</p>
+
+<p>留两位小数。</p>
+
+<p>提示：这个程序适合直接运行，用键盘与之交互，然后从屏幕中看到输出信息。但正因</p>
+
+<p>为如此，作为一道算法竞赛的题目，其输出看上去会比较乱。</p>
+
+<p>【分析】</p>
+
+<p>正如题目所说，这是一道很常见的“作业题”，在一些早期的大学编程教材中可以看到类</p>
+
+<p>似的问题（只是要求不一定有这么明确）。</p>
+
+<p>因为要求比较多，可以沿用之前介绍过的“自顶向下，逐步求精”方法，先写出如下的框</p>
+
+<p>架：</p>
+
+<p>int main() {</p>
+
+<p>for(;;) {</p>
+
+<p>int choice; print_menu(); s c a nf(&ldquo;%d&rdquo;, &amp;choice); if(choice == 0) break;</p>
+
+<p>if(choice == 1) add(); if(choice == 2) DQ(0); if(choice == 3) DQ(1);</p>
+
+<p>if(choice == 4) printf(&ldquo;Showing the ranklist hurts students&rsquo; self-esteem if(choice == 5) stat();</p>
+
+<p>}</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>接下来就是分别实现各个函数了。注意上面把操作2(删除)和操作3(查询)合并在了 一起，因为二者非常相似，代码如下(isq=1表示查询，isq=0表示删除)：</p>
+
+<p>void DQ(int isq) { char s[maxl]; for(;;) {</p>
+
+<p>printf(&ldquo;Please enter SID or name. Enter 0 to finish.\n&rdquo;); scanf(&ldquo;%s&rdquo;, s);</p>
+
+<p>if(strcmp(s, &ldquo;0&rdquo;) == 0) break; int r = 0;</p>
+
+<p>for(int i = 0; i &lt; n; i++) if(!removed[i]) { if(strcmp(sid[i], s) == 0 || strcmp(name[i], s) == 0) {</p>
+
+<p>if(isq) printf(&ldquo;%d %s %d %s %d %d %d %d %d %.2f\n&rdquo;, rank(i), sid[i] else { removed[i] = 1; r++; }</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>if(!isq) printf(&ldquo;%d student(s) removed.\n&rdquo;, r);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>在编写上述函数的过程中，用到了尚未编写的rank函数，并且直接使用了还没有声明的 数组removed、sid、cid、name和score。换句话说，根据函数编写的需要定义了数据结构， 而不是一开始就设计好数据结构。程序的其他部分略为麻烦，但没有难点，建议初学者自 主完成整个程序，作为C语言部分的结束。</p>
+
+<p>顺便说一句，虽然在前面学习了排序，但rank函数的实现并不一定要对数据排序。另 外，上述代码在输出实数时加了一个EPS，原因将在本章最后讨论。</p>
+
+<h6 id="4-5-注解与习题">4.5 注解与习题</h6>
+
+<p>到目前为止，本书要介绍的C语言知识已经全部讲完了(第5章将介绍C++ )。本章涉及 了整个C语言中最难理解的两项内容：指针和递归。</p>
+
+<p>4.5.1 头文件、副作用及其他</p>
+
+<p>还记得第1章中给出的程序框架吗？是时候搞清楚所有细节了。读者现在已经知道mam</p>
+
+<p>函数也是一个普通的函数(甚至可以递归调用)，其返回值将告之操作系统，在算法竞赛中</p>
+
+<p>应当总是等于0，唯一的谜团就是#1加1旧6&lt;814^上〉了。</p>
+
+<p>这是一个头文件。什么是头文件呢？实践者的理解方式就是——不加这一行时会出现什</p>
+
+<p>么错误，反过来就说明了这一行的作用。不加这一行的编译警告是：</p>
+
+<p>warning: incompatible implicit declaration of built-in function &lsquo;printf&rsquo; [enabled by default]</p>
+
+<p>也就是说，prinf函数的“隐式定义”出了问题，这个头文件和printf有关。还记得第一次 介绍math.h是怎么讲的吗？如果要使用数学相关的函数，需要包含这个头文件。换句话说， 头文件的作用就是：包含了一些函数，供主程序使用<a href="#bookmark6">(11)</a>。表4-1中列出了一些常用函数和对 应的头文件。</p>
+
+<p>表4-1 常用函数及头文件</p>
+
+<table>
+<thead>
+<tr>
+<th>函    数</th>
+<th>作    用</th>
+<th>头文件</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>printf/scanf 及其“兄弟”</td>
+<td>格式化输入输出</td>
+<td></td>
+</tr>
+
+<tr>
+<td>fopen, freopen, fclose</td>
+<td>文件的打幵与关闭</td>
+<td>stdio.h</td>
+</tr>
+
+<tr>
+<td>getchar, fgets 等</td>
+<td>字符/字符申输入输出</td>
+<td></td>
+</tr>
+
+<tr>
+<td>sin/cos/pow 等</td>
+<td>各种数学函数</td>
+<td>math.h</td>
+</tr>
+
+<tr>
+<td>strlen, strcat</td>
+<td>T-符中函数</td>
+<td>string.h</td>
+</tr>
+
+<tr>
+<td>memset，memcpy</td>
+<td>内存清0与赋值</td>
+<td></td>
+</tr>
+
+<tr>
+<td>isalpha，isdigit，toupper 等</td>
+<td>字符分类与转换</td>
+<td>ctype.h</td>
+</tr>
+
+<tr>
+<td>clock</td>
+<td>汁时函数</td>
+<td>time.h</td>
+</tr>
+</tbody>
+</table>
+
+<p>在编写实用软件时，往往需要编写自己的头文件，但在大部分算法竞赛中，只是编写单</p>
+
+<p>个程序文件。在本书中，所有题目都由单个程序文件求解。</p>
+
+<p>下面来看一个有意思的问题：是否可以编写一个函数f()，使得依次执行int a = f()和int b =f()以后a和b的值不同？使用全局变量，这个问题不难解决：</p>
+
+<p>#include<stdio.h></p>
+
+<p>int g = 0;</p>
+
+<p>int f() { g++; return g; } //修改全局变量的函数</p>
+
+<p>int main() {</p>
+
+<p>int a = f(); int b = f();</p>
+
+<p>printf(&ldquo;%d %d\n&rdquo;, a, b);</p>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>不难写出一个更有意思的程序：写3个函数f()、g()和h()，使得“mt a = (f()+g())+h()”和“mt b=f()+(g()+h())”后，a和b的值不同。</p>
+
+<p>加法明明满足结合律，居然有可能“(f()+g())+h()”不等于“f()+(g()+h())” ！这个例子说明：</p>
+
+<p>C语言的函数并不都像数学函数那样“规矩”。或者说得学术一点：C语言的函数可以有副作</p>
+
+<p>用，而不像数学函数那样“纯”。本书无意深入介绍函数式编程，但时刻警惕并最小化“副作</p>
+
+<p>用”是一个良好的编程习惯。正因为如此，前面曾多次强调：全局变量要少用。</p>
+
+<p>再来看一个小问题：函数可以返回指针吗？例如这样：</p>
+
+<p>int* get_pointer() { int a = 3; return &a;</p>
+
+<p>这个程序可以编译通过，不过有一个警告：</p>
+
+<p>warning: function returns address of local variable [enabled by default]</p>
+
+<p>意思是函数返回了一个局部变量的地址。为什么不能返回局部变量的地址呢？前面说</p>
+
+<p>过，局部变量是在栈中，函数执行完毕后，局部变量就失效了。严格地讲，指针里保存的地</p>
+
+<p>址仍然存在，但不再属于那个局部变量了。这时如果修改那个指针指向的内容，程序有可能</p>
+
+<p>会崩溃，也可能悄悄地修改了另外一个变量的值，使程序输出一个莫名其妙的结果。</p>
+
+<p>那推荐的写法是怎样的？这取决于你想做什么。如果只是想得到一个指向内容为3的指</p>
+
+<p>针，可以把这个指针作为参数，然后在函数里修改它；如果坚持返回一个“新”的指针，可以 使用malloc函数进行动态内存分配。笔者并不准备在这里叙述详细做法，因为在接下来的章 节中会对动态内存分配进行深入讨论。在学习到那些知识之前，请尽量不要编写返回指针的 函数。</p>
+
+<p>最后一个话题是关于浮点误差的。例如：</p>
+
+<p>#include<stdio.h></p>
+
+<table>
+<thead>
+<tr>
+<th>int main()</th>
+<th>{</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>double f</td>
+<td>;</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>for(f =</td>
+<td>2;</td>
+<td>f &gt;</td>
+<td>1; f -= 1e-6);</td>
+</tr>
+
+<tr>
+<td>printf(&rdquo;</td>
+<td>%.</td>
+<td>7f\n&rdquo;</td>
+<td>, f);</td>
+</tr>
+
+<tr>
+<td>printf(&rdquo;</td>
+<td>%.</td>
+<td>7f\n&rdquo;</td>
+<td>, f / 4);</td>
+</tr>
+
+<tr>
+<td>printf(&rdquo;</td>
+<td>%.</td>
+<td>1f\n&rdquo;</td>
+<td>, f / 4);</td>
+</tr>
+</tbody>
+</table>
+
+<p>return 0;</p>
+
+<p>}</p>
+
+<p>在笔者的机器上，输出如下：</p>
+
+<p>0.9999990</p>
+
+<p>0.2499998</p>
+
+<p>0.2</p>
+
+<p>换句话说，在不断减1e-6的过程中出现了误差，使得循环终止时併不等于1，而是比1小 一点。在除以4保留1位小数时成了0.2。如果不出现误差，正确答案应该是0.25四舍五入保留 一位小数，即0.3。一道好的竞赛题目应避免这种情况出现<a href="#bookmark8">（12）</a> ，但作为竞赛选手来说，有 一种方法可以缓解这种情况：加上一个EPS以后再输出。这里的EPS通常取一个比最低精度 还要小几个数量级的小实数。例如，要求保留3位小数时取EPS为1e-6。这只是个权宜之计， 甚至有可能起到“反作用”（如正确答案真的是0.499999），但在实践中很好用（毕竟正确答 案是0.499999的情况比0.5要少很多）。</p>
+
+<p>4.5.2 例题一览和习题</p>
+
+<p>本章共有6道例题，如表4-2所示。除了最后两道题目比较复杂之外，读者应熟练掌握</p>
+
+<p>前4道题目的程序写法。当然，为了巩固基础，让后面的学习更加轻松，笔者强烈建议大家</p>
+
+<p>独立实现所有6道题目。</p>
+
+<p>表4-2 例题一览</p>
+
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>题号</th>
+<th>题目名称（英文）</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>例题4-1</td>
+<td>UVa1339</td>
+<td>Ancient Cipher</td>
+<td>排序</td>
+</tr>
+
+<tr>
+<td>例题4-2</td>
+<td>UVa489</td>
+<td>Hangman Judge</td>
+<td>自顶向下逐步求精法</td>
+</tr>
+
+<tr>
+<td>例题4-3</td>
+<td>UVa133</td>
+<td>The Dole Queue</td>
+<td>子过程（函数）设计</td>
+</tr>
+
+<tr>
+<td>例题4-4</td>
+<td>UVa213</td>
+<td>Message Decoding</td>
+<td>二进制；输入技巧；调试技巧</td>
+</tr>
+
+<tr>
+<td>例题4-5</td>
+<td>UVa512</td>
+<td>Spreadsheet Tracking</td>
+<td>模拟；一题多解</td>
+</tr>
+
+<tr>
+<td>例题 4-6</td>
+<td>UVa12412</td>
+<td>A Typical Homework( a.k.a Shi Xiong Bang Bang Mang)</td>
+<td>综合练习</td>
+</tr>
+</tbody>
+</table>
+
+<p>下面是一些习题。这些题目的综合性较强，部分题目还涉及一些专门知识（如中国象</p>
+
+<p>棋、莫尔斯电码、RAID），理解起来也需要一定时间。另外一些题目需要一些思考，否则</p>
+
+<p>无从入手编写程序。由于这些题目的挑战性，在继续阅读之前只需完成其中的3道题目。</p>
+
+<p>如果想达到更好的效果，最好是完成3道或更多的题目。</p>
+
+<p>习题4-1 象棋(Xiangqi, ACM/ICPC Fuzhou 2011, UVa1589 )</p>
+
+<p>考虑一个象棋残局，其中红方有《 （ 2&lt;^&lt;7 ）个棋子，黑方只有一个将。红方除了有一个 帅（G ）之外还有3种可能的棋子：车（R），马（H），炮（C），并且需要考虑“蹩马</p>
+
+<p>腿”（如图4-4所示）与将和帅不能照面（将、帅如果同在一条直线上，中间又不隔着任何棋</p>
+
+<p>子的情况下，走子的一方获胜）的规则。</p>
+
+<p>输入所有棋子的位置，保证局面合法并且红方已经将军。你的任务是判断红方是否已经</p>
+
+<p>把黑方将死。关于中国象棋的相关规则请参见原题。</p>
+
+<p>习题4-2 正方形( Squares, ACM/ICPC World Finals 1990, UVa201)</p>
+
+<p>有《行《列（2&lt;^&lt;9 ）的小黑点，还有m条线段连接其中的一些黑点。统计这些线段连成</p>
+
+<p>了多少个正方形（每种边长分别统计）。</p>
+
+<p>行从上到下编号为卜《，列从左到右编号为卜《。边用H i j和V i j表示，分别代表边 （i，j）-（i，j+1）和（i，j）-（i+1，j）。如图4-5所示最左边的线段用V1 1表示。图中包含两个边长为1的正 方形和一个边长为2的正方形。</p>
+
+<p>Hcbblmg the horsed leg</p>
+
+<p>图4-4 “蹩马腿”情况</p>
+
+<p><img src="97d5de5b65e8cf78082c24809 (97d57a2f0ee16f66de5b)-20.jpg" alt="img" /></p>
+
+<p>习题4-3 黑白棋( Othello, ACM/ICPC World Finals 1992, UVa220)</p>
+
+<p>你的任务是模拟黑白棋游戏的进程。黑白棋的规则为：黑白双方轮流放棋子，每次必须</p>
+
+<p>让新放的棋子“夹住”至少一枚对方棋子，然后把所有被新放棋子“夹住”的对方棋子替换成己</p>
+
+<p>方棋子。一段连续（横、竖或者斜向）的同色棋子被“夹住”的条件是两端都是对方棋子（不</p>
+
+<p>能是空位）。如图4-6 （ a ）所示，白棋有6个合法操作,分别为（2,3），（3,3），（3,5），    （6,2），（7,3），</p>
+
+<p>（7,4）。选择在（7,3）放白棋后变成如图4-6 （ b ）所示效果（注意有竖向和斜向的共两枚黑棋变 白）。注意（4，6）的黑色棋子虽然被夹住，但不是被新放的棋子夹住，因此不变白。</p>
+
+<p>（a）    （b）</p>
+
+<p>图4-6 黑白棋</p>
+
+<p>输入一个8*8的棋盘以及当前下一次操作的游戏者，处理3种指令：</p>
+
+<p>□    L指令打印所有合法操作，按照从上到下，从左到右的顺序排列（没有合法操作时输出 No legal move）。</p>
+
+<p>□    Mrc指令放一枚棋子在（r，c）。如果当前游戏者没有合法操作，则是先切换游戏者再操 作。输入保证这个操作是合法的。输出操作完毕后黑白方的棋子总数。</p>
+
+<p>□    Q指令退出游戏，并打印当前棋盘（格式同输入）。</p>
+
+<p>习题4-4 骰 子涂色（ Cube painting, UVa 253）</p>
+
+<p>输入两个骰子，判断二者是否等价。每个骰子用6个字母表示，如图4-7所示。</p>
+
+<p><img src="97d5de5b65e8cf78082c24809 (97d57a2f0ee16f66de5b)-22.jpg" alt="img" /></p>
+
+<p>例如rbgggr和rggbgr分别表示如图4-8所示的两个骰子。二者是等价的，因为图4-8 (a) 所示的骰子沿着竖直轴旋转90°之后就可以得到图4-8 ( b )所示的骰子。</p>
+
+<p>(a)</p>
+
+<p><img src="97d5de5b65e8cf78082c24809 (97d57a2f0ee16f66de5b)-23.jpg" alt="img" /></p>
+
+<p><img src="97d5de5b65e8cf78082c24809 (97d57a2f0ee16f66de5b)-24.jpg" alt="img" /></p>
+
+<p>(b)</p>
+
+<p>图4-8 旋转前后的两个骰子</p>
+
+<p>习题 4-5 IP网络(IP Networks, ACM/ICPC NEERC 2005, UVa1590 )</p>
+
+<p>可以用一^个网络地址和一^个子网掩码描述一^个子网(即连续的IP地址范围)。其中子网 掩码包含32个二进制位，前32-n位为1，后n位为0，网络地址的前32-n位任意，后n位为0。 所有前32-n位和网络地址相同的IP都属于此网络。</p>
+
+<p>例如，网络地址为194.85.160.176（二进制为11000010|01010101|10100000|10110000），</p>
+
+<p>子网掩码为255.255.255.248（二进制为11111111|11111111|11111111|11111000），则该子网 的IP地址范围是194.85.160.176 ~ 194.85.160.183。输入一些IP地址，求最小的网络（即包含IP 地址最少的网络），包含所有这些输入地址。</p>
+
+<p>例如，若输入3个IP地址:194.85.160.177、194.85.160.183和 194.85.160.178，包含上述3 个地址的最小网络的网络地址为194.85.160.176，子网掩码为255.255.255.248。</p>
+
+<p>习题4-6 莫尔斯电码( Morse Mismatches, ACM/ICPC World Finals 1997, UVa508)</p>
+
+<p>输入每个字母的Morse编码，一个词典以及若干个编码。对于每个编码，判断它可能是 哪个单词。如果有多个单词精确匹配，任选一个输出并且后面加上“!”；如果无法精确匹 配，可以在编码尾部增加或删除一些字符以后匹配某个单词（增加或删除的字符应尽量 少）。如果有多个单词可以这样匹配上，任选一个输出并且在后面加上“?”。</p>
+
+<p>莫尔斯电码的细节参见原题。</p>
+
+<p>习题4-7 RAID技术(RAID!, ACM/ICPC World Finals 1997, UVa509 )</p>
+
+<p>RAID技术用多个磁盘保存数据。每份数据在不止一个磁盘上保存，因此在某个磁盘损 坏时能通过其他磁盘恢复数据。本题讨论其中一种RAID技术。数据被划分成大小 为（ 1&lt;5&lt;64 ）比特的数据袂保存在d （ 2&lt;d&lt;6 ）个磁盘上，如图4-9所示，每d-1个数据袂都 有一个校验块，使得每d个数据块的异或结果为全0 （偶校验）或者全1 （奇校验）。</p>
+
+<table>
+<thead>
+<tr>
+<th>Disk 1</th>
+<th>Disk 2</th>
+<th>Disk 3</th>
+<th>Disk 4</th>
+<th>Disk 5</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Parity for 1-4</td>
+<td>Data block 1</td>
+<td>Data block 2</td>
+<td>Data block 3</td>
+<td>Data block A</td>
+</tr>
+
+<tr>
+<td>Data block 5</td>
+<td>Parity for 5-8</td>
+<td>Data block 6</td>
+<td>Data block 7</td>
+<td>Data block 8</td>
+</tr>
+
+<tr>
+<td>Data block 9</td>
+<td>Data block 10</td>
+<td>Paiitv for 9-12</td>
+<td>Data block 11</td>
+<td>Data block. 12</td>
+</tr>
+
+<tr>
+<td>Data block 13</td>
+<td>Data block 14</td>
+<td>Data block 15</td>
+<td>Parity for 15-16</td>
+<td>Data block 16</td>
+</tr>
+
+<tr>
+<td>Data block 17</td>
+<td>Data block 18</td>
+<td>Data block 19</td>
+<td>Data block 20</td>
+<td>Parity for 17-20</td>
+</tr>
+
+<tr>
+<td>Parity for 21-24</td>
+<td>Data block 21</td>
+<td>Bata block 22</td>
+<td>Data block 23</td>
+<td>Data block 24</td>
+</tr>
+
+<tr>
+<td>Data block 25</td>
+<td>Parity for 25-28</td>
+<td>Data block 26</td>
+<td>Data block 27</td>
+<td>Data block 28</td>
+</tr>
+</tbody>
+</table>
+
+<p>图4-9 数据保存情况</p>
+
+<p>例如，d=5，尸2，偶校验，数据6C7A79EDFC （二进制01101100    01111010    01111001</p>
+
+<p>11101101 11111100）的保存方式如图4-10所示。</p>
+
+<p>其中加粗袂是校验袂。输入d、s、b、校验的种类（E表示偶校验，O表示奇校验）以 B（ 1&lt;b&lt;100 ）个数据块（其中“?”表示损坏的数据），你的任务是恢复并输出完整的数</p>
+
+<p>据。如果校验错或者由于损坏数据过多无法恢复，应报告磁盘非法。</p>
+
+<p>提示：本题是位运算的不错练习，但如果没有RAID的知识背景，上述简要翻译可能较</p>
+
+<p>难理解，细节建议参考原题。</p>
+
+<p>习题4-8 特别困的学生( Extraordinarily Tired Students, ACM/ICPC Xi&rsquo;an 2006, UVa12108)</p>
+
+<p>课堂上有n个学生（n&lt;10 ）。每个学生都有一个“睡眠-清醒”周期，其中第/个学生醒為分 钟后睡什分钟，然后重复（1&lt;為，Bi&lt;5 ），初始时第i个学生处在他的周期的第q分钟。每个</p>
+
+<p>学生在临睡前会察看全班睡觉人数是否严格大于清醒人数，只有这个条件满足时才睡觉，否 则就坚持听课為分钟后再次检查这个条件。问经过多长时间后全班都清醒。如果用（A，B，C）描 述一些学生，则图4-11中描述了3个学生（2,4,1）、 （1,5,2）和（1,4,3）在每个时刻的行为。</p>
+
+<p>注意：有可能并不存在“全部都清醒”的时刻，此时应输出-1。</p>
+
+<p>习题4-9 数据挖掘( Data Mining, ACM/ICPC NEERC 2003, UVa1591)</p>
+
+<p>有两个《元素数组P和2。P数组每个元素占知个字节，2数组每个元素占^^个字节。有时</p>
+
+<p>需直接根据P数组中某个元素户⑺的偏移量八办(/)算出对应的2(/)的偏移量2咖(/)。当两个数组</p>
+
+<p>的元素均为连续存储时，但因为除法慢，可以把式子改写成速度较快的。</p>
+
+<p>为了让这个式子成立，在p数组仍然连续存储的前提下，2数组可以不连续存储(但不同数</p>
+
+<p>组元素的存储空间不能重叠)。这样做虽然会浪费一些空间，但是提升了速度，是一种用空</p>
+
+<p>间换时间的方法。</p>
+
+<p>输入n、知和如(N&lt;220，1&lt;SP，S2&lt;210)，你的任务是找到最优的A和B，使得占的空间 K尽量小。输出K、A、B的值。多解时让A尽量小，如果仍多解则让B尽量小。</p>
+
+<p>提示：本题有一定实际意义，不过描述比较抽象。如果对本题兴趣不大，可以先跳过。</p>
+
+<p>习题4-10 洪水！( Flooded! ACM/ICPC World Finals 1999, UVa815)</p>
+
+<p>有一个n*m ( 1&lt;m，n&lt;30 )的网格，每个格子是边长10米的正方形，网格四周是无限大 的墙壁。输入每个格子的海拔高度，以及网格内雨水的总体积，输出水位的海拔高度以及有 多少百分比的区域有水(即高度严格小于水平面)。</p>
+
+<p>本题有多种方法，能锻炼思维，建议读者一试。</p>
+
+<p>4.5.3 小结</p>
+
+<p>指针还有很多相关内容本书没有介绍，例如，指向void型的指针、指向函数的指针、指 向常量的指针以及指针和数组之间的关系(注意，尽管在很多地方可以混用，但指针和数组 不是一回事！《C语言程序设计奥秘》用一章的篇幅来叙述二者的区别)。正如书中所说， 本书将尽量回避指针，但尽管如此，调试并理解前面几个swap函数的工作方式对于理解计算 机的工作原理大有好处。</p>
+
+<p>递归需要从概念和语言两个方面理解。从概念上，递归就是“自己使用自己”的意思。递 归调用就是自己调用自己，递归定义就是自己定义自己……当然，这里的“使用自己”可以是 直接的，也可以是间接的。很多初学者在学习递归时专注于表象，从而未能透彻理解其“计 算机”本质。由于我们的重点是设计算法和编写程序，理解递归函数的执行过程是非常重要 的。因此，本章大量使用了gdb作为工具讲解内部机理，即使读者在平时编程时不用gdb调 试，在学习初期用它帮助理解也是大有禆益的。关于gdb的更多介绍参见附录A。</p>
+
+<p><a href="#bookmark23">(1)</a>    注意：这个函数不是ANSI C的。</p>
+
+<p><a href="#bookmark25">(2)</a>    gdb是一个功能强大的源码级调试器，虽然是基于命令的文本界面，但运用熟练后非常方便。关于gdb更多的介绍请 参见附录A。</p>
+
+<p><a href="#bookmark27">(3)</a>    这是一个指向函数的指针，该函数返回一个指针，该指针指向一个只读的指针，此指针指向一个字符变量。</p>
+
+<p><a href="#bookmark29">(4)</a>    更严密的说法是：正整数集是满足(1)、(2)的最小集。这里牺牲一点严密性，换来的是更通俗易懂的表达方式。</p>
+
+<p><a href="#bookmark31">(5)</a>    Linux和Windows下的MinGW中都有这个程序。</p>
+
+<p><a href="#bookmark33">(6)</a>    实际上，桟大小是由连接程序ld指定的。gcc编译参数-Wl的作用正是把其后的参数(&ndash;stack=<size>)传递给ld。</p>
+
+<p><a href="#bookmark35">(7)</a>    这里没有“几乎”二字。函数和递归均可以用其他内容替代。</p>
+
+<p><a href="#bookmark37">⑻</a>有兴趣的读者可以翻阅Paul Graham的经典著作《On Lisp》。</p>
+
+<p><a href="#bookmark39">(9)</a>    注意：这里讨论的是编写代码的顺序。在测试时，先测试工具函数的方式非常常用。</p>
+
+<p><a href="#bookmark41">(10)</a>    当然，这是笔者的主观看法。有些人觉得充满指针的代码很优美。</p>
+
+<p><a href="#bookmark5">(11)</a>    和本章开头的自定义函数不同，头文件里并没有printf的源代码，而只有它的声明。prinf属于libc的一部分，有兴趣 的读者请自行查阅相关资料。</p>
+
+<p><a href="#bookmark7">(12)</a>    方法有两种：一是删除答案恰好处于“舍入交界口”的数据，二是允许选手输出和标准答案有少许出入。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E5%85%A5%E9%97%A8%E7%BB%8F%E5%85%B8/03-%E6%95%B0%E7%BB%84%E5%92%8C%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 数组和字符串</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/01-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/04-%E5%85%A8%E5%B1%80%E6%9C%80%E5%B0%8F%E4%B8%8E%E5%B1%80%E9%83%A8%E6%9E%81%E5%B0%8F/">
+            <span class="next-text nav-default">04 全局最小与局部极小</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

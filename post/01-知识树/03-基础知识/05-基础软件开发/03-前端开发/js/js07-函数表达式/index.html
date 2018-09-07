@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JS07 函数表达式 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第7章 函数表达式 本章内容 □函数表达式的特征 口使用函数实现递归 □使用闭包定义私宥变贵 数表达式是JavaScript中的•个既强大乂容易令人困惑" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/03-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/js/js07-%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="JS07 函数表达式" />
+<meta property="og:description" content="第7章 函数表达式 本章内容 □函数表达式的特征 口使用函数实现递归 □使用闭包定义私宥变贵 数表达式是JavaScript中的•个既强大乂容易令人困惑" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/03-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/js/js07-%E5%87%BD%E6%95%B0%E8%A1%A8%E8%BE%BE%E5%BC%8F/" /><meta property="article:published_time" content="2018-06-12T20:20:56&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-12T20:20:56&#43;00:00"/>
+<meta itemprop="name" content="JS07 函数表达式">
+<meta itemprop="description" content="第7章 函数表达式 本章内容 □函数表达式的特征 口使用函数实现递归 □使用闭包定义私宥变贵 数表达式是JavaScript中的•个既强大乂容易令人困惑">
+
+
+<meta itemprop="datePublished" content="2018-06-12T20:20:56&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-12T20:20:56&#43;00:00" />
+<meta itemprop="wordCount" content="13113">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JS07 函数表达式"/>
+<meta name="twitter:description" content="第7章 函数表达式 本章内容 □函数表达式的特征 口使用函数实现递归 □使用闭包定义私宥变贵 数表达式是JavaScript中的•个既强大乂容易令人困惑"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JS07 函数表达式</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-12 </span>
+        
+        <span class="more-meta"> 13113 words </span>
+        <span class="more-meta"> 27 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <p>第7章</p>
+
+<p>函数表达式</p>
+
+<p>本章内容</p>
+
+<p>□函数表达式的特征</p>
+
+<p>口使用函数实现递归</p>
+
+<p>□使用闭包定义私宥变贵</p>
+
+<p><img src="E:/11.ProgramFiles/Typora/JavaScriptd8a70b8fbea1082c34809-33.jpg" alt="img" /></p>
+
+<p>数表达式是JavaScript中的•个既强大乂容易令人困惑的特性。第5章曾介绍过，定义函数的 方式有两种：一种是函数声明，另一种就是函数表达式。函数声明的语法是这样的。</p>
+
+<p>function functionNanie{argO# argl, arg2) {</p>
+
+<p>//函数体</p>
+
+<p>}</p>
+
+<p>首先是function关键字，然后是函数的名字，这就是指定函数名的方式。Firefox、Safari, Chrome</p>
+
+<p>和Opera都给函数定义了一个非标准的name属性，通过这个属性可以访问到给函数指定的名字。这个</p>
+
+<p>属性的值永远等于跟在function关键字后面的标识符。</p>
+
+<p>//只在 Firefox、Safari、Chrome 和 Opera 有效 alert(funecionName.name);    //* functionName&rdquo;</p>
+
+<p>FunctionNameExampleOl. htm</p>
+
+<p>关于兩数声明，它的一个重要特征就是函数声明提升(function declaration hoisting ),意思是在执行 代码之前会先读取函数声明。这就意味着可以把函数声明放在调用它的语句后面。</p>
+
+<p>sayHi{);</p>
+
+<p>function sayHi(}{ alert(&ldquo;Hi!’};</p>
+
+<p>}</p>
+
+<p>FunctionDeclarationHoistingOl .htm</p>
+
+<p>这个例子不会抛出错误，w为在代码执行之前会先读取函数声明。</p>
+
+<p>第二种创建函数的方式是使用函数表达式。函数表达式有几种不同的语法形式。下面是最常见的一 种形式。</p>
+
+<p>var functionName = function(argO&lt; argl, arg2){</p>
+
+<p>//函數体</p>
+
+<p>这种形式看起来好像是常规的变S赋值语句，即创建一个函数并将它魅值给变量functionName„ 这种情况下创建的函数叫做匿名函数(anonymous fimction ),因为function关键后面没有标识符。</p>
+
+<p>(匿名函数有时候也叫拉姆达函数。)匿名函数的name属性是空字符串。</p>
+
+<p>函数表达式与其他表达式-样，在使用前必须先賦值。以下代码会导致错误。</p>
+
+<p>sayHi ()，-    //蟾误：函数还不存在</p>
+
+<p>var sayHi = function(){</p>
+
+<p>alert(&ldquo;Hi I&rdquo;)；</p>
+
+<p>}?</p>
+
+<p>理解函数提升的关键，就是理解函数声明与函数表达式之间的区别。例如，执行以下代码的结果可 能会让人意想不到。</p>
+
+<p>//不要这样做！ if(condi t ion){</p>
+
+<p>function sayHi(){ alert(&ldquo;Hi!&rdquo;);</p>
+
+<p>}</p>
+
+<p>} else {</p>
+
+<p>function sayHi(}{ alert(&ldquo;Yo!•);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>FunctionDeciarationsErrorExampleO 1. htm</p>
+
+<p>表面上看，以上代码表示在condition为true时，使用一个sayHi ()的定义；否则，就使用另 一个定义。实际上，这在ECMAScript中属于无效语法，JavaScript引擎会尝试修正错误，将其转换为合 理的状态。但问题是浏览器尝试修正错误的做法并不一致。大多数浏览器会返回第二个声明，忽略 condition; Firefox会在condition为true时返回第一个声明。因此这种使用方式很危险，不应该 出现在你的代码中。不过，如果是使用函数表达式，那就没有什么问题了。</p>
+
+<p>//可以这样做 var sayHi；</p>
+
+<p>if(condition){</p>
+
+<p>sayHi = function</p>
+
+<p>alert(&ldquo;Hi!■)；</p>
+
+<p>}；</p>
+
+<p>} else {</p>
+
+<p>sayHi = function(){ alert(&ldquo;Yo!;</p>
+
+<p>}；</p>
+
+<p>)</p>
+
+<p>这个例子不会有什么意外，不同的函数会根据condition被赋值给sayHi。</p>
+
+<p>能够创建函数再赋值给变量，也就能够把函数作为其他函数的值返冋。还记得第5章中的那个</p>
+
+<p>createComparisonFunct ion ()函数吗：</p>
+
+<p>function createComparisonFunct ion(propertyName) {</p>
+
+<p>return function(objectl, object2){</p>
+
+<p>var valuel = objectl[propertyName); var value2 = object2[propertyNameJ；</p>
+
+<p>if (valuel &lt; value2){ return -1;</p>
+
+<p>} else if (valuel &gt; value2){ return 1；</p>
+
+<p>} else {</p>
+
+<p>return 0；</p>
+
+<p>}</p>
+
+<p>};</p>
+
+<p>}</p>
+
+<p>createCoroparisonFunct ion ()就返回了一•个匿名函数3返回的涵数可能会被拭值给一•个变量， 或者以其他方式被调用；不过，在createComparisonFunction ()兩数内部，它是匿名的。在把函数 当成值来使用的情况下，都可以使用匿名函数。不过，这并不是匿名函数唯一的用途。</p>
+
+<p>7.1递归</p>
+
+<p>递归函数是在一个函数通过名字调用0身的情况下构成的，如下所示。</p>
+
+<p>function factorial(num){ if (num &lt;= 1}{</p>
+
+<p>return 1;</p>
+
+<p>} else {</p>
+
+<p>return num * factorial(num-1)；</p>
+
+<p>}</p>
+
+<p>)</p>
+
+<p>RecursionExampleOl. htm</p>
+
+<p>这是一个经典的递归阶乘函数。虽然这个函数表面看来没什么问题,但下面的代码却可能导致它出错。</p>
+
+<p>var anotherFactorial = factorial?</p>
+
+<p>factorial = null;</p>
+
+<p>alert (anotherFactorial (4))；&rdquo;出错！</p>
+
+<p>RecursionExampleOl. htm</p>
+
+<p>以上代码先把factorial ()函数保存在变量anotherFactorial中，然后将factorial变量设 置为null,结果指向原始函数的引用只剩卞一个。但在接下来调用anotherFactorial &lt;)时，由于必 须执行factorial ()，而factorial已经不再是函数，所以就会导致错误。在这种情况下，使用arguments .callee可以解决这个问题。</p>
+
+<p>我们知道，arguments .callee是一个指向正在执行的函数的指针，因此可以用它来实现对函数 的递归调用，例如：</p>
+
+<p>function factorial(num){ if {num &lt;= 1){</p>
+
+<p>return 1;</p>
+
+<p>} else {</p>
+
+<p>return num * arguments.callee(num-1)；</p>
+
+<p>Recurs ionExample02. htm</p>
+
+<p>加粗的代码显示，通过使用arguments.callee代替函数名，可以确保无论怎样调用函数都不会 出问题。因此，在编写递归函数时，使用arguments.callee总比使用函数名更保险。</p>
+
+<p>但在严格模式下，不能通过脚本访问arguments.callee,访问这个域性会导致错误。不过，可 以使用命名函数表达式来达成相同的结果。例如：</p>
+
+<p>var factorial = (function f(num){ if (num &lt;= 1){</p>
+
+<p>return 1;</p>
+
+<p>} else {</p>
+
+<p>return num ♦ £ (num-1);</p>
+
+<p>}</p>
+
+<p>))；</p>
+
+<p>以上代码创建了一个名为f&lt;)的命名函数表达式，然后将它赋值给变量factorial o即便把函数 赋值给了另一个变量，函数的名字f仍然有效，所以递归调用照样能正确完成。这种方式在严格模式和 非严格模式下都行得通。</p>
+
+<p>7.2闭包</p>
+
+<p>有不少开发人员总是搞+清匿名函数和闭包这两个概念，因此经常混用。闭包是指有权访问另一个 函数作用域中的变量的函数。创建闭包的常见方式，就是在一个函数内部创建另一个函数，仍以前面的 createCcmparisonFunction ()函数为例，注意加粗的代码c</p>
+
+<p>function createComparisonFunction(propertyName) {</p>
+
+<p>return function(object1, object2){</p>
+
+<p>var valuel = obj ectl [propertyNaxne] j var value2 ■ object2[propertyName];</p>
+
+<p>if (valuel &lt; value2){ return -1；</p>
+
+<p>} else if (valuel &gt; value2){ return 1；</p>
+
+<p>} else {</p>
+
+<p>return 0；</p>
+
+<p>}</p>
+
+<p>}?</p>
+
+<p>}</p>
+
+<p>在这个例子中，突出的那两行代码是内部函数(一个匿名函数)中的代码，这两行代码访问了外部 函数中的变量propertyName，即使这个内部函数被返回了，而且是在其他地方被调用了，但它仍然可 以访问变量propertyNameo之所以还能够访问这个变量，是因为内部函数的作用域链中包含 createComparisonFunction ()的作用域。要彻底搞清楚其中的细节必须从理解函数第一次被调用 的时候都会发生什么人手。</p>
+
+<p>第4帝介绍了作用域链的概念。而有关如何创建作用域链以及作用域链有什么作用的细节，对彻底 理解闭包至关重要。当某个函数第一次被调用时，会创建&ndash;个执行环境(executioncontext)及相应的作 用域链，并把作用域链赋值给一个特殊的内部属性(即[[ScopeH )。然后，使用this、arguments 和其他命名参数的值来初始化函数的活动对象(activation object )„但在作用域链中，外部函数的活动对</p>
+
+<p>象始终处于第二位，外部函数的外部函数的活动对象处于第三位，……直至作为作用域链终点的全局执 行环境，，</p>
+
+<p>在函数执行过程中，为读取和写人变量的值，就需要在作用域链中査找变量。来看下面的例子。</p>
+
+<p>function compare(valuelf value2){ if (valuel &lt; value2){</p>
+
+<p>return -1;</p>
+
+<p>} else if (valuel &gt; value2J{ return 1；</p>
+
+<p>} else {</p>
+
+<p>return 0；</p>
+
+<p>}</p>
+
+<p>var result = compare(5, 10)?</p>
+
+<p>以上代码先定义了 compare ()函数，然后又在全局作用域中调用了它。当第一次调用compare () 时，会创建一个包含this、argumentsx valuel和value2的活动对象。全局执行环境的变fi对象 (包含this、result和compare )在compare ()执行环境的作用域链中则处于第二位。图7-1展示了 包含上述关系的compare {)函数执行时的作用域链。</p>
+
+<p>(scope chain} |</p>
+
+<p>compare execution context</p>
+
+<table>
+<thead>
+<tr>
+<th>Scope Chain</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>•—</td>
+</tr>
+
+<tr>
+<td>0</td>
+<td>•—</td>
+</tr>
+</tbody>
+</table>
+
+<p>►-</p>
+
+<table>
+<thead>
+<tr>
+<th>Global variable object</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>compare</td>
+<td>•&mdash;</td>
+</tr>
+
+<tr>
+<td>result</td>
+<td>undefined</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>compare() activation object</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>arguments</td>
+<td>【5， 10]</td>
+</tr>
+
+<tr>
+<td>valuel</td>
+<td>5</td>
+</tr>
+
+<tr>
+<td>value2</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+
+<p>图7-1</p>
+
+<p>后台的每个执行环境都有一个表示变量的对象一变》对象。全局环境的变量对象始终存在，而像 compare(＞困数这样的局部环境的变量对象，则只在函数执行的过程中存在。在创建compared函数 时，会创建一个预先包含全局变量对象的作用域链，这个作用域链被保存在内部的[[Scope]]属性中。 当调用compare (＞困数时，会为涵数创建一个执行环境，然后通过&amp;制函数的[[Scope]]属性中的对 象构建起执行环境的作用域链。此后，又有一个活动对象(在此作为变S对象使用)被创建并被推人执 行环境作用域链的前端。对于这个例子中compare ()函数的执行环境而言，其作用域链中包含两个变 最对象：本地活动对象和全局变景对象。显然，作用域链本质上是一个指向变景对象的指针列表，它只 引用但不实际包含变量对象。</p>
+
+<p>无论什么时候在函数中访问一个变馕时，就会从作用域链中搜索具有相应名字的变ft。一般來讲， 当函数执行完毕后，局部活动对象就会被销毁，内存中仅保存全局作用域(全局执行环境的变量对象)。 但是，闭包的情况又有所不同。</p>
+
+<p>在另一•个函数内部定义的函数会将包含函数(即外部函数)的活动对象添加到它的作用域链中、因 此，在createComparisonFunction()涵数内部定义的匿名函数的作用域链中，实际上将会包含外部 闲数createComparisonFunction ()的活动对象。1冬1 7-2展示了当下列代码执行时，包含闲数与内部 匿名函数的作用域链、</p>
+
+<p>var compare = createComparisonFunction(&ldquo;name&rdquo;);</p>
+
+<p>var result = compare({ name: &ldquo;Nicholas&rdquo; }, { name： ffGreg&rdquo; })；</p>
+
+<p>在匿名函数从createComparisonFunction (}中被返回后，它的作用域链被初始化为包含 createComparisonFunction ()函数的活动对象和全局变量对象。这样，匿名函数就可以访问在 createComparisonFunction {)中定义的所有变釐。更为重要的是，createComparisonFunction () 函数在执行完毕后，其活动对象也不会被销毁，因为匿名函数的作用域链仍然在引用这个活动对象。换 句话说，当createComparisonFunction ()函数返回后，其执彳环境的作用域链会被销毁，但它的活 动对象仍然会留在内存中；直到匿名闲数被销毁后，createComparisonFunction()的活动对象才会 被销毁，例如：</p>
+
+<p>//创建函数</p>
+
+<p>var compareNames = createComparisonFunction(&ldquo;name&rdquo;)；</p>
+
+<p>//调用函数</p>
+
+<p>var result = compareNames ({ name: &ldquo;Nicholas&rsquo;* }, { name： &ldquo;Greg&rdquo; });</p>
+
+<p>//解除对愛名函数的引用(以便释放内存) compareNames 二 null;</p>
+
+<p>首先，创建的比较函数被保存在变compareNames中。而通过将compareNames设置为等于null 解除该函数的引用，就等丁-通知垃圾回收例程将其清除。随着匿名函数的作用域链被销毁，K他作用域 (除丫全局作用域)也都可以安全地销毁了。图7-2展示了调用compareNames 的过程中产生的作用 域链之间的关系。</p>
+
+<p>createComparisonFunction execution context</p>
+
+<p>(scope chain)</p>
+
+<p>anonymous execution context</p>
+
+<p>(scope chain)</p>
+
+<table>
+<thead>
+<tr>
+<th>Scope Chain</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>•—</td>
+</tr>
+
+<tr>
+<td>0</td>
+<td>•—</td>
+</tr>
+</tbody>
+</table>
+
+<p>Scope Chain</p>
+
+<table>
+<thead>
+<tr>
+<th>Global variable object</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>createComparison Function</td>
+<td>•-</td>
+</tr>
+
+<tr>
+<td>result</td>
+<td>undefined</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>createComparisonFunction() activation object</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>arguments</td>
+<td>(&ldquo;name&rdquo;]</td>
+</tr>
+
+<tr>
+<td>propertyName</td>
+<td>hname&rdquo;</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>Closure activation object</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>argument s</td>
+<td>[{name: &ldquo;Nicholas&rdquo;}, {name： &ldquo;Greg&rdquo;}]</td>
+</tr>
+
+<tr>
+<td>objectl</td>
+<td>{name: -Nicholas&rdquo;}</td>
+</tr>
+
+<tr>
+<td>object2</td>
+<td>{name: &ldquo;Greg&rdquo;}</td>
+</tr>
+</tbody>
+</table>
+
+<p>阁7-2</p>
+
+<p>由于闭包会携带包含它的函数的作用城，因此会比其他函数占用更多的内存。过 度使用闭包可能会导致内存占用过多，我们建议读者只在绝对必要时再考虑使用闭 包。虽然像V8等优化后的JavaScript引擎会尝试回收被闭包占用的内存，但请大家 还是要慎重使用闭包。</p>
+
+<p>7.2.1闭包与变量</p>
+
+<p>作用域链的这种配置机制引出了一个值得注意的副作用，即闭包只能取得包含函数中任何变量的最 后一个值。别忘了闭包所保存的是整个变量对象，而不是某个特殊的变it。下面这个例子可以清晰地说 明这个问题。</p>
+
+<p>function createFunctions(){ var result = new Array()；</p>
+
+<p>for (var i=0； i &lt; 10； i&gt;+) { result[i] = function(){</p>
+
+<p>return i；</p>
+
+<p>}；</p>
+
+<p>}</p>
+
+<p>return result;</p>
+
+<p>)</p>
+
+<p>ClosureExample01.htm</p>
+
+<p>这个函数会返回一个函数数组。表面上看，似乎每个函数都应该返自己的索引值，即位置0的函数 返回0,位置1的函数返回1，以此类推。但实际上，毎个函数都返回10。因为每个函数的作用域链中 都保存着createFunctionsG函数的活动对象，所以它们引用的都是同一个变量i。当 createFunctions &lt;)函数返回后，变堡i的值是10,此时每个函数都引用着保存变i i的同一个变最 对象，所以在毎个函数内部i的值都是10。但是，我们可以通过创建另一个匿名函数强制让闭包的行为 符合预期，如下所示。</p>
+
+<p>function createFunctions(){ var result = new Array()；</p>
+
+<p>for (var i=0; i &lt; 10; i++){</p>
+
+<p>result【1】■ function(nusi) { return function(){</p>
+
+<p>return num；</p>
+
+<p>}；</p>
+
+<p>}(i)；</p>
+
+<p>return result;</p>
+
+<p>ClosureExample02. htm</p>
+
+<p>在重写了前面的createFunctionsO函数后，每个函数就会返回各自不同的索引值了。在这个版 本中，我们没宥直接把闭包赋值给数组，而是定义了一个匿名函数，并将立即执行该匿名函数的结果赋 给数组。这里的匿名函数有一个参数num,也就是最终的函数要返回的值。在调用每个匿名函数时，我 们传人了变fti。由于函数参数是按值传递的，所以就会将变tti的当前值复制给参数num。而在这个 匿名函数内部，又创建并返凹了一个访问nv®的闭包。这样一来，result数组巾的毎个函数都有自己 num变谊的一个副本，因此就町以返回各自不同的数值了。</p>
+
+<p>7.2.2关于this对象</p>
+
+<p>在闭包中使用this对象也吋能会导致一些问题。我们知道，this对象是在运行时基于函数的执 行环境绑定的：在全局函数巾，this等于window,而当函数被作为某个对象的方法调用时，this等 于那个对象。不过，匿名函数的执行环境具有全W性，因此其this对象通常指向window®。但冇时候 由于编写闭包的方式不同，这一点可能不会那么明显。下面来看一个例子。</p>
+
+<p>var nair‘e = &ldquo;The Window&rdquo;;</p>
+
+<p>var object = {</p>
+
+<p>name : &ldquo;My Object&rdquo;,</p>
+
+<p>getNameFunc : function(){ return function^){</p>
+
+<p>return this.name；</p>
+
+<p>};</p>
+
+<p>}</p>
+
+<p>}；</p>
+
+<p>alert (object .getNameFunc() () ) ； //-The Window&rdquo;(在非严格模式下&gt;</p>
+
+<p>ThisObjectExampleOl. htm</p>
+
+<p>以上代码先创建了一个全局变量name,又创建了一个包含name属性的对象。这个对象还包含一</p>
+
+<p>个方法-getNameFunc()，它返回一个匿名涵数，而匿名函数又返冋this.name。由于getNameFunc()</p>
+
+<p>返回一个函数，因此调用object .getNameFunc (&gt;()就会立即调用它返回的涵数，结果就是返回一个 字符串。然而，这个例子返冋的字符串是^The Window-.即全局name变量的值。为什么匿名函数没 有取得其包含作用域(或外部作用域)的this对象呢？</p>
+
+<p>前面曾经提到过，每个函数在被调用时，其活动对象都会自动取得两个特殊变量：this和 argument so内部函数在搜索这两个变最时，只会搜索到其活动对象为止，因此永远不可能直接访问外 部函数中的这两个变量(这一点通过图7-2可以看得更清楚)。不过，把外部作用域中的this对象保存 在一个闭包能够访问到的变tt里，就可以让闭包访问该对象了，如下所示。</p>
+
+<p>var name = &ldquo;The Window&rdquo;；</p>
+
+<p>var object = {</p>
+
+<p>name : *My Object&rdquo;#</p>
+
+<p>getNameFunc : function(){</p>
+
+<p>①当然.在通过call ()或apply 0改变函数执行坏境的情况下，this就会指向其他对象„</p>
+
+<p>var that = this； return function()(</p>
+
+<p>return that.name；</p>
+
+<p>};</p>
+
+<p>}</p>
+
+<p>)；</p>
+
+<p>alert (object .getNaineFunc() {));    //&ldquo;My Object</p>
+
+<p>ThisObj ectExampleO2 .htm</p>
+
+<p>代码中突出的行展示了这个例子与前一个例子之问的不同之处。在定义匿名函数之前,我们把this 对象賦值给了一个名叫that的变贵。而在定义了闭包之后，闭包也可以访问这个变量，因为它是我们 在包含函数中特意声名的-个变量。即使在函数返回之后，that也仍然引用着object,所以调用 obj ect.. getNameFunc ()()就返冋了&rdquo; My Obj ect&rdquo; o</p>
+
+<p>this和arguments也存在同样的问题。如果想访问作用域中的arguments对 象，必须将对该对象的引用保存到另一个闭包能够访问的变量中。</p>
+
+<p>在几种特殊情况下，this的值可能会意外地改变。比如，下面的代码是修改前面例子的结果。 var name = &ldquo;The Window&rdquo;;</p>
+
+<p>var object = {</p>
+
+<p>name : &ldquo;My Object&rdquo;,</p>
+
+<p>getName: function(){ return this.name;</p>
+
+<p>}</p>
+
+<p>} &lsquo;•</p>
+
+<p>这里的getName ()方法只简单地返回this.name的值。以下是几种调用object .getName ()的</p>
+
+<p>方式以及各自的结果。</p>
+
+<p>obj ect.getName();    //&ldquo;My Object&rdquo;</p>
+
+<p>(object .getName) () ; /&ldquo;My Object11</p>
+
+<p>(object .getName = obj ect. getName) () ; //&ldquo;The Window* ,在非严格模式下</p>
+
+<p>ThisObjectExample03. htm</p>
+
+<p>第一行代码銀平常一样调用了 obj ect. getName (),返回的是&rdquo;My Object&rdquo;,因为this, name 就是object.name。第二行代码在调用这个方法前先给它加上了括号。虽然加上括号之后，就好像只 是在引用&ndash;个函数，但this的值梅到了维持，因为object .getName和｛object .getName)的定义 是相同的。第三行代砰先执行了一条拭值语句，然后再调用赋值后的结果。因为这个嫁值表达式的值是 函数本身，所以this的值不能得到维持，结果就返回了•The Window%</p>
+
+<p>当然，你不大可能会像第二行和第三行代码一样调用这个方法。不过，这个例子有助于说明即使是 语法的细微变化，都有可能意外改变this的值。</p>
+
+<p>7.2.3内存泄漏</p>
+
+<p>由丁• IE9之前的版本对JScript对象和COM对象使用不同的垃圾收集例程(第4章曾经讨论过),</p>
+
+<p>因此闭包在IE的这些版本中会导致一些特殊的问题。具体来说，如果闭包的作用域链中保存着一个 HTML元素，那么就意味着该元素将无法被销毁。来看下面的例子。</p>
+
+<p>function assignHandler(){</p>
+
+<p>var element = document.getElementByld(&ldquo;someElement&rdquo;); element.onclick = function(&gt;{</p>
+
+<p>alert(element.id)；</p>
+
+<p>}?</p>
+
+<p>}</p>
+
+<p>以上代码创建了一个作为element元素事件处理程序的闭包，而这个闭包则又创建了一个循环引 用(事件将在第13章讨论)。由于匿名函数保存了一个对assignHandler (&gt;的活动对象的引用，因此 就会导致无法减少element的引用数„只要匿名函数存在，element的引用数至少也fil,因此它所 占用的内存就永远不会被回收。不过，这个问题可以通过稍微改写一下代W来解决，如下所示。</p>
+
+<p>function assignHandler(){</p>
+
+<p>var element = document.getElement3yId{&ldquo;someElement&rdquo;};</p>
+
+<p>vor id. ■ element .id;</p>
+
+<p>element.onclick = function(){</p>
+
+<p>alert(id)/</p>
+
+<p>);</p>
+
+<p>element = null;</p>
+
+<p>}</p>
+
+<p>在上面的代码中，通过把element.id的一个副本保存在一个变tt屮，并且在闭包中引用该变量消 除了循环引用。但仅仅做到这一步，还是不能解决内存泄漏的问题。必须要记住：闭包会引用包含函数 的整个活动对象，而其屮包含着elemento即使闭包不直接引用element,包含函数的活动对象中也 仍然会保存一个引用。因此，有必要把element变量设置为null。这样就能够解除对DOM对象的引 用，顺利地减少其引用数，确保正常回收其占用的内存。</p>
+
+<p>7.3模仿块级作用域</p>
+
+<p>如前所述，JavaScript没有块级作用域的概念。这意味着在块语句中定义的变量，实际上是在包含 函数中而非语句中创建的，来看r面的例子。</p>
+
+<p>function outputNumbers{count){</p>
+
+<p>for (var i=0； i &lt; count； i++){</p>
+
+<p>alert(i);</p>
+
+<p>alert (i) ?    //计数</p>
+
+<p>BlockScopeExampleOl. htm</p>
+
+<p>这个函数中定义了一个for循环，而变量i的初始值被设置为0。在Java、C++等语言中，变量i 只会在for循环的语句块中有定义，循环一旦结束，变量i就会被销毁。可是在JavaScrip中，变量i 是定义在ouputNumbersO的活动对象中的.因此从它有定义开始，就可以在函数内部随处访问它。即 使像下面这样错误地重新声明同一个变进，也不会改变它的值。</p>
+
+<p>function outputNumbers{count H</p>
+
+<p>for (var i=0; i &lt; count; i++}{</p>
+
+<p>alert(i);</p>
+
+<p>}</p>
+
+<p>var i;    &ldquo;重新声明t量</p>
+
+<p>alert (i) ；    //计数</p>
+
+<p>}</p>
+
+<p>BlockScopeExample02. htm</p>
+
+<p>JavaScript从来不会告诉你是否多次声明了同一个变量；遇到这种情况，它只会对后续的声明视而不 见(不过，它会执行后续声明中的变量初始化)。匿名函数可以用来模仿块级作用域并避免这个问题。</p>
+
+<p>用作块级作用域(通常称为私有作用域)的匿名函数的语法如下所示。</p>
+
+<p>(function(){</p>
+
+<p>//这叉是块级作用域</p>
+
+<p>})()；</p>
+
+<p>以上代码定义并立即调用了一个匿名函数。将阐数卢明包含在一对圆括号中，表示它实际上是一个 函数表达式。而紧随其后的另一对岡括号会立即调用这个函数。如果有读者感觉这种语法不太好理解， 可以再看看下面这个例子。</p>
+
+<p>var count =5; outputNumbers(count)；</p>
+
+<p>这里初始化了变量count,将其值设置为5。当然，这里的变量是没有必要的，因为可以把值直接 传给函数。为了让代码更简洁，我们在调用函数时用5来代替变量count,如下所示。</p>
+
+<p><img src="E:/11.ProgramFiles/Typora/JavaScriptd8a70b8fbea1082c34809-34.jpg" alt="img" /></p>
+
+<p>outputNumbers(5);</p>
+
+<p>这样做之所以可行，是因为变S只不过是值的另一种表现形式，因此用实际的值替换变量没有问题。 再看下面的例子。</p>
+
+<p>var someFunction = function(){</p>
+
+<p>//这里是块级作用域</p>
+
+<p>}；</p>
+
+<p>someFunction();</p>
+
+<p>这个例子先定义了一个函数，然后立即调用了它。定义函数的方式是创建一个匿名函数，并把匿名 函数赋值给变量someFunction。而调用函数的方式是在函数名称后面添加一对圆括号，即 someFunctionO。通过前面的例子我们知道，可以使用实际的值来取代变量count，那在这里是不是 也可以用函数的值寅接取代函数名呢？然而，下面的代码却会导致错误。</p>
+
+<p>function(){</p>
+
+<p>//这里是块级作用域</p>
+
+<p>)0?    //出错！</p>
+
+<p>这段代码会导致语法错误，是因为JavaScript将function关键字当作一个函数声明的开始，而函 数声明后面不能跟阏括号。然而，函数表达式的后面可以跟圆括号。要将函数声明转换成函数表达式， 只要像下面这样给它加上一对圆括号即可。</p>
+
+<p>(function(){</p>
+
+<p>//这里是块级作用域</p>
+
+<p>))()/</p>
+
+<p>无论在什么地方.只要临时需要一些变量，就可以使用私有作用域，例如:</p>
+
+<p>function outputNumbers(count){</p>
+
+<p>(function (} {</p>
+
+<p>for (var i=0; i &lt; count; !•►+){ alert(i)；</p>
+
+<p>J</p>
+
+<p>})()；</p>
+
+<p>alert (i};    //导致一个媒误！</p>
+
+<p>}</p>
+
+<p>BlockScopeExample03. htm</p>
+
+<p>在这个重写后的outputNumbers ()函数中，我们在£or循环外部插人了一个私有作用域。在匿名 函数中定义的任何变fi,都会在执行结束时被销毁。因此，变tt i只能在循坏中使用，使用后即被销毁。 而在私有作用域中能够访问变最count,是因为这个匿名函数是一个闭包，它能够访问包含作用域中的 所有变呈。</p>
+
+<p>这种技术经常在全局作用域屮被用在函数外部，从而限制向全局作用域中添加过多的变量和函数。 —般来说，我们都应该尽圮少向全局作用域中添加变进和函数。在一个由很多开发人员共同参与的大型 应用程序中，过多的全局变量和函数很容易导致命名冲突。而通过创建私有作用域，每个开发人员既可 以使用自己的变S,又不必担心搞乱全局作用域。例如：</p>
+
+<p>(function(){</p>
+
+<p>var now = new Date();</p>
+
+<p>if {now.getMonth() == 0 &amp;&amp; now.getDate ()    1) {</p>
+
+<p>alert(&ldquo;Happy new year!&rdquo;)；</p>
+
+<p>}</p>
+
+<p>}) () ?</p>
+
+<p>把上面这段代码放在全局作用域中，可以用来确定哪&ndash;天是1月丨日；如果到了这一天，就会向用 户显示一条祝贺新年的消息。其中的变盘now现在是匿名函数中的局部变贵，而我们不必在全局作用域 中创建它。</p>
+
+<p>这种做法可以减少闭包占用的内存问题，因为没有指向匿名函数的51用。只要函 数执行完毕，就可以立即销毁其作用域链了。</p>
+
+<p>7.4私有变量</p>
+
+<p>严格来讲，JavaScript中没有私有成员的概念；所冇对象《性都是公有的。不过，倒是有一个私有 变S的概念。任何在函数中定义的变量，都可以认为是私有变景，因为不能在函数的外部访问这些变量。 私有变tt包括函数的参数、局部变量和在函数内部定义的Jt•他函数。来看下面的例乎：</p>
+
+<p>function add(numl, num2){ var sum = numl + num2; return sum；</p>
+
+<p>在这个函数内部，有3个私有变量：rnrnl、num2和sum。在函数内部可以访问这几个变盘，但在 函数外部则不能访问它们。如果在这个函数内部创建一个闭包，那么闭包通过A己的作用域链也可以访 问这些变#。而利用这一点，就可以创建用于访问私存变量的公布方法。</p>
+
+<p>我们把相权访问私有变错和私有函数的公有方法称为特权方法(privileged method )□有两种在对象 上创建特权方法的力•式。第一种是在构造函数中定义特权方法，基本模式如下。</p>
+
+<p>function MyObject{}{</p>
+
+<p>//私有变量•和私有朵数</p>
+
+<p>var privateVariable = 10;</p>
+
+<p>function privateFunction(}{ return false；</p>
+
+<p>}</p>
+
+<p>//特权方法</p>
+
+<p>this.publicMethod = function (){ privateVariable++; return privateFunction 0；</p>
+
+<p>这个模式在构造函数内部定义了所有私有变量和函数。然后，乂继续创建了能够访问这些私存成员 的特权方法。能够在构造函数中定义特权方法，是㈥为特权方法作为闭包有权访问在构造函数中定义的 所有变14和函数。对这个例子而肓，变量privateVariable和函数privateFunction ()只能通过特 权方法publicMet hod &lt;)来访问。在创建MyObject的实例后，除了使用publicMethod ()这一个途 径外，没存任何办法口f以直接访问privateVariable和privateFunction 。</p>
+
+<p>利用私有和特权成员，可以隐藏那些不应该被直接修改的数据，例如：</p>
+
+<p>function Person(name){</p>
+
+<p>this.getName = function(){ return name；</p>
+
+<p>this.setName = function (value) { name - value；</p>
+
+<p>var person = new Person{&ldquo;Nicholas&rdquo;); alert (person.getName ⑴；    //&ldquo;Nicholas&rdquo;</p>
+
+<p>person.setName(•Greg•};</p>
+
+<p>alert (person.getName ⑴；    //&ldquo;Greg&rdquo;</p>
+
+<p>PrivilegedMethoclExampleOl. htm</p>
+
+<p>以上代码的构造函数中定义了两个特权方法：getNameU和setName()。这两个方法都可以在构 造函数外部使用，而且都有权访问私有变量 name。但在Person构造函数外部，没有任何办法访问name。 由于这两个方法是在构造函数内部定义的，它们作为闭包能够通过作用域链访问name。私有变量name 在Person的每一个实例中都不相同，因为每次调用构造函数都会重新创建这两个方法。不过，在构造 函数中定义特权方法也有一个缺点，那就是你必须使用构造函数模式来达到这个目的。第6章曾经讨论 过，构造函数模式的缺点是针对每个实例都会创建同样一组新方法，而使用静态私有变摄来实现特权方 法就可以避免这个问题。</p>
+
+<p>7.4.1静态私有变量</p>
+
+<p>通过在私存作用域中定义私有变量或函数，同样也可以创建特权方法，其基本模式如下所示。 (function(){</p>
+
+<p>//私有变量和私有函数</p>
+
+<p>var privateVariable = 10;</p>
+
+<p>function privateFunction(){ return false；</p>
+
+<p>}</p>
+
+<p>//构追函数</p>
+
+<p>MyObject = function(){</p>
+
+<p>)；</p>
+
+<p>/ /公有/特权方法</p>
+
+<p>MyObject.prototype.publicMethod = function(){ priva匕eVariable++; return privateFunction{);</p>
+
+<p>};</p>
+
+<p>})();</p>
+
+<p>这个模式创建了一个私有作用域，并在其中封装了一个构造函数及相应的方法。在私有作用域中， 首先定义了私冇变最和私有函数，然后又定义了构造函数及其公有方法。公有方法是在原型上定义的， 这一点体现了典型的原型模式。需要注意的是，这个模式在定义构造函数时并没有使用函数声明，而是 使用了函数表达式。戒数声明只能创建局部函数，但那并不是我们想要的。出于同样的原因，我们也没 有在声明MyObject时使用var关键字。记住：初始化未经声明的变贵，总是会创建一个全局变量。 因此，MyObject就成r一个全局变该，能够在私存作用域之外被访问到。但也要知道，在严格模式下 给未经声明的变3®值会导致错误。</p>
+
+<p>这个模式*3在构造函数中定义特权方法的主要K别，就在于私有变量和函数是由实例共享的。由于 特权方法是在原型上定义的，因此所有实例都使用同一个函数。而这个特权方法，作为一个闭包，总是 保存着对包含作用域的引用。来看一看下面的代码。</p>
+
+<p>(function(){</p>
+
+<p>var name =</p>
+
+<p>Person = function(value)( name = value?</p>
+
+<p>};</p>
+
+<p>Person.prototype.getName = function(){ return name;</p>
+
+<p>)；</p>
+
+<p>Person.prototype.setName = function (value){</p>
+
+<p>name = value;</p>
+
+<p>);</p>
+
+<p>})();</p>
+
+<p>var personl = new Person(&ldquo;Nicholas&rdquo;); alert(personl.getName())；    //&ldquo;Nicholas&rdquo;</p>
+
+<p>personl.setName{&ldquo;Greg&rdquo;);</p>
+
+<p>alert(personl.getName())；    //&ldquo;Greg&rdquo;</p>
+
+<p>var person2 = new Person(&ldquo;Michael&rdquo;); a ]. ert (personl. getName () }; // * Michaelw alert (person2 .getName ⑴；// &ldquo;Michael&rdquo;</p>
+
+<p>PrivilegedMethodExample02. htm</p>
+
+<p>这个例丰中的Person构造函数与getName ()和setName ()方法一样,都有权访问私右变量name。 在这种模式下，变量name就变成了一个静态的、由所有实例共享的属性。也就是说，在一个災例上调 用setName (＞会影响所有实例。而调用setName ()或新逮&rsquo;h Person实例都会赋予name属性一个 新值。结果就是所有实例都会返问相同的值。</p>
+
+<p>以这种方式创逑静态私有变量会因为使用原型而增进代码复用，但每个实例都没有自已的私有变 呈。到底是使用实例变量，还是諍态私有变最，最终还是要视你的具体需求而定。</p>
+
+<p>多查找作用域链中的一个层次，就会在■-定程度上影响奎找速度。而这正是使用 闭包和私有变量的一个S明的不足之处。</p>
+
+<p>7.4.2模块模式</p>
+
+<p>前面的模式是用于为自定义类型创建私有变量和特权方法的。而道格拉斯所说的模块模式(module pattern )则是为单例创建私有变董和特权方法。所谓单例(singleton),指的就是只有一个实例的对象。 按照惯例，JavaScript是以对象字面量的方式來创建单例对象的。</p>
+
+<p>var singleton = { name : value, method : function {) {</p>
+
+<p>//这I是方法的代码</p>
+
+<p>}</p>
+
+<p>}；</p>
+
+<p>模块模式通过为单例添加私有变S和特权方法能够使其得到增强，其语法形式如下： var singleton = function。{</p>
+
+<p>//私有变責和私有函数</p>
+
+<p>var privateVariable = 10；</p>
+
+<p>function privateFunccion(}{ return false；</p>
+
+<p>//特权/公有方法和属性</p>
+
+<p>return {</p>
+
+<p>pnblicProperty: true,</p>
+
+<p>publicMethod : function{){ privateVariable++; return privateFunction()；</p>
+
+<p>这个模块模式使用了一个返冋对象的匿名函数。在这个匿名函数内部，首先定义了私有变蛍和函数。 然后，将■-个对象字而tt作为函数的值返冋。返回的对象字面试中只包含可以公开的属性和方法。由于 这个对象是在匿名函数内部定义的，因此它的公有方法有权访问私有变M和函数。从本质上来讲，这个 对象字W景定义的是单例的公共接口。这种模式在需要对单例进行某些初始化，同时又需要维护其私有 变量时是非常有用的，例如：</p>
+
+<p>var application. = function.(} {</p>
+
+<p>//私有变量和函数</p>
+
+<p>var components = new Array(}；</p>
+
+<p>//初始化</p>
+
+<p>components.push(new BaseComponent());</p>
+
+<p>//公共 return {</p>
+
+<p>getComponentCount : functionO { return components.length;</p>
+
+<p>registerComponent : function(component){ if (typeof component -= &ldquo;object&rdquo;){</p>
+
+<p>components.push &lt; component);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>);</p>
+
+<p>}(); _</p>
+
+<p>ModulePattemExampleO 1 .htm</p>
+
+<p>在Web应用程序中，经常需要使用一个单例来管理砬用程序级的信总。这个简单的例子创建了一 个用于管理组件的application对象。在创建送个对象的过程中，首先声明了一个私有的components 数組，并向数组中添加了~个BaseComponent的新实例(在这里不需要关心BaseComponent的代我 们只是用它来賊承初始化操作)。而返回对象的getConponentCount (＞和registerConponent ()方法，都 是有权访问数组co叩onents的特权方法。前者只是返回已注册的组件数目，后者用丁注册旅fi件。</p>
+
+<p>简言之，如果必须创建一个对象并以菜些数据其进初始化，同时还要公开一些能够访问这些私有 数据的方法，那么就可以使用模块模式=以这种模式创建的每个单例都是Object的实例，W为最终要通 过一个对象字面量来表示它。事实上，这也没有什么；毕竞，单例通常都是作为全局对象存在的，我们不 会将它传递给一个函数。闪此，也就没有什么必要使川instanceof操作符来检查其对象类型了。</p>
+
+<p>7.4.3增强的模块模式</p>
+
+<p>有人进一步改进了模块模式，即在返回对象之前加人对其增强的代这种增强的模块模式适合那 单例必须是某种类逛的实例，同时还必须添加某些属性和(或)方法对其加以增强的情况。来看下面</p>
+
+<p>的例子。</p>
+
+<p>var singleton = function{){</p>
+
+<p>//私有变量和私有函数</p>
+
+<p>var privateVariable = 10;</p>
+
+<p>function privateFunction(){ return false;</p>
+
+<p>}</p>
+
+<p>//创建对象</p>
+
+<p>var object = new CustomType()；</p>
+
+<p>//添加特权/公有属性和方法</p>
+
+<p>obj ect.publicProperty = true；</p>
+
+<p>object.publicMethod = function{){ privateVariable++; return privateFunction()；</p>
+
+<p>};</p>
+
+<p>//返田这个对象 return object;</p>
+
+<p><img src="E:/11.ProgramFiles/Typora/JavaScriptd8a70b8fbea1082c34809-36.jpg" alt="img" /></p>
+
+<p>川；</p>
+
+<p>如果前面演不模块模式的例子中的application对象必须是BaseComponent的实例，那么就可 以使用以下代码。</p>
+
+<p>var application = function(){</p>
+
+<p>//私有变黃和義数</p>
+
+<p>var components = new Array();</p>
+
+<p>//初始化</p>
+
+<p>components.push(new BaseComponent())；</p>
+
+<p>//创建application的一+局部副本 var app = new BaseComponent()；</p>
+
+<p>//公共接口</p>
+
+<p>app.getComponentCount = function(H return components.length;</p>
+
+<p>};</p>
+
+<p>app.registerComponent = function(component){ if (typeof component == &ldquo;object&rdquo;){</p>
+
+<p>components.push(component)；</p>
+
+<p>}</p>
+
+<p>//返田这个剔本</p>
+
+<p>return app；</p>
+
+<p>}();</p>
+
+<p>ModuleA ugmentationPatternExampleOl .htm</p>
+
+<p>在这个重写后的应用程序（application）单例中，首先也是像前面例中一样定义了私有变虽。主 要的不同之处在于命名变贵app的创建过程，因为它必须是BaseComponent的实例。这个实例实际上 是application对象的局部变量版。此后，我们又为app对象添加了能够访问私有变量的公有方法。 最后一步是返回app对象，结果仍然是将它轼值给全W变量application。</p>
+
+<p>7.5小结</p>
+
+<p>在JavaScript编程屮，函数表达式是一种非常有用的技术。使用函数表达式可以无须对函数命名， 从而实现动态编程。匿名函数，也称为拉姆达函数，是&ndash;种使用JavaScript函数的强大方式。以下总结 了函数表达式的特点。</p>
+
+<p>□函数表达式不同于函数声明。函数声明要求有名字.但函数表达式不需要。没有名字的函数表 达式也叫做匿名函数。</p>
+
+<p>□在无法确定如何引用函数的情况下，递归函数就会变得比较复杂；</p>
+
+<p>□递归函数应该始终使用arguments.callee来递归地调用自身，不要使用函数名——函数名可 能会发生变化。</p>
+
+<p>当在函数内部定义f艽他函数时，就创建了闭包。闭包有权访问包含函数内部的所有变量，原理 如下。</p>
+
+<p>□在后台执行环境中，闭包的作用域链包含着它自己的作用域、包念函数的作用域和全局作用域。</p>
+
+<p>□通常，函数的作用域及其所有变量都会在函数执行结束后被销毁。</p>
+
+<p>□仴是，当函数返间了一个闭包时，这个函数的作用域将会一-直在内存巾保存到闭包不存在为止。</p>
+
+<p>使用闭包可以在hvaScript中模仿块级作用域（JavaScript本身没有块级作用域的概念），要点如下。</p>
+
+<p>□创建并立即调用一个函数，这样既可以执行其中的代码，又不会在内存中留下对该闲数的引用。 □结果就是函数内部的所有变《都会被立即销毁——除非将某些变呈賦值给了包含作用域（即外</p>
+
+<p>部作用域）中的变量。</p>
+
+<p>闭包还可以用于在对象中创建私有变鐘，相关概念和要点如下。</p>
+
+<p>□即使JavaScript中没有正式的私相对象属性的概念，但可以使用闭包来实现公有方法，而通过公 有方法可以访问在包含作用域屮定义的变量。</p>
+
+<p>□有权访问私有变a的公有方法叫做特权方法、</p>
+
+<p>□可以使用构造函数模式、原型模式来实现自定义类型的特权方法，也可以使用模块模式、增强 的模块模式来实现单例的特权方法。</p>
+
+<p>JavaScript中的函数表达式和闭包都足极其有用的特性，利用它们可以实现很多功能。不过，因为 创建闭包必须维护额外的作用域，所以过度使用它们可能会占用大量内存。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/03-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/js/js08-bom/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">JS08 BOM</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/03-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/js/js06-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
+            <span class="next-text nav-default">JS06 面向对象的程序设计</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

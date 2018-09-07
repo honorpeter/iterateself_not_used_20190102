@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 Docker 相关概念 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 aaa MOTIVE aaa docker 是一套 Linux 的 LXC 管理工具. LXC (Linux Containers) 的概念类似于虚拟机, 但是形式上有区别. 虚拟机更像是提供&amp;rdquo;机器环境&amp;rdquo;, 而" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/02-%E5%AE%B9%E5%99%A8/01-docker/03-docker-%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 Docker 相关概念" />
+<meta property="og:description" content="需要补充的 aaa MOTIVE aaa docker 是一套 Linux 的 LXC 管理工具. LXC (Linux Containers) 的概念类似于虚拟机, 但是形式上有区别. 虚拟机更像是提供&rdquo;机器环境&rdquo;, 而" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/02-%E5%AE%B9%E5%99%A8/01-docker/03-docker-%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5/" /><meta property="article:published_time" content="2018-06-11T08:14:47&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:47&#43;00:00"/>
+<meta itemprop="name" content="03 Docker 相关概念">
+<meta itemprop="description" content="需要补充的 aaa MOTIVE aaa docker 是一套 Linux 的 LXC 管理工具. LXC (Linux Containers) 的概念类似于虚拟机, 但是形式上有区别. 虚拟机更像是提供&rdquo;机器环境&rdquo;, 而">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:47&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:47&#43;00:00" />
+<meta itemprop="wordCount" content="1478">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 Docker 相关概念"/>
+<meta name="twitter:description" content="需要补充的 aaa MOTIVE aaa docker 是一套 Linux 的 LXC 管理工具. LXC (Linux Containers) 的概念类似于虚拟机, 但是形式上有区别. 虚拟机更像是提供&rdquo;机器环境&rdquo;, 而"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 Docker 相关概念</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 1478 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#motive">MOTIVE</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<p><strong>docker</strong> 是一套 Linux 的 <strong>LXC</strong> 管理工具.</p>
+
+<p><strong>LXC</strong> (<strong>Linux Containers</strong>) 的概念类似于虚拟机, 但是形式上有区别. 虚拟机更像是提供&rdquo;机器环境&rdquo;, 而<strong> LXC</strong> 则是提供&rdquo;运行环境&rdquo;. 单看概念它们的区别有些微妙, 但是 <strong>LXC</strong> 的特点就是, 同样是提供一套完全隔离的操作系统环境, 它很快, 超级快.</p>
+
+<p>在使用上, 概念上的区别就是, 用虚拟机, 可能更多是想, 做一个电脑, 让它跑起来, 然后再说让这台电脑干什么事.</p>
+
+<p>而 <strong>docker</strong> 的使用, 则是做一个环境(一组进程, 还有虚拟的设备等), 用环境来运行一个命令. <strong>环境-命令</strong> 是一体的(一个容器), 命令一旦执行完成, 那么一个容器实例的任务就结束了. 所以如果我们想让一个容器像一台电脑那样, 通常我们给它一个像 <code>/usr/bin/sshd -D</code> 这样的命令, 这个容器像一台电脑, 是因为这个命令一直&rdquo;没有执行完成&rdquo;的效果.</p>
+
+<p>虚拟机的使用, 一个镜像就是一个安装好的系统. 而 <strong>docker</strong> 中, 镜像更像是一张安装光盘(刻盘后不能更改), 容器才是安装好的系统. 这种两层式结构相较于传统的&rdquo;快照&rdquo;机制, 要好用得多. (如何从真正的系统安装 ISO 镜像得到 docker 镜像, 我现在也不清楚怎么做)</p>
+
+<p>更具体一些, 使用 <strong>docker</strong> , 就是在指定的环境中执行一条命令, 比如:</p>
+
+<pre><code>docker run ubuntu:14.04 /bin/bash
+</code></pre>
+
+<p>意思就是, 在 <strong>ubuntu:14.04</strong> 这个环境中, 执行 <strong>/bin/bash</strong> 这条命令. 当然, 这条命令显然是瞬间就执行完了的. 如果和这个命令立即有交互, 那么需要一些参数:</p>
+
+<pre><code>docker run -t -i ubuntu:14.04 /bin/bash
+</code></pre>
+
+<p><code>-t</code> 是分配一个虚拟终端, <code>-i</code> 是获取当前的输入. 这样你可以立即使用一个终端来和这个环境交互了.</p>
+
+<p>虽然终端是正常使用电脑最常用的交互方式, 不过真实使用 <strong>docker</strong> 的场景中, 会这样用的机会不会很多的. 通常是直接执行我们要做的事, 比如运行一个服务, 或者执行一系列的计算.</p>
+
+<p>使用 <code>nc</code> 来作一个例子:</p>
+
+<pre><code>docker run -t ubuntu:14.04 nc -l 8000
+</code></pre>
+
+<p>加上 <code>-t</code> 是因为需要一个终端来显示输出, 否则 <code>nc</code> 的标准输出就没地方去了.</p>
+
+<p><strong>docker</strong> 安装之后, 会自动在系统中作一个网桥配置, <code>run</code> 出来的每个容器实例, 都会分配一个桥接的 IP 地址. 上面的命令执行之后, 已经有容器在运行了, 并且在其中, <code>nc</code> 正监听着 <code>8000</code> 端口. 我们要接上去试试, 首先需要找到这个容器实例的 IP 地址.</p>
+
+<p>先看当前运行着的实例列表:</p>
+
+<pre><code>docker ps
+</code></pre>
+
+<p>你先看到下面的信息:</p>
+
+<pre><code>CONTAINER ID  IMAGE         COMMAND     CREATED        STATUS        PORTS  NAMES
+e1d0c9193025  ubuntu:14.04  nc -l 8000  5 seconds ago  Up 4 seconds         silly_curie
+</code></pre>
+
+<p>记下 ID , 不需要全部, 前面几位就可以了, 然后查看指定容器实例的细节:</p>
+
+<pre><code>docker inspect e1d0
+</code></pre>
+
+<p>会输出一串 json 字符串, 里面会有这样一节:</p>
+
+<pre><code>&quot;NetworkSettings&quot;: {
+    &quot;Bridge&quot;: &quot;docker0&quot;,
+    &quot;Gateway&quot;: &quot;172.17.42.1&quot;,
+    &quot;IPAddress&quot;: &quot;172.17.0.82&quot;,
+    &quot;IPPrefixLen&quot;: 16,
+    &quot;PortMapping&quot;: null,
+    &quot;Ports&quot;: {}
+},
+</code></pre>
+
+<p>可以看到, 容器的 IP 是 <code>172.17.0.82</code> , 上面的网关 IP <code>172.17.42.1</code> 就是你&rdquo;实体机&rdquo;的.</p>
+
+<p>在实体机使用 <code>telnet</code> 连上去:</p>
+
+<pre><code>telnet 172.17.0.82 8000
+</code></pre>
+
+<p>现在能看到效果了.</p>
+
+<p><code>^]</code> 然后 <code>quit</code> 退出, <code>nc</code> 那边结束执行, 命令执行完, 之前的那个容器实例也就关闭了. 你使用 <code>docker ps</code> 看不到. 但是使用:</p>
+
+<pre><code>docker ps -a
+</code></pre>
+
+<p>就能看到所有的容器实例. 在这里列出的实例是真实存在的, 只是当前并没有运行起来而已. 你可以随时让其中的实例再运行起来:</p>
+
+<pre><code>docker start e1d0c9193025
+</code></pre>
+
+<p>这样你又可以 <code>telnet</code> , 只是没地方看输出.</p>
+
+<p>回顾上面的过程, 提出两个概念, <strong>镜像</strong> 和 <strong>容器</strong> .</p>
+
+<p><strong>镜像</strong> 指上面的 <code>ubuntu:14.04</code> 这种, 嗯, 这种环境, 这种系统. 后面会讲如何做一个自己的 <strong>镜像</strong> .</p>
+
+<p><strong>容器</strong> 是在具体的 <strong>镜像</strong> 上 <code>run</code> 具体的命令, 得到的一个&rdquo;绑定状态&rdquo;. <code>run</code> 命令执行时的一些参数(比如和实体机的端口映射), 也是&rdquo;状态&rdquo;的一部分, <code>run</code> 过之后就不能更改了.</p>
+
+<p>它们的关系, 有些像编程语言中的 <strong>类</strong> 和 <strong>实例</strong> . <code>run</code> 时的命令就像是类实例化时的参数. 后面会提到, 你可以删除 <strong>容器</strong> , 也可以删除 <strong>镜像</strong> . 当你想删除 <strong>镜像</strong> , 但是使用它的 <strong>容器</strong> 还存在时, 你会得到操作失败的提示.</p>
+
+<p><strong>类</strong> 有继承关系, 得利于 <strong>AUFS</strong> 这些的层级文件系统, <strong>镜像</strong> 的构建也是这种层层封装的结果.</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><a href="https://www.w3cschool.cn/use_docker/">Docker简单使用指南</a></li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/06-%E8%81%9A%E7%B1%BB/%E7%BD%91%E6%A0%BC%E8%81%9A%E7%B1%BB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">网格聚类</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/02-%E5%AE%B9%E5%99%A8/01-docker/04-docker-%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/">
+            <span class="next-text nav-default">04 Docker 基本命令</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

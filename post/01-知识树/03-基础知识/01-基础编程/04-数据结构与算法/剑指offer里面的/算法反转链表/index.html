@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：反转链表 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="相关资料 CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 输入一个链表，反转链表后，输出链表的所有元素。 链表的node是这样的： struct ListNode { public : int val; struct ListNode *next; }; 题目解答 三" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：反转链表" />
+<meta property="og:description" content="相关资料 CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 输入一个链表，反转链表后，输出链表的所有元素。 链表的node是这样的： struct ListNode { public : int val; struct ListNode *next; }; 题目解答 三" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" /><meta property="article:published_time" content="2018-07-05T21:20:20&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-05T21:20:20&#43;00:00"/>
+<meta itemprop="name" content="算法：反转链表">
+<meta itemprop="description" content="相关资料 CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 输入一个链表，反转链表后，输出链表的所有元素。 链表的node是这样的： struct ListNode { public : int val; struct ListNode *next; }; 题目解答 三">
+
+
+<meta itemprop="datePublished" content="2018-07-05T21:20:20&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-05T21:20:20&#43;00:00" />
+<meta itemprop="wordCount" content="1284">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：反转链表"/>
+<meta name="twitter:description" content="相关资料 CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 输入一个链表，反转链表后，输出链表的所有元素。 链表的node是这样的： struct ListNode { public : int val; struct ListNode *next; }; 题目解答 三"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：反转链表</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-05 </span>
+        
+        <span class="more-meta"> 1284 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#三指针滑动-pprev-pnode-pnext">三指针滑动 pPrev  pNode  pNext</a></li>
+<li><a href="#那么如果可以建立新链表呢">那么如果可以建立新链表呢？</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ul>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>输入一个链表，反转链表后，输出链表的所有元素。</p>
+
+<p>链表的node是这样的：</p>
+
+<pre><code>struct ListNode
+{
+public :
+    int val;
+    struct ListNode *next;
+};
+</code></pre>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="三指针滑动-pprev-pnode-pnext">三指针滑动 pPrev  pNode  pNext</h2>
+
+<p>其实我们看到这个题目，首先想到的就是是不是可以用三个指针同时滑动，然后操作指针的指向来完成反转？ 比如 pPrev  pNode  pNext ：</p>
+
+<ul>
+<li><p>我们先将 pPrev 指向当前结点之前的结点，把 pNode 指向当前结点。嗯，准备条件已经做好了。</p></li>
+
+<li><p>然后用 pNext 指向当前结点的下一个结点：pNext = pNode-&gt;next，OK这个时候下一个结点就不会丢失了，我们开始集中精力处理当前这个结点的反转。</p></li>
+
+<li><p>我们把当前结点的 next 指向它之前的结点：pNode-&gt;next = pPrev，OK，就这样，这个结点我们就已经处理好了。</p></li>
+
+<li><p>下面就开始依次处理下一个结点：把pPrev指向当前结点：pPrev = pNode ，把pNode指向之前保存的下一个结点：pNode = pNext。</p></li>
+
+<li><p>OK，不断循环就行。</p></li>
+</ul>
+
+<p>代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+
+struct ListNode {
+public:
+    int val;
+    struct ListNode *next;
+};
+
+
+class Solution {
+public:
+    ListNode* ReverseList(ListNode* pHead) {
+
+        ListNode *pReversedHead = NULL;
+
+        ListNode *pNode = pHead;
+        ListNode *pPrev = NULL;
+        ListNode *pNext = NULL;
+
+        while (pNode != NULL) {
+            pNext = pNode-&gt;next;        //  首先保存其下一个节点
+            pNode-&gt;next = pPrev;        //  然后把当前的node 的next 指针指向之前的node
+            pPrev = pNode;              //  准备处理下一个node，把pPrev指向当前的 node
+            pNode = pNext;              //  准备处理下一个node，把pNode指向下一个node
+        }
+        return pPrev;           //  最后pPrev指针指向的那个节点就是原来的未指针，新的头指针 是的
+    }
+};
+
+
+int main() {
+    //建立链表
+    ListNode list[5];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = &amp;list[4];
+    list[4].val = 5;
+    list[4].next = NULL;
+    //输出当前的情况
+    ListNode *node = list;
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+    //进行反转
+    Solution solu;
+    node = solu.ReverseList(list);
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>12345
+54321
+</code></pre>
+
+<p>OK，上面的方法还是很厉害的，而且原地反转，很 nice。</p>
+
+<h2 id="那么如果可以建立新链表呢">那么如果可以建立新链表呢？</h2>
+
+<p>如果允许你建立新链表呢？</p>
+
+<p>比如说我们可以建立一个新链表，每次插入元素的时候都是在头结点的前一个位置插入，那么这个链表元素的顺序就正好跟插入的顺序相反</p>
+
+<p>这个思路也很好，因为他的过程其实就是构建一个每次插入只是在头结点前面的链表的过程。</p>
+
+<p>当然，这过程中也要注意保存原来链表中的 node 的 next 防止丢失。</p>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+
+struct ListNode {
+public:
+    int val;
+    struct ListNode *next;
+
+};
+
+
+class Solution {
+public:
+    ListNode* ReverseList(ListNode* pHead) {
+        if (pHead == NULL) {
+            return NULL;
+        }
+
+        ListNode *pNewNode = NULL;
+
+        ListNode *pNode = pHead;
+        ListNode *pNext = NULL; //用来保存旧链表里面的node的next指针
+
+        // 对于新链表的头进行处理
+        pNewNode = pNode;
+        pNode = pNode-&gt;next;           //  移动到下一个node
+        pNewNode-&gt;next = NULL;
+        cout &lt;&lt; pNewNode-&gt;val &lt;&lt; &quot; 已被作为表头加入链表 &quot; &lt;&lt; endl;
+
+        //  循环将node放到新链表中
+        while (pNode != NULL) {
+            pNext = pNode-&gt;next;                //  保存next指向，防止丢失
+            pNode-&gt;next = pNewNode;     //将pNode节点插入到nNode链表的头部
+            pNewNode = pNode;               //把pNewNode的指针重新指向链表头
+            cout &lt;&lt; pNewNode-&gt;val &lt;&lt; &quot; 已被作为表头加入链表 &quot; &lt;&lt; endl;
+            pNode = pNext;          //  移动指针 开始处理下一个 node
+        }
+        return pNewNode;
+    }
+};
+
+
+int main() {
+    //初始化数据
+    ListNode list[5];
+    list[0].val = 1;
+    list[0].next = &amp;list[1];
+    list[1].val = 2;
+    list[1].next = &amp;list[2];
+    list[2].val = 3;
+    list[2].next = &amp;list[3];
+    list[3].val = 4;
+    list[3].next = &amp;list[4];
+    list[4].val = 5;
+    list[4].next = NULL;
+
+    //打印原始序列
+    ListNode *node = list;
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+
+    //反转
+    Solution solu;
+    node = solu.ReverseList(list);
+    while (node != NULL) {
+        cout &lt;&lt; node-&gt;val;
+        node = node-&gt;next;
+    }
+    cout &lt;&lt; endl;
+
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>12345
+1 已被作为表头加入链表
+2 已被作为表头加入链表
+3 已被作为表头加入链表
+4 已被作为表头加入链表
+5 已被作为表头加入链表
+54321
+</code></pre>
+
+<p>可见，这个还是很方便的。比上面的三指针的方法稍微方便了点。</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：合并两个排序的链表</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E7%9F%A9%E5%BD%A2%E8%A6%86%E7%9B%96/">
+            <span class="next-text nav-default">算法：矩形覆盖</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

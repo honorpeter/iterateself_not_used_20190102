@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法：从1到n整数中1出现的次数 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-05-23 04:17:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/23/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0/ slug: &amp;lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0&amp;rsquo; title: 算法：从1到n整数中1出现的次数 wordpress_id: 6299 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BB%8E1%E5%88%B0n%E6%95%B4%E6%95%B0%E4%B8%AD1%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法：从1到n整数中1出现的次数" />
+<meta property="og:description" content="author: evo comments: true date: 2018-05-23 04:17:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/23/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0&rsquo; title: 算法：从1到n整数中1出现的次数 wordpress_id: 6299 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BB%8E1%E5%88%B0n%E6%95%B4%E6%95%B0%E4%B8%AD1%E5%87%BA%E7%8E%B0%E7%9A%84%E6%AC%A1%E6%95%B0/" /><meta property="article:published_time" content="2018-06-11T08:14:55&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:55&#43;00:00"/>
+<meta itemprop="name" content="算法：从1到n整数中1出现的次数">
+<meta itemprop="description" content="author: evo comments: true date: 2018-05-23 04:17:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/23/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0&rsquo; title: 算法：从1到n整数中1出现的次数 wordpress_id: 6299 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:55&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:55&#43;00:00" />
+<meta itemprop="wordCount" content="998">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法：从1到n整数中1出现的次数"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-05-23 04:17:25&#43;00:00 layout: post link: http://106.15.37.116/2018/05/23/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0/ slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0&rsquo; title: 算法：从1到n整数中1出现的次数 wordpress_id: 6299 categories: - 基础程序设计 tags: - ordinary algorithm [mathjax] 注：非原创，只是按照自己的思路做了整合，修改。推荐"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法：从1到n整数中1出现的次数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 998 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#ordinary-algorithm">- ordinary algorithm</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述">题目描述</a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#暴力方法">暴力方法</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-05-23 04:17:25+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/05/23/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0/">http://106.15.37.116/2018/05/23/%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0/</a>
+slug: &lsquo;%e7%ae%97%e6%b3%95%ef%bc%9a%e4%bb%8e1%e5%88%b0n%e6%95%b4%e6%95%b0%e4%b8%ad1%e5%87%ba%e7%8e%b0%e7%9a%84%e6%ac%a1%e6%95%b0&rsquo;
+title: 算法：从1到n整数中1出现的次数
+wordpress_id: 6299
+categories:
+- 基础程序设计
+tags:</p>
+
+<h2 id="ordinary-algorithm">- ordinary algorithm</h2>
+
+<!-- more -->
+
+<p>[mathjax]</p>
+
+<p><strong>注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li></li>
+</ol>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>没有结束</strong></li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述">题目描述</h2>
+
+<p>从1到 n 整数中 1 出现的次数</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="暴力方法">暴力方法</h2>
+
+<p>最简单直接的方法就是我们循环所有的 1~n 中的每个 number，计算每个 number 出现的次数。</p>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+
+class Solution {
+public:
+    // 统计1到n的整数中1出现的次数
+    int NumberOf1Between1AndN_Solution(int n) {
+        int count = 0;
+        for (int i = 1; i &lt;= n; i++) {
+            count += NumberOf1(i);
+        }
+        return count;
+    }
+
+protected:
+    //统计number中1出现的次数
+    int NumberOf1(int number) {
+        int count = 0;
+        while (number != 0) {
+            if (number % 10 == 1) {
+                count++;
+            }
+            number /= 10;
+        }
+        return count;
+    }
+};
+
+
+int main() {
+    Solution solu;
+    cout &lt;&lt; solu.NumberOf1Between1AndN_Solution(12) &lt;&lt; endl;
+    cout &lt;&lt; solu.NumberOf1Between1AndN_Solution(100) &lt;&lt; endl;
+    cout &lt;&lt; solu.NumberOf1Between1AndN_Solution(1000) &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>5
+21
+301
+</code></pre>
+
+<p>此方法简单，容易理解，但它的问题是效率，时间复杂度为$O(N * lgN)$，N比较大的时候，需要耗费很长的时间。</p>
+
+<p>#分治递归
+我们重新分析下这个问题，</p>
+
+<p>对于任意一个个位数n，只要n&gt;=1,它就包含一个&rdquo;1&rdquo;；</p>
+
+<p>n&lt;1，即n=0时，则包含的&rdquo;1&rdquo;的个数为0。</p>
+
+<p>于是我们考虑用分治的思想将任意一个n位数不断缩小规模分解成许多个个位数，这样求解就很方便。</p>
+
+<p>但是，我们该如何降低规模？</p>
+
+<p>仔细分析，我们会发现，</p>
+
+<p><strong>任意一个n位数中&rdquo;1&rdquo;的个位可以分解为两个n-1位数中&rdquo;1&rdquo;的个数的和，最后再加上一个与最高位数相关的常数C</strong>例如，</p>
+
+<p>对于n=12，可以拆分为0109,1012，即 f(12) = f(10 - 1) + f(12 - 10) + 3,其中3是表示最高位为1的数字个数，这里就是10,11,12；</p>
+
+<p>对于n=132，可以拆分为099，100132，即f(132)=f(100 -1) + f(132 - 100) + 33，33代表最高位为1的数字的个数，这里就是100~132百位数字的1出新了33次</p>
+
+<p>对于232，可以拆分为099，100232，即f(232) = 2*f(100 - 1) + f(32) + 100，因为232大于199，所以它包括了所有最高位为1的数字即100~199，共100个。
+综上，我们分析得出，最后加的常数C只跟最高位n1是否为1有关</p>
+
+<p>当最高位为1时，常数C为原数字N去掉最高位后剩下的数字+1，如N=12时，$C = 2 + 1 = 3$，N=132时，$C = 32 + 1 = 33$
+当最高位大于1时，常数C为$10^(bit-1)$，其中bit为N的位数，如N=232时，bit=3，$C = 10^(bit-1) = 10^2 = 100$。 于是，我们可以列出递归方程如下：</p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E5%AD%97%E7%AC%A6%E4%BD%8D%E7%BD%AE/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：第一个只出现一次的字符位置</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%A4%A7%E5%92%8C/">
+            <span class="next-text nav-default">算法：连续子数组的最大和</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

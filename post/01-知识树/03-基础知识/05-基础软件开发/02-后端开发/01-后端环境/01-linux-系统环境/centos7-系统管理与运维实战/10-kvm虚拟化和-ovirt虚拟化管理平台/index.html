@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>10 KVM虚拟化和 oVirt虚拟化管理平台 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="55 10 S &amp;gt;■ a* ■ W 10.3小结 55 10 S &amp;gt;■ a* ■ W KVM繡化翮oViri醐七冒理率台 虚拟化是最近几年来兴起的一个比较实用的技术，从各企" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/10-kvm%E8%99%9A%E6%8B%9F%E5%8C%96%E5%92%8C-ovirt%E8%99%9A%E6%8B%9F%E5%8C%96%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="10 KVM虚拟化和 oVirt虚拟化管理平台" />
+<meta property="og:description" content="55 10 S &gt;■ a* ■ W 10.3小结 55 10 S &gt;■ a* ■ W KVM繡化翮oViri醐七冒理率台 虚拟化是最近几年来兴起的一个比较实用的技术，从各企" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/10-kvm%E8%99%9A%E6%8B%9F%E5%8C%96%E5%92%8C-ovirt%E8%99%9A%E6%8B%9F%E5%8C%96%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0/" /><meta property="article:published_time" content="2018-06-27T07:04:57&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-27T07:04:57&#43;00:00"/>
+<meta itemprop="name" content="10 KVM虚拟化和 oVirt虚拟化管理平台">
+<meta itemprop="description" content="55 10 S &gt;■ a* ■ W 10.3小结 55 10 S &gt;■ a* ■ W KVM繡化翮oViri醐七冒理率台 虚拟化是最近几年来兴起的一个比较实用的技术，从各企">
+
+
+<meta itemprop="datePublished" content="2018-06-27T07:04:57&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-27T07:04:57&#43;00:00" />
+<meta itemprop="wordCount" content="16376">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="10 KVM虚拟化和 oVirt虚拟化管理平台"/>
+<meta name="twitter:description" content="55 10 S &gt;■ a* ■ W 10.3小结 55 10 S &gt;■ a* ■ W KVM繡化翮oViri醐七冒理率台 虚拟化是最近几年来兴起的一个比较实用的技术，从各企"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">10 KVM虚拟化和 oVirt虚拟化管理平台</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-27 </span>
+        
+        <span class="more-meta"> 16376 words </span>
+        <span class="more-meta"> 33 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      <nav>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#55-10-s">55 10 S</a></li>
+<li><a href="#a-w">&gt;■ a* ■ W</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#10-3小结">10.3小结</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+
+<h6 id="55-10-s">55 10 S</h6>
+
+<h6 id="a-w">&gt;■ a* ■ W</h6>
+
+<p>KVM繡化翮oViri醐七冒理率台</p>
+
+<p>虚拟化是最近几年来兴起的一个比较实用的技术，从各企业的使用来看虚拟化带来了许多 好处，例如：细化资源管理、低成本投入等。CentOS是较早支持虚拟化的Linux发行版之一。 早期的CentOS支持Xen虚拟化，但随着Red Hat公司收购KVM虚拟化，CentOS主要的虚拟 化软件由Xen过渡为KVM。本章将简要介绍KVM虚拟化及oVirt虚拟化管理平台的使用。</p>
+
+<p>本章主要涉及的知识点有：</p>
+
+<p>•    KVM虚拟化简介</p>
+
+<p>•    CentOS中KVM虚拟化使用方法</p>
+
+<p>•    oVirt虚拟化管理平台简介</p>
+
+<p>•    oVirt虚拟化管理平台的安装和使用</p>
+
+<p>10.1    KVM虚拟化</p>
+
+<p>KVM (Kernel-based Virtual Machine)是一个基于内核的系统虚拟化模块，从Linux内核版本 2.6.20开始，各大Linux发行版就已经将其集成于发行版中。与Xen等虚拟化相比，KVM是需要 硬件支持的完全虚拟化(Xen的早期产品是基于软件的半虚拟化产品)。KVM由内核加载，并使 用Linux系统的调试器进行管理，因此KVM对资源的管理效率相对较高。在基于Linux操作系 统的虚拟化产品中占有较大份额，本节将简要介绍CentOS 7中KVM的安装和使用。</p>
+
+<p>10.1.1    安装KVM虚拟化</p>
+
+<p>同之前的CentOS 6—样，CentOS 7也将KVM作为虚拟化的基础部件之一，因此可以直 接通过yum工具安装。本小节简要介绍如何使用yum工具安装KVM虚拟化。</p>
+
+<p>(1)环境配置</p>
+
+<p>由于KVM使用的是基于硬件支持的虚拟化，因此CPU必须包含了相关的指令集。可以 在Linux系统中查看CPU是否包含了相关指令集，如【示例10-1】所示。</p>
+
+<p>【示例10-1】</p>
+
+<p>[rootQlocalhost # egrep *(vmx|svm)&rsquo; /proc/cpuinfo</p>
+
+<p>flags    : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge me a emov</p>
+
+<p>pat pse36 clflush dts acpi 腿x fxsr sse sse2 ss ht tm pbe syscall nx rdtsep lm constant一tsc arch一perfmon pebs bts rep_good nopl xtopology nonstop一tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds__cpl vmx est tm2 ssse3 cx!6 xtpr pdem pcid sse4一 1 sse4一2 popent tsc_deadline_timer xsave avx lahf一lm arat epb xsaveopt pin pts dtherm tpr一shadow vnmi flexpriority ept vpid</p>
+
+<p>查看CPU支持之后，还需要修改SELinux设置，将文件/etc/sysconfig/selinux中的 “SELINUX=enforcing” 修改为 “SELINUX=disabled” 并重启系统。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-196.jpg" alt="img" /></p>
+
+<p>如果系统中查看CPU支持没有相应标志，可能需要修改BIOS相关设置以获得支持。关 于修改BIOS设置，读者可自行阅读相关文档修改。</p>
+
+<p>(2)安装KVM</p>
+
+<p>由于使用yum工具安装，因此必须正确设置IP地址、DNS等信息，确保网络畅通。安装 过程如【示例10-2］所示。</p>
+
+<p>【示例10-2】</p>
+
+<p>#安装KVM相关软件包</p>
+
+<p>[root@localhost -3 # yum -y install qemu-kvm libvirt virt-install bridge-utils Loaded plugins: fastestmirror, langpacks Loading mirror speeds from cached hostfile</p>
+
+<p>*    base: centos.ustc.edu.cn</p>
+
+<p>*    extras: mirrors.sina.cn</p>
+
+<p>*    updates: mirrors.sina.cn</p>
+
+<p>Package 10:qemu-kvm-1.5.3-86.el7_l.2.x86__64 already installed and latest</p>
+
+<p>version</p>
+
+<p>Package bridge-utils-1.5-9.el7.x86_64 already installed and latest version</p>
+
+<p>Resolving Dependencies</p>
+
+<p>&ndash;&gt; Running transaction check</p>
+
+<p>&mdash;&gt; Package libvirt.x86__64 0:1.2.8-16,el7_l.3 will be installed</p>
+
+<p>-一&gt; Processing Dependency: libvirt-daemon-driver-lxc = 1.2.8-16.el7_l.3 for</p>
+
+<p>package: libvirt-1.2.8-16 .el7_l. 3 ,x86__64</p>
+
+<p>&ndash;&gt; Processing Dependency: libvirt-daemon-config-nwfilter = 1.2.8-16.el7_l.3</p>
+
+<p>for package: libvirt-1.2.8-16. el7_l. 3. x86__64 ••••••</p>
+
+<p>#检查kvm模块是否加载</p>
+
+<p>[rootGlocalhost    # lsmod | grep kvm</p>
+
+<p>kvm 一intel    148081 0</p>
+
+<p>kvm    461126    1 kvm_intel</p>
+
+<p>(3)    开启服务</p>
+
+<p>安装完成后还需要开启libvirtd，以开启相关支持：</p>
+
+<p>[root@localhost ~]# systemctl start libvirtd [root@localhost # systemctl enable libvirtd</p>
+
+<p>(4)    桥接网络</p>
+
+<p>在虚拟机的网络连接中，使用的最多的莫过于桥接网络，所谓桥接网络是指将物理网络连 接到虚拟机中。新安装的KVM还没有桥接网络，需要手动添加。添加过程如【示例10-3】所</p>
+
+<p>ZJ&rsquo;* O</p>
+
+<p>【示例10-3]</p>
+
+<p>#本例中物理网卡名为enp5s0    :兔&rsquo;</p>
+
+<p>[root@localhost network-scripts]# cat ifcfg-enp5s0</p>
+
+<p>TYPE=nEthernetn</p>
+
+<p>DEVICE=Menp5sOM</p>
+
+<p>ONBOOT=wyesn</p>
+
+<p>BRIDGE=.，brO，.</p>
+
+<p>#新建一个名为brO的桥接网卡并设置IP地址等信息</p>
+
+<p>[root@localhost network-scripts]# cat ifcfg-brO</p>
+
+<p>TYPE=nBridge&rdquo;</p>
+
+<p>BOOTPROTO=Hnone&rdquo;</p>
+
+<p>IPADDR=M172.16.45.35”</p>
+
+<p>PREFIXES4</p>
+
+<p>GATEWAY-n172.16.45.1M</p>
+
+<p>DEVICE=brO</p>
+
+<p>ONBOOT-nyesH</p>
+
+<p>#重启网络服务</p>
+
+<p>[root@localhost ~]# systemctl restart network</p>
+
+<p>[root@localhost    ifconfig</p>
+
+<p>brO: flags-4163<UP,BROADCAST,RUNNING,MULTICAST> mtu 1500</p>
+
+<p>inet 172.16.45.35 netmask 255.255.255.0 broadcast 172.16.45.255 inet6 fe80::eea8;6bff:fea4:49fa prefixlen 64 scopeid 0x20<link> ether ec:a8:6b:a4:49:fa txqueuelen 0 (Ethernet)</p>
+
+<p>RX packets 131 bytes 8307 (8.1 KiB)</p>
+
+<p>RX errors 0 dropped 0 overruns 0 frame 0 TX packets 22 bytes 1823 (1.7 KiB)</p>
+
+<p>TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0</p>
+
+<p>enp5s0: flags-4163<UP,BROADCAST,RUNNING,MULTICAST> mtu 1500</p>
+
+<p>inet6 fe80::eea8:6bff:fea4:49fa prefixlen 64 scopeid 0x20<link> ether ec:a8:6b:a4:49:fa txqueuelen 1000 (Ethernet)</p>
+
+<p>RX packets 17350 bytes 3777406 (3,6 MiB)</p>
+
+<p>RX errors 0 dropped 8 overruns 0 frame 0 TX packets 2830 bytes 325846 (318.2 KiB)</p>
+
+<p>TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0</p>
+
+<p>桥接网络设置完后，KVM就已经安装完成了。</p>
+
+<p>10.1.2 KVM虚拟机的管理方法</p>
+
+<p>安装完Linux系统后，就可以管理KVM虚拟机了。管理KVM虚拟机通常可以使用两种 方法，其一是使用Linux系统图形界面下的虚拟系统管理器，其二是使用命令的方式，本小节 将分别介绍这两种方式。</p>
+
+<p>1.虚拟系统龍器</p>
+
+<p>虚拟系统管理器由软件包virt-manager提供，可以使用yum工具安装“yum install virt-manager”。安装完后可以通过单击桌面右上角的“应用程序”，然后依次单击“系统工具” 和“虚拟系统管理器”，弹出虚拟系统管理器界面，如图10.1所示。</p>
+
+<p>图10.1虚拟系统管理器</p>
+
+<p>由于没有新建任何KVM虚拟机，因此在虚拟系统管理器中没有看到任何虚拟机。虚拟系 统管理器可以用来创建、删除虚拟机，还可以管理虚拟机电源、编辑硬件等，几乎所有功能都 可以在虚拟系统管理器中实现。</p>
+
+<p>2.命令M</p>
+
+<p>除了图形界面工具虚拟系统管理器之外，KVM还提供了一些命令工具，使用这些命令工 具也可以达到管理虚拟机的目的，常见的命令形式如表10.1所示。</p>
+
+<p>表10.1管理虚拟机的常见命令形式</p>
+
+<table>
+<thead>
+<tr>
+<th>命令形式</th>
+<th>作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>virt-install</td>
+<td>用于创建虚拟机，具体选项可参考其手册页了解</td>
+</tr>
+
+<tr>
+<td>virsh list —all</td>
+<td>查看所有虚拟机</td>
+</tr>
+
+<tr>
+<td>virsh start name</td>
+<td>启动名为name的虚拟机</td>
+</tr>
+
+<tr>
+<td>virsh destroy name</td>
+<td>停止名为name的虚拟机</td>
+</tr>
+
+<tr>
+<td>virsh undefine name</td>
+<td>删除名为name的虚拟机</td>
+</tr>
+
+<tr>
+<td>virsh console name</td>
+<td>连接到名为name的虚拟机的控制台</td>
+</tr>
+</tbody>
+</table>
+
+<p>除以上列举的命令形式之外，还有许多其他形式的用途各异的命令读者可自行阅读virsh 的手册页了解，此处不再赘述。</p>
+
+<p>10.1.3使用图形工具创建虚拟机</p>
+
+<p>安装完KVM虚拟机之后，就可以创建虚拟机并安装操作系统了。创建虚拟机可以使用图 形界面中的虚拟系统管理工具，也可以使用virt-install命令，本节将以虚拟系统管理工具创建 Linux虚拟机为例介绍如何创建虚拟机。</p>
+
+<p>打开虚拟系统管理器，确保主界面中的“lOcalhOSt(QEMU)”处于连接状态，并在之上单 击鼠标右键，在弹出的菜单中选择“新建(N)”，将弹出新建虚拟机向导，如图10.2所示。</p>
+
+<p>图10.2新建虚拟机向导</p>
+
+<p>新建虚拟机向导要求选择安装介质的位置，从图10.2中可以看到KVM支持本地安装、 网络安装、PXE引导安装(需要操作系统支持)及使用现在硬盘文件几种方式。此处使用ISO 光盘映像文件安装，因此选择“本地安装介质”，单击“前进”按钮，向导要求输入ISO光盘 映像文件路径或使用光驱，如图10.3所示。</p>
+
+<p>图10.3选择光盘映像和操作系统类型</p>
+
+<p>此时选择“使用ISO映像”并单击后面的“浏览”按钮，将弹出“定位ISO介质卷”界 面，如图10.4所示。</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>定位ISO介质卷</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>:Storage Pools</td>
+<td></td>
+</tr>
+
+<tr>
+<td>■    oerauit■    文件紐目录</td>
+<td>名称大小    格式    用于</td>
+</tr>
+
+<tr>
+<td>!</td>
+<td></td>
+</tr>
+
+<tr>
+<td>本地浏览（旦）</td>
+<td>取消（£）    滤卷（V:</td>
+</tr>
+</tbody>
+</table>
+
+<p>图10.4 “定位ISO介质卷”界面</p>
+
+<p>单击左下角的“本地浏览”按钮，在弹出的界面正确选择Linux安装光盘ISO映像所在位 置，并返回选择光盘映像和操作系统类型界面。软件可能不能正确识别ISO映像的操作系统， 因此可以取消选择“根据安装介质自动侦测操作系统类型”选项，并在之后的操作“系统类型&rdquo; 和“版本”中正确选择。在本例中将安装CentOS 6.6，由于CentOS是RHEL的重编译版，二 者之间的区别很小，因此此处可选择“Linux”及“Red Hat Enterprise Linux 6.6”。然后单击前 进按钮，进入内存和CPU设置界面，如图10.5所示。</p>
+
+<p>在内存和CPU设置界面需要对虚拟机的内存容量及CPU数量进行设置，通常情况下内存 容量越大、CPU数量越多表示虚拟机性能越好。此处可以按需要进行设置，如果没有特殊需 求，也可以保持默认设置。设置完成后，单击“前进”按钮，进入存储设置界面，如图10.6 所示。</p>
+
+<p>图10.6设置存储界面</p>
+
+<p>在存储设置界面需要为虚拟机设置合适的磁盘空间，此处按需要进行设置即可。需要注意 的是如果需要使用迁移功能，此时需要将硬盘映像的存储位置选择到远程存储上，而不是本地 磁盘中。选择合适的磁盘容量后，单击“前进”按钮，接下来向导要求用户确认配置，如图 10.7所示。</p>
+
+<p>图10.7确认设置</p>
+
+<p>在确认设置界面，向导会将之前的设置罗列出来，并自动为虚拟机命名(由于之前的虚拟 机类型中选择为RHEL6.6,此处向导自动命名为RHEL6.6,可更改为CentOS6.6,可保持默认)、 添加网卡。在尚级选项中可以定义虚拟机网络I此处选择之前设置的桥接网络brO，向导还会 自动为虚拟机设置一个MAC地址，MAC地址是网卡工作的必要条件，此项设置一般无须修 改。确认所有设置都正确后，单击“完成”按钮即可完成虚拟机的创建工作。</p>
+
+<p>在向导完成虚拟机创建之后，虚拟系统管理器会立即打开虚拟机电源，并显示虚拟机的控 制台，如图10.8所示。</p>
+
+<p>文件(F)鹿拟机(M)查看(V)发送技键(K)</p>
+
+<p>■ &hellip;. v</p>
+
+<p>Uelcome to CentOS 6.6!</p>
+
+<p>jjistalI or upgrade an existing system Install system uitli basic video driver Rescue installed system</p>
+
+<p>Boot from local drive Memory test</p>
+
+<p>Press [Tab] to edit options</p>
+
+<p>fiutonwtit： boot in 35 sw^onds -.</p>
+
+<p>CentOS 6</p>
+
+<p>Community €NTerpr(se Operating System</p>
+
+<p>图10.8虚拟机控制台</p>
+
+<p>由于新的虚拟机还没有安装操作系统，因此虚拟机使用了之前指定的ISO光盘映像引导， 此时只需要将操作系统正确安装就可以使用虚拟机了。</p>
+
+<p>10.1.4使用virt-install创建虚拟机</p>
+
+<p>使用图形界面创建虚拟机只适合能接触到系统桌面的情况，无论是直接在物理机上操作还 是通过VNC远程操作均可。但有许多计算机可能并没有安装桌面，用户可能更希望通过远程 的方式访问虚拟机，就像VMware的ESX那样通过客户端远程操作虚拟机。这时可行的方法 通常有两种：其一是使用VNC，其二是使用SPICE协议。本小节将以不使用图形界面为例介 绍如何通过上述方法创建和访问虚拟机。</p>
+
+<p>\1. VNC远程访问</p>
+
+<p>由于virt-install的选项和参数众多，因此在使用virt-install创建虚拟机之前建议先阅读其 手册页详细了解其参数和选项的使用方法。此处仍以CentOS 6.6作示例，其创建命令如【示 例10-4】所示。</p>
+
+<p>【示例10-4】</p>
+
+<p>[root@localhost 〜]# virt-install -n centos6.6-2 -r 1024 </p>
+
+<p>&gt;    &ndash;disk /var/lib/libvirt/iraages/rhel6.6-2.imgr size=10 </p>
+
+<p>&gt;    &ndash;network bridge=br0 &ndash;os-type=linux    os~variant=rhel6.6 </p>
+
+<p>&gt;    &ndash;cdrom /iso/CentOS-6.6-x86__64 . iso </p>
+
+<p>&gt;    &ndash;graphics vnc,port=5910,listen=,0.0.0.0* ^password^*redhat1</p>
+
+<p>Starting install&hellip;</p>
+
+<p>Allocating <em>rhel6.6-2.img</em>    1    10 GB 00:00</p>
+
+<p>Creating domain&hellip;    } 0B 00:00</p>
+
+<p>Cannot open display:</p>
+
+<p>Run &lsquo;virt-viewer help&rsquo; to see a full list of available command line options Domain installation still in progress. You can reconnect to the console to complete the installation process.</p>
+
+<p>[root@localhost 〜]# netstat -tunlp | grep 5910</p>
+
+<p>tcp    0    0 0.0.0.0:5910    0.0,0.0:*    LISTEN</p>
+
+<p>7435/qemu~kvm</p>
+
+<p>【示例10-4】创建虚拟机时使用的选项及参数如下：</p>
+
+<p>•    常规设置：选项n和r分别指定了虚拟机的名称和内存容量。</p>
+
+<p>•    磁盘设置：选项disk用于设置磁盘参数。参数/var/lib/libvirt/images/rhel6.6-2.img表示 磁盘文件名及存放路径，size参数则设置磁盘容量。</p>
+
+<p>•    网络选项：选项network用于设置虚拟机的网络。参数bridge=brO表示使用桥接网络 brO。</p>
+
+<p>•    操作系统类型：选项os-type用于设置操作系统类型，os-variant表示操作系统的版本，</p>
+
+<p>•    光驱设置：选项cdrom在此示例中用于设定ISO光盘映像的路径。</p>
+
+<p>•    图形选项：选项graphics用于设置图形、监视器等。参数 vnipor^SgiOJister^&lsquo;O.O.O.O^passworddredhat&rsquo;表示使用 VNC作为监视器，端口为 5910 （对应的桌面号为10），访问密码为redhat, listen=&lsquo;0.0.0.0’表示在物理机的所有接口 上监听。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-204.jpg" alt="img" /></p>
+
+<p>以上均为较简单的设置，使用其他的参数还可以做更为复杂的设置，例如设置硬件的厂商 和类型等，读者可自行参考相关文档，此处不再赘述。</p>
+
+<p>从【示例10-4】的两条命令输出中可以看到，虚拟机己经建立并在5910端口监听。此时 可以在远程的Windows计算机上打开VNC Viewer访问，如图10.9所示。</p>
+
+<p>图 10.9 VNC Viewer</p>
+
+<p>在VNC Viewer中输入服务器的IP地址和桌面号（注意不是端口号），单击“确定”按钮, 并输入建立虚拟机时设置的密码就可以访问到建立的虚拟机了，如图10.10所示。</p>
+
+<p>图10.10使用VNC Viewer访问虚拟机</p>
+
+<p>使用VNC Viewer访问虚拟机时，VNC Viewer也支持向虚拟机发送按键指令。发送按键 指令时在窗口上方的标题栏中单击右键，即可弹出指令菜单，如图10.11所示。</p>
+
+<p>趣麵&reg;    (</p>
+
+<p>移动(M)</p>
+
+<p>大＜HS)</p>
+
+<p>-爆小化(N) a飲化(X)</p>
+
+<p>x 关闻(Q    Att*F4</p>
+
+<p>±^{F)</p>
+
+<p>运动們</p>
+
+<p>Ctrl</p>
+
+<p>Alt</p>
+
+<p>发送F8</p>
+
+<p>糙 Ctrl-Alt-Del 卜 賺願(H)</p>
+
+<p>颜(0)川</p>
+
+<p>图10.1］指令菜单</p>
+
+<p>从图10J1中可以看到，指令菜单中有一些VNC Viewer无法捕获的快捷键(使用这些快 捷键会被Windows或其他软件捕获)，鼠标单击相应的菜单项就可以向虚拟机发送快捷键。</p>
+
+<p>\2. SPICE远程访问</p>
+
+<p>与VNC远程访问相比，SPICE访问更加优秀，除了完全实现VNC的功能，SPICE还可 以支持视频播放GPU加速、音频传输、连接加密、多桌面及USB设备远程传输等。但SPICE 的缺点也比较明显，SPICE的配置相对比较复杂。</p>
+
+<p>(1)安装软件</p>
+
+<p>在使用SPICE之前必须确保系统中已经安装有spice-server等软件包，如果没有安装可参 考【示例10-5］所示安装。</p>
+
+<p>【示例10-5】</p>
+
+<p>[rootQlocalhost    yum install -y spice~gtk3 spice-server spice-protocol</p>
+
+<p>Loaded plugins: fastestmirror, langpacks Loading mirror speeds from cached hostfile</p>
+
+<p>*    base: mirrors.sina.cn</p>
+
+<p>*    extras: centos•ustc.edu.cn</p>
+
+<p>*    updates: mirrors.sina.cn</p>
+
+<p>示例所示的软件包中spice-gtk3是一个SPICE客户端，spice-server和spice-protocol用于 实现SPICE服务器。</p>
+
+<p>(2)生成证书</p>
+
+<p>由于SPICE协议是可以加密的，因此必须要为其生成证书才能使用，生成证书如【示例 10-6】所示。</p>
+
+<p>Centos 7系统管理与运维实战</p>
+
+<p>___________________________________J</p>
+
+<p>【示例10-6】</p>
+
+<p>#生成证书的过程相对比较麻烦，此处仅为简单示例 •    #创建证书目录</p>
+
+<p>[root^localhost 〜]# mkdir /etc/pki/libvirt-spice [root@localhost 〜]# cd /etc/pki/libvirt-spice/</p>
+
+<p>#创建CA并生成证书</p>
+
+<p>[root@localhost libvirt-spice]# umask 077</p>
+
+<p>[root@localhost libvirt-spice]# openssl genrsa 2048 &gt; ca-key.pem Generating RSA private key, 2048 bit long modulus</p>
+
+<p>4.4.4.</p>
+
+<p>• • •</p>
+
+<p>e is 65537 (0x10001)</p>
+
+<p>[rootSlocalhost libvirt-spice]# openssl req -new -x509 -nodes -days 1095 \ &gt; -key ca-key.pern -out ca-cert.pem</p>
+
+<p>You are about to be asked to enter information that will be incorporated into your certificate request.</p>
+
+<p>What you are about to enter is what is called a Distinguished Name or a DN. There are quite a few fields but you can leave some blank</p>
+
+<p>For some fields there will be a default value, If you enter *.S the field will be left blank.</p>
+
+<p>Country Name (2 letter code) [XX]:CN</p>
+
+<p>State or Province Name (full name) []:Sichuan</p>
+
+<p>Locality Name (eg, city) [Default City]:Chengdu</p>
+
+<p>Organization Name (eg, company) [Default Company Ltd]:Example, Inc. Organizational Unit Name (eg, section)[]:</p>
+
+<p>Common Name (eg, your name or your server’s hostname) []:vt.example•com Email Address []:</p>
+
+<p>[root^localhost libvirt-spice]# openssl req -newkey rsa:2048 -days 1095 \ &gt; -nodes -keyout server-key.pem -out server-req.pem Generating a 2048 bit RSA private key</p>
+
+<p>• •■•••••••■••••••••■••••■••••a + + +</p>
+
+<p>writing new private key to 1 server-key.pem&rsquo;</p>
+
+<p>You are about to be asked to enter information that will be incorporated</p>
+
+<p>into your certificate</p>
+
+<p>What you are about to There are quite a few For some fields there If you enter 1.*, the</p>
+
+<p>request.</p>
+
+<p>enter is what is called a Distinguished Name or a DN. fields but you can leave some blank will be a default value,</p>
+
+<p>field will be left blank.</p>
+
+<p>Country Name (2 letter code) [XX]:CN</p>
+
+<p>State or Province Name {full name) []:Sichuan</p>
+
+<p>Locality Name (eg, city) [Default City]:Chengdu</p>
+
+<p>Organization Name (eg, company) [Default Company Ltd]:Exanqple, Inc. Organizational Unit Name (eg, section)[]:</p>
+
+<p>Common Name (eg, your name or your server’s hostname) [3:vt.©xan^le.com Email Address []:</p>
+
+<p>Please enter the following 1 extra&rsquo; attributes to be sent with your certificate request A challenge password []:</p>
+
+<p>An optional company name []:</p>
+
+<p>[root@localhost libvirt-spice]# openssi rsa -in server-key.pem -out server-key.pem</p>
+
+<p>writing RSA key</p>
+
+<p>[rootSlocalhost libvirt-spice]# openssl x509 -req -in server-req.pem </p>
+
+<p>&gt;    -days 1095 -CA ca-cert.pem </p>
+
+<p>&gt;    -CAkey ca-key,pem -set一serial 01 </p>
+
+<p>&gt;    -out server-cert.pem Signature ok</p>
+
+<p>subject=/C=CN/ST=Sichuan/L=Chengdu/O=Example, Inc./CN=vt.example.com Getting CA Private Key</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-207.jpg" alt="img" /></p>
+
+<p>本小节中的证书用过程仅为参考，并不具备在生产环境使用的条件。由 并不讨论安全问题，因此关于证书的安全性、证书的使用等问题并不涉及，读者可自行参 考相关资料了解。</p>
+
+<p>(3)修改配置文件</p>
+
+<p>接下来需要修改配置文件qemu.conf,启用SPICE的加密功能，修改过程如【示例10-7】 所示。</p>
+
+<p>【示例10-7】</p>
+
+<p>#以下文件内容开始f文件的第112行</p>
+
+<p>[root@localhost 〜]# cat /etc/libvirt/qemu.conf</p>
+
+<p>#    Enable use of TLS encryption on the SPICE server.</p>
+
+<p>#</p>
+
+<p>#    It is necessary to setup CA and issue a server certificate</p>
+
+<p>#    before enabling this.</p>
+
+<p>#</p>
+
+<p>spice_tls = 1    #将此行的注释取消</p>
+
+<p>#以下为关于证书文件名称的相关说明 #如果需要使用证书必须确保文件名相同</p>
+
+<p>#</p>
+
+<p>#</p>
+
+<p>#</p>
+
+<p>#</p>
+
+<p>#</p>
+
+<p>Use of TLS requires that x509 certificates be issued. The default it to keep them in /etc/pki/libvirt-spice. This directory must contain</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-208.jpg" alt="img" /></p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-209.jpg" alt="img" /></p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-210.jpg" alt="img" /></p>
+
+<p>ca-cert.pem - the CA master certificate</p>
+
+<p>server-cert.pem - the server certificate signed with ca-cert.pem server-key.pem - the server private key</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-211.jpg" alt="img" /></p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-212.jpg" alt="img" /></p>
+
+<p>#</p>
+
+<p>#</p>
+
+<p>This option allows the certificate directory to be changed.</p>
+
+<p>#在执行以下命令之前最好确保虚报机都已经关机 #重启libvirtd服务让配置文件生效</p>
+
+<p>[root@localhost # systemctl restart libvirtd</p>
+
+<p>(4)创建虚拟机</p>
+
+<p>使用SPICE协议时，创建虚拟机过程与VNC几乎相同，不同的是此处需要指定控制台为 SPICE，如【示例10-8】所示。</p>
+
+<p>【示例10-8]</p>
+
+<p>[root@localhost    virt-install -n centos6.6-3 -r 1024 </p>
+
+<p>&gt;    disk /var/lib/libvirt/images/rhel6.6-3.imgf size=10 -一network bridge^brO </p>
+
+<p>&gt;    ~~os~type=linux &ndash;os~variant=rhel6.6 &ndash;cdrom /iso/CentOS-6.6-x86一64.iso </p>
+
+<p>&gt;    &ndash;graphics spice,port=5931rlisten-* 0.0.0.01,password=,redhat1</p>
+
+<p>Starting install&hellip;</p>
+
+<p>Creating domain&hellip;    I 0 B 00:00</p>
+
+<p>Cannot open display:</p>
+
+<p>Run ’virt—viewer &ndash;help1 to see a full list of available command line options Domain installation still in progress. You can reconnect to the console to complete the installation process.</p>
+
+<p>[root@localhost # netstat -tunlp J grep 5931</p>
+
+<p>tcp    0    0 0.0.0.0:5931    0.0.0.0:*    LISTEN</p>
+
+<p>9944/qemu-kvm</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-214.jpg" alt="img" /></p>
+
+<p>由于在本例中使用的是自建证书，因此在创建虚拟机的命令选项中，并没有使用加密的 SPICE。创建完虚拟机之后，就可以使用SPICE客户端访问虚拟机了。</p>
+
+<p>(5) SPICE客户端访问</p>
+
+<p>SPICE为Windows用户开发了相应的客户端程序，读者可以从其官方网上下载。</p>
+
+<p>客户端下载地址：<a href="http://www.spice-space.org/download.html">http://www.spice-space.org/download.html</a></p>
+
+<p>官方网站提供两种访问方法，其是SPICE的客户端，另一个是Windows版的Virt Viewer, 安装过程都比较简单，根据官方网站上的说明下载安装即可。</p>
+
+<p>使用SPICE客户端访问时，直接输入IP地址、端口及密码就可以直接访问，如图10.12 所示。</p>
+
+<p>图10.12 SPICE客户端访问虚拟机</p>
+
+<p>使用Virt Viewer访问时，会要求输入链接地址，链接地址形如：spice://ipaddress:port，例 如本例中应输入spice://172.16.45.35:5931。输入链接地址后就可以连接到远程虚拟机，如图 10.13所示。</p>
+
+<p>图10.13 Virt Viewer远程连接</p>
+
+<p>无论使用SnCE客户端还是VirtViewer连接，都可以传输虚拟机的音频、使用本地USB 设备等，与VMware公司的ESX客户端相同。</p>
+
+<p>读者可以阅读相关文档了解SPICE客户端及Virt Viewer的更多使用方法，此处不再赘述。</p>
+
+<p>1临2 oVirt虚拟化管理平台</p>
+
+<p>oVirt 是 Red Hat 公司下的 RHEV （Red Hat Enterprise virtualization,红帽企业虚拟化）的 开源版本，主要用来管理和部署虚拟化主机。oVirt由两部分组成，客户端称为oVirt Node, 与VMware公司的ESXi类似，主要用来实现主机的虚拟化；另一部分称为oVirt-engine，类 似于VMware vCenter，主要用来管理虚拟化主机。本节将介绍如何在CentOS 7中安装和使用 oVirt虚拟化管理平台。</p>
+
+<p>10.2.1 oVirt-engine虚拟化管理平台概述</p>
+
+<p>时至今日，KVM虚拟化可以说已经深入人心，包括IBM、Ubuntu、Red Hat在内的许多 Linux发行版都将其作为默认的kypervisor。而oVirt虚拟化管理平台正是Red Hat公司下的 RHEV的开源版本，可以说是为小型企业应用环境量身定制。oVirt提供了一个Web管理工具， 利用Web管理工具可以实现许多功能：</p>
+
+<p>•    与vCenter类似，oVirt也可以完成虚拟机的基本管理，包括创建虚拟机、快照功能、 虚拟机模板克隆等。</p>
+
+<p>•    高可用的在线或离线迁移虚拟机（需要存储支持）。</p>
+
+<p>•    查看、统计虚拟机、宿主机的性能。</p>
+
+<p>•    多样化的网格连接。</p>
+
+<p>oVirt虚拟化管理平台的功能还有许多，此处不再一一列举，读者可自行参考相关资料了 解。尽管oVirt还有许多缺点，例如不能精细地调节系统资源等，但由于其成本低，使用方便 深受小型企业用户喜爱。</p>
+
+<p>10.2.2 oVirt管理平台的安装</p>
+
+<p>oVirt管理平台的安装过程十分简便，其官方网站上对其有十分详尽的说明。 oVirt 官方网站：<a href="http://www.ovirt.org/Home">http://www.ovirt.org/Home</a></p>
+
+<p>oVirt管理平台目前的最新版本为3.5,本小节将以3.5为例介绍其在CentOS 7上的安装过程。 在开始安装之前还需要安装一些额外的部件，主要包括DNS域名服务器、iSCSI存储和</p>
+
+<p>NFS存储。DNS域名服务器的安装过程可参考第3章中的相关章节，目标是能解析 oVirt-engine、Node及NFS存储等。iSCSI、NFS存储可用来虚拟相关数据，NFS存储还需要</p>
+
+<p>用来存储ISO光盘映像。本节将采用一个最简单的结构简单介绍oVirt平台的使用，其主要的 主机、IP地址等信息如表10.2所示。</p>
+
+<p>表10.2 oVirt平台示例主机信息</p>
+
+<table>
+<thead>
+<tr>
+<th>域名</th>
+<th>IP地址</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>ma.example.com</td>
+<td>172.16.45.35</td>
+<td>用于安装oVirt-engine</td>
+</tr>
+
+<tr>
+<td>node.example.com</td>
+<td>172.16.45.39</td>
+<td>用于安装oVirt Node</td>
+</tr>
+
+<tr>
+<td>无</td>
+<td>172.16.45.42</td>
+<td>iSCSI存储</td>
+</tr>
+
+<tr>
+<td>ma.example.com</td>
+<td>172.16.45.35</td>
+<td>NFS存储，用于建立ISO域</td>
+</tr>
+</tbody>
+</table>
+
+<p>在本示例中，NFS存储、DNS域名服务器、oVirt管理平台为同一台主机，但为了减少延 迟，在实际使用过程中NFS存储直接使用IP地址而不是域名。与VMware的ESXi相同，oVirt 也支持包括Vian内的多种网络，但在本示例中并不会涉及。</p>
+
+<p>(1)    安装软件仓库</p>
+
+<p>由于oVirt在RHEL及CentOS中推荐使用yum的方式安装，因此第一步首先要安装yum 仓库包：</p>
+
+<p>[root@localhost 〜yum install <a href="http://resources.ovirt.org/pub/yum-repo/ovirt-release35.rpm">http://resources.ovirt.org/pub/yum-repo/ovirt-release35.rpm</a></p>
+
+<p>以上命令将从官方网站上直接下载包含有仓库配置文件、Key等文件的安装包，并进行安 装，安装完成后可以从目录/etC/yum.repOS.d中查看到软件仓库配置文件。</p>
+
+<p>(2)    安装 oVirt-engine</p>
+
+<p>在管理机上安装oVirt-engine之前，确保已经设置好IP地址、系统软件已全部为最新版本 等信息，网络接口上最好使用静态IP地址。接下来就可以安装oVirt-engine 了，安装过程如【示 例10-9】所示。</p>
+
+<p>【示例10-9】</p>
+
+<p>[root^localhost -]# yum install -y ovirt-engine Loaded plugins: fastestmirror, langpacks Loading mirror speeds from cached hostfile</p>
+
+<ul>
+<li>base: mirrors.btte.net</li>
+</ul>
+
+<p>*    extras: mirrors.sina.cn</p>
+
+<p>*    ovirt-3.5: mirror.linux.duke.edu</p>
+
+<p>*    ovirt-3 &gt;S&rsquo;-epel: <a href="ftp://ftp.cuhk.edu.hk">ftp.cuhk.edu.hk</a></p>
+
+<p>*    updates: mirrors.sina.cn Resolving Dependencies</p>
+
+<p>&ndash;&gt; Running transaction check</p>
+
+<p>&mdash;&gt; Package ovirt-engine.noarch 0:3.5.2.1-1.el7.centos will be installed</p>
+
+<p>由于【示例10-9】所示命令需要从oVirt官方网站上下载近900MB的数据，因此整个安</p>
+
+<p>装过程可能要持续约1小时，需耐心等待。</p>
+
+<p>(3)初始化 oVirt-engine</p>
+
+<p>安装完成后，还需要对oVirt-engine进行初始化，这个过程主要是用来配置密码、防火墙、 数据库、ISO域等信息。如【示例10-10】所示。</p>
+
+<p>【示例10-10】</p>
+
+<p>#初始化过程需要用户确认配置信息，按实际情况输入即可 [root@ma -]# engine-setup [INFO ] Stage: Initializing [INFO ] Stage: Environment setup</p>
+
+<p>Configuration files:</p>
+
+<p>[&lsquo;/etc/ovirt-engine-setup.conf.d/10-packaging-jboss.conf *,</p>
+
+<p>’/etc/ovirt-engine-setup.conf.d/10-packaging.conf1]</p>
+
+<p>Log file:</p>
+
+<p>/var/log/ovirt-engine/setup/ovirt~engine~setup~20150610195044-8gpxck.log Version: otopi~l.3.1 (otopi-1,3.1~1,e!7)</p>
+
+<table>
+<thead>
+<tr>
+<th>[INFO</th>
+<th>]Stage:</th>
+<th>Environment packages setup</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>[INFO</td>
+<td>]Stage:</td>
+<td>Programs detection</td>
+</tr>
+
+<tr>
+<td>[INFO</td>
+<td>]Stage:</td>
+<td>Environment setup</td>
+</tr>
+
+<tr>
+<td>[INFO</td>
+<td>]Stage:</td>
+<td>Environment customization</td>
+</tr>
+</tbody>
+</table>
+
+<p>#在设置过程中会询问用户设置选项 # “门”中的设置为默认设置 #选项及更新检查</p>
+
+<p>=PRODUCT OPTIONS</p>
+
+<p>Configure Engine on this host (Yes, No) [Yes]:</p>
+
+<p>Configure WebSocket Proxy on this host (Yes, No) [Yes]:</p>
+
+<p>―PACKAGES ===—</p>
+
+<p>[INFO 3 Checking for product updates&hellip;</p>
+
+<p>[INFO ] No product updates found</p>
+
+<p>ALL IN ONE CONFIGURATION ~&ndash;</p>
+
+<p>#网络设置    •    •</p>
+
+<p>.#已关闭防火墙因此此处跳过防火墙设置</p>
+
+<p>—===== NETWORK CONFIGURATION</p>
+
+<p>Setup can automatically configure the firewall on this system.</p>
+
+<p>Note: automatic configuration of the firewall may overwrite current</p>
+
+<p>settings.</p>
+
+<p>Do you want Setup to configure the firewall? (Yes, No) [Yes]: No Host fully qualified DNS name of this server [ma.example.com]:</p>
+
+<p>#数据库选项通常保持默认</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-217.jpg" alt="img" /></p>
+
+<p>一s DATABASE CONFIGURATION ——</p>
+
+<p>Where is the Engine database located? (Local, Remote) [Local]:</p>
+
+<p>Setup can configure the local postgresql server automatically for the</p>
+
+<p>engine to run. This may conflict with existing applications.</p>
+
+<p>Would you like Setup to automatically configure postgresql and create</p>
+
+<p>Engine database, or prefer to perform that manually? (Automatic, Manual) [Automatic]:</p>
+
+<p>#设置访问密码</p>
+
+<p>—==OVIRT ENGINE CONFIGURATION</p>
+
+<p>Engine admin password:</p>
+
+<p>Confirm engine admin password:</p>
+
+<p>Application mode (Virt, Glusterf Both) [Both]:</p>
+
+<p>&ndash;==PKI CONFIGURATION ==&ndash;</p>
+
+<p>Organization name for certificate [example.com]:</p>
+
+<p>弁设置httpd服务</p>
+
+<p>&ndash;=« APACHE CONFIGURATION ==&ndash;</p>
+
+<p>Setup can configure the default page of the web server to present the application home page. This may conflict with existing applications.</p>
+
+<p>Do you wish to set the application as the default page of the web server?</p>
+
+<p>(Yes, No) [Yes]:</p>
+
+<p>Setup can configure apache to use SSL using a certificate issued from the internal CA.</p>
+
+<p>Do you wish Setup to configure that, or prefer to perform that manually? (Automatic, Manual) [Automatic]:</p>
+
+<p>#系统配置项</p>
+
+<p>一—=SYSTEM CONFIGURATION -#此处跳过ISO域配置 #将在后续小节中介紹此设置</p>
+
+<p>Configure an NFS share on this server to be used as an ISO Domain? (Yes, No) [Yes]: No</p>
+
+<p>—MI SC CONFIGURATION ==—</p>
+
+<p>END OF CONFIGURATION ==——</p>
+
+<p>[INFO ] Stage: Setup validation</p>
+
+<p>[WARNING] Less than 16384MB of memory is available #安装清单</p>
+
+<p>CONFIGURATION PREVIEW</p>
+
+<p>&lsquo;Application mode</p>
+
+<p>both</p>
+
+<p>False</p>
+
+<p>ma.example.com :engine :False :localhost :engine :False :5432 :True example.com :True :True :True :True</p>
+
+<p>ma.example.com</p>
+
+<p>Update Firewall    :</p>
+
+<p>Host FQDN    :</p>
+
+<p>Engine database name</p>
+
+<p>Engine database secured connection</p>
+
+<p>Engine database host</p>
+
+<p>Engine database user name</p>
+
+<p>Engine database host name validation</p>
+
+<p>Engine database port</p>
+
+<p>Engine installation</p>
+
+<p>PK工 organization</p>
+
+<p>Configure local Engine database</p>
+
+<p>Set application as default page</p>
+
+<p>Configure Apache SSL</p>
+
+<p>Configure WebSocket Proxy</p>
+
+<p>Engine Host FQDN    ;</p>
+
+<p>[INFO [INFO [INFO [INFO [INFO [INFO [INFO [INFO [INFO [INFO</p>
+
+<p>Please confirm installation settings (OK, Cancel) ]Stage: Transaction setup ]Stopping engine service</p>
+
+<p>]Stopping ovirt-fence-kdump-listener service ]Stopping websocket-proxy service ]Stage: Misc configuration ]Stage: Package installation ]Stage: Misc configuration ]Creating PostgreSQL * engine1 database ]Configuring PostgreSQL</p>
+
+<p>} Creating/refreshing Engine database schema</p>
+
+<p>[INFO ] Creating CA</p>
+
+<p>[INFO 3 Configuring WebSocket Proxy</p>
+
+<p>[INFO ] Generating post install configuration file</p>
+
+<p>[INFO ] Stage: Transaction conunit [INFO ] Stage: Closing up #以下为安装结束时显示的有关访问信息</p>
+
+<p>SUMMARY ==</p>
+
+<p>[WARNING] Less than 16384MB of memory is available</p>
+
+<p>SSH fingerprint: B6:F6:E8:93:80:95:A1:3D:OF:6D:37:F4:B5:2F:2C:D4 Internal CA</p>
+
+<p>15:Cl:AD:Al:12:04:44:C2:18:13:4F:34:6E:4F:21:52:CD:D4:93:C5 Web access is enabled at:</p>
+
+<p><a href="http://ma,example.com:80/ovirt-enginehttps://ma,example.com:443/ovirt-engine">http://ma,example.com:80/ovirt-enginehttps://ma,example.com:443/ovirt-engine</a> Please use the user ,&lsquo;admin,T and password specified in order to login In order to configure firewalld, copy the files from</p>
+
+<p>/etc/ovirt-engine/firewalld to /etc/firewalld/services</p>
+
+<table>
+<thead>
+<tr>
+<th>and execute the following commands:</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>firewall-cmd -service ovirt-postgres</td>
+<td></td>
+</tr>
+
+<tr>
+<td>firewall-cmd -service ovirt-https firewall-cmd -service ovirt-fence-kdump-listener firewall-cmd -service ovirt-websocket-proxy firewall-cmd -service ovirt-nfsfirewall-cmd -service ovirt-httpThe following network ports should be opened:tcp:111 tcp:2049 tcp:32803 tcp:443 tcp:5432 tcp:6100 tcp:662 tcp:80 tcp:875 tcp:892 udp:111 udp:32769 udp:662 udp:7410 udp:875 udp:8 92An example of the required configuration for iptables can be found at: /etc/ovirt-engine/iptables.example&ndash;==END OF SUMMARY =====&ndash;[INFO ] Starting engine service [INFO ] Restarting httpd (INFO ] Stage: Clean upLog file is located at</td>
+<td></td>
+</tr>
+
+<tr>
+<td>/var/log/ovirt~eng.ine/setup/ovirt-engine-setup-20150610195044-8gpxck.log [INFO ] Generating answer file*/var/lib/ovirt-engine/setup/answers/20150610195255-setup.conf1 [INFO ] Stage: Pre-termination [INFO ] Stage: Termination[INFO ] Execution of setup completed successfully</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>安装过程中的许多设置保持默认即可。需要注意的是，以上初始化过程根据不同的计算机 情况，可能会稍有不同。</p>
+
+<p>羽 I 1/7，口 o</p>
+
+<p>在初始化oVirt管理平台的过程中可能会失败，此时可以继续使用engine-setup命令尝试</p>
+
+<p>^Sr -in /P</p>
+
+<p>安装完成后即可在浏览器中输入地址http7/ipaddreSS/访问管理平台，如图10.14所示。</p>
+
+<table>
+<thead>
+<tr>
+<th>Ovirt-Engine - MoziUa Firefox</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>:/ O Ovirt-Cncme    » . ♦</td>
+<td></td>
+</tr>
+
+<tr>
+<td>♦ •$172 16 45 35</td>
+<td></td>
+</tr>
+
+<tr>
+<td>OVirt OPEN VIRTUALIZATION MANAGER</td>
+<td>oVirt</td>
+</tr>
+
+<tr>
+<td>欢迎使用开放式游拟化靑瑚器    VT</td>
+<td></td>
+</tr>
+
+<tr>
+<td>门产    下钱8腿】騄個</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>图10.14 oVirt管理平台</p>
+
+<p>管理平台分为三个功能门户区，功能分别是用户管理、平台管理及实时报表，可以使用初 始化过程中设置的admin用户登录管理。</p>
+
+<p>10.2.3 oVirt Node 安装</p>
+
+<p>oVirt Node的作用与VMware的ESXi相似，也是一个基于Linux的操作系统，主要用来 实现虚拟机运行和基本管理。oVirt Node的下载地址如下所示。</p>
+
+<p>oVirt Node 官方下载地址：<a href="http://resources01.phx.ovirt.org/releases/stable/iso/">http://resources01.phx.ovirt.org/releases/stable/iso/</a></p>
+
+<p>在官方提供的下载地址中，有多个版本的oVirt-node提供下载，本例中将采用</p>
+
+<p>ovirt-node-iso-3.0.4-1.0.2014012912O4.el6 作为示例安装使用。</p>
+
+<p>下载oVirt Node光盘映像并刻录为光盘后，就可以使用光盘引导系统。引导系统后，其引</p>
+
+<p>导菜单如图10.15所示。</p>
+
+<p>oUir! Node Hypervisor 3.B.4 (1.0.201401291204.elG)</p>
+
+<p>Install or Upgrade Bool (Basic Uideo)</p>
+
+<p>Install (Basic UideoJ</p>
+
+<p>Install or Upgrade with serial console</p>
+
+<p>Reinstall</p>
+
+<p>Reinstall (Basic Uideo)</p>
+
+<p>Reinstall uith serial console Uninstall</p>
+
+<p>Boot fron local driue</p>
+
+<p>Press fTobl to edit opt ions</p>
+
+<p>图10.15 oVift-node引导菜单</p>
+
+<p>oVirt Node的引导菜单中提供了比较丰富的功能选项，需要注意的是，如果选择重新安装 必须要输入原系统的密码方可进行。在本例中选中“Install or Upgrade”，并按Enter键进入下 一步安装=接下来安装程序会检测系统中是否已安装有oVirt Node,并要求选择进一步的操作, 如图10.16所示。</p>
+
+<p>图10.16安装选择界面</p>
+
+<p>如果系统中已安装有oVirt Node,会在安装选择界面中显示，井提示用户选择是否重新安 装或升级原有系统。</p>
+
+<p>由于oVirt Node底层仍然采用的是KVM虚拟化，因此安装程序将检测系统是否支持硬件 虚拟化。如图10.16所示，安装程序提示没有在当前系统中检测到硬件虚拟化支持，此时可参 考相关资料，在BIOS中打开硬件虚拟化支持选项。确认没有任何问题，可按Enter键继续安 装。接下来安装程序会要求用户选择键盘布局，如图10.17所示。</p>
+
+<p>oUirt Node Hyperuisoi* 3.0.1 1.8.201401291204 .elb</p>
+
+<p>图10.17选择键盘布局</p>
+
+<p>键盘布局需要按实际情况进行选择，本示例中将保持默认，即选择“U.S. English”，然后 将光标移动到“Continue”上按Enter键继续。接下来安装程序将要求用户选择安装的磁盘， 如图10.18所示。</p>
+
+<p>图10.18磁盘选择</p>
+
+<p>如果系统中存在多个磁盘，需要在磁盘选择界面中选择合适的磁盘安装。由于oVirtNode 系统占用磁盘空间并不大，并且现在的服务器大部分都支持U盘启动系统，因此在实际应用 环境中，通常将oVirtNode安装到U盘中，以节省磁盘空间。在本例中将采用默认存储设备， 在默认的磁盘上按Enter键选中磁盘，然后将光标移动到“Continue”上按Enter键继续。接下 来安装程序会提供一个默认的分区方案，如图10.19所示。</p>
+
+<p>图10.19确认分区方案</p>
+
+<p>如图10.19所示，安装程序提供了一个默认的分区方案要求用户确认。通常不需要修改此 默认分区方案，将光标移动至“Next”上按Enter键。接下来安装程序会要求用户设置用户admin 的密码，如图10.20所示。</p>
+
+<table>
+<thead>
+<tr>
+<th>oUirt Node Hypervisor 3 .R .4-1.0-.28H01231204 .c 16</th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Require a password for the admin user?</td>
+<td></td>
+<td></td>
+<td>騙醐i9s職嘯賊,i&rsquo;1 { / ”(</td>
+</tr>
+
+<tr>
+<td>Password r</td>
+<td></td>
+<td></td>
+<td>匕7勞曝&rsquo;7</td>
+</tr>
+
+<tr>
+<td>Conf iriu Password :</td>
+<td></td>
+<td>2一</td>
+<td>&ndash;</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td>.- &ndash;&rsquo;</td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>;讀賴紀;s仰補g赛藝奔喊:，警鐘&lt; Quit &gt;    &lt; Back &gt;    &lt; Install &gt;</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>—■-    ■■    ■-    1    z &lsquo; •&gt;    &rsquo;    S    : &lsquo; : _    -    :    ■    -</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Press esc to quit.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>图10.20设置用户密码</p>
+
+<p>与Linux系统不同的是，oVirt Node管理员不再是root,而是admin。此处设置好admin 的用户密码之后，就可以将光标移动到Install上按Enter键开始安装了。</p>
+
+<p>整个安装过程视计算机性能不同而不等，大约需要3~10分钟。安装完成后，安装程序会 要求用户重新启动计算机，如图10.21所示。</p>
+
+<p>oUirt Wade Hypervisor 3.0.4-1.0.281401291281.e16</p>
+
+<p>Installing oUirt Mode Hypervisor</p>
+
+<p>Start ing &hellip;</p>
+
+<p>(lz5) Writing configuration file (Done)</p>
+
+<p>(<sup>2</sup>&frasl;<sub>5</sub>) Partitioning and Creating File Systems on 1 r/dev/mapper/lftTAJ|EMU<strong>HABinnSK</strong>QM00的 1* r (Done) (<sup>3</sup>&frasl;<sub>5</sub>) Setting Admin Password (Done)</p>
+
+<p>(<sup>4</sup>&frasl;<sub>5</sub>) Installing Image and Bootloader Configuration to <em>/dcv/«apper/lATA_QEMU_HARDDISK_Qtffl0001</em> (Done)</p>
+
+<p>(<sup>5</sup>&frasl;<sub>5</sub>) Setting keyboard layout to * us* (Done)</p>
+
+<p>&lt; Reboot &gt;</p>
+
+<p>Press esc to quit.</p>
+
+<p>图10.21安装完成</p>
+
+<p>此吋按Enter键即可重新启动系统，系统重启后界面如图10.22所示。</p>
+
+<p>oUirt Mode Hypervisor release 3.8.4 (1.8.elb) Kernel 2.6.32-431.3.1 .e 16. xfif»_64 on x86_64 (ttyl)</p>
+
+<p>Uirttta I izat inn bardunre is    i lab le .</p>
+
+<p>(Mo virtna1izAtion hardware was detected on this system)</p>
+
+<p>Please login as * adwin* to conf igure the node local host login:</p>
+
+<p>图10.22 oVirt Node启动界面</p>
+
+<p>此时输入安装时设置的用户admin及其密码即可进入oVirt Node»</p>
+
+<p>10.2.4 oVirt Node 设置</p>
+
+<p>oVirt Node安装完成后，还需要对其进行设置，主要包括IP地址、DNS域名、管理密码 等。进入oVirt Node系统，选择主界面左侧的“Network”，此时右侧界面将显示网络配置界面， 如图10.23所示。</p>
+
+<p>图10.23网络配置界面</p>
+
+<p>在网络配置界面中的“Hostname”后面输入主机名，“DNS Server 1 ”后面输入域名服务 器地址。最后将光标移动到“Available System NICs”下面的网络接口卡ethO上，按Enter键, 将弹出网络接口配置界面，如图10.24所示。</p>
+
+<table>
+<thead>
+<tr>
+<th>NIC Details： elh8</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Driver：    8139cpLink Status: Disconnected</td>
+<td>Vendor：    Kealtek Semiconductor CoMAC Address: 52:54：08：3a：ba :9b</td>
+<td></td>
+</tr>
+
+<tr>
+<td>IPv4 Settings Bootprotocol:IP Address:</td>
+<td>&lt; )Disabled 172.16.45.33</td>
+<td>()DHCP    (X) StaticMetmask:    255.255.255.0</td>
+</tr>
+
+<tr>
+<td>Gateway：</td>
+<td>172.16.45.1</td>
+<td></td>
+</tr>
+
+<tr>
+<td>IPv6 Settings Bootprotocol:IP Address:</td>
+<td>(X) Disabled    (</td>
+<td>Auto    ( ) DHCP    C ) Static„&rdquo;&hellip; Prefix Length:    _ &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;..</td>
+</tr>
+
+<tr>
+<td>Gateway:</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>ULAM ID.</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Use Bridge:</td>
+<td></td>
+<td>E 3</td>
+</tr>
+
+<tr>
+<td>&lt; Flash Lights</td>
+<td>to Identify &gt;</td>
+<td>*</td>
+</tr>
+
+<tr>
+<td>&lt; Save &gt;    &lt;</td>
+<td>Close &gt;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>图10.24网络接口配置界面</p>
+
+<p>选中“IPv4 Settings”后面的“Static”，然后在后面分别设置IP地址、子网掩码及默认网</p>
+
+<p>关，最后保存退出即可生效。</p>
+
+<p>除了网络设置外，还需要对服务器，即oVirt Engine进行配置，通过键盘的上下方向键选 中左侧的oVirt Engine，此时右侧将显示oVirt Enging配置，如图10.25所示。</p>
+
+<p>图 10.25 oVirt Engine 配置界面</p>
+
+<p>在oVirt Engine配置界面，需要配置Management Server的IP地址并获取证书，然后还需 要为SSH守护进程设置密码。SSH守护进程密码主要是为了保证oVirt Engine能正确连接到 oVirt Node,设置好以上两项之后将光标移动到“Save &amp; Register”并按Enter键即可生效。</p>
+
+<p>10.2.5 oVirt虚拟化管理平台设置</p>
+
+<p>完成前面几个小节的内容之后，就可以将相关的资源添加到oVirt Engine管理平台，并使 用这些资源建立虚拟机了，本小节将简单介绍如何添加资源及管理平台设置等内容。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-228.jpg" alt="img" /></p>
+
+<p>oVirt Engine管理平台可以在Linux或Windows下的IE、Firefox等浏览器访问，但各版本 安装的软件却并不相同，可通过单击管理平台主界面•中的“控制台客户资源&rsquo;了解，此处 不再赘述。</p>
+
+<p>(1)创建数据中心</p>
+
+<p>在oVirt中，一台或几台版本相同的oVirt Node组成一个集群。在同一集群内，位于不同 oVirt Node之上的虚拟机可以互为冗余，即其中一台Node宕机，之上的虚拟机会自动在别的 Node上运行。多个集群又可以组成数据中心，数据中心内的集群将共用中心的资源，如存储、 ISO域等均可共用，因此oVirt虚拟化平台管理的第一步是创建数据中心。</p>
+
+<p>本节将采用一个单节点Node作为示例，介绍如何使用oVirt平台。首先登录oVirt虚拟化 管理平台，并单击主界面左侧的“数据中心”，然后选择右侧的“新建”，此时将弹出“新建数 据中心”窗口，如图10.26所示。</p>
+
+<p>图10.26新建数据中心窗口</p>
+
+<p>在名称后面输入数据中心名，类型选择本地，兼容版本需要选择oVirt Node的版本，在本 例中选择3.4,其他设置保持默认即可，单击“确定”按钮就可以完成数据中心的创建。</p>
+
+<p>(2)创建集群</p>
+
+<p>完成数据中心的创建后，管理平台会弹出向导窗口，要求用户配置一个新的集群，单击配 置集群就可以弹出创建集群界面。如果没有弹出向导窗口，可以在左侧单击新建的数据中心名， 然后在右侧选择集群选项卡，并单击选项卡中的新建即可弹出“新建集群”窗口，如图10.27 所示。</p>
+
+<p>图10.27新建集群窗口</p>
+
+<p>在“新建集群”窗口的常规设置中，选择数据中心(系统己自动选择)，输入集群名，并</p>
+
+<p>选择Node使用的CPU类型、版本信息，然后在优化设置中为虚拟机设置合适的优化策略。 由于本示例中采用单节点Node,因此集群策略可略过，单击&rdquo;确定”按钮就可以完成集群创 建。</p>
+
+<p>(3)为集群添加主机</p>
+
+<p>oVirt Node在管理平台中称为主机，创建完集群后管理平台将弹出向导提示用户添加或选 择主机。如果没有弹出向导，可在左侧窗口中依次选择新建的数据中心、集群名称，在右侧的 主机选项卡中选择新建，即可弹出“新建主机”窗口，如图10.28所示。</p>
+
+<p>图10.28 “新建主机”窗口</p>
+
+<p>在新建主机窗口中选择主机所属的数据中心和集群，然后在名称、地址、SSH端口中正 确输入oVirt Node的相应信息，最后在验证中输入主机的root用户密码。如果需要验证输入 是否正确，可在高级参数中的SSH指印下单击获取，如果此时显示SSH指印则说明主机信息 输入正确，否则就需要检查上述输入。由于本示例中采用单节点，因此电源管理等选项可略过 (电源管理选项主要用于多节点集群中)，单击“确定”按钮就可以完成主机添加。</p>
+
+<p>主机添加完成后，管理平台会立即要求主机初始化并安装启动相关服务，因此在添加完成 后的一段时间内，主机将处于不可用状态，直到上述步骤完成。当主机完成初始化、安装等步 骤后，会立即将其状态更新为Up,如图10.29所示。</p>
+
+<p>測I主机I网銘I雜I虚姐机|地|翻</p>
+
+<p>脉理编格妒1    維护选为SPM ?&lsquo;：.彳岣I:,: 、分4i标类职解能力</p>
+
+<p>名»    主机名/p    負霧    的件心 狄态    ▼虚报« 内存 CPU    m格    SPM</p>
+
+<p>&rsquo; -    • - &lsquo;i5    ?-M，&rsquo;•    F\ - ?&lt;?.</p>
+
+<p>图10.29主机状态</p>
+
+<p>在主机状态一栏中显示为Up,表明主机已初始化完成并可用。如果主机状态不可用，此 时将在主窗口下面的事件中显示日志信息，也可以在右侧窗口的事件选项卡中查看完整的日志 事件。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-232.jpg" alt="img" /></p>
+
+<p>在创建数据中心和集群时，一定要注意oVirtNode的版本及硬件类型，错误的设置将会因j</p>
+
+<p>主机与数据中心和集群信息不匹配，从而导致主机添加失败。</p>
+
+<p>S&rsquo;-w’-ww-w”&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.. &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;. &hellip;&hellip;&hellip;..&mdash;&mdash;&mdash;&mdash;&mdash;-</p>
+
+<p>10.2.6配置资源</p>
+
+<p>经过前面几个小节的配置，oVirt平台已经可以正常使用，但虚拟平台的最终目标是建立 虚拟机，还需要存储等资源，本小节将简要介绍如何配置资源。</p>
+
+<p>(1)使用oVirt Node本地存储</p>
+
+<p>oVirt可供使用的存储方案有多种，例如Node本地存储、NFS、iSCSI等。本地存储虽然 有诸多限制(例如不能使用故障迁移)，但其配置简单，特别适合单节点使用。配置本地存储 可在管理界面左侧单击系统，然后在右侧选择存储并单击新建域，将弹出“新建域”窗口，如 图10.30所示。</p>
+
+<p>图10.30新建本地存储域</p>
+
+<p>选择正确的数据中心，并在域功能/存储类型中选择“Data/LocalonHost”，系统会自动在 使用主机和路径中填入相应的参数，最后单击“确定”按钮即可添加完成。需要注意的是，仅 当安装oVirtNode时添加了数据分区时，本地存储选项才可用，否则将无法使用本地存储。</p>
+
+<p>(2)建立ISO域</p>
+
+<p>ISO域是由所有数据中心共享使用的存储资源，其作用是为虚拟机提供安装光盘映像。在 10.2.2小节中安装过程中，跳过了 ISO域的配置，因此必须手动建立ISO,建立过程如【示例</p>
+
+<p>10-11】所示。</p>
+
+<p>【示例10-11】</p>
+
+<p>#此处略过NFS安装过程</p>
+
+<p>[root@ma *■] # mkdir -p /export/iso</p>
+
+<p>#此配置并没有考虑安全等因素，读者可参考NFS安全相关文档了解</p>
+
+<p>[root@ma -]# cat /etc/exports</p>
+
+<p>/export/iso *(rwz sync,no_subtree一check,all_squash,anonuid=36,anongid=36) [root@ma -]# chmod -R 777 /export/iso [root@ma    systemctl start nfs</p>
+
+<p>#确认配置</p>
+
+<p>[root@ma    showmount -e ma.example.com</p>
+
+<p>Export list for ma.example.com:</p>
+
+<p>/export/iso *</p>
+
+<p>建立NFS共享之后就可以在管理平台上添加ISO域了，单击平台左侧的系统，然后在右 侧依次选择存储、新建域，将弹出新建域窗口，如图10.31所示。</p>
+
+<p>图10.31添加ISO域</p>
+
+<p>在新建域窗口中填入名称，选择当前的数据中心，并在域功能/存储类型中选择 “ISO/NFS”，最后在导出路径中输入NFS共享路径，单击“确定”按钮完成添加。添加完成 后，ISO域还需要初始化，因此需要等待一段时间之后才可用。</p>
+
+<p>添加完ISO域之后，还需要在ISO域中添加光盘映像才能使用，添加过程需要在oVirt 管理平台上完成，其过程如【示例10-12】所示。</p>
+
+<p>【示例10-12】</p>
+
+<p>#此操作在管理平台上用命令进行 #先査看iso域的名称</p>
+
+<p>#以下两个操诈都需要输入管理平台用户admin的密码 [roottoa # engine-iso-uploader list</p>
+
+<p>Please provide the REST API password for the admin@internal oVirt Engine user (CTRL+D to abort):</p>
+
+<p>ISO Storage Domain Name 丨 Datacenter    丨 ISO Domain Status</p>
+
+<p>ISOs    I MyDC    I active</p>
+
+<p>#向ISOs域添加光盘映像</p>
+
+<p>[root@ma 〜]# engine-iso-uploader upload -i ISOs CentOS-5.5-i386-bin-DVD,iso</p>
+
+<p>Please provide the REST API password for the admin@internal oVirt Engine user (CTRL+D to abort):</p>
+
+<p>Uploading, please wait…</p>
+
+<p>INFO: Start uploading CentOS-5.5-i386-bin-DVD.iso</p>
+
+<p>INFO: CentOS-5.5-i386-bin-DVD.iso uploaded successfully</p>
+
+<p>完成上述步骤后，就可以在管理平台的存储中添加ISO域，并在之下的映像选项卡中查 看到上传的光盘映像。</p>
+
+<p>也可以使i    过程与添域类似，此处不=再赘述。</p>
+
+<p>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;- &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-1—— &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;j</p>
+
+<p>(3) iSCSI 存储</p>
+
+<p>iSCSI无疑是应用最广泛的存储解决方案之一，oVirt也支持iSCSI作为其数据存储。添加 iSCSI存储首先选中左侧的系统，然后在右侧的存储选项中单击新建域，将弹出新建域窗口， 如图10.32所示。</p>
+
+<p>新建域</p>
+
+<p>名称    ^CSI__42    _ _ _    _____ J 描述</p>
+
+<p>使用主机    j node example.com____</p>
+
+<p>荃0,由1 &lt; S§1</p>
+
+<p>[■、发现目标-</p>
+
+<p>地址    n用户验证：</p>
+
+<p>端口    网&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;j    O4AP用户1:    CHAP密挺</p>
+
+<p>唇J</p>
+
+<table>
+<thead>
+<tr>
+<th>舀解名称</th>
+<th>機    端口</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>© iqn.2015-06.dev.iscsl-target.sdbLOW®</td>
+<td>祕*小</td>
+<td></td>
+<td>鑛酶©</td>
+<td>172.16 45 42    3260产伽    ‘辨贈</td>
+<td>争</td>
+</tr>
+
+<tr>
+<td>1IET_OOO1OOO1</td>
+<td>149GB</td>
+<td>1</td>
+<td>IET</td>
+<td>VIRTUAL DISK SlET VIRTUAL-DP</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>确定取消</p>
+
+<p>图10.32添加iSCSI存储</p>
+
+<p>在名称中输入iSCSI名称，数据中心选择“(none)”，域功能/存储类型选择“Data/iSCSI”， 此时窗口将自动显示发现目标按钮。单击发现目标并输入地址和端口号，然后单击“发现”， 窗口将自动显示发现结果。此时需要单击右侧的“登录全部”按钮，并单击发现的LUN之前 的“+”，显示全部磁盘信息，选中相应磁盘并单击“确定”按钮就可以添加完毕。</p>
+
+<p><img src="11 CentOS7fbdfa1060ed0f49e18-236.jpg" alt="img" /></p>
+
+<p>iSCSI存储通常是全局性的，只有附加到某个数据中心上才能使用。附加时需要注意只有 当数据中心的类型为共享，并且拥有活动主机的情况下才能附加。’</p>
+
+<p>10.2.7建立虚拟机</p>
+
+<p>在前面几个小节中介绍了如何建立一个最基本的oVirt单节点平台，在确认所有资源都可 用的情况下就可以建立虚拟机了。在左侧窗口中选择数据中心，然后在右侧的虚拟机选项卡中 选择新建虚拟机，将弹出新建虚拟机窗口，如图10.33所示。</p>
+
+<p>图10.33新建虚拟机</p>
+
+<p>在新建虚拟机窗口中选择合适的操作系统，并在名称中为操作系统命名，然后在nicl后 面为虚拟机添加网卡。由于本例中并没有添加网络，因此可以选择“ovirtmgmt”使用管理网 络。</p>
+
+<p>完成常规设置后，需要单击系统选项为虚拟机设置合适的内存大小、CPU数量及时区。 由于是第一次配置，还需要在引导选项中为新系统添加安装光盘映像，如图10.34所示。</p>
+
+<p>在引导序列中勾选附加CD选项，并在之后的选择框中选择合适的光盘映像，完成所有步 骤之后，即可单击“确定”按钮完成创建。接下来会弹出引导窗口，要求用户为虚拟机添加虚 拟磁盘，如图10.35所示。</p>
+
+<p>图10.35添加虚拟磁盘</p>
+
+<p>在添加虚拟磁盘窗口中，直接输入磁盘大小并选择相应的存储域即可完成添加，也可勾选 “外部（直接LUN）”将iSCSI存储作为虚拟磁盘使用。</p>
+
+<p>添加完虚拟磁盘后，虚拟机就已经添加完成了。可以选择虚拟机，然后单击右键，在弹出 的菜单中选择“运行”，即可打开虚拟机电源。打开虚拟机电源后，可以再次单击右键，在弹 出的菜单中选择“控制台”，即可打开虚拟机的控制台，如图10.36所示。</p>
+
+<dl>
+<dt>C«rrtOS5.S:l -按 SHIFT+F12 释放光标-Remote Viewer</dt>
+</dl>
+
+<p>:文件（f&gt; 查管On 发送按键（s） 帮助（h）_</p>
+
+<p>複 CentOS</p>
+
+<p>图10.36虚拟机控制台</p>
+
+<p>关于虚拟机控制台程序的安装说明，可参考oVirt主界面链接“控制台客户资源”中的相 关内容，此处不再赘述。</p>
+
+<p>307</p>
+
+<h4 id="10-3小结">10.3小结</h4>
+
+<p>当今的互联网以云计算和虚拟化技术为主体，CentOS 7在发布之初就已经吸收整合了 RHEL7的虚拟化技术。本章以KVM虚拟化为起点，介绍了 CentOS 7中的KVM虚拟化解决 方案，及当前最新的oVirt管理平台。虽然在大型企业中，这些平台应用较少，但在经费紧张 的小型企业中却应用非常广泛。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/09-%E5%8F%8C%E6%9C%BA%E7%83%AD%E5%A4%87/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">09 双机热备</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/centos7-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E4%B8%8E%E8%BF%90%E7%BB%B4%E5%AE%9E%E6%88%98/11-glusterfs%E5%AD%98%E5%82%A8/">
+            <span class="next-text nav-default">11 GlusterFS存储</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

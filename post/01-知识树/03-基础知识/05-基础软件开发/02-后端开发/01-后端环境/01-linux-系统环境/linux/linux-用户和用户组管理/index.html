@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Linux 用户和用户组管理 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Linux 用户和用户组管理 需要补充的 aaa MOTIVE aaa Linux 用户和用户组管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/linux/linux-%E7%94%A8%E6%88%B7%E5%92%8C%E7%94%A8%E6%88%B7%E7%BB%84%E7%AE%A1%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Linux 用户和用户组管理" />
+<meta property="og:description" content="Linux 用户和用户组管理 需要补充的 aaa MOTIVE aaa Linux 用户和用户组管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/linux/linux-%E7%94%A8%E6%88%B7%E5%92%8C%E7%94%A8%E6%88%B7%E7%BB%84%E7%AE%A1%E7%90%86/" /><meta property="article:published_time" content="2018-07-10T15:50:43&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-10T15:50:43&#43;00:00"/>
+<meta itemprop="name" content="Linux 用户和用户组管理">
+<meta itemprop="description" content="Linux 用户和用户组管理 需要补充的 aaa MOTIVE aaa Linux 用户和用户组管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先">
+
+
+<meta itemprop="datePublished" content="2018-07-10T15:50:43&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-10T15:50:43&#43;00:00" />
+<meta itemprop="wordCount" content="7127">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Linux 用户和用户组管理"/>
+<meta name="twitter:description" content="Linux 用户和用户组管理 需要补充的 aaa MOTIVE aaa Linux 用户和用户组管理 Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Linux 用户和用户组管理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-10 </span>
+        
+        <span class="more-meta"> 7127 words </span>
+        <span class="more-meta"> 15 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#linux-用户和用户组管理">Linux 用户和用户组管理</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#motive">MOTIVE</a>
+<ul>
+<li><a href="#linux-用户和用户组管理-1">Linux 用户和用户组管理</a></li>
+<li><a href="#一-linux系统用户账号的管理">一、Linux系统用户账号的管理</a>
+<ul>
+<li><a href="#1-添加新的用户账号使用useradd命令-其语法如下">1、添加新的用户账号使用useradd命令，其语法如下：</a>
+<ul>
+<li><a href="#实例1">实例1</a></li>
+<li><a href="#实例2">实例2</a></li>
+</ul></li>
+<li><a href="#3-删除帐号">3、删除帐号</a></li>
+<li><a href="#4-修改帐号">4、修改帐号</a></li>
+<li><a href="#5-用户口令的管理">5、用户口令的管理</a></li>
+</ul></li>
+<li><a href="#二-linux系统用户组的管理">二、Linux系统用户组的管理</a>
+<ul>
+<li><a href="#1-增加一个新的用户组使用groupadd命令-其格式如下">1、增加一个新的用户组使用groupadd命令。其格式如下：</a>
+<ul>
+<li><a href="#实例1-1">实例1：</a></li>
+<li><a href="#实例2-1">实例2：</a></li>
+</ul></li>
+<li><a href="#2-如果要删除一个已有的用户组-使用groupdel命令-其格式如下">2、如果要删除一个已有的用户组，使用groupdel命令，其格式如下：</a>
+<ul>
+<li><a href="#例如">例如：</a></li>
+</ul></li>
+<li><a href="#3-修改用户组的属性使用groupmod命令-其语法如下">3、修改用户组的属性使用groupmod命令。其语法如下：</a>
+<ul>
+<li><a href="#实例1-2">实例1：</a></li>
+<li><a href="#实例2-2">实例2：</a></li>
+</ul></li>
+<li><a href="#4-如果一个用户同时属于多个用户组-那么用户可以在用户组之间切换-以便具有其他用户组的权限">4、如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户组的权限。</a></li>
+</ul></li>
+<li><a href="#三-与用户账号有关的系统文件">三、与用户账号有关的系统文件</a>
+<ul>
+<li><a href="#1-etc-passwd文件是用户管理工作涉及的最重要的一个文件">1、/etc/passwd文件是用户管理工作涉及的最重要的一个文件。</a></li>
+<li><a href="#1-用户名-是代表用户账号的字符串">1）&rdquo;用户名&rdquo;是代表用户账号的字符串。</a></li>
+<li><a href="#2-口令-一些系统中-存放着加密后的用户口令字">2）“口令”一些系统中，存放着加密后的用户口令字。</a></li>
+<li><a href="#3-用户标识号-是一个整数-系统内部用它来标识用户">3）“用户标识号”是一个整数，系统内部用它来标识用户。</a></li>
+<li><a href="#4-组标识号-字段记录的是用户所属的用户组">4）“组标识号”字段记录的是用户所属的用户组。</a></li>
+<li><a href="#5-注释性描述-字段记录着用户的一些个人情况">5)“注释性描述”字段记录着用户的一些个人情况。</a></li>
+<li><a href="#6-主目录-也就是用户的起始工作目录">6)“主目录”，也就是用户的起始工作目录。</a></li>
+<li><a href="#7-用户登录后-要启动一个进程-负责将用户的操作传给内核-这个进程是用户登录到系统后运行的命令解释器或某个特定的程序-即shell">7)用户登录后，要启动一个进程，负责将用户的操作传给内核，这个进程是用户登录到系统后运行的命令解释器或某个特定的程序，即Shell。</a></li>
+<li><a href="#8-系统中有一类用户称为伪用户-psuedo-users">8)系统中有一类用户称为伪用户（psuedo users）。</a></li>
+</ul></li>
+<li><a href="#拥有帐户文件">拥有帐户文件</a>
+<ul>
+<li><a href="#1-除了上面列出的伪用户外-还有许多标准的伪用户-例如-audit-cron-mail-usenet等-它们也都各自为相关的进程和文件所需要">1、除了上面列出的伪用户外，还有许多标准的伪用户，例如：audit, cron, mail, usenet等，它们也都各自为相关的进程和文件所需要。</a></li>
+<li><a href="#2-etc-shadow中的记录行与-etc-passwd中的一一对应-它由pwconv命令根据-etc-passwd中的数据自动产生">2、/etc/shadow中的记录行与/etc/passwd中的一一对应，它由pwconv命令根据/etc/passwd中的数据自动产生</a></li>
+<li><a href="#3-用户组的所有信息都存放在-etc-group文件中">3、用户组的所有信息都存放在/etc/group文件中。</a></li>
+<li><a href="#四-添加量用户批">四、添加量用户批</a></li>
+<li><a href="#1-先编辑一个文本用户文件">（1）先编辑一个文本用户文件。</a></li>
+<li><a href="#2-以root身份执行命令-usr-sbin-newusers-从刚创建的用户文件-user-txt-中导入数据-创建用户">（2）以root身份执行命令 <code>/usr/sbin/newusers</code>，从刚创建的用户文件<code>user.txt</code>中导入数据，创建用户：</a></li>
+<li><a href="#3-执行命令-usr-sbin-pwunconv">（3）执行命令/usr/sbin/pwunconv。</a></li>
+<li><a href="#4-编辑每个用户的密码对照文件">（4）编辑每个用户的密码对照文件。</a></li>
+<li><a href="#5-以root身份执行命令-usr-sbin-chpasswd">（5）以root身份执行命令 <code>/usr/sbin/chpasswd</code>。</a></li>
+<li><a href="#6-确定密码经编码写入-etc-passwd的密码栏后">（6）确定密码经编码写入/etc/passwd的密码栏后。</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="linux-用户和用户组管理">Linux 用户和用户组管理</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="motive">MOTIVE</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h2 id="linux-用户和用户组管理-1">Linux 用户和用户组管理</h2>
+
+<p>Linux系统是一个多用户多任务的分时操作系统，任何一个要使用系统资源的用户，都必须首先向系统管理员申请一个账号，然后以这个账号的身份进入系统。</p>
+
+<p>用户的账号一方面可以帮助系统管理员对使用系统的用户进行跟踪，并控制他们对系统资源的访问；另一方面也可以帮助用户组织文件，并为用户提供安全性保护。</p>
+
+<p>每个用户账号都拥有一个惟一的用户名和各自的口令。</p>
+
+<p>用户在登录时键入正确的用户名和口令后，就能够进入系统和自己的主目录。</p>
+
+<p>实现用户账号的管理，要完成的工作主要有如下几个方面：</p>
+
+<ul>
+<li><p>用户账号的添加、删除与修改。</p></li>
+
+<li><p>用户口令的管理。</p></li>
+
+<li><p>用户组的管理。</p></li>
+</ul>
+
+<hr />
+
+<h2 id="一-linux系统用户账号的管理">一、Linux系统用户账号的管理</h2>
+
+<p>用户账号的管理工作主要涉及到用户账号的添加、修改和删除。</p>
+
+<p>添加用户账号就是在系统中创建一个新账号，然后为新账号分配用户号、用户组、主目录和登录Shell等资源。刚添加的账号是被锁定的，无法使用。</p>
+
+<h3 id="1-添加新的用户账号使用useradd命令-其语法如下">1、添加新的用户账号使用useradd命令，其语法如下：</h3>
+
+<pre><code>useradd 选项 用户名
+</code></pre>
+
+<p>参数说明：</p>
+
+<ul>
+<li><p>选项:</p>
+
+<ul>
+<li><p>-c comment 指定一段注释性描述。</p></li>
+
+<li><p>-d 目录 指定用户主目录，如果此目录不存在，则同时使用-m选项，可以创建主目录。</p></li>
+
+<li><p>-g 用户组 指定用户所属的用户组。</p></li>
+
+<li><p>-G 用户组，用户组 指定用户所属的附加组。</p></li>
+
+<li><p>-s Shell文件 指定用户的登录Shell。</p></li>
+
+<li><p>-u 用户号 指定用户的用户号，如果同时有-o选项，则可以重复使用其他用户的标识号。</p></li>
+</ul></li>
+
+<li><p>用户名:</p></li>
+</ul>
+
+<p>指定新账号的登录名。</p>
+
+<h4 id="实例1">实例1</h4>
+
+<pre><code># useradd –d /usr/sam -m sam
+</code></pre>
+
+<p>此命令创建了一个用户sam，其中-d和-m选项用来为登录名sam产生一个主目录/usr/sam（/usr为默认的用户主目录所在的父目录）。</p>
+
+<h4 id="实例2">实例2</h4>
+
+<pre><code># useradd -s /bin/sh -g group –G adm,root gem
+</code></pre>
+
+<p>此命令新建了一个用户gem，该用户的登录Shell是 <code>/bin/sh</code>，它属于group用户组，同时又属于adm和root用户组，其中group用户组是其主组。</p>
+
+<p>这里可能新建组：<code>#groupadd group及groupadd adm</code></p>
+
+<p>增加用户账号就是在/etc/passwd文件中为新用户增加一条记录，同时更新其他系统文件如/etc/shadow, /etc/group等。</p>
+
+<p>Linux提供了集成的系统管理工具userconf，它可以用来对用户账号进行统一管理。</p>
+
+<h3 id="3-删除帐号">3、删除帐号</h3>
+
+<p>如果一个用户的账号不再使用，可以从系统中删除。删除用户账号就是要将/etc/passwd等系统文件中的该用户记录删除，必要时还删除用户的主目录。</p>
+
+<p>删除一个已有的用户账号使用<code>userdel</code>命令，其格式如下：</p>
+
+<pre><code>userdel 选项 用户名
+</code></pre>
+
+<p>常用的选项是-r，它的作用是把用户的主目录一起删除。</p>
+
+<p>例如：</p>
+
+<pre><code># userdel sam
+</code></pre>
+
+<p>此命令删除用户sam在系统文件中（主要是/etc/passwd, /etc/shadow, /etc/group等）的记录，同时删除用户的主目录。</p>
+
+<h3 id="4-修改帐号">4、修改帐号</h3>
+
+<p>修改用户账号就是根据实际情况更改用户的有关属性，如用户号、主目录、用户组、登录Shell等。</p>
+
+<p>修改已有用户的信息使用<code>usermod</code>命令，其格式如下：</p>
+
+<pre><code>usermod 选项 用户名
+</code></pre>
+
+<p>常用的选项包括<code>-c, -d, -m, -g, -G, -s, -u以及-o等</code>，这些选项的意义与<code>useradd</code>命令中的选项一样，可以为用户指定新的资源值。</p>
+
+<p>另外，有些系统可以使用选项：-l 新用户名</p>
+
+<p>这个选项指定一个新的账号，即将原来的用户名改为新的用户名。</p>
+
+<p>例如：</p>
+
+<pre><code># usermod -s /bin/ksh -d /home/z –g developer sam
+</code></pre>
+
+<p>此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer。</p>
+
+<h3 id="5-用户口令的管理">5、用户口令的管理</h3>
+
+<p>用户管理的一项重要内容是用户口令的管理。用户账号刚创建时没有口令，但是被系统锁定，无法使用，必须为其指定口令后才可以使用，即使是指定空口令。</p>
+
+<p>指定和修改用户口令的Shell命令是<code>passwd</code>。超级用户可以为自己和其他用户指定口令，普通用户只能用它修改自己的口令。命令的格式为：</p>
+
+<pre><code>passwd 选项 用户名
+</code></pre>
+
+<p>可使用的选项：</p>
+
+<ul>
+<li><p>-l 锁定口令，即禁用账号。</p></li>
+
+<li><p>-u 口令解锁。</p></li>
+
+<li><p>-d 使账号无口令。</p></li>
+
+<li><p>-f 强迫用户下次登录时修改口令。</p></li>
+</ul>
+
+<p>如果默认用户名，则修改当前用户的口令。</p>
+
+<p>例如，假设当前用户是sam，则下面的命令修改该用户自己的口令：</p>
+
+<pre><code>$ passwd
+Old password:******
+New password:*******
+Re-enter new password:*******
+</code></pre>
+
+<p>如果是超级用户，可以用下列形式指定任何用户的口令：</p>
+
+<pre><code># passwd sam
+New password:*******
+Re-enter new password:*******
+</code></pre>
+
+<p>普通用户修改自己的口令时，passwd命令会先询问原口令，验证后再要求用户输入两遍新口令，如果两次输入的口令一致，则将这个口令指定给用户；而超级用户为用户指定口令时，就不需要知道原口令。</p>
+
+<p>为了系统安全起见，用户应该选择比较复杂的口令，例如最好使用8位长的口令，口令中包含有大写、小写字母和数字，并且应该与姓名、生日等不相同。</p>
+
+<p>为用户指定空口令时，执行下列形式的命令：</p>
+
+<pre><code># passwd -d sam
+</code></pre>
+
+<p>此命令将用户sam的口令删除，这样用户sam下一次登录时，系统就不再询问口令。</p>
+
+<p>passwd命令还可以用-l(lock)选项锁定某一用户，使其不能登录，例如：</p>
+
+<pre><code># passwd -l sam
+</code></pre>
+
+<hr />
+
+<h2 id="二-linux系统用户组的管理">二、Linux系统用户组的管理</h2>
+
+<p>每个用户都有一个用户组，系统可以对一个用户组中的所有用户进行集中管理。不同Linux 系统对用户组的规定有所不同，如Linux下的用户属于与它同名的用户组，这个用户组在创建用户时同时创建。</p>
+
+<p>用户组的管理涉及用户组的添加、删除和修改。组的增加、删除和修改实际上就是对/etc/group文件的更新。</p>
+
+<h3 id="1-增加一个新的用户组使用groupadd命令-其格式如下">1、增加一个新的用户组使用groupadd命令。其格式如下：</h3>
+
+<pre><code>groupadd 选项 用户组
+</code></pre>
+
+<p>可以使用的选项有：</p>
+
+<ul>
+<li><p>-g GID 指定新用户组的组标识号（GID）。</p></li>
+
+<li><p>-o 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同。</p></li>
+</ul>
+
+<h4 id="实例1-1">实例1：</h4>
+
+<pre><code># groupadd group1
+</code></pre>
+
+<p>此命令向系统中增加了一个新组group1，新组的组标识号是在当前已有的最大组标识号的基础上加1。</p>
+
+<h4 id="实例2-1">实例2：</h4>
+
+<pre><code># groupadd -g 101 group2
+</code></pre>
+
+<p>此命令向系统中增加了一个新组group2，同时指定新组的组标识号是101。</p>
+
+<h3 id="2-如果要删除一个已有的用户组-使用groupdel命令-其格式如下">2、如果要删除一个已有的用户组，使用groupdel命令，其格式如下：</h3>
+
+<pre><code>groupdel 用户组
+</code></pre>
+
+<h4 id="例如">例如：</h4>
+
+<pre><code># groupdel group1
+</code></pre>
+
+<p>此命令从系统中删除组group1。</p>
+
+<h3 id="3-修改用户组的属性使用groupmod命令-其语法如下">3、修改用户组的属性使用groupmod命令。其语法如下：</h3>
+
+<pre><code>groupmod 选项 用户组
+</code></pre>
+
+<p>常用的选项有：</p>
+
+<ul>
+<li><p>-g GID 为用户组指定新的组标识号。</p></li>
+
+<li><p>-o 与-g选项同时使用，用户组的新GID可以与系统已有用户组的GID相同。</p></li>
+
+<li><p>-n新用户组 将用户组的名字改为新名字</p></li>
+</ul>
+
+<h4 id="实例1-2">实例1：</h4>
+
+<pre><code># groupmod -g 102 group2
+</code></pre>
+
+<p>此命令将组group2的组标识号修改为102。</p>
+
+<h4 id="实例2-2">实例2：</h4>
+
+<pre><code># groupmod –g 10000 -n group3 group2
+</code></pre>
+
+<p>此命令将组group2的标识号改为10000，组名修改为group3。</p>
+
+<h3 id="4-如果一个用户同时属于多个用户组-那么用户可以在用户组之间切换-以便具有其他用户组的权限">4、如果一个用户同时属于多个用户组，那么用户可以在用户组之间切换，以便具有其他用户组的权限。</h3>
+
+<p>用户可以在登录后，使用命令newgrp切换到其他用户组，这个命令的参数就是目的用户组。例如：</p>
+
+<pre><code>$ newgrp root
+</code></pre>
+
+<p>这条命令将当前用户切换到root用户组，前提条件是root用户组确实是该用户的主组或附加组。类似于用户账号的管理，用户组的管理也可以通过集成的系统管理工具来完成。</p>
+
+<hr />
+
+<h2 id="三-与用户账号有关的系统文件">三、与用户账号有关的系统文件</h2>
+
+<p>完成用户管理的工作有许多种方法，但是每一种方法实际上都是对有关的系统文件进行修改。</p>
+
+<p>与用户和用户组相关的信息都存放在一些系统文件中，这些文件包括/etc/passwd, /etc/shadow, /etc/group等。</p>
+
+<p>下面分别介绍这些文件的内容。</p>
+
+<h3 id="1-etc-passwd文件是用户管理工作涉及的最重要的一个文件">1、/etc/passwd文件是用户管理工作涉及的最重要的一个文件。</h3>
+
+<p>Linux系统中的每个用户都在/etc/passwd文件中有一个对应的记录行，它记录了这个用户的一些基本属性。</p>
+
+<p>这个文件对所有用户都是可读的。它的内容类似下面的例子：</p>
+
+<pre><code>＃ cat /etc/passwd
+
+root❌0:0:Superuser:/:
+daemon❌1:1:System daemons:/etc:
+bin❌2:2:Owner of system commands:/bin:
+sys❌3:3:Owner of system files:/usr/sys:
+adm❌4:4:System accounting:/usr/adm:
+uucp❌5:5:UUCP administrator:/usr/lib/uucp:
+auth❌7:21:Authentication administrator:/tcb/files/auth:
+cron❌9:16:Cron daemon:/usr/spool/cron:
+listen❌37:4:Network daemon:/usr/net/nls:
+lp❌71:18:Printer administrator:/usr/spool/lp:
+sam❌200:50:Sam san:/usr/sam:/bin/sh
+</code></pre>
+
+<p>从上面的例子我们可以看到，/etc/passwd中一行记录对应着一个用户，每行记录又被冒号(:)分隔为7个字段，其格式和具体含义如下：</p>
+
+<pre><code>用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell
+</code></pre>
+
+<h3 id="1-用户名-是代表用户账号的字符串">1）&rdquo;用户名&rdquo;是代表用户账号的字符串。</h3>
+
+<p>通常长度不超过8个字符，并且由大小写字母和/或数字组成。登录名中不能有冒号(:)，因为冒号在这里是分隔符。</p>
+
+<p>为了兼容起见，登录名中最好不要包含点字符(.)，并且不使用连字符(-)和加号(+)打头。</p>
+
+<h3 id="2-口令-一些系统中-存放着加密后的用户口令字">2）“口令”一些系统中，存放着加密后的用户口令字。</h3>
+
+<p>虽然这个字段存放的只是用户口令的加密串，不是明文，但是由于/etc/passwd文件对所有用户都可读，所以这仍是一个安全隐患。因此，现在许多Linux 系统（如SVR4）都使用了shadow技术，把真正的加密后的用户口令字存放到/etc/shadow文件中，而在/etc/passwd文件的口令字段中只存放一个特殊的字符，例如“x”或者“*”。</p>
+
+<h3 id="3-用户标识号-是一个整数-系统内部用它来标识用户">3）“用户标识号”是一个整数，系统内部用它来标识用户。</h3>
+
+<p>一般情况下它与用户名是一一对应的。如果几个用户名对应的用户标识号是一样的，系统内部将把它们视为同一个用户，但是它们可以有不同的口令、不同的主目录以及不同的登录Shell等。</p>
+
+<p>通常用户标识号的取值范围是0～65 535。0是超级用户root的标识号，1～99由系统保留，作为管理账号，普通用户的标识号从100开始。在Linux系统中，这个界限是500。</p>
+
+<h3 id="4-组标识号-字段记录的是用户所属的用户组">4）“组标识号”字段记录的是用户所属的用户组。</h3>
+
+<p>它对应着/etc/group文件中的一条记录。</p>
+
+<h3 id="5-注释性描述-字段记录着用户的一些个人情况">5)“注释性描述”字段记录着用户的一些个人情况。</h3>
+
+<p>例如用户的真实姓名、电话、地址等，这个字段并没有什么实际的用途。在不同的Linux 系统中，这个字段的格式并没有统一。在许多Linux系统中，这个字段存放的是一段任意的注释性描述文字，用做finger命令的输出。</p>
+
+<h3 id="6-主目录-也就是用户的起始工作目录">6)“主目录”，也就是用户的起始工作目录。</h3>
+
+<p>它是用户在登录到系统之后所处的目录。在大多数系统中，各用户的主目录都被组织在同一个特定的目录下，而用户主目录的名称就是该用户的登录名。各用户对自己的主目录有读、写、执行（搜索）权限，其他用户对此目录的访问权限则根据具体情况设置。</p>
+
+<h3 id="7-用户登录后-要启动一个进程-负责将用户的操作传给内核-这个进程是用户登录到系统后运行的命令解释器或某个特定的程序-即shell">7)用户登录后，要启动一个进程，负责将用户的操作传给内核，这个进程是用户登录到系统后运行的命令解释器或某个特定的程序，即Shell。</h3>
+
+<p>Shell是用户与Linux系统之间的接口。Linux的Shell有许多种，每种都有不同的特点。常用的有sh(Bourne Shell), csh(C Shell), ksh(Korn Shell), tcsh(TENEX/TOPS-20 type C Shell), bash(Bourne Again Shell)等。</p>
+
+<p>系统管理员可以根据系统情况和用户习惯为用户指定某个Shell。如果不指定Shell，那么系统使用sh为默认的登录Shell，即这个字段的值为/bin/sh。</p>
+
+<p>用户的登录Shell也可以指定为某个特定的程序（此程序不是一个命令解释器）。</p>
+
+<p>利用这一特点，我们可以限制用户只能运行指定的应用程序，在该应用程序运行结束后，用户就自动退出了系统。有些Linux 系统要求只有那些在系统中登记了的程序才能出现在这个字段中。</p>
+
+<h3 id="8-系统中有一类用户称为伪用户-psuedo-users">8)系统中有一类用户称为伪用户（psuedo users）。</h3>
+
+<p>这些用户在/etc/passwd文件中也占有一条记录，但是不能登录，因为它们的登录Shell为空。它们的存在主要是方便系统管理，满足相应的系统进程对文件属主的要求。</p>
+
+<p>常见的伪用户如下所示：</p>
+
+<pre><code>伪 用 户 含 义
+bin 拥有可执行的用户命令文件
+sys 拥有系统文件
+adm 拥有帐户文件
+uucp UUCP使用
+lp lp或lpd子系统使用
+nobody NFS使用
+</code></pre>
+
+<hr />
+
+<h2 id="拥有帐户文件">拥有帐户文件</h2>
+
+<h3 id="1-除了上面列出的伪用户外-还有许多标准的伪用户-例如-audit-cron-mail-usenet等-它们也都各自为相关的进程和文件所需要">1、除了上面列出的伪用户外，还有许多标准的伪用户，例如：audit, cron, mail, usenet等，它们也都各自为相关的进程和文件所需要。</h3>
+
+<p>由于/etc/passwd文件是所有用户都可读的，如果用户的密码太简单或规律比较明显的话，一台普通的计算机就能够很容易地将它破解，因此对安全性要求较高的Linux系统都把加密后的口令字分离出来，单独存放在一个文件中，这个文件是/etc/shadow文件。 有超级用户才拥有该文件读权限，这就保证了用户密码的安全性。</p>
+
+<h3 id="2-etc-shadow中的记录行与-etc-passwd中的一一对应-它由pwconv命令根据-etc-passwd中的数据自动产生">2、/etc/shadow中的记录行与/etc/passwd中的一一对应，它由pwconv命令根据/etc/passwd中的数据自动产生</h3>
+
+<p>它的文件格式与/etc/passwd类似，由若干个字段组成，字段之间用&rdquo;:&ldquo;隔开。这些字段是：</p>
+
+<pre><code>登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志
+</code></pre>
+
+<ol>
+<li><p>&ldquo;登录名&rdquo;是与/etc/passwd文件中的登录名相一致的用户账号</p></li>
+
+<li><p>&ldquo;口令&rdquo;字段存放的是加密后的用户口令字，长度为13个字符。如果为空，则对应用户没有口令，登录时不需要口令；如果含有不属于集合 { ./0-9A-Za-z }中的字符，则对应的用户不能登录。</p></li>
+
+<li><p>&ldquo;最后一次修改时间&rdquo;表示的是从某个时刻起，到用户最后一次修改口令时的天数。时间起点对不同的系统可能不一样。例如在SCO Linux 中，这个时间起点是1970年1月1日。</p></li>
+
+<li><p>&ldquo;最小时间间隔&rdquo;指的是两次修改口令之间所需的最小天数。</p></li>
+
+<li><p>&ldquo;最大时间间隔&rdquo;指的是口令保持有效的最大天数。</p></li>
+
+<li><p>&ldquo;警告时间&rdquo;字段表示的是从系统开始警告用户到用户密码正式失效之间的天数。</p></li>
+
+<li><p>&ldquo;不活动时间&rdquo;表示的是用户没有登录活动但账号仍能保持有效的最大天数。</p></li>
+
+<li><p>&ldquo;失效时间&rdquo;字段给出的是一个绝对的天数，如果使用了这个字段，那么就给出相应账号的生存期。期满后，该账号就不再是一个合法的账号，也就不能再用来登录了。</p></li>
+</ol>
+
+<p>下面是/etc/shadow的一个例子：</p>
+
+<pre><code>＃ cat /etc/shadow
+
+root:Dnakfw28zf38w:8764:0:168:7:::
+daemon:*::0:0::::
+bin:*::0:0::::
+sys:*::0:0::::
+adm:*::0:0::::
+uucp:*::0:0::::
+nuucp:*::0:0::::
+auth:*::0:0::::
+cron:*::0:0::::
+listen:*::0:0::::
+lp:*::0:0::::
+sam:EkdiSECLWPdSa:9740:0:0::::
+</code></pre>
+
+<h3 id="3-用户组的所有信息都存放在-etc-group文件中">3、用户组的所有信息都存放在/etc/group文件中。</h3>
+
+<p>将用户分组是Linux 系统中对用户进行管理及控制访问权限的一种手段。</p>
+
+<p>每个用户都属于某个用户组；一个组中可以有多个用户，一个用户也可以属于不同的组。</p>
+
+<p>当一个用户同时是多个组中的成员时，在/etc/passwd文件中记录的是用户所属的主组，也就是登录时所属的默认组，而其他组称为附加组。</p>
+
+<p>用户要访问属于附加组的文件时，必须首先使用newgrp命令使自己成为所要访问的组中的成员。</p>
+
+<p>用户组的所有信息都存放在/etc/group文件中。此文件的格式也类似于/etc/passwd文件，由冒号(:)隔开若干个字段，这些字段有：</p>
+
+<pre><code>组名:口令:组标识号:组内用户列表
+</code></pre>
+
+<ol>
+<li><p>&ldquo;组名&rdquo;是用户组的名称，由字母或数字构成。与/etc/passwd中的登录名一样，组名不应重复。</p></li>
+
+<li><p>&ldquo;口令&rdquo;字段存放的是用户组加密后的口令字。一般Linux 系统的用户组都没有口令，即这个字段一般为空，或者是*。</p></li>
+
+<li><p>&ldquo;组标识号&rdquo;与用户标识号类似，也是一个整数，被系统内部用来标识组。</p></li>
+
+<li><p>&ldquo;组内用户列表&rdquo;是属于这个组的所有用户的列表/b]，不同用户之间用逗号(,)分隔。这个用户组可能是用户的主组，也可能是附加组。</p></li>
+</ol>
+
+<p>/etc/group文件的一个例子如下：</p>
+
+<pre><code>root::0:root
+bin::2:root,bin
+sys::3:root,uucp
+adm::4:root,adm
+daemon::5:root,daemon
+lp::7:root,lp
+users::20:root,sam
+</code></pre>
+
+<h3 id="四-添加量用户批">四、添加量用户批</h3>
+
+<p>添加和删除用户对每位Linux系统管理员都是轻而易举的事，比较棘手的是如果要添加几十个、上百个甚至上千个用户时，我们不太可能还使用useradd一个一个地添加，必然要找一种简便的创建大量用户的方法。Linux系统提供了创建大量用户的工具，可以让您立即创建大量用户，方法如下：</p>
+
+<h3 id="1-先编辑一个文本用户文件">（1）先编辑一个文本用户文件。</h3>
+
+<p>每一列按照<code>/etc/passwd</code>密码文件的格式书写，要注意每个用户的用户名、UID、宿主目录都不可以相同，其中密码栏可以留做空白或输入x号。一个范例文件user.txt内容如下：</p>
+
+<pre><code>user001::600💯user:/home/user001:/bin/bash
+user002::601💯user:/home/user002:/bin/bash
+user003::602💯user:/home/user003:/bin/bash
+user004::603💯user:/home/user004:/bin/bash
+user005::604💯user:/home/user005:/bin/bash
+user006::605💯user:/home/user006:/bin/bash
+</code></pre>
+
+<h3 id="2-以root身份执行命令-usr-sbin-newusers-从刚创建的用户文件-user-txt-中导入数据-创建用户">（2）以root身份执行命令 <code>/usr/sbin/newusers</code>，从刚创建的用户文件<code>user.txt</code>中导入数据，创建用户：</h3>
+
+<pre><code># newusers &lt; user.txt
+</code></pre>
+
+<p>然后可以执行命令 <code>vipw</code> 或 <code>vi /etc/passwd</code> 检查 <code>/etc/passwd</code> 文件是否已经出现这些用户的数据，并且用户的宿主目录是否已经创建。</p>
+
+<h3 id="3-执行命令-usr-sbin-pwunconv">（3）执行命令/usr/sbin/pwunconv。</h3>
+
+<p>将 <code>/etc/shadow</code> 产生的 <code>shadow</code> 密码解码，然后回写到 <code>/etc/passwd</code> 中，并将<code>/etc/shadow</code>的<code>shadow</code>密码栏删掉。这是为了方便下一步的密码转换工作，即先取消 <code>shadow password</code> 功能。</p>
+
+<pre><code># pwunconv
+</code></pre>
+
+<h3 id="4-编辑每个用户的密码对照文件">（4）编辑每个用户的密码对照文件。</h3>
+
+<p>范例文件 <code>passwd.txt</code> 内容如下：</p>
+
+<pre><code>user001:密码
+user002:密码
+user003:密码
+user004:密码
+user005:密码
+user006:密码
+</code></pre>
+
+<h3 id="5-以root身份执行命令-usr-sbin-chpasswd">（5）以root身份执行命令 <code>/usr/sbin/chpasswd</code>。</h3>
+
+<p>创建用户密码，<code>chpasswd</code> 会将经过 <code>/usr/bin/passwd</code> 命令编码过的密码写入 <code>/etc/passwd</code> 的密码栏。</p>
+
+<pre><code># chpasswd &lt; passwd.txt
+</code></pre>
+
+<h3 id="6-确定密码经编码写入-etc-passwd的密码栏后">（6）确定密码经编码写入/etc/passwd的密码栏后。</h3>
+
+<p>执行命令 <code>/usr/sbin/pwconv</code> 将密码编码为 <code>shadow password</code>，并将结果写入 <code>/etc/shadow</code>。</p>
+
+<pre><code># pwconv
+</code></pre>
+
+<p>这样就完成了大量用户的创建了，之后您可以到/home下检查这些用户宿主目录的权限设置是否都正确，并登录验证用户密码是否正确。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><a href="https://www.w3cschool.cn/linux/">Linux教程</a></li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/linux/linux-%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Linux 磁盘管理</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/linux/linux-%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6%E5%92%8C%E6%96%87%E4%BB%B6%E5%A4%B9/">
+            <span class="next-text nav-default">Linux 查找文件和文件夹</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

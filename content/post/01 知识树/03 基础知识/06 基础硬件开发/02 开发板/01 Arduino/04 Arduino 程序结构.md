@@ -1,68 +1,14 @@
 ---
-title: Arduino 程序结构
+title: 04 Arduino 程序结构
 toc: true
 date: 2018-07-27 20:33:50
 ---
----
-author: evo
-comments: true
-date: 2018-05-05 06:56:17+00:00
-layout: post
-link: http://106.15.37.116/2018/05/05/arduino-%e7%a8%8b%e5%ba%8f%e7%bb%93%e6%9e%84/
-slug: arduino-%e7%a8%8b%e5%ba%8f%e7%bb%93%e6%9e%84
-title: Arduino 程序结构
-wordpress_id: 5262
-categories:
-- 基础工具使用
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，推荐直接看原文**
 
 
-## 相关资料
+# 需要补充的
 
 
-
-
-
-
-  1. [Arduino教程](https://www.w3cschool.cn/arduino/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
-
+# Arduino 程序结构
 
 在本章中，我们将深入研究Arduino程序结构，并将学习更多Arduino世界中使用的新术语。Arduino软件是开源的。Java环境的源代码在GPL下发布，C/C++微控制器库在LGPL下。
 
@@ -149,19 +95,6 @@ Void setup ( ) {
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+1. [Arduino教程](https://www.w3cschool.cn/arduino/)

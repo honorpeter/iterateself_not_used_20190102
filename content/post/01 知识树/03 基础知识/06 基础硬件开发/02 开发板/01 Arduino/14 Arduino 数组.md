@@ -1,69 +1,14 @@
 ---
-title: Arduino 数组
+title: 14 Arduino 数组
 toc: true
 date: 2018-07-27 20:33:17
 ---
----
-author: evo
-comments: true
-date: 2018-05-05 07:09:53+00:00
-layout: post
-link: http://106.15.37.116/2018/05/05/arduino-%e6%95%b0%e7%bb%84/
-slug: arduino-%e6%95%b0%e7%bb%84
-title: Arduino 数组
-wordpress_id: 5296
-categories:
-- 基础工具使用
-tags:
-- Arduino
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，推荐直接看原文**
 
 
-## 相关资料
+# 需要补充的
 
 
-
-
-
-
-  1. [Arduino教程](https://www.w3cschool.cn/arduino/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
+# Arduino 数组
 
 
 数组是连续的一组相同类型的内存位置。要引用数组中的特定位置或元素，我们指定数组的名称和数组中特定元素的位置编号。
@@ -492,18 +437,6 @@ Elements of Array
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+1. [Arduino教程](https://www.w3cschool.cn/arduino/)

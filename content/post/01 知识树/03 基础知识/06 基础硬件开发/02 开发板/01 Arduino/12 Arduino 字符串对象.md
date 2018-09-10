@@ -1,68 +1,14 @@
 ---
-title: Arduino 字符串对象
+title: 12 Arduino 字符串对象
 toc: true
 date: 2018-06-11 08:14:47
 ---
----
-author: evo
-comments: true
-date: 2018-05-05 07:08:36+00:00
-layout: post
-link: http://106.15.37.116/2018/05/05/arduino-%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%af%b9%e8%b1%a1/
-slug: arduino-%e5%ad%97%e7%ac%a6%e4%b8%b2%e5%af%b9%e8%b1%a1
-title: Arduino 字符串对象
-wordpress_id: 5266
-categories:
-- 基础工具使用
----
 
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，推荐直接看原文**
-
-
-## 相关资料
+# 需要补充的
 
 
 
-
-
- 	
-  1. [Arduino教程](https://www.w3cschool.cn/arduino/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
-
-
+# Arduino 字符串对象
 
 在Arduino编程中使用的第二种类型的字符串是字符串对象。
 
@@ -79,33 +25,33 @@ categories:
 
 
 
-    
-    void setup() { 
+
+    void setup() {
        String my_str = "This is my string.";
        Serial.begin(9600);
-    
+
        // (1) print the string
        Serial.println(my_str);
-    
+
        // (2) change the string to upper-case
        my_str.toUpperCase();
        Serial.println(my_str);
-    
+
        // (3) overwrite the string
        my_str = "My new string.";
        Serial.println(my_str);
-    
+
        // (4) replace a word in the string
        my_str.replace("string", "Arduino sketch");
        Serial.println(my_str);
-    
+
        // (5) get the length of the string
        Serial.print("String length is: ");
        Serial.println(my_str.length());
     }
-    
-    void loop() { 
-    
+
+    void loop() {
+
     }
 
 
@@ -115,7 +61,7 @@ categories:
 
 
 
-    
+
     This is my string.
     THIS IS MY STRING.
     My new string.
@@ -125,7 +71,7 @@ categories:
 
 创建字符串对象，并在草图顶部分配一个值（或字符串）。
 
-    
+
     String my_str = "This is my string." ;
 
 
@@ -133,7 +79,7 @@ categories:
 
 这可以与创建变量并为其分配一个值（如整数）相比较：
 
-    
+
     int my_var = 102;
 
 
@@ -151,9 +97,9 @@ categories:
 
 创建的字符串对象my_str，有多个可以在其上操作的函数或方法。这些方法通过使用对象名称后跟点运算符(.)，然后使用函数的名称来调用的。
 
-    
+
     my_str.toUpperCase();
-    
+
 
 
 **toUpperCase()**函数对包含在类型为String的** my_str **对象中的字符串进行操作，并将对象包含的字符串数据（或文本）转换为大写字符。String类包含的函数列表可以在Arduino字符串参考中找到。从技术上讲，String被称为一个类，用于创建String对象。
@@ -164,9 +110,9 @@ categories:
 
 赋值运算符用于将新字符串分配给** my_str **对象以替换旧字符串。
 
-    
+
     my_str = "My new string." ;
-    
+
 
 
 赋值运算符不能用于字符数组字符串，仅适用于String对象。
@@ -214,24 +160,6 @@ replace()函数用于将传递给它的第二个字符串替换传递给它的�
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+1. [Arduino教程](https://www.w3cschool.cn/arduino/)

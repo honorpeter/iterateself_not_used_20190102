@@ -1,66 +1,13 @@
 ---
-title: Arduino 时间函数
+title: 13 Arduino 时间函数
 toc: true
 date: 2018-06-11 08:14:47
 ---
----
-author: evo
-comments: true
-date: 2018-05-05 07:09:58+00:00
-layout: post
-link: http://106.15.37.116/2018/05/05/arduino-%e6%97%b6%e9%97%b4%e5%87%bd%e6%95%b0/
-slug: arduino-%e6%97%b6%e9%97%b4%e5%87%bd%e6%95%b0
-title: Arduino 时间函数
-wordpress_id: 5295
-categories:
-- 基础工具使用
----
 
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，推荐直接看原文**
+# 需要补充的
 
 
-## 相关资料
-
-
-
-
-
- 	
-  1. [Arduino教程](https://www.w3cschool.cn/arduino/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
+# Arduino 时间函数
 
 
 
@@ -126,22 +73,6 @@ micros()函数返回Arduino板开始运行当前程序时的微秒数。该数�
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+1. [Arduino教程](https://www.w3cschool.cn/arduino/)

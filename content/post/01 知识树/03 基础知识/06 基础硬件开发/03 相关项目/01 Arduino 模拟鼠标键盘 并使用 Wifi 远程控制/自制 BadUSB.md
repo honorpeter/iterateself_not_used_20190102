@@ -10,4 +10,4 @@ date: 2018-09-09
 需要的代码：https://github.com/hak5darren/USB-Rubber-Ducky/wiki/Payloads
 生成代码的工具：https://github.com/CYRO4S/Automator
 Arduino配置：https://www.bilibili.com/video/av18699066/
-驱动https://github.com/digistump/DigistumpArduino/releases
+驱动: https://github.com/digistump/DigistumpArduino/releases

@@ -1,67 +1,16 @@
 ---
-title: Arduino 控制语句
+title: 08 Arduino 控制语句
 toc: true
 date: 2018-07-27 20:33:02
 ---
----
-author: evo
-comments: true
-date: 2018-05-05 06:58:11+00:00
-layout: post
-link: http://106.15.37.116/2018/05/05/arduino-%e6%8e%a7%e5%88%b6%e8%af%ad%e5%8f%a5/
-slug: arduino-%e6%8e%a7%e5%88%b6%e8%af%ad%e5%8f%a5
-title: Arduino 控制语句
-wordpress_id: 5282
-categories:
-- 基础工具使用
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，推荐直接看原文**
-
-
-## 相关资料
 
 
 
+# 需要补充的
 
 
 
-  1. [Arduino教程](https://www.w3cschool.cn/arduino/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
+# Arduino 控制语句
 
 
 判断结构要求程序员指定要由程序评估或测试的一个或多个条件，以及条件为真时要执行的语句（必需的）和条件为假时要执行的语句（可选的）。
@@ -146,22 +95,6 @@ categories:
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+1. [Arduino教程](https://www.w3cschool.cn/arduino/)

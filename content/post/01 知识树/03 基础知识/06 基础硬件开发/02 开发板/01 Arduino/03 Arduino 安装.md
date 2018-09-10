@@ -1,69 +1,12 @@
 ---
-title: Arduino 安装
+title: 03 Arduino 安装
 toc: true
 date: 2018-07-27 20:31:50
 ---
----
-author: evo
-comments: true
-date: 2018-05-05 06:55:30+00:00
-layout: post
-link: http://106.15.37.116/2018/05/05/arduino-%e5%ae%89%e8%a3%85/
-slug: arduino-%e5%ae%89%e8%a3%85
-title: Arduino 安装
-wordpress_id: 5261
-categories:
-- 基础工具使用
-tags:
-- Arduino
----
 
-<!-- more -->
+# 需要补充的
 
-[mathjax]
-
-**注：非原创，推荐直接看原文**
-
-
-## 相关资料
-
-
-
-
-
-
-  1. [Arduino教程](https://www.w3cschool.cn/arduino/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
+# Arduino 安装
 
 
 在了解Arduino UNO板的主要部分后，我们准备学习如何设置Arduino IDE。一旦我们学到这一点，我们将准备在Arduino板上上传我们的程序。
@@ -225,18 +168,6 @@ Arduino Uno，Mega，Duemilanove和Arduino Nano通过USB连接到计算机或外
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+1. [Arduino教程](https://www.w3cschool.cn/arduino/)

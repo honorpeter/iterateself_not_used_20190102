@@ -1,68 +1,13 @@
 ---
-title: Arduino 字符串
+title: 11 Arduino 字符串
 toc: true
 date: 2018-06-11 08:14:47
 ---
----
-author: evo
-comments: true
-date: 2018-05-05 07:08:11+00:00
-layout: post
-link: http://106.15.37.116/2018/05/05/arduino-%e5%ad%97%e7%ac%a6%e4%b8%b2/
-slug: arduino-%e5%ad%97%e7%ac%a6%e4%b8%b2
-title: Arduino 字符串
-wordpress_id: 5285
-categories:
-- 基础工具使用
----
 
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，推荐直接看原文**
+# 需要补充的
 
 
-## 相关资料
-
-
-
-
-
- 	
-  1. [Arduino教程](https://www.w3cschool.cn/arduino/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
-
-
+# Arduino 字符串
 
 字符串用于存储文本。它们可用在LCD或Arduino IDE串口监视器窗口中显示文本。字符串也可用于存储用户输入。例如，用户在连接到Arduino的键盘上键入的字符。
 
@@ -70,10 +15,10 @@ categories:
 
 
 
- 	
+
   * 字符数组，与C编程中使用的字符串相同。
 
- 	
+
   * Arduino字符串，它允许我们在草图中使用字符串对象。
 
 
@@ -95,7 +40,7 @@ categories:
 
 **例**
 
-    
+
     void setup() {
        char my_str[6]; // an array big enough for a 5 character string
        Serial.begin(9600);
@@ -107,11 +52,11 @@ categories:
        my_str[5] = 0; // 6th array element is a null terminator
        Serial.println(my_str);
     }
-    
-    void loop() { 
-    
+
+    void loop() {
+
     }
-    
+
 
 
 以下示例显示了字符串由什么组成。一个具有可打印字符的字符数组和0作为数组的最后一个元素，表示这是字符串结束的位置。通过使用** Serial.println()**并传递字符串的名称，可以将字符串打印到Arduino IDE串口监视器窗口。
@@ -120,17 +65,17 @@ categories:
 
 **示例**
 
-    
+
     void setup() {
        char my_str[] = "Hello";
        Serial.begin(9600);
        Serial.println(my_str);
     }
-    
+
     void loop() {
-    
+
     }
-    
+
 
 
 在这个草图中，编译器计算字符串数组的大小，并自动使用空值0终止字符串。一个长度为六个元素长，由五个字符后跟一个零组成的数组，其创建方式与上一个草图完全相同。
@@ -146,7 +91,7 @@ categories:
 
 
 
-    
+
     void setup() {
        char like[] = "I like coffee and cake"; // create a string
        Serial.begin(9600);
@@ -163,9 +108,9 @@ categories:
        like[21] = 0; // terminate the string
        Serial.println(like);
     }
-    
+
     void loop() {
-    
+
     }
 
 
@@ -175,7 +120,7 @@ categories:
 
 
 
-    
+
     I like coffee and cake
     I like coffee
     I like coffee and tea
@@ -220,30 +165,30 @@ categories:
 
 
 
-    
+
     void setup() {
        char str[] = "This is my string"; // create a string
        char out_str[40]; // output from string functions placed here
        int num; // general purpose integer
        Serial.begin(9600);
-    
+
        // (1) print the string
        Serial.println(str);
-    
+
        // (2) get the length of the string (excludes null terminator)
        num = strlen(str);
        Serial.print("String length is: ");
        Serial.println(num);
-    
+
        // (3) get the length of the array (includes null terminator)
        num = sizeof(str); // sizeof() is not a C string function
        Serial.print("Size of the array: ");
        Serial.println(num);
-    
+
        // (4) copy a string
        strcpy(out_str, str);
        Serial.println(out_str);
-    
+
        // (5) add a string to the end of a string (append)
        strcat(out_str, " sketch.");
        Serial.println(out_str);
@@ -254,9 +199,9 @@ categories:
        Serial.print("Size of the array out_str[]: ");
        Serial.println(num);
     }
-    
+
     void loop() {
-    
+
     }
 
 
@@ -266,7 +211,7 @@ categories:
 
 
 
-    
+
     This is my string
     String length is: 17
     Size of the array: 18
@@ -341,20 +286,6 @@ strcpy()函数用于将str[]字符串复制到out_num[]数组。strcpy()函数�
 
 
 
+## 相关资料
 
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+1. [Arduino教程](https://www.w3cschool.cn/arduino/)

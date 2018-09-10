@@ -4,47 +4,8 @@ toc: true
 date: 2018-06-12 22:17:09
 ---
 
+# 需要补充的
 
-
-## 相关资料
-
-
-
-
-
-
-  1. 《深度学习》Ian Goodfellow
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
-
-
-
-
-# INTRODUCTION
-
-
-
-
-
-
-  * aaa
 
 
 
@@ -873,16 +834,6 @@ et al., 2015) 和 TensorFlow (Abadi et al., 2015) 都能支持重要的研究项
 
 
 
+# 相关资料
 
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- 《深度学习》Ian Goodfellow

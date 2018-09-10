@@ -1,69 +1,11 @@
 ---
-title: 算法：wordpress 代码高亮插件 mikhak syntax highlighter
+title: wordpress 代码高亮插件 mikhak syntax highlighter
 toc: true
 date: 2018-07-27 17:21:32
 ---
----
-author: evo
-comments: true
-date: 2018-03-19 15:03:45+00:00
-layout: post
-link: http://106.15.37.116/2018/03/19/wordpress-mikhak-syntax-highlighter/
-slug: wordpress-mikhak-syntax-highlighter
-title: wordpress 代码高亮插件 mikhak syntax highlighter
-wordpress_id: 433
-categories:
-- 非核心点
-tags:
-- wordpress
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，推荐直接看原文**
 
 
-## 相关资料
-
-
-
-
-
-
-  1. [Google Code Prettify – 程式碼上色工具](http://blog.shihshih.com/google-code-prettify/)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
+# 需要补充的
 
 
 
@@ -83,9 +25,6 @@ tags:
 
 
 # mikhak syntax highlighter 插件存在的问题
-
-
-
 
 ## 在插件的 General 界面设置的 default language 没有作用，并没有切换过去，每次都要手动
 
@@ -134,11 +73,11 @@ tags:
 
 
 
-
-    pre.prettyprint {
-        padding: 2px;
-    }
-
+```css
+pre.prettyprint {
+    padding: 2px;
+}
+```
 
 来解决：
 
@@ -151,22 +90,7 @@ tags:
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+- [Google Code Prettify – 程式碼上色工具](http://blog.shihshih.com/google-code-prettify/)
+ttify/)

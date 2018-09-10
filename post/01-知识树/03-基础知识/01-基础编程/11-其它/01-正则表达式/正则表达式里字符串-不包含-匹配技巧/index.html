@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>正则表达式里字符串 不包含 匹配技巧 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="正则表达式里字符串”不包含”匹配技巧 我使用了文中的方法，把带有 ![mark] 的从我的 ![] 里面排除掉，只保留不是存放在我的七牛上的图片的地址。 经常我们会遇到" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/11-%E5%85%B6%E5%AE%83/01-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E9%87%8C%E5%AD%97%E7%AC%A6%E4%B8%B2-%E4%B8%8D%E5%8C%85%E5%90%AB-%E5%8C%B9%E9%85%8D%E6%8A%80%E5%B7%A7/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="正则表达式里字符串 不包含 匹配技巧" />
+<meta property="og:description" content="正则表达式里字符串”不包含”匹配技巧 我使用了文中的方法，把带有 ![mark] 的从我的 ![] 里面排除掉，只保留不是存放在我的七牛上的图片的地址。 经常我们会遇到" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/11-%E5%85%B6%E5%AE%83/01-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E9%87%8C%E5%AD%97%E7%AC%A6%E4%B8%B2-%E4%B8%8D%E5%8C%85%E5%90%AB-%E5%8C%B9%E9%85%8D%E6%8A%80%E5%B7%A7/" /><meta property="article:published_time" content="2018-08-03T12:43:19&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T12:43:19&#43;00:00"/>
+<meta itemprop="name" content="正则表达式里字符串 不包含 匹配技巧">
+<meta itemprop="description" content="正则表达式里字符串”不包含”匹配技巧 我使用了文中的方法，把带有 ![mark] 的从我的 ![] 里面排除掉，只保留不是存放在我的七牛上的图片的地址。 经常我们会遇到">
+
+
+<meta itemprop="datePublished" content="2018-08-03T12:43:19&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T12:43:19&#43;00:00" />
+<meta itemprop="wordCount" content="935">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="正则表达式里字符串 不包含 匹配技巧"/>
+<meta name="twitter:description" content="正则表达式里字符串”不包含”匹配技巧 我使用了文中的方法，把带有 ![mark] 的从我的 ![] 里面排除掉，只保留不是存放在我的七牛上的图片的地址。 经常我们会遇到"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">正则表达式里字符串 不包含 匹配技巧</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 935 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#正则表达式里字符串-不包含-匹配技巧">正则表达式里字符串”不包含”匹配技巧</a>
+<ul>
+<li>
+<ul>
+<li><a href="#解释">解释</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="正则表达式里字符串-不包含-匹配技巧">正则表达式里字符串”不包含”匹配技巧</h1>
+
+<p>我使用了文中的方法，把带有 ![mark] 的从我的 ![] 里面排除掉，只保留不是存放在我的七牛上的图片的地址。</p>
+
+<p>经常我们会遇到想找出不包含某个字符串的文本，程序员最容易想到的是在正则表达式里使用，<code>^(hede)</code>来过滤”hede”字串，但这种写法是错误的。我们可以这样写：<code>[^hede]</code>，但这样的正则表达式完全是另外一个意思，它的意思是字符串里不能包含‘h’，‘e’，‘d’三个但字符。那什么样的正则表达式能过滤出不包含完整“hello”字串的信息呢？</p>
+
+<p>事实上，说正则表达式里不支持逆向匹配并不是百分之百的正确。就像这个问题，我们就可以使用否定式查找来模拟出逆向匹配，从而解决我们的问题：</p>
+
+<pre><code>^((?!hede).)*$
+</code></pre>
+
+<p>上面这个表达式就能过滤出不包含‘hede’字串的信息。我上面也说了，这种写法并不是正则表达式“擅长”的用法，但它是可以这样用的。</p>
+
+<h3 id="解释">解释</h3>
+
+<p>一个字符串是由n个字符组成的。在每个字符之前和之后，都有一个空字符。这样，一个由n个字符组成的字符串就有n+1个空字符串。我们来看一下“ABhedeCD”这个字符串：</p>
+
+<pre><code>    +--+---+--+---+--+---+--+---+--+---+--+---+--+---+--+---+--+
+S = |e1| A |e2| B |e3| h |e4| e |e5| d |e6| e |e7| C |e8| D |e9|
+    +--+---+--+---+--+---+--+---+--+---+--+---+--+---+--+---+--+
+
+index    0      1      2      3      4      5      6      7
+</code></pre>
+
+<p>所有的e编号的位置都是空字符。表达式<code>(?!hede).</code>会往前查找，看看前面是不是没有“hede”字串，如果没有(是其它字符)，那么<code>.</code>(点号)就会匹配这些其它字符。这种正则表达式的“查找”也叫做“zero-width-assertions”(零宽度断言)，因为它不会捕获任何的字符，只是判断。</p>
+
+<p>在上面的例子里，每个空字符都会检查其前面的字符串是否不是‘hede’，如果不是，这<code>.</code>(点号)就是匹配捕捉这个字符。表达式<code>(?!hede).</code>只执行一次，所以，我们将这个表达式用括号包裹成组(group)，然后用<code>*</code>(星号)修饰——匹配0次或多次：<code>((?!hede).)*</code>。</p>
+
+<p>你可以理解，正则表达式<code>((?!hede).)*</code>匹配字符串<code>&quot;ABhedeCD&quot;</code>的结果false，因为在<code>e3</code>位置，<code>(?!hede)</code>匹配不合格，它之前有<code>&quot;hede&quot;</code>字符串，也就是包含了指定的字符串。</p>
+
+<p>在正则表达式里， <code>?!</code> 是否定式向前查找，它帮我们解决了字符串“不包含”匹配的问题。</p>
+
+<p>[英文原文：<a href="http://stackoverflow.com/questions/406230/regular-expression-to-match-string-not-containing-a-word">Regular expression to match string not containing a word?</a> ]</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%96%B9%E6%B3%95/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92-%E4%BE%8B%E5%AD%901%E6%8B%9F%E5%90%88%E4%B8%80%E4%BA%9B%E6%95%B0%E6%8D%AE%E7%82%B9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">线性回归 例子1：拟合一些数据点</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/04-%E8%B4%9D%E5%8F%B6%E6%96%AF/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF-%E4%BE%8B%E5%AD%902%E4%BD%BF%E7%94%A8%E8%B4%9D%E5%8F%B6%E6%96%AF%E8%BF%87%E6%BB%A4%E5%9E%83%E5%9C%BE%E9%82%AE%E4%BB%B6/">
+            <span class="next-text nav-default">朴素贝叶斯 例子2：使用贝叶斯过滤垃圾邮件</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

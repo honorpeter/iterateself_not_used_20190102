@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>10 用 MXNet 实现一个神经网络 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这部分安装的内容要放到工程实践流程里面。 对于 mxnet 的安装也要放到 mxnet 里面 对于 mxnet 的例子放到 mxnet 里面。 使用 MXNet 实现一个简单的神经网络 用MXNet" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/05-mxnet/10-%E7%94%A8-mxnet-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="10 用 MXNet 实现一个神经网络" />
+<meta property="og:description" content="需要补充的 这部分安装的内容要放到工程实践流程里面。 对于 mxnet 的安装也要放到 mxnet 里面 对于 mxnet 的例子放到 mxnet 里面。 使用 MXNet 实现一个简单的神经网络 用MXNet" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/03-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/05-mxnet/10-%E7%94%A8-mxnet-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" /><meta property="article:published_time" content="2018-08-29T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-29T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="10 用 MXNet 实现一个神经网络">
+<meta itemprop="description" content="需要补充的 这部分安装的内容要放到工程实践流程里面。 对于 mxnet 的安装也要放到 mxnet 里面 对于 mxnet 的例子放到 mxnet 里面。 使用 MXNet 实现一个简单的神经网络 用MXNet">
+
+
+<meta itemprop="datePublished" content="2018-08-29T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-29T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1358">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="10 用 MXNet 实现一个神经网络"/>
+<meta name="twitter:description" content="需要补充的 这部分安装的内容要放到工程实践流程里面。 对于 mxnet 的安装也要放到 mxnet 里面 对于 mxnet 的例子放到 mxnet 里面。 使用 MXNet 实现一个简单的神经网络 用MXNet"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">10 用 MXNet 实现一个神经网络</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-29 </span>
+        
+        <span class="more-meta"> 1358 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#使用-mxnet-实现一个简单的神经网络">使用 MXNet 实现一个简单的神经网络</a>
+<ul>
+<li><a href="#用mxnet实现一个两层神经网络">用MXNet实现一个两层神经网络</a></li>
+<li><a href="#生成我们需要的数据">生成我们需要的数据</a></li>
+<li><a href="#构建网络-训练-对某个值进行预测">构建网络、训练、对某个值进行预测</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>这部分安装的内容要放到工程实践流程里面。</li>
+<li>对于 mxnet 的安装也要放到 mxnet 里面</li>
+<li>对于 mxnet 的例子放到 mxnet 里面。</li>
+</ul>
+
+<h1 id="使用-mxnet-实现一个简单的神经网络">使用 MXNet 实现一个简单的神经网络</h1>
+
+<h2 id="用mxnet实现一个两层神经网络">用MXNet实现一个两层神经网络</h2>
+
+<p>这一节我们用一个Hello World级别的神 经网络小例子带大家一起入门最基本的训练（Training）-预测（Inference）流程，以及 MXNet 这种框架的基本使用。</p>
+
+<p>我们要用到的数据的二维可视化如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/7FFJ7AFIkm.png?imageslim" alt="mark" /></p>
+
+<p>我们将通过 MXNet 的 model 模块搭建一个两层神经网络，网络结构如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/2ba909hiCc.png?imageslim" alt="mark" /></p>
+
+<h2 id="生成我们需要的数据">生成我们需要的数据</h2>
+
+<pre><code class="language-python">import pickle
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+# 划分类别的边界
+def cos_curve(x):
+    return 0.25 * np.sin(2 * x * np.pi + 0.5 * np.pi) + 0.5
+
+
+# samples 保存二维点的坐标，labels 标明类别
+np.random.seed(123)
+samples = []
+labels = []
+
+# 单位样本空间内平均样本数为 50
+sample_density = 50
+for i in range(sample_density):
+    x1, x2 = np.random.random(2)
+    # 计算当前 x1 对应的分类边界
+    bound = cos_curve(x1)
+    # 为了方便可视化，舍弃太靠近边界的样本
+    if bound - 0.1 &lt; x2 &lt;= bound + 0.1:
+        continue
+    else:
+        samples.append((x1, x2))
+        # 上半部分标签为1，下半部分标签为0
+        if x2 &gt; bound:
+            labels.append(1)
+        else:
+            labels.append(0)
+
+# 讲生成的样本和标签保存
+with open('data.pkl', 'wb') as f:
+    pickle.dump((samples, labels), f)
+
+# 可视化
+for i, sample in enumerate(samples):
+    plt.plot(sample[0], sample[1],
+             'o' if labels[i] else '^',
+             mec='r' if labels[i] else 'b',
+             mfc='none',
+             markersize=10)
+
+x1 = np.linspace(0, 1)
+plt.plot(x1, cos_curve(x1), 'k--')
+plt.show()
+</code></pre>
+
+<h2 id="构建网络-训练-对某个值进行预测">构建网络、训练、对某个值进行预测</h2>
+
+<p>完整代码如下：</p>
+
+<pre><code class="language-python">import pickle
+import logging
+import numpy as np
+import mxnet as mx
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Define the network
+# 定义 data
+data = mx.sym.Variable('data')
+# data 经过一个两输出的全连接层
+fc1 = mx.sym.FullyConnected(data=data, name='fc1', num_hidden=2)
+# 再经过一个 sigmoid 激活层
+sigmoid1 = mx.sym.Activation(data=fc1, name='sigmoid1', act_type='sigmoid')
+# 然后再经过一个全连接层
+fc2 = mx.sym.FullyConnected(data=sigmoid1, name='fc2', num_hidden=2)
+# 最后经过 Softmax 输出，SoftmaxOutput 还自带 NLL 作为loss 进行计算
+mlp = mx.sym.SoftmaxOutput(data=fc2, name='softmax')
+
+
+# 网络结构可视化，基于 graphviz
+shape = {'data': (2,)}
+mlp_dot = mx.viz.plot_network(symbol=mlp, shape=shape)
+mlp_dot.render('simple_mlp.gv', view=True)
+
+
+# 接着，我们就开始读取数据来训练这个模型
+# 用 pickle 读取数据
+with open('../data.pkl', 'rb') as f:
+    samples, labels = pickle.load(f)
+
+# 设置 logging 级别，显示训练时候的信息
+logging.getLogger().setLevel(logging.DEBUG)
+
+# 对于这个简单例子，就用全量梯度下降法，整个数据集作为一个 batch
+batch_size = len(labels)
+samples = np.array(samples)
+labels = np.array(labels)
+
+# 生成训练数据迭代器
+train_iter = mx.io.NDArrayIter(samples, labels, batch_size)
+
+# 利用 mxnet.model.FeedForward.create 训练一个网络
+# 迭代 1000 代，学习率 0.1，冲量系数 0.99
+model = mx.model.FeedForward.create(
+    symbol=mlp,
+    X=train_iter,
+    num_epoch=1000,
+    learning_rate=0.1,
+    momentum=0.99)
+
+'''
+# mxnet 也提供先设置好参数，然后通过 fit() 方法进行训练的方式。
+model = mx.model.FeedForward(
+    symbol=mlp,
+    num_epoch=1000,
+    learning_rate=0.1,
+    momentum=0.99)
+model.fit(X=train_iter)
+'''
+
+# 使用训练好的模型对一个点进行预测
+print(model.predict(mx.nd.array([[0.5, 0.5]])))
+
+# 接下来对所有样本和取值范围的平面进行分类，并画出对应的概率可视化的图
+
+# 定义取值范围平面的采样格点，以 0.05 为间隔
+X = np.arange(0, 1.05, 0.05)
+Y = np.arange(0, 1.05, 0.05)
+X, Y = np.meshgrid(X, Y)
+
+# 按照模型可以接受的格式生成每个格点的坐标
+grids = mx.nd.array([[X[i][j], Y[i][j]] for i in range(X.shape[0]) for j in range(X.shape[1])])
+# 获取模型预测的结果，以标签 1 为结果
+grid_probs = model.predict(grids)[:, 1].reshape(X.shape)
+
+# 定义图标
+fig = plt.figure('Sample Surface')
+ax = fig.gca(projection='3d')
+
+# 画出整个结果的表面
+ax.plot_surface(X, Y, grid_probs, alpha=0.15, color='k', rstride=2, cstride=2, lw=0.5)
+
+# 按照标签选出对应的样本
+samples0 = samples[labels==0]
+samples0_probs = model.predict(samples0)[:, 1]
+samples1 = samples[labels==1]
+samples1_probs = model.predict(samples1)[:, 1]
+
+# 按照标签画出散点图，标签为 0 的是红色圆，标签为 1 的是蓝色三角
+ax.scatter(samples0[:, 0], samples0[:, 1], samples0_probs, c='b', marker='^', s=50)
+ax.scatter(samples1[:, 0], samples1[:, 1], samples1_probs, c='r', marker='o', s=50)
+
+plt.show()
+</code></pre>
+
+<p>说明：</p>
+
+<ol>
+<li><p>在执行程序的时候，我们会得到如图7-2所示的结构图。
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/g95g1gk0BC.png?imageslim" alt="mark" /></p></li>
+
+<li><p>我们用的是 mxnet.io.NDArrayIter 来生成一个用于遍历训练数据和对应标签的迭代器，然后用model进行训练。<span style="color:red;">是不是一定要用这个？</span></p></li>
+
+<li><p>训练过程中可以看到实时输出的loss信息，每迭代完一代（epoch）就进行一次重 新设置：</p>
+
+<pre><code>INFO:root:Start training with [cpu (0)]
+INFO:root:Epoch[0] Resetting Data Iterator
+INFO:root:Epoch[0] Time cost=0.007
+INFO:root:Epoch[1] Resetting Data Iterator
+INFO:root:Epoch[1] Time cost=0.002
+</code></pre></li>
+
+<li><p>我们会用训练好的模型对所有样本和取值范围的平面进行分类，并画出对应的三维的概率可视化的图如下：
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/AcJGk9GCl5.png?imageslim" alt="mark" /></p></li>
+</ol>
+
+<p>对于上面的程序有两个地方想知道：<span style="color:red;">SoftmaxOutput 还自带 NLL 作为loss 是什么意思？冲量系数是什么？了解下。</span></p>
+
+<p>注：这只是最简单的例子，目的是帮助了解 MXNet 的基本使用，并没有设置验证/测试集，训练迭代1000次也只是随便定的。7.2 节将用 Caffe 实现这个例子，而更加实际的例子会从第8章开始。<span style="color:red;">嗯。</span></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/03-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8C%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80/05-%E6%95%B0%E6%8D%AE-%E8%AE%AD%E7%BB%83%E7%AD%96%E7%95%A5%E5%92%8C%E8%A7%84%E8%8C%83%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 数据 训练策略和规范化</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/c&#43;&#43;-%E9%A2%98%E7%9B%AE/12-%E5%86%85%E5%AD%98%E7%9A%84%E7%AE%A1%E7%90%86/">
+            <span class="next-text nav-default">12 内存的管理</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

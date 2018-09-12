@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>tensorflow MNIST 入门 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="author: evo comments: true date: 2018-03-25 05:02:21&#43;00:00 layout: post link: http://106.15.37.116/2018/03/25/tensorflow-mnist-easy/ slug: tensorflow-mnist-easy title: wordpress_id: 818 categories: - 机器学习相关工具 tags: - &amp;lsquo;@want_to_know&amp;rsquo; - Tensorflow 缘由： 看了下tensorflow手册，感觉对于MNIST这个例子讲的非常透彻，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/02-tensorflow/tensorflow-mnist-%E5%85%A5%E9%97%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="tensorflow MNIST 入门" />
+<meta property="og:description" content="author: evo comments: true date: 2018-03-25 05:02:21&#43;00:00 layout: post link: http://106.15.37.116/2018/03/25/tensorflow-mnist-easy/ slug: tensorflow-mnist-easy title: wordpress_id: 818 categories: - 机器学习相关工具 tags: - &lsquo;@want_to_know&rsquo; - Tensorflow 缘由： 看了下tensorflow手册，感觉对于MNIST这个例子讲的非常透彻，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/02-tensorflow/tensorflow-mnist-%E5%85%A5%E9%97%A8/" /><meta property="article:published_time" content="2018-07-27T15:10:30&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-27T15:10:30&#43;00:00"/>
+<meta itemprop="name" content="tensorflow MNIST 入门">
+<meta itemprop="description" content="author: evo comments: true date: 2018-03-25 05:02:21&#43;00:00 layout: post link: http://106.15.37.116/2018/03/25/tensorflow-mnist-easy/ slug: tensorflow-mnist-easy title: wordpress_id: 818 categories: - 机器学习相关工具 tags: - &lsquo;@want_to_know&rsquo; - Tensorflow 缘由： 看了下tensorflow手册，感觉对于MNIST这个例子讲的非常透彻，">
+
+
+<meta itemprop="datePublished" content="2018-07-27T15:10:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-27T15:10:30&#43;00:00" />
+<meta itemprop="wordCount" content="5650">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="tensorflow MNIST 入门"/>
+<meta name="twitter:description" content="author: evo comments: true date: 2018-03-25 05:02:21&#43;00:00 layout: post link: http://106.15.37.116/2018/03/25/tensorflow-mnist-easy/ slug: tensorflow-mnist-easy title: wordpress_id: 818 categories: - 机器学习相关工具 tags: - &lsquo;@want_to_know&rsquo; - Tensorflow 缘由： 看了下tensorflow手册，感觉对于MNIST这个例子讲的非常透彻，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">主页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">主页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">tensorflow MNIST 入门</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-27 </span>
+        
+        <span class="more-meta"> 5650 words </span>
+        <span class="more-meta"> 12 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#tensorflow">- Tensorflow</a></li>
+</ul></li>
+<li><a href="#缘由">缘由：</a></li>
+<li><a href="#要点">要点：</a>
+<ul>
+<li><a href="#1-一些说明">1.一些说明</a></li>
+<li><a href="#2-softmax-回归-介绍">2.Softmax 回归 介绍</a></li>
+<li><a href="#3-回归模型的实现">3.回归模型的实现</a></li>
+<li><a href="#5-评估模型-evaluating-our-model">5.评估模型 Evaluating Our Model</a></li>
+</ul></li>
+<li><a href="#完整代码如下">完整代码如下：</a></li>
+<li><a href="#comment">COMMENT：</a>
+<ul>
+<li><a href="#相关资料">相关资料：</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<hr />
+
+<p>author: evo
+comments: true
+date: 2018-03-25 05:02:21+00:00
+layout: post
+link: <a href="http://106.15.37.116/2018/03/25/tensorflow-mnist-easy/">http://106.15.37.116/2018/03/25/tensorflow-mnist-easy/</a>
+slug: tensorflow-mnist-easy
+title:
+wordpress_id: 818
+categories:
+- 机器学习相关工具
+tags:
+- &lsquo;@want_to_know&rsquo;</p>
+
+<h2 id="tensorflow">- Tensorflow</h2>
+
+<!-- more -->
+
+<h1 id="缘由">缘由：</h1>
+
+<p>看了下tensorflow手册，感觉对于MNIST这个例子讲的非常透彻，而且各种变化，因此对这个进行总结标记下。</p>
+
+<h1 id="要点">要点：</h1>
+
+<h2 id="1-一些说明">1.一些说明</h2>
+
+<p>MNIST 是一个入门级的计算机视觉数据集，它包含各种手写数字图片：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/57GgcK9b6D.png?imageslim" alt="mark" /></p>
+
+<p>它也包含每一张图片对应的标签，告诉我们这个是数字几．比如，上面这四张图片的标签分别是 5,0,4,1</p>
+
+<p>这次我们将训练一个机器学习模型用于预测图片里面的数字．主要是介绍下如何使用 TensorFlow 。</p>
+
+<p>先从一个简单的数学模型开始，它叫做 Softmax Regression ．</p>
+
+<p>MNIST 数据集的官网是 <a href="http://yann.lecun.com/exdb/mnist/">Yann LeCun’s website</a> ．在这里，我们提供了一份 python 源
+代码用于自动下载和安装这个数据集．你可以下载这段代码，然后用下面的代码导入到
+你的项目里面，也可以直接复制粘贴到你的代码文件里面．</p>
+
+<pre><code>import tensorflow as tf
+from tensorflow.examples.tutorials.mnist import input_data
+
+# 如果没有数据包，这一行会从网上下载对应的数据包
+mnist = input_data.read_data_sets('MNIST_data/', one_hot=True)
+print(type(mnist))
+print(type(mnist.train))
+print(type(mnist.test))
+print(type(mnist.validation))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>Extracting MNIST_data/train-images-idx3-ubyte.gz
+Extracting MNIST_data/train-labels-idx1-ubyte.gz
+Extracting MNIST_data/t10k-images-idx3-ubyte.gz
+Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
+&lt;class 'tensorflow.contrib.learn.python.learn.datasets.base.Datasets'&gt;
+&lt;class 'tensorflow.contrib.learn.python.learn.datasets.mnist.DataSet'&gt;
+&lt;class 'tensorflow.contrib.learn.python.learn.datasets.mnist.DataSet'&gt;
+&lt;class 'tensorflow.contrib.learn.python.learn.datasets.mnist.DataSet'&gt;
+</code></pre>
+
+<p>上面的代码会检查MNIST_data文件夹里面有没有需要的数据，如过没有，会自动将需要用到的数据下载到MNIST_data文件夹里面，然后读入到mnist里面，所以下载下来的包不用你手动解压。</p>
+
+<p>下载下来的数据集可被分为三部分：</p>
+
+<ul>
+<li><p>55000 行训练用点数据集（ mnist.train ）</p></li>
+
+<li><p>10000行测试数据集 ( mnist.test )</p></li>
+
+<li><p>5000 行验证数据集（ mnist.validation ）<strong>为什么有了测试之后还要有验证呢？</strong></p></li>
+</ul>
+
+<p>这样的切分很重要：在机器学习模型设计时必须有一个单独的测试数据集不用于训练而是用来评
+估这个模型的性能，从而更加容易把设计的模型推广到其他数据集上（泛化）。</p>
+
+<p>正如前面提到的一样，每一个 MNIST 数据单元有两部分组成：一张包含手写数字的图片和一个对应的标签．我们把这些图片设为“ xs ”，把这些标签设为“ ys ”．训练数据集和测试数据集都包含 xs 和 ys ，比如训练数据集的图片是 mnist.train.images ，训练数据集的标签是 mnist.train.labels ．</p>
+
+<p>每一张图片包含 28×28 像素．我们可以用一个数字数组来表示这张图片：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Fd962eh5d9.png?imageslim" alt="mark" /></p>
+
+<p>我们把这个数组展开成一个向量，长度是 28×28=784 ．如何展开这个数组（数字间的顺序）不重要，只要保持各个图片采用相同的方式展开．从这个角度来看， MNIST数据集的图片就是在 784 维向量空间里面的点 , 并且拥有比较复杂的结构 ( 注意 : 此类数据的可视化是计算密集型的 ) ．（<strong>什么意思？什么是可视化是计算密集型的？</strong>）</p>
+
+<p>展平图片的数字数组会丢失图片的二维结构信息．这显然是不理想的，最优秀的计算机视觉方法会挖掘并利用这些结构信息，我们会在后续教程中介绍．但是在这个教程中我们忽略这些结构，所介绍的简单数学模型， softmax 回归 (softmax regression) ，不会利用这些结构信息．（<strong>优秀的计算机视觉方法？CNN吗？ 还有别的吗？softmax回归到底是什么？</strong>）</p>
+
+<p>因此，在 MNIST 训练数据集中， mnist.train.images 是一个形状为 [55000, 784] 的张量，第一个维度数字用来索引图片，第二个维度数字用来索引每张图片中的像素点．在此张量里的每一个元素，都表示某张图片里的某个像素的强度值，值介于 0 和 1 之间．（<strong>之所以是55000行784列，而不是反过来，是因为每一列都是对应一个特征，每一行都是一个样本</strong>）</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eDd4kjfidJ.png?imageslim" alt="mark" /></p>
+
+<p>相对应的 MNIST 数据集的标签是介于 0 到 9 的数字，用来描述给定图片里表示的数字．为了用于这个教程，我们使标签数据是 &ldquo;one-hot vectors&rdquo; ．<strong>一个 one-hot 向量除了某一位的数字是 1 以外其余各维度数字都是 0</strong> ．所以在此教程中，数字 n 将表示成一个只有在第 n 维度（从 0 开始）数字为 1 的 10 维向量．比如，标签 0 将表示成( [1,0,0,0,0,0,0,0,0,0,0] ) ．因此， mnist.train.labels 是一个[55000, 10] 的数字矩阵．（<strong>原来这个就是one-hot，之前看到过，但是又忘记了，然后对这个一直有疑问，是的，labels是一个55000*10的矩阵</strong>）</p>
+
+<h2 id="2-softmax-回归-介绍">2.Softmax 回归 介绍</h2>
+
+<p>我们知道 MNIST 数据集的每一张图片都表示一个 (0 到 9 的 ) 数字．那么，<strong>如果模型能看到一张图就能知道它属于各个数字的对应概率就好了。</strong>比如，我们的模型可能看到一张数字 &ldquo;9&rdquo; 的图片，就判断出它是数字 &ldquo;9&rdquo; 的概率为 80% ，而有 5% 的概率属于数字 &ldquo;8&rdquo; （因为 8 和 9 都有上半部分的小圆），同时给予其他数字对应的小概率（因为该图像代表它们的可能性微乎其微）．</p>
+
+<p>这是能够体现 softmax 回归自然简约的一个典型案例． <strong>softmax 模型可以用来给不同的对象分配概率．</strong>在后文，我们训练更加复杂的模型时，最后一步也往往需要用softmax 来分配概率．</p>
+
+<p>softmax 回归（ softmax regression ）分两步：首先对输入被分类对象属于某个类的<strong>“证据”相加求和</strong>，然后将这个<strong>“证据”的和转化为概率。</strong>（<strong>什么叫证据的和转化为概率？</strong>）</p>
+
+<p>我们使用加权的方法来累积计算一张图片是否属于某类的“证据”。如果图片的像素强有力的体现该图不属于某个类，则权重为负数，相反如果这个像素拥有有利的证据支持这张图片属于这个类，那么权值为正．</p>
+
+<p>下面的图片显示了一个模型学习到的图片上每个像素对于特定数字类的权值．红色代表负权值，蓝色代表正权值．（<strong>没想到这个都可以弄出来，怎么做到的？</strong>）</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/k0mKI98Db0.png?imageslim" alt="mark" /></p>
+
+<p>我们也需要引入额外的“证据”，可称之为偏置量 (bias ）。总的来说，我们希望它代表了与所输入向无关的判断证据．因此对于给定的输入图片 x 代表某数字 i 的总体证据可以表示为：
+[mathjax]
+[evidence<em>{i}=\sum</em>{j}^{ }W_{i,j}x_j+b_i]</p>
+
+<p>其中， (W_i)代表权重， (b_i)代表第 i 类的偏置量， j 代表给定图片 x 的像素索引用于像素求
+和．然后用 softmax 函数可以把这些证据转换成概率 y:
+[y=softmax(evidence)]</p>
+
+<p>这里的 softmax 可以看成是一个激励（ activation ）函数或是链接（ link ）函数，把我们定
+义的线性函数的输出转换成我们想要的格式，也就是关于 10 个数字类的概率分布．因
+此，给定一张图片，它对于每一个数字的吻合度可以被 softmax 函数转换成为一个概率
+值． softmax 函数可以定义为：（<strong>为什么这个是这样的？exp(x)？</strong>）
+[softmax(x)=normalize(exp(x))]</p>
+
+<p>展开等式右边的子式，可以得到：（<strong>为什么展开会得到这个？</strong>）
+[softmax(x)_i=\frac{exp(x<em>i)}{\sum</em>{j}^{ } exp(x_j)}]</p>
+
+<p>但是更多的时候把 softmax 模型函数定义为第一种形式：把输入值当成幂指数求值，再正则化这些结果值．这个幂运算表示，更大的证据对应更大的假设模型（ hypothesis ）里面的乘数权重值．反之，拥有更少的证据意味着在假设模型里面拥有更小的乘数系数．假设模型里的权值不可以是 0 值或者负值． Softmax 然后会正则化这些权重值，使它们的总和等于 1 ，以此构造一个有效的概率分布．（更多的关于 Softmax 函数的信息，可以参考 Michael Nieslen 的书里面的<a href="http://neuralnetworksanddeeplearning.com/chap3.html#softmax">这个部分</a>，其中有关于softmax 的可交互式的可视化解释．）（<strong>还是没明白这段？</strong>）</p>
+
+<p>对于 softmax 回归模型可以用下面的图解释，对于输入的 xs 加权求和，再分别加上一个
+偏置量，最后再输入到 softmax 函数中：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/71J6lcmfBh.png?imageslim" alt="mark" /></p>
+
+<p>如果把它写成一个方程，可以得到：（为什么得到的是这样的形式？(W_{1,1})是什么？）</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ecmL9BIm34.png?imageslim" alt="mark" /></p>
+
+<p>我们也可以用向量表示这个计算过程：用矩阵乘法和向量相加．这有助于提高计算效率（也是一种更有效的思考方式）．</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aKi4E234JJ.png?imageslim" alt="mark" /></p>
+
+<p>更进一步，可以写成更加紧凑的方式：
+[y=softmax(W_{k}+b)]</p>
+
+<h2 id="3-回归模型的实现">3.回归模型的实现</h2>
+
+<p>为了在 python 中高效的进行数值计算，我们通常会调用（如 NumPy ）外部函数库，把类似矩阵乘法这样的复杂运算使用其他外部语言实现．不幸的是，从外部计算切换回Python 的每一个操作，仍然是一个很大的开销．如果你用 GPU 来进行外部计算，这样的开销会更大．用分布式的计算方式，也会花费更多的资源用来传输数据．</p>
+
+<p>TensorFlow 也把复杂的计算放在 python 之外完成，但是为了避免前面说的那些开销，它做了进一步完善． TensorFlow 不单独地运行单一的复杂计算，而是让我们可以先用图描述一系列可交互的计算操作，然后全部一起在 Python 之外运行．（这样类似的运行方式，可以在不少的机器学习库中看到．）（<strong>先用图描述一系列可交互的计算操作，然后全部一起放在python之外运行，底层是怎么实现的？</strong>）</p>
+
+<p>我们通过操作符号变量来描述这些可交互的操作单元，可以用下面的方式创建一个：</p>
+
+<p><em>x = tf.placeholder(&ldquo;float&rdquo;, [None, 784])</em></p>
+
+<p>x 不是一个特定的值，而是一个占位符 placeholder ，我们在 TensorFlow 运行计算时输入这个值．我们希望能够输入任意数量的 MNIST 图像，每一张图展平成 784 维的向量．我们用 2 维的浮点数张量来表示这些图，这个张量的形状是 [None ， 784] ．（<strong>这里的 None 表示此张量的第一个维度可以是任何长度的</strong>．<strong>虽然 placeholder 的 shape 参数是可选的，但有了它， TensorFlow 能够自动捕捉因数据维度不一致导致的错误。</strong>）</p>
+
+<p>我们的模型也需要权重值和偏置量，当然我们可以把它们当做是另外的输入（使用占位符），但 TensorFlow 有一个更好的方法来表示它们： Variable ．<strong>一个 Variable 代表一个可修改的张量，存在在 TensorFlow 的用于描述交互性操作的图中．它们可以用于计算输入值，也可以在计算中被修改．</strong>对于各种机器学习应用，一般都会有模型参数，可以用 Variable 表示．（<strong>一个Variable代表一个可修改的张量吗？</strong>）</p>
+
+<p><em>W = tf.Variable(tf.zeros([784,10]))</em>
+<em>b = tf.Variable(tf.zeros([10]))</em></p>
+
+<p>我们赋予 tf.Variable 不同的初值来创建不同的 Variable ：在这里，我们都用全为零的张量来初始化 W 和 b ．因为我们要学习 W 和 b 的值，它们的初值可以随意设置。</p>
+
+<p><strong>注意， W 的维度是 [784，10] ，因为我们想要用 784 维的图片向量乘以它以得到一个10 维的证据值向量，每一位对应不同数字类。b 的形状是 [10] ，所以我们可以直接把它加到输出上面。是的。</strong></p>
+
+<p>现在，可以实现我们的模型了，只需以下一行代码：</p>
+
+<p>_ y = tf.nn.softmax(tf.matmul(x,W) + b)_</p>
+
+<p>首先，我们用 tf.matmul(X，W) 表示 x 乘以 W ，对应之前等式里面的(W_x)，这里 x 是
+一个 2 维张量拥有多个输入．然后再加上 b ，把和输入到 tf.nn.softmax 函数里面。</p>
+
+<p>至此，我们先用了几行简短的代码来设置变量，然后只用了一行代码来定义我们的模型． TensorFlow 不仅仅可以使 softmax 回归模型计算变得特别简单，它也用这种非常灵活的方式来描述其他各种数值计算，从机器学习模型对物理学模拟仿真模型．一旦被定义好之后，我们的模型就可以在不同的设备上运行：计算机的 CPU ， GPU ，甚至是手机！</p>
+
+<p>4.训练模型</p>
+
+<p>为了训练我们的模型，我们首先需要定义一个指标来评估这个模型是好的．其实，在机器学习，我们通常定义指标来表示一个模型是坏的，这个指标称为成本（ cost ）或损失（ loss ），然后尽量最小化这个指标．但是，这两种方式是相同的。</p>
+
+<p>一个非常常见的，非常漂亮的成本函数是“交叉熵” (cross-entropy) ．交叉熵产生于信息论里面的信息压缩编码技术，但是它后来演变成为从博弈论到机器学习等其他领域里的重要技术手段．它的定义如下：（<strong>为什么是这样的？</strong>）</p>
+
+<p>[
+H<em>{y&rsquo;}(y)=-\sum</em>{i}^{ } y_i&rsquo;log(y_i)
+]
+y 是我们预测的概率分布 ,y ′ 是实际的分布（我们输入的 one-hot vector) ．比较粗糙的理解是，交叉熵是用来衡量我们的预测用于描述真相的低效性．更详细的关于交叉熵的解释超出本教程的范畴，但是你很有必要好好理解它．（<strong>怎么理解交叉熵？需要学习下</strong>）</p>
+
+<p>为了计算交叉熵，我们首先需要添加一个新的占位符用于输入正确值：</p>
+
+<p><em>y=tf.placeholder(tf.float32,[None,10])</em></p>
+
+<p>然后我们可以使用(-\sum_{ }^{ }y&rsquo;log(y))来计算交叉熵：（<strong>为什么这么计算？</strong>）</p>
+
+<p>_cross_entropy=-tf.reduce<em>sum(y</em>*tf.log(y))_</p>
+
+<p>首先，用 tf.log 计算 y 的每个元素的对数．接下来，我们把 y_ 的每一个元素和 tf.log(y_) 的对应元素相乘．最后，用 tf.reduce_sum 计算张量的所有元素的总和．</p>
+
+<p><strong>注</strong><strong>意， tf.reduce_sum 把 minibatch 里的每张图片的交叉熵值都加起来了。我们计算的交叉熵是指整个 minibatch 的。</strong>（<strong>为什么是reduce_sum？与之前python里面的reduce又什么关联？</strong>）</p>
+
+<p>值得注意的是，这里的交叉熵不仅仅用来衡量单一的一对预测和真实值，而是所有100 幅图片的交叉熵的总和．对于 100 个数据点的预测表现比单一数据点的表现能更好地描述我们的模型的性能．</p>
+
+<p>现在我们知道我们需要我们的模型做什么啦，用 TensorFlow 来训练它是非常容易的．因为 TensorFlow 拥有一张描述你各个计算单元的图，它可以自动地使用反向传播算法 (backpropagation algorithm) 来有效地确定你的变量是如何影响你想要最小化的那个成本值的．然后， TensorFlow 会用你选择的优化算法来不断地修改变量以降低成本．（<strong>反向传播算法用代码是怎么实现的？</strong>）</p>
+
+<p>_train_step=tf.train.GradientDescentOptimizer(0.01).minimize(cross<em>entropy)</em></p>
+
+<p>在这里，我们要求 TensorFlow 用梯度下降算法（ gradient descent algorithm ）以 0.01的学习速率最小化交叉熵．梯度下降算法（ gradient descent algorithm ）是一个简单的学习过程， TensorFlow 只需将每个变量一点点地往使成本不断降低的方向移动．当然TensorFlow 也提供了其他许多优化算法：只要简单地调整一行代码就可以使用其他的算法．（<strong>学习率是什么？0.01是大是小？</strong>）</p>
+
+<p>TensorFlow 在这里实际上所做的是，它会在后台给描述你的计算的那张图里面增加一系列新的计算操作单元用于实现反向传播算法和梯度下降算法．然后，它返回给你的只是一个单一的操作，当运行这个操作时，它用梯度下降算法训练你的模型，微调你的变量，不断减少成本．</p>
+
+<p>现在，我们已经设置好了我们的模型．在运行计算之前，我们需要添加一个操作来
+初始化我们创建的变量：</p>
+
+<p>_init = tf.initialize_all<em>variables()</em></p>
+
+<p>现在我们可以在一个 Session 里面启动我们的模型，并且初始化变量：</p>
+
+<p><em>sess = tf.Session()</em>
+<em>sess.run(init)</em></p>
+
+<p>然后开始训练模型，这里我们让模型循环训练 1000 次！</p>
+
+<p>_ for i in range(1000):_
+_    batch_xs, batch_ys = mnist.train.next<em>batch(100)</em>
+_    sess.run(train_step, feed_dict={x: batch<em>xs, y</em>: batch<em>ys})</em></p>
+
+<p>该循环的每个步骤中，我们都会随机抓取训练数据中的 100 个批处理数据点，然后
+我们用这些数据点作为参数替换之前的占位符来运行 train_step ．(<strong>嗯，不错，批量训练还是厉害的</strong>）</p>
+
+<p>使用一小部分的随机数据来进行训练被称为随机训练 (stochastic training)&mdash; 在这里更确切的说是随机梯度下降训练．理想情况下，我们希望用我们所有的数据来进行每一步的训练，因为这能给我们更好的训练结果，但显然这需要很大的计算开销．所以，每一次训练我们可以使用不同的数据子集，这样做既可以减少计算开销，又可以最大化地学习到数据集的总体特性．</p>
+
+<h2 id="5-评估模型-evaluating-our-model">5.评估模型 Evaluating Our Model</h2>
+
+<p>那么我们的模型性能如何呢？</p>
+
+<p>首先让我们找出那些预测正确的标签． tf.argmax() 是一个非常有用的函数，它能给你在一个张量里沿着某条轴的最高条目的索引值．比如， tf.argmax(y,1) 是模型认为每个输入最有可能对应的那些标签，而 tf.argmax(y_,1) 代表正确的标签．我们可以用 tf.equal来检测我们的预测是否真实标签匹配。（<strong>厉害，原来tf.argmax是用在这个地方的，的确用的好</strong>）</p>
+
+<p>_correct<em>prediction = tf.equal(tf.argmax(y,1), tf.argmax(y</em>,1))_</p>
+
+<p>这行代码会给我们一组布尔值．为了确定正确预测项的比例，我们可以把布尔值转换成浮点数，然后取平均值．例如， [True, False, True, True] 会变成 [1,0,1,1] ，取平均值后得到 0.75 .</p>
+
+<p>_accuracy = tf.reduce_mean(tf.cast(correct<em>prediction, &ldquo;float&rdquo;))</em></p>
+
+<p>最后，我们计算所学习到的模型在测试数据集上面的正确率．</p>
+
+<p>_print sess.run(accuracy, feed<em>dict={x: mnist.test.images, y</em>: mnist.test.labels})_</p>
+
+<p>最终结果值应该大约是 91%</p>
+
+<p>这个结果好吗？嗯，并不太好．事实上，这个结果是很差的．这是因为我们仅仅使用了一个非常简单的模型．不过，做一些小小的改进，我们就可以得到 97% 的正确率．最好的模型甚至可以获得超过 99.7% 的准确率！<a href="http://rodrigob.github.io/are_we_there_yet/build/classification_datasets_results.html">这里有统计</a>。（<strong>99.7是怎么做的？</strong>）</p>
+
+<p>比结果更重要的是，我们从这个模型中学习到的设计思想．不过，如果你仍然对这里的结果有点失望，可以查看下个教程，在那里你将学到如何用 FensorFlow 构建更加复杂的模型以获得更好的性能！</p>
+
+<h1 id="完整代码如下">完整代码如下：</h1>
+
+<p><strong>后续补充</strong></p>
+
+<h1 id="comment">COMMENT：</h1>
+
+<p><strong>还是又很多东西不明白，不明确的，要补充下</strong></p>
+
+<h2 id="相关资料">相关资料：</h2>
+
+<ol>
+<li>tensorflow中文手册</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法：二叉搜索树的后序遍历序列</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/06-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0/01-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E4%BB%8B%E7%BB%8D/02-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0%E7%9A%84%E7%A0%94%E7%A9%B6%E9%A2%86%E5%9F%9F/">
+            <span class="next-text nav-default">02 迁移学习的研究领域</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

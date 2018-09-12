@@ -3,8 +3,6 @@ title: OCR 方法介绍
 toc: true
 date: 2018-09-02
 ---
-
-
 # 需要补充的
 
 一般 OCR 步骤是这样的

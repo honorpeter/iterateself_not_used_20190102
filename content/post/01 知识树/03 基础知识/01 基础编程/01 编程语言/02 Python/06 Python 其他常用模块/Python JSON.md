@@ -5,10 +5,14 @@ date: 2018-06-22 22:20:02
 ---
 
 
-## 需要补充的
+# 需要补充的
+
 - 最好都介绍下，不仅仅是 Json
+- 常用的用法也要整理下。
 
+# Json
 
+Json 在传输数据的时候，或者使用不同的语言之间来传输数据的时候经常会用到。因此还是要好好整理下的。常用的用法也要整理下。
 
 # Json 的编码解码
 
@@ -125,6 +129,8 @@ Python 可以使用 demjson.decode() 函数解码 JSON 数据。该函数返回 
     {u'a': 1, u'c': 3, u'b': 2, u'e': 5, u'd': 4}
 
 
-## 相关资料
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
+# 相关资料
+
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
+- [Python JSON](http://www.runoob.com/python/python-json.html)

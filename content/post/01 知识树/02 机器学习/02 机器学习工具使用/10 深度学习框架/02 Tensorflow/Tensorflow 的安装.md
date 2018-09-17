@@ -57,3 +57,6 @@ print(sess.run(a + b))
 
 
 
+## 相关资料
+
+- [TensorFlow在windows 下的安装](https://blog.csdn.net/lxy_2011/article/details/79181990)

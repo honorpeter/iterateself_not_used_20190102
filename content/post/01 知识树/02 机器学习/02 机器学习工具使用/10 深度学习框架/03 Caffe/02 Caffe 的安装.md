@@ -17,6 +17,9 @@ date: 2018-09-01
 
 # Caffe 的安装
 
+
+[caffe](https://github.com/BVLC/caffe/tree/windows)
+
 <span style="color:red;">**注意**：在安装之前，先看下 “00 基本环境” 文件夹中的系统基础要装的东西是否已经安装好了。</span>
 
 
@@ -86,3 +89,11 @@ export PYTHONPATH=$PYTHONPATH=:/path/to/caffe/python
 
 - 《深度学习与计算机视觉》
 - 七月在线 深度学习
+- [转 Windows+VS2013爆详细Caffe编译安装教程](https://www.cnblogs.com/love6tao/p/5706830.html)
+- [【Caffe】Windows下caffe安装详解](https://blog.csdn.net/summer_and_opencv/article/details/76639496)
+- [win10+VS2015+CPU-Only安装与配置Caffe以及python接口（大坑）](https://blog.csdn.net/qq_26591517/article/details/79440887)
+- [win10+VS2015+CPU-Only安装与配置Caffe](https://blog.csdn.net/qxconverse/article/details/76376718)
+- [windows7 + Python3.5 + caffe](https://www.jianshu.com/p/ea7dd8ba15d2)
+- [Windows 10 & Visual Studio 2015 配置 Caffe](https://blog.csdn.net/qust_waiwai/article/details/54868919)
+- [实践详细篇-Windows下使用VS2015编译安装Caffe环境(CPU ONLY)](https://www.cnblogs.com/david97/p/8949713.html)
+- [windows安装caffe 新](http://www.th7.cn/system/win/201707/219096.shtml)

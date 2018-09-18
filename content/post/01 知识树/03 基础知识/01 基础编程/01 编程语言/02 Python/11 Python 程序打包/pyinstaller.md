@@ -1,5 +1,9 @@
 
 
+
+`pyinstaller -F -w -i 1003.ico cutimage.py`
+
+
 这个是用 pyinstaller 来打包的
 
 在 Anaconda 环境下使用这个来打包遇到很多问题。

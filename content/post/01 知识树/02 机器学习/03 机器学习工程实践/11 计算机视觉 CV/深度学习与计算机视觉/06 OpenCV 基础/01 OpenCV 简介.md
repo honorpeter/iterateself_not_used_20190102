@@ -12,73 +12,58 @@ date: 2018-08-29
 - <span style="color:red;">这部分暂时还没有进行整理，对于 OpenCV 的使用我其实有一些了解，因此这部分在整合 OpenCV 相关的时候整理进去。</span>
 - 相关代码在 github 上是有的 https://github.com/frombeijingwithlove/dlcv_for_beginners
 
-在深度学习大行其道之前，提到计算机视觉的工具和框架，大多数人一定会最先想到 OpenCV。因为其丰富的接口，优秀的性能，商业友好的属性，OpenCV至今仍然是最流行 的计算机视觉库，并在各个计算机视觉领域发挥着巨大的作用。
+在深度学习大行其道之前，提到计算机视觉的工具和框架，大多数人一定会最先想到 OpenCV。因为其丰富的接口，优秀的性能，商业友好的属性，OpenCV 至今仍然是最流行的计算机视觉库，并在各个计算机视觉领域发挥着巨大的作用。
 
-本章将介绍OpenCV的基本知识，以及Python下OpenCV的基础使用，并完成4个有 趣且实用的小例子。
+本章将介绍 OpenCV 的基本知识，以及 Python 下 OpenCV 的基础使用，并完成 4 个有趣且实用的小例子。
 
-延时摄影小程序。
+- 延时摄影小程序。
+- 视频中截屏采样的小程序。
+- 图片数据增加（dataaugmentation）的小工具。
+- 物体检测框标注小工具。
 
-视频中截屏采样的小程序。
 
-图片数据增加（dataaugmentation）的小工具。
+# OpenCV 简介
 
-物体检测框标注小工具。
+OpenCV 的起源和发展历史已经在第1章中介绍过了，本节主要介绍 OpenCV 的常见 模块和结构。
 
-其中，后两个例子的代码可以在 <https://github.com/frombeijingwithlove/dlcv_for_> beginners上直接下载。
+### OpenCV 的结构
 
-6.1 OpenCV 简介
-
-OpenCV的起源和发展历史已经在第1章中介绍过了，本节主要介绍OpenCV的常见 模块和结构。
-
-6.1.1 OpenCV 的结构
-
-和Python—样，当前的OpenCV也有两个大版本，即OpenCV 2和OpenCV 3。相比 OpenCV 2, OpenCV 3提供了更强的功能和更多方便的特性。不过考虑到和深度学习框架 的兼容性，以及上手安装的难度，本节先以OpenCV 2为主进行介绍。
+和 Python 一样，当前的 OpenCV 也有两个大版本，即 OpenCV 2 和 OpenCV 3。相比 OpenCV 2, OpenCV 3 提供了更强的功能和更多方便的特性。不过考虑到和深度学习框架 的兼容性，以及上手安装的难度，本节先以 OpenCV 2 为主进行介绍。
 
 根据功能和需求的不同，OpenCV中的函数接口大体可以分为如下几部分。
 
-□    core：核心模块，主要包含了 OpenCV中最基本的结构（矩阵、点线和形状等）， 以及相关的基础运算/操作。
+如果不考虑视频应用，下面 3 部分就是最核心和常用的模块了：
 
-□    imgproc：图像处理模块，包含和图像相关的基础功能（滤波、梯度、改变大小等）， 以及一些衍生的高级功能（图像分割、直方图、形态分析和边缘/直线提取等）。
+- core：核心模块，主要包含了 OpenCV 中最基本的结构（矩阵、点线和形状等），以及相关的基础运算/操作。
+- imgproc：图像处理模块，包含和图像相关的基础功能（滤波、梯度、改变大小等），以及一些衍生的高级功能（图像分割、直方图、形态分析和边缘/直线提取等）。
+- highgui：提供了用户界面和文件读取的基本函数，比如图像显示窗口的生成和控制，图像/视频文件的 IO 等。<span style="color:red;">图像显示窗口是不是就是 imgshow 对应的窗口？这个 highgui 里面还有别的功能吗？</span>
 
-□    highgui：提供了用户界面和文件读取的基本函数，比如图像显示窗口的生成和控 制，图像/视频文件的IO等。
 
-如果不考虑视频应用，以上3部分就是最核心和常用的模块了。针对视频和一些特别 的视觉应用，OpenCV也提供了如下强劲的支持。
+针对视频和一些特别的视觉应用，OpenCV 也提供了如下强劲的支持：
 
-□    video：用于视频分析的常用功能，比如光流法（Optical Flow）和目标跟踪等。
+- video：用于视频分析的常用功能，比如光流法（Optical Flow）和目标跟踪等。<span style="color:red;">突然想到了，光流法在那种摄像头震动的情况下可以用于预处理视频吗？ 这个 video 里面还有别的功能吗？</span>
+- calib3d：三维重建、立体视觉和相机标定等相关功能。<span style="color:red;">这个还是要会的，立体视觉还是很重要的。三维重建什么的这个是 SLAM 的基础吧。</span>
+- features2d：二维特征相关的功能，主要是一些不受专利保护的、商业友好的特征点检测和匹配等功能，比如 ORB 特征。<span style="color:red;">特征点检测和匹配是什么？有受专利保护的功能吗？</span>
+- object：目标检测模块，包含级联分类和 Latent SVM。<span style="color:red;">竟然有目标检测算法，要总结下，而且级联分类是什么？Latent SVM 是什么？</span>
+- ml：机器学习算法模块，包含一些视觉中最常用的传统机器学习算法。<span style="color:red;">这个也要总结进来</span>
+- flann：最近邻算法库，Fast Library for Approximate Nearest Neighbors，用于在多维空间进行聚类和检索，经常和关键点匹配搭配使用。<span style="color:red;">为什么最近邻算法单独拿出来了？怎么与关键点匹配搭配使用的？</span>
+- gpu：包含了一些 gpu 加速的接口，底层的加速是 CUDA 实现。<span style="color:red;">这些 gpu 加速的，之前好像从来没有接触过，要怎么用？怎么加速的？在什么情况下使用？</span>
+- photo：计算摄像学(Computational Photography)相关的接口，当然这只是个名字，其实只有图像修复和降噪而已。<span style="color:red;">不知道现在有什么？这个图像修复和降噪是什么？与 imgproc 有重复吗？</span>
+- stitching：图像拼接模块，有了它可以自己生成全景照片。<span style="color:red;">竟然把图像拼接也单独拿出来了。</span>
+- nonfree：受到专利保护的一些算法，其实就是 SIFT 和 SURF 。<span style="color:red;">嗯，对于 SIFT 和 SURF 在真实项目中的使用还是需要补充的。什么项目会使用这个呢？</span>
+- contrib： 一些实验性质的算法，考虑在未来版本中加入。<span style="color:red;">这个里面有什么？</span>
+- legacy：字面是遗产，意思就是废弃的一些接口，将其保留下来是考虑到向下兼容。
+- ocl：利用 OpenCL 并行加速的一些接口。<span style="color:red;">怎么利用 OpenCL 加速并行的？为什么会加速并行？什么情况下使用这个？</span>
+- superres：超分辨率模块，其实就是 BTV-L1 (Biliteral Total Variation - LI regularization)算法。<span style="color:red;">超分辨率是用来干什么的？超分辨率重建吗？BTV-L1 是什么？</span>
+- viz：基础的3D渲染模块，其实底层就是著名的 3D 工具包 VTK (Visualization Toolkit)。<span style="color:red;">这个是用来做什么的？VTK 是通用的 3D 工具包吗？之前好像在医学方面听说过 ITK VTK ，我之前以为这些就是在医学方面才使用的。</span>
 
-□    calib3d：三维重建、立体视觉和相机标定等相关功能。
+从使用的角度来看，和 OpenCV2 相比，OpenCV3 的主要变化是更多的功能和更细化的模块划分。
 
-□    features2d：二维特征相关的功能，主要是一些不受专利保护的、商业友好的特征 点检测和匹配等功能，比如ORB特征。
+<span style="color:red;">嗯，要好好总结下。</span>
 
-□    object：目标检测模块，包含级联分类和Latent SVM。
+## 安装和使用OpenCV
 
-□    ml：机器学习算法模块，包含一些视觉中最常用的传统机器学习算法。
-
-口 flann：最近邻算法库，Fast Library for Approximate Nearest Neighbors,用于在多维 空间进行聚类和检索，经常和关键点匹配搭配使用。
-
-□    gpu:包含了一些gpu加速的接口，底层的加速是CUDA实现。
-
-□    photo：计算摄像学(Computational Photography)相关的接口，当然这只是个名字， 其实只有图像修复和降噪而已。
-
-□    stitching：图像拼接模块，有了它可以自己生成全景照片。
-
-□    nonfree：受到专利保护的一些算法，其实就是SIFT和SURF。
-
-□    contrib： 一些实验性质的算法，考虑在未来版本中加入。
-
-□    legacy：字面是遗产，意思就是废弃的一些接口，将其保留下来是考虑到向下兼容。
-
-□    ocl:利用OpenCL并行加速的一些接口。
-
-□    superres:超分辨率模块，其实就是 BTV-L1 (Biliteral Total Variation - LI regularization)算法。
-
-□    viz:基础的3D渲染模块，其实底层就是著名的3D工具包VTK (Visualization Toolkit)。
-
-从使用的角度来看，和OpenCV2相比，OpenCV 3的主要变化是更多的功能和更细化 的模块划分。
-
-6.1.2安装和使用OpenCV
-
-作为最流行的视觉包，在Linux中安装OpenCV是非常方便的，大多数Linux的发行 版都支持包管理器的安装，比如在Ubuntu 16.04 LTS中，只需要在终端中输入：
+作为最流行的视觉包，在 Linux 中安装 OpenCV 是非常方便的，大多数 Linux 的发行 版都支持包管理器的安装，比如在 Ubuntu 16.04 LTS 中，只需要在终端中输入：
 
 » sudo apt install libopencv-dev python-opencv
 

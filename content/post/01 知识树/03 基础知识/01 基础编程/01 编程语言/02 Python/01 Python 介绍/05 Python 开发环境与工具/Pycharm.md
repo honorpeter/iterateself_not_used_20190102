@@ -1,5 +1,5 @@
 ---
-title: Python 工具 Pycharm
+title: Pycharm
 toc: true
 date: 2018-06-11 08:14:44
 ---
@@ -37,3 +37,4 @@ PyCharm 官方下载地址：[http://www.jetbrains.com/pycharm/download/](https:
 
 - [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
 - [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
+torial.html)

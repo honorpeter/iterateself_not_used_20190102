@@ -3,72 +3,17 @@ title: Python 工具 Pycharm
 toc: true
 date: 2018-06-11 08:14:44
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 10:43:25+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-pycharm/
-slug: python-pycharm
-title: Python Pycharm
-wordpress_id: 5023
-categories:
-- 随想与反思
----
-
-<!-- more -->
-
-[mathjax]
 
 
-## 相关资料ERENCE
+
+
+# 需要补充的
 
 
 
 
 
- 	
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
- 	
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-
-
-
-
-## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
-
-
-
-
-
-
-## PyCharm
+# PyCharm
 
 
 PyCharm是由JetBrains打造的一款Python IDE。
@@ -88,30 +33,7 @@ PyCharm 官方下载地址：[http://www.jetbrains.com/pycharm/download/](https:
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

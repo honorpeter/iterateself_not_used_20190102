@@ -3,67 +3,8 @@ title: Python 工具 SublimeText
 toc: true
 date: 2018-08-03 13:52:49
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 11:04:23+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-sublimetext/
-slug: python-sublimetext
-title: Python SublimeText
-wordpress_id: 5039
-categories:
-- 随想与反思
----
 
-<!-- more -->
-
-[mathjax]
-
-
-## 相关资料ERENCE
-
-
-
-
-
-
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
-
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
-
+# 需要补充的
 
 
 
@@ -98,30 +39,9 @@ Sublime Text 是一个跨平台的编辑器，同时支持Windows、Linux、Mac 
 
 
 
+  # 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
+  - [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+  - [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
 
 # COMMENT

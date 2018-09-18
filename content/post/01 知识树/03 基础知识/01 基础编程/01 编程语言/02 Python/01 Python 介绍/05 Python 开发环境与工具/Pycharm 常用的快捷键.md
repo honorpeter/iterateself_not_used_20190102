@@ -3,6 +3,11 @@ title: Pycharm 常用的快捷键
 toc: true
 date: 2018-08-01 17:47:15
 ---
+# 需要补充的
+
+- 这个要不要合并到 Pycharm 里面
+
+
 # Pycharm 常用的快捷键
 
 

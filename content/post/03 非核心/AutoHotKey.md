@@ -1,3 +1,8 @@
+---
+title: AutoHotKey
+toc: true
+date: 2018-09-21
+---
 AutoHotKey 还是很好用的
 
 把之前的脚本总结过来

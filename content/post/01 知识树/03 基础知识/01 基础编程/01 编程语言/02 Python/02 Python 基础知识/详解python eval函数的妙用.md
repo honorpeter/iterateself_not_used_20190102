@@ -1,3 +1,8 @@
+---
+title: 详解python eval函数的妙用
+toc: true
+date: 2018-09-21
+---
 # 需要补充的
 
 - 资料还没总结进来。

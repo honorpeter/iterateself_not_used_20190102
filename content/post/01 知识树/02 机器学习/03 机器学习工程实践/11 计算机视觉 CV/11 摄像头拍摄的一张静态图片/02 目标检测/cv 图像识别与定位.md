@@ -79,16 +79,8 @@ ImageNet
 
 步骤4:
 
-
-
-
-  * 预测阶段把2个“头部”模块拼上
-
-
-  * 完成不同的功能
-
-
-
+* 预测阶段把2个“头部”模块拼上
+* 完成不同的功能
 
 ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dLGb4hfjbm.png?imageslim)
 
@@ -97,10 +89,8 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-  * (最后的)卷积层后
-
-
-  * 全连接层后
+* (最后的)卷积层后
+* 全连接层后
 
 
 

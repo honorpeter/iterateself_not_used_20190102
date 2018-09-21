@@ -3,98 +3,26 @@ title: Python XML解析
 toc: true
 date: 2018-06-11 08:14:44
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 10:35:22+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-xml/
-slug: python-xml
-title: Python XML解析
-wordpress_id: 5021
-categories:
-- 随想与反思
----
-
-<!-- more -->
-
-[mathjax]
-
-
-## 相关资料ERENCE
+# 需要补充的
 
 
 
 
 
- 	
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
- 	
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-
-
-
-
-## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
-
-
-
-
-
-## Python XML解析
-
-
-
-
-
-* * *
-
-
+# Python XML解析
 
 
 
 ## 什么是XML？
 
 
-XML 指可扩展标记语言（e**X**tensible **M**arkup **L**anguage）。 你可以通过本站学习[XML教程](https://www.w3cschool.cn/xml/xml-tutorial.html)
+XML 指可扩展标记语言（eXtensible Markup Language）。 你可以通过本站学习[XML教程](https://www.w3cschool.cn/xml/xml-tutorial.html)
 
 XML 被设计用来传输和存储数据。
 
 XML是一套定义语义标记的规则，这些标记将文档分成许多部件并对这些部件加以标识。
 
 它也是元标记语言，即定义了用于定义其他与特定领域有关的、语义的、结构化的标记语言的句法语言。
-
-
-
-* * *
-
-
 
 
 
@@ -123,11 +51,11 @@ pyhton 标准库包含SAX解析器，SAX用事件驱动模型，通过在解析X
 
 ElementTree就像一个轻量级的DOM，具有方便友好的API。代码可用性好，速度快，消耗内存少。
 
-**注：**因DOM需要将XML数据映射到内存中的树，一是比较慢，二是比较耗内存，而SAX流式读取XML文件，比较快，占用内存少，但需要用户实现回调函数（handler）。
+**注：** 因DOM需要将XML数据映射到内存中的树，一是比较慢，二是比较耗内存，而SAX流式读取XML文件，比较快，占用内存少，但需要用户实现回调函数（handler）。
 
 本章节使用到的XML实例文件movies.xml内容如下：
 
-    
+
     <collection shelf="New Arrivals">
     <movie title="Enemy Behind">
        <type>War, Thriller</type>
@@ -161,13 +89,8 @@ ElementTree就像一个轻量级的DOM，具有方便友好的API。代码可用
        <description>Viewable boredom</description>
     </movie>
     </collection>
-    
 
 
-
-
-
-* * *
 
 
 
@@ -188,13 +111,13 @@ SAX是一种基于事件驱动的API。
 
 
 
- 	
+
   * 1、对大型文件进行处理；
 
- 	
+
   * 2、只需要文件的部分内容，或者只需从文件中得到特定信息。
 
- 	
+
   * 3、想建立自己的对象模型的时候。
 
 
@@ -245,16 +168,16 @@ SAX是一种基于事件驱动的API。
 
 以下方法创建一个新的解析器对象并返回。
 
-    
+
     xml.sax.make_parser( [parser_list] )
-    
+
 
 
 参数说明:
 
 
 
- 	
+
   * **parser_list** - 可选参数，解析器列表
 
 
@@ -272,22 +195,22 @@ SAX是一种基于事件驱动的API。
 
 以下方法创建一个 SAX 解析器并解析xml文档：
 
-    
+
     xml.sax.parse( xmlfile, contenthandler[, errorhandler])
-    
+
 
 
 参数说明:
 
 
 
- 	
+
   * **xmlfile** - xml文件名
 
- 	
+
   * **contenthandler** - 必须是一个ContentHandler的对象
 
- 	
+
   * **errorhandler** - 如果指定该参数，errorhandler必须是一个SAX ErrorHandler对象
 
 
@@ -305,22 +228,22 @@ SAX是一种基于事件驱动的API。
 
 parseString方法创建一个XML解析器并解析xml字符串：
 
-    
+
     xml.sax.parseString(xmlstring, contenthandler[, errorhandler])
-    
+
 
 
 参数说明:
 
 
 
- 	
+
   * **xmlstring** - xml字符串
 
- 	
+
   * **contenthandler** - 必须是一个ContentHandler的对象
 
- 	
+
   * **errorhandler** - 如果指定该参数，errorhandler必须是一个SAX ErrorHandler对象
 
 
@@ -337,12 +260,12 @@ parseString方法创建一个XML解析器并解析xml字符串：
 
 
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-    
+
     import xml.sax
-    
+
     class MovieHandler( xml.sax.ContentHandler ):
        def __init__(self):
           self.CurrentData = ""
@@ -352,7 +275,7 @@ parseString方法创建一个XML解析器并解析xml字符串：
           self.rating = ""
           self.stars = ""
           self.description = ""
-    
+
        # 元素开始事件处理
        def startElement(self, tag, attributes):
           self.CurrentData = tag
@@ -360,7 +283,7 @@ parseString方法创建一个XML解析器并解析xml字符串：
              print "*****Movie*****"
              title = attributes["title"]
              print "Title:", title
-    
+
        # 元素结束事件处理
        def endElement(self, tag):
           if self.CurrentData == "type":
@@ -376,7 +299,7 @@ parseString方法创建一个XML解析器并解析xml字符串：
           elif self.CurrentData == "description":
              print "Description:", self.description
           self.CurrentData = ""
-    
+
        # 内容事件处理
        def characters(self, content):
           if self.CurrentData == "type":
@@ -391,25 +314,25 @@ parseString方法创建一个XML解析器并解析xml字符串：
              self.stars = content
           elif self.CurrentData == "description":
              self.description = content
-      
+
     if ( __name__ == "__main__"):
-       
+
        # 创建一个 XMLReader
        parser = xml.sax.make_parser()
        # turn off namepsaces
        parser.setFeature(xml.sax.handler.feature_namespaces, 0)
-    
+
        # 重写 ContextHandler
        Handler = MovieHandler()
        parser.setContentHandler( Handler )
-       
+
        parser.parse("movies.xml")
-    
+
 
 
 以上代码执行结果如下：
 
-    
+
     *****Movie*****
     Title: Enemy Behind
     Type: War, Thriller
@@ -440,7 +363,7 @@ parseString方法创建一个XML解析器并解析xml字符串：
     Rating: PG
     Stars: 2
     Description: Viewable boredom
-    
+
 
 
 完整的 SAX API 文档请查阅[Python SAX APIs](https://docs.python.org/library/xml.sax.html)
@@ -462,28 +385,28 @@ parseString方法创建一个XML解析器并解析xml字符串：
 
 python中用xml.dom.minidom来解析xml文件，实例如下：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-    
+
     from xml.dom.minidom import parse
     import xml.dom.minidom
-    
+
     # 使用minidom解析器打开 XML 文档
     DOMTree = xml.dom.minidom.parse("movies.xml")
     collection = DOMTree.documentElement
     if collection.hasAttribute("shelf"):
        print "Root element : %s" % collection.getAttribute("shelf")
-    
+
     # 在集合中获取所有电影
     movies = collection.getElementsByTagName("movie")
-    
+
     # 打印每部电影的详细信息
     for movie in movies:
        print "*****Movie*****"
        if movie.hasAttribute("title"):
           print "Title: %s" % movie.getAttribute("title")
-    
+
        type = movie.getElementsByTagName('type')[0]
        print "Type: %s" % type.childNodes[0].data
        format = movie.getElementsByTagName('format')[0]
@@ -492,12 +415,12 @@ python中用xml.dom.minidom来解析xml文件，实例如下：
        print "Rating: %s" % rating.childNodes[0].data
        description = movie.getElementsByTagName('description')[0]
        print "Description: %s" % description.childNodes[0].data
-    
+
 
 
 以上程序执行结果如下：
 
-    
+
     Root element : New Arrivals
     *****Movie*****
     Title: Enemy Behind
@@ -523,7 +446,7 @@ python中用xml.dom.minidom来解析xml文件，实例如下：
     Format: VHS
     Rating: PG
     Description: Viewable boredom
-    
+
 
 
 完整的 DOM API 文档请查阅[Python DOM APIs](https://docs.python.org/library/xml.dom.html)。
@@ -537,28 +460,7 @@ python中用xml.dom.minidom来解析xml文件，实例如下：
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

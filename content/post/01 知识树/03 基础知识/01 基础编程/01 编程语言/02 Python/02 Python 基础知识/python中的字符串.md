@@ -3,27 +3,8 @@ title: python中的字符串
 toc: true
 date: 2018-06-11 08:14:29
 ---
----
-author: evo
-comments: true
-date: 2018-03-19 14:24:08+00:00
-layout: post
-link: http://106.15.37.116/2018/03/19/string-in-python/
-slug: string-in-python
-title: python中的字符串
-wordpress_id: 425
-categories:
-- 随想与反思
-tags:
-- '@todo'
-- python
----
 
-<!-- more -->
-
-
-## 缘由：
-
+# 缘由
 
 以前在写程序的时候，遇到字符串的时候总是感觉到很棘手，用起来也很忐忑，比如字符串的转换，转换成数字，转换成ascii，转换成list，中文字符串，打印字符串时候的参数的形式，format，字符串的查找，等等。。这导致我一遇到这种类似的问题，就感觉心里忐忑，没有把握，因此还是要好好总结一下，让心里有个底。
 
@@ -37,14 +18,14 @@ tags:
 
 
 
-    
+
     a='abc'
     a[0]='b'
 
 
 会有如下异常：
 
-    
+
     'str' object does not support item assignment
 
 
@@ -54,7 +35,7 @@ tags:
 
 
 
-    
+
     s='  abc  egf  '
     print(s)
     print(s.strip())# 返回的是一个新的字符串 删掉了前后的空格
@@ -64,7 +45,7 @@ tags:
 
 输出：
 
-    
+
       abc  egf  
     abc  egf
     abc  egf  
@@ -77,7 +58,7 @@ tags:
 
 
 
-    
+
     s='abc def'
     print(s.upper())
     print(s.upper().lower())
@@ -86,7 +67,7 @@ tags:
 
 输出：
 
-    
+
     ABC DEF
     abc def
     Abc def
@@ -98,7 +79,7 @@ tags:
 
 
 
-    
+
     s_1='abcdefg'
     s_2='abdeffxx'
     print(s_1.index('bcd'))
@@ -107,7 +88,7 @@ tags:
 
 输出：
 
-    
+
     1
     Traceback (most recent call last):
       File "E:\11.ProgramFiles\Anaconda3\lib\site-packages\IPython\core\interactiveshell.py", line 2881, in run_code
@@ -123,7 +104,7 @@ tags:
 
 
 
-    
+
     s_1 = 'abcdefg'
     s_2 = 'abdeffxx'
     print(s_1 == s_2)
@@ -133,7 +114,7 @@ tags:
 
 输出：
 
-    
+
     False
     True
     False
@@ -145,7 +126,7 @@ tags:
 
 
 
-    
+
     print(len('abcdefg'))
     print(len(''))
     print(len(None))
@@ -153,7 +134,7 @@ tags:
 
 输出：
 
-    
+
     7
     0
     Traceback (most recent call last):
@@ -170,7 +151,7 @@ tags:
 
 
 
-    
+
     # 空字符串并不等于None
     s = ''
     if s is None:
@@ -190,7 +171,7 @@ tags:
 
 输出：
 
-    
+
     is not None
     Empty
     s is not False
@@ -202,7 +183,7 @@ tags:
 
 
 
-    
+
     # 字符串的分割和连接
     # 在python大数据分析处理的时候，经常拿到csv格式的数据，经常要分割csv的每一个行，然后】#
     # 在输出的时候又合并成一个整体
@@ -210,7 +191,7 @@ tags:
     splitted = s.split(',')
     print(type(splitted))  # 返回的是一个数组
     print(splitted)
-    
+
     s = 'abc,,def,,ghi'
     splitted = s.split(',,')
     print(type(splitted))  # 返回的是一个数组
@@ -223,7 +204,7 @@ tags:
     s_2 = s.splitlines()
     print(s_1)
     print(s_2)
-    
+
     s = ['abc', 'def', 'ghi']
     print(''.join(s))  # 可以很轻松的把结果拼回去
     print('\n'.join(s))
@@ -231,7 +212,7 @@ tags:
 
 输出：
 
-    
+
     <class 'list'>
     ['abc', 'def', 'ghi']
     <class 'list'>
@@ -250,7 +231,7 @@ tags:
 
 
 
-    
+
     s = 'abcdefg'
     print(s.startswith('a'))
     print(s.startswith('abc'))
@@ -259,7 +240,7 @@ tags:
 
 输出：
 
-    
+
     True
     True
     True
@@ -271,7 +252,7 @@ tags:
 
 
 
-    
+
     # 判断是不是只有 abcdefg 或者 12345
     print('1234abcd'.isalnum())
     print('\t12ab'.isalnum())
@@ -285,7 +266,7 @@ tags:
 
 输出：
 
-    
+
     True
     False
     True
@@ -302,7 +283,7 @@ tags:
 
 
 
-    
+
     print(str(5))
     print(str(5.))  # 注意 这个地方会自动补0  因此有时候需要特别处理
     print(str(5.1234))
@@ -311,7 +292,7 @@ tags:
 
 输出：
 
-    
+
     5
     5.0
     5.1234
@@ -324,7 +305,7 @@ tags:
 
 
 
-    
+
     print(int('1234'))
     print(float('1234.4'))
     # 系统不会自动做转换，
@@ -337,7 +318,7 @@ tags:
 
 输出：
 
-    
+
     1234
     1234.4
     15
@@ -351,7 +332,7 @@ tags:
 
 
 
-    
+
     # 因为字符串不可以修改，因此想复制到一个数组里面
     s = 'abcdefg'
     l = list(s)
@@ -360,7 +341,7 @@ tags:
 
 输出：
 
-    
+
     ['a', 'b', 'c', 'd', 'e', 'f', 'g']
 
 
@@ -369,5 +350,3 @@ tags:
 
 
 **缘由里面还有很多问题没有解答，要补充**
-
-

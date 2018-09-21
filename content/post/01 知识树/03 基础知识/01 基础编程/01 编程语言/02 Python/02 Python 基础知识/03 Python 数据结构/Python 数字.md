@@ -3,35 +3,6 @@ title: Python 数字
 toc: true
 date: 2018-06-11 08:14:42
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 05:05:30+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-num/
-slug: python-num
-title: Python 数字
-wordpress_id: 4977
-categories:
-- 随想与反思
----
-
-<!-- more -->
-
-[mathjax]
-
-
-## 相关资料ERENCE
-
-
-
-
-
- 	
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
- 	
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
 
 
 
@@ -42,7 +13,7 @@ categories:
 
 
 
- 	
+
   * aaa
 
 
@@ -54,7 +25,7 @@ categories:
 
 
 
- 	
+
   * aaa
 
 
@@ -76,43 +47,43 @@ Python 数字数据类型用于存储数值。
 
 以下实例在变量赋值时数字对象将被创建：
 
-    
+
     var1 = 1
     var2 = 10
-    
+
 
 
 您也可以使用del语句删除一些数字对象引用。
 
 del语句的语法是：
 
-    
+
     del var1[,var2[,var3[....,varN]]]]
-    
+
 
 
 您可以通过使用del语句删除单个或多个对象，例如：
 
-    
+
     del var
     del var_a, var_b
-    
+
 
 
 Python 支持四种不同的数值类型：
 
 
 
- 	
+
   * **整型(Int)** - 通常被称为是整型或整数，是正或负整数，不带小数点。
 
- 	
+
   * **长整型(long integers)** - 无限大小的整数，整数最后是一个大写或小写的L。
 
- 	
+
   * **浮点型(floating point real values)** - 浮点型由整数部分与小数部分组成，浮点型也可以使用科学计数法表示（2.5e2 = 2.5 x 102 = 250）
 
- 	
+
   * **复数( (complex numbers))** - 复数的虚部以字母J 或 j结尾 。如：2+3i
 
 
@@ -227,10 +198,10 @@ complex
 
 
 
- 	
+
   * 长整型也可以使用小写"L"，但是还是建议您使用大写"L"，避免与数字"1"混淆。Python使用"L"来显示长整型。
 
- 	
+
   * Python还支持复数，复数由实数部分和虚数部分构成，可以用a + bj,或者complex(a,b)表示， 复数的实部a和虚部b都是浮点型
 
 
@@ -248,7 +219,7 @@ complex
 
 
 
-    
+
     int(x [,base ])         将x转换为一个整数  
     long(x [,base ])        将x转换为一个长整数  
     float(x )               将x转换到一个浮点数  
@@ -263,7 +234,7 @@ complex
     ord(x )                 将一个字符转换为它的整数值  
     hex(x )                 将一个整数转换为一个十六进制字符串  
     oct(x )                 将一个整数转换为一个八进制字符串  
-    
+
 
 
 
@@ -621,27 +592,7 @@ Python包括以下三角函数：
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

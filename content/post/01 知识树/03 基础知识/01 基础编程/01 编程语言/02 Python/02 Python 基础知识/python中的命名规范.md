@@ -3,21 +3,6 @@ title: python中的命名规范
 toc: true
 date: 2018-06-11 08:14:29
 ---
----
-author: evo
-comments: true
-date: 2018-03-20 11:42:38+00:00
-layout: post
-link: http://106.15.37.116/2018/03/20/python-name-instructions/
-slug: python-name-instructions
-title: python中的命名规范
-wordpress_id: 473
-categories:
-- 随想与反思
-tags:
-- python
----
-
 ## 缘由：
 
 
@@ -45,23 +30,8 @@ tags:
 
 
 
- 	
+
   * 类Class用驼峰式表示(HelloWorld)
 
- 	
+
   * 其他的obj等等，都用‘_’隔开(this_is_object)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -3,22 +3,6 @@ title: Python 异常处理
 toc: true
 date: 2018-06-11 08:14:43
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 10:25:20+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-except/
-slug: python-except
-title: Python 异常处理
-wordpress_id: 5000
-categories:
-- 随想与反思
----
-
-<!-- more -->
-
-[mathjax]
 
 
 ## 相关资料ERENCE
@@ -27,10 +11,10 @@ categories:
 
 
 
- 	
+
   1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
 
- 	
+
   2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
 
 
@@ -42,7 +26,7 @@ categories:
 
 
 
- 	
+
   * aaa
 
 
@@ -54,7 +38,7 @@ categories:
 
 
 
- 	
+
   * aaa
 
 
@@ -74,10 +58,10 @@ python提供了两个非常重要的功能来处理python程序在运行中出�
 
 
 
- 	
+
   * 异常处理: 本站Python教程会具体介绍。
 
- 	
+
   * 断言(Assertions):本站Python教程会具体介绍。
 
 
@@ -503,7 +487,7 @@ try/except语句用来检测try语句块中的错误，从而让except语句捕�
 
 以下为简单的_try....except...else_的语法：
 
-    
+
     try:
     <语句>        #运行别的代码
     except <名字>：
@@ -512,20 +496,20 @@ try/except语句用来检测try语句块中的错误，从而让except语句捕�
     <语句>        #如果引发了'名字'异常，获得附加的数据
     else:
     <语句>        #如果没有异常发生
-    
+
 
 
 try的工作原理是，当开始一个try语句后，python就在当前程序的上下文中作标记，这样当异常出现时就可以回到这里，try子句先执行，接下来会发生什么依赖于执行时是否出现异常。
 
 
 
- 	
+
   * 如果当try后的语句执行时发生异常，python就跳回到try并执行第一个匹配该异常的except子句，异常处理完毕，控制流就通过整个try语句（除非在处理异常时又引发新的异常）。
 
- 	
+
   * 如果在try后的语句里发生了异常，却没有匹配的except子句，异常将被递交到上层的try，或者到程序的最上层（这样将结束程序，并打印缺省的出错信息）。
 
- 	
+
   * 如果在try子句执行时没有发生异常，python将执行else语句后的语句（如果有else的话），然后控制流通过整个try语句。
 
 
@@ -536,9 +520,9 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
 
 下面是简单的例子，它打开一个文件，在该文件中的内容写入内容，且并未发生异常：
 
-    
+
     #!/usr/bin/python
-    
+
     try:
        fh = open("testfile", "w")
        fh.write("This is my test file for exception handling!!")
@@ -547,14 +531,14 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
     else:
        print "Written content in the file successfully"
        fh.close()
-    
+
 
 
 以上程序输出结果：
 
-    
+
      Written content in the file successfully
-    
+
 
 
 
@@ -564,9 +548,9 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
 
 下面是简单的例子，它打开一个文件，在该文件中的内容写入内容，但文件没有写入权限，发生了异常：
 
-    
+
     #!/usr/bin/python
-    
+
     try:
        fh = open("testfile", "w")
        fh.write("This is my test file for exception handling!!")
@@ -574,14 +558,14 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
        print "Error: can\'t find file or read data"
     else:
        print "Written content in the file successfully"
-    
+
 
 
 以上程序输出结果：
 
-    
+
     Error: can't find file or read data
-    
+
 
 
 
@@ -598,7 +582,7 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
 
 你可以不带任何异常类型使用except，如下实例：
 
-    
+
     try:
        You do your operations here;
        ......................
@@ -606,8 +590,8 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
        If there is any exception, then execute this block.
        ......................
     else:
-       If there is no exception then execute this block. 
-    
+       If there is no exception then execute this block.
+
 
 
 以上方式try-except语句捕获所有发生的异常。但这不是一个很好的方式，我们不能通过该程序识别出具体的异常信息。因为它捕获所有的异常。
@@ -625,17 +609,17 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
 
 你也可以使用相同的except语句来处理多个异常信息，如下所示：
 
-    
+
     try:
        You do your operations here;
        ......................
     except(Exception1[, Exception2[,...ExceptionN]]]):
-       If there is any exception from the given exception list, 
+       If there is any exception from the given exception list,
        then execute this block.
        ......................
     else:
        If there is no exception then execute this block.  
-    
+
 
 
 
@@ -652,13 +636,13 @@ try的工作原理是，当开始一个try语句后，python就在当前程序�
 
 try-finally 语句无论是否发生异常都将执行最后的代码。
 
-    
+
     try:
     <语句>
     finally:
     <语句>    #退出try时总会执行
     raise
-    
+
 
 
 **注意：**你可以使用except语句或者finally语句，但是两者不能同时使用。else语句也不能与finally语句同时使用
@@ -668,29 +652,29 @@ try-finally 语句无论是否发生异常都将执行最后的代码。
 
 
 
-    
+
     #!/usr/bin/python
-    
+
     try:
        fh = open("testfile", "w")
        fh.write("This is my test file for exception handling!!")
     finally:
        print "Error: can\'t find file or read data"
-    
+
 
 
 如果打开的文件没有可写权限，输出如下所示：
 
-    
+
     Error: can't find file or read data
-    
+
 
 
 同样的例子也可以写成如下方式：
 
-    
+
     #!/usr/bin/python
-    
+
     try:
        fh = open("testfile", "w")
        try:
@@ -700,7 +684,7 @@ try-finally 语句无论是否发生异常都将执行最后的代码。
           fh.close()
     except IOError:
        print "Error: can\'t find file or read data"
-    
+
 
 
 当在try块中抛出一个异常，立即执行finally块代码。
@@ -724,13 +708,13 @@ finally块中的所有语句执行后，异常被再次提出，并执行except�
 
 你可以通过except语句来捕获异常的参数，如下所示：
 
-    
+
     try:
        You do your operations here;
        ......................
     except ExceptionType, Argument:
        You can print value of Argument here...
-    
+
 
 
 变量接收的异常值通常包含在异常的语句中。在元组的表单中变量可以接收一个或者多个值。
@@ -743,27 +727,27 @@ finally块中的所有语句执行后，异常被再次提出，并执行except�
 
 以下为单个异常的实例：
 
-    
+
     #!/usr/bin/python
-    
+
     # Define a function here.
     def temp_convert(var):
        try:
           return int(var)
        except ValueError, Argument:
           print "The argument does not contain numbers\n", Argument
-    
+
     # Call above function here.
     temp_convert("xyz");
-    
+
 
 
 以上程序执行结果如下：
 
-    
+
     The argument does not contain numbers
     invalid literal for int() with base 10: 'xyz'
-    
+
 
 
 
@@ -782,9 +766,9 @@ finally块中的所有语句执行后，异常被再次提出，并执行except�
 
 raise语法格式如下：
 
-    
+
     raise [Exception [, args [, traceback]]]
-    
+
 
 
 语句中Exception是异常的类型（例如，NameError）参数是一个异常参数值。该参数是可选的，如果不提供，异常的参数是"None"。
@@ -799,7 +783,7 @@ raise语法格式如下：
 
 定义一个异常非常简单，如下所示：
 
-    
+
     def functionName( level ):
        if level < 1:       raise "Invalid level!", level       # The code below to this would not be executed       # if we raise the exception
 
@@ -808,14 +792,14 @@ raise语法格式如下：
 
 例如我们捕获以上异常，"except"语句如下所示：
 
-    
+
     try:
        Business Logic here...
     except "Invalid level!":
        Exception handling here...
     else:
        Rest of the code here...
-    
+
 
 
 
@@ -836,16 +820,16 @@ raise语法格式如下：
 
 在try语句块中，用户自定义的异常后执行except块语句，变量 e 是用于创建Networkerror类的实例。
 
-    
+
     class Networkerror(RuntimeError):
        def __init__(self, arg):
           self.args = arg
-    
+
 
 
 在你定义以上类后，你可以触发该异常，如下所示：
 
-    
+
     try:
        raise Networkerror("Bad hostname")
     except Networkerror,e:
@@ -881,6 +865,3 @@ raise语法格式如下：
 
 
 # COMMENT
-
-
-

@@ -3,67 +3,7 @@ title: Python 多线程
 toc: true
 date: 2018-06-11 08:14:44
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 10:34:41+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-multithread/
-slug: python-multithread
-title: Python 多线程
-wordpress_id: 5020
-categories:
-- 随想与反思
----
-
-<!-- more -->
-
-[mathjax]
-
-
-## 相关资料ERENCE
-
-
-
-
-
- 	
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
- 	
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-
-
-
-
-## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
-
-
+# 需要补充的
 
 
 
@@ -72,20 +12,10 @@ categories:
 
 多线程类似于同时执行多个不同程序，多线程运行有如下优点：
 
-
-
- 	
-  * 使用线程可以把占据长时间的程序中的任务放到后台去处理。
-
- 	
-  * 用户界面可以更加吸引人，这样比如用户点击了一个按钮去触发某些事件的处理，可以弹出一个进度条来显示处理的进度
-
- 	
-  * 程序的运行速度可能加快
-
- 	
-  * 在一些等待的任务实现上如用户输入、文件读写和网络收发数据等，线程就比较有用了。在这种情况下我们可以释放一些珍贵的资源如内存占用等等。
-
+* 使用线程可以把占据长时间的程序中的任务放到后台去处理。
+* 用户界面可以更加吸引人，这样比如用户点击了一个按钮去触发某些事件的处理，可以弹出一个进度条来显示处理的进度
+* 程序的运行速度可能加快
+* 在一些等待的任务实现上如用户输入、文件读写和网络收发数据等，线程就比较有用了。在这种情况下我们可以释放一些珍贵的资源如内存占用等等。
 
 线程在执行过程中与进程还是有区别的。每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制。
 
@@ -93,10 +23,10 @@ categories:
 
 指令指针和堆栈指针寄存器是线程上下文中两个最重要的寄存器，线程总是在进程得到上下文中运行的，这些地址都用于标志拥有线程的进程地址空间中的内存。
 
- 	
+
   * 线程可以被抢占（中断）。
 
- 	
+
   * 在其他线程正在运行时，线程可以暂时搁置（也称为睡眠） -- 这就是线程的退让。
 
 
@@ -110,36 +40,36 @@ Python中使用线程有两种方式：函数或者用类来包装线程对象�
 
 函数式：调用thread模块中的start_new_thread()函数来产生新线程。语法如下:
 
-    
+
     thread.start_new_thread ( function, args[, kwargs] )
-    
+
 
 
 参数说明:
 
 
 
- 	
+
   * function - 线程函数。
 
- 	
+
   * args - 传递给线程函数的参数,他必须是个tuple类型。
 
- 	
+
   * kwargs - 可选参数。
 
 
 实例：
 
-    
+
     #!/usr/bin/python
     # -*- coding: UTF-8 -*-
-    
-    
+
+
     import thread
     import time
-    
-    
+
+
     # 为线程定义一个函数
     def print_time( threadName, delay):
        count = 0
@@ -147,24 +77,24 @@ Python中使用线程有两种方式：函数或者用类来包装线程对象�
           time.sleep(delay)
           count += 1
           print "%s: %s" % ( threadName, time.ctime(time.time()) )
-    
-    
+
+
     # 创建两个线程
     try:
        thread.start_new_thread( print_time, ("Thread-1", 2, ) )
        thread.start_new_thread( print_time, ("Thread-2", 4, ) )
     except:
        print "Error: unable to start thread"
-    
-    
+
+
     while 1:
        pass
-    
+
 
 
 执行以上程序输出结果如下：
 
-    
+
     Thread-1: Thu Jan 22 15:42:17 2009
     Thread-1: Thu Jan 22 15:42:19 2009
     Thread-2: Thu Jan 22 15:42:19 2009
@@ -175,7 +105,7 @@ Python中使用线程有两种方式：函数或者用类来包装线程对象�
     Thread-2: Thu Jan 22 15:42:27 2009
     Thread-2: Thu Jan 22 15:42:31 2009
     Thread-2: Thu Jan 22 15:42:35 2009
-    
+
 
 
 线程的结束一般依靠线程函数的自然结束；也可以在线程函数中调用thread.exit()，他抛出SystemExit exception，达到退出线程的目的。
@@ -197,34 +127,34 @@ thread 模块提供的其他方法：
 
 
 
- 	
+
   * threading.currentThread(): 返回当前的线程变量。
 
- 	
+
   * threading.enumerate(): 返回一个包含正在运行的线程的list。正在运行指线程启动后、结束前，不包括启动前和终止后的线程。
 
- 	
+
   * threading.activeCount(): 返回正在运行的线程数量，与len(threading.enumerate())有相同的结果。
 
 
 除了使用方法外，线程模块同样提供了Thread类来处理线程，Thread类提供了以下方法:
 
- 	
+
   * **run():** 用以表示线程活动的方法。
 
- 	
+
   * **start():**启动线程活动。
 
- 	
+
   * **join([time]):** 等待至线程中止。这阻塞调用线程直至线程的join() 方法被调用中止-正常退出或者抛出未处理的异常-或者是可选的超时发生。
 
- 	
+
   * **isAlive():** 返回线程是否活动的。
 
- 	
+
   * **getName():** 返回线程名。
 
- 	
+
   * **setName():** 设置线程名。
 
 
@@ -242,26 +172,26 @@ thread 模块提供的其他方法：
 
 使用Threading模块创建线程，直接从threading.Thread继承，然后重写__init__方法和run方法：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-    
+
     import threading
     import time
-    
+
     exitFlag = 0
-    
+
     class myThread (threading.Thread):   #继承父类threading.Thread
         def __init__(self, threadID, name, counter):
             threading.Thread.__init__(self)
             self.threadID = threadID
             self.name = name
             self.counter = counter
-        def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
+        def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数
             print "Starting " + self.name
             print_time(self.name, self.counter, 5)
             print "Exiting " + self.name
-    
+
     def print_time(threadName, delay, counter):
         while counter:
             if exitFlag:
@@ -269,22 +199,22 @@ thread 模块提供的其他方法：
             time.sleep(delay)
             print "%s: %s" % (threadName, time.ctime(time.time()))
             counter -= 1
-    
+
     # 创建新线程
     thread1 = myThread(1, "Thread-1", 1)
     thread2 = myThread(2, "Thread-2", 2)
-    
+
     # 开启线程
     thread1.start()
     thread2.start()
-    
+
     print "Exiting Main Thread"
-    
+
 
 
 以上程序执行结果如下；
 
-    
+
     Starting Thread-1
     Starting Thread-2
     Exiting Main Thread
@@ -300,7 +230,7 @@ thread 模块提供的其他方法：
     Thread-2: Thu Mar 21 09:10:10 2013
     Thread-2: Thu Mar 21 09:10:12 2013
     Exiting Thread-2
-    
+
 
 
 
@@ -331,13 +261,13 @@ thread 模块提供的其他方法：
 
 实例：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-    
+
     import threading
     import time
-    
+
     class myThread (threading.Thread):
         def __init__(self, threadID, name, counter):
             threading.Thread.__init__(self)
@@ -353,33 +283,33 @@ thread 模块提供的其他方法：
             print_time(self.name, self.counter, 3)
             # 释放锁
             threadLock.release()
-    
+
     def print_time(threadName, delay, counter):
         while counter:
             time.sleep(delay)
             print "%s: %s" % (threadName, time.ctime(time.time()))
             counter -= 1
-    
+
     threadLock = threading.Lock()
     threads = []
-    
+
     # 创建新线程
     thread1 = myThread(1, "Thread-1", 1)
     thread2 = myThread(2, "Thread-2", 2)
-    
+
     # 开启新线程
     thread1.start()
     thread2.start()
-    
+
     # 添加线程到线程列表
     threads.append(thread1)
     threads.append(thread2)
-    
+
     # 等待所有线程完成
     for t in threads:
         t.join()
     print "Exiting Main Thread"
-    
+
 
 
 
@@ -400,49 +330,49 @@ Queue模块中的常用方法:
 
 
 
- 	
+
   * Queue.qsize() 返回队列的大小
 
- 	
+
   * Queue.empty() 如果队列为空，返回True,反之False
 
- 	
+
   * Queue.full() 如果队列满了，返回True,反之False
 
- 	
+
   * Queue.full 与 maxsize 大小对应
 
- 	
+
   * Queue.get([block[, timeout]])获取队列，timeout等待时间
 
- 	
+
   * Queue.get_nowait() 相当Queue.get(False)
 
- 	
+
   * Queue.put(item) 写入队列，timeout等待时间
 
- 	
+
   * Queue.put_nowait(item) 相当Queue.put(item, False)
 
- 	
+
   * Queue.task_done() 在完成一项工作之后，Queue.task_done()函数向任务已经完成的队列发送一个信号
 
- 	
+
   * Queue.join() 实际上意味着等到队列为空，再执行别的操作
 
 
 实例:
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-    
+
     import Queue
     import threading
     import time
-    
+
     exitFlag = 0
-    
+
     class myThread (threading.Thread):
         def __init__(self, threadID, name, q):
             threading.Thread.__init__(self)
@@ -453,7 +383,7 @@ Queue模块中的常用方法:
             print "Starting " + self.name
             process_data(self.name, self.q)
             print "Exiting " + self.name
-    
+
     def process_data(threadName, q):
         while not exitFlag:
             queueLock.acquire()
@@ -464,44 +394,44 @@ Queue模块中的常用方法:
             else:
                 queueLock.release()
             time.sleep(1)
-    
+
     threadList = ["Thread-1", "Thread-2", "Thread-3"]
     nameList = ["One", "Two", "Three", "Four", "Five"]
     queueLock = threading.Lock()
     workQueue = Queue.Queue(10)
     threads = []
     threadID = 1
-    
+
     # 创建新线程
     for tName in threadList:
         thread = myThread(threadID, tName, workQueue)
         thread.start()
         threads.append(thread)
         threadID += 1
-    
+
     # 填充队列
     queueLock.acquire()
     for word in nameList:
         workQueue.put(word)
     queueLock.release()
-    
+
     # 等待队列清空
     while not workQueue.empty():
         pass
-    
+
     # 通知线程是时候退出
     exitFlag = 1
-    
+
     # 等待所有线程完成
     for t in threads:
         t.join()
     print "Exiting Main Thread"
-    
+
 
 
 以上程序执行结果：
 
-    
+
     Starting Thread-1
     Starting Thread-2
     Starting Thread-3
@@ -519,32 +449,7 @@ Queue模块中的常用方法:
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

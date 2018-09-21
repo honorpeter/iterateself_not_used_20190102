@@ -3,7 +3,8 @@ title: Python 字符串
 toc: true
 date: 2018-06-22 22:50:44
 ---
-## 需要补充的
+# 需要补充的
+
 - 要重新整理下。
 
 
@@ -1091,6 +1092,8 @@ world
 
 
 
-## 相关资料
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
+# 相关资料
+
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
+- [python 字符串的split()函数详解](http://www.cnblogs.com/douzi2/p/5579651.html)

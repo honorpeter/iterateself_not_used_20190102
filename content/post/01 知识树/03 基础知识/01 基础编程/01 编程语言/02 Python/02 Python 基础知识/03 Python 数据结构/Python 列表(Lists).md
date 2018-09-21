@@ -3,67 +3,7 @@ title: Python 列表(Lists)
 toc: true
 date: 2018-06-11 08:14:42
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 05:08:33+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-lists/
-slug: python-lists
-title: Python 列表(Lists)
-wordpress_id: 4982
-categories:
-- 随想与反思
----
-
-<!-- more -->
-
-[mathjax]
-
-
-## 相关资料ERENCE
-
-
-
-
-
- 	
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
- 	
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-
-
-
-
-## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
-
-
+# 需要补充的
 
 
 
@@ -84,19 +24,14 @@ Python有6个序列的内置类型，但最常见的是列表和元组。
 
 创建一个列表，只要把逗号分隔的不同的数据项使用方括号括起来即可。如下所示：
 
-    
-    list1 = ['physics', 'chemistry', 1997, 2000];
-    list2 = [1, 2, 3, 4, 5 ];
-    list3 = ["a", "b", "c", "d"];
-    
 
+```python
+list1 = ['physics', 'chemistry', 1997, 2000];
+list2 = [1, 2, 3, 4, 5 ];
+list3 = ["a", "b", "c", "d"];
+```
 
 与字符串的索引一样，列表索引从0开始。列表可以进行截取、组合等。
-
-
-
-* * *
-
 
 
 
@@ -106,23 +41,24 @@ Python有6个序列的内置类型，但最常见的是列表和元组。
 
 使用下标索引来访问列表中的值，同样你也可以使用方括号的形式截取字符，如下所示：
 
-    
-    #!/usr/bin/python
-    
-    list1 = ['physics', 'chemistry', 1997, 2000];
-    list2 = [1, 2, 3, 4, 5, 6, 7 ];
-    
-    print "list1[0]: ", list1[0]
-    print "list2[1:5]: ", list2[1:5]
-    
+```python
+#!/usr/bin/python
+
+list1 = ['physics', 'chemistry', 1997, 2000];
+list2 = [1, 2, 3, 4, 5, 6, 7 ];
+
+print "list1[0]: ", list1[0]
+print "list2[1:5]: ", list2[1:5]
+```
+
 
 
 以上实例输出结果：
 
-    
+
     list1[0]:  physics
     list2[1:5]:  [2, 3, 4, 5]
-    
+
 
 
 
@@ -139,29 +75,29 @@ Python有6个序列的内置类型，但最常见的是列表和元组。
 
 你可以对列表的数据项进行修改或更新，你也可以使用append()方法来添加列表项，如下所示：
 
-    
+
     #!/usr/bin/python
-    
+
     list = ['physics', 'chemistry', 1997, 2000];
-    
+
     print "Value available at index 2 : "
     print list[2];
     list[2] = 2001;
     print "New value available at index 2 : "
     print list[2];
-    
+
 
 
 **注意：**我们会在接下来的章节讨论append()方法的使用
 
 以上实例输出结果：
 
-    
+
     Value available at index 2 :
     1997
     New value available at index 2 :
     2001
-    
+
 
 
 
@@ -178,25 +114,25 @@ Python有6个序列的内置类型，但最常见的是列表和元组。
 
 可以使用 del 语句来删除列表的的元素，如下实例：
 
-    
+
     #!/usr/bin/python
-    
+
     list1 = ['physics', 'chemistry', 1997, 2000];
-    
+
     print list1;
     del list1[2];
     print "After deleting value at index 2 : "
     print list1;
-    
+
 
 
 以上实例输出结果：
 
-    
+
     ['physics', 'chemistry', 1997, 2000]
     After deleting value at index 2 :
     ['physics', 'chemistry', 2000]
-    
+
 
 
 **注意：**我们会在接下来的章节讨论remove()方法的使用
@@ -293,9 +229,9 @@ Python 表达式
 
 Python的列表截取与字符串操作类型，如下所示：
 
-    
+
     L = ['spam', 'Spam', 'SPAM!']
-    
+
 
 
 操作：
@@ -503,29 +439,7 @@ Python包含以下方法:
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

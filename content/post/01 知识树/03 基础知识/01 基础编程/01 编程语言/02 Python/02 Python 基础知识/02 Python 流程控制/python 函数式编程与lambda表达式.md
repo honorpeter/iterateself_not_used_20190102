@@ -74,7 +74,7 @@ Lambda函数的语法：   lambda [arg1 [,arg2,.....argn]]:expression
 
     my_sum = lambda arg1, arg2: arg1 + arg2
     print(my_sum(10,20))
-    
+
     g = lambda x: x * 2
     print(g(3))
     print((lambda x: x * 2)(4))
@@ -99,7 +99,7 @@ Python中的reduce内建函数是一个二元操作函数，他用来将一个�
 
 
     from functools import reduce
-    
+
     l = [1, 2, 3, 4, 5]
     # 把list中的值，一个个放进lamda的x,y中
     print(reduce(lambda x, y: x + y, l))
@@ -136,10 +136,10 @@ Python函数式编程中的map()函数是将func作用于seq中的每一个元�
     # 这是为了让里面的值给显示出来，要不然你会得到这是个map函数
     new_list = list(map(lambda i: i + 1, l))
     print(new_list)
-    
+
     func = lambda x, y: x + y
     print(func(3, 5))
-    
+
     # WARINING 这个地方要注意，map中的lambda表达式后面的参数，一定要是列表格式的
     res=list(map(lambda x,y:x+y,[3],[5]))
     print(res)

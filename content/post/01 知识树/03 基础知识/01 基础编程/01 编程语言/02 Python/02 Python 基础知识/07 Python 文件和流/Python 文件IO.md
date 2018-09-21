@@ -3,66 +3,8 @@ title: Python 文件IO
 toc: true
 date: 2018-06-11 08:14:42
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 10:24:08+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-io/
-slug: python-io
-title: Python 文件I/O
-wordpress_id: 4998
-categories:
-- 随想与反思
----
-
-<!-- more -->
-
-[mathjax]
-
-
-## 相关资料ERENCE
-
-
-
-
-
- 	
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
- 	
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-
-
-
 
 ## 需要补充的
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-# MOTIVE
-
-
-
-
-
- 	
-  * aaa
-
-
-
-
-
-* * *
-
 
 
 
@@ -78,18 +20,18 @@ categories:
 
 最简单的输出方法是用print语句，你可以给它传递零个或多个用逗号隔开的表达式。此函数把你传递的表达式转换成一个字符串表达式，并将结果写到标准输出如下：
 
-    
+
     #!/usr/bin/python
-     
+
     print "Python is really a great language,", "isn't it?";
-    
+
 
 
 你的标准屏幕上会产生以下结果：
 
-    
+
     Python is really a great language, isn't it?
-    
+
 
 
 
@@ -101,10 +43,10 @@ Python提供了两个内置函数从标准输入读入一行文本，默认的�
 
 
 
- 	
+
   * raw_input
 
- 	
+
   * input
 
 
@@ -115,21 +57,21 @@ Python提供了两个内置函数从标准输入读入一行文本，默认的�
 
 raw_input([prompt]) 函数从标准输入读取一个行，并返回一个字符串（去掉结尾的换行符）：
 
-    
+
     #!/usr/bin/python
     # -*- coding: UTF-8 -*- 
      
     str = raw_input("请输入：");
     print "你输入的内容是: ", str
-    
+
 
 
 这将提示你输入任意字符串，然后在屏幕上显示相同的字符串。当我输入"Hello Python！"，它的输出如下：
 
-    
+
     请输入：Hello Python！
     你输入的内容是:  Hello Python！
-    
+
 
 
 
@@ -139,20 +81,20 @@ raw_input([prompt]) 函数从标准输入读取一个行，并返回一个字符
 
 input([prompt]) 函数和raw_input([prompt]) 函数基本可以互换，但是input会假设你的输入是一个有效的Python表达式，并返回运算结果。
 
-    
+
     #!/usr/bin/python
-     
+
     str = input("Enter your input: ");
     print "Received input is : ", str
-    
+
 
 
 这会产生如下的对应着输入的结果：
 
-    
+
     Enter your input: [x*5 for x in range(2,10,2)]
     Recieved input is :  [10, 20, 30, 40]
-    
+
 
 
 
@@ -172,22 +114,22 @@ Python提供了必要的函数和方法进行默认情况下的文件基本操�
 
 语法：
 
-    
+
     file object = open(file_name [, access_mode][, buffering])
-    
+
 
 
 各个参数的细节如下：
 
 
 
- 	
+
   * file_name：file_name变量是一个包含了你要访问的文件名称的字符串值。
 
- 	
+
   * access_mode：access_mode决定了打开文件的模式：只读，写入，追加等。所有可取值见如下的完全列表。这个参数是非强制的，默认文件访问模式为只读(r)。
 
- 	
+
   * buffering:如果buffering的值被设为0，就不会有寄存。如果buffering的值取1，访问文件时会寄存行。如果将buffering的值设为大于1的整数，表明了这就是的寄存区的缓冲大小。如果取负值，寄存区的缓冲大小则为系统默认。
 
 
@@ -346,7 +288,7 @@ Python提供了必要的函数和方法进行默认情况下的文件基本操�
 </table>
 如下实例：
 
-    
+
     #!/usr/bin/python
     # -*- coding: UTF-8 -*-
      
@@ -356,17 +298,17 @@ Python提供了必要的函数和方法进行默认情况下的文件基本操�
     print "是否已关闭 : ", fo.closed
     print "访问模式 : ", fo.mode
     print "末尾是否强制加空格 : ", fo.softspace
-    
+
 
 
 以上实例输出结果：
 
-    
+
     文件名:  foo.txt
     是否已关闭 :  False
     访问模式 :  wb
     末尾是否强制加空格 :  0
-    
+
 
 
 
@@ -380,31 +322,31 @@ File对象的close（）方法刷新缓冲区里任何还没写入的信息，�
 
 语法：
 
-    
+
     fileObject.close();
-    
+
 
 
 例子：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # 打开一个文件
     fo = open("foo.txt", "wb")
     print "文件名: ", fo.name
-     
+
     # 关闭打开的文件
     fo.close()
-    
+
 
 
 以上实例输出结果：
 
-    
+
     文件名:  foo.txt
-    
+
 
 
 读写文件：
@@ -421,34 +363,34 @@ Write()方法不在字符串的结尾不添加换行符('\n')：
 
 语法：
 
-    
+
     fileObject.write(string);
-    
+
 
 
 在这里，被传递的参数是要写入到已打开文件的内容。
 
 例子：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # 打开一个文件
     fo = open("/tmp/foo.txt", "wb")
     fo.write( "Python is a great language.\nYeah its great!!\n");
-     
+
     # 关闭打开的文件
     fo.close()#!/usr/bin/python
-    
+
 
 
 上述方法会创建foo.txt文件，并将收到的内容写入该文件，并最终关闭文件。如果你打开这个文件，将看到以下内容:
 
-    
+
     Python is a great language.
     Yeah its great!!
-    
+
 
 
 
@@ -460,9 +402,9 @@ read（）方法从一个打开的文件中读取一个字符串。需要重点�
 
 语法：
 
-    
+
     fileObject.read([count]);
-    
+
 
 
 在这里，被传递的参数是要从已打开文件中读取的字节计数。该方法从文件的开头开始读入，如果没有传入count，它会尝试尽可能多地读取更多的内容，很可能是直到文件的末尾。
@@ -471,24 +413,24 @@ read（）方法从一个打开的文件中读取一个字符串。需要重点�
 
 就用我们上面创建的文件foo.txt。
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # 打开一个文件
     fo = open("/tmp/foo.txt", "r+")
     str = fo.read(10);
     print "读取的字符串是: ", str
     # 关闭打开的文件
     fo.close()
-    
+
 
 
 以上实例输出结果：
 
-    
+
     读取的字符串是:  Python is
-    
+
 
 
 文件位置：
@@ -503,35 +445,35 @@ seek（offset [,from]）方法改变当前文件的位置。Offset变量表示�
 
 就用我们上面创建的文件foo.txt。
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # 打开一个文件
     fo = open("/tmp/foo.txt", "r+")
     str = fo.read(10);
     print "读取的字符串是: ", str
-     
+
     # 查找当前位置
     position = fo.tell();
     print "当前文件位置: ", position
-     
+
     # 把指针再次重新定位到文件开头
     position = fo.seek(0, 0);
     str = fo.read(10);
     print "重新读取字符串: ", str
     # 关闭打开的文件
     fo.close()
-    
+
 
 
 以上实例输出结果：
 
-    
+
     读取的字符串是:  Python is
     当前文件位置:  10
     重新读取字符串:  Python is
-    
+
 
 
 
@@ -549,23 +491,23 @@ rename()方法需要两个参数，当前的文件名和新文件名。
 
 语法：
 
-    
+
     os.rename(current_file_name, new_file_name)
-    
+
 
 
 例子：
 
 下例将重命名一个已经存在的文件test1.txt。
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
     import os
-     
+
     # 重命名文件test1.txt到test2.txt。
     os.rename( "test1.txt", "test2.txt" )
-    
+
 
 
 
@@ -577,23 +519,23 @@ rename()方法需要两个参数，当前的文件名和新文件名。
 
 语法：
 
-    
+
     os.remove(file_name)
-    
+
 
 
 例子：
 
 下例将删除一个已经存在的文件test2.txt。
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
     import os
-     
+
     # 删除一个已经存在的文件test2.txt
     os.remove("text2.txt")
-    
+
 
 
 
@@ -611,23 +553,23 @@ rename()方法需要两个参数，当前的文件名和新文件名。
 
 语法：
 
-    
+
     os.mkdir("newdir")
-    
+
 
 
 例子：
 
 下例将在当前目录下创建一个新目录test。
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
     import os
-     
+
     # 创建目录test
     os.mkdir("test")
-    
+
 
 
 
@@ -639,23 +581,23 @@ rename()方法需要两个参数，当前的文件名和新文件名。
 
 语法：
 
-    
+
     os.chdir("newdir")
-    
+
 
 
 例子：
 
 下例将进入"/home/newdir"目录。
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
     import os
-     
+
     # 将当前目录改为"/home/newdir"
     os.chdir("/home/newdir")
-    
+
 
 
 getcwd()方法：
@@ -664,23 +606,23 @@ getcwd()方法显示当前的工作目录。
 
 语法：
 
-    
+
     os.getcwd()
-    
+
 
 
 例子：
 
 下例给出当前目录：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
     import os
-     
+
     # 给出当前的目录
     os.getcwd()
-    
+
 
 
 
@@ -694,23 +636,23 @@ rmdir()方法删除目录，目录名称以参数传递。
 
 语法：
 
-    
+
     os.rmdir('dirname')
-    
+
 
 
 例子：
 
 以下是删除" /tmp/test"目录的例子。目录的完全合规的名称必须被给出，否则会在当前目录下搜索该目录。
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
     import os
-     
+
     # 删除”/tmp/test”目录
     os.rmdir( "/tmp/test"  )
-    
+
 
 
 
@@ -722,10 +664,10 @@ rmdir()方法删除目录，目录名称以参数传递。
 
 
 
- 	
+
   * File 对象方法: file对象提供了操作文件的一系列方法。
 
- 	
+
   * OS 对象方法: 提供了处理文件及目录的一系列方法。
 
 
@@ -736,28 +678,7 @@ rmdir()方法删除目录，目录名称以参数传递。
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)

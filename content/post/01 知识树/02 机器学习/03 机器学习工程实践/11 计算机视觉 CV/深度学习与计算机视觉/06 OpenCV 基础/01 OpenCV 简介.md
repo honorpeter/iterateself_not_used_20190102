@@ -65,47 +65,62 @@ OpenCV 的起源和发展历史已经在第1章中介绍过了，本节主要介
 
 作为最流行的视觉包，在 Linux 中安装 OpenCV 是非常方便的，大多数 Linux 的发行 版都支持包管理器的安装，比如在 Ubuntu 16.04 LTS 中，只需要在终端中输入：
 
-» sudo apt install libopencv-dev python-opencv
+```
+sudo apt install libopencv-dev python-opencv
+```
 
 当然也可以通过官网下载源码编译安装，首先安装各种依赖。
 
-» sudo apt install build-essential
+```
+sudo apt install build-essential
+sudo apt install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libj asper-dev libdcl394-22-dev
+```
 
-»    sudo apt install cmake    git libgtk2.0-dev    pkg-config
-
-libavcodec-dev libavformat-dev libswscale-dev
-
-»    sudo apt-get    install    python-dev    python-numpy libtbb2    libtbb-dev
-
-libjpeg-dev libpng-dev libtiff-dev libj asper-dev libdcl3 94-22-dev
 
 然后找一个clone压缩包的文件夹，将源码下载下来。
 
-\>> git clone <https://github.com/opencv/opencv.git>
+```
+git clone https://github.com/opencv/opencv.git
+```
 
-然后进入OpenCV文件夹。
+然后进入 OpenCV 文件夹。
 
-» mkdir release » cd release
+```
+mkdir release
+cd release
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local..
+```
 
-» cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREF工X=/usr/local.. 准备完毕，直接make并安装。
+准备完毕，直接make并安装。
 
-\>> make
+```
+make
+sudo make install
+```
 
-» sudo make install
 
-Windows 下的安装也很简单，直接去 OpenCV 官网 <http://opencv.org/downloads.html> 下 载即可。
+Windows 下的安装也很简单，直接去 OpenCV 官网 http://opencv.org/downloads.html 下载即可。
 
-执行exe文件安装后，会在＜安装目录〉\build\python/2.7下发现一个cv2.pyd的文件， 把该文件复制到＜?外11011目录〉\Lib\site-packages下就可以了。Windows下如果只想在Python 中体验OpenCV,有个更简单的方法是加州大学尔湾分校(University of California，Irvine) 的Christoph Gohlke制作的Windows下的Python科学计算包网页，下载对应版本的wheel 文件，然后通过 pip 安装即可，下载地址为 [http://www.lfd.uci.edU/~gohlke/pythonlibs/#opencvo](http://www.lfd.uci.edu/~gohlke/pythonlibs/%23opencvo)
+执行exe文件安装后，会在 `<安装目录>\build\python/2.7` 下发现一个`cv2.pyd`的文件， 把该文件复制到 `<Python目录>\Lib\site-packages` 下就可以了。Windows 下如果只想在 Python 中体验 OpenCV ，有个更简单的方法是加州大学尔湾分校(University of California，Irvine) 的Christoph Gohlke制作的 Windows 下的 Python 科学计算包网页，下载对应版本的 wheel 文件，然后通过 pip 安装即可，下载地址为 https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv 。<span style="color:red;">这个是只能在 Python 里面使用吗？</span>
 
-本节只讲Python下的OpenCV基本用法，Python中导入OpenCV非常简单： import cv2 这样就导入成功了。
+本节只讲 Python 下的 OpenCV 基本用法，Python 中导入 OpenCV 非常简单：
 
-6.2 Python-OpenCV 基础
+```
+import cv2
+```
 
-本节主要讲解在Python中利用OpenCV的图像存取，以及与深度学习中图像预处理阶 段相关的最基本使用。
+这样就导入成功了。
 
-6.2.1图像的表示
+## Python-OpenCV 基础
 
-前面章节已经提到过了单通道的灰度图像在计算机中的表示，就是一个8位无符号整 形的矩阵。在OpenCV的C++代码中，表示图像有个专门的结构cv::Mat,不过在 Python-OpenCV中^因为已经有了 NumPy这种强大的基础工具，所以这个矩阵就用NumPy 的array表示。如果是多通道情况，最常见的就是红绿蓝(RGB)三通道，则第一个维度 是高度，第二个维度是高度，第三个维度是通道，如图6-la所示为一幅3x3图像在计算机 中表示的例子。
+本节主要讲解在 Python 中利用 OpenCV 的图像存取，以及与深度学习中图像预处理阶段相关的最基本使用。
+
+### 图像的表示
+
+前面章节已经提到过了单通道的灰度图像在计算机中的表示，就是一个 8 位无符号整形的矩阵。在 OpenCV 的 C++ 代码中，表示图像有个专门的结构`cv::Mat`，不过在 Python-OpenCV 中因为已经有了 NumPy 这种强大的基础工具，所以这个矩阵就用 NumPy 的 array 表示。
+
+如果是多通道情况，最常见的就是红绿蓝(RGB)三通道，则第一个维度是高度，第二个维度是高度，第三个维度是通道，如图 6-la 所示为一幅 3x3 图像在计算机中表示的例子。
 
 
 

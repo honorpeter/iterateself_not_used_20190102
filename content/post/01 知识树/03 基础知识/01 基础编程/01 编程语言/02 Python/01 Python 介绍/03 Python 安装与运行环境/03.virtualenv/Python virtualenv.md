@@ -1,60 +1,17 @@
 ---
-title: Python 变量类型
+title: Python virtualenv
 toc: true
-date: 2018-07-28 23:17:52
+date: 2018-07-28 23:17:04
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 10:47:27+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-virtualenv/
-slug: python-virtualenv
-title:
-wordpress_id: 5025
-categories:
-- 基础程序设计
-tags:
-- python
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。**
-
-
-## 相关资料
-
-
-
-
-
-
-  * [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
-  * [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-
-  * [windows下使用pycharm配置python的virtualenv环境](https://blog.csdn.net/hy245120020/article/details/50776197)
-
-  * [PyCharm中使用virtualenv](https://segmentfault.com/a/1190000003758895)
 
 
 
 
 ## 需要补充的
 
-
-
-
-
-
-  * **要不要使用 virtualenvwrapper**
-
-  * **在 windows 和 linux 上分别是怎么用的？**
-
-  * **virtualenv 与 docker 有相似之处吗？**
+* **要不要使用 virtualenvwrapper**
+* **在 windows 和 linux 上分别是怎么用的？**
+* **virtualenv 与 docker 有相似之处吗？**
 
 
 
@@ -290,7 +247,7 @@ virtualenv 是一个创建 Python 独立环境的包，virtualenvwrapper 使得v
 
 创建的环境是独立的，互不干扰，无需sudo权限即可使用 pip 来进行包的管理。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ELFI1Fbaja.png?imageslim)
+![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ALFB73ef8d.png?imageslim)
 
 
 
@@ -300,23 +257,9 @@ virtualenv 是一个创建 Python 独立环境的包，virtualenvwrapper 使得v
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+- [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
+- [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
+- [windows下使用pycharm配置python的virtualenv环境](https://blog.csdn.net/hy245120020/article/details/50776197)
+- [PyCharm中使用virtualenv](https://segmentfault.com/a/1190000003758895)

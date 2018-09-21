@@ -3,39 +3,10 @@ title: Python 同时装了 Python3 和 Python2 之后怎么使用？
 toc: true
 date: 2018-06-11 08:15:04
 ---
----
-author: evo
-comments: true
-date: 2018-06-01 23:55:02+00:00
-layout: post
-link: http://106.15.37.116/2018/06/02/python-%e5%90%8c%e6%97%b6%e8%a3%85%e4%ba%86-python3-%e5%92%8c-python2-%e4%b9%8b%e5%90%8e%e6%80%8e%e4%b9%88%e4%bd%bf%e7%94%a8%ef%bc%9f/
-slug: python-%e5%90%8c%e6%97%b6%e8%a3%85%e4%ba%86-python3-%e5%92%8c-python2-%e4%b9%8b%e5%90%8e%e6%80%8e%e4%b9%88%e4%bd%bf%e7%94%a8%ef%bc%9f
-title: Python 同时装了 Python3 和 Python2 之后怎么使用？
-wordpress_id: 7338
-categories:
-- 基础程序设计
-tags:
-- python
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。**
-
 
 ## 相关资料
 
-
-
-
-
- 	
-  1. 
-
-
-[同时装了Python3和Python2，怎么用pip？](https://www.zhihu.com/question/21653286)
+- [同时装了Python3和Python2，怎么用pip？](https://www.zhihu.com/question/21653286)
 
 
 
@@ -49,7 +20,7 @@ tags:
 
 
 
- 	
+
   * aaa
 
 
@@ -68,7 +39,7 @@ tags:
 
 
 
- 	
+
   * aaa
 
 
@@ -95,13 +66,13 @@ tags:
 
 
 
- 	
+
   * py -2 hello.py
 
 
 类似的，如果你想用Python3运行它，就这样
 
- 	
+
   * py -3 hello.py
 
 
@@ -114,19 +85,19 @@ tags:
 
 
 
- 	
+
   * #! python2
 
 
 或者
 
- 	
+
   * #! python3
 
 
 分别表示该代码文件使用Python2或者Python3解释运行。这样，运行的时候你的命令就可以简化为
 
- 	
+
   * py hello.py
 
 
@@ -140,13 +111,13 @@ tags:
 
 
 
- 	
+
   * py -2 -m pip install XXXX
 
 
 -2 还是表示使用 Python2，-m pip 表示运行 pip 模块，也就是运行pip命令了。如果是为Python3安装软件，那么命令类似的变成
 
- 	
+
   * py -3 -m pip install XXXX
 
 
@@ -155,7 +126,7 @@ tags:
 
 即：
 
-    
+
     ## 对于 Linux ##
     sudo pip install sth
     # 或者明确版本
@@ -163,15 +134,15 @@ tags:
     sudo pip3 install sth
     sudo python2 -m pip install sth
     sudo /path/to/python -m pip install sth
-    
+
     ## 对于 Windows NT ##
-    
+
     # 如果仅安装 python2
     pip install sth
     # 如果安装有 python3, 则需要明确 pip 版本
     py -2 -m pip install sth
     py -3 -m pip install sth
-    
+
     作者：Johnny Wong
     链接：https://www.zhihu.com/question/21653286/answer/96834584
     来源：知乎
@@ -205,6 +176,3 @@ tags:
 
 
 # COMMENT
-
-
-

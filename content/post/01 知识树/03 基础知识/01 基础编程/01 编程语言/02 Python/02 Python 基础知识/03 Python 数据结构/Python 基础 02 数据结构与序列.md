@@ -129,7 +129,7 @@ print(d)
 
 ```
 tmp = a
-a = b 
+a = b
 b = tmp
 ```
 
@@ -409,7 +409,7 @@ print(c)
 
 ```
 seq = [7, 2, 3, 7, 5, 6, 0, 1]
-seq[1:5] 
+seq[1:5]
 ```
 输出：
 ```
@@ -584,8 +584,8 @@ for i, (a, b) in enumerate(zip(seq1, seq2)):
 如果给我们一个压缩过的序列，我们可以将其解压：==这也行？没看明白？==
 
 ```
-pitchers = [('Nolan', 'Ryan'), 
-            ('Roger', 'Clemens'), 
+pitchers = [('Nolan', 'Ryan'),
+            ('Roger', 'Clemens'),
             ('Schilling', 'Curt')]
 first_names, last_names = zip(*pitchers)
 print(first_names)
@@ -990,7 +990,7 @@ loc_mapping
 
 
 ```
-all_data = [['John', 'Emily', 'Michael', 'Mary', 'Steven'], 
+all_data = [['John', 'Emily', 'Michael', 'Mary', 'Steven'],
             ['Maria', 'Juan', 'Javier', 'Natalia', 'Pilar']]
 ```
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>pip log - 迭代自己</title>
+  <title>Python 工具 Pip 和 virtualenv 的使用 - 迭代自己</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="iterateself" />
-  <meta name="description" content="pip log 在安装 pip 的时候：pip install jieba ：报错： Looking in indexes: http://mirrors.aliyun.com/pypi/simple/ Collecting jieba Installing collected packages: jieba Killed 想知道log 在哪里？ 看到说是： pip install matplotlib &amp;ndash;log log.txt 这个输出的log 不是全部，还是看不到详细" />
+  <meta name="description" content="这两个东西已经使用一段时间了，也总结过一些，是需要全面总结一下了。 要包括： pip 的源的配置，有时候外面的源很慢，之前看过别人的一些配置，全面总结" />
 
   <meta name="keywords" content="Hugo, theme, even" />
 
@@ -29,7 +29,7 @@
 <meta name="generator" content="Hugo 0.47.1" />
 
 
-<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-python-%E4%BB%8B%E7%BB%8D/03-python-%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/pip-log/" />
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-python-%E4%BB%8B%E7%BB%8D/03-python-%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/01.pip/python-%E5%B7%A5%E5%85%B7-pip-%E5%92%8C-virtualenv-%E7%9A%84%E4%BD%BF%E7%94%A8/" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -49,25 +49,25 @@
 
 
 
-<meta property="og:title" content="pip log" />
-<meta property="og:description" content="pip log 在安装 pip 的时候：pip install jieba ：报错： Looking in indexes: http://mirrors.aliyun.com/pypi/simple/ Collecting jieba Installing collected packages: jieba Killed 想知道log 在哪里？ 看到说是： pip install matplotlib &ndash;log log.txt 这个输出的log 不是全部，还是看不到详细" />
+<meta property="og:title" content="Python 工具 Pip 和 virtualenv 的使用" />
+<meta property="og:description" content="这两个东西已经使用一段时间了，也总结过一些，是需要全面总结一下了。 要包括： pip 的源的配置，有时候外面的源很慢，之前看过别人的一些配置，全面总结" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-python-%E4%BB%8B%E7%BB%8D/03-python-%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/pip-log/" /><meta property="article:published_time" content="2018-08-01T17:45:12&#43;00:00"/>
-<meta property="article:modified_time" content="2018-08-01T17:45:12&#43;00:00"/>
-<meta itemprop="name" content="pip log">
-<meta itemprop="description" content="pip log 在安装 pip 的时候：pip install jieba ：报错： Looking in indexes: http://mirrors.aliyun.com/pypi/simple/ Collecting jieba Installing collected packages: jieba Killed 想知道log 在哪里？ 看到说是： pip install matplotlib &ndash;log log.txt 这个输出的log 不是全部，还是看不到详细">
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-python-%E4%BB%8B%E7%BB%8D/03-python-%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/01.pip/python-%E5%B7%A5%E5%85%B7-pip-%E5%92%8C-virtualenv-%E7%9A%84%E4%BD%BF%E7%94%A8/" /><meta property="article:published_time" content="2018-06-14T06:46:15&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-14T06:46:15&#43;00:00"/>
+<meta itemprop="name" content="Python 工具 Pip 和 virtualenv 的使用">
+<meta itemprop="description" content="这两个东西已经使用一段时间了，也总结过一些，是需要全面总结一下了。 要包括： pip 的源的配置，有时候外面的源很慢，之前看过别人的一些配置，全面总结">
 
 
-<meta itemprop="datePublished" content="2018-08-01T17:45:12&#43;00:00" />
-<meta itemprop="dateModified" content="2018-08-01T17:45:12&#43;00:00" />
-<meta itemprop="wordCount" content="79">
+<meta itemprop="datePublished" content="2018-06-14T06:46:15&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-14T06:46:15&#43;00:00" />
+<meta itemprop="wordCount" content="214">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="pip log"/>
-<meta name="twitter:description" content="pip log 在安装 pip 的时候：pip install jieba ：报错： Looking in indexes: http://mirrors.aliyun.com/pypi/simple/ Collecting jieba Installing collected packages: jieba Killed 想知道log 在哪里？ 看到说是： pip install matplotlib &ndash;log log.txt 这个输出的log 不是全部，还是看不到详细"/>
+<meta name="twitter:title" content="Python 工具 Pip 和 virtualenv 的使用"/>
+<meta name="twitter:description" content="这两个东西已经使用一段时间了，也总结过一些，是需要全面总结一下了。 要包括： pip 的源的配置，有时候外面的源很慢，之前看过别人的一些配置，全面总结"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -130,12 +130,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">pip log</h1>
+      <h1 class="post-title">Python 工具 Pip 和 virtualenv 的使用</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2018-08-01 </span>
+        <span class="post-time"> 2018-06-14 </span>
         
-        <span class="more-meta"> 79 words </span>
+        <span class="more-meta"> 214 words </span>
         <span class="more-meta"> 1 min read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
@@ -147,11 +147,7 @@
   <h2 class="post-toc-title">Contents</h2>
   
   <div class="post-toc-content">
-    <nav id="TableOfContents">
-<ul>
-<li><a href="#pip-log">pip log</a></li>
-</ul>
-</nav>
+    
   </div>
 </div>
 
@@ -160,27 +156,14 @@
 
     
     <div class="post-content">
-      
+      <p>这两个东西已经使用一段时间了，也总结过一些，是需要全面总结一下了。</p>
 
-<h1 id="pip-log">pip log</h1>
-
-<p>在安装 pip 的时候：pip install jieba ：报错：</p>
-
-<pre><code>Looking in indexes: http://mirrors.aliyun.com/pypi/simple/
-Collecting jieba
-Installing collected packages: jieba
-Killed
-</code></pre>
-
-<p>想知道log 在哪里？</p>
-
-<p>看到说是：</p>
+<p>要包括：</p>
 
 <ul>
-<li>pip install matplotlib &ndash;log log.txt</li>
+<li>pip 的源的配置，有时候外面的源很慢，之前看过别人的一些配置，全面总结下。</li>
+<li>virtualenv 生成的 env 文件夹的位置，之前都是和项目放在一个文件夹里面的，但是之前看到有人把这个放到项目文件夹里面了，然后我就想，这样是为什么呢？首先，git要怎么处理这个env 文件夹？传吗？还是不传？而且，即使传了，server上也还是需要另配的，不传的话，感觉怪怪的，还需要 在 gitignore 里面 把它过滤掉。</li>
 </ul>
-
-<p>这个输出的log 不是全部，还是看不到详细的为什么 killed 的原因。</p>
 
     </div>
 
@@ -196,14 +179,14 @@ Killed
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/01-python-%E4%BB%8B%E7%BB%8D/03-python-%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83/pip-%E5%88%B0%E5%BA%95%E6%80%8E%E4%B9%88%E7%94%A8/">
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/python-%E4%B8%8E-tensorflow/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">pip 到底怎么用？</span>
+            <span class="prev-text nav-default">Python 与 Tensorflow</span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
         
-          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/pb-%E7%BA%A7%E6%95%B0%E6%8D%AE%E6%98%AF%E5%A4%9A%E5%B0%91/">
-            <span class="next-text nav-default">PB 级数据是多少</span>
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/04-python-%E7%BD%91%E7%BB%9C%E5%BC%80%E5%8F%91/02-python-web-%E5%BC%80%E5%8F%91/02-django/django-08000/">
+            <span class="next-text nav-default">Django 08000</span>
             <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>

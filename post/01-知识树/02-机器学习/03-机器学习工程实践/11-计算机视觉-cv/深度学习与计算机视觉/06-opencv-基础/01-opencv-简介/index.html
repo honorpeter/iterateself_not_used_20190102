@@ -60,7 +60,7 @@
 
 <meta itemprop="datePublished" content="2018-08-29T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-08-29T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="17914">
+<meta itemprop="wordCount" content="17798">
 
 
 
@@ -135,7 +135,7 @@
       <div class="post-meta">
         <span class="post-time"> 2018-08-29 </span>
         
-        <span class="more-meta"> 17914 words </span>
+        <span class="more-meta"> 17798 words </span>
         <span class="more-meta"> 36 mins read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
@@ -159,9 +159,10 @@
 <ul>
 <li><a href="#opencv-的结构">OpenCV 的结构</a></li>
 </ul></li>
-<li><a href="#安装和使用opencv">安装和使用OpenCV</a>
+<li><a href="#安装和使用opencv">安装和使用OpenCV</a></li>
+<li><a href="#python-opencv-基础">Python-OpenCV 基础</a>
 <ul>
-<li>
+<li><a href="#图像的表示">图像的表示</a>
 <ul>
 <li>
 <ul>
@@ -253,47 +254,54 @@
 
 <p>作为最流行的视觉包，在 Linux 中安装 OpenCV 是非常方便的，大多数 Linux 的发行 版都支持包管理器的安装，比如在 Ubuntu 16.04 LTS 中，只需要在终端中输入：</p>
 
-<p>» sudo apt install libopencv-dev python-opencv</p>
+<pre><code>sudo apt install libopencv-dev python-opencv
+</code></pre>
 
 <p>当然也可以通过官网下载源码编译安装，首先安装各种依赖。</p>
 
-<p>» sudo apt install build-essential</p>
-
-<p>»    sudo apt install cmake    git libgtk2.0-dev    pkg-config</p>
-
-<p>libavcodec-dev libavformat-dev libswscale-dev</p>
-
-<p>»    sudo apt-get    install    python-dev    python-numpy libtbb2    libtbb-dev</p>
-
-<p>libjpeg-dev libpng-dev libtiff-dev libj asper-dev libdcl3 94-22-dev</p>
+<pre><code>sudo apt install build-essential
+sudo apt install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libj asper-dev libdcl394-22-dev
+</code></pre>
 
 <p>然后找一个clone压缩包的文件夹，将源码下载下来。</p>
 
-<p>&gt;&gt; git clone <a href="https://github.com/opencv/opencv.git">https://github.com/opencv/opencv.git</a></p>
+<pre><code>git clone https://github.com/opencv/opencv.git
+</code></pre>
 
-<p>然后进入OpenCV文件夹。</p>
+<p>然后进入 OpenCV 文件夹。</p>
 
-<p>» mkdir release » cd release</p>
+<pre><code>mkdir release
+cd release
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local..
+</code></pre>
 
-<p>» cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREF工X=/usr/local.. 准备完毕，直接make并安装。</p>
+<p>准备完毕，直接make并安装。</p>
 
-<p>&gt;&gt; make</p>
+<pre><code>make
+sudo make install
+</code></pre>
 
-<p>» sudo make install</p>
+<p>Windows 下的安装也很简单，直接去 OpenCV 官网 <a href="http://opencv.org/downloads.html">http://opencv.org/downloads.html</a> 下载即可。</p>
 
-<p>Windows 下的安装也很简单，直接去 OpenCV 官网 <a href="http://opencv.org/downloads.html">http://opencv.org/downloads.html</a> 下 载即可。</p>
+<p>执行exe文件安装后，会在 <code>&lt;安装目录&gt;\build\python/2.7</code> 下发现一个<code>cv2.pyd</code>的文件， 把该文件复制到 <code>&lt;Python目录&gt;\Lib\site-packages</code> 下就可以了。Windows 下如果只想在 Python 中体验 OpenCV ，有个更简单的方法是加州大学尔湾分校(University of California，Irvine) 的Christoph Gohlke制作的 Windows 下的 Python 科学计算包网页，下载对应版本的 wheel 文件，然后通过 pip 安装即可，下载地址为 <a href="https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv">https://www.lfd.uci.edu/~gohlke/pythonlibs/#opencv</a> 。<span style="color:red;">这个是只能在 Python 里面使用吗？</span></p>
 
-<p>执行exe文件安装后，会在＜安装目录〉\build\python/2.7下发现一个cv2.pyd的文件， 把该文件复制到＜?外11011目录〉\Lib\site-packages下就可以了。Windows下如果只想在Python 中体验OpenCV,有个更简单的方法是加州大学尔湾分校(University of California，Irvine) 的Christoph Gohlke制作的Windows下的Python科学计算包网页，下载对应版本的wheel 文件，然后通过 pip 安装即可，下载地址为 <a href="http://www.lfd.uci.edu/~gohlke/pythonlibs/%23opencvo">http://www.lfd.uci.edU/~gohlke/pythonlibs/#opencvo</a></p>
+<p>本节只讲 Python 下的 OpenCV 基本用法，Python 中导入 OpenCV 非常简单：</p>
 
-<p>本节只讲Python下的OpenCV基本用法，Python中导入OpenCV非常简单： import cv2 这样就导入成功了。</p>
+<pre><code>import cv2
+</code></pre>
 
-<p>6.2 Python-OpenCV 基础</p>
+<p>这样就导入成功了。</p>
 
-<p>本节主要讲解在Python中利用OpenCV的图像存取，以及与深度学习中图像预处理阶 段相关的最基本使用。</p>
+<h2 id="python-opencv-基础">Python-OpenCV 基础</h2>
 
-<p>6.2.1图像的表示</p>
+<p>本节主要讲解在 Python 中利用 OpenCV 的图像存取，以及与深度学习中图像预处理阶段相关的最基本使用。</p>
 
-<p>前面章节已经提到过了单通道的灰度图像在计算机中的表示，就是一个8位无符号整 形的矩阵。在OpenCV的C++代码中，表示图像有个专门的结构cv::Mat,不过在 Python-OpenCV中^因为已经有了 NumPy这种强大的基础工具，所以这个矩阵就用NumPy 的array表示。如果是多通道情况，最常见的就是红绿蓝(RGB)三通道，则第一个维度 是高度，第二个维度是高度，第三个维度是通道，如图6-la所示为一幅3x3图像在计算机 中表示的例子。</p>
+<h3 id="图像的表示">图像的表示</h3>
+
+<p>前面章节已经提到过了单通道的灰度图像在计算机中的表示，就是一个 8 位无符号整形的矩阵。在 OpenCV 的 C++ 代码中，表示图像有个专门的结构<code>cv::Mat</code>，不过在 Python-OpenCV 中因为已经有了 NumPy 这种强大的基础工具，所以这个矩阵就用 NumPy 的 array 表示。</p>
+
+<p>如果是多通道情况，最常见的就是红绿蓝(RGB)三通道，则第一个维度是高度，第二个维度是高度，第三个维度是通道，如图 6-la 所示为一幅 3x3 图像在计算机中表示的例子。</p>
 
 <p>分通道表示</p>
 

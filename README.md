@@ -1,6 +1,6 @@
 主要内容在 '/content/post' 内。
 
-# iterateself
+# iterate self
 
 wiki for self iterate.
 
@@ -25,6 +25,10 @@ wiki for self iterate.
     - 基础计算机：只要是做出人工智能可能需要掌握的。
 
 i like the tree very much.
+
+## 关于增进对世界的理解
+
+暂时是空的。
 
 ## 关于个人迭代
 

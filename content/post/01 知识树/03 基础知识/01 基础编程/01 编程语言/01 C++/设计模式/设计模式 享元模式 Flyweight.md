@@ -1,97 +1,17 @@
 ---
-title: 设计模式 享元模式（Flyweight）
+title: 设计模式 享元模式 Flyweight
 toc: true
 date: 2018-07-27 17:55:13
 ---
----
-author: evo
-comments: true
-date: 2018-05-31 23:42:03+00:00
-layout: post
-link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%ba%ab%e5%85%83%e6%a8%a1%e5%bc%8f%ef%bc%88flyweight%ef%bc%89/
-slug: '%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%ba%ab%e5%85%83%e6%a8%a1%e5%bc%8f%ef%bc%88flyweight%ef%bc%89'
-title: 设计模式 享元模式（Flyweight）
-wordpress_id: 7171
-categories:
-- 基础程序设计
-tags:
-- Design Patterns
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。**
-
-
-## 相关资料
-
-
-
-
-
-
-  1. [design-patterns-cpp](https://github.com/yogykwan/design-patterns-cpp)  作者： [Jennica](http://jennica.space/)  厉害的
-
-
-  2. 《设计模式精解 - GoF 23种设计模式解析》
-
-
-  3. 《大话设计模式》作者 程杰
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
-
-
-
-
-# INTRODUCTION
-
-
-
-
-
-
-  * aaa
-
-
-
+# 需要补充的
 
 
 # 享元模式（Flyweight）
 
-
-
-
-
-
-  1. 享元模式：运用共享技术有效支持大量细粒度对象。
-
-
-  2. 在享元模式对象内部不随环境改变的共享部分是内部状态，不可共享需要通过调用传递进来的参数是外部状态。
-
-
-  3. 使用享元模式的场景包括，一个应用程序产生了大量的实例对象，占用了大量内存开销；或对象的大多数状态为外部状态，删除内部状态后可以用较少的共享对象来取代组对象。
-
-
-  4. 应用场景有正则表达式、浏览器、机器人指令集等。
+- 享元模式：运用共享技术有效支持大量细粒度对象。
+- 在享元模式对象内部不随环境改变的共享部分是内部状态，不可共享需要通过调用传递进来的参数是外部状态。
+- 使用享元模式的场景包括，一个应用程序产生了大量的实例对象，占用了大量内存开销；或对象的大多数状态为外部状态，删除内部状态后可以用较少的共享对象来取代组对象。
+- 应用场景有正则表达式、浏览器、机器人指令集等。
 
 
 
@@ -255,15 +175,9 @@ Flyweight模式在实现过程中主要是要为共享对象提供一个存放�
 
 
 
+# 相关资料
 
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+- [design-patterns-cpp](https://github.com/yogykwan/design-patterns-cpp)  作者： [Jennica](http://jennica.space/)  厉害的
+- 《设计模式精解 - GoF 23种设计模式解析》
+- 《大话设计模式》作者 程杰
+杰

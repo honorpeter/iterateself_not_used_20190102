@@ -5,9 +5,7 @@ date: 2018-08-19 17:00:05
 menu: main
 weight: 50
 ---
-# iterate self
-
-wiki for self iterate.
+# 迭代自己 iterate self
 
 注：大多数信息不是我原创的，我只是收集然后在其基础上迭代，因此，**所有的文档仅用于学习，版权属于原作者**。
 

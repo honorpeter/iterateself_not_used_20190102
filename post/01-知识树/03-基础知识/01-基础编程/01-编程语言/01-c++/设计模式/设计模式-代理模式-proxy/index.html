@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>设计模式 代理模式（Proxy） - 迭代自己</title>
+  <title>设计模式 代理模式 Proxy - 迭代自己</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="iterateself" />
-  <meta name="description" content="author: evo comments: true date: 2018-05-31 23:38:51&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89/ slug: &amp;lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89&amp;rsquo; title: 设计模式 代理模式（Proxy） wordpress_id: 7162 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了" />
+  <meta name="description" content="需要补充的 代理模式：为其他对象提供一种代理以控制对这个对象的访问。实际上是在访问对象时引入一定程度的间接性。 远程代理：为一个对象在不同地址空" />
 
   <meta name="keywords" content="Hugo, theme, even" />
 
@@ -29,7 +29,7 @@
 <meta name="generator" content="Hugo 0.47.1" />
 
 
-<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8Fproxy/" />
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F-proxy/" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -49,25 +49,25 @@
 
 
 
-<meta property="og:title" content="设计模式 代理模式（Proxy）" />
-<meta property="og:description" content="author: evo comments: true date: 2018-05-31 23:38:51&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89&rsquo; title: 设计模式 代理模式（Proxy） wordpress_id: 7162 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了" />
+<meta property="og:title" content="设计模式 代理模式 Proxy" />
+<meta property="og:description" content="需要补充的 代理模式：为其他对象提供一种代理以控制对这个对象的访问。实际上是在访问对象时引入一定程度的间接性。 远程代理：为一个对象在不同地址空" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8Fproxy/" /><meta property="article:published_time" content="2018-07-27T17:55:39&#43;00:00"/>
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/01-c&#43;&#43;/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F-proxy/" /><meta property="article:published_time" content="2018-07-27T17:55:39&#43;00:00"/>
 <meta property="article:modified_time" content="2018-07-27T17:55:39&#43;00:00"/>
-<meta itemprop="name" content="设计模式 代理模式（Proxy）">
-<meta itemprop="description" content="author: evo comments: true date: 2018-05-31 23:38:51&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89&rsquo; title: 设计模式 代理模式（Proxy） wordpress_id: 7162 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了">
+<meta itemprop="name" content="设计模式 代理模式 Proxy">
+<meta itemprop="description" content="需要补充的 代理模式：为其他对象提供一种代理以控制对这个对象的访问。实际上是在访问对象时引入一定程度的间接性。 远程代理：为一个对象在不同地址空">
 
 
 <meta itemprop="datePublished" content="2018-07-27T17:55:39&#43;00:00" />
 <meta itemprop="dateModified" content="2018-07-27T17:55:39&#43;00:00" />
-<meta itemprop="wordCount" content="1134">
+<meta itemprop="wordCount" content="1038">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="设计模式 代理模式（Proxy）"/>
-<meta name="twitter:description" content="author: evo comments: true date: 2018-05-31 23:38:51&#43;00:00 layout: post link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89/ slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89&rsquo; title: 设计模式 代理模式（Proxy） wordpress_id: 7162 categories: - 基础程序设计 tags: - Design Patterns [mathjax] 注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了"/>
+<meta name="twitter:title" content="设计模式 代理模式 Proxy"/>
+<meta name="twitter:description" content="需要补充的 代理模式：为其他对象提供一种代理以控制对这个对象的访问。实际上是在访问对象时引入一定程度的间接性。 远程代理：为一个对象在不同地址空"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -130,12 +130,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">设计模式 代理模式（Proxy）</h1>
+      <h1 class="post-title">设计模式 代理模式 Proxy</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2018-07-27 </span>
         
-        <span class="more-meta"> 1134 words </span>
+        <span class="more-meta"> 1038 words </span>
         <span class="more-meta"> 3 mins read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
@@ -149,14 +149,8 @@
   <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
-<li>
-<ul>
-<li><a href="#design-patterns">- Design Patterns</a></li>
-<li><a href="#相关资料">相关资料</a></li>
 <li><a href="#需要补充的">需要补充的</a></li>
-</ul></li>
-<li><a href="#introduction">INTRODUCTION</a></li>
-<li><a href="#comment">COMMENT</a></li>
+<li><a href="#相关资料">相关资料</a></li>
 </ul>
 </nav>
   </div>
@@ -169,63 +163,15 @@
     <div class="post-content">
       
 
-<hr />
-
-<p>author: evo
-comments: true
-date: 2018-05-31 23:38:51+00:00
-layout: post
-link: <a href="http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89/">http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89/</a>
-slug: &lsquo;%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e4%bb%a3%e7%90%86%e6%a8%a1%e5%bc%8f%ef%bc%88proxy%ef%bc%89&rsquo;
-title: 设计模式 代理模式（Proxy）
-wordpress_id: 7162
-categories:
-- 基础程序设计
-tags:</p>
-
-<h2 id="design-patterns">- Design Patterns</h2>
-
-<!-- more -->
-
-<p>[mathjax]</p>
-
-<p><strong>注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。</strong></p>
-
-<h2 id="相关资料">相关资料</h2>
-
-<ol>
-<li><p><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</p></li>
-
-<li><p>《设计模式精解 - GoF 23种设计模式解析》</p></li>
-
-<li><p>《大话设计模式》作者 程杰</p></li>
-</ol>
-
-<h2 id="需要补充的">需要补充的</h2>
+<h1 id="需要补充的">需要补充的</h1>
 
 <ul>
-<li>aaa</li>
+<li>代理模式：为其他对象提供一种代理以控制对这个对象的访问。实际上是在访问对象时引入一定程度的间接性。</li>
+<li>远程代理：为一个对象在不同地址空间提供局部代表，隐藏一个对象存在于不同空间的事实。如.Net加入Web引用，引入WebService，此时项目会生成WebReference的文件夹，就是代理。</li>
+<li>虚拟代理：根据需要创建开销很大的对象，通过它存放实例化需很长时间的真实对象。HTML中的多图，就是通过虚拟代理代替了真实图片，存储路径和尺寸。</li>
+<li>安全代理：控制真实对象的访问权限，用于对象应该拥有不同的访问权限时。</li>
+<li>智能指引：当调用真实对象时，代理处理一些另外的事情。通过代理在访问对象时增加一些内务处理。</li>
 </ul>
-
-<hr />
-
-<h1 id="introduction">INTRODUCTION</h1>
-
-<ul>
-<li>aaa</li>
-</ul>
-
-<ol>
-<li><p>代理模式：为其他对象提供一种代理以控制对这个对象的访问。实际上是在访问对象时引入一定程度的间接性。</p></li>
-
-<li><p>远程代理：为一个对象在不同地址空间提供局部代表，隐藏一个对象存在于不同空间的事实。如.Net加入Web引用，引入WebService，此时项目会生成WebReference的文件夹，就是代理。</p></li>
-
-<li><p>虚拟代理：根据需要创建开销很大的对象，通过它存放实例化需很长时间的真实对象。HTML中的多图，就是通过虚拟代理代替了真实图片，存储路径和尺寸。</p></li>
-
-<li><p>安全代理：控制真实对象的访问权限，用于对象应该拥有不同的访问权限时。</p></li>
-
-<li><p>智能指引：当调用真实对象时，代理处理一些另外的事情。通过代理在访问对象时增加一些内务处理。</p></li>
-</ol>
 
 <p>2.7 Proxy 模式
 -问题
@@ -255,7 +201,7 @@ Proxy模式典型的结构图为:</p>
 
 <p>proxy.h</p>
 
-<pre><code>#ifndef DESIGN_PATTERNS_PROXY_H
+<pre><code class="language-cpp">#ifndef DESIGN_PATTERNS_PROXY_H
 #define DESIGN_PATTERNS_PROXY_H
 
 #include &lt;iostream&gt;
@@ -305,7 +251,7 @@ private:
 
 <p>proxy.cpp</p>
 
-<pre><code>#include &quot;proxy.h&quot;
+<pre><code class="language-cpp">#include &quot;proxy.h&quot;
 
 SchoolGirl::SchoolGirl(std::string name): name_(name) {
 }
@@ -344,7 +290,7 @@ void Proxy::GiveDolls() {
 
 <p>main.cpp</p>
 
-<pre><code>#include &quot;proxy.h&quot;
+<pre><code class="language-cpp">#include &quot;proxy.h&quot;
 #include &lt;iostream&gt;
 
 
@@ -357,7 +303,6 @@ int main() {
     proxy_-&gt;GiveDolls();
     delete school_girl_;
     delete proxy_;
-
 
     return 0;
 }
@@ -372,9 +317,14 @@ int main() {
 <p>■讨论
 Proxy模式最大的好处就是实现了逻辑和实现的彻底解耦。</p>
 
-<hr />
+<h1 id="相关资料">相关资料</h1>
 
-<h1 id="comment">COMMENT</h1>
+<ul>
+<li><a href="https://github.com/yogykwan/design-patterns-cpp">design-patterns-cpp</a>  作者： <a href="http://jennica.space/">Jennica</a>  厉害的</li>
+<li>《设计模式精解 - GoF 23种设计模式解析》</li>
+<li>《大话设计模式》作者 程杰
+杰</li>
+</ul>
 
     </div>
 

@@ -3,82 +3,10 @@ title: RL 强化学习介绍
 toc: true
 date: 2018-07-28 23:16:12
 ---
----
-author: evo
-comments: true
-date: 2018-05-16 16:23:25+00:00
-layout: post
-link: http://106.15.37.116/2018/05/17/rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d/
-slug: rl-%e5%bc%ba%e5%8c%96%e5%ad%a6%e4%b9%a0%e4%bb%8b%e7%bb%8d
-title: RL 强化学习介绍
-wordpress_id: 5870
-categories:
-- 人工智能学习
-tags:
-- NOT_ADD
-- Reinforcement Learning
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。**
-
-
-## 相关资料
-
-
-
-
-
-
-  1. [强化学习读书笔记 - 01 - 强化学习的问题](http://www.cnblogs.com/steven-yang/p/6440755.html)
-
-
-  2. [强化学习 wiki](https://zh.wikipedia.org/wiki/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0)
-
-
-  3. [强化学习是什么？](https://www.zhihu.com/question/31140846)
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
-
-
-
-
-# INTRODUCTION
-
-
-
-
-
-
-  * aaa
-
-
+# 需要补充的
 
 
 # 强化学习方法介绍
-
-
-
 
 ## 强化学习在机器学习理论中的位置
 
@@ -413,23 +341,8 @@ OK，对上面的元素进行说明：
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
+- [强化学习读书笔记 - 01 - 强化学习的问题](http://www.cnblogs.com/steven-yang/p/6440755.html)
+- [强化学习 wiki](https://zh.wikipedia.org/wiki/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0)
+- [强化学习是什么？](https://www.zhihu.com/question/31140846)

@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>回归 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 认真总结 需要添加 Andrew Ng,Machine Learning。和统计学习方法的东西。 将线性回归拆分出去，并且局部加权线性回归要说清楚点，机器学习实战 书上提" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/%E5%9B%9E%E5%BD%92/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="回归" />
+<meta property="og:description" content="需要补充的 认真总结 需要添加 Andrew Ng,Machine Learning。和统计学习方法的东西。 将线性回归拆分出去，并且局部加权线性回归要说清楚点，机器学习实战 书上提" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/%E5%9B%9E%E5%BD%92/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="回归">
+<meta itemprop="description" content="需要补充的 认真总结 需要添加 Andrew Ng,Machine Learning。和统计学习方法的东西。 将线性回归拆分出去，并且局部加权线性回归要说清楚点，机器学习实战 书上提">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="7960">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="回归"/>
+<meta name="twitter:description" content="需要补充的 认真总结 需要添加 Andrew Ng,Machine Learning。和统计学习方法的东西。 将线性回归拆分出去，并且局部加权线性回归要说清楚点，机器学习实战 书上提"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">回归</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 7960 words </span>
+        <span class="more-meta"> 16 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#知识前提">知识前提</a></li>
+<li><a href="#回归">回归</a></li>
+<li><a href="#回归介绍">回归介绍</a>
+<ul>
+<li><a href="#到底什么是回归">到底什么是回归？</a></li>
+<li><a href="#为什么叫回归这个名字">为什么叫回归这个名字？</a></li>
+<li><a href="#有那些回归的方法">有那些回归的方法？</a></li>
+</ul></li>
+<li><a href="#线性回归">线性回归</a>
+<ul>
+<li><a href="#简单介绍">简单介绍</a></li>
+<li><a href="#先给样本添加满足正态分布的误差">先给样本添加满足正态分布的误差</a></li>
+<li><a href="#进而转化为-y-的似然函数">进而转化为 y 的似然函数</a></li>
+<li><a href="#这时就可以求这个似然函数的最小值">这时就可以求这个似然函数的最小值</a></li>
+<li><a href="#那么这个时候就可以得到最小二乘">那么这个时候就可以得到最小二乘</a></li>
+<li><a href="#那么怎么求最小二乘时候的最优解呢">那么怎么求最小二乘时候的最优解呢？</a>
+<ul>
+<li><a href="#先明确一下目标函数">先明确一下目标函数</a></li>
+<li><a href="#然后对-theta-求梯度">然后对(\theta)求梯度</a></li>
+<li><a href="#于是就得到了-theta">于是就得到了(\theta)</a></li>
+<li><a href="#那么如果-x-tx-不可逆或过拟合怎么办呢">那么如果(X^TX)不可逆或过拟合怎么办呢？</a></li>
+<li><a href="#对加入的扰动-λ-再做一些讲解">对加入的扰动 λ 再做一些讲解</a></li>
+<li><a href="#对涉及到的-广义逆矩阵-伪逆-的讲解">对涉及到的 广义逆矩阵（伪逆）的讲解</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#梯度下降算法">梯度下降算法</a>
+<ul>
+<li><a href="#为什么要用梯度下降法">为什么要用梯度下降法？</a></li>
+<li><a href="#那么什么是梯度下降算法呢">那么什么是梯度下降算法呢？</a></li>
+<li><a href="#好了-开始计算最小二乘的梯度是什么">好了，开始计算最小二乘的梯度是什么</a></li>
+<li><a href="#有了梯度就可以进行梯度下降了">有了梯度就可以进行梯度下降了</a></li>
+<li><a href="#梯度下降的一些信息">梯度下降的一些信息</a></li>
+<li><a href="#批处理梯度下降图示">批处理梯度下降图示</a></li>
+<li><a href="#随机梯度下降算法">随机梯度下降算法</a></li>
+<li><a href="#mini-batch-梯度下降算法">mini-batch 梯度下降算法</a></li>
+</ul></li>
+<li><a href="#梯度下降代码">梯度下降代码</a>
+<ul>
+<li><a href="#批处理梯度下降-要自己实现一下">批处理梯度下降  要自己实现一下</a>
+<ul>
+<li><a href="#代码">代码</a></li>
+<li><a href="#学习率代码">学习率代码</a></li>
+<li><a href="#线性回归-rate-loss">线性回归、rate、Loss</a></li>
+</ul></li>
+<li><a href="#随机梯度下降"> 随机梯度下降</a>
+<ul>
+<li><a href="#代码-1">代码</a></li>
+<li><a href="#输出"> 输出</a></li>
+</ul></li>
+<li><a href="#结果对比">结果对比：</a></li>
+</ul></li>
+<li><a href="#线性回归的进一步分析">线性回归的进一步分析</a>
+<ul>
+<li><a href="#线性回归解决分类问题是否可行">线性回归解决分类问题是否可行？</a></li>
+<li><a href="#多项式回归">多项式回归</a></li>
+<li><a href="#局部加权线性回归">局部加权线性回归</a>
+<ul>
+<li><a href="#局部加权线性回归-1">局部加权线性回归</a></li>
+<li><a href="#权值的设置-核函数">权值的设置 核函数</a></li>
+</ul></li>
+<li><a href="#局部回归与多项式回归那个好">局部回归与多项式回归那个好</a></li>
+</ul></li>
+<li><a href="#logistic回归">Logistic回归</a>
+<ul>
+<li><a href="#logistic-函数">Logistic 函数</a></li>
+<li><a href="#让-y-服从二项分布">让 y 服从二项分布</a></li>
+<li><a href="#这个时候求logrange函数">这个时候求Logrange函数</a></li>
+<li><a href="#然后求对数似然函数及其梯度">然后求对数似然函数及其梯度</a></li>
+<li><a href="#将梯度带入得到logistic回归参数的学习规则">将梯度带入得到Logistic回归参数的学习规则</a></li>
+</ul></li>
+<li><a href="#logistic回归与线性回归的关系">Logistic回归与线性回归的关系</a>
+<ul>
+<li><a href="#那么可以根据指数族扩展到广义线性模型-glm">那么可以根据指数族扩展到广义线性模型 GLM</a></li>
+</ul></li>
+<li><a href="#使用lagrange对偶来求-x-tx-的最小值">使用Lagrange对偶来求 (x^Tx)的最小值</a>
+<ul>
+<li><a href="#线性方程的最小二乘问题">线性方程的最小二乘问题</a></li>
+<li><a href="#通过原始的lagrange函数怎么求对偶函数">通过原始的Lagrange函数怎么求对偶函数：</a></li>
+<li><a href="#求对偶函数的极大值">求对偶函数的极大值</a></li>
+<li><a href="#带进去就求到了极值点">带进去就求到了极值点</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT：</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>认真总结</li>
+<li>需要添加 Andrew Ng,Machine Learning。和统计学习方法的东西。</li>
+<li>将线性回归拆分出去，并且局部加权线性回归要说清楚点，机器学习实战 书上提到了</li>
+<li>把Logistic回归拆分出去，而且，为什么logistic回归叫着回归的名字却是用来做分类的呢？</li>
+<li>把梯度下降拆分出去</li>
+<li>岭回归和Lasso要添加进来，并拆分到线性回归里面</li>
+</ul>
+
+<h1 id="知识前提">知识前提</h1>
+
+<ul>
+<li>矩阵变换与特征值</li>
+<li>向量求导</li>
+<li>还有一些知识这个地方会用到，要补充下。</li>
+</ul>
+
+<h1 id="回归">回归</h1>
+
+<p>对机器学习中回归问题相关的总结</p>
+
+<h1 id="回归介绍">回归介绍</h1>
+
+<h2 id="到底什么是回归">到底什么是回归？</h2>
+
+<p>我们已经知道一些分类的算法了，分类的目标变量是标称型数据，也就是说，只要把样本对应到某个类别上就行。</p>
+
+<p>但是，有些问题，比如说给定一些过去每天的股价信息，然后让你预测今天的股价，那么这个股价就不再是一个类别了，而是一个数，把每天的股价看作样本，就相当于根据这些样本得到今天的样本对应的值。这其实就是一个回归问题，回归的目的是预测样本的数值型目标值。</p>
+
+<h2 id="为什么叫回归这个名字">为什么叫回归这个名字？</h2>
+
+<p>回归的目的是预测数值型的目标值。</p>
+
+<p>而我们最直接的办法就是依据输入写出一个目标值的计算公式。</p>
+
+<p>比如说，你想要预测兰博基尼跑车的功率大小，可能会这样计算：</p>
+
+<p>HorsePower = 0.0015 * annualSalary - 0.99 * hoursListeningToPublicRadio</p>
+
+<p>那么这个方程就是所谓的 回归方程(regression equation)，其中的 0.0015 和 -0.99 被称作 回归系数（regression weights），而求这些回归系数的过程就是回归。所以回归的大体意思就是这样。<strong>还是优点不清晰。</strong></p>
+
+<h2 id="有那些回归的方法">有那些回归的方法？</h2>
+
+<p>说到回归，一般都是指 线性回归(linear regression)。线性回归意味着可以将输入项分别乘以一些常量，再将结果加起来得到输出。</p>
+
+<h1 id="线性回归">线性回归</h1>
+
+<h2 id="简单介绍">简单介绍</h2>
+
+<p>回归就是：万事万物都向中间靠拢，这个过程叫做回归，比如太阳不断的回归到赤道。</p>
+
+<p>y=ax+b， x是房屋面积，y是房屋价格</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/856eIehmCC.png?imageslim" alt="mark" /></p>
+
+<p>考虑两个变量的时候呢：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EBFemBC2H3.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/B133b68Bhk.png?imageslim" alt="mark" /></p>
+
+<p>在上面的式子中，可以在(\theta_0)的地方加上一个强制为1的(x_0)，这样就得到了下面的式子，而且可从i=0开始。</p>
+
+<p>要注意的是，这个地方的(\theta^Tx)里面的(\theta)和(x)都是向量了。</p>
+
+<p>那么现在也就是说已经有了 (x) 和 (h<em>{\theta}(x)) ，让你来估计 (\theta)，这个就是线性回归的基本想法。这个地方要注意 (x)  是已知的， (h</em>{\theta}(x)) 也是已知的，这个式子是关于(\theta) 的一个函数，虽然我们写成的是 (h_{\theta}(x)) 。</p>
+
+<p>那么我们怎么求这个 (\theta) 呢？</p>
+
+<h2 id="先给样本添加满足正态分布的误差">先给样本添加满足正态分布的误差</h2>
+
+<p>首先对于第i个样本来说：</p>
+
+<p>[y^{i}=\theta^Tx^{i}+\epsilon^{i}]</p>
+
+<p>每个样本有一个对应的(\epsilon)，是一个噪声或者说误差。</p>
+
+<p>因为每个样本是独立的，所以可以认为每个(\epsilon)是独立的，而且可以认为是相同分布的。</p>
+
+<p>而它可以认为是大量的细节的未知的东西影响得到的，而这样的东西根据<a href="http://106.15.37.116/2018/03/31/ai-probability-statistics-the-law-of-large-numbers-and-the-central-limit-theorem/">中心极限定理</a>可以认为它的分布是最最正常状态的分布，即正态分布，也即高斯分布。</p>
+
+<p>由于(\theta)里面含有(\theta_0)，对应的(x_0)为1，因此，如果(\epsilon)的均值不是0，那么总是可以将不是0的部分划到(\theta_0)里面。所以可以认为(\epsilon)满足的这个高斯分布均值是0，方差是(\sigma^2)。<strong>嗯 是的，可以这么认为。</strong></p>
+
+<p>##</p>
+
+<h2 id="进而转化为-y-的似然函数">进而转化为 y 的似然函数</h2>
+
+<p>(\epsilon)的概率密度函数为：</p>
+
+<p>[p(\epsilon^(i))=\frac{1}{\sqrt{2\pi}\omega}exp(-\frac{(\epsilon^{(i)})^2}{2\sigma^2})]</p>
+
+<p>将(y^{(i)}=\theta^Tx^{(i)}+\epsilon^{(i)})带入得到：</p>
+
+<p>[p(y^{(i)}\mid x^{(i)};\theta)=\frac{1}{\sqrt{2\pi}\sigma}exp(-\frac{(y^{(i)}-\theta^Tx^{(i)})^2}{2\sigma^2})]</p>
+
+<p>这个地方有两个地方要注意下：① 这个式子本质上是一个关于(\theta)的一个函数。② 这个式子实际上是表达在 (x^{(i)}) 和 (\theta) 的条件下 (y^{(i)}) 的概率，也就是说 (y^{(i)}) 出现的概率，这样我们就可以把所有的概率密度函数乘起来，就得到下面的似然函数：</p>
+
+<p>[\begin{align<em>}L(\theta)&amp;=\prod<em>{i=1}^{m}p(y^{(i)}\mid x^{(i)};\theta)\&amp;=\prod</em>{i=1}^{m}\frac{1}{\sqrt{2\pi}\sigma}exp(-\frac{(y^{(i)}-\theta^Tx^{(i)})^2}{2\sigma^2})\end{align</em>}]</p>
+
+<h2 id="这时就可以求这个似然函数的最小值">这时就可以求这个似然函数的最小值</h2>
+
+<p>然后，我们怎么去求这个似然函数的最小值呢？可以先取对数，得到对数似然函数：</p>
+
+<p>[\begin{align<em>}l(\theta)&amp;=log\,L(\theta)\&amp;=log(\prod<em>{i=1}^{m}\frac{1}{\sqrt{2\pi}\sigma}exp(-\frac{(y^{(i)}-\theta^Tx^{(i)})^2}{2\sigma^2}))\&amp;=\sum</em>{i=1}^{m}log(\frac{1}{\sqrt{2\pi}\sigma}exp(-\frac{(y^{(i)}-\theta^Tx^{(i)})^2}{2\sigma^2}))\&amp;=m\,log\frac{1}{\sqrt{2\pi}\sigma}-\frac{1}{\sigma^2}\cdot \frac{1}{2}\sum_{i=1}^{m}(y^{(i)}-\theta^Tx^{(i)})^2\end{align</em>}]</p>
+
+<h2 id="那么这个时候就可以得到最小二乘">那么这个时候就可以得到最小二乘</h2>
+
+<p>我们想做的是<a href="http://106.15.37.116/2018/03/31/ai-probability-statistics-moment-estimation-and-maximum-likelihood-estimation/#_MLE">极大似然估计</a>，即想求(l(\theta))的最大值，而m是样本的数量，(\sigma)是噪声的方差，可以认为是一个固定的值，那么就可以转化成求下面这个式子的最小值：<strong>这个(h_\theta (x^{(i)}))就是上面的(\theta^Tx^{(i)})，因此实际上没错。</strong></p>
+
+<p>[J(\theta)=\frac{1}{2}\sum<em>{i=1}^{m}(h</em>\theta (x^{(i)})-y^{(i)})^2]</p>
+
+<p><strong>求这个式子的最小，就是所谓的最小二乘。</strong>可见，<strong>最小二乘是在假定误差为正态分布的情况下，使用极大似然估计推导得出的结论。</strong><strong>这个地方要注意：如果在特定场景下噪声的分布不是正态分布，那么就不能用正太分布的公式来做。</strong></p>
+
+<p>对于上面这个式子来说，只有(\theta)是未知数，那么怎么去求呢？</p>
+
+<h2 id="那么怎么求最小二乘时候的最优解呢">那么怎么求最小二乘时候的最优解呢？</h2>
+
+<h3 id="先明确一下目标函数">先明确一下目标函数</h3>
+
+<p>将M个N维样本组成矩阵X，其中，X的每一行对应一个样本，共M个样本，X的每一列对应样本的一个维度，共N维。其实还有额外的一维常数项，全为1。</p>
+
+<p>那么，目标函数就是：因为模的平方相当于转置与自身的点乘。</p>
+
+<p>[J(\theta)=\frac{1}{2}\sum<em>{i=1}^{m}(h</em>\theta (x^{(i)})-y^{(i)})^2]</p>
+
+<p>因为模的平方相当于转置与自身的点乘：</p>
+
+<p>[J(\theta)=\frac{1}{2}\sum<em>{i=1}^{m}(h</em>\theta (x^{(i)})-y^{(i)})^2=\frac{1}{2}(X\theta-y)^T(X\theta-y)]</p>
+
+<h3 id="然后对-theta-求梯度">然后对(\theta)求梯度</h3>
+
+<p>这是一个关于(\theta)的方程，那么可以对(\theta)求梯度：</p>
+
+<p>[\begin{align<em>}\bigtriangledown<em>\theta J(\theta)&amp;=\bigtriangledown</em>\theta (\frac{1}{2}(X\theta-y)^T(X\theta-y))\&amp;=\bigtriangledown<em>\theta (\frac{1}{2}(\theta^TX^T-y^T)(X\theta-y))\ &amp;=\bigtriangledown</em>\theta(\frac{1}{2}(\theta^TX^TX\theta-\theta^TX^Ty-y^TX\theta+y^Ty))\&amp;=\frac{1}{2}(2X^TX\theta-X^Ty-(y^TX)^T)\&amp;=X^TX\theta-X^Ty\&amp;\overset{求驻点}{\rightarrow}0\end{align</em>}]</p>
+
+<p>说明一下。在(\bigtriangledown_\theta(\frac{1}{2}(\theta^TX^TX\theta-\theta^TX^Ty-y^TX\theta+y^Ty)))中，(\theta^TX^TX\theta) 的(\X^TX)一定是个对称阵，因此根据前提知识点：标量对向量的导数得到(2X^TX\theta)，而 (\theta^TX^Ty) 和 (y^TX\theta) 根据前提知识点：向量的导数 得到(X^Ty)和(y^TX)^T。</p>
+
+<h3 id="于是就得到了-theta">于是就得到了(\theta)</h3>
+
+<p>现在既然(X^TX\theta-X^Ty=0)，那么(\theta)就是下面的式子，参数的解析式如下：</p>
+
+<p>[\theta=(X^TX)^{-1}X^Ty]</p>
+
+<p>上面这个就是我们得到的结论。</p>
+
+<h3 id="那么如果-x-tx-不可逆或过拟合怎么办呢">那么如果(X^TX)不可逆或过拟合怎么办呢？</h3>
+
+<p>如果(X^TX)不可逆或防止过拟合，增加(\lambda)扰动，保证它一定是正定的。因为(X^TX)一定是半正定的。如果(X^TX)是不可逆的，那么就不能求逆，而且，如果有100个样本而n的维度是10000，那么肯定过拟合了，而且一定不可逆，而(\lambda)的取值一般是从小的值开始试就行。这个加 (\lambda) 其实不是随便加的，其实可以把它认为是极大后验估计MAP。<strong>为什么？</strong><strong>为什么可以保证是正定的？为什么可以加这个(\lambda).  (X^TX)不一定满秩，所以一定不可逆，然后(\lambda)是L2正则项。</strong></p>
+
+<p>[\theta=(X^TX+\lambda I)^{-1}X^Ty]</p>
+
+<h3 id="对加入的扰动-λ-再做一些讲解">对加入的扰动 λ 再做一些讲解</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LlEclDBDme.png?imageslim" alt="mark" /></p>
+
+<h3 id="对涉及到的-广义逆矩阵-伪逆-的讲解">对涉及到的 广义逆矩阵（伪逆）的讲解</h3>
+
+<p>A为非奇异矩阵,则线性方程组Ax=b的解为(x=A^{-1}b)其中A的逆矩阵(A^{-1})满足(A^{-1}A=AA^{-1}=I) (I为单位矩阵)。若A是奇异阵或长方阵,( x=A^+b)。(A^+)叫做A的伪逆阵。<strong>什么是非奇异？</strong></p>
+
+<p>1955年R.Penrose证明了对每个m×n阶矩阵A,都存在惟一的n×m阶矩阵X，满足：</p>
+
+<ol>
+<li><p>AXA=A</p></li>
+
+<li><p>XAX=X</p></li>
+
+<li><p>(AX)*＝I</p></li>
+
+<li><p>(XA)*＝I</p></li>
+</ol>
+
+<p>通常称 X 为 A 的穆尔-彭罗斯广义逆矩阵,简称M-P逆，记作(A^+) 。</p>
+
+<p>在矛盾线性方程组Ax＝b的最小二乘解中, (x=A^+b)是范数最小的一个解。</p>
+
+<p>在奇异值分解SVD的问题中，将继续该话题的讨论。</p>
+
+<h1 id="梯度下降算法">梯度下降算法</h1>
+
+<h2 id="为什么要用梯度下降法">为什么要用梯度下降法？</h2>
+
+<p>为什么要用梯度下降法？上面不是已经把最优点的(\theta)求出来了吗？</p>
+
+<p>事实上，一般而言，不是直接用上面的(\theta)的解析式求的，因为里面有一个方阵求逆运算的操作，这个一般来说时间复杂度是(O(N^3))的。<strong>现在有没有更好的方法？</strong></p>
+
+<p>因此一般而言，也为了变成方便 因此使用梯度下降</p>
+
+<p>而梯度下降是几乎任何一个函数都可以使用的方法。也是机器学习里面用的最广泛的。实践中也是应用的最广泛的。</p>
+
+<h2 id="那么什么是梯度下降算法呢">那么什么是梯度下降算法呢？</h2>
+
+<p>以第 j 维对应的 (\theta) 为例：</p>
+
+<ol>
+<li><p>初始化(theta) 随机初始化</p></li>
+
+<li><p>迭代，新的(theta)能够使(J(\theta))更小。(\theta_j:=\theta_j-\alpha\frac{\partial}{\partial \theta_j}J(\theta))。即对(J(\theta))求偏导，然后沿着负的方向不断走。其中 (\alpha) 被称为学习率或者步长。<strong>为什么是 (\theta_j) ？哦，这个是第 j 维对应的 (\theta) ，实际上，每个维度对应的(\theta) 都是要自己不断迭代的。</strong></p></li>
+
+<li><p>如果(J(\theta))能够继续减小，返回2</p></li>
+</ol>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mc3b8BEFag.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ABm46IK4Cc.png?imageslim" alt="mark" /></p>
+
+<h2 id="好了-开始计算最小二乘的梯度是什么">好了，开始计算最小二乘的梯度是什么</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FIE2Ida4dd.png?imageslim" alt="mark" /></p>
+
+<h2 id="有了梯度就可以进行梯度下降了">有了梯度就可以进行梯度下降了</h2>
+
+<p>因此将这个梯度带入到梯度下降的式子里，而且如何利用这m个样本呢？可以对所有的样本每个都求梯度，假定所有的样本的重要程度是一样的（<strong>实际上，样本的重要程度可能是不一样的，就比如下面介绍的局部加权线性回归</strong>），然后加起来，走一个很小的(\alpha)，因此得到下面的式子：</p>
+
+<p>[\theta_j:=\theta<em>j+\alpha\sum</em>{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}]</p>
+
+<p>由于是n维的数据，有 n 个 (\theta)，因此上面的式子要计算 n 遍，然后进行下一轮迭代。</p>
+
+<p>这个就是所谓的<strong>批处理的梯度下降算法</strong>。能够保证每走一步就能够接近我们最真实的(\theta)。</p>
+
+<p>由于(J(\theta)=\frac{1}{2}\sum<em>{i=1}^{m}(h</em>\theta (x^{(i)})-y^{(i)})^2) 关于(\theta)是一个凸函数，因此对于任何一点，可以沿着梯度求出局部最小值，并且一定会收敛到全局最小值。</p>
+
+<h2 id="梯度下降的一些信息">梯度下降的一些信息</h2>
+
+<p>梯度下降的缺点就是需要给定一个(\alpha)，这个值是需要给定的，但是确可以不固定的，每一步给一个(\alpha)也是可以的。这个的给定有一些比较有趣的方案，方案下次讲，<strong>讲了之后补充过来。</strong></p>
+
+<p>对于最小二乘法来说，梯度下降能够得到全局最优解，但是对于别的方法就不一定，比如：深度学习的softmax回归，可以用梯度下降的方式来求解，但是求得的是一个局部的最优解。但是深度学习往往会忽略这个问题，第一是因为太复杂了不太容易求最优解，第二是因为往往求出局部最优解运行的效果还不错。</p>
+
+<p>如果我先求(theta_1)，那么我求(\theta_2)的时候，不用老的(theta_1)，而用新的(theta_1)行不行？求完(\theta_2)之后，再用更新之后的(\theta_1)和(\theta_2)来求(\theta_3) 行不行？对于线性回归这个目标函数而言，这种做法是没有问题的，并且应该在其他条件都一样的情况下，是可以加速的，这个有个名字叫做坐标上升。<strong>没明白？</strong></p>
+
+<h2 id="批处理梯度下降图示">批处理梯度下降图示</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2A0ijfLkl7.png?imageslim" alt="mark" /></p>
+
+<h2 id="随机梯度下降算法">随机梯度下降算法</h2>
+
+<p>刚才是m个样本加起来之后再去更新(\theta)，能不能每拿到一个样本就把所有的(\theta)给更新一遍？再拿到一个样本再更新一遍？</p>
+
+<p>实际上是可以的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8eI07eB2Ja.png?imageslim" alt="mark" /></p>
+
+<p>这种方式比较激进，叫做随机梯度下降，实际上这种方式比批处理的方式更值得推荐，因为m一般比较大，而且以网络流的方式的时候m不可能全部拿到，而是一点一点拿到。</p>
+
+<p>当然可以在随机之上做一个折中：拿到一些，对这一些进行求和，再更新。这样就是下面的 mini-batch</p>
+
+<h2 id="mini-batch-梯度下降算法">mini-batch 梯度下降算法</h2>
+
+<p>不是每拿到一个样本即更改梯度，而是若干个样本的平均梯度作为更新方向，则是mini-batch梯度下降算法。<strong>这个是非常值得推荐的。</strong></p>
+
+<h1 id="梯度下降代码">梯度下降代码</h1>
+
+<h2 id="批处理梯度下降-要自己实现一下">批处理梯度下降  要自己实现一下</h2>
+
+<h3 id="代码">代码</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/E67EDb9AEf.png?imageslim" alt="mark" /></p>
+
+<h3 id="学习率代码">学习率代码</h3>
+
+<p>可以按照一个规则，再当前梯度下给出一个比较好的(\alpha).</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ajba0523fH.png?imageslim" alt="mark" /></p>
+
+<h3 id="线性回归-rate-loss">线性回归、rate、Loss</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/25d95ehAi9.png?imageslim" alt="mark" /></p>
+
+<h2 id="随机梯度下降"> 随机梯度下降</h2>
+
+<h3 id="代码-1">代码</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/70gcD5bb21.png?imageslim" alt="mark" /></p>
+
+<h3 id="输出"> 输出</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1If1iJB1AJ.png?imageslim" alt="mark" /></p>
+
+<p>对比看一下，基本看不出那个好，那个差。不过可以看出随机梯度下降是比较震荡的，但是批处理的方式是一直往下的 。</p>
+
+<h2 id="结果对比">结果对比：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/48583H4L9E.png?imageslim" alt="mark" /></p>
+
+<p>可见，基本是差不多的，非常接近，批处理是1.69,3   随机梯度下降是 1.65,3  。在实际中优先使用随机梯度下降。</p>
+
+<h1 id="线性回归的进一步分析">线性回归的进一步分析</h1>
+
+<h2 id="线性回归解决分类问题是否可行">线性回归解决分类问题是否可行？</h2>
+
+<p>可不可以？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mKc1FaiEfj.png?imageslim" alt="mark" /></p>
+
+<p>如下图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8Fc9g2B8mm.png?imageslim" alt="mark" /></p>
+
+<p>上图中：紫色： 线性回归   绿色：Logistic回归，如果样本有偏，那么进行线性回归的时候，紫色的线显然不适合做分类，而绿色的是适合的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dmelF6haAH.png?imageslim" alt="mark" /></p>
+
+<p>上图中：左侧：线性回归   右侧： Softmax回归 三个样本，拟合出两条线，那么线性回归显然也不合理。</p>
+
+<p>所以说，直接用线性回归解决分类是不合理的。</p>
+
+<p>所以说出了线性回归以外，还需要研究别的回归。比如Logistic回归。</p>
+
+<p>#</p>
+
+<h2 id="多项式回归">多项式回归</h2>
+
+<p>线性回归为什么叫线性回归呢？线性体现在那里呢？可以对样本是非线性的，只要对参数θ线性就行。</p>
+
+<p>左边是：(y=\theta_0+\theta_1x) 右边是： (y=\theta_0+\theta_1x+\theta_2x^2)</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/F1K9L680a5.png?imageslim" alt="mark" /></p>
+
+<p>这个时候右边虽然有(x^2)，但是仍然是可以用线性回归，只要比左边多添加一个(x^2)的维度就行。所以只要系数是线性的就可以用线性回归。</p>
+
+<h2 id="局部加权线性回归">局部加权线性回归</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2E9D7Ajgmb.png?imageslim" alt="mark" /></p>
+
+<p>黑色是样本点，那么我们用红色的线来拟合肯定是不太合理的。</p>
+
+<p>但是虽然整体而言不是线性的，但在某一点的周围应该是线性的，而这个点对于别的点的影响呢，离这个点越远，被影响的越小，越近的，被影响的越大。因此可以根据这个让所有的样本对这个点做加权，离得远的权值低，离得近的权值高。而之前我们在批量梯度下降中的时候，是认为所有的样本的权重是相同的，现在我们认为每个样本有自己的不同的权重。而且这个权重是跟样本与我选中的这个点的距离有关的。我就对这一点做插值，做回归。也就是所谓的局部的回归，但是怎么做加权呢？<strong>还是有些没明白？怎么设定加权？为什么可行？</strong></p>
+
+<h3 id="局部加权线性回归-1">局部加权线性回归</h3>
+
+<p>局部加权线性回归 LWR：Locally Weighted linear Regression</p>
+
+<p>之前是这样的：即求最小二乘</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mb523LfgH3.png?imageslim" alt="mark" /></p>
+
+<p>现在加了一个权重(w^{(i)})</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ffB68GBg79.png?imageslim" alt="mark" /></p>
+
+<p>那么这个权值怎么定呢？</p>
+
+<h3 id="权值的设置-核函数">权值的设置 核函数</h3>
+
+<p>之所以叫核函数，感觉是因为只是对数据之间做的一些变化，像是一种数值映射。跟算法是相对独立的。高斯核可以用在线性回归上，也可以用在SVM上<strong>。</strong></p>
+
+<p>(\omega) 的一种可能的选择方式(高斯核函数)：<strong>什么是高斯核函数？</strong></p>
+
+<p>[\omega^{(i)}=exp(-\frac{(x^{(i)}-x)^2}{2\tau^2}]</p>
+
+<p>对上式进行理解：</p>
+
+<ul>
+<li><p>(\tau) 称为带宽，它控制着训练样本随着与 (x^{(i)}) 距离的衰减速率，即控制w（钟形函数）的宽窄程度，类似于高斯函数的标准差。</p></li>
+
+<li><p>x 某个预测点，就是我想算的那个当前的那个点，就是上面图中的大红点。</p></li>
+
+<li><p>x^((i))为样本点，样本点距离预测点越近，贡献的误差越大（权值越大），越远则贡献的误差越小（权值越小）。</p></li>
+</ul>
+
+<p>(\omega) 也可以用多项式核函数：</p>
+
+<p>[\kappa(x_1,x_2)=(\left\langle x_1,x_2 \right\rangle +R)^d]</p>
+
+<p>上面的式子中(\left\langle x_1,x_2 \right\rangle)是做点乘的意思，加上一个常数(R)。比如d=2，得到一个跟距离的平方求反比的一个核。</p>
+
+<p>推荐用高斯核。</p>
+
+<p><strong>这个理解的不够，有什么实践吗？线性回归加高斯核好用吗？</strong></p>
+
+<h2 id="局部回归与多项式回归那个好">局部回归与多项式回归那个好</h2>
+
+<p>如果方便去计算的话，可以用多项式回归，即加个平方像，关键是要真的可以满足条件，如果是不知道是不是多项式什么的，而且拐来拐去的就用局部加权。</p>
+
+<p>局部加权回归最大的麻烦就是：它是非参数化的，每个样本都无法丢掉，模型的参数的数目和我的样本点是一个量级的，它是一个非参数化的一个学习方法。最烦的就是样本是丢不掉的。也就是说，上面的图中的绿色的线是没有一个解析式的。</p>
+
+<p>但是用多项式回归就可以丢掉样本，因为我的模型已经学出来了。</p>
+
+<h1 id="logistic回归">Logistic回归</h1>
+
+<p>现在我们回到Logistic回归。</p>
+
+<p>之前用二项分布推导出来过Logistic函数。</p>
+
+<h2 id="logistic-函数">Logistic 函数</h2>
+
+<p>[g(z)=\frac{1}{1+e^{-z} }]</p>
+
+<p>(\theta^Tx)是线性的，把这个线性变化带到这个Logistic函数里面去：</p>
+
+<p>[h_{\theta}(x)=g(\theta^T x)=\frac{1}{1+e^{-\theta^Tx} }]</p>
+
+<p>这个就是我们的Logistic回归函数，有时候也叫sigmoid函数，图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l2kl6356mI.png?imageslim" alt="mark" /></p>
+
+<p>这个地方提一下，(g(z))的导数是：</p>
+
+<p>[\begin{align<em>} g&rsquo;(z)&amp;=\frac{d}{dz}\frac{1}{1+e^{-z} }\&amp;= \frac{1}{(1+e^{-z})^2}(e^{-z})\&amp;=\frac{1}{(1+e^{-z})}\cdot (1-\frac{1}{(1+e^{-z})})\&amp;=g(z)(1-g(z))\end{align</em>}]</p>
+
+<h2 id="让-y-服从二项分布">让 y 服从二项分布</h2>
+
+<p>这个时候我们再去看这个Logistic回归的参数分布：</p>
+
+<p>之前我们说过如果样本的噪声服从的是高斯分布，那么我们的样本 y 服从的是x和(\theta)的一个高斯分布。即：(p(y^{(i)}\mid x^{(i)};\theta)=\frac{1}{\sqrt{2\pi}\sigma}exp(-\frac{(y^{(i)}-\theta^Tx^{(i)})^2}{2\sigma^2}))。现在我们不让这个 y 服从高斯分布，而是服从二项分布。那么可以这么写：假定：<strong>为什么可以设定维服从二项分布？</strong></p>
+
+<p>[P(y=1\mid x;\theta)=h_{\theta}(x)]</p>
+
+<p>[P(y=0\mid x;\theta)=1-h_{\theta}(x)]</p>
+
+<p>为什么呢？因为Logistic函数的值域是0-1的，而且还是递增的，所以可以把它看成是一个概率分布，所以可以这么写。<strong>没明白？(h_{\theta}(x))是什么？</strong></p>
+
+<p>上面两个式子合起来：等于1时候的1次方乘以等于0时候的1次方。<strong>为什么？</strong></p>
+
+<p>[p(y\mid x;\theta)=(h<em>{\theta}(x))^y(1-h</em>{\theta}(x))^{1-y}]</p>
+
+<h2 id="这个时候求logrange函数">这个时候求Logrange函数</h2>
+
+<p>[\begin{align<em>}L(\theta) &amp;=p(\overrightarrow{y}\mid X;\theta)\&amp;=\prod<em>{i=1}^{m}p(y^{(i)}\mid x^{(i)};\theta )\&amp;=\prod</em>{i=1}^{m}(h<em>{\theta}(x^{(i)}))^{y^{(i)} }(1-h</em>{\theta}(x^{(i)}))^{1-y^{(i)} }\end{align</em>}]</p>
+
+<h2 id="然后求对数似然函数及其梯度">然后求对数似然函数及其梯度</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/I8h7bbmLc7.png?imageslim" alt="mark" /></p>
+
+<p>那么现在已经求出了一个偏导了，就可以给定一个学习率来按照梯度进行下降。</p>
+
+<h2 id="将梯度带入得到logistic回归参数的学习规则">将梯度带入得到Logistic回归参数的学习规则</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/hCh52Kl21h.png?imageslim" alt="mark" /></p>
+
+<p>Logistic回归，任意给定一个值，都可以得到一个全局最优值。</p>
+
+<p>注意这个地方的(h<em>{\theta}(x))是(h</em>{\theta}(x)=g(\theta^T x)=\frac{1}{1+e^{-\theta^Tx} })，而在线性回归的时候的(h<em>{\theta}(x)) 是(\theta^Tx)，可见，他们的(h</em>{\theta}(x))不同，但是整体的式子是一致的。</p>
+
+<p>那么线性回归和Logistic回归肯定有某种关联性。</p>
+
+<h1 id="logistic回归与线性回归的关系">Logistic回归与线性回归的关系</h1>
+
+<p>先定义一个概念：</p>
+
+<p>一个事件的几率odds，是指该事件发生的概率与该事件不发生的概率的比值。</p>
+
+<p>对数几率：对这个odds取对数。log it 函数。</p>
+
+<p>对于Logistic回归来说，</p>
+
+<ul>
+<li><p>发生的概率是：(P(y=1\mid x;\theta)=h_{\theta}(x))</p></li>
+
+<li><p>不发生的概率是：(P(y=0\mid x;\theta)=1-h_{\theta}(x))</p></li>
+</ul>
+
+<p>那么得到：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/JClCKa9Il9.png?imageslim" alt="mark" /></p>
+
+<p>我们发现，这个Logistic模型的对数几率与x是线性的，因此，这个模型<strong>本质上是一个对数的线性模型。</strong></p>
+
+<p>那么我们再回忆一下指数族分布：</p>
+
+<h2 id="那么可以根据指数族扩展到广义线性模型-glm">那么可以根据指数族扩展到广义线性模型 GLM</h2>
+
+<p>事实上指数族概念的目的的提出，是为了解释广义线性模型Generalized Linear Models （GLM）</p>
+
+<p>比如上面用到了高斯分布和二项分布，他们都是指数族分布，他们最终的学习的规则是一样的。也就是说： 凡是符合指数族分布的随机变量，都可以用 GLM 回归分析</p>
+
+<p>所以因变量 y 可以不是正态分布，而是扩大为指数族中的任一分布。比如说想做分类，那么就是0-1记号的问题，就是两点分布的问题。</p>
+
+<p>解释变量x的线性组合不再直接用于解释因变量y的均值u，而是通过一个联系函数g来解释g(u)；这里，要求g连续单调可导。<strong>没明白？什么叫直接解释因变量y的均值u？联系函数是什么？</strong></p>
+
+<p>如Logistic 回归中的(g(z)=\frac{1}{1+e^{-z} }) ，可以添加一个(\lambda)进行拉伸变换后：(g(z)=\frac{1}{1+e^{-\lambda z} }) <strong>这个拉伸变换有什么用？</strong></p>
+
+<h1 id="使用lagrange对偶来求-x-tx-的最小值">使用Lagrange对偶来求 (x^Tx)的最小值</h1>
+
+<p>这个思路是凸优化里面最核心的东西。这个再SVM和HMM部分都会看到这个解法。</p>
+
+<p>先推Lagrange函数得到对偶函数，在对对偶函数求极大值，就得到了x*应该是什么</p>
+
+<h2 id="线性方程的最小二乘问题">线性方程的最小二乘问题</h2>
+
+<p>没明白这个怎么跟最小二乘有关系了？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/hdDDb3DA8f.png?imageslim" alt="mark" /></p>
+
+<h2 id="通过原始的lagrange函数怎么求对偶函数">通过原始的Lagrange函数怎么求对偶函数：</h2>
+
+<p>上面的Lagrange函数的对偶函数是这样求的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/d6ijeLc0KF.png?imageslim" alt="mark" /></p>
+
+<p>求偏导之后：<strong>这个求偏导为0的结果x*是什么意义？</strong></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/9CmK0lffCi.png?imageslim" alt="mark" /></p>
+
+<p>这个值不是真的，是关于v的一个值，把这个值回带到Lagrange函数里面去。就得到了Lagrange对偶函数。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/4bFk2gHE58.png?imageslim" alt="mark" /></p>
+
+<h2 id="求对偶函数的极大值">求对偶函数的极大值</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1EIcJf713j.png?imageslim" alt="mark" /></p>
+
+<p>这个就是之前求线性回归的时候的最优解</p>
+
+<h2 id="带进去就求到了极值点">带进去就求到了极值点</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eEAeIDA8cE.png?imageslim" alt="mark" /></p>
+
+<p>我们会发现，这个对偶函数的极大值，等于原函数的极小值，也就是说这个满足了强对偶条件，即线性回归满足了强对偶性。<strong>什么是强队偶？</strong></p>
+
+<p>顺便提下，KKT条件不是强对偶性的充要条件，甚至不是充分条件。只是一个必要条件。<strong>为什么，要了解下。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 机器学习</li>
+<li><a href="http://ml.apachecn.org/mlia/regress/">第8章 预测数值型数据：回归</a> <strong>这里面由关于局部加权线性回归、岭回归、Lasso 要整理进来</strong></li>
+</ul>
+
+<h1 id="comment">COMMENT：</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/02-%E5%88%86%E7%B1%BB/02-svm/svm-%E4%B8%89%E9%87%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">svm 三重</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/%E6%95%B0%E6%8D%AE-01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/">
+            <span class="next-text nav-default">数据 01 数据加载、存储、文件格式</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

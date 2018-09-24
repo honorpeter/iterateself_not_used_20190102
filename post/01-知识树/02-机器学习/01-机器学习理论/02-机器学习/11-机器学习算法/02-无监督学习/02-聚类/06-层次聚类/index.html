@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>06 层次聚类 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="层次聚类 层次聚类(hierarchical clustering)试图在不同层次对数据集进行划分，从而形成树形的聚类结构.数据集的划分可采用“" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E8%81%9A%E7%B1%BB/06-%E5%B1%82%E6%AC%A1%E8%81%9A%E7%B1%BB/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="06 层次聚类" />
+<meta property="og:description" content="层次聚类 层次聚类(hierarchical clustering)试图在不同层次对数据集进行划分，从而形成树形的聚类结构.数据集的划分可采用“" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E8%81%9A%E7%B1%BB/06-%E5%B1%82%E6%AC%A1%E8%81%9A%E7%B1%BB/" /><meta property="article:published_time" content="2018-06-29T08:50:16&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-29T08:50:16&#43;00:00"/>
+<meta itemprop="name" content="06 层次聚类">
+<meta itemprop="description" content="层次聚类 层次聚类(hierarchical clustering)试图在不同层次对数据集进行划分，从而形成树形的聚类结构.数据集的划分可采用“">
+
+
+<meta itemprop="datePublished" content="2018-06-29T08:50:16&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-29T08:50:16&#43;00:00" />
+<meta itemprop="wordCount" content="2523">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="06 层次聚类"/>
+<meta name="twitter:description" content="层次聚类 层次聚类(hierarchical clustering)试图在不同层次对数据集进行划分，从而形成树形的聚类结构.数据集的划分可采用“"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">06 层次聚类</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-29 </span>
+        
+        <span class="more-meta"> 2523 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#comment">COMMENT</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>层次聚类</p>
+
+<p>层次聚类(hierarchical clustering)试图在不同层次对数据集进行划分，从而形成树形的聚类结构.数据集的划分可采用“自底向上”的聚合策略，也可采 用“自顶向下”的分拆策略.</p>
+
+<p>AGNES是一种采用自底向上聚合策略的层次聚类算法.它先将数据集中的每个样本看作一个初始聚类簇，然后在算法运行的每一步中找出距离最近的两个聚类簇进行合并，该过程不断重复，直至达到预设的聚类簇个数.这里的关键是如何计算聚类簇之间的距离.实际上，每个簇是一个样本集合，因此，只需 采用关于集合的某种距离即可.例如，给定聚类簇 $C_i$ 与 $C_j$ ，可通过下面的式子来计算距离：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/55emgImIlK.png?imageslim" alt="mark" /></p>
+
+<p>显然，最小距离由两个簇的最近样本决定，最大距离由两个簇的最远样本决定， 而平均距离则由两个簇的所有样本共同决定.当聚类簇距离由 dmin、dmax 或 davg计算时，AGNES算法被相应地称为“单链接” (single-linkage)、 “全链 接”(complete-linkage)或 “均链接”(average-linkage)算法.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/0b48DbGH86.png?imageslim" alt="mark" /></p>
+
+<p>AGNES算法描述如图 9.11 所示.
+- 在第14行，算法先对仅含一个样本的初始聚类簇和相应的距离矩阵进行初始化；
+- 然后在第11-23行，AGNES不断合 并距离最近的聚类簇，并对合并得到的聚类簇的距离矩阵进行更新；
+- 上述过程不断重复，直至达到预设的聚类簇数.</p>
+
+<p>以西瓜数据集4.0为例，令 AGNES 算法一直执行到所有样本出现在同一 个簇中，即 $k= 1$，则可得到图 9.12 所示的“树状图”(dendrogram),其中每层 链接一组聚类簇.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/E8If9i73Li.png?imageslim" alt="mark" /></p>
+
+<p>在树状图的特定层次上进行分割，则可得到相应的簇划分结果.例如，以图 9.12中所示虚线分割树状图，将得到包含7个聚类簇的结果：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/BLKjBJH06f.png?imageslim" alt="mark" /></p>
+
+<p>将分割层逐步提升，则可得到聚类簇逐渐减少的聚类结果.例如图9.13显示出了从图9.12中产生7至4个聚类簇的划分结果.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/AG8mEDbCIg.png?imageslim" alt="mark" /></p>
+
+<h1 id="comment">COMMENT</h1>
+
+<p>9.7阅读材料
+聚类也许是机器学习中“新算法”出现最多、最快的领域.一个重要原因 是聚类不存在客观标准；给定数据集，总能从某个角度找到以往算法未覆盖的</p>
+
+<p>按大小，也能按颜色，甚至</p>
+
+<p>能按产地聚类.    某种标准从而设计出新算法［Estivill-Castro, 2002］.相对于机器学习其他分支</p>
+
+<p>来说，聚类的知识还不够系统化，因此著名教科书［Mitchell, 1997］中甚至没有 关于聚类的章节.但聚类技术本身在现实任务中非常重要，因此本章勉强采用 了 “列举式”的叙述方式，相较于其他各章给出了更多的算法描述.关于聚类</p>
+
+<p>距离度量学习参见10.6 节.</p>
+
+<p>凸形簇结构即形似“椭 球”的農结构.</p>
+
+<p>Bregman距离亦称 Bregman divergence,是一 类不满足对称性和直递性 的距离.</p>
+
+<p>降维参见第10章.</p>
+
+<p>更多的内容5可参阅这方面的专门书籍和综述文章如[Jain and Dubes, 1988; Jain et al.5 1999; Xu and Wunsch II, 2005; Jain, 2009]等.</p>
+
+<p>聚类性能度量除9.2节的内容外，常见的还有F值、互信息(mutual information)、平均廓宽(average silhouette width) [Rousseeuw, 1987]等，可 参阅[Jain and Dubes, 1988; Halkidi et al” 2001; Maulik and Bandyopadhyay, 2002].</p>
+
+<p>距离计算是很多学习任务的核心技术.闵可夫斯基距离提供了距离计算的 一般形式.除闵可夫斯基距离之外，内积距离、余弦距离等也很常用，可参阅 [Deza and Deza，2009]. MinkovDM 在[Zhou and Yu, 2005]中正式给出.模式 识别、图像检索等涉及复杂语义的应用中常会涉及非度量距离[Jacobs et al, 2000; Tan et al, 2009].距离度量学习可直接嵌入到聚类学习过程中[Xing et al.5 2003].</p>
+
+<p>k均值算法可看作高斯混合聚类在混合成分方差相等、且每个样本仅指 派给一个混合成分时的特例.该算法在历史上曾被不同领域的学者多次重 新发明，如 Steinhaus 在 1956 年、Lloyd 在 1957 年、McQueen 在 1967 年等 [Jain and Dubes, 1988; Jain, 2009]. k 均值算法有大量变体，如 Axmedoids 算 法[Kaufman and Rousseeuw, 1987]强制原型向量必为训练样本，fc-modes算 法[Huang, 1998]可处理离散属性，Fuzzy C-means (简称 FCM) [Bezdek, 1981] 则是“软聚类”(soft clustering)算法，允许每个样本以不同程度同时属于多个 原型.需注意的是，均值类算法仅在凸形簇结构上效果较好.最近研究表明, 若采用某种Bregman距离，则可显著増强此类算法对更多类型簇结构的适用性 [Banerjee et al., 2005].引入核技巧则可得到核/c均值(kernel fc-means)算法 [Scholkopf et al., 1998]，这与谱聚类(spectral clustering) [von Luxburg, 2007] 有密切联系[Dhillon et al., 2004],后者可看作在拉普拉斯特征映射(Laplacian Eigenmap)降维后执行fc均值聚类.聚类簇数k通常需由用户提供5有一些启 发式用于自动确定々[peiieg and Moore, 2000; Tibshirani et al., 2001],但常用 的仍是基于不同值多次运行后选取最佳结果.</p>
+
+<p>LVQ算法在每轮迭代中仅更新与当前样本距离最近的原型向量.同时 更新多个原型向量能显著提高收敛速度，相应的改进算法有LVQ2、LVQ3等 [Kolionen, 2001]. [McLachlan and Peel, 2000]详细介绍了高斯混合聚类，算法 中EM迭代优化的推导过程可参阅[Bilmes，1998; Jain and Dubes，1988].</p>
+
+<p>采用不同方式表征样本分布的紧密程度，可设计出不同的密度聚类算 法，除 DBSCAN [Ester et al.5 1996]夕卜，较常用的还有 OPTICS [Ankerst et al.,</p>
+
+<p>1999］、DENCLUE ［Hinneburg and Keim, 1998］等.AGNES ［Kaufman and Rousseeuw, 1990］采用了自底向上的聚合策略来产生层次聚类结构，与之相 反，DIANA ［Kaufman and Rousseeuw, 1990］则是采用自顶向下的分拆策略. AGNES和DIANA都不能对已合并或已分拆的聚类簇进行回溯调整，常用的 层次聚类算法如 BIRCH ［Zhang et al., 1996］. ROCK ［Guha et al.，1999］等对 此进行了改进.</p>
+
+<p>聚类集成(clustering ensemble)通过对多个聚类学习器进行集成，能有效 降低聚类假设与真实聚类结构不符、聚类过程中的隨机性等因素帯来的不利 影响，可参阅［Zhou, 2012］第7章.</p>
+
+<p>亦称 outlier detection.    异常检测(anomaly detection) ［Hodge and Austin, 2004; Chandola et</p>
+
+<p>al., 2009］常借助聚类或距离计算进行，如将远离所有簇中心的样本作为 异常点，或将密度极低处的样本作为异常点.最近有研究提出基于“隔离 性”(isolation)可快速检测出异常点［Liu et al., 2012］.</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E9%99%8D%E7%BB%B4/01-pca/03-%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 主成分分析</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E8%81%9A%E7%B1%BB/05-%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/">
+            <span class="next-text nav-default">05 密度聚类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

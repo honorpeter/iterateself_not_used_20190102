@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>线性模型 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 还需要补充，认识的还不全面 知识前提 向量 矩阵 线性模型 OK，一般来说机器学习都从线性模型开始讲起。 那么，什么是线性模型呢？ 给定由 d 个属" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/00-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="线性模型" />
+<meta property="og:description" content="需要补充的 还需要补充，认识的还不全面 知识前提 向量 矩阵 线性模型 OK，一般来说机器学习都从线性模型开始讲起。 那么，什么是线性模型呢？ 给定由 d 个属" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/00-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" /><meta property="article:published_time" content="2018-06-11T08:14:38&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:38&#43;00:00"/>
+<meta itemprop="name" content="线性模型">
+<meta itemprop="description" content="需要补充的 还需要补充，认识的还不全面 知识前提 向量 矩阵 线性模型 OK，一般来说机器学习都从线性模型开始讲起。 那么，什么是线性模型呢？ 给定由 d 个属">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:38&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:38&#43;00:00" />
+<meta itemprop="wordCount" content="444">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="线性模型"/>
+<meta name="twitter:description" content="需要补充的 还需要补充，认识的还不全面 知识前提 向量 矩阵 线性模型 OK，一般来说机器学习都从线性模型开始讲起。 那么，什么是线性模型呢？ 给定由 d 个属"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">线性模型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 444 words </span>
+        <span class="more-meta"> 1 min read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#知识前提">知识前提</a></li>
+<li><a href="#线性模型">线性模型</a></li>
+<li><a href="#那么-什么是线性模型呢">那么，什么是线性模型呢？</a></li>
+<li><a href="#那么线性模型有什么优点呢">那么线性模型有什么优点呢？</a></li>
+<li><a href="#那么有哪些线性模型呢">那么有哪些线性模型呢？</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>还需要补充，认识的还不全面</li>
+</ul>
+
+<h1 id="知识前提">知识前提</h1>
+
+<ul>
+<li>向量</li>
+<li>矩阵</li>
+</ul>
+
+<h1 id="线性模型">线性模型</h1>
+
+<p>OK，一般来说机器学习都从线性模型开始讲起。</p>
+
+<h1 id="那么-什么是线性模型呢">那么，什么是线性模型呢？</h1>
+
+<p>给定由 d 个属性描述的示例 (x=(x_1;x_2;\cdots ;x_d)) ， 其中均是 x 在第 (i) 个属性上的取值，线性模型 (linear model)试图学得一个通过属性的线性组合来进行预测的函数，即：</p>
+
+<p>[f(x)=w_1x_1+w_2x_2+\cdots +w_dx_d+b]</p>
+
+<p>而用向量的形式可以写成：</p>
+
+<p>[f(x)=w^Tx+b]</p>
+
+<p>那么，其中的 w 和 b 学得之后，模型就可以确定下来了。</p>
+
+<p>OK，看起来还是很简单的。</p>
+
+<h1 id="那么线性模型有什么优点呢">那么线性模型有什么优点呢？</h1>
+
+<ul>
+<li><p>线性模型形式简单、易于建模，但却蕴涵着机器学习中一些重要的基本思想。<strong>什么思想？</strong></p></li>
+
+<li><p>许多功能更为强大的非线性模型 (nonlinear model) 可在线性模型的基础上通过引入层级结构或高维映射而得。</p></li>
+
+<li><p>而且，线性模型中的参数w，实际上可以看成是对应的特征的重要程度，比如说，如果某个w大，说明它比别的特征更重要。也因此，线性模型可以具有很好的可解释性  (comprehensibility)。</p></li>
+</ul>
+
+<p><strong>没想到，一直以为线性模型表达能力不够，肯定不够利害，没想到还是有优点的。</strong></p>
+
+<h1 id="那么有哪些线性模型呢">那么有哪些线性模型呢？</h1>
+
+<p>最经典的就是线性回归。</p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li>《机器学习》周志华</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/03-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/%E7%89%B9%E5%BE%81%E8%A1%8D%E7%94%9F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">特征衍生</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/01-%E5%90%8E%E7%AB%AF%E7%8E%AF%E5%A2%83/01-linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/vim/vim2/">
+            <span class="next-text nav-default">vim2</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

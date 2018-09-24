@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>岭回归 例子1：根据鲍鱼壳的层数推算鲍鱼年龄 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 代码的原理还需要总结下，然后在这里引用 项目要求 我们有一份来自 UCI 的数据集合的数据，记录了鲍鱼（一种介壳类水生动物）的年龄。鲍鱼年龄可" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/01-%E5%9B%9E%E5%BD%92/02-%E5%B2%AD%E5%9B%9E%E5%BD%92/%E5%B2%AD%E5%9B%9E%E5%BD%92-%E4%BE%8B%E5%AD%901%E6%A0%B9%E6%8D%AE%E9%B2%8D%E9%B1%BC%E5%A3%B3%E7%9A%84%E5%B1%82%E6%95%B0%E6%8E%A8%E7%AE%97%E9%B2%8D%E9%B1%BC%E5%B9%B4%E9%BE%84/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="岭回归 例子1：根据鲍鱼壳的层数推算鲍鱼年龄" />
+<meta property="og:description" content="需要补充的 代码的原理还需要总结下，然后在这里引用 项目要求 我们有一份来自 UCI 的数据集合的数据，记录了鲍鱼（一种介壳类水生动物）的年龄。鲍鱼年龄可" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/01-%E5%9B%9E%E5%BD%92/02-%E5%B2%AD%E5%9B%9E%E5%BD%92/%E5%B2%AD%E5%9B%9E%E5%BD%92-%E4%BE%8B%E5%AD%901%E6%A0%B9%E6%8D%AE%E9%B2%8D%E9%B1%BC%E5%A3%B3%E7%9A%84%E5%B1%82%E6%95%B0%E6%8E%A8%E7%AE%97%E9%B2%8D%E9%B1%BC%E5%B9%B4%E9%BE%84/" /><meta property="article:published_time" content="2018-08-03T13:02:07&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T13:02:07&#43;00:00"/>
+<meta itemprop="name" content="岭回归 例子1：根据鲍鱼壳的层数推算鲍鱼年龄">
+<meta itemprop="description" content="需要补充的 代码的原理还需要总结下，然后在这里引用 项目要求 我们有一份来自 UCI 的数据集合的数据，记录了鲍鱼（一种介壳类水生动物）的年龄。鲍鱼年龄可">
+
+
+<meta itemprop="datePublished" content="2018-08-03T13:02:07&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T13:02:07&#43;00:00" />
+<meta itemprop="wordCount" content="1039">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="岭回归 例子1：根据鲍鱼壳的层数推算鲍鱼年龄"/>
+<meta name="twitter:description" content="需要补充的 代码的原理还需要总结下，然后在这里引用 项目要求 我们有一份来自 UCI 的数据集合的数据，记录了鲍鱼（一种介壳类水生动物）的年龄。鲍鱼年龄可"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">岭回归 例子1：根据鲍鱼壳的层数推算鲍鱼年龄</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 1039 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#项目要求">项目要求</a></li>
+</ul></li>
+<li><a href="#项目数据">项目数据</a></li>
+<li><a href="#与其它项目的关系">与其它项目的关系</a></li>
+<li><a href="#完整代码">完整代码</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>代码的原理还需要总结下，然后在这里引用</strong></li>
+</ul>
+
+<h2 id="项目要求">项目要求</h2>
+
+<p>我们有一份来自 UCI 的数据集合的数据，记录了鲍鱼（一种介壳类水生动物）的年龄。鲍鱼年龄可以从鲍鱼壳的层数推算得到。</p>
+
+<h1 id="项目数据">项目数据</h1>
+
+<p>链接：<a href="https://pan.baidu.com/s/11biXI3zJlcgGPoqCcfT9_w">https://pan.baidu.com/s/11biXI3zJlcgGPoqCcfT9_w</a> 密码：0sk8</p>
+
+<p>数据存储格式：</p>
+
+<pre><code>1   0.455   0.365   0.095   0.514   0.2245  0.101   0.15    15
+1   0.35    0.265   0.09    0.2255  0.0995  0.0485  0.07    7
+-1  0.53    0.42    0.135   0.677   0.2565  0.1415  0.21    9
+1   0.44    0.365   0.125   0.516   0.2155  0.114   0.155   10
+0   0.33    0.255   0.08    0.205   0.0895  0.0395  0.055   7
+</code></pre>
+
+<h1 id="与其它项目的关系">与其它项目的关系</h1>
+
+<p>岭回归是基于线性回归的。</p>
+
+<p>当数据的特征比样本点还多的时候（n &gt; m），我们就不能再使用线性回归和局部线性回归了，因这时候输入数据的矩阵x不是满秩矩阵。非满秩矩阵在求逆时会出现问题。 为了解决这个问题，我们提出了岭回归，这是我们要讲的第一种缩减方法。</p>
+
+<h1 id="完整代码">完整代码</h1>
+
+<pre><code class="language-python">import numpy as np
+import matplotlib.pylab as plt
+from time import sleep
+import bs4
+from bs4 import BeautifulSoup
+import json
+import urllib.request  # 在Python3中将urllib2和urllib3合并为一个标准库urllib,其中的urllib2.urlopen更改为urllib.request.urlopen
+
+
+​
+# 加载数据集
+def load_data_set(file_name):
+    feature_num = len(open(file_name).readline().split('\t')) - 1
+    data_arr = []
+    label_arr = []
+    fr = open(file_name)
+    for line in fr.readlines():
+        line_arr = []
+        cur_line = line.strip().split('\t')
+        # 特征值
+        for i in range(feature_num):
+            line_arr.append(float(cur_line[i]))
+        data_arr.append(line_arr)
+        # 标签
+        label_arr.append(float(cur_line[-1]))
+    data_mat = np.mat(data_arr)
+    label_mat = np.mat(label_arr).T
+    return data_mat, label_mat
+
+
+​
+# 给定 lambda 下的岭回归求解。
+# lam 引入的一个λ值，使得矩阵非奇异
+def ridge_regression(data_mat_m, label_mat_m, lam=0.2):
+    column_num = np.shape(data_mat_m)[1]
+    data_square = data_mat_m.T * data_mat_m
+    # 岭回归就是在矩阵 xTx 上加一个 λI 从而使得矩阵非奇异，进而能对 xTx + λI 求逆
+    denom = data_square + np.eye(column_num) * lam
+    # 检查行列式是否为零，即矩阵是否可逆，行列式为0的话就不可逆，不为0的话就是可逆。
+    if np.linalg.det(denom) == 0.0:
+        print(&quot;This matrix is singular, cannot do inverse&quot;)
+        return
+    weight = denom.I * (data_mat_m.T * label_mat_m)
+    return weight
+
+
+​
+# 用于在一组 λ 上测试结果
+def try_ridge(data_mat_m, label_mat_m):
+    label_mean = np.mean(label_mat_m, 0)
+    label_mat_m = label_mat_m - label_mean  # Y的所有的特征减去均值
+
+    data_mean = np.mean(data_mat_m, 0)  # xMat 平均值
+    data_var = np.var(data_mat_m, 0)  # X的方差
+    data_mat_m = (data_mat_m - data_mean) / data_var
+
+    # 可以在 30 个不同的 lambda 下调用 ridgeRegres() 函数。
+    num_test_pts = 30  # 为什么用这个名字？
+    column_num = np.shape(data_mat_m)[1]
+    weight_mat = np.zeros((num_test_pts, column_num))  # 30 * column_num
+    for i in range(num_test_pts):
+        lam = np.exp(i - 10)  # 为什么是这么计算的？
+        weight = ridge_regression(data_mat_m, label_mat_m, lam)
+        weight_mat[i, :] = weight.T
+    # 返回所有的回归系数
+    return weight_mat
+
+
+​
+def plot_weight_mat(weight_mat):
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    print(weight_mat)
+    ax.plot(weight_mat)
+    plt.show()
+
+
+​
+if __name__ == &quot;__main__&quot;:
+    data_mat, label_mat = load_data_set(&quot;../../../input/8.Regression/abalone.txt&quot;)
+    weight_mat = try_ridge(data_mat, label_mat)
+    plot_weight_mat(weight_mat)
+</code></pre>
+
+<p>输出图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6lle5J2LLH.png?imageslim" alt="mark" /></p>
+
+<p>上图绘制除了回归系数与 log(λ) 的关系。</p>
+
+<ul>
+<li><p>在最左边，即 λ 最小时，可以得到所有系数的原始值（与线性回归一致）；</p></li>
+
+<li><p>在右边，系数全部缩减为0；</p></li>
+
+<li><p>在中间部分的某值将可以取得最好的预测效果。</p></li>
+</ul>
+
+<p>为了定量地找到最佳参数值，还需要进行交叉验证。另外，要判断哪些变量对结果预测最具有影响力，在上图中观察它们对应的系数大小就可以了。<strong>嗯，这倒是，但是如果变量与目标有非线性，比如平方的关系，这种模型是看不出来的。除非手动添加特征，确认下是不是</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><a href="http://ml.apachecn.org/mlia/regress/">第8章 预测数值型数据：回归</a></li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/99-%E5%85%B6%E5%AE%83%E9%A1%B9%E7%9B%AE/%E4%B8%83%E6%9C%88kaggle/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E8%A7%A3%E5%86%B3%E9%97%AE%E9%A2%98%E7%BB%BC%E8%BF%B0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 机器学习问题解决思路</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E6%80%BB%E8%A7%88/">
+            <span class="next-text nav-default">机器学习算法总览</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

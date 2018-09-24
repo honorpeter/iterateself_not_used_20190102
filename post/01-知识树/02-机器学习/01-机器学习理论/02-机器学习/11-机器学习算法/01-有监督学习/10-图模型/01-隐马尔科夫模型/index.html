@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 隐马尔科夫模型 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="隐马尔可夫模型 机器学习最重要的任务，是根据一些已观察到的证据(例如训练样本)来 对感兴趣的未知变量(初如类别标记)进行估计和推测.概率模型(p" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/10-%E5%9B%BE%E6%A8%A1%E5%9E%8B/01-%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 隐马尔科夫模型" />
+<meta property="og:description" content="隐马尔可夫模型 机器学习最重要的任务，是根据一些已观察到的证据(例如训练样本)来 对感兴趣的未知变量(初如类别标记)进行估计和推测.概率模型(p" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/10-%E5%9B%BE%E6%A8%A1%E5%9E%8B/01-%E9%9A%90%E9%A9%AC%E5%B0%94%E7%A7%91%E5%A4%AB%E6%A8%A1%E5%9E%8B/" /><meta property="article:published_time" content="2018-07-01T09:09:31&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-01T09:09:31&#43;00:00"/>
+<meta itemprop="name" content="01 隐马尔科夫模型">
+<meta itemprop="description" content="隐马尔可夫模型 机器学习最重要的任务，是根据一些已观察到的证据(例如训练样本)来 对感兴趣的未知变量(初如类别标记)进行估计和推测.概率模型(p">
+
+
+<meta itemprop="datePublished" content="2018-07-01T09:09:31&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-01T09:09:31&#43;00:00" />
+<meta itemprop="wordCount" content="2055">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 隐马尔科夫模型"/>
+<meta name="twitter:description" content="隐马尔可夫模型 机器学习最重要的任务，是根据一些已观察到的证据(例如训练样本)来 对感兴趣的未知变量(初如类别标记)进行估计和推测.概率模型(p"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 隐马尔科夫模型</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-01 </span>
+        
+        <span class="more-meta"> 2055 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>隐马尔可夫模型</p>
+
+<p>机器学习最重要的任务，是根据一些已观察到的证据(例如训练样本)来 对感兴趣的未知变量(初如类别标记)进行估计和推测.概率模型(probabilistic model)提供了一种描述框架，将学习任务归结于计算变量的概率分布.在概率模型中，利用已知变量推测未知变量的分布称为“推断”(inference),其核心是如何基于可观测变量推测出未知变量的条件分布。具体来说，假定所关心的变量集合为 $Y$ ，可观测变量集合为 $O$ ,其他变量的集合为 $R$，“生成式”(generative)模型考虑联合分布 $P(Y,R,O)$ ，“判别式”(discriminative)模型考虑条件分布 $P(Y,R|O)$。给定一组观测变量值，推断就是要由 $P(Y,R,O)$ 或 $P(Y,R|O)$得到条件概率分布 $P(Y|O)$.</p>
+
+<p>直接利用概率求和规则消去变量 $R$ 显然不可行，因为即便每个变量仅有两 种取值的简单问题，其复杂度已至少是 $O(2^{|Y|+|R|})$ .另一方面，属性变量之间往往存在复杂的联系，因此概率模型的学习，即基于训练样本来估计变量分布的 参数往往相当困难.为了便于研究高效的推断和学习算法，需有一套能简洁紧凑地表达变量间关系的工具.</p>
+
+<p>概率图模型(probabilistic graphical model)是一类用图来表达变量相关关 系的概率模型。它以图为表示工具，最常见的是用一个结点表示一个或一组 随机变量，结点之间的边表示变量间的概率相关关系，即“变量关系图”.根据边的性质不同，概率图模型可大致分为两类：</p>
+
+<ul>
+<li>第一类是使用有向无环图表 示变量间的依赖关系，称为有向图模型或贝叶斯网(Bayesian network);</li>
+<li>第二类 是使用无向图表示变量间的相关关系，称为无向图模型或马尔可夫网(Markov network).</li>
+</ul>
+
+<p>隐马尔可夫模型(Hidden Markov Model,简称HMM)是结构最简单的动态贝叶斯网(dynamic Bayesian network),这是一种著名的有向图模型，主要用于时序数据建模，在语音识别、自然语言处理等领域有广泛应用.</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/8id691C700.png?imageslim" alt="mark" /></p>
+
+<p>如图14.1所示，隐马尔可夫模型中的变量可分为两组.第一组是状态变量 ${y_1,y_2,\cdots,y_n}$ ,其中 $y_i\in \mathcal{Y}$ 表示第 i 时刻的系统状态.通常假定状态变量是隐藏的、不可被观测的，因此状态变量亦称隐变量(hidden variable；).第二组是观测变量 ${x_1,x_2,\cdots,x_n}$ ，其中 $x_i\in\mathcal{X}$ 表示第 i 时刻的观测值.在隐马尔可夫模 型中，系统通常在多个状态 ${s_1,s_2,\cdots,s_N}$ 之间转换，因此状态变量 $y_i$ 的取值范围 $\mathcal{Y}$ (称为状态空间)通常是有 N 个可能取值的离散空间.观测变量 $x_i$ 可以 是离散型也可以是连续型，为便于讨论，我们仅考虑离散型观测变量，并假定其取值范围 $\mathcal{X}$  为 ${o_1,o_2,\cdots,o_M}$ 。</p>
+
+<p>图14.1中的箭头表示了变量间的依赖关系.在任一时刻，观测变量的取值仅依赖于状态变量，即 $x_t$ 由 $y_t$ 确定，与其他状态变量及观测变量的取值无关. 同时，$t$ 时刻的状态 $y<em>t$ 仅依赖于 $t-1$ 时刻的状态 $y</em>{t-1}$ ,与其余 $n-2$ 个状态无关.这就是所谓的 “马尔可夫链” (Markov chain), 即：系统下一时刻的状态仅由当前状态决定，不依赖于以往的任何状态。</p>
+
+<p>基于这种依赖关系，所有变量的联合概率分布为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/cjC725lgDd.png?imageslim" alt="mark" /></p>
+
+<p>除了结构信息，欲确定一个隐马尔可夫模型还需以下三组参数：</p>
+
+<ul>
+<li>状态转移概率：模型在各个状态间转换的概率，通常记为矩阵 $A =[a<em>{ij}]</em>{N\times N}$ 其中</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/1ae3K1hI5E.png?imageslim" alt="mark" /></p>
+
+<p>表示在任意时刻 t ，若状态为 $s_i$ 则在下一时刻状态为 $s_j$ 的概率.</p>
+
+<ul>
+<li>输出观测概率：模型根据当前状态获得各个观测值的概率，通常记为矩阵 $B=[b<em>{ij}]</em>{N\times M}$ 其中</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/jf1EIj21B6.png?imageslim" alt="mark" /></p>
+
+<p>表示在任意时刻 $t$ ,若状态为 $s_i$ 则观测值 $o_j$ 被获取的概率.</p>
+
+<ul>
+<li>初始状态概率：模型在初始时刻各状态出现的概率，通常记为 $\pi=(\pi_1,\pi_2,\cdots,\pi_N)$ ,其中：</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/CCJ7mB7iIC.png?imageslim" alt="mark" /></p>
+
+<p>表示模型的初始状态为 $s_i$ 的概率.</p>
+
+<p>通过指定状态空间 $\mathcal{Y}$ 、观测空间 $\mathcal{X}$ 和上述三组参数，就能确定一个隐马尔可夫模型，通常用其参数 $\lambda=[A,B,\pi]$ 来指代。给定隐马尔可夫模型 $\lambda$ ，它按如下过程产生观测序列 ${x_1,x_2,\cdots ,x_n}$ :</p>
+
+<ol>
+<li>设置 $t=1$ ，并根据初始状态概率 $\pi$ 选择初始状态 $y_1$ ；</li>
+<li>根据状态 $y_t$ 和输出观测概率 $B$ 选择观测变量取值 $x_t$</li>
+<li>根据状态 $y<em>t$ 和状态转移矩阵 $A$ 转移模型状态，即确定 $y</em>{t+1}$ ;</li>
+<li>若 $t&lt;n$ ，设置 $t=t+1$ ,并转到第 2 步，否则停止.，</li>
+</ol>
+
+<p>其中 $y_t\in{s_1,s_2,\cdots,s_N}$ 和 $x_t\in{o_1,o_2,\cdots ,o_M}$ 分别为第 $t$ 时刻的状态和观测值.</p>
+
+<p>在实际应用中，人们常关注隐马尔可夫模型的三个基本问题：</p>
+
+<ul>
+<li><p>给定模型 $\lambda=[A,B,\pi]$ ，如何有效计算其产生观测序列 $x={x_1,x_2,\cdots,x_n}$ 的概率 $P(x|\lambda)$ ?换言之，如何评估模型与观测序列之间的匹配程度？</p></li>
+
+<li><p>给定模型 $\lambda=[A,B,\pi]$ 和观测序列$x={x_1,x_2,\cdots,x_n}$ ，如何找到与此观测序列最匹配的状态序列 $y={y_1,y_2,\cdots ,y_n}$ ?换言之，如何根据观测序列推断出隐藏的模型状态？</p></li>
+
+<li><p>给定观测序列$x={x_1,x_2,\cdots,x_n}$ ，如何调整模型参数 $\lambda=[A,B,\pi]$ 使得该序列出现的概率 $P(x |\lambda)$ 最大？换言之，如何训练模型使其能最好地描述观测数据？</p></li>
+</ul>
+
+<p>上述问题在现实应用中非常重要.例如:</p>
+
+<ul>
+<li>许多任务需根据以往的观测序列 ${x_1,x<em>2,\cdots,x</em>{n-1}}$ 来推测当前时刻最有可能的观测值 $x_n$ ,这显然可转化为求取 $P(x|\lambda)$ ,即上述第一个问题；</li>
+<li>在语音识别等任务中，观测值为语音信号，隐藏状态为文字，目标就是根据观测信号来推断最有可能的状态序列(即对应 的文字)，即上述第二个问题；</li>
+<li>在大多数现实应用中，人工指定模型参数已变得越来越不可行，如何根据训练样本学得最优的模型参数，恰是上述第三个问题.</li>
+</ul>
+
+<p>值得庆幸的是，基于式(14.1)的条件独立性，隐马尔可夫模型的这三个问题均能被高效求解.</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/10-%E5%9B%BE%E6%A8%A1%E5%9E%8B/03-%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 条件随机场</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/03-%E5%8D%8A%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/06-%E5%8D%8A%E7%9B%91%E7%9D%A3%E8%81%9A%E7%B1%BB/">
+            <span class="next-text nav-default">06 半监督聚类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

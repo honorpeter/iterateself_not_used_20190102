@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>pca 2 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="pca 2 需要补充的 实际上感觉他讲的东西还是很多的，需要好好消化。尤其是例子。 降维会用作主要的算法吗？还是只有再预处理的时候用到？ 把这个归在预处理" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E9%99%8D%E7%BB%B4/01-pca/pca-2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="pca 2" />
+<meta property="og:description" content="pca 2 需要补充的 实际上感觉他讲的东西还是很多的，需要好好消化。尤其是例子。 降维会用作主要的算法吗？还是只有再预处理的时候用到？ 把这个归在预处理" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E9%99%8D%E7%BB%B4/01-pca/pca-2/" /><meta property="article:published_time" content="2018-08-12T20:03:48&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:03:48&#43;00:00"/>
+<meta itemprop="name" content="pca 2">
+<meta itemprop="description" content="pca 2 需要补充的 实际上感觉他讲的东西还是很多的，需要好好消化。尤其是例子。 降维会用作主要的算法吗？还是只有再预处理的时候用到？ 把这个归在预处理">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:03:48&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:03:48&#43;00:00" />
+<meta itemprop="wordCount" content="3482">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="pca 2"/>
+<meta name="twitter:description" content="pca 2 需要补充的 实际上感觉他讲的东西还是很多的，需要好好消化。尤其是例子。 降维会用作主要的算法吗？还是只有再预处理的时候用到？ 把这个归在预处理"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">pca 2</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 3482 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#pca-2">pca 2</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#motive">MOTIVE</a></li>
+<li><a href="#需要的数学知识">需要的数学知识</a></li>
+<li><a href="#pca">PCA</a>
+<ul>
+<li><a href="#为什么要用pca">为什么要用PCA？</a></li>
+<li><a href="#那么我们怎么去求出这种主成分呢">那么我们怎么去求出这种主成分呢？</a></li>
+<li><a href="#计算投影样本点的方差">计算投影样本点的方差</a></li>
+<li><a href="#目标函数">目标函数</a></li>
+<li><a href="#方差核特征值">方差核特征值</a></li>
+<li><a href="#pca的重要应用">PCA的重要应用</a>
+<ul>
+<li><a href="#pca的重要应用-去噪">PCA的重要应用-去噪</a></li>
+<li><a href="#pca的重要应用-降维">PCA的重要应用-降维</a></li>
+</ul></li>
+<li><a href="#pca总结">PCA总结</a></li>
+<li><a href="#关于pca的进一步考察">关于PCA的进一步考察</a></li>
+</ul></li>
+<li><a href="#再琢磨一下这个svd">再琢磨一下这个SVD：</a>
+<ul>
+<li><a href="#svd举例">SVD举例：</a></li>
+<li><a href="#奇异值分解不是唯一的">奇异值分解不是唯一的</a></li>
+<li><a href="#svd的四个矩阵">SVD的四个矩阵</a></li>
+</ul></li>
+<li><a href="#现在做一点拓展">现在做一点拓展：</a>
+<ul>
+<li><a href="#svd与plsa">SVD与pLSA</a></li>
+</ul></li>
+<li><a href="#svd举例-1">SVD举例</a>
+<ul>
+<li>
+<ul>
+<li><a href="#评分矩阵">评分矩阵</a></li>
+</ul></li>
+<li><a href="#svd分解">SVD分解</a></li>
+<li><a href="#产品矩阵的压缩">产品矩阵的压缩</a></li>
+<li><a href="#用户矩阵的压缩">用户矩阵的压缩</a></li>
+<li><a href="#新用户的个性化推荐">新用户的个性化推荐</a></li>
+</ul></li>
+<li><a href="#pca和svd总结">PCA和SVD总结</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="pca-2">pca 2</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ol>
+<li><strong>实际上感觉他讲的东西还是很多的，需要好好消化。尤其是例子。</strong></li>
+<li><strong>降维会用作主要的算法吗？还是只有再预处理的时候用到？</strong></li>
+<li><strong>把这个归在预处理里面是不是更好？</strong></li>
+</ol>
+
+<h1 id="motive">MOTIVE</h1>
+
+<p>对降维相关的进行总结。</p>
+
+<p>$\propto$ 这个符号是正比于的意思。</p>
+
+<h1 id="需要的数学知识">需要的数学知识</h1>
+
+<ul>
+<li>熵的定义式等概念。</li>
+<li>决策树学习的生成算法。</li>
+<li>实对称阵不同特征值的特征向量正交]</li>
+<li>伪逆</li>
+</ul>
+
+<h1 id="pca">PCA</h1>
+
+<h2 id="为什么要用pca">为什么要用PCA？</h2>
+
+<p>实际问题往往需要研究多个特征，而这些特征存在一定的相关性。</p>
+
+<ul>
+<li>数据量增加了问题的复杂性。</li>
+</ul>
+
+<p>将多个特征综合为少数几个代表性特征：</p>
+
+<ul>
+<li>既能够代表原始特征的绝大多数信息，</li>
+<li>组合后的特征又互不相关，降低相关性。</li>
+<li>主成分</li>
+</ul>
+
+<p>即主成分分析。</p>
+
+<h2 id="那么我们怎么去求出这种主成分呢">那么我们怎么去求出这种主成分呢？</h2>
+
+<p>考察降维后的样本方差</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ih2iaGEBje.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/H36lH5B2l6.png?imageslim" alt="mark" /></p>
+
+<h2 id="计算投影样本点的方差">计算投影样本点的方差</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ejm8aL35jc.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/El7amiG0kf.png?imageslim" alt="mark" />就是做投影的意义吗？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lCDCbbFDFh.png?imageslim" alt="mark" />就是投影到那条直线上的m个数。这m个数总可以进行求方差。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3EI3Jkhd4H.png?imageslim" alt="mark" />为什么是这样求方差的？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c90hK44CAD.png?imageslim" alt="mark" />这个目标函数是关于u的。现在想去求u。这个1/2是要去掉的，笔误。</p>
+
+<h2 id="目标函数">目标函数</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lAIfG3Akch.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7AiiBfcjBl.png?imageslim" alt="mark" />即u的模是1。</p>
+
+<p>给一个目标函数，求约束条件下的目标函数的极值，那么就可以用Lagrange</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4E7K53E365.png?imageslim" alt="mark" />这个式子能高速我们什么信息呢？一个方阵乘以一个方向等于一个常数乘以这个方向。因此这个u就是去<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CAC7bjE1be.png?imageslim" alt="mark" />的特征向量，而且对应的特征值就是这个Lagrange乘子 (\lambda)</p>
+
+<p>这就是PCA的推导的核心过程</p>
+
+<p>即什么是主方向？就是保证样本投到我这个方向上来保证方差最大，那个方向就是主方向。</p>
+
+<h2 id="方差核特征值">方差核特征值</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aI1GCDEk8K.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/iGCLEH3hac.png?imageslim" alt="mark" />给定方差的时候那种分布的熵最大？正态分布。</p>
+
+<p>所以想弄到方差最大的方向上去，其实PCA适合的数据的特征其中一点就是比较适合高斯分布的情况。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2jKGAD7E0i.png?imageslim" alt="mark" />用最小二乘拟合的直线也是这个直线</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mckfHfL1Jb.png?imageslim" alt="mark" />上面三条都没有很明白</p>
+
+<p>现在说一下降维体现在那里？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fF9l0jKEAg.png?imageslim" alt="mark" />我现在可以对<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1E23EDF0hK.png?imageslim" alt="mark" />这个方阵求出特征值最大的一个u出来，然后把它列成一列，然后把它特征值次大的一个u拿出来裂成第二列。以此类推，这样，原来的n*n的一个矩阵，通过特征值写成一个新的n*n的矩阵，我只取前面的前k个。那么我就只用了k列，而没有用到n列</p>
+
+<p>由于<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/IlijJffkim.png?imageslim" alt="mark" />是对称阵，那么它的不同的特征值对应的特征向量一定是正交的，也就是说第二个方向一定是垂直于第一个的主方向的。所以球出来的维度都是相互垂直的。</p>
+
+<p>PCA的两个特征向量</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3k3gKI6amE.png?imageslim" alt="mark" /></p>
+
+<p>OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？</p>
+
+<h2 id="pca的重要应用">PCA的重要应用</h2>
+
+<ul>
+<li>OBB树：
+
+<ul>
+<li>Oriented Bounding Box <strong>OBB是什么？</strong></li>
+<li>GIS中的空间索引</li>
+</ul></li>
+<li>特征提取</li>
+<li>数据压缩
+
+<ul>
+<li>降维</li>
+<li>对原始观测数据A在λ值前k大的特征向量u上投影后，获得一个A(mxn)Q(nxk)的序列，再加上特征向量矩阵Q，即将A原来的mxn个数据压缩到mxk+kxn个数据</li>
+</ul></li>
+</ul>
+
+<p>对于现在的计算机，数据压缩现在基本不是一个重要的事情。关键是特征提取</p>
+
+<p><strong>这三方面的例子需要补充下</strong></p>
+
+<h3 id="pca的重要应用-去噪">PCA的重要应用-去噪</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a9FL6L9Ebg.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/amgBkBFJhh.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b55ffDA94D.png?imageslim" alt="mark" /></p>
+
+<p>怎么去噪呢？</p>
+
+<p>先找到主方向，然后把它的次方向和次次方向全部清为0，这样就可以达到去噪的目的。</p>
+
+<p>这个不是PCA的主要作用，但是PCA是可以用来去噪的。</p>
+
+<h3 id="pca的重要应用-降维">PCA的重要应用-降维</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4iH5Lg7H1D.png?imageslim" alt="mark" /></p>
+
+<p>主要是降维，x，y就发生变化了，也就是说降维后的特征已经不一样了，这个是PCA的恶一个限制。这个时候，特征是什么已经有一点怪异了。就有点混在一起了。 <strong>是的呀。</strong></p>
+
+<p>但是就因为说不清，所以我们就可以造个词语：主题，来解释。<strong>什么是主题？</strong></p>
+
+<h2 id="pca总结">PCA总结</h2>
+
+<p>实对称阵的特征值一定是实数，不同特征值对应的特征向量一定正交，重数为r的特征值一定有r个线性无关的特征向量；</p>
+
+<p>样本矩阵的协方差矩阵必然一定是对称阵，协方差矩阵的元素即各个特征间相关性的度量；</p>
+
+<ul>
+<li>具体实践中考虑是否去均值化；</li>
+</ul>
+
+<p>将协方差矩阵C的特征向量组成矩阵P，可以将C合同为对角矩阵D，对角阵D的对角元素即为A的特征值。</p>
+
+<ul>
+<li><p>(P^TCP=D)</p></li>
+
+<li><p>协方差矩阵的特征向量，往往单位化，即特征向量的模为1，从而，P是标准正交阵：(P^TP=I)。</p></li>
+
+<li><p>即将特征空间线性加权，使得加权后的特征组合间是不相关的。选择若干最大的特征值对应的特征向量(即新的特征组合)，即完成了PCA的过程。</p></li>
+</ul>
+
+<p><strong>但是一直想问：对于所有的特征类型都可以使用PCA吗？</strong></p>
+
+<p>注意：</p>
+
+<p>正常去求协方差矩阵，应该是去均值的。去均值的作用是什么？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0J7L6i9Kj2.png?imageslim" alt="mark" /></p>
+
+<p>正常而言我的均值的方向就是我的绿色的箭头的方向。但是如果不去均值，算出来的是紫色的方向，因为你从0开始数，从0开始画一条线使它方差最大。那么就是这个紫色的线。<strong>为什么？</strong></p>
+
+<p><strong>有人提了 WCCN和ZCA。不知道是什么？</strong></p>
+
+<p>如果想把降维后的k维向量还原时，只要乘回投影矩阵就行，但是时会损失数据的，不能完全还原，有损失率。<strong>到底是怎么做的？</strong></p>
+
+<h2 id="关于pca的进一步考察">关于PCA的进一步考察</h2>
+
+<p>若A是m×n阶矩阵，不妨认为m&gt;n，则(A^TA)是n×n阶方阵。根据下式计算：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kFeAD9799b.png?imageslim" alt="mark" /></p>
+
+<p>我就用PCA的计算过程把A这个矩阵分成了U和V这两个方阵和一个对角阵 (\Sum) 的乘积。</p>
+
+<p>(\Sum) 的主对角线上放的是什么呢？放的是特征值开放得到的东西 (\sigma_i=\sqrt{\lambda_i}) ,这个东西很好，把它叫做奇异值。而这种过程叫做奇异值分解 SVD。</p>
+
+<p>(\Sum) 到底是什么？</p>
+
+<p>奇异值不如叫做优值，优秀的那些东西。<strong>为什么优秀？</strong></p>
+
+<p>仔细看下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/36gb385jDD.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CJBLKJKekG.png?imageslim" alt="mark" />这个就是u</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/A1Lfda5jef.png?imageslim" alt="mark" />单位化之后的特征向量相乘还是1。</p>
+
+<p><strong>利害的。</strong></p>
+
+<h1 id="再琢磨一下这个svd">再琢磨一下这个SVD：</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CGI7dBl2LH.png?imageslim" alt="mark" /></p>
+
+<h2 id="svd举例">SVD举例：</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GbiE876fH6.png?imageslim" alt="mark" /></p>
+
+<p>注意：虽然 $\sum$ 是唯一确定的，但是 SVD 却不是唯一确定的：</p>
+
+<h2 id="奇异值分解不是唯一的">奇异值分解不是唯一的</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4ch9iEJBbb.png?imageslim" alt="mark" /></p>
+
+<h2 id="svd的四个矩阵">SVD的四个矩阵</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kbJgA5fBAA.png?imageslim" alt="mark" /></p>
+
+<p>实践中我们得 到这个分解之后，可以进行数据压缩，或者降维，或者数据整理，比如上图中的只保留前面的前k个。<strong>什么是伪逆？为什么这里谈到了伪逆？</strong></p>
+
+<h1 id="现在做一点拓展">现在做一点拓展：</h1>
+
+<p>比如给定n篇文档，而且有若干个主题，通过主题，就可以确定一个单词或者字：</p>
+
+<h2 id="svd与plsa">SVD与pLSA</h2>
+
+<p>基于概率统计的pLSA模型(probabilistic latentsemantic analysis, 概率隐语义分析)，增加了主题模型，形成简单的贝叶斯网络，可以使用EM算法学习模型参数。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c9IiHhHJIe.png?imageslim" alt="mark" /></p>
+
+<p>所以可以把SVD应用到求主题的这种思路上去。为什么呢？手头上有m篇文档，每个文档有n个词，那么这就是一个m*n的大矩阵，可以进行奇异值分解SVD得到三个矩阵相乘，然后U的前k个就是所谓的主题，因为这k个是原来的很多的特征转换而来的，这些PCA生成的新的特征就可以称作主题。这个是SVD的一种应用。这个方法在十几年前还是i可以的。。现在用的少了</p>
+
+<p>所以PCA生成的特征虽然意义没有之前明确，但是可以说它是一种主题。</p>
+
+<p>另外，在谈到主题模型的时候，会谈到一个基于概率意义下仍然做主题的一个推导，叫概率化的隐语义分析 pLSA。本质上是通过EM算法来做的。</p>
+
+<p>这个pLSA的东西后面再讲。</p>
+
+<p>附：参数含义</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3mF3m7c98D.png?imageslim" alt="mark" /></p>
+
+<p>pLSA模型</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hIlD37mlA0.png?imageslim" alt="mark" /></p>
+
+<h1 id="svd举例-1">SVD举例</h1>
+
+<p>假定Ben、Tom、John、Fred对6种产品进行了评价，评分越高，代表对该产品越喜欢。0表示未评价。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a76Dcemlkl.png?imageslim" alt="mark" /></p>
+
+<h3 id="评分矩阵">评分矩阵</h3>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3eJlLmAfl2.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Cmjhe0DBai.png?imageslim" alt="mark" /></p>
+
+<h2 id="svd分解">SVD分解</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ahfEL8EI79.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ladBeAdc5e.png?imageslim" alt="mark" /></p>
+
+<p>注意：这个<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ImLhj9j68B.png?imageslim" alt="mark" />里面是V不是VT。要修改下。所以才是前两列</p>
+
+<p>把U的前两列画出来：为什么要把前两列画出来？</p>
+
+<h2 id="产品矩阵的压缩">产品矩阵的压缩</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9h481e9D80.png?imageslim" alt="mark" /></p>
+
+<p>在这里面，用夹角余弦去度量它们之间的距离。那么这些点里面5和6是最近的。我们看一下A中5和6是不是最近的，的确是比较接近的。<strong>为什么可以用余弦是度量它们之间距离？</strong></p>
+
+<h2 id="用户矩阵的压缩">用户矩阵的压缩</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8K9kJEgGd5.png?imageslim" alt="mark" /></p>
+
+<p>可以看到Fred和Ben是比较近的。<strong>为什么这两列能表示出这些东西？</strong></p>
+
+<p>那么对于新用户，怎么进行个性化推荐呢？</p>
+
+<h2 id="新用户的个性化推荐">新用户的个性化推荐</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a92e57d337.png?imageslim" alt="mark" /></p>
+
+<p>因为 (\Sum^{-1})  本身是对角阵，因此转置还是它</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7HHjCibbC0.png?imageslim" alt="mark" /></p>
+
+<p><strong>为什么可以这样乘？ 最后的结果的意义又是什么？</strong></p>
+
+<p>再把Bob的值放到图上去：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/78Fa7AlaFi.png?imageslim" alt="mark" /></p>
+
+<p>由于Bob有三个没有评分，而Ben距离他最近，所以，我给他推荐Ben的最好的评价的东西。</p>
+
+<p>如果新来一个产品的话，就没办法像上面这么用了，因为你这个产品还没做呢。因此这个是牵涉到基于产品的冷启动。<strong>什么是冷启动？有些文章说冷启动是一个不值得过分关注的事情。</strong></p>
+
+<p>上面这个方法不是基于用户的。基于产品的和基于用户的和基于内容的，都是做的近邻。</p>
+
+<p>所以推荐系统中，可以用近邻以外，然后就是这种SVD的方式。<strong>想知道真正的推荐系统中SVD的方式真的又用到吗？于k-近邻的方式哪个好？有什么优缺点？</strong></p>
+
+<h1 id="pca和svd总结">PCA和SVD总结</h1>
+
+<p>虽然这里PCA和SVD是一起说的，但是实际上是不一样的。</p>
+
+<p>矩阵对向量的乘法，对应于对该向量的旋转、伸缩。如果对某向量只发生了伸缩而无旋转变化，则该向量是该矩阵的特征向量，伸缩比即为特征值。</p>
+
+<p>PCA用来提取一个场的主要信息(即主成分分量) ，而SVD一般用来分析两个场的相关关系。</p>
+
+<p>两者在具体的实现方法上也有不同，SVD是通过矩阵奇异值分解的方法分解两个场的协方差矩阵的，而PCA是通过分解一个场的协方差矩阵。</p>
+
+<p>PCA可用于特征的压缩、降维；当然也能去噪等；如果将矩阵转置后再用PCA，相当于去除相关度过大的样本数据——但不常见；SVD能够对一般矩阵分解，并可用于个性化推荐等内容。</p>
+
+<p>PCA其实做的是对一个场的数据做的提取，SVD是两类数据的相关性，比如说用户和产品的相关性。这个是要强调的。<strong>嗯 是的。</strong></p>
+
+<p>虽然技术上都是做矩阵的分解等。但是再实践层面的用途上是完全不一样的。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>七月在线 机器学习</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E9%99%8D%E7%BB%B4/01-pca/04-%E6%A0%B8%E5%8C%96%E7%BA%BF%E6%80%A7%E9%99%8D%E7%BB%B4/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 核化线性降维</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-%E8%B0%83%E5%8F%82%E6%95%B0/">
+            <span class="next-text nav-default">ML 调参数</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

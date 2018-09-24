@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>特征抽象 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="特征抽象 需要补充的 对于文本、音频、图像 到底怎么处理？要单独拿出来说 视频文件呢？带字幕的视频呢？ 什么是特征抽象？ 将源数据抽象成算法可以理解的数" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/03-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/%E7%89%B9%E5%BE%81%E6%8A%BD%E8%B1%A1/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="特征抽象" />
+<meta property="og:description" content="特征抽象 需要补充的 对于文本、音频、图像 到底怎么处理？要单独拿出来说 视频文件呢？带字幕的视频呢？ 什么是特征抽象？ 将源数据抽象成算法可以理解的数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/03-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/%E7%89%B9%E5%BE%81%E6%8A%BD%E8%B1%A1/" /><meta property="article:published_time" content="2018-08-01T23:20:59&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-01T23:20:59&#43;00:00"/>
+<meta itemprop="name" content="特征抽象">
+<meta itemprop="description" content="特征抽象 需要补充的 对于文本、音频、图像 到底怎么处理？要单独拿出来说 视频文件呢？带字幕的视频呢？ 什么是特征抽象？ 将源数据抽象成算法可以理解的数">
+
+
+<meta itemprop="datePublished" content="2018-08-01T23:20:59&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-01T23:20:59&#43;00:00" />
+<meta itemprop="wordCount" content="2119">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="特征抽象"/>
+<meta name="twitter:description" content="特征抽象 需要补充的 对于文本、音频、图像 到底怎么处理？要单独拿出来说 视频文件呢？带字幕的视频呢？ 什么是特征抽象？ 将源数据抽象成算法可以理解的数"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">特征抽象</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-01 </span>
+        
+        <span class="more-meta"> 2119 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#特征抽象">特征抽象</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#什么是特征抽象">什么是特征抽象？</a></li>
+<li><a href="#时间戳">时间戳</a></li>
+<li><a href="#二值类问题">二值类问题</a></li>
+<li><a href="#多值">多值</a>
+<ul>
+<li><a href="#多值有序">多值有序</a></li>
+<li><a href="#多值无序">多值无序</a>
+<ul>
+<li><a href="#信息阉割">信息阉割</a></li>
+<li><a href="#one-hot-编码">One-hot 编码</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#文本类型">文本类型</a></li>
+<li><a href="#图像或者语音数据">图像或者语音数据</a></li>
+<li><a href="#视频文件">视频文件</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="特征抽象">特征抽象</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>对于文本、音频、图像 到底怎么处理？要单独拿出来说</strong></li>
+<li><strong>视频文件呢？带字幕的视频呢？</strong></li>
+</ul>
+
+<h1 id="什么是特征抽象">什么是特征抽象？</h1>
+
+<p>将源数据抽象成算法可以理解的数据。</p>
+
+<p>举个例子：</p>
+
+<p>首先思考一下，什么样的数据是算法可以理解的？目前机器学习算法主要是通过对一些数据进行矩阵运算或者概率运算来得出一个结论。也就是：算法的入参应该是一组可以表达数据某类特性的数字。</p>
+
+<p>那么，我们希望数据是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/19kdcdl3ia.png?imageslim" alt="mark" /></p>
+
+<p>但是呢，实际中采集到的数据可能是这样的：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GlA1ibB7H6.png?imageslim" alt="mark" /></p>
+
+<p>那么，如何使用这种非结构化的数据进行分析呢？如何从这些数据中挑选特征？</p>
+
+<p>实际上，这种抽象的过程没有现成的公式或者工具，需要根据用户的主观判断来实现，。</p>
+
+<p>即：</p>
+
+<ul>
+<li><p>需要进行大量的选灌灌工作来积累经验</p></li>
+
+<li><p>需要对特征抽象的数据业务场景足够了解</p></li>
+</ul>
+
+<p>OK，那么到底该如何处理这种特征？从看似不可量化的数据中抽象出特征？下面我们挨个说一下：</p>
+
+<h1 id="时间戳">时间戳</h1>
+
+<p>数据来自系统日志的时候，时间抽经常会有，而且，实践序列是对结果影响很大的一部分特征。比如，要预测一个用户下一周的购买行为，最好选择用户今年的数据来训练，而不是去年的，对于这种强时效性的事件，事件还是很重要的。那么如何处理呢？</p>
+
+<p>如下面这个数据集：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DC3bd73bm7.png?imageslim" alt="mark" /></p>
+
+<p>时间戳 Time 的这种 “年-月-日” 格式的数据。可以选定一天作为基准，然后取具体日期字段中的数据与这一天的差值。比如，可以取2016-9-13 为基准，那么数据可以显示为：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/dd4b6F7DFA.png?imageslim" alt="mark" /></p>
+
+<h1 id="二值类问题">二值类问题</h1>
+
+<p>比如这样一组数据：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5bgffHeiAk.png?imageslim" alt="mark" /></p>
+
+<p>看似由非结构化的文本构成，但是可以稍微调整一下将数据量化。比如，对于性别和是否购买两项，都是二值型的，因此可以抽象成：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5daLi044Ej.png?imageslim" alt="mark" /></p>
+
+<p>注：对于单个字段那个是0，那个是1，不用纠结，因为只要可以通过量纲数值表示字段的具体含义就可以了。</p>
+
+<h1 id="多值">多值</h1>
+
+<p>上面的二值的还是比较好处理的，但是当字段的数据出现很多值的时候，就稍微麻烦了些。多值的字段数据分为两种i给你：一种是有序的，一种是无序的。</p>
+
+<h2 id="多值有序">多值有序</h2>
+
+<p>有序数据指的是数据可以按照程度来分层，如：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/H5d5CiJ9bJ.png?imageslim" alt="mark" /></p>
+
+<p>这里需要对Type进行特征抽象，看到里面这种疼痛程度，感觉可以对应成 0，1，2。嗯。</p>
+
+<p>那么那么那个值对应0，哪个值对应1呢？</p>
+
+<p>如果这些文本值表示的意义是可以按照验证程度排序的化，我们可以吧字符对象按照从轻到重，或者从重到轻两种方式与数值一一对应。比如：轻、中、重 可以对应成0，1，2 或者2，1，0。都可以，只要是按照程度来排序就行。</p>
+
+<h2 id="多值无序">多值无序</h2>
+
+<p>这种就比较麻烦了，但那时嫩，只能被迫对数据的信息熵进行一定程度的阉割或者采用One-hot 编码的方法。</p>
+
+<p>比如下面这个数据集：职业与收入</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CiLDa3IJGm.png?imageslim" alt="mark" /></p>
+
+<p>这里，我们要对Occupation进行抽象，那么，多值有序的方法就行不通了，因为没有办法分辨这些职业之间的程度关系。那么怎么办呢？</p>
+
+<h3 id="信息阉割">信息阉割</h3>
+
+<p>如果实在没有更好的办法的情况下，只能牺牲一下这个字段的信息熵，比如如果我们是要预测教育行业相关的情况的话，我们可以吧老师设定为1，把其它的都设定为0，那么这个特征表示的意义就是：职业是否是老师，对收入的影响。<strong>但是这样感觉丢掉了太多的信息了吧？有了One-hot这种之后，信息阉割这种还会被用到吗？什么场景下？</strong></p>
+
+<h3 id="one-hot-编码">One-hot 编码</h3>
+
+<p>其实呢，我们还有一种方法来解决多值无序的我呢提，而且，还不用阉割信息。这就是One-hot编码。</p>
+
+<p>对于上面这个Occupation的例子：我们可以把：老师、厨师、司机、运动员，分别编码成：[1,0,0,0]、[0,1,0,0]、[0,0,1,0]、[0,0,0,1]。</p>
+
+<p>注意：这里我们做的是：相当于把 Occupation 这一个特征根据它里面 Occupation 的种类拆成了4个特征，比如说这些特征的名字是：occ_teacher、occ_cook、occ_driver、occ_athlete 。那么，对于每一个样本来说，如果他是老师，那么他的这四个特征的值分别是 1，0，0，0。 以此类推，这就是上面这4组值的意思。</p>
+
+<p>OK，理解了之后，我们来对这种形式总结一下：One-hot 编码的原则是通过唯一数值表示每个字符数据在其特征列重的未知属性来实现特征编码。<strong>确认一下这个定义是不是准确，感觉有点不清楚。</strong></p>
+
+<p>嗯，感觉这个One-hot 编码还是很厉害的，虽然编出的特征里面的值很稀疏，但是是可以带到算法重进行运算的。</p>
+
+<h1 id="文本类型">文本类型</h1>
+
+<p><strong>这里需要重新总结下，最好放到NLP那里。</strong></p>
+
+<p>之前提到的一些特征抽象，都是建立在半结构化数据的基础上的，二半结构化数据指的是数据已经存储到了矩阵结构的数据库重，但是实际的值是字符类型的。</p>
+
+<p>那么，假如，我们的数据本来就是一段文本，那么怎么进行抽象特征呢？比如，数据是“小王真聪明”，怎么做呢？</p>
+
+<p>实际上，还是由很多方式的，比如，我们可以把文本先分词，比如分成：“小王/真/聪明” ，然后就可以按照词语出现的未知和次数来提取特征，也可以按照每个词的词性来提取特征。如果是多个文本的集合，还可以根据TF-IDF来提取特征。<strong>？不清楚</strong></p>
+
+<p>当然，最简单的特征增还是词的长度，比如前面这句话在特征首相后可以表示成表：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/deidF3e74a.png?imageslim" alt="mark" /></p>
+
+<h1 id="图像或者语音数据">图像或者语音数据</h1>
+
+<p><strong>需要补充</strong></p>
+
+<p>思路大体是：首先，将图像或者语音转化成矩阵。<strong>音频怎么转化成矩阵的？语音怎么提取特征？</strong></p>
+
+<p>以图像为例：按照像素点切割的话，每个像素点可以表示成一个数值，特征的生成也可以通过深度学习的自编码等方法来实现。<strong>要好好总结下。对所有的方法总结一下。什么是自编码？</strong></p>
+
+<h1 id="视频文件">视频文件</h1>
+
+<p><strong>需补充</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习 实践应用》</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/%E7%BA%BF%E6%80%A7%E5%88%A4%E5%88%AB%E5%88%86%E6%9E%90-lda/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">线性判别分析 LDA</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/03-%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9/">
+            <span class="next-text nav-default">特征选择</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

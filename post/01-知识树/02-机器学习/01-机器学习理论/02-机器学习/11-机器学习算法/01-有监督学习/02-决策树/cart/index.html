@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>CART - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="CART 需要补充的 要系统的总结下 CART 树 之前在决策树文中，只是提了一下CART用的度量方法是基尼指数，再也没有更多信息了。。 难道CART与 ID3 和 C4.5 只有这" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E5%86%B3%E7%AD%96%E6%A0%91/cart/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="CART" />
+<meta property="og:description" content="CART 需要补充的 要系统的总结下 CART 树 之前在决策树文中，只是提了一下CART用的度量方法是基尼指数，再也没有更多信息了。。 难道CART与 ID3 和 C4.5 只有这" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E5%86%B3%E7%AD%96%E6%A0%91/cart/" /><meta property="article:published_time" content="2018-08-12T20:02:06&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:02:06&#43;00:00"/>
+<meta itemprop="name" content="CART">
+<meta itemprop="description" content="CART 需要补充的 要系统的总结下 CART 树 之前在决策树文中，只是提了一下CART用的度量方法是基尼指数，再也没有更多信息了。。 难道CART与 ID3 和 C4.5 只有这">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:02:06&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:02:06&#43;00:00" />
+<meta itemprop="wordCount" content="1612">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CART"/>
+<meta name="twitter:description" content="CART 需要补充的 要系统的总结下 CART 树 之前在决策树文中，只是提了一下CART用的度量方法是基尼指数，再也没有更多信息了。。 难道CART与 ID3 和 C4.5 只有这"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">CART</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1612 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#cart">CART</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#cart介绍">CART介绍</a>
+<ul>
+<li><a href="#回到对于决策树的介绍">回到对于决策树的介绍</a></li>
+<li><a href="#什么是-分类回归树-cart">什么是 分类回归树 CART？</a></li>
+<li><a href="#cart-与-id3-和-c4-5的比较">CART 与 ID3 和 C4.5的比较</a></li>
+<li><a href="#为什么要引入分类回归树">为什么要引入分类回归树？</a></li>
+<li><a href="#要怎么计算连续型数值的混乱度呢">要怎么计算连续型数值的混乱度呢？</a></li>
+</ul></li>
+<li><a href="#树回归-算法特点">树回归 算法特点</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="cart">CART</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>要系统的总结下 CART 树</li>
+</ul>
+
+<p>之前在决策树文中，只是提了一下CART用的度量方法是基尼指数，再也没有更多信息了。。
+难道CART与 ID3 和 C4.5 只有这点不同吗？</p>
+
+<h1 id="cart介绍">CART介绍</h1>
+
+<h2 id="回到对于决策树的介绍">回到对于决策树的介绍</h2>
+
+<p>构建决策树算法，最常用到的是三个方法: ID3, C4.5, CART</p>
+
+<p>这三种方法的区别只是划分树的分支的方式不同：</p>
+
+<ul>
+<li><p>ID3 是用信息增益来划分分支</p></li>
+
+<li><p>C4.5 是用信息增益率来划分分支</p></li>
+
+<li><p>CART 是用 GINI 系数来划分分支</p></li>
+</ul>
+
+<p>其中 CART 和 C4.5 之间主要差异在于分类结果上，CART 可以回归分析也可以分类，C4.5 只能做分类；C4.5 子节点是可以多分的，而 CART 是无数个二叉子节点；</p>
+
+<h2 id="什么是-分类回归树-cart">什么是 分类回归树 CART？</h2>
+
+<p>CART(Classification And Regression Trees， 分类回归树) 是一种决策树算法，该算法既可以用于分类还可以用于回归。<strong>怎么用于回归的？</strong></p>
+
+<h2 id="cart-与-id3-和-c4-5的比较">CART 与 ID3 和 C4.5的比较</h2>
+
+<p>以此拓展出以 CART 为基础的 “树群” Random forest ， 以 回归树 为基础的 “树群” GBDT 。</p>
+
+<p>首先，我们看一下ID3，ID3 的做法是每次选取当前最佳的特征来分割数据，并按照该特征的所有可能取值来切分。也就是说：</p>
+
+<ul>
+<li><p>一种方法是：如果一个特征有 4 种取值，那么数据将被切分成 4 份。一旦按照某特征切分后，后面的切分过程中只会对应别的特征。因此有的观点认为这种切分方式过于迅速。<strong>嗯，好像是过于迅速了。这句是不是应该放在下面？二分法好像切分也很迅速。</strong></p></li>
+
+<li><p>另外一种方法：二分切分法，即每次把数据集切分成两份。如果数据的某特征值等于切分所要求的值，那么这些数据就进入树的左子树，反之则进入树的右子树。<strong>是等于进入左子树吗？是大于的时候吧？确认下。</strong></p></li>
+</ul>
+
+<p>除了切分过于迅速外， ID3 算法还存在另一个问题，它不能直接处理连续型特征。只有事先将连续型特征转换成离散型，才能在 ID3 算法中使用。但是，这种连续型转换成离散的过程会破坏连续型变量的内在性质。<strong>为什么会破坏内在本质？什么内在本质？</strong></p>
+
+<p>而使用二分切分法则易于对树构造过程进行调整以处理连续型特征。具体的处理方法是: 如果特征值大于给定值就走左子树，否则就走右子树。另外，二分切分法也节省了树的构建时间，但这点意义也不是特别大，因为这些树构建一般是离线完成，时间并非需要重点关注的因素。<strong>什么情况？怎么突然讲起二分切分法了？</strong></p>
+
+<p>CART 是十分著名且广泛记载的树构建算法，它使用二元切分来处理连续型变量。对 CART 稍作修改就可以处理回归问题。第 3 章中使用香农熵来度量集合的无组织程度。如果选用其他方法来代替香农熵，就可以使用树构建算法来完成回归。</p>
+
+<p>回归树与分类树的思路类似，但是叶节点的数据类型不是离散型，而是连续型。</p>
+
+<h2 id="为什么要引入分类回归树">为什么要引入分类回归树？</h2>
+
+<p>之前我们学习了线性回归的一些强大的方法，比如岭回归什么的，但这些方法创建的模型需要拟合所有的样本点（局部加权线性回归除外）。因此，它实际上是有些局限性的，比如：</p>
+
+<ul>
+<li><p>当数据拥有众多特征并且特征之间关系十分复杂时，构建全局模型的想法就显得太难了，也略显笨拙。</p></li>
+
+<li><p>实际生活中很多问题都是非线性的，不可能使用全局线性模型来拟合任何数据。</p></li>
+</ul>
+
+<p>那么怎么办呢？</p>
+
+<p>一种可行的方法是将数据集切分成很多份易建模的数据，然后利用我们的线性回归技术来建模。如果首次切分后仍然难以拟合线性模型就继续切分。在这种切分方式下，树回归和回归法就相当有用。<strong>还是没明白什么是树回归？</strong></p>
+
+<h2 id="要怎么计算连续型数值的混乱度呢">要怎么计算连续型数值的混乱度呢？</h2>
+
+<p>为成功构建以分段常数为叶节点的树，需要度量出数据的一致性。之前我们做决策树的时候，会在给定节点时计算数据的混乱度。那么如何计算连续型数值的混乱度呢？</p>
+
+<p>在这里，计算连续型数值的混乱度是非常简单的。首先计算所有数据的均值，然后计算每条数据的值到均值的差值。为了对正负差值同等看待，一般使用绝对值或平方值来代替上述差值。</p>
+
+<p>上述做法有点类似于前面介绍过的统计学中常用的方差计算。唯一不同就是，方差是平方误差的均值(均方差)，而这里需要的是平方误差的总值(总方差)。总方差可以通过均方差乘以数据集中样本点的个数来得到。</p>
+
+<h1 id="树回归-算法特点">树回归 算法特点</h1>
+
+<p>优点：
+  * 可以对复杂和非线性的数据建模。
+缺点：
+  * 结果不易理解。
+适用数据类型：
+  * 数值型和标称型数据。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<p>1.<a href="http://ml.apachecn.org/mlia/tree-regress/">第9章 树回归</a></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-%E8%B0%83%E5%8F%82%E6%95%B0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ML 调参数</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/05-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/04-%E7%BB%93%E5%90%88%E7%AD%96%E7%95%A5/">
+            <span class="next-text nav-default">04 结合策略</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>随机森林 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="随机森林 需要补充的 最典型的机器学习算法，所有的，还是要自己手动写一遍，这样才会有代码级的理解。最核心的元素才能够体会到。 老师的例子用的是js" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/05-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="随机森林" />
+<meta property="og:description" content="随机森林 需要补充的 最典型的机器学习算法，所有的，还是要自己手动写一遍，这样才会有代码级的理解。最核心的元素才能够体会到。 老师的例子用的是js" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/05-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" /><meta property="article:published_time" content="2018-08-12T19:54:50&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T19:54:50&#43;00:00"/>
+<meta itemprop="name" content="随机森林">
+<meta itemprop="description" content="随机森林 需要补充的 最典型的机器学习算法，所有的，还是要自己手动写一遍，这样才会有代码级的理解。最核心的元素才能够体会到。 老师的例子用的是js">
+
+
+<meta itemprop="datePublished" content="2018-08-12T19:54:50&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T19:54:50&#43;00:00" />
+<meta itemprop="wordCount" content="1753">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="随机森林"/>
+<meta name="twitter:description" content="随机森林 需要补充的 最典型的机器学习算法，所有的，还是要自己手动写一遍，这样才会有代码级的理解。最核心的元素才能够体会到。 老师的例子用的是js"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">随机森林</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 1753 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#随机森林">随机森林</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#随机森林算法介绍">随机森林算法介绍</a>
+<ul>
+<li><a href="#什么是随机森林算法">什么是随机森林算法？</a></li>
+<li><a href="#随机森林与决策树之间的关系与比较">随机森林与决策树之间的关系与比较</a></li>
+<li><a href="#随机森林在现实中的使用情况">随机森林在现实中的使用情况</a></li>
+</ul></li>
+<li><a href="#ok-如何构造随机森林">OK，如何构造随机森林？</a></li>
+<li><a href="#什么是好的随机森林">什么是好的随机森林？</a>
+<ul>
+<li><a href="#分类强度和相关度">分类强度和相关度</a></li>
+<li><a href="#oob错误率">OOB错误率</a></li>
+</ul></li>
+<li><a href="#随机森林的作用的扩展">随机森林的作用的扩展</a></li>
+<li><a href="#随机森林的优缺点">随机森林的优缺点</a>
+<ul>
+<li><a href="#优点">优点：</a></li>
+<li><a href="#缺点">缺点：</a></li>
+</ul></li>
+<li><a href="#随机森林的算法特点">随机森林的算法特点</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="随机森林">随机森林</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<p><strong>最典型的机器学习算法，所有的，还是要自己手动写一遍，这样才会有代码级的理解。最核心的元素才能够体会到。</strong>
+<strong>老师的例子用的是js写的，最好自己用Python写一遍。</strong></p>
+
+<p>对随机森林进行总结</p>
+
+<h1 id="随机森林算法介绍">随机森林算法介绍</h1>
+
+<h2 id="什么是随机森林算法">什么是随机森林算法？</h2>
+
+<p>利用多棵树对样本进行训练并预测的一种算法。</p>
+
+<h2 id="随机森林与决策树之间的关系与比较">随机森林与决策树之间的关系与比较</h2>
+
+<p>随机森林算法是在决策树的基础上发展出来的。</p>
+
+<p>决策树相当于一个大师，通过自己在数据集中学到的知识用于新数据的分类。随机森林就相当于很多个臭皮匠，希望最终的分类效果能够超过单个大师的一种算法。</p>
+
+<p>对于决策树算法来说，实际上单棵树的泛化能力还是很弱的，而随机森林的泛化能力就比较强了。<strong>为什么？</strong></p>
+
+<h2 id="随机森林在现实中的使用情况">随机森林在现实中的使用情况</h2>
+
+<p>在实际的应用中，随机森林用的非常多，基本上在Kaggle的比赛里面是在首选方法的列表里面。<strong>Kaggle的比赛中有那些首选方法？现在好像lightGBM比较多了。</strong></p>
+
+<h1 id="ok-如何构造随机森林">OK，如何构造随机森林？</h1>
+
+<p>首先，我们通过两个随机性，来构造不同的次优树：</p>
+
+<ul>
+<li>数据的随机性：我们采样的时候使用的是有放回的随机采样，而且我们只采样60%或者80%，因此这样的话样本是有可能被重复选到的。</li>
+<li>特征的随机性：我们随机选择一部分特征来构建决策树，而且并不对树进行裁剪，也就是说这个时候构造的随机树，所使用的特征并不一定是全局最优的。</li>
+</ul>
+
+<p>注：单树采用 CART 树。<strong>什么是CART树？</strong></p>
+
+<p>通过这两种随机性构造出的次优树，基本上是彼此不同的，这样就提升了系统的多样性，从而可以提升分类性能。<strong>为什么呢？为什么提升了多样性就可以提升分类性能？</strong></p>
+
+<p>在生成一定数目的次优树之后，森林的输出采用简单多数投票法（针对分类）或单棵树输出结果的简单平均（针对回归）得到。</p>
+
+<h1 id="什么是好的随机森林">什么是好的随机森林？</h1>
+
+<h2 id="分类强度和相关度">分类强度和相关度</h2>
+
+<ul>
+<li><p>森林中单棵树的分类强度（Strength）：每棵树的分类强度越大，则随机森林的分类性能越好。</p></li>
+
+<li><p>森林中树之间的相关度（Correlation）：树之间的相关度越大，则随机森林的分类型能越差。</p></li>
+</ul>
+
+<p>也就是说，单棵树的分类强度越大，树之间的相关度越小，则效果越好。<strong>但是这个是怎么实现的？单树足够强大可以是树的深度允许更深。还有吗？</strong></p>
+
+<p>可见：树不是越多越好的，由于树的个数越多，树之间的相关度也就会越大，所以，森林的分类性反而会降低。 其实，我们可以自己实现看看不同的树在测试集中的分类正确率的曲线。</p>
+
+<h2 id="oob错误率">OOB错误率</h2>
+
+<p>OOB错误率是随机森林的错误率无偏估计</p>
+
+<p>首先，由于树是由可放回的样本构造出来的，那么肯定有些样本不参数与这个树的构建，这些样本相对于这个树来说就是OOB样本，那么我每一个样本，都可以找到对应的不参与构建的那些树，每个样本在这些树中的出错的比值叫做OOB错误率。即：对每个样本，在其所有OOB的单树中错误占比，作为OOB错误率。</p>
+
+<p>因此每个样本的OOB错误率求平均值就是随机森林的错误率的无偏估计 。由于是无偏估计了，所以，随机森林不需要进行交叉验证。<strong>什么是交叉验证？</strong></p>
+
+<p>实际上如果样本足够多的时候OOB错误率大概就等于产品上线之后的错误率。当然，前提是我的样本足够多。</p>
+
+<p><strong>这个没明白</strong></p>
+
+<h1 id="随机森林的作用的扩展">随机森林的作用的扩展</h1>
+
+<ul>
+<li><p>根据样本在相同结点出现的比率，判别样本的相似性。比如说我的两个样本在不同的树中总是分到同一个类别下面，这说明我的这两个样本是很相似的。</p></li>
+
+<li><p>根据分割特征选择的次数，可以给出特征重要性排序。即如果某个特征经常被用来作为分割，那么这个特征就是很重要的。<strong>这个没有很清楚。要怎么统计呢？</strong></p></li>
+</ul>
+
+<h1 id="随机森林的优缺点">随机森林的优缺点</h1>
+
+<h2 id="优点">优点：</h2>
+
+<p>继承了树的一些优点</p>
+
+<ul>
+<li><p>数据适应性好，对于连续值和离散值都可以很好分类，而且缺失特征对它影响很小</p></li>
+
+<li><p>分类计算快速</p></li>
+
+<li><p>能应对一定unblance的数据</p></li>
+</ul>
+
+<p>增加的一些优点：</p>
+
+<ul>
+<li><p>提高了泛化能力</p></li>
+
+<li><p>随机森林中的树是可以并行生成的，因此可以用分布式的框架同时生成很多的树，再组合再一起。<strong>有相关的实现吗，想看看怎么实现的。怎么分到分布式框架里面的。</strong></p></li>
+</ul>
+
+<h2 id="缺点">缺点：</h2>
+
+<p>*</p>
+
+<p>随机森林增加树的话还是要重来的重新训练，因为再原来的基础上改造还是比较困难的。<strong>现在还是这样吗？有什么好的对应的方法？</strong></p>
+
+<h1 id="随机森林的算法特点">随机森林的算法特点</h1>
+
+<p>优点：</p>
+
+<ul>
+<li><p>几乎不需要输入准备</p></li>
+
+<li><p>可实现隐式特征选择</p></li>
+
+<li><p>训练速度非常快、其他模型很难超越  <strong>真的吗？</strong></p></li>
+
+<li><p>很难建立一个糟糕的随机森林模型  <strong>这个也是优点，好吧</strong></p></li>
+
+<li><p>有大量优秀、免费以及开源的实现。</p></li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>模型大小、是个很难去解释的黑盒子</li>
+</ul>
+
+<p>适用数据范围：</p>
+
+<ul>
+<li>数值型和标称型</li>
+</ul>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>七月在线 机器学习</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/ml-yearning/00-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">00 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/05-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/adaboost-%E4%BE%8B%E5%AD%901%E4%BB%8E%E7%96%9D%E6%B0%94%E7%97%85%E7%97%87%E9%A2%84%E6%B5%8B%E7%97%85%E9%A9%AC%E7%9A%84%E6%AD%BB%E4%BA%A1%E7%8E%87/">
+            <span class="next-text nav-default">AdaBoost 例子1：从疝气病症预测病马的死亡率</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

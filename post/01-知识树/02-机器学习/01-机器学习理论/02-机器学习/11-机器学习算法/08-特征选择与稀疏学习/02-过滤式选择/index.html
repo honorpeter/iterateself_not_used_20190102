@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 过滤式选择 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="过滤式选择 过滤式方法先对数据集进行特征选择，然后再训练学习器，特征选择过程与后续学习器无关.这相当于先用特征选择过程对初始特征进行“过滤”，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/02-%E8%BF%87%E6%BB%A4%E5%BC%8F%E9%80%89%E6%8B%A9/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 过滤式选择" />
+<meta property="og:description" content="过滤式选择 过滤式方法先对数据集进行特征选择，然后再训练学习器，特征选择过程与后续学习器无关.这相当于先用特征选择过程对初始特征进行“过滤”，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/02-%E8%BF%87%E6%BB%A4%E5%BC%8F%E9%80%89%E6%8B%A9/" /><meta property="article:published_time" content="2018-06-29T13:56:45&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-29T13:56:45&#43;00:00"/>
+<meta itemprop="name" content="02 过滤式选择">
+<meta itemprop="description" content="过滤式选择 过滤式方法先对数据集进行特征选择，然后再训练学习器，特征选择过程与后续学习器无关.这相当于先用特征选择过程对初始特征进行“过滤”，">
+
+
+<meta itemprop="datePublished" content="2018-06-29T13:56:45&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-29T13:56:45&#43;00:00" />
+<meta itemprop="wordCount" content="988">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 过滤式选择"/>
+<meta name="twitter:description" content="过滤式选择 过滤式方法先对数据集进行特征选择，然后再训练学习器，特征选择过程与后续学习器无关.这相当于先用特征选择过程对初始特征进行“过滤”，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 过滤式选择</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-29 </span>
+        
+        <span class="more-meta"> 988 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>过滤式选择</p>
+
+<p>过滤式方法先对数据集进行特征选择，然后再训练学习器，特征选择过程与后续学习器无关.这相当于先用特征选择过程对初始特征进行“过滤”，再用过滤后的特征来训练模型.</p>
+
+<p>Relief (Relevant Features) 是一种著名的过滤式特征选择方法，该方法设计了一个“相关统计量”来度量特征的重要性.该统计量是一个向量，其每个分量分别对应于一个初始特征，而特征子集的重要性则是由子集中每个特征所对应的相关统计量分量之和来决定.于是，最终只需指定一个阈值 $\tau$ ，然后选择比 $\tau$  大的相关统计量分量所对应的特征即可;也可指定欲选取的特征个数 k ，然后选择相关统计量分量最大的 k 个特征.</p>
+
+<p>显然，Relief的关键是如何确定相关统计量.给定训练集 ${(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m),}$ 对每个示例 $x_i$ ，Relief先在 $x<em>i$ 的同类样本中寻找 其最近邻 $x</em>{i,nh}$，称为“猜中近邻” (near-hit)，再从 $x<em>i$ 的异类样本中寻找其最近邻 $x</em>{i,nm}$ ，称为“猜错近邻” (near-miss),然后，相关统计量对应于属性 j 的分量为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/DlAiaf1iJ2.png?imageslim" alt="mark" /></p>
+
+<p>其中 $x_a^j$ 表示样本 $x_a$ 在属性 j 上的取值，$diff(x_a^j,x_b^j)$  取决于属性 j 的类型：若属性 j 为离散型，则 $x_a^j=x_b^j$ 时 $diff(x_a^j,x_b^j)=0$ ,否则为 1;若属性 j 为连续型， 则 $diff(x_a^j,x_b^j)=|x_a^j-x_b^j|$ ,注意 $x_a^j$,$x_b^j$ 已规范化到[0,1]区间.</p>
+
+<p>从式(11.3)可看出，若 $x<em>i$ 与其猜中近邻 $x</em>{i,nh}$ 在属性 j 上的距离小于  $x<em>i$ 与其猜错近邻 $x</em>{i,nm}$ 的距离，则说明属性 j 对区分同类与异类样本是有益的，于是增大属性 j 所对应的统计量分量;</p>
+
+<p>反之，若 $x<em>i$ 与其猜中近邻 $x</em>{i,nh}$ 在属性 j 上的距离大于 $x<em>i$ 与其猜错近邻 $x</em>{i,nm}$ 的距离，则说明属性 j 起负面作用，于是减小属性j所对应的统计量分量。</p>
+
+<p>最后，对基于不同样本得到的估计结果进行平均， 就得到各属性的相关统计量分量,分量值越大，则对应属性的分类能力就越强.</p>
+
+<p>式(11.3)中的 i 出了指出了用于平均的样本下标.实际上 Relief 只需在数据集的 采样上而不必在整个数据集上估计相关统计量.显然，Relief的时间开销随采样次数以及原始特征数线性増长，因此是一个运行效率很高的过滤式特征选择算法.</p>
+
+<p>Relief 是为二分类问题设计的，其扩展变体 Relief-F 能处理多分类问题.假定数据集 D 中的样本来自 $|\mathcal{Y}|$ 个类别.对示例 $x_i$ ，若它属于第 k 类 $(k\in {1,2,\cdots ,|\mathcal{Y}|}$ ,则 Relief-F 先在第 k 类的样本中寻找 $x<em>i$ 的最近邻示例 $x</em>{i,nh}$ 并将其作为猜中近邻，然后在第 k 类之外的每个类中找到一个 $x<em>i$ 的最近邻示例作为猜错近邻，记为 $x</em>{i,l,nm}(l=1,2,\ldots,|\mathcal{Y}|;l\neq k)$ 。于是，相关统计量对应于属性 j 的分量为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/1lLgG3g9Kd.png?imageslim" alt="mark" /></p>
+
+<p>其中 $p_l$ 为第 l 类样本在数据集 D 中所占的比例.</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/03-%E5%8C%85%E8%A3%B9%E5%BC%8F%E9%80%89%E6%8B%A9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 包裹式选择</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/01-%E5%AD%90%E9%9B%86%E6%90%9C%E7%B4%A2%E4%B8%8E%E8%AF%84%E4%BB%B7/">
+            <span class="next-text nav-default">01 子集搜索与评价</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

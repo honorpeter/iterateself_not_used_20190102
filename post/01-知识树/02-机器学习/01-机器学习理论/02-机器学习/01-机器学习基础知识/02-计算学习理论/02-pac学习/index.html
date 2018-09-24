@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 PAC学习 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="PCA 学习 需要补充的 这一章也没有整理。 12.2 PAC学习 计算学习理论中最基本的是概率近似正确(Probably Approximately Correct,简称PAC)学习理论[" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E8%AE%A1%E7%AE%97%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-pac%E5%AD%A6%E4%B9%A0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 PAC学习" />
+<meta property="og:description" content="PCA 学习 需要补充的 这一章也没有整理。 12.2 PAC学习 计算学习理论中最基本的是概率近似正确(Probably Approximately Correct,简称PAC)学习理论[" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E8%AE%A1%E7%AE%97%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-pac%E5%AD%A6%E4%B9%A0/" /><meta property="article:published_time" content="2018-07-30T10:59:32&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-30T10:59:32&#43;00:00"/>
+<meta itemprop="name" content="02 PAC学习">
+<meta itemprop="description" content="PCA 学习 需要补充的 这一章也没有整理。 12.2 PAC学习 计算学习理论中最基本的是概率近似正确(Probably Approximately Correct,简称PAC)学习理论[">
+
+
+<meta itemprop="datePublished" content="2018-07-30T10:59:32&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-30T10:59:32&#43;00:00" />
+<meta itemprop="wordCount" content="2042">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 PAC学习"/>
+<meta name="twitter:description" content="PCA 学习 需要补充的 这一章也没有整理。 12.2 PAC学习 计算学习理论中最基本的是概率近似正确(Probably Approximately Correct,简称PAC)学习理论["/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 PAC学习</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-30 </span>
+        
+        <span class="more-meta"> 2042 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#pca-学习">PCA 学习</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="pca-学习">PCA 学习</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>这一章也没有整理。</li>
+</ul>
+
+<p>12.2 PAC学习</p>
+
+<p>计算学习理论中最基本的是概率近似正确(Probably Approximately Correct,简称PAC)学习理论[Valiant, 1984]. “概率近似正确”这个名字 看起来有点古怪,我们稍后再解释.</p>
+
+<p>令c表示“概念” (concept),这是从样本空间1到标记空间J的映射，它 决定示例:r的真实标记2/，若对任何样例Or,?/)有= ^/成立，则称c为目 标概念；所有我们希望学得的目标概念所构成的集合称为“概念类”(concept class),用符号C表示.</p>
+
+<p>学习算法公的假设空间 不是1.3节所讨论的学习 任务本身对应的假设空间.</p>
+
+<p>给定学习算法公，它所考虑的所有可能概念的集合称为“假设空 间”(hypothesis space),用符号表示.由于学习算法事先并不知道概念 类的真实存在，因此7Z和C通常是不同的，学习算法会把自认为可能的目标概</p>
+
+<p>念集中起来构成況，对&amp; e宄，由于并不能确定它是否真是目标概念，因此称为 “假设”(hypothesis).显然，假设九也是从样本空间Y到标记空间0；的映射.</p>
+
+<p>若目标概念c G丸，则況中存在假设能将所有示例按与真实标记一致的方 式完全分开，我们称该问题对学习算法£是“可分的”(separable)，亦称“一 致的”(consistent);若c矣H，则沢中不存在任何假设能将所有示例完全正 确分开，称该问题对学习算法£是“不可分的” (non-separable),亦称“不一 致的” (non-consistent).</p>
+
+<p>参见1.4节.</p>
+
+<p>一般来说，训练样例越 少，采样偶然性越大.</p>
+
+<p>给定训练集P，我们希望基于学习算法£学得的模型所对应的假设/I尽可 能接近目标概念匕读者可能会间：为什么不是希望精确地学到目标概念0呢? 这是由于机器学习过程受到很多因素的制约，例如我们获得的训练集I?往往仅 包含有限数量的样例，因此，通常会存在一些在I?上“等效”的假设，学习算 法对它们无法区别；再如，从分布P采样得到I?的过程有一定偶然性，可以想 象即便对同样大小的不同训练集，学得结果也可能有所不同.因此，我们是希 望以比较大的把握学得比较好的模型，也就是说，以较大的概率学得误差满足 预设上限的模型；这就是“概率” “近似正确”的含义.形式化地说，令5表示 置信度，可定义：</p>
+
+<p>定义 12.1 PAC 辨识(PAC Identify):对 0 &lt; €，d &lt; 1，所有 cEC 和分布 P，若存在学习算法氡其输出假设/i e対满足
+P(E(h) &lt; e) &gt; 1 — d，    (12.9)
+则称学习算法il能从假设空间対中PAC辨识概念类C.</p>
+
+<p>这样的学习算法£能以较大的概率(至少1 -幻学得目标概念c的近似 (误差最多为e).在此基础上可定义：</p>
+
+<p>样例数目m与误差e、 置信度&lt;5、数据本身的复 杂度size(sc)、目标概念的 复杂度size⑷都有关.</p>
+
+<p>定义12.2 PAC可学习(PAC Learnable):令m表示从分布D中独立同 分布采样得到的样例数目，0 &lt; &lt; 1，对所有分布P，若存在学习算法£和多 项式函数 poly(-5 •，•，•)，使得对于任何 m 彡 poly(l/e51/5, size⑻，size&copy;), £ 能 从假设空间丸中PAC辨识概念类C，则称概念类C对假设空间并而言是PAC 可学习的，有时也简称概念类C是PAC可学习的.</p>
+
+<p>对计算机算法来说,必然要考虑时间复杂度，于是：</p>
+
+<p>定义12.3 PAC学习算法(PAC Learning Algorithm):若学习算法£使 概念类C为PAC可学习的，且;C的运行时间也是多项式函数poly(l/e,lA size(£c),size&copy;),则称概念类 C 是高效 PAC 可学习(efficiently PAC learnable) 的，称为概念类C的PAC学习算法.</p>
+
+<p>假定学习算法处理每个样本的时间为常数，则£的时间复杂度等价于样 本复杂度.于是，我们对算法时间复杂度的关心就转化为对样本复杂度的关心：</p>
+
+<p>定义12.4样本复杂度(Sample Complexity):满足PAC学习算法41所 需的m &gt; poly(l/e5 l/d3size(aj),size&copy;)中最小的m,称为学习算法£的样本 复杂度.</p>
+
+<p>显然，PAC学习给出了一个抽象地刻画机器学习能力的框架，基于这个框 架能对很多重要问题进行理论探讨，例如研究某任务在什么样的条件下可学得 较好的模型？某算法在什么样的条件下可进行有效的学习？需多少训练样例才 能获得较好的模型？</p>
+
+<p>.PAC学习中一个关键因素是假设空间7/的复杂度.宄包含了学习算法£ 所有可能输出的假设，者在PAC学习中假设空间与概念类完全相同，即并= 这称为“恰PAC可学习”(properly PAC learnable);直观地看,这意味着学习 算法的能力与学习任务“恰好匹配”.然而，这种让所有候选假设都来自概念 类的要求看似合理，但却并不实际，因为在现实应用中我们对概念类C通常一 无所知，更别说获得一个假设空间与概念类恰好相同的学习算法.显然，更重要 的是研究假设空间与概念类不同的情形，即況一 a —般而言，并越大5其包含 任意目标概念的可能性越大，但从中找到某个具体目标概念的难度也越大.間 有限时，我们称并为“有限假设空间”，否则称为“无限假设空间”.</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E8%AE%A1%E7%AE%97%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/03-%E6%9C%89%E9%99%90%E5%81%87%E8%AE%BE%E7%A9%BA%E9%97%B4/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 有限假设空间</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E8%AE%A1%E7%AE%97%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/01-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+            <span class="next-text nav-default">01 基础知识</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

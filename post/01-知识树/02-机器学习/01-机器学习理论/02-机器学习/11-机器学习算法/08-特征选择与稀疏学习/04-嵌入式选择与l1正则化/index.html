@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 嵌入式选择与L1正则化 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="嵌入式选择与k正则化 在过滤式和包裹式特征选择方法中，特征选择过程与学习器训练过程有明显的分别;与此不同，嵌入式特征选择是将特征选择过程与学习" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/04-%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%89%E6%8B%A9%E4%B8%8El1%E6%AD%A3%E5%88%99%E5%8C%96/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 嵌入式选择与L1正则化" />
+<meta property="og:description" content="嵌入式选择与k正则化 在过滤式和包裹式特征选择方法中，特征选择过程与学习器训练过程有明显的分别;与此不同，嵌入式特征选择是将特征选择过程与学习" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/04-%E5%B5%8C%E5%85%A5%E5%BC%8F%E9%80%89%E6%8B%A9%E4%B8%8El1%E6%AD%A3%E5%88%99%E5%8C%96/" /><meta property="article:published_time" content="2018-06-29T18:57:30&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-29T18:57:30&#43;00:00"/>
+<meta itemprop="name" content="04 嵌入式选择与L1正则化">
+<meta itemprop="description" content="嵌入式选择与k正则化 在过滤式和包裹式特征选择方法中，特征选择过程与学习器训练过程有明显的分别;与此不同，嵌入式特征选择是将特征选择过程与学习">
+
+
+<meta itemprop="datePublished" content="2018-06-29T18:57:30&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-29T18:57:30&#43;00:00" />
+<meta itemprop="wordCount" content="1342">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 嵌入式选择与L1正则化"/>
+<meta name="twitter:description" content="嵌入式选择与k正则化 在过滤式和包裹式特征选择方法中，特征选择过程与学习器训练过程有明显的分别;与此不同，嵌入式特征选择是将特征选择过程与学习"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 嵌入式选择与L1正则化</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-29 </span>
+        
+        <span class="more-meta"> 1342 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>嵌入式选择与k正则化</p>
+
+<p>在过滤式和包裹式特征选择方法中，特征选择过程与学习器训练过程有明显的分别;与此不同，嵌入式特征选择是将特征选择过程与学习器训练过程融 为一体，两者在同一个优化过程中完成，即在学习器训练过程中自动地进行了特征选择.</p>
+
+<p>给定数据集 $D={(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m)}$ ,其中 $x\in \mathbb{R}^d$ ，$y\in \mathbb{R}$ .我们考虑最简单的线性回归模型，以平方误差为损失函数，则优化目标为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/b6IKe6GdcI.png?imageslim" alt="mark" /></p>
+
+<p>当样本特征很多，而样本数相对较少时，式(11.5)很容易陷入过拟合.为了 缓解过拟合问题，可对式(11.5)引入正则化项.若使用L2范数正则化，则有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/CmKAa8BfGG.png?imageslim" alt="mark" /></p>
+
+<p>其中正则化参数 $\lambda&gt;0$ .式(11.6)称为“岭回归” (ridge regression) ,通过引入 $L_2$ 范数正则化，确能显著降低过拟合的风险.</p>
+
+<p>那么，能否将正则化项中的 $L_2$ 范数替换为 $L_p$ 范数呢？答案是肯定的.若令 $p=1$ ,即采用 $L_1$ 范数，则有</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/iajBB23D1H.png?imageslim" alt="mark" /></p>
+
+<p>其中正则化参数  $\lambda&gt;0$ 。式(11.7)称为 LASSO (Least Absolute Shrinkage and Selection Operator).</p>
+
+<p>$L_1$ 范数和 $L_2$ 范数正则化都有助于降低过拟合风险，但前者还会带来一个 额外的好处：它比后者更易于获得“稀疏”(sparse)解，即它求得的 w 会有更少的非零分量.</p>
+
+<p>为了理解这一点，我们来看一个直观的例子：假定 x 仅有两个属性，于是 无论式(11.6)还是(11.7)解出的 w 都只有两个分量，即 $w_1$,$w_2$,我们将其作为两个坐标轴，然后在图中绘制出式(11.6)与(11.7)的第一项的“等值线”，即在 $(w_1,w_2)$ 空间中平方误差项取值相同的点的连线，再分别绘制出 $L_1$ 范数与 $L_2$ 范数的等值线，即在$(w_1,w_2)$ 空间中 $L_1$ 范数取值相同的点的连线，以及 $L_2$ 范数取值相同的点的连线，</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/943jCmBh5K.png?imageslim" alt="mark" /></p>
+
+<p>如图11.2所示.式(11.6)与(11.7)的解要在平方误差项与正则化项之间折中，即出现在图中平方误差项等值线与正则化项等值线相交处.由图11.2可看出，采用 $L_1$ 范数时平方误差项等值线与正则化项等值线的交点常出现在坐标轴上，即 $w_1$ 或 $w_2$ 为0,而在采用 $L_2$ 范数时，两者的交点常出现在某个象限中，即$w_1$ 或 $w_2$ 均非0;换言之，采用范数 $L_1$ 比 $L_2$ 范数更易于 得到稀疏解。</p>
+
+<p>注意到 $w$ 取得稀疏解意味着初始的 d 个特征中仅有对应着 $w$ 的非零分量 的特征才会出现在最终模型中，于是，求解 $L_1$ 范数正则化的结果是得到了仅采用一部分初始特征的模型；换言之，基于 $L_1$ 正则化的学习方法就是一种嵌入式特征选择方法，其特征选择过程与学习器训练过程融为一体，同时完成.<span style="color:red;">厉害</span></p>
+
+<p>$L_1$ 正则化问题的求解可使用近端梯度下降(Proximal Gradient Descent, 简称PGD).具体来说，令 $\triangledown$ 表示微分算子，对优化目标</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/9caEEGll0A.png?imageslim" alt="mark" /></p>
+
+<p>若 $f(x)$ 可导，且 $\triangledown f$ 满足 L-Lipschitz 条件，即存在常数 $L&gt;0$ 使得</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/0Gb7hBcdFD.png?imageslim" alt="mark" /></p>
+
+<p>则在 $x_k$ 附近可将 $f(x)$ 通过二阶泰勒展式近似为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/kCKh8f975D.png?imageslim" alt="mark" /></p>
+
+<p>其中 const 是与 $x$ 无关的常数，$\langle \cdot,\cdot\rangle$ 表示内积.显然，式(11.10)的最小值在如下 $x_{k+1}$ 获得：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/Jjh2c8cFkK.png?imageslim" alt="mark" /></p>
+
+<p>于是，若通过梯度下降法对 $f(x)$ 进行最小化，则每一步梯度下降迭代实际 上等价于最小化二次函数 $\hat{f}(x)$ .将这个思想推广到式(11.8)，则能类似地得到 其每一步迭代应为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/BG7I4KKF84.png?imageslim" alt="mark" /></p>
+
+<p>即在每一步对 $f(x)$ 进行梯度下降迭代的同时考虑 $L_1$ 范数最小化.</p>
+
+<p>对于式(11.12),可先计算 $z=x_k-\frac{1}{L}\triangledown f(x_k)$ ，然后求解</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/mm8Am7E5D2.png?imageslim" alt="mark" /></p>
+
+<p>令 $x^i$ 表示 x 的第 i 个分量，将式(11.13)按分量展开可看出，其中不存在 $x^ix^j(i\neq j)$ 这样的项，即 $x$ 的各分量互不影响，于是式(11.13)有闭式解</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/2GfAk2mmjE.png?imageslim" alt="mark" /></p>
+
+<p>其中 $x<em>{k+1}^i$ 与 $z^i$ 分别是 $x</em>{k+1}$ 与 $z$ 的第 i 个分量.因此，通过 PGD 能使 LASSO 和其他基于 $L_1$ 范数最小化的方法得以快速求解。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/05-%E7%A8%80%E7%96%8F%E8%A1%A8%E7%A4%BA%E4%B8%8E%E5%AD%97%E5%85%B8%E5%AD%A6%E4%B9%A0/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">05 稀疏表示与字典学习</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/08-%E7%89%B9%E5%BE%81%E9%80%89%E6%8B%A9%E4%B8%8E%E7%A8%80%E7%96%8F%E5%AD%A6%E4%B9%A0/03-%E5%8C%85%E8%A3%B9%E5%BC%8F%E9%80%89%E6%8B%A9/">
+            <span class="next-text nav-default">03 包裹式选择</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

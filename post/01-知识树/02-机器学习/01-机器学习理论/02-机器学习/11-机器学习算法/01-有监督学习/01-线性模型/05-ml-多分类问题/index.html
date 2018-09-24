@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 ML 多分类问题 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="ML 多分类问题 需要补充的 MvM 没有看，还是要看的。 现实中常遇到多分类学习任务。 有些二分类学习方法可直接推广到多分类，但在更多情形下，我们是基于一些" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/05-ml-%E5%A4%9A%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 ML 多分类问题" />
+<meta property="og:description" content="ML 多分类问题 需要补充的 MvM 没有看，还是要看的。 现实中常遇到多分类学习任务。 有些二分类学习方法可直接推广到多分类，但在更多情形下，我们是基于一些" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/05-ml-%E5%A4%9A%E5%88%86%E7%B1%BB%E9%97%AE%E9%A2%98/" /><meta property="article:published_time" content="2018-07-30T21:23:49&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-30T21:23:49&#43;00:00"/>
+<meta itemprop="name" content="05 ML 多分类问题">
+<meta itemprop="description" content="ML 多分类问题 需要补充的 MvM 没有看，还是要看的。 现实中常遇到多分类学习任务。 有些二分类学习方法可直接推广到多分类，但在更多情形下，我们是基于一些">
+
+
+<meta itemprop="datePublished" content="2018-07-30T21:23:49&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-30T21:23:49&#43;00:00" />
+<meta itemprop="wordCount" content="2389">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 ML 多分类问题"/>
+<meta name="twitter:description" content="ML 多分类问题 需要补充的 MvM 没有看，还是要看的。 现实中常遇到多分类学习任务。 有些二分类学习方法可直接推广到多分类，但在更多情形下，我们是基于一些"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 ML 多分类问题</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-30 </span>
+        
+        <span class="more-meta"> 2389 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#ml-多分类问题">ML 多分类问题</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#多分类学习的基本解决思路是拆解法">多分类学习的基本解决思路是拆解法</a></li>
+<li><a href="#ovo">OvO</a></li>
+<li><a href="#ovr">OvR</a></li>
+<li><a href="#mvm">MvM</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="ml-多分类问题">ML 多分类问题</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>MvM 没有看，还是要看的。</li>
+</ul>
+
+<p>现实中常遇到多分类学习任务。</p>
+
+<p>有些二分类学习方法可直接推广到多分类，但在更多情形下，我们是基于一些基本策略，利用二分类学习器来解决多分类问题的。<span style="color:red;">那些可以推广到多分类问题的？怎么利用二分类问题来解决多分类问题的？</span></p>
+
+<h2 id="多分类学习的基本解决思路是拆解法">多分类学习的基本解决思路是拆解法</h2>
+
+<p>不失一般性，考虑个 N 个类别 $C_1,C_2,\cdots C_N$，多分类学习的基本思路是 “拆解法”，即将多分类任务拆为若干个二分类任务求解。</p>
+
+<p>具体来说，先对问题进行拆分，然后为拆出的每个二分类任务训练一个分类器。在测试时，对这些分类器的预测结果进行集成，以获得最终的多分类结果。这里的关键是如何对多分类任务进行拆分，以及如何对多个分类器进行集成。本节主要介绍拆分策略。<span style="color:red;">到底是怎么进行拆分的？又是怎么进行集成的？为什么之前的 kaggle 案例课程里面我对于这个关键的问题没有怎么注意到呢？他们是怎么在实际中进行解决的？</span></p>
+
+<p>最经典的拆分策略有三种：</p>
+
+<ul>
+<li>“一对一” (One vs. One，简称 OvO )</li>
+<li>“一对其余” (One vs. Rest，简称 OvR )</li>
+<li>“多对多” (Many vs. Many，简称 MvM )</li>
+</ul>
+
+<p><span style="color:red;">奇怪，为什么我上了 kaggle 实战课却对于这种拆分没有什么印象呢？还是说 sklearn 已经把这种拆分封装进 <code>fit</code> 里面了？</span></p>
+
+<h2 id="ovo">OvO</h2>
+
+<p>给定数据集 $D={(x_1,y_1),(x_2,y_2),\cdots (x_m,y_m)}$，$y_i\in {C_1,C_2,\cdots ,C_N}$。</p>
+
+<p>OvO 将这 $N$ 个类别两两配对，从而产生 $N(N— 1)/2$ 个二分类任务，例如 OvO 将为了区分类别 $C_i$ 和 $C_j$ 而训练一个分类器，这个分类器把 $D$ 中的 $C_i$ 类样例作为正例，$C_j$ 类样例作为反例。<span style="color:blue;">那么不属于这两个类别的样例呢？输出什么？ OvO 的每个分类器仅用到两个类的样例进行训练。不属于这两个类别的不会参加训练。</span>在测试阶段，新样本将同时提交给所有分类器，于是我们将得到 $N(N—1)/2$ 个分类结果，最终结果可通过投票产生：<span style="color:red;">是的是的，好主意。</span></p>
+
+<p>图 3.4 给出了一个示意图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/7503AgaL97.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:blue;">上面这个图没看明白，如果这是一个 $C_3$ 输入了 $f_5$ 分类器，怎么会得到 $C_2$ 呢？嗯，是这样的，因为 OvO 的每个分类器仅用到两个类的样例进行训练。</span></p>
+
+<h2 id="ovr">OvR</h2>
+
+<p>OvR 则是每次将一个类的样例作为正例、所有其他类的样例作为反例来训练个分类器。在测试时若仅有一个分类器预测为正类，则对应的类别标记作为最终分类结果，如图 3.4 所示。若有多个分类器预测为正类，则通常考虑各分类器的预测置信度，选择置信度最大的类别标记作为分类结果。 <span style="color:red;">预测置信度是什么？怎么得到？</span></p>
+
+<p>容易看出，OvR 只需训练 $N$ 个分类器，而 OvO 需训练 $N(N— 1)/2$ 个分类器，因此，OvO 的存储开销和测试时间开销通常比 OvR 更大。但在训练时, OvR的每个分类器均使用全部训练样例，而 OvO 的每个分类器仅用到两个类的样例，<span style="color:red;">嗯，才知道 OvO 的每个分类器仅用到两个类的样例进行训练。嗯，这我就知道了上面 图3.4 为什么这么说了。</span>因此，在类别很多时，OvO 的训练时间开销通常比 OvR 更小。<span style="color:red;">好吧。</span><strong>至于预测性能，则取决于具体的数据分布，在多数情形下两者差不多。</strong><span style="color:red;">好吧。</span></p>
+
+<h2 id="mvm">MvM</h2>
+
+<p><span style="color:red;">这个没怎么看，还是要看的。</span></p>
+
+<p>MvM 是每次将若干个类作为正类，若干个其他类作为反类。显然，OvO 和 OvR 是 MvM 的特例。MvM的正、反类构造必须有特殊的设计，不能随意选取。这里我们介绍一种最常用的 MvM 技术：“纠错输出码”(Error Correcting Output Codes，简称 ECOC)。<span style="color:red;">嗯，想知道是怎么特殊设计的。</span></p>
+
+<p>ECOC 是将编码的思想引入类别拆分，并尽可能在解码过程中具有容错性。</p>
+
+<p>ECOC工作过程主要分为两步:</p>
+
+<ul>
+<li>编码：对 $N$ 个类别做 $M$ 次划分，每次划分将一部分类别划为正类，一部分划为反类，从而形成一个二分类训练集。这样一共产生 $M$ 个训练集，可训练出 $M$ 个分类器.</li>
+<li>解码：$M$ 个分类器分别对测试样本进行预测，这些预测标记组成一个编码。将这个预测编码与每个类别各自的编码进行比较，返回其中距离最小的类别作为最终预测结果。</li>
+</ul>
+
+<p><span style="color:red;">没太看懂，$N$ 与 $M$ 之间的大小关系有限定吗？</span></p>
+
+<p>类别划分通过“编码矩阵”(coding matrix)指定。编码矩阵有多种形式，常见的主要有二元码和三元码。前者将每个类别分别指定为正类和反类，后者在正、反类之外，还可指定“停用类”。</p>
+
+<p>图 3.5 给出了一个示意图，在图3.5(a)中，分类器 $f_2$ 将 $C_1$ 类和 $C_3$ 类的样例作为正例，$C_2$ 类和 $C_4$ 类的样例作为反例；在图3.5(b)中，分类器  $f_4$ 将 $C_1$ 类和 $C_4$ 类的样例作为正例，$C_3$ 类的样例作为反例。在解码阶段，各分类器的预测结果联合起来形成了测试示例的编码，该编码与各类所对应的编码 进行比较，将距离最小的编码所对应的类别作为预测结果.例如在图3.5(a)中，基于欧氏距离，预测结果将是 $C_3$。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/dfJ5aKdcb6.png?imageslim" alt="mark" /></p>
+
+<p>为什么称为“纠错输出码”呢？这是因为在测试阶段，ECOC编码对分类 器的错误有一定的容忍和修正能力。例如图3.5(a)中对测试示例的正确预测编码是(―1,+1,+1,—1,+1)，假设在预测时某个分类器出错了，例如 $f_2$ 出错从而导致了错误编码 (-1,-1,+1,-1,+1)，但基于这个编码仍能产生正确的最终分类结果 $C_3$ . —般来说，对同一个学习任务，ECOC编码越长，纠错能力越强.然 而，编码越长，意味着所需训练的分类器越多，计算、存储开销都会増大；另一 方面，对有限类别数，可能的组合数目是有限的，码长超过一定范围后就失去了 意义。</p>
+
+<p>对同等长度的编码，理论上来说，任意两个类别之间的编码距离越远，则纠 错能力越强.因此，在码长较小时可根据这个原则计算出理论最优编码.然而， 码长稍大一些就难以有效地确定最优编码，事实上这是NP难问题。不过，通常 我们并不需获得理论最优编码，因为非最优编码在实践中往往已能产生足够好的分类器.另一方面，并不是编码的理论性质越好,分类性能就越好，因为机器学习问题涉及很多因素，例如将多个类拆解为两个“类别子集”，不同拆解方式所形成的两个类别子集的区分难度往往不同，即其导致的二分类问题的难度不同；于是，一个理论纠错性质很好、但导致的二分类问题较难的编码，与另一个理论纠错性质差一些、但导致的二分类问题较简单的编码，最终产生的模型性能孰强孰弱很难说。</p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li>《机器学习》周志华</li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/02-%E5%88%86%E7%B1%BB/02-svm/02-%E5%AF%B9%E5%81%B6%E9%97%AE%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 对偶问题</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/01-%E5%9B%9E%E5%BD%92/01-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/02-%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">
+            <span class="next-text nav-default">02 线性回归</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

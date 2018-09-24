@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 逻辑回归 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="逻辑回归 需要补充的 没有很清楚 公式要自己推一边 推导仍然不清楚。 从回归里把逻辑回归拿过来 知识前提 Logistic 函数，又叫 对数几率函数 为什么叫这个，本篇有讲 逻" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/02-%E5%88%86%E7%B1%BB/03-logistic-%E5%9B%9E%E5%BD%92/03-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 逻辑回归" />
+<meta property="og:description" content="逻辑回归 需要补充的 没有很清楚 公式要自己推一边 推导仍然不清楚。 从回归里把逻辑回归拿过来 知识前提 Logistic 函数，又叫 对数几率函数 为什么叫这个，本篇有讲 逻" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/01-%E6%9C%89%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/01-%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/02-%E5%88%86%E7%B1%BB/03-logistic-%E5%9B%9E%E5%BD%92/03-%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" /><meta property="article:published_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-21T18:16:23&#43;00:00"/>
+<meta itemprop="name" content="03 逻辑回归">
+<meta itemprop="description" content="逻辑回归 需要补充的 没有很清楚 公式要自己推一边 推导仍然不清楚。 从回归里把逻辑回归拿过来 知识前提 Logistic 函数，又叫 对数几率函数 为什么叫这个，本篇有讲 逻">
+
+
+<meta itemprop="datePublished" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-21T18:16:23&#43;00:00" />
+<meta itemprop="wordCount" content="3201">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 逻辑回归"/>
+<meta name="twitter:description" content="逻辑回归 需要补充的 没有很清楚 公式要自己推一边 推导仍然不清楚。 从回归里把逻辑回归拿过来 知识前提 Logistic 函数，又叫 对数几率函数 为什么叫这个，本篇有讲 逻"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 逻辑回归</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-21 </span>
+        
+        <span class="more-meta"> 3201 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#逻辑回归">逻辑回归</a>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#知识前提">知识前提</a></li>
+<li><a href="#逻辑回归的由来">逻辑回归的由来</a>
+<ul>
+<li><a href="#起因-想把线性回归用在分类任务中">起因，想把线性回归用在分类任务中</a></li>
+<li><a href="#看一看二分类任务">看一看二分类任务</a></li>
+<li><a href="#logistic-函数">Logistic 函数</a></li>
+<li><a href="#为什么逻辑回归又叫做对数几率函数">为什么逻辑回归又叫做对数几率函数</a></li>
+<li><a href="#它的名字虽然是回归-但实际上是一种分类学习方法">它的名字虽然是回归，但实际上是一种分类学习方法</a></li>
+</ul></li>
+<li><a href="#求解-w-和-b">求解 $w$ 和 $b$</a>
+<ul>
+<li><a href="#怎么确定式子中的-w-和-b-呢">怎么确定式子中的 $w$ 和 $b$ 呢？</a></li>
+<li><a href="#使用极大似然法来估计-w-和-b">使用极大似然法来估计 $w$ 和 $b$</a></li>
+<li><a href="#使用牛顿法求解-beta">使用牛顿法求解 $\beta$</a></li>
+</ul></li>
+<li><a href="#logistic-回归的使用方式">Logistic 回归的使用方式</a>
+<ul>
+<li><a href="#完整的-logistic-回归模型的开发流程如下">完整的 Logistic 回归模型的开发流程如下</a></li>
+<li><a href="#实际应用中-怎么使用开源模块实现-logistic-回归">实际应用中，怎么使用开源模块实现 Logistic 回归？</a></li>
+<li><a href="#如果不是用开源模块-怎么自己实现对于-logistic-回归的求解">如果不是用开源模块，怎么自己实现对于 Logistic 回归的求解？</a></li>
+</ul></li>
+<li><a href="#logistic-回归的优缺点">Logistic 回归的优缺点</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="逻辑回归">逻辑回归</h1>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>没有很清楚 公式要自己推一边</strong></li>
+<li><strong>推导仍然不清楚。</strong></li>
+<li><strong>从回归里把逻辑回归拿过来</strong></li>
+</ul>
+
+<h2 id="知识前提">知识前提</h2>
+
+<ul>
+<li>Logistic 函数，又叫 <strong>对数几率函数 为什么叫这个，本篇有讲</strong></li>
+</ul>
+
+<h2 id="逻辑回归的由来">逻辑回归的由来</h2>
+
+<h3 id="起因-想把线性回归用在分类任务中">起因，想把线性回归用在分类任务中</h3>
+
+<p>在线性回归中，我们讨论了如何使用线性模型进行回归学习，但如果要做的是分类任务该怎么办？<span style="color:red;">是呀？之前将的线性模型对应的是回归，相当于拟合一条曲线，那么分类任务要怎么对应？</span></p>
+
+<p>答案蕴涵在广义线性模型中，我们只需找一个单调可微函数将分类任务的真实标记 $y$ 与线性回归模型的预测值联系起来即可。<span style="color:red;">really ？ 怎么找到的？到底怎么把分类任务的真实标记与回归模型的预测值联系起来的？嗯，说实话，我之前一直没怎么明白逻辑回归为什么被创造出来，看到这里，我才终于明白一点点。但是为什么这种致力于解决分类问题的方案叫做逻辑回归呢？为什么不是逻辑分类？</span></p>
+
+<h3 id="看一看二分类任务">看一看二分类任务</h3>
+
+<p>我们先考虑简单的二分类任务。</p>
+
+<p>OK，我们考虑二分类任务，其输出标记 $y\in {0,1}$ ，而线性回归模型产生的预测值 $z=w^Tx+b$ 是实值，那么我们只要将实值 $z$ 转换为 $0/1$ 值就可以了，而要完成这种转换，最理想的就是&rdquo;单位阶跃函数&rdquo; (unit-step function) ：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/37I9K1k5ea.png?imageslim" alt="mark" /></p>
+
+<p>即若预测值 $z$ 大于零就判为正例，小于零则判为反例，预测值为临界值零则可任意判别。</p>
+
+<p>如图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/CgCam8lLEc.png?imageslim" alt="mark" /></p>
+
+<p>但是呢，在线性回归那一章中，我们要求了广义线性模型的联系函数 $g$ 必须是一个连续且充分平滑的函数。<span style="color:red;">是的。</span> 而从上图可看出，单位阶跃函数它并不连续，因此，我们不能直接把它用作 $g^-(\cdot )$ 。于是我们希望找到能在一定程度上近似单位阶跃函数的 &ldquo;替代函数&rdquo; (surrogate function) ，并希望它单调可微。<span style="color:red;">这个 $g^-(\cdot )$ 的负号哪里来的？我看到这里的时候，倒吸了一口气，对这个逻辑回归的由来又了解了一步，他是作为单位阶跃函数的替代品出现的。。好吧</span></p>
+
+<p>那么哪个函数可以近似单位阶跃函数呢？嗯，答案已经呼之欲出了。</p>
+
+<h3 id="logistic-函数">Logistic 函数</h3>
+
+<p>Logistic 函数 (logistic function) 正是这样的一个常用来近似单位阶跃函数的函数。</p>
+
+<p>$$y=\frac{1}{1+e^{-z} }$$</p>
+
+<p>从之前的图可以看出，Logistic 函数是一种 &ldquo;Sigmoid 函数&rdquo;，Sigmoid 函数即形似字母 s 的函数，它将 $z$ 值转化为一个接近 $0$ 或 $1$ 的 $y$ 值，并且其输出值在 $z= 0$ 附近变化很陡。嗯，我们将 Logistic 函数作为 $g^-(\cdot )$  代入广义线性模型，就得到了：</p>
+
+<p>$$y=\frac{1}{1+e^{-(w^Tx+b)} }$$</p>
+
+<p>这个式子可以变化为：</p>
+
+<p>$$ln\frac{y}{1-y}=w^Tx+b$$</p>
+
+<h3 id="为什么逻辑回归又叫做对数几率函数">为什么逻辑回归又叫做对数几率函数</h3>
+
+<p>OK，看到这个式子，我们要注意，如果我们将 $y$ 视为样本作为正例的可能性，那么 $1-y$ 就是其反例可能性，那么两者的比 $\frac{y}{1-y}$ 称为&rdquo;几率&rdquo; (odds) ，几率反映了作为正例的相对可能性。而我们对几率取对数则得到 &ldquo;对数几率&rdquo; (log odds，亦称 logit )，即：$ln\frac{y}{1-y}$ 。<span style="color:red;">厉害了，没想到对数几率是在这里出现的，对于 Logistic 回归函数进行变换就可以得到。</span></p>
+
+<p>由此我们可以把这个式子 $ln\frac{y}{1-y}=w^Tx+b$ 解读成：我们是在用线性回归模型的预测结果去逼近真实标记的对数几率。<span style="color:red;">嗯是的。很精彩！</span></p>
+
+<p>因此，其对应的模型 $y=\frac{1}{1+e^{-(w^Tx+b)} }$ 称为 &ldquo;Logistic 回归&rdquo; (logistic regression，亦称 logit regrssion) 。</p>
+
+<h3 id="它的名字虽然是回归-但实际上是一种分类学习方法">它的名字虽然是回归，但实际上是一种分类学习方法</h3>
+
+<p><strong>注意：虽然它的名字是&rdquo;回归&rdquo;，但实际却是一种分类学习方法。</strong><span style="color:red;">是的，这个是我以前感觉非常奇怪的地方。。原来是这样，这次才稍微清晰了些。</span></p>
+
+<p>比如说：我们可以将范围在 0~1 之间的数值中大于 0.5 的数据被分入 1 类，小于 0.5 即被归入 0 类。这样就可以用来解决分类问题。<span style="color:red;">是的，很好。</span></p>
+
+<h2 id="求解-w-和-b">求解 $w$ 和 $b$</h2>
+
+<p><span style="color:red;">这次看比上次又清楚了一些。</span></p>
+
+<h3 id="怎么确定式子中的-w-和-b-呢">怎么确定式子中的 $w$ 和 $b$ 呢？</h3>
+
+<p>$$y=\frac{1}{1+e^{-(w^Tx+b)} }$$</p>
+
+<p>下面我们来看看如何确定式子中的 $w$ 和 $b$ 的。 若将上式中的 $y$ 视为类后验概率估计 $p(y=1|x)$ ，则 $ln\frac{y}{1-y}=w^Tx+b$ 可重写为： <span style="color:red;">为什么可以将 $y$ 视为类后验概率估计 $p(y=1|x)$ ，没明白？</span></p>
+
+<p>$$ln\frac{p(y=1|x)}{p(y=0|x)}=w^Tx+b$$</p>
+
+<p>显然有：<span style="color:red;">是的，把 $p(y=1|x)$ 代入 $ln\frac{y}{1-y}=w^Tx+b$ 中的 $y$ 就可以算出。</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/JEK84KCLdC.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:blue;">这个式子写出来之后后续有用到吗？有用到，代入对数似然中，把概率用 $\beta$ 的表达式替换了，这样式子中就只有 $\beta$ 这个参数了。</span></p>
+
+<h3 id="使用极大似然法来估计-w-和-b">使用极大似然法来估计 $w$ 和 $b$</h3>
+
+<p>于是，我们可通过&rdquo;极大似然法&rdquo; (maximum likelihood method) 来估计 $w$ 和 $b$ 。给定数据集 ${(x_i,y<em>i)}</em>{i=1}^{m}$ ，&rdquo;对数似然&rdquo; (log likelihood) 为：<span style="color:red;">为什么可以用极大似然法来估计？原因还是要补充在这里的。</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/1II9diB21D.png?imageslim" alt="mark" /></p>
+
+<p>最大化&rdquo;对数似然&rdquo; ，即令每个样本属于其真实标记的概率越大越好。为便于讨论，令 $\beta= (w;b)$，$\hat{x}=(x;1)$， 则 $w^Tx +b$ 可简写为 $\beta^T\hat{x}$，再令 $p_1(\hat{x};\beta) = p(y= 1|\hat{x};\beta)$ ，$p_0(\hat{x};\beta)=p(y=0\mid \hat{x};\beta)=1-p_1(\hat{x};\beta)$，则上式中的似然项可重写为 ：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/C1cLFhL6dl.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">是的，这里还是看得懂的，可以这么写。</span></p>
+
+<p>带入对数似然函数，并根据上面的 $p(y=1\mid x)$ 和 $p(y=0\mid x)$，得到：<span style="color:red;">这一步略了计算过程，要补上，每一步都要清楚的算过。</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/3ea87achdA.png?imageslim" alt="mark" /></p>
+
+<p>现在，这个对数似然函数已经变成这样了，我们要求的就是这个对数似然函数最大的时候的 $\beta$ 值。</p>
+
+<h3 id="使用牛顿法求解-beta">使用牛顿法求解 $\beta$</h3>
+
+<p><span style="color:red;">自己求解一下</span></p>
+
+<p>这个式子是关于 $\beta$ 的高阶可导连续凸函数，根据凸优化理论，经典的数值优化算法如梯度下降法 (gradient descent method) 、牛顿法 (Newton method) 等都可求得其最优解，于是就得到 ：<span style="color:red;">使用梯度下降和牛顿法求解的过程这里要说一下。</span></p>
+
+<p>$$\beta ^*=\underset{\beta}{arg\, min}\,\ell (\beta)$$</p>
+
+<p><span style="color:red;">不是要最大化对数似然吗？这里是不是抄错了？核对一下 pdf 。</span></p>
+
+<p>以牛顿法为例，其第 $t+1$ 轮迭代解的更新公式为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/6EmKkJkmCb.png?imageslim" alt="mark" /></p>
+
+<p>其中关于 $\beta$  的一阶、 二阶导数分别为</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/b6l9gLCkHA.png?imageslim" alt="mark" /></p>
+
+<p><span style="color:red;">好吧，关键的步骤都写出来了，要自己把它补全。</span></p>
+
+<h2 id="logistic-回归的使用方式">Logistic 回归的使用方式</h2>
+
+<p>OK，到这里，整个 Logistic 回归算法的前因，求解的过程，我们都已经知道了。</p>
+
+<p>那么在实际的应用中，我们是怎么使用的呢？怎么计算的呢？</p>
+
+<p><span style="color:red;">好像在哪里看到过说 LR 要先对数据进行 standardnize ，忘记是不是了，确认下，使用 LR 的数据前提。</span></p>
+
+<h3 id="完整的-logistic-回归模型的开发流程如下">完整的 Logistic 回归模型的开发流程如下</h3>
+
+<ul>
+<li>收集数据: 采用任意方法收集数据</li>
+<li>准备数据: 由于需要进行距离计算，因此要求数据类型为数值型。另外，结构化数据格式则最佳。</li>
+<li>分析数据: 采用任意方法对数据进行分析。</li>
+<li>训练算法: 大部分时间将用于训练，训练的目的是为了找到最佳的分类回归系数。</li>
+<li>测试算法: 一旦训练步骤完成，分类将会很快。</li>
+<li>使用算法: 首先，我们需要输入一些数据，并将其转换成对应的结构化数值；接着，基于训练好的回归系数就可以对这些数值进行简单的回归计算，判定它们属于哪个类别；在这之后，我们就可以在输出的类别上做一些其他分析工作。</li>
+</ul>
+
+<h3 id="实际应用中-怎么使用开源模块实现-logistic-回归">实际应用中，怎么使用开源模块实现 Logistic 回归？</h3>
+
+<p>实际中，一般是适应的 sklearn ，它内部已经完全把计算的过程封装进去了，外在的接口只有几个超参数。<span style="color:red;">把 sklearn 关于 Logistic 回归的暴露在外面的超参数总结一下，可以拆分成一个文章并带一个例子</span></p>
+
+<p><span style="color:red;">把别的开源模块中关于逻辑回归的使用也结合例子总结下。</span></p>
+
+<h3 id="如果不是用开源模块-怎么自己实现对于-logistic-回归的求解">如果不是用开源模块，怎么自己实现对于 Logistic 回归的求解？</h3>
+
+<ul>
+<li>开始时候，先将每个回归系数初始化为 1。<span style="color:red;">确定吗？</span></li>
+<li>重复 R 次：计算整个数据集的梯度，使用 步长 x 梯度 更新回归系数的向量</li>
+<li>返回回归系数</li>
+</ul>
+
+<p><span style="color:red;">还是要补充下，并且自己实现下。看看整个完整的实现过程。或者把开源库的实现代码总结到这里。</span></p>
+
+<h2 id="logistic-回归的优缺点">Logistic 回归的优缺点</h2>
+
+<p>基本上，对于 Logistic 回归已经介绍完了，现在，我们来看看这个方法的一些优缺点：</p>
+
+<p>这种方法有很多的优点：</p>
+
+<ul>
+<li>Logistic 回归的计算代码还是不是很高的，不需要太多的计算资源。</li>
+<li>Logistic 还是比较容易理解的，这样使用的时候得到的结果就有很好的可解释性。</li>
+<li>它是直接对分类可能性进行建模，无需事先假设数据分布，这样就避免了假设分布不准确所带来的问题。<span style="color:red;">什么叫假设数据分布？别的机器学习方法有假设数据分布吗？</span></li>
+<li>它不是仅预测出&rdquo;类别&rdquo;，而是可得到近似概率预测，这对许多需利用概率辅助决策的任务很有用。<span style="color:red;">是的，不过能结合例子谈一下吗？</span></li>
+<li>此外，对率函数是任意阶可导的凸函数，有很好的数学性质，现有的许多数值优化算法都可直接用于求取最优解。<span style="color:red;">有哪些数值优化算法？怎么直接求取最优解的？</span></li>
+</ul>
+
+<p>当然，它也是有一些缺点的：</p>
+
+<ul>
+<li>Logistic 回归方法容易欠拟合。<span style="color:red;">好吧，能说一下为什么呢？还是说因为它是从线性回归过来的，所以有这种欠拟合的缺点？</span></li>
+<li>分类精度可能不高。<span style="color:red;">什么叫分类精度不高？还是说因为容易欠拟合所以才分类精度不高？确认下。</span></li>
+</ul>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>《机器学习》 周志华</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F/03-%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3%E7%9A%84api%E4%BA%A4%E4%BA%92/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">03 网络相关的API交互</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E8%81%9A%E7%B1%BB/04-%E5%8E%9F%E5%9E%8B%E8%81%9A%E7%B1%BB/">
+            <span class="next-text nav-default">04 原型聚类</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -3,40 +3,7 @@ title: RL on-policy控制的近似方法
 toc: true
 date: 2018-06-11 08:14:53
 ---
----
-author: evo
-comments: true
-date: 2018-05-16 16:56:10+00:00
-layout: post
-link: http://106.15.37.116/2018/05/17/rl-on-policy%e6%8e%a7%e5%88%b6%e7%9a%84%e8%bf%91%e4%bc%bc%e6%96%b9%e6%b3%95/
-slug: rl-on-policy%e6%8e%a7%e5%88%b6%e7%9a%84%e8%bf%91%e4%bc%bc%e6%96%b9%e6%b3%95
-title: RL on-policy控制的近似方法
-wordpress_id: 5909
-categories:
-- 人工智能学习
-tags:
-- NOT_ADD
-- Reinforcement Learning
----
 
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，只是按照自己的思路做了整合，修改。推荐直接看 ORIGINAL 中所列的原文。**
-
-
-## 相关资料
-
-
-
-
-
- 	
-  1. 
-
-
-# [强化学习读书笔记 - 10 - on-policy控制的近似方法](http://www.cnblogs.com/steven-yang/p/6536471.html)
 
 
 
@@ -50,7 +17,7 @@ tags:
 
 
 
- 	
+
   * aaa
 
 
@@ -69,7 +36,7 @@ tags:
 
 
 
- 	
+
   * aaa
 
 
@@ -132,27 +99,27 @@ Choose \(A'\) as a function of \(\hat{q}(S', \dot \ , \theta)\) (e.g., \(\epsilo
 
 
 
- 	
+
   * 目标回报（= 原奖赏 - 平均奖赏）
 \[
 G_t \doteq R_{t+1} - \eta(\pi) + R_{t+2} - \eta(\pi) + \cdots
 \]
 
- 	
+
   * 策略价值
 \[
 v_{\pi}(s) = \sum_{a} \pi(a|s) \sum_{r,s'} p(s',r|s,a)[r - \eta(\pi) + v_{\pi}(s')] \\
 q_{\pi}(s,a) = \sum_{r,s'} p(s',r|s,a)[r - \eta(\pi) + \sum_{a'} \pi(a'|s') q_{\pi}(s',a')] \\
 \]
 
- 	
+
   * 策略最优价值
 \[
 v_{*}(s) = \underset{a}{max} \sum_{r,s'} p(s',r|s,a)[r - \eta(\pi) + v_{*}(s')] \\
 q_{*}(s,a) = \sum_{r,s'} p(s',r|s,a)[r - \eta(\pi) + \underset{a'}{max} \ q_{*}(s',a')] \\
 \]
 
- 	
+
   * 时序差分误差
 \[
 \delta_t \doteq R_{t+1} - \bar{R} + \hat{v}(S_{t+1},\theta) - \hat{v}(S_{t},\theta) \\
@@ -161,7 +128,7 @@ where \\
 \bar{R} \text{ - is an estimate of the average reward } \eta(\pi)
 \]
 
- 	
+
   * 半梯度递减Sarsa的平均奖赏版
 \[
 \theta_{t+1} \doteq \theta_t + \alpha \delta_t \nabla \hat{q}(S_{t},A_t,\theta)
@@ -208,20 +175,6 @@ Choose \(A'\) as a function of \(\hat{q}(S', \dot \ , \theta)\) (e.g., \(\epsilo
 
 
 
+# 相关资料
 
-
-
-
-
-
-
-* * *
-
-
-
-
-
-# COMMENT
-
-
-
+- [强化学习读书笔记 - 10 - on-policy控制的近似方法](http://www.cnblogs.com/steven-yang/p/6536471.html)

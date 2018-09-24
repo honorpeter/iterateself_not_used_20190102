@@ -1,0 +1,40 @@
+---
+title: YOLOv3
+toc: true
+date: 2018-09-22
+---
+# 需要补充的
+
+- YOLOv3 是什么时候出现的？
+
+
+
+# YOLOv3
+
+
+## 需要消化的
+
+
+- github 上有人总结了：[keras-yolo3-detection](https://github.com/SpikeKing/keras-yolo3-detection)
+
+
+- [探索 YOLO v3 实现细节 - 第1篇 训练](https://mp.weixin.qq.com/s/T9LshbXoervdJDBuP564dQ)
+- [探索 YOLO v3 实现细节 - 第2篇 模型](https://mp.weixin.qq.com/s/N79S9Qf1OgKsQ0VU5QvuHg)
+- [探索 YOLO v3 实现细节 - 第3篇 网络](https://mp.weixin.qq.com/s/hC4P7iRGv5JSvvPe-ri_8g)
+- [探索 YOLO v3 实现细节 - 第4篇 真值](https://mp.weixin.qq.com/s/5Sj7QadfVvx-5W9Cr4d3Yw)
+- [探索 YOLO v3 实现细节 - 第5篇 Loss](https://mp.weixin.qq.com/s/4L9E4WGSh0hzlD303036bQ)
+
+- 实现： [keras-yolo3](https://github.com/qqwweee/keras-yolo3)
+
+- [](http://pjreddie.com/media/files/papers/yolo.pdf)
+- [YOLO v3 Paper](https://arxiv.org/abs/1804.02767)
+- [What’s new in YOLO v3?](https://towardsdatascience.com/yolo-v3-object-detection-53fb7d3bfe6b)
+
+- You Only Look Once: Unified, Real-Time Object Detection http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf
+
+## 需要补充的
+
+
+- YOLO 是专门用在目标检测上的吗？
+- 我想问，YOLO 和 R-CNN 系列有什么不同？为什么之前上课的时候老师说 YOLO 实际上没有什么特别的创新？而且没提YOLO，直接带过去了？而我看微信群里有人一直用的就是 YOLO。
+- YOLO 直接是 v3 吗？之前有 v1 v2 吗？

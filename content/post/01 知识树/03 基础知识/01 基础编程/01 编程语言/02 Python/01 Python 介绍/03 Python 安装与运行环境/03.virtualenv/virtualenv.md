@@ -1,5 +1,5 @@
 ---
-title: Python 变量类型
+title: virtualenv
 toc: true
 date: 2018-07-28 23:17:52
 ---
@@ -232,3 +232,4 @@ virtualenv 是一个创建 Python 独立环境的包，virtualenvwrapper 使得v
 - [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
 - [windows下使用pycharm配置python的virtualenv环境](https://blog.csdn.net/hy245120020/article/details/50776197)
 - [PyCharm中使用virtualenv](https://segmentfault.com/a/1190000003758895)
+758895)

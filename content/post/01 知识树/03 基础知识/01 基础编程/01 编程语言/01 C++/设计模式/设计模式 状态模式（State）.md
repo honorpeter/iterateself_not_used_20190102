@@ -3,73 +3,7 @@ title: 设计模式 状态模式（State）
 toc: true
 date: 2018-07-27 19:17:51
 ---
----
-author: evo
-comments: true
-date: 2018-05-31 23:45:08+00:00
-layout: post
-link: http://106.15.37.116/2018/06/01/%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e7%8a%b6%e6%80%81%e6%a8%a1%e5%bc%8f%ef%bc%88state%ef%bc%89/
-slug: '%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f-%e7%8a%b6%e6%80%81%e6%a8%a1%e5%bc%8f%ef%bc%88state%ef%bc%89'
-title: 设计模式 状态模式（State）
-wordpress_id: 7181
-categories:
-- 基础程序设计
-tags:
-- Design Patterns
----
-
-<!-- more -->
-
-[mathjax]
-
-**注：非原创，所有版权属于原作者，原文已列在 ORIGINAL 中。为了方便个人学习做了整合、修改，仅供个人学习使用。**
-
-
-## 相关资料
-
-
-
-
-
-
-  1. [design-patterns-cpp](https://github.com/yogykwan/design-patterns-cpp)  作者： [Jennica](http://jennica.space/)  厉害的
-
-
-  2. 《设计模式精解 - GoF 23种设计模式解析》
-
-
-  3. 《大话设计模式》作者 程杰
-
-
-
-
-## 需要补充的
-
-
-
-
-
-
-  * aaa
-
-
-
-
-
-* * *
-
-
-
-
-
-# INTRODUCTION
-
-
-
-
-
-
-  * aaa
+# 需要补充的
 
 
 
@@ -77,25 +11,14 @@ tags:
 
 # 状态模式（State）
 
+- 拥有过多分支的过长方法违背了单一职责原则，而且当需求变化时修改代码往往会违背开放-封闭原则，应该将分支变成一不同小类，将状态的判断逻辑转移到小类中。
+- 状态模式：一个对象可能拥有多种状态，当内在状态改变时允许改变行为。
+- 状态模式的好处是将与特定状态有关的行为局部化，并将不同状态的行为分隔开。
 
 
+# State 模式
 
 
-
-  1. 拥有过多分支的过长方法违背了单一职责原则，而且当需求变化时修改代码往往会违背开放-封闭原则，应该将分支变成一不同小类，将状态的判断逻辑转移到小类中。
-
-
-  2. 状态模式：一个对象可能拥有多种状态，当内在状态改变时允许改变行为。
-
-
-  3. 状态模式的好处是将与特定状态有关的行为局部化，并将不同状态的行为分隔开。
-
-
-
-
-
-
-State 模式
 -问题
 每个人、事物在不同的状态下会有不同表现（动作），而一个状态又会在不同的表现下 转移到下一个不同的状态（State）。最简单的一个生活中的例子就是：地铁入口处，如果你 放入正确的地铁票，门就会打开让你通过。在出口处也是验票，如果正确你就可以ok，否 则就不让你通过（如果你动作野蛮，或许会有报警（Alarm），））。
 
@@ -113,57 +36,60 @@ State模式就是被用来解决上面列出的两个问题的，在State模式�
 
 ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ChG7j7lICe.png?imageslim)
 
--实现
-♦完整代码示例
+## 实现
+
+
+完整代码示例
 
 state.h
 
 
-    #ifndef DESIGN_PATTERNS_STATE_H
-    #define DESIGN_PATTERNS_STATE_H
+```cpp
+#ifndef DESIGN_PATTERNS_STATE_H
+#define DESIGN_PATTERNS_STATE_H
 
-    class State;
+class State;
 
-    class Work {
-    public:
-      Work();
-      ~Work();
-      void SetState(State*);
-      void WriteProgram();
+class Work {
+public:
+  Work();
+  ~Work();
+  void SetState(State*);
+  void WriteProgram();
 
-    public:
-      bool finished_;
-      int hour_;
+public:
+  bool finished_;
+  int hour_;
 
-    private:
-      State* state_;
-    };
+private:
+  State* state_;
+};
 
-    class State {
-    public:
-      virtual ~State() {}
-      virtual void WriteProgram(Work*) = 0;
-    };
+class State {
+public:
+  virtual ~State() {}
+  virtual void WriteProgram(Work*) = 0;
+};
 
-    class WorkingState: public State {
-      void WriteProgram(Work* work);
-    };
+class WorkingState: public State {
+  void WriteProgram(Work* work);
+};
 
-    class OvertimeState: public State {
-      void WriteProgram(Work* work);
-    };
+class OvertimeState: public State {
+  void WriteProgram(Work* work);
+};
 
-    class RestState: public State {
-      void WriteProgram(Work* work);
-    };
+class RestState: public State {
+  void WriteProgram(Work* work);
+};
 
-    class SleepingState: public State {
-      void WriteProgram(Work* work);
-    };
+class SleepingState: public State {
+  void WriteProgram(Work* work);
+};
 
 
-    #endif //DESIGN_PATTERNS_STATE_H
-
+#endif //DESIGN_PATTERNS_STATE_H
+```
 
 
 state.cpp
@@ -287,13 +213,8 @@ State模式问题主要是逻辑分散化，状态逻辑分布到了很多的Sta
 
 
 
+# 相关资料
 
-
-
-* * *
-
-
-
-
-
-# COMMENT
+- [design-patterns-cpp](https://github.com/yogykwan/design-patterns-cpp)  作者： [Jennica](http://jennica.space/)  厉害的
+- 《设计模式精解 - GoF 23种设计模式解析》
+- 《大话设计模式》作者 程杰

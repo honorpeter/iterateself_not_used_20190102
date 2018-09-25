@@ -15,7 +15,7 @@ YOLO v3 是 YOLO 的第 3 个版本，即YOLO、YOLO 9000、YOLO v3，检测效�
 
 
 
-![img](https://mmbiz.qpic.cn/mmbiz_jpg/MVibsicfR1qiaQITUTtU53eicKqEJte5JYQBusDUACCK5Y0CFiaRd8C9uUYMf7lkOmXI76koZzX4nt5ia2WgEZOthAFg/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+
 
 
 

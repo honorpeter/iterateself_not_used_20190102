@@ -1,3 +1,8 @@
+---
+title: 01 OCR 的一般方法
+toc: true
+date: 2018-09-25
+---
 一般的 OCR 包含两步：
 
 - detection -> 找到包含文字的区域(proposal)

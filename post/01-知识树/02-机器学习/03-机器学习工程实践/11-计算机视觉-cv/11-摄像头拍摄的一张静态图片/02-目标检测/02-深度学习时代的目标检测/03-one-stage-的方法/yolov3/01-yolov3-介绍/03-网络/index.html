@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 网络 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第3篇，网络，以DarkNet为基础 1. 网络 在模型中，通过传入输入层 image_input、每层的 anchor 数 num_anchors//3 和类别数 num_classes，调用 yolo_body" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/03-%E7%BD%91%E7%BB%9C/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 网络" />
+<meta property="og:description" content="第3篇，网络，以DarkNet为基础 1. 网络 在模型中，通过传入输入层 image_input、每层的 anchor 数 num_anchors//3 和类别数 num_classes，调用 yolo_body" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/03-%E7%BD%91%E7%BB%9C/" /><meta property="article:published_time" content="2018-09-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-09-25T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="03 网络">
+<meta itemprop="description" content="第3篇，网络，以DarkNet为基础 1. 网络 在模型中，通过传入输入层 image_input、每层的 anchor 数 num_anchors//3 和类别数 num_classes，调用 yolo_body">
+
+
+<meta itemprop="datePublished" content="2018-09-25T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-25T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3930">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 网络"/>
+<meta name="twitter:description" content="第3篇，网络，以DarkNet为基础 1. 网络 在模型中，通过传入输入层 image_input、每层的 anchor 数 num_anchors//3 和类别数 num_classes，调用 yolo_body"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 网络</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-09-25 </span>
+        
+        <span class="more-meta"> 3930 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#第3篇-网络-以darknet为基础">第3篇，网络，以DarkNet为基础</a>
+<ul>
+<li><a href="#1-网络">1. 网络</a></li>
+<li><a href="#2-darknet">2. Darknet</a></li>
+<li><a href="#3-特征图">3. 特征图</a></li>
+<li><a href="#13x13检测图">13x13检测图</a></li>
+<li><a href="#26x26检测图">26x26检测图</a></li>
+<li><a href="#52x52检测图">52x52检测图</a></li>
+<li><a href="#补充1-卷积-padding">补充1. 卷积 Padding</a></li>
+<li><a href="#补充2-compose函数">补充2. compose函数</a></li>
+<li><a href="#补充3-upsampling2d上采样">补充3. UpSampling2D上采样</a></li>
+<li><a href="#补充4-1x1卷积操作与全连接">补充4. 1x1卷积操作与全连接</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="第3篇-网络-以darknet为基础">第3篇，网络，以DarkNet为基础</h1>
+
+<h2 id="1-网络">1. 网络</h2>
+
+<p>在模型中，通过传入输入层 image_input、每层的 anchor 数 num_anchors//3 和类别数 num_classes，调用 yolo_body 方法，构建 YOLO v3 的网络 model_body。其中，image_input 的结构是 (?, 416, 416, 3)。</p>
+
+<pre><code class="language-python">model_body = yolo_body(image_input, num_anchors // 3, num_classes)  # model
+</code></pre>
+
+<p>在 model_body 中，最终的输入是 image_input，最终的输出是 3 个矩阵的列表：</p>
+
+<pre><code class="language-python">[(?, 13, 13, 18), (?, 26, 26, 18), (?, 52, 52, 18)]
+</code></pre>
+
+<p>YOLO v3 的基础网络是 DarkNet 网络，将 DarkNet 网络中底层和中层的特征矩阵，通过卷积操作和多个矩阵的拼接操作，创建3个尺度的输出，即[y1, y2, y3]。<span style="color:red;">DarkNet 网络还是要了解下的。</span></p>
+
+<pre><code class="language-python">def yolo_body(inputs, num_anchors, num_classes):
+    darknet = Model(inputs, darknet_body(inputs))
+
+    x, y1 = make_last_layers(darknet.output, 512, num_anchors * (num_classes + 5))
+
+    x = compose(
+        DarknetConv2D_BN_Leaky(256, (1, 1)),
+        UpSampling2D(2))(x)
+    x = Concatenate()([x, darknet.layers[152].output])
+    x, y2 = make_last_layers(x, 256, num_anchors * (num_classes + 5))
+
+    x = compose(
+        DarknetConv2D_BN_Leaky(128, (1, 1)),
+        UpSampling2D(2))(x)
+    x = Concatenate()([x, darknet.layers[92].output])
+    x, y3 = make_last_layers(x, 128, num_anchors * (num_classes + 5))
+
+    return Model(inputs, [y1, y2, y3])
+</code></pre>
+
+<h2 id="2-darknet">2. Darknet</h2>
+
+<p>Darknet 网络的输入是图片数据集 inputs，即 (?, 416, 416, 3)，输出是 darknet_body 方法的输出。将网络的核心逻辑封装在 darknet_body 方法中。即：</p>
+
+<pre><code class="language-python">darknet = Model(inputs, darknet_body(inputs))
+</code></pre>
+
+<p>其中，darknet_body 的输出格式是 (?, 13, 13, 1024)。</p>
+
+<p>Darknet 的网络简化图，如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/cd66k23f5C.png?imageslim" alt="mark" /></p>
+
+<p>网络简化图</p>
+
+<p>YOLO v3 所使用的 Darknet 版本是 Darknet53。那么，为什么是 Darknet53 呢？因为 Darknet53 是 53 个卷积层和池化层的组合，与Darknet简化图一一对应，即：</p>
+
+<pre><code>53 = 2 + 1*2 + 1 + 2*2 + 1 + 8*2 + 1 + 8*2 + 1 + 4*2 + 1
+</code></pre>
+
+<p>在 darknet_body 中，Darknet 网络含有 5 组重复的 resblock_body 单元，即：</p>
+
+<pre><code class="language-python">def darknet_body(x):
+    '''Darknent body having 52 Convolution2D layers'''
+    x = DarknetConv2D_BN_Leaky(32, (3, 3))(x)
+    x = resblock_body(x, num_filters=64, num_blocks=1)
+    x = resblock_body(x, num_filters=128, num_blocks=2)
+    x = resblock_body(x, num_filters=256, num_blocks=8)
+    x = resblock_body(x, num_filters=512, num_blocks=8)
+    x = resblock_body(x, num_filters=1024, num_blocks=4)
+    return x
+</code></pre>
+
+<p>在第 1 个卷积操作 DarknetConv2D_BN_Leaky 中，是 3 个操作的组合，即：</p>
+
+<ul>
+<li>1 个Darknet的 2 维卷积 Conv2D 层，即 DarknetConv2D；</li>
+<li>1 个批正则化层，即 BatchNormalization()；</li>
+<li>1 个 LeakyReLU 层，斜率是 0.1，LeakyReLU 是 ReLU 的变换；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">def DarknetConv2D_BN_Leaky(*args, **kwargs):
+    &quot;&quot;&quot;Darknet Convolution2D followed by BatchNormalization and LeakyReLU.&quot;&quot;&quot;
+    no_bias_kwargs = {'use_bias': False}
+    no_bias_kwargs.update(kwargs)
+    return compose(
+        DarknetConv2D(*args, **no_bias_kwargs),
+        BatchNormalization(),
+        LeakyReLU(alpha=0.1))
+</code></pre>
+
+<p>其中，LeakyReLU的激活函数，如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/ik0llFbHeA.png?imageslim" alt="mark" /></p>
+
+<p>LeakyReLU</p>
+
+<p>其中，Darknet 的 2 维卷积 DarknetConv2D，具体操作如下：</p>
+
+<ul>
+<li>将核权重矩阵的正则化，使用 L2 正则化，参数是 5e-4，即操作 w 参数；</li>
+<li>Padding，一般使用 same 模式，只有当步长为 (2,2) 时，使用 valid 模式。避免在降采样中，引入无用的边界信息；</li>
+<li>其余参数不变，都与二维卷积操作Conv2D()一致；</li>
+</ul>
+
+<p>kernel_regularizer 是将核权重参数 w 进行正则化，而 BatchNormalization 是将输入数据 x 进行正则化。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">@wraps(Conv2D)
+def DarknetConv2D(*args, **kwargs):
+    &quot;&quot;&quot;Wrapper to set Darknet parameters for Convolution2D.&quot;&quot;&quot;
+    darknet_conv_kwargs = {'kernel_regularizer': l2(5e-4)}
+    darknet_conv_kwargs['padding'] = 'valid' if kwargs.get('strides') == (2, 2) else 'same'
+    darknet_conv_kwargs.update(kwargs)
+    return Conv2D(*args, **darknet_conv_kwargs)
+</code></pre>
+
+<p>下一步，第 1 个残差结构 resblock_body，输入的数据x是(?, 416, 416, 32)，通道 filters 是 64 个，重复次数 num_blocks 是 1 次。第 1 个残差结构是网络简化图第1部分。</p>
+
+<pre><code class="language-python">x = resblock_body(x, num_filters=64, num_blocks=1)
+</code></pre>
+
+<p>在 resblock_body 中，含有以下逻辑：</p>
+
+<ul>
+<li>ZeroPadding2D：填充 x 的边界为0，由(?, 416, 416, 32)转换为(?, 417, 417, 32)。因为下一步卷积操作的步长为2，所以图的边长需要是奇数；</li>
+<li>DarknetConv2D_BN_Leaky：DarkNet的2维卷积操作，核是 (3,3)，步长是 (2,2)，注意，这会导致特征尺寸变小，由 (?, 417, 417, 32) 转换为 (?, 208, 208, 64)。由于 num_filters 是 64，所以产生64个通道。</li>
+<li>compose：输出预测图y，功能是组合函数，先执行1x1的卷积操作，再执行3x3的卷积操作，filter先降低2倍后恢复，最后与输入相同，都是64；</li>
+<li>x = Add()([x, y])：残差操作，将x的值与y的值相加。残差操作可以避免，在网络较深时所产生的梯度弥散问题。</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">def resblock_body(x, num_filters, num_blocks):
+    '''A series of resblocks starting with a downsampling Convolution2D'''
+    # Darknet uses left and top padding instead of 'same' mode
+    x = ZeroPadding2D(((1, 0), (1, 0)))(x)
+    x = DarknetConv2D_BN_Leaky(num_filters, (3, 3), strides=(2, 2))(x)
+    for i in range(num_blocks):
+        y = compose(
+            DarknetConv2D_BN_Leaky(num_filters // 2, (1, 1)),
+            DarknetConv2D_BN_Leaky(num_filters, (3, 3)))(x)
+        x = Add()([x, y])
+    return x
+</code></pre>
+
+<p>残差操作流程，如图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/Dagm9JE54G.png?imageslim" alt="mark" /></p>
+
+<p>Residual</p>
+
+<p>同理，在 darknet_body 中，执行 5 组 resblock_body 残差块，重复[1, 2, 8, 8, 4]次，双卷积操作，每组均含有一次步长为 2 的卷积操作，因而一共降维 5 次 32 倍，即 32=2^5，则输出的特征图维度是13，即 13=<sup>416</sup>&frasl;<sub>32</sub> 。最后 1 层的通道数是 1024，因此，最终的输出结构是 (?, 13, 13, 1024)，即：</p>
+
+<pre><code class="language-python">Tensor(&quot;add_23/add:0&quot;, shape=(?, 13, 13, 1024), dtype=float32)
+</code></pre>
+
+<p>至此，Darknet模型的输入是(?, 416, 416, 3)，输出是(?, 13, 13, 1024)。</p>
+
+<hr />
+
+<h2 id="3-特征图">3. 特征图</h2>
+
+<p>在YOLO v3网络中，输出3个不同尺度的检测图，用于检测不同大小的物体。调用 3 次 make_last_layers，产生3个检测图，即 y1、y2 和 y3。</p>
+
+<h2 id="13x13检测图">13x13检测图</h2>
+
+<p>第1个部分，输出维度是13x13。在make_last_layers方法中，输入参数如下：</p>
+
+<ul>
+<li>darknet.output：DarkNet网络的输出，即(?, 13, 13, 1024)；</li>
+<li>num_filters：通道个数512，用于生成中间值x，x会传导至第2个检测图；</li>
+<li>out_filters：第1个输出y1的通道数，值是锚框数*(类别数+4个框值+框置信度)；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">x, y1 = make_last_layers(darknet.output, 512, num_anchors * (num_classes + 5))
+</code></pre>
+
+<p>在 make_last_layers 方法中，执行2步操作：</p>
+
+<ul>
+<li>第1步，x执行多组1x1的卷积操作和3x3的卷积操作，filter先扩大再恢复，最后与输入的filter保持不变，仍为512，则x由(?, 13, 13, 1024)转变为(?, 13, 13, 512)；</li>
+<li>第2步，x先执行3x3的卷积操作，再执行不含BN和Leaky的1x1的卷积操作，作用类似于全连接操作，生成预测矩阵y；</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">def make_last_layers(x, num_filters, out_filters):
+    '''6 Conv2D_BN_Leaky layers followed by a Conv2D_linear layer'''
+    x = compose(
+        DarknetConv2D_BN_Leaky(num_filters, (1, 1)),
+        DarknetConv2D_BN_Leaky(num_filters * 2, (3, 3)),
+        DarknetConv2D_BN_Leaky(num_filters, (1, 1)),
+        DarknetConv2D_BN_Leaky(num_filters * 2, (3, 3)),
+        DarknetConv2D_BN_Leaky(num_filters, (1, 1)))(x)
+    y = compose(
+        DarknetConv2D_BN_Leaky(num_filters * 2, (3, 3)),
+        DarknetConv2D(out_filters, (1, 1)))(x)
+    return x, y
+</code></pre>
+
+<p>最终，第1个make_last_layers方法，输出的x是(?, 13, 13, 512)，输出的y是(?, 13, 13, 18)。由于模型只有1个检测类别，因而y的第4个维度是18，即3*(1+5)=18。</p>
+
+<h2 id="26x26检测图">26x26检测图</h2>
+
+<p>第2个部分，输出维度是26x26，包含以下步骤：</p>
+
+<ul>
+<li>通过DarknetConv2D_BN_Leaky卷积，将x由512的通道数，转换为256的通道数；</li>
+<li>通过2倍上采样UpSampling2D，将x由13x13的结构，转换为26x26的结构；</li>
+<li>将x与DarkNet的第152层拼接Concatenate，作为第2个make_last_layers的输入，用于生成第2个预测图y2；</li>
+</ul>
+
+<p>其中，输入的x和darknet.layers[152].output的结构都是26x26的尺寸，如下：</p>
+
+<pre><code class="language-python">x: shape=(?, 26, 26, 256)
+darknet.layers[152].output: (?, 26, 26, 512)
+</code></pre>
+
+<p>在拼接之后，输出的x的格式是(?, 26, 26, 768)。</p>
+
+<p>这样做的目的是：将Darknet最底层的高级抽象信息darknet.output，经过若干次转换之后，除了输出给第1个检测部分，还被用于第2个检测部分，经过上采样，与Darknet骨干中，倒数第2次降维的数据拼接，共同作为第2个检测部分的输入。底层抽象特征含有全局信息，中层抽象特征含有局部信息，这样拼接，两者兼顾，用于检测较小的物体。</p>
+
+<p>最后，还是调用相同的make_last_layers，输出第2个检测层y2和临时数据x。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">x = compose(
+    DarknetConv2D_BN_Leaky(256, (1, 1)),
+    UpSampling2D(2))(x)
+x = Concatenate()([x, darknet.layers[152].output])
+x, y2 = make_last_layers(x, 256, num_anchors * (num_classes + 5))
+</code></pre>
+
+<p>最终，第2个make_last_layers方法，输出的x是(?, 26, 26, 256)，输出的y是(?, 26, 26, 18)。</p>
+
+<h2 id="52x52检测图">52x52检测图</h2>
+
+<p>第3个部分，输出维度是52x52，与第2个部分类似，包含以下步骤：</p>
+
+<pre><code class="language-python">x = compose(
+    DarknetConv2D_BN_Leaky(128, (1, 1)),
+    UpSampling2D(2))(x)
+x = Concatenate()([x, darknet.layers[92].output])
+_, y3 = make_last_layers(x, 128, num_anchors * (num_classes + 5))
+</code></pre>
+
+<p>逻辑如下：</p>
+
+<ul>
+<li>x经过128个filter的卷积，再执行上采样，输出为(?, 52, 52, 128)；</li>
+<li>darknet.layers[92].output，与152层类似，结构是(?, 52, 52, 256)；</li>
+<li>两者拼接之后，x是(?, 52, 52, 384)；</li>
+<li>最后输入至make_last_layers，生成y3是(?, 52, 52, 18)，忽略x的输出；</li>
+</ul>
+
+<p>最后，则是根据整个逻辑的输入和输出，构建模型。输入inputs依然保持不变，即(?, 416, 416, 3)，而输出则转换为3个尺度的预测层，即[y1, y2, y3]。</p>
+
+<pre><code class="language-python">return Model(inputs, [y1, y2, y3])
+</code></pre>
+
+<p>[y1, y2, y3]的结构如下：</p>
+
+<pre><code class="language-python">Tensor(&quot;conv2d_59/BiasAdd:0&quot;, shape=(?, 13, 13, 18), dtype=float32)
+Tensor(&quot;conv2d_67/BiasAdd:0&quot;, shape=(?, 26, 26, 18), dtype=float32)
+Tensor(&quot;conv2d_75/BiasAdd:0&quot;, shape=(?, 52, 52, 18), dtype=float32)
+</code></pre>
+
+<p>最终，在yolo_body中，完成整个YOLO v3网络的构建，基础网络是DarkNet。</p>
+
+<pre><code>model_body = yolo_body(image_input, num_anchors // 3, num_classes)
+</code></pre>
+
+<p>网络的示意图，层次序号略有不同：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/a3FBdGLldc.png?imageslim" alt="mark" /></p>
+
+<p>网络的示意图</p>
+
+<hr />
+
+<h2 id="补充1-卷积-padding">补充1. 卷积 Padding</h2>
+
+<p>在卷积操作中，针对于边缘数据，有两种操作，一种是舍弃 valid，一种是填充 same。</p>
+
+<p>如：</p>
+
+<pre><code>数据：1 2 3 4 5 6 7 8 9 10 11 12 13
+输入数据 = 13
+过滤器宽度 = 6
+步长 = 5
+</code></pre>
+
+<p>第 1 种，valid 操作，宽度是 6，步长是 5，执行数据：</p>
+
+<pre><code>1 2 3 4 5 6
+6 7 8 9 10 11
+11 12 13（不足，舍弃）
+</code></pre>
+
+<p>第2种，same操作，执行数据：</p>
+
+<pre><code>1 2 3 4 5 6（前两步相同）
+6 7 8 9 10 11
+11 12 13 0 0（不足，填充）
+</code></pre>
+
+<p>其中，same 模式中数据利用率更高，valid 模式中避免引入无效的边缘数据，两种模式各有千秋。</p>
+
+<h2 id="补充2-compose函数">补充2. compose函数</h2>
+
+<p>compose 函数，使用 Python 的 Lambda 表达式，顺次执行函数列表，且前一个函数的输出是后一个函数的输入。compose 函数适用于在神经网络中连接两个层。</p>
+
+<p>例如：</p>
+
+<pre><code class="language-python">def compose(*funcs):
+    if funcs:
+        return reduce(lambda f, g: lambda *a, **kw: g(f(*a, **kw)), funcs)
+    else:
+        raise ValueError('Composition of empty sequence not supported.')
+def func_x(x):
+    return x * 10
+def func_y(y):
+    return y - 6
+z = compose(func_x, func_y)  # 先执行x函数，再执行y函数
+print(z(10))  # 10*10-6=94
+</code></pre>
+
+<h2 id="补充3-upsampling2d上采样">补充3. UpSampling2D上采样</h2>
+
+<p>UpSampling2D 上采样操作，将特征矩阵按倍数扩大，其核心是通过 resize 的方式，默认使用最邻近（Nearest Neighbor）插值算法。data_format 是数据模式，默认是 channels_last，即通道在最后，如 (128,128,3)。</p>
+
+<p>源码：</p>
+
+<pre><code class="language-python">def call(self, inputs):
+    return K.resize_images(inputs, self.size[0], self.size[1],
+                           self.data_format)
+// ...
+x = tf.image.resize_nearest_neighbor(x, new_shape)
+</code></pre>
+
+<p>例如：数据 (?, 13, 13, 256)，经过上采样2倍操作，即 UpSampling2D(2)，生成 (?, 26, 26, 256) 的特征图。</p>
+
+<h2 id="补充4-1x1卷积操作与全连接">补充4. 1x1卷积操作与全连接</h2>
+
+<p>1x1 的卷积层和全连接层都可以作为最后一层的预测输出，两者之间略有不同。</p>
+
+<p>第 1 点：</p>
+
+<ul>
+<li>1x1 的卷积层，可以不考虑输入的通道数，输出固定通道数的特征矩阵；</li>
+<li>全连接层（Dense），输入和输出都是固定的，在设计网络时，固定就不能修改；</li>
+</ul>
+
+<p>这样，1x1 的卷积层，比全连接层，更为灵活；</p>
+
+<p>第 2 点：</p>
+
+<p>例如：输入 (13,13,1024)，输出为 (13,13,18)，则两种操作：</p>
+
+<ul>
+<li>1x1 的卷积层，参数较少，只需与输出通道匹配的参数，如 13x13x1x1x18 个参数；</li>
+<li>全连接层，参数较多，需要与输入和输出都匹配的参数，如 13x13x1028x18 个参数；</li>
+</ul>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/hC4P7iRGv5JSvvPe-ri_8g">探索 YOLO v3 实现细节 - 第3篇 网络</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/02-%E6%A8%A1%E5%9E%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 模型</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/06-python-%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/python-h5py/">
+            <span class="next-text nav-default">Python h5py</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>YOLOv3 - 迭代自己</title>
+  <title> - 迭代自己</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="iterateself" />
-  <meta name="description" content="需要补充的 YOLOv3 是什么时候出现的？ YOLOv3 需要消化的 github 上有人总结了：keras-yolo3-detection 探索 YOLO v3 实现细节 - 第1篇 训练 探索 YOLO v3 实现" />
+  <meta name="description" content="YOLO 介绍 YOLO，即 You Only Look Once 的缩写，是一个基于卷积神经网络的物体检测算法。 YOLO v3 是 YOLO 的第 3 个版本，即YOLO、YOLO 9000、YOLO v3，检" />
 
   <meta name="keywords" content="Hugo, theme, even" />
 
@@ -29,7 +29,7 @@
 <meta name="generator" content="Hugo 0.47.1" />
 
 
-<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/" />
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/01-yolo-%E4%BB%8B%E7%BB%8D/" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -49,25 +49,23 @@
 
 
 
-<meta property="og:title" content="YOLOv3" />
-<meta property="og:description" content="需要补充的 YOLOv3 是什么时候出现的？ YOLOv3 需要消化的 github 上有人总结了：keras-yolo3-detection 探索 YOLO v3 实现细节 - 第1篇 训练 探索 YOLO v3 实现" />
+<meta property="og:title" content="" />
+<meta property="og:description" content="YOLO 介绍 YOLO，即 You Only Look Once 的缩写，是一个基于卷积神经网络的物体检测算法。 YOLO v3 是 YOLO 的第 3 个版本，即YOLO、YOLO 9000、YOLO v3，检" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/" /><meta property="article:published_time" content="2018-09-22T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2018-09-22T00:00:00&#43;00:00"/>
-<meta itemprop="name" content="YOLOv3">
-<meta itemprop="description" content="需要补充的 YOLOv3 是什么时候出现的？ YOLOv3 需要消化的 github 上有人总结了：keras-yolo3-detection 探索 YOLO v3 实现细节 - 第1篇 训练 探索 YOLO v3 实现">
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/01-yolo-%E4%BB%8B%E7%BB%8D/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="YOLO 介绍 YOLO，即 You Only Look Once 的缩写，是一个基于卷积神经网络的物体检测算法。 YOLO v3 是 YOLO 的第 3 个版本，即YOLO、YOLO 9000、YOLO v3，检">
 
 
-<meta itemprop="datePublished" content="2018-09-22T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2018-09-22T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="260">
+
+<meta itemprop="wordCount" content="195">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="YOLOv3"/>
-<meta name="twitter:description" content="需要补充的 YOLOv3 是什么时候出现的？ YOLOv3 需要消化的 github 上有人总结了：keras-yolo3-detection 探索 YOLO v3 实现细节 - 第1篇 训练 探索 YOLO v3 实现"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="YOLO 介绍 YOLO，即 You Only Look Once 的缩写，是一个基于卷积神经网络的物体检测算法。 YOLO v3 是 YOLO 的第 3 个版本，即YOLO、YOLO 9000、YOLO v3，检"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -130,12 +128,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">YOLOv3</h1>
+      <h1 class="post-title"></h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2018-09-22 </span>
+        <span class="post-time"> 0001-01-01 </span>
         
-        <span class="more-meta"> 260 words </span>
+        <span class="more-meta"> 195 words </span>
         <span class="more-meta"> 1 min read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
@@ -149,12 +147,7 @@
   <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
-<li><a href="#需要补充的">需要补充的</a></li>
-<li><a href="#yolov3">YOLOv3</a>
-<ul>
-<li><a href="#需要消化的">需要消化的</a></li>
-<li><a href="#需要补充的-1">需要补充的</a></li>
-</ul></li>
+<li><a href="#yolo-介绍">YOLO 介绍</a></li>
 </ul>
 </nav>
   </div>
@@ -167,47 +160,23 @@
     <div class="post-content">
       
 
-<h1 id="需要补充的">需要补充的</h1>
+<h1 id="yolo-介绍">YOLO 介绍</h1>
 
-<ul>
-<li>YOLOv3 是什么时候出现的？</li>
-</ul>
+<p>YOLO，即 You Only Look Once 的缩写，是一个基于卷积神经网络的物体检测算法。</p>
 
-<h1 id="yolov3">YOLOv3</h1>
+<p>YOLO v3 是 YOLO 的第 3 个版本，即YOLO、YOLO 9000、YOLO v3，检测效果，更准更强。</p>
 
-<h2 id="需要消化的">需要消化的</h2>
+<p>更多细节，可以参考YOLO的官网。</p>
 
-<ul>
-<li><p>github 上有人总结了：<a href="https://github.com/SpikeKing/keras-yolo3-detection">keras-yolo3-detection</a></p></li>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/MVibsicfR1qiaQITUTtU53eicKqEJte5JYQBusDUACCK5Y0CFiaRd8C9uUYMf7lkOmXI76koZzX4nt5ia2WgEZOthAFg/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" /></p>
 
-<li><p><a href="https://mp.weixin.qq.com/s/T9LshbXoervdJDBuP564dQ">探索 YOLO v3 实现细节 - 第1篇 训练</a></p></li>
+<p>YOLO</p>
 
-<li><p><a href="https://mp.weixin.qq.com/s/N79S9Qf1OgKsQ0VU5QvuHg">探索 YOLO v3 实现细节 - 第2篇 模型</a></p></li>
+<blockquote>
+<p>YOLO是一句美国的俗语，You Only Live Once，人生苦短，及时行乐。</p>
+</blockquote>
 
-<li><p><a href="https://mp.weixin.qq.com/s/hC4P7iRGv5JSvvPe-ri_8g">探索 YOLO v3 实现细节 - 第3篇 网络</a></p></li>
-
-<li><p><a href="https://mp.weixin.qq.com/s/5Sj7QadfVvx-5W9Cr4d3Yw">探索 YOLO v3 实现细节 - 第4篇 真值</a></p></li>
-
-<li><p><a href="https://mp.weixin.qq.com/s/4L9E4WGSh0hzlD303036bQ">探索 YOLO v3 实现细节 - 第5篇 Loss</a></p></li>
-
-<li><p>实现： <a href="https://github.com/qqwweee/keras-yolo3">keras-yolo3</a></p></li>
-
-<li><p>[](<a href="http://pjreddie.com/media/files/papers/yolo.pdf">http://pjreddie.com/media/files/papers/yolo.pdf</a>)</p></li>
-
-<li><p><a href="https://arxiv.org/abs/1804.02767">YOLO v3 Paper</a></p></li>
-
-<li><p><a href="https://towardsdatascience.com/yolo-v3-object-detection-53fb7d3bfe6b">What’s new in YOLO v3?</a></p></li>
-
-<li><p>You Only Look Once: Unified, Real-Time Object Detection <a href="http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf">http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf</a></p></li>
-</ul>
-
-<h2 id="需要补充的-1">需要补充的</h2>
-
-<ul>
-<li>YOLO 是专门用在目标检测上的吗？</li>
-<li>我想问，YOLO 和 R-CNN 系列有什么不同？为什么之前上课的时候老师说 YOLO 实际上没有什么特别的创新？而且没提YOLO，直接带过去了？而我看微信群里有人一直用的就是 YOLO。</li>
-<li>YOLO 直接是 v3 吗？之前有 v1 v2 吗？</li>
-</ul>
+<p>本文主要分享，如何实现YOLO v3的算法细节，Keras框架。这是第1篇，训练。当然还有第2篇，至第n篇，毕竟，这是一个完整版 ：）</p>
 
     </div>
 
@@ -223,14 +192,14 @@
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/retinanet/">
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%9F%BA%E7%A1%80/06-%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E5%B0%8F%E6%96%B9%E6%B3%95/%E5%A4%A7%E7%BA%B2/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">RetinaNet</span>
+            <span class="prev-text nav-default"></span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
         
-          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/02-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-gpu-%E8%AE%A1%E7%AE%97/%E5%A4%A7%E7%BA%B2/">
-            <span class="next-text nav-default">大纲</span>
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/01-%E8%AE%AD%E7%BB%83/">
+            <span class="next-text nav-default"></span>
             <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>

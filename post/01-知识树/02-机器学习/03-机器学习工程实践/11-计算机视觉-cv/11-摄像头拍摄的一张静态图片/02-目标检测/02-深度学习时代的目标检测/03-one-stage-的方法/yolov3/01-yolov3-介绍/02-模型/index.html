@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第2篇，模型 入口 在训练中，调用 create_model 方法构建算法模型。 在 create_model 方法中，创建 YOLO v3 的算法模型，其中方法参数是： input_shape：输入图片的尺寸，默" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/02-%E6%A8%A1%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="第2篇，模型 入口 在训练中，调用 create_model 方法构建算法模型。 在 create_model 方法中，创建 YOLO v3 的算法模型，其中方法参数是： input_shape：输入图片的尺寸，默" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/02-%E6%A8%A1%E5%9E%8B/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="第2篇，模型 入口 在训练中，调用 create_model 方法构建算法模型。 在 create_model 方法中，创建 YOLO v3 的算法模型，其中方法参数是： input_shape：输入图片的尺寸，默">
+
+
+
+<meta itemprop="wordCount" content="2276">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="第2篇，模型 入口 在训练中，调用 create_model 方法构建算法模型。 在 create_model 方法中，创建 YOLO v3 的算法模型，其中方法参数是： input_shape：输入图片的尺寸，默"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 2276 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#第2篇-模型">第2篇，模型</a>
+<ul>
+<li><a href="#入口">入口</a></li>
+<li><a href="#逻辑">逻辑</a></li>
+<li><a href="#补充1-iou"><strong>补充1. IoU</strong></a></li>
+<li><a href="#补充2-冻结网络层"><strong>补充2. 冻结网络层</strong></a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="第2篇-模型">第2篇，模型</h1>
+
+<h2 id="入口">入口</h2>
+
+<p>在训练中，调用 create_model 方法构建算法模型。</p>
+
+<p>在 create_model 方法中，创建 YOLO v3 的算法模型，其中方法参数是：</p>
+
+<ul>
+<li>input_shape：输入图片的尺寸，默认是(416, 416)；<span style="color:red;">对于一个很大分辨率的图像来说，使用多少尺寸比较好？</span></li>
+<li>anchors：默认的 9 种anchor box，结构是(9, 2)；</li>
+<li>num_classes：类别个数，在创建网络时，只需类别数即可。在网络中，类别值按 0~n 排列，同时，输入数据的类别也是用索引表示；</li>
+<li>load_pretrained：是否使用预训练权重。预训练权重，既可以产生更好的效果，也可以加快模型的训练速度；</li>
+<li>freeze_body：冻结模式，1或2。其中，1是冻结 DarkNet53 网络中的层，2 是只保留最后 3 个 1x1 的卷积层，其余层全部冻结；</li>
+<li>weights_path：预训练权重的读取路径；</li>
+</ul>
+
+<p>如下：</p>
+
+<pre><code class="language-python">def create_model(input_shape,
+                 anchors,
+                 num_classes,
+                 load_pretrained=True,
+                 freeze_body=2,
+                 weights_path='model_data/yolo_weights.h5'):
+</code></pre>
+
+<h2 id="逻辑">逻辑</h2>
+
+<p>在 create_model 方法中，先将输入参数，进行处理：</p>
+
+<ul>
+<li>拆分图片尺寸的宽 h 和高 w；</li>
+<li>创建图片的输入层 image_input 。在输入层中，既可显式指定图片尺寸，如(416, 416, 3)，也可隐式指定，用“?”代替，如(?, ?, 3)；</li>
+<li>计算 anchor 的数量 num_anchors；<span style="color:red;">anchors 是什么？</span></li>
+<li>根据 anchor 的数量，创建真值 y_true 的输入格式。</li>
+</ul>
+
+<p>具体的实现，如下：</p>
+
+<pre><code class="language-python">h, w = input_shape  # 尺寸
+image_input = Input(shape=(w, h, 3))  # 图片输入格式
+num_anchors = len(anchors)  # anchor数量
+
+# YOLO的三种尺度，每个尺度的anchor数，类别数+边框4个+置信度1
+y_true = [Input(shape=(h // {0: 32, 1: 16, 2: 8}[l], w // {0: 32, 1: 16, 2: 8}[l],
+                       num_anchors // 3, num_classes + 5)) for l in range(3)]
+</code></pre>
+
+<p><span style="color:red;">上面句子中的 h // {0: 32, 1: 16, 2: 8}[l], w // {0: 32, 1: 16, 2: 8}[l] 没看懂？</span></p>
+
+<p>其中，真值 y_true，真值即 Ground Truth。“//” 是 Python 语法中的整除符号。通过循环，创建 3 个 Input 层的列表，作为y_true。y_true 的张量结构，如下：</p>
+
+<pre><code class="language-python">Tensor(&quot;input_2:0&quot;, shape=(?, 13, 13, 3, 6), dtype=float32)
+Tensor(&quot;input_3:0&quot;, shape=(?, 26, 26, 3, 6), dtype=float32)
+Tensor(&quot;input_4:0&quot;, shape=(?, 52, 52, 3, 6), dtype=float32)
+</code></pre>
+
+<p>其中，在真值 y_true 中，第1位是输入的样本数，第 2~3 位是特征图的尺寸，如 13x13，第 4 位是每个图中的 anchor 数，第 5 位是：类别(n)+4个框值(xywh)+框的置信度(是否含有物体)。</p>
+
+<p>接着，通过传入，输入 Input 层 image_input、每个尺度的 anchor 数 num_anchors//3，和类别数 num_classes，构建 YOLO v3 的网络 yolo_body，这个 yolo_body 方法是核心逻辑。</p>
+
+<p>即：</p>
+
+<pre><code class="language-python">model_body = yolo_body(image_input, num_anchors // 3, num_classes)
+</code></pre>
+
+<p>下一步，就是加载预训练权重的逻辑块：</p>
+
+<ul>
+<li>根据预训练权重的地址 weights_path，加载权重文件，设置参数为，按名称对应 by_name，略过不匹配 skip_mismatch；</li>
+<li>选择冻结模式：模式 1 是冻结 185 层，模式 2 是保留最底部 3 层，其余全部冻结。整个模型共有 252 层；将所冻结的层，设置为不可训练，trainable=False；</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">if load_pretrained:  # 加载预训练模型
+    model_body.load_weights(weights_path, by_name=True, skip_mismatch=True)
+    if freeze_body in [1, 2]:
+        # Freeze darknet53 body or freeze all but 3 output layers.
+        num = (185, len(model_body.layers) - 3)[freeze_body - 1]
+        for i in range(num):
+            model_body.layers[i].trainable = False  # 将其他层的训练关闭
+</code></pre>
+
+<p>其中，185 层是 DarkNet53 网络的层数，而最底部 3 层是 3 个 1x1 的卷积层，用于预测最终结果。185 层是 DarkNet53 网络的最后一个残差单元，其输入和输出如下：</p>
+
+<pre><code>input: [(None, 13, 13, 1024), (None, 13, 13, 1024)]
+output: (None, 13, 13, 1024)
+</code></pre>
+
+<p>最底部3个1x1的卷积层，将3个特征矩阵转换为3个预测矩阵，其格式如下：</p>
+
+<pre><code>1: (None, 13, 13, 1024) -&gt; (None, 13, 13, 18)
+2: (None, 26, 26, 512) -&gt; (None, 26, 26, 18)
+3: (None, 52, 52, 256) -&gt; (None, 52, 52, 18)
+</code></pre>
+
+<p>下一步，构建模型的损失层 model_loss，其内容如下：</p>
+
+<ul>
+<li>Lambda 是 Keras 的自定义层，输入为 model_body.output 和 y_true，输出 output_shape 是 (1,)，即一个损失值；</li>
+<li>自定义 Lambda 层的名字 name 为 yolo_loss；</li>
+<li>层的参数是锚框列表 anchors、类别数 num_classes 和 IoU 阈值 ignore_thresh。其中，ignore_thresh 用于在物体置信度损失中过滤IoU较小的框；</li>
+<li>yolo_loss 是损失函数的核心逻辑。</li>
+</ul>
+
+<p>实现如下：</p>
+
+<pre><code class="language-python">model_loss = Lambda(yolo_loss,
+                    output_shape=(1,),
+                    name='yolo_loss',
+                    arguments={'anchors': anchors,
+                               'num_classes': num_classes,
+                               'ignore_thresh': 0.5}
+                    )(model_body.output + y_true)
+</code></pre>
+
+<p>下一步，构建完整的算法模型，步骤如下：</p>
+
+<ul>
+<li>模型的输入层：model_body 的输入和真值 y_true；</li>
+<li>模型的输出层：自定义的 model_loss 层，其输出是一个损失值 (None,1)；</li>
+<li>保存模型的网络图 plot_model 和打印网络结构 model.summary；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">model = Model(inputs=[model_body.input] + y_true, outputs=model_loss) # 模型
+plot_model(model,
+          to_file=os.path.join('model_data', 'model.png'),
+          show_shapes=True,
+          show_layer_names=True)  # 存储网络结构
+model.summary()  # 打印网络
+</code></pre>
+
+<p>其中，model_body.input 是任意 (?) 个 (416,416,3) 的图片；y_true 是已标注数据所转换的真值结构。</p>
+
+<p>即：</p>
+
+<pre><code>[Tensor(&quot;input_2:0&quot;, shape=(?, 13, 13, 3, 6), dtype=float32),
+  Tensor(&quot;input_3:0&quot;, shape=(?, 26, 26, 3, 6), dtype=float32),
+  Tensor(&quot;input_4:0&quot;, shape=(?, 52, 52, 3, 6), dtype=float32)]
+</code></pre>
+
+<p>最终，这些逻辑，完成算法模型model的构建。</p>
+
+<hr />
+
+<h2 id="补充1-iou"><strong>补充1. IoU</strong></h2>
+
+<p>IoU，即Intersection over Union，用于计算两个图的重叠度，用于计算两个标注框之间的相关度，值越高，相关度越高。在 NMS 非极大值抑制或计算 mAP 中，都会使用 IoU 判断两个框的相关性。<span style="color:red;">NMS 非极大值抑制是什么？</span></p>
+
+<p>如图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/9LciffaD6C.png?imageslim" alt="mark" /></p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">def bb_intersection_over_union(boxA, boxB):
+    boxA = [int(x) for x in boxA]
+    boxB = [int(x) for x in boxB]
+
+    xA = max(boxA[0], boxB[0])
+    yA = max(boxA[1], boxB[1])
+    xB = min(boxA[2], boxB[2])
+    yB = min(boxA[3], boxB[3])
+
+    interArea = max(0, xB - xA + 1) * max(0, yB - yA + 1)
+
+    boxAArea = (boxA[2] - boxA[0] + 1) * (boxA[3] - boxA[1] + 1)
+    boxBArea = (boxB[2] - boxB[0] + 1) * (boxB[3] - boxB[1] + 1)
+
+    iou = interArea / float(boxAArea + boxBArea - interArea)
+
+    return iou
+</code></pre>
+
+<hr />
+
+<h2 id="补充2-冻结网络层"><strong>补充2. 冻结网络层</strong></h2>
+
+<p>在微调中，需要确定冻结的层数和可训练的层数，主要取决于，数据集相似度和新数据集的大小。原则上，相似度越高，则固定的层数越多；新数据集越大，不考虑训练时间的成本，则可训练更多的层数。然后可能也要考虑数据集本身的类别间差异度，但上面说的规则基本上还是成立的。</p>
+
+<p>例如，在图片分类的网络中，底层一般是颜色、轮廓、纹理等基础结构，显然大部分问题都由这些相同的基础结构组成，所以可以冻结这些层。层数越高，所具有泛化性越高，例如这些层会包含对鞋子、裙子和眼睛等，具体语义信息，比较敏感的神经元。所以，对于新的数据集，就需要训练这些较高的层。同时，比如一个高层神经元对车的轮胎较为敏感，不等于输入其它图像，就无法激活，因而，普通问题甚至可以只训练最后全连接层。<span style="color:red;">嗯。</span></p>
+
+<p>在 Keras 中，通过设置每层的 trainable 参数，即可控制是否冻结该层，如：</p>
+
+<pre><code class="language-python">model_body.layers[i].trainable = False
+</code></pre>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/N79S9Qf1OgKsQ0VU5QvuHg">探索 YOLO v3 实现细节 - 第2篇 模型</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/01-%E8%AE%AD%E7%BB%83/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/02-yolov3-%E4%BD%BF%E7%94%A8/01-tensorflow-%E5%AE%9E%E7%8E%B0/%E5%A4%A7%E7%BA%B2/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

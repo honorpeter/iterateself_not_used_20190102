@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="本文的GitHub源码： https://github.com/SpikeKing/keras-yolo3-detection 1. 参数 模型的训练参数，共有5个，即： (1) 已标注边界框的图片数据集，其格式如下： 图片的位置 框的4个坐标和1个类别ID (xmin,ymin,xmax,ymax,id)" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/01-%E8%AE%AD%E7%BB%83/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="本文的GitHub源码： https://github.com/SpikeKing/keras-yolo3-detection 1. 参数 模型的训练参数，共有5个，即： (1) 已标注边界框的图片数据集，其格式如下： 图片的位置 框的4个坐标和1个类别ID (xmin,ymin,xmax,ymax,id)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/01-%E8%AE%AD%E7%BB%83/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="本文的GitHub源码： https://github.com/SpikeKing/keras-yolo3-detection 1. 参数 模型的训练参数，共有5个，即： (1) 已标注边界框的图片数据集，其格式如下： 图片的位置 框的4个坐标和1个类别ID (xmin,ymin,xmax,ymax,id)">
+
+
+
+<meta itemprop="wordCount" content="2624">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="本文的GitHub源码： https://github.com/SpikeKing/keras-yolo3-detection 1. 参数 模型的训练参数，共有5个，即： (1) 已标注边界框的图片数据集，其格式如下： 图片的位置 框的4个坐标和1个类别ID (xmin,ymin,xmax,ymax,id)"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 2624 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-参数">1.  参数</a></li>
+<li><a href="#2-创建模型">2.  创建模型</a></li>
+<li><a href="#3-样本数量">3.  样本数量</a></li>
+<li><a href="#4-第1阶段训练">4.  第1阶段训练</a></li>
+<li><a href="#5-第2阶段训练">5.  第2阶段训练</a></li>
+<li><a href="#补充1-k-means">补充1.  K-Means</a></li>
+<li><a href="#补充2-earlystopping">补充2.  EarlyStopping</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>本文的GitHub源码：</p>
+
+<p><a href="https://github.com/SpikeKing/keras-yolo3-detection">https://github.com/SpikeKing/keras-yolo3-detection</a></p>
+
+<h2 id="1-参数">1.  参数</h2>
+
+<p>模型的训练参数，共有5个，即：</p>
+
+<p>(1) 已标注边界框的图片数据集，其格式如下：</p>
+
+<pre><code>图片的位置 框的4个坐标和1个类别ID (xmin,ymin,xmax,ymax,id) ...
+dataset/image.jpg 788,351,832,426,0 805,208,855,270,0
+</code></pre>
+
+<p>(2) 标注框类别的汇总，即数据集中所标注物体的全部类别，例如：</p>
+
+<pre><code>aeroplane
+bicycle
+bird
+...
+</code></pre>
+
+<p>(3) 预训练模型，用于迁移学习中的微调，可选 YOLO v3 已训练完成的 COCO 模型权重，即：</p>
+
+<pre><code>pretrained_path = 'model_data/yolo_weights.h5'
+</code></pre>
+
+<p>(4) 预测特征图的 anchor 框集合：<span style="color:red;">什么是 anchor 框？</span></p>
+
+<ul>
+<li>3 个尺度的特征图，每个特征图 3 个 anchor 框，共 9 个框，从小到大排列；</li>
+<li>框 1~3 在大尺度 52x52 特征图中使用，框 4~6 是中尺度 26x26，框 7~9 是小尺度 13x13 ；</li>
+<li>大尺度特征图用于检测小物体，小尺度检测大物体；</li>
+<li>9个 anchor 来源于边界框的 K-Means 聚类。</li>
+</ul>
+
+<p>例如，COCO 的 anchors 列表，如下：</p>
+
+<pre><code>10,13,  16,30,  33,23,  30,61,  62,45,  59,119,  116,90,  156,198,  373,326
+</code></pre>
+
+<p>(5) 图片输入尺寸，默认为 416x416，选择 416 的原因是：<span style="color:red;">可以任意选定吗？</span></p>
+
+<ul>
+<li>图片尺寸满足 32 的倍数，在 DarkNet 网络中，执行 5 次步长为 2 卷积，降采样，其卷积操作如下：<span style="color:red;">这个与 DarkNet 有什么关系？</span></li>
+</ul>
+
+<pre><code>x = DarknetConv2D_BN_Leaky(num_filters, (3, 3), strides=(2, 2))(x)
+</code></pre>
+
+<ul>
+<li>在最底层时，特征图尺寸需要满足为奇数，如 13，以保证中心点落在唯一框中。如果为偶数时，则中心点落在中心的 4 个框中，导致歧义。<span style="color:red;">什么意思？</span></li>
+</ul>
+
+<hr />
+
+<h2 id="2-创建模型">2.  创建模型</h2>
+
+<p>创建 YOLOv3 的网络模型，输入：</p>
+
+<ul>
+<li>input_shape：图片尺寸；</li>
+<li>anchors：9 个 anchor box；<span style="color:red;">这个 anchors 到底是什么概念？</span></li>
+<li>num_classes：类别数；</li>
+<li>freeze_body：冻结模式，1 是冻结 DarkNet53 的层，2 是冻结全部，只保留最后 3 层；<span style="color:red;">冻结模式什么时候使用？</span></li>
+<li>weights_path：预训练模型的权重。</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">model = create_model(input_shape,
+                     anchors,
+                     num_classes,
+                     freeze_body=2,
+                     weights_path=pretrained_path)
+</code></pre>
+
+<p>其中，网络的<strong>最后3层</strong>是：3个1x1的卷积层，用于将3个尺度的特征图，转换为3个尺度的预测值。<span style="color:red;">嗯。</span></p>
+
+<p>即：</p>
+
+<pre><code class="language-python">out_filters = num_anchors * (num_classes + 5)
+// ...
+DarknetConv2D(out_filters, (1, 1))
+</code></pre>
+
+<p>结构如下：</p>
+
+<pre><code>conv2d_59 (Conv2D)      (None, 13, 13, 18)   18450       leaky_re_lu_58[0][0]
+conv2d_67 (Conv2D)      (None, 26, 26, 18)   9234        leaky_re_lu_65[0][0]
+conv2d_75 (Conv2D)      (None, 52, 52, 18)   4626        leaky_re_lu_72[0][0]
+</code></pre>
+
+<h2 id="3-样本数量">3.  样本数量</h2>
+
+<p>样本洗牌，将数据集拆分为10份，训练9份，验证1份，比较简单。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">val_split = 0.1       # 训练和验证的比例 with open(annotation_path) as f:
+lines = f.readlines()
+np.random.seed(47)
+np.random.shuffle(lines)
+np.random.seed(None)
+num_val = int(len(lines) * val_split)   # 验证集数量
+num_train = len(lines) - num_val        # 训练集数量
+</code></pre>
+
+<h2 id="4-第1阶段训练">4.  第1阶段训练</h2>
+
+<p>第 1 阶段，冻结部分网络，只训练底层权重：</p>
+
+<ul>
+<li>优化器使用常见的 Adam；</li>
+<li>损失函数，直接使用模型的输出 y_pred，忽略真值 y_true；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code>model.compile(optimizer=Adam(lr=1e-3), loss={
+    # 使用定制的 yolo_loss Lambda层
+    'yolo_loss': lambda y_true, y_pred: y_pred})  # 损失函数
+</code></pre>
+
+<p><span style="color:red;">上面的</span></p>
+
+<p>其中，关于损失函数 yolo_loss，以及 y_true 和 y_pred：<span style="color:red;">没有很理解</span></p>
+
+<ul>
+<li>把 y_true 当成输入，作为模型的多输入，把 loss 封装为层，作为输出；</li>
+<li>在模型中，最终输出的 y_pred 就是 loss；</li>
+<li>在编译时，将 loss 设置为 y_pred 即可，无视 y_true；</li>
+<li>在训练时，随意添加一个符合结构的 y_true 即可。</li>
+</ul>
+
+<p>Python 的 Lambda 表达式：</p>
+
+<pre><code>f = lambda y_true, y_pred: y_pred
+print(f(1, 2))  # 输出2
+</code></pre>
+
+<p>模型 fit 数据，使用数据生成包装器，按批次生成训练和验证数据。最终，模型 model 存储权重。</p>
+
+<p>实现如下：</p>
+
+<pre><code class="language-python">batch_size = 32  # batch
+model.fit_generator(data_generator_wrapper(lines[:num_train], batch_size, input_shape, anchors, num_classes),
+                    steps_per_epoch=max(1, num_train // batch_size),
+                    validation_data=data_generator_wrapper(
+                        lines[num_train:], batch_size, input_shape, anchors, num_classes),
+                    validation_steps=max(1, num_val // batch_size),
+                    epochs=50,
+                    initial_epoch=0,
+                    callbacks=[logging, checkpoint])
+# 存储最终的权重，再训练过程中，也通过回调存储
+model.save_weights(log_dir + 'trained_weights_stage_1.h5')
+</code></pre>
+
+<p>同时，在训练过程中，也会不断保存，epoch 完成的模型权重，设置参数为：</p>
+
+<ul>
+<li>只存储权重（save_weights_only）</li>
+<li>只存储最优结果（save_best_only）</li>
+<li>每隔 3 个 epoch 存储一次（period）</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">checkpoint = ModelCheckpoint(log_dir + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
+                             monitor='val_loss',
+                             save_weights_only=True,
+                             save_best_only=True,
+                             period=3)  # 只存储 weights 权重
+</code></pre>
+
+<h2 id="5-第2阶段训练">5.  第2阶段训练</h2>
+
+<p>第 2 阶段，使用第 1 阶段已训练完成的网络权重，继续训练：</p>
+
+<ul>
+<li>将全部的权重都设置为可训练，而在第 1 阶段中，则是冻结部分权重；</li>
+<li>优化器，仍是 Adam，只是学习率有所下降，从 1e-3 减少至 1e-4；</li>
+<li>损失函数，仍是只使用 y_pred，忽略 y_true。</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">for i in range(len(model.layers)):
+    model.layers[i].trainable = True
+
+model.compile(optimizer=Adam(lr=1e-4),
+              loss={'yolo_loss': lambda y_true, y_pred: y_pred})
+</code></pre>
+
+<p>第 2 阶段的模型 fit 数据，与第 1 阶段类似，从第 50 个 epoch 开始，一直训练到第 100 个 epoch ，当触发条件时，则提前终止。额外增加了两个回调 reduce_lr 和 early_stopping ，用于控制训练提取终止的时机：</p>
+
+<ul>
+<li>reduce_lr：当评价指标不在提升时，减少学习率，每次减少 10%，当验证损失值，持续 3 次未减少时，则终止训练。</li>
+<li>early_stopping：当验证集损失值，连续增加小于 0 时，持续 10 个 epoch，则终止训练。</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=3, verbose=1)  # 当评价指标不在提升时，减少学习率
+early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=1)  # 验证集准确率，下降前终止
+batch_size = 32
+model.fit_generator(data_generator_wrapper(lines[:num_train], batch_size, input_shape, anchors, num_classes),
+                    steps_per_epoch=max(1, num_train // batch_size),
+                    validation_data=data_generator_wrapper(lines[num_train:], batch_size, input_shape, anchors,
+                                                           num_classes),
+                    validation_steps=max(1, num_val // batch_size),
+                    epochs=100,
+                    initial_epoch=50,
+                    callbacks=[logging, checkpoint, reduce_lr, early_stopping])
+model.save_weights(log_dir + 'trained_weights_final.h5')
+</code></pre>
+
+<p>至此，在第 2 阶段训练完成之后，输出的网络权重，就是最终的模型权重。</p>
+
+<hr />
+
+<h2 id="补充1-k-means">补充1.  K-Means</h2>
+
+<p>K-Means 算法是聚类算法，将一组数据划分为多个组，每组都含有一个中心。</p>
+
+<blockquote>
+<p>在YOLOv3中，获取数据集的全部 anchor box，通过 K-Means 算法，将这些边界框的宽高，聚类为 9 类，获取 9 个聚类中心，面积从小到大排列，作为 9 个 anchor box。</p>
+</blockquote>
+
+<p>模拟 K-Means 算法：</p>
+
+<ul>
+<li>创建测试点，X 是数据，y 是标签，如 X:(300,2), y:(300,)；</li>
+<li>将数据聚类为 9 类；</li>
+<li>输入数据 X，训练；</li>
+<li>预测 X 的类别，为 y_kmeans；</li>
+<li>使用 scatter 绘制散点图，颜色范围 viridis；</li>
+<li>获取聚类中心 cluster_centers_，以黑色点表示；</li>
+</ul>
+
+<p>源码：</p>
+
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()  # for plot styling
+from sklearn.cluster import KMeans
+from sklearn.datasets.samples_generator import make_blobs
+
+
+def test_of_k_means():
+    # 创建测试点，X是数据，y是标签，X:(300,2), y:(300,)
+    X, y_true = make_blobs(n_samples=300, centers=9, cluster_std=0.60, random_state=0)
+    kmeans = KMeans(n_clusters=9)  # 将数据聚类
+    kmeans.fit(X)  # 数据X
+    y_kmeans = kmeans.predict(X)  # 预测
+
+    # 颜色范围viridis: https://matplotlib.org/examples/color/colormaps_reference.html
+    plt.scatter(X[:, 0], X[:, 1], c=y_kmeans, s=20, cmap='viridis')  # c是颜色，s是大小
+
+    centers = kmeans.cluster_centers_  # 聚类的中心
+    plt.scatter(centers[:, 0], centers[:, 1], c='black', s=40, alpha=0.5)  # 中心点为黑色
+
+    plt.show()  # 展示
+
+
+if __name__ == '__main__':
+    test_of_k_means()
+</code></pre>
+
+<p>输出：</p>
+
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/MVibsicfR1qiaQITUTtU53eicKqEJte5JYQBibvRDn35De2TeONGg9P3zSYCI2XcZgnocDzsxrBzpOx6Ua8Aq0D9RPw/640?wx_fmt=jpeg&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="img" /></p>
+
+<h2 id="补充2-earlystopping">补充2.  EarlyStopping</h2>
+
+<p>EarlyStopping 是 Callback 的子类，Callback 用于指定在每个阶段开始和结束时，执行的操作。在 Callback 中，有已经实现的简单子类，如 acc、val、loss 和 val_loss 等，还有复杂子类，如ModelCheckpoint和TensorBoard等。</p>
+
+<p>Callback的回调接口，如下：</p>
+
+<pre><code>def on_epoch_begin(self, epoch, logs=None):
+def on_epoch_end(self, epoch, logs=None):
+def on_batch_begin(self, batch, logs=None):
+def on_batch_end(self, batch, logs=None):
+def on_train_begin(self, logs=None):
+def on_train_end(self, logs=None):
+</code></pre>
+
+<p>EarlyStopping 是提前停止训练的 Callback 子类。具体地，当训练或验证集中的 loss 不再减小，即减小的程度小于某个阈值，则会停止训练。这样做，可以提高调参效率，避免浪费资源。</p>
+
+<p>在 model 的 fit 数据时，以列表设置 callbacks 回调，支持设置多个 Callback，如：</p>
+
+<pre><code class="language-python">callbacks=[logging, checkpoint, reduce_lr, early_stopping]
+</code></pre>
+
+<p>EarlyStopping的参数：</p>
+
+<ul>
+<li>monitor：监控数据的类型，支持acc、val_acc、loss、val_loss等；</li>
+<li>min_delta：停止阈值，与mode参数配合，支持增加或下降；</li>
+<li>mode：min是最少，max是最多，auto是自动，与min_delta配合；</li>
+<li>patience：达到阈值之后，能够容忍的epoch数，避免停止在抖动中；</li>
+<li>verbose：日志的繁杂程度，值越大，输出的信息越多。</li>
+</ul>
+
+<p>min_delta和patience需要相互配合，避免模型停止在抖动的过程中。min_delta降低，patience减少；而min_delta增加，则patience增加。</p>
+
+<p>例如：</p>
+
+<pre><code>early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=1)
+</code></pre>
+
+<hr />
+
+<p>OK, that&rsquo;s all! Enjoy it!</p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/T9LshbXoervdJDBuP564dQ">探索 YOLO v3 实现细节 - 第1篇 训练</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/01-yolo-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/02-%E6%A8%A1%E5%9E%8B/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

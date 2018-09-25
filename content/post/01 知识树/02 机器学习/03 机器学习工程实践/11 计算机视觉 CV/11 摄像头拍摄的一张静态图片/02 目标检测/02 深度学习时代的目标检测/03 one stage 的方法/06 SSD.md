@@ -20,3 +20,5 @@ date: 2018-09-22
 - 实现：[ssd_keras github](https://github.com/pierluigiferrari/ssd_keras)
 
 - SSD: Single Shot MultiBox Detector  https://arxiv.org/pdf/1512.02325v5.pdf
+
+- [【object detection】目标检测之SSD](https://zhuanlan.zhihu.com/p/30478644)

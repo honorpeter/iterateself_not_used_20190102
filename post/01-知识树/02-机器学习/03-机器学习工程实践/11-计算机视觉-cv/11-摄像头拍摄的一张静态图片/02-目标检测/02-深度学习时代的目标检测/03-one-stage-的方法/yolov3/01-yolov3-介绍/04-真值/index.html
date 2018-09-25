@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第4篇，数据和y_true 其中包含随机生成图片数据，和设置真值y_true，技巧性非常强。 1. fit_generator 在训练中，模型调用 fit_generator 方法，按批次创建数据，输入" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/04-%E7%9C%9F%E5%80%BC/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="第4篇，数据和y_true 其中包含随机生成图片数据，和设置真值y_true，技巧性非常强。 1. fit_generator 在训练中，模型调用 fit_generator 方法，按批次创建数据，输入" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/04-%E7%9C%9F%E5%80%BC/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="第4篇，数据和y_true 其中包含随机生成图片数据，和设置真值y_true，技巧性非常强。 1. fit_generator 在训练中，模型调用 fit_generator 方法，按批次创建数据，输入">
+
+
+
+<meta itemprop="wordCount" content="3962">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="第4篇，数据和y_true 其中包含随机生成图片数据，和设置真值y_true，技巧性非常强。 1. fit_generator 在训练中，模型调用 fit_generator 方法，按批次创建数据，输入"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 3962 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#第4篇-数据和y-true">第4篇，数据和y_true</a>
+<ul>
+<li><a href="#1-fit-generator">1. fit_generator</a></li>
+<li><a href="#2-数据生成器">2. 数据生成器</a></li>
+<li><a href="#3-图片和标注框">3. 图片和标注框</a></li>
+<li><a href="#4-真值y-true">4. 真值y_true</a></li>
+<li><a href="#补充1-矩阵相加">补充1. 矩阵相加</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="第4篇-数据和y-true">第4篇，数据和y_true</h1>
+
+<p>其中包含随机生成图片数据，和设置真值y_true，技巧性非常强。</p>
+
+<h2 id="1-fit-generator">1. fit_generator</h2>
+
+<p>在训练中，模型调用 fit_generator 方法，按批次创建数据，输入模型，进行训练。其中，数据生成器wrapper是 data_generator_wrapper，用于验证数据格式，最终调用 data_generator ，输入参数是：</p>
+
+<ul>
+<li>annotation_lines：标注数据的行，每行数据包含图片路径，和框的位置信息；</li>
+<li>batch_size：批次数，每批生成的数据个数；</li>
+<li>input_shape：图像输入尺寸，如 (416, 416)；</li>
+<li>anchors：anchor box 列表，9 个宽高值；</li>
+<li>num_classes：类别的数量；</li>
+</ul>
+
+<p>在 data_generator_wrapper 中，验证输入参数是否正确，再调用 data_generator，这也是 wrapper 函数的常见用法。<span style="color:red;">嗯。</span></p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">data_generator_wrapper(lines[:num_train], batch_size, input_shape, anchors, num_classes)
+
+def data_generator_wrapper(annotation_lines, batch_size, input_shape, anchors, num_classes):
+    n = len(annotation_lines)  # 标注图片的行数
+    if n == 0 or batch_size &lt;= 0: return None
+    return data_generator(annotation_lines, batch_size, input_shape, anchors, num_classes)
+
+def data_generator(annotation_lines, batch_size, input_shape, anchors, num_classes):
+</code></pre>
+
+<h2 id="2-数据生成器">2. 数据生成器</h2>
+
+<p>在数据生成器 data_generator 中，数据的总行数是 n，循环输出固定批次数 batch_size 的图片数据 image_data 和标注框数据 box_data。</p>
+
+<p>在第 0 次时，将数据洗牌 shuffle，调用 get_random_data 解析 annotation_lines[i] ，生成图片 image 和标注框 box，添加至各自的列表 image_data 和 box_data 中。</p>
+
+<p>索引值递增 i+1，当完成 n 个一轮之后，重新将 i 置 0，再次调用 shuffle 洗牌数据。</p>
+
+<p>将 image_data 和 box_data 都转换为 np 数组，其中：</p>
+
+<pre><code>image_data: (16, 416, 416, 3)
+box_data: (16, 20, 5) # 每个图片最多含有20个框
+</code></pre>
+
+<p>接着，将框的数据box_data、输入图片尺寸input_shape、anchor box列表anchors和类别数num_classes转换为真值y_true，其中y_true是3个预测特征的列表：</p>
+
+<pre><code>[(16, 13, 13, 3, 6), (16, 26, 26, 3, 6), (16, 52, 52, 3, 6)]
+</code></pre>
+
+<p>最终输出：图片数据image_data、真值y_true、每个图片的损失值np.zeros。不断循环while True，生成的批次数据，与epoch步数相同，即steps_per_epoch。</p>
+
+<p>实现如下：</p>
+
+<pre><code>def data_generator(annotation_lines, batch_size, input_shape, anchors, num_classes):
+    '''data generator for fit_generator'''
+    n = len(annotation_lines)
+    i = 0
+    while True:
+        image_data = []
+        box_data = []
+        for b in range(batch_size):
+            if i == 0:
+                np.random.shuffle(annotation_lines)
+            image, box = get_random_data(annotation_lines[i], input_shape, random=True)  # 获取图片和框
+            image_data.append(image)  # 添加图片
+            box_data.append(box)  # 添加框
+            i = (i + 1) % n
+        image_data = np.array(image_data)
+        box_data = np.array(box_data)
+        y_true = preprocess_true_boxes(box_data, input_shape, anchors, num_classes)  # 真值
+        yield [image_data] + y_true, np.zeros(batch_size)
+</code></pre>
+
+<hr />
+
+<h2 id="3-图片和标注框">3. 图片和标注框</h2>
+
+<p>在get_random_data中，分离图片image和标注框box，输入：</p>
+
+<ul>
+<li>数据annotation_line：图片地址和框的位置类别；</li>
+<li>图片尺寸input_shape：如(416, 416)；</li>
+<li>数据random：随机开关；</li>
+</ul>
+
+<p>方法如下：</p>
+
+<pre><code>image, box = get_random_data(annotation_lines[i], input_shape, random=True)
+
+def get_random_data(
+        annotation_line, input_shape, random=True,
+        max_boxes=20, jitter=.3, hue=.1, sat=1.5,
+        val=1.5, proc_img=True):
+</code></pre>
+
+<p>第1步，解析annotation_line数据：</p>
+
+<ul>
+<li>将annotation_line按空格分割为line列表；</li>
+<li>使用PIL读取图片image；</li>
+<li>图片的宽和高，iw和ih；</li>
+<li>输入尺寸的高和宽，h和w；</li>
+<li>图片中的标注框box，box是5维，4个点和1个类别；</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code>line = annotation_line.split()
+image = Image.open(line[0])
+iw, ih = image.size
+h, w = input_shape
+box = np.array([np.array(list(map(int, box.split(',')))) for box in line[1:]])
+</code></pre>
+
+<p>第2步，如果是非随机，即if not random：</p>
+
+<ul>
+<li>将图片等比例转换为416x416的图片，其余用灰色填充，即(128, 128, 128)，同时颜色值转换为0~1之间，即每个颜色值除以255；</li>
+<li>将边界框box等比例缩小，再加上填充的偏移量dx和dy，因为新的图片部分用灰色填充，影响box的坐标系，box最多有max_boxes个，即20个。</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">scale = min(float(w) / float(iw), float(h) / float(ih))
+nw = int(iw * scale)
+nh = int(ih * scale)
+dx = (w - nw) // 2
+dy = (h - nh) // 2
+image_data = 0
+if proc_img:  # 图片
+    image = image.resize((nw, nh), Image.BICUBIC)
+    new_image = Image.new('RGB', (w, h), (128, 128, 128))
+    new_image.paste(image, (dx, dy))
+    image_data = np.array(new_image) / 255.
+
+# 标注框
+box_data = np.zeros((max_boxes, 5))
+if len(box) &gt; 0:
+    np.random.shuffle(box)
+    if len(box) &gt; max_boxes: box = box[:max_boxes]  # 最多只取20个
+    box[:, [0, 2]] = box[:, [0, 2]] * scale + dx
+    box[:, [1, 3]] = box[:, [1, 3]] * scale + dy
+    box_data[:len(box)] = box
+
+return image_data, box_data
+</code></pre>
+
+<p>第3步，如果是随机：</p>
+
+<p>通过jitter参数，随机计算new_ar和scale，生成新的nh和nw，将原始图像随机转换为nw和nh尺寸的图像，即非等比例变换图像。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">new_ar = w / h * rand(1 - jitter, 1 + jitter) / rand(1 - jitter, 1 + jitter)
+scale = rand(.25, 2.)
+if new_ar &lt; 1:
+    nh = int(scale * h)
+    nw = int(nh * new_ar)
+else:
+    nw = int(scale * w)
+    nh = int(nw / new_ar)
+image = image.resize((nw, nh), Image.BICUBIC)
+</code></pre>
+
+<p>将变换后的图像，转换为416x416的图像，其余部分用灰色值填充。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">dx = int(rand(0, w - nw))
+dy = int(rand(0, h - nh))
+new_image = Image.new('RGB', (w, h), (128, 128, 128))
+new_image.paste(image, (dx, dy))
+image = new_image
+</code></pre>
+
+<p>根据随机数flip，随机左右翻转FLIP_LEFT_RIGHT图片。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">flip = rand() &lt; .5
+if flip: image = image.transpose(Image.FLIP_LEFT_RIGHT)
+</code></pre>
+
+<p>在HSV坐标域中，改变图片的颜色范围，hue值相加，sat和vat相乘，先由RGB转为HSV，再由HSV转为RGB，添加若干错误判断，避免范围过大。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">hue = rand(-hue, hue)
+sat = rand(1, sat) if rand() &lt; .5 else 1 / rand(1, sat)
+val = rand(1, val) if rand() &lt; .5 else 1 / rand(1, val)
+x = rgb_to_hsv(np.array(image) / 255.)
+x[..., 0] += hue
+x[..., 0][x[..., 0] &gt; 1] -= 1
+x[..., 0][x[..., 0] &lt; 0] += 1
+x[..., 1] *= sat
+x[..., 2] *= val
+x[x &gt; 1] = 1
+x[x &lt; 0] = 0
+image_data = hsv_to_rgb(x)  # numpy array, 0 to 1
+</code></pre>
+
+<p>将所有的图片变换，增加至检测框中，并且包含若干异常处理，避免变换之后的值过大或过小，去除异常的box。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">box_data = np.zeros((max_boxes, 5))
+if len(box) &gt; 0:
+    np.random.shuffle(box)
+    box[:, [0, 2]] = box[:, [0, 2]] * nw / iw + dx
+    box[:, [1, 3]] = box[:, [1, 3]] * nh / ih + dy
+    if flip: box[:, [0, 2]] = w - box[:, [2, 0]]
+    box[:, 0:2][box[:, 0:2] &lt; 0] = 0
+    box[:, 2][box[:, 2] &gt; w] = w
+    box[:, 3][box[:, 3] &gt; h] = h
+    box_w = box[:, 2] - box[:, 0]
+    box_h = box[:, 3] - box[:, 1]
+    box = box[np.logical_and(box_w &gt; 1, box_h &gt; 1)]  # discard invalid box
+    if len(box) &gt; max_boxes: box = box[:max_boxes]
+    box_data[:len(box)] = box
+</code></pre>
+
+<p>最终，返回图像数据image_data和边框数据box_data。box的4个值是(xmin, ymin, xmax, ymax)，第5位不变，是标注框的类别，如0~n。</p>
+
+<hr />
+
+<h2 id="4-真值y-true">4. 真值y_true</h2>
+
+<p>在preprocess_true_boxes中，输入：</p>
+
+<ul>
+<li>true_boxes：检测框，批次数16，最大框数20，每个框5个值，4个边界点和1个类别序号，如(16, 20, 5)；</li>
+<li>input_shape：图片尺寸，如(416, 416)；</li>
+<li>anchors：anchor box列表；</li>
+<li>num_classes：类别的数量；</li>
+</ul>
+
+<p>如：</p>
+
+<pre><code class="language-python">def preprocess_true_boxes(true_boxes, input_shape, anchors, num_classes):
+</code></pre>
+
+<p>检测类别序号是否小于类别数，避免异常数据，如：</p>
+
+<pre><code class="language-python">assert (true_boxes[..., 4] &lt; num_classes).all(), 'class id must be less than num_classes'
+</code></pre>
+
+<p>每一层anchor box的数量num_layers；预设anchor box的掩码anchor_mask，第1层678，第2层345，第3层012，倒序排列。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">num_layers = len(anchors) // 3  # default setting
+anchor_mask = [[6, 7, 8], [3, 4, 5], [0, 1, 2]] if num_layers == 3 else [[3, 4, 5], [1, 2, 3]]
+</code></pre>
+
+<p>计算true_boxes：</p>
+
+<ul>
+<li>true_boxes：真值框，左上和右下2个坐标值和1个类别，如[184, 299, 191, 310, 0.0]，结构是(16, 20, 5)，16是批次数，20是框的最大数，5是框的5个值；</li>
+<li>boxes_xy：xy是box的中心点，结构是(16, 20, 2)；</li>
+<li>boxes_wh：wh是box的宽和高，结构也是(16, 20, 2)；</li>
+<li>input_shape：输入尺寸416x416；</li>
+</ul>
+
+<p>true_boxes：第0和1位设置为xy，除以416，归一化，第2和3位设置为wh，除以416，归一化，如[0.449, 0.730, 0.016, 0.026, 0.0]。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">true_boxes = np.array(true_boxes, dtype='float32')
+input_shape = np.array(input_shape, dtype='int32')
+boxes_xy = (true_boxes[..., 0:2] + true_boxes[..., 2:4]) // 2
+boxes_wh = true_boxes[..., 2:4] - true_boxes[..., 0:2]
+true_boxes[..., 0:2] = boxes_xy / input_shape[::-1]
+true_boxes[..., 2:4] = boxes_wh / input_shape[::-1]
+</code></pre>
+
+<p>设置y_true的初始值：</p>
+
+<ul>
+<li>m是批次16；</li>
+<li>grid_shape是input_shape等比例降低，即[[13,13], [26,26], [52,52]]；</li>
+<li>y_true是全0矩阵（np.zeros）列表，即[(16,13,13,3,6), (16,26,26,3,6), (16,52,52,3,6)]</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code>m = true_boxes.shape[0]
+grid_shapes = [input_shape // {0: 32, 1: 16, 2: 8}[l] for l in range(num_layers)]
+y_true = [np.zeros((m, grid_shapes[l][0], grid_shapes[l][1], len(anchor_mask[l]), 5 + num_classes),
+                   dtype='float32') for l in range(num_layers)]
+</code></pre>
+
+<p>设置anchors的值：</p>
+
+<ul>
+<li>将anchors增加1维expand_dims，由(9,2)转为(1,9,2)；</li>
+<li>anchor_maxes，是anchors值除以2；</li>
+<li>anchor_mins，是负的anchor_maxes；</li>
+<li>valid_mask，将boxes_wh中宽w大于0的位，设为True，即含有box，结构是(16,20)；</li>
+</ul>
+
+<p>valid_mask：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/ldjKi811mf.png?imageslim" alt="mark" /></p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">anchors = np.expand_dims(anchors, 0)
+anchor_maxes = anchors / 2.
+anchor_mins = -anchor_maxes
+valid_mask = boxes_wh[..., 0] &gt; 0
+</code></pre>
+
+<p>循环m处理批次中的每个图像和标注框：</p>
+
+<ul>
+<li>只选择存在标注框的wh，例如：wh的shape是(7,2)；</li>
+<li>np.expand_dims(wh, -2)是wh倒数第2个添加1位，即(7,2)-&gt;(7,1,2)；</li>
+<li>box_maxes和box_mins，与anchor_maxes和anchor_mins的操作类似。</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">for b in range(m):
+    # Discard zero rows.
+    wh = boxes_wh[b, valid_mask[b]]
+    if len(wh) == 0: continue
+    # Expand dim to apply broadcasting.
+    wh = np.expand_dims(wh, -2)
+    box_maxes = wh / 2.
+    box_mins = -box_maxes
+</code></pre>
+
+<p>计算标注框box与anchor box的iou值，计算方式很巧妙：</p>
+
+<ul>
+<li>box_mins的shape是(7,1,2)，anchor_mins的shape是(1,9,2)，intersect_mins的shape是(7,9,2)，即两两组合的值；</li>
+<li>intersect_area的shape是(7,9)；box_area的shape是(7,1)；anchor_area的shape是(1,9)；</li>
+<li>iou的shape是(7,9)；</li>
+</ul>
+
+<p>IoU数据，即anchor box与检测框box，两两匹配的iou值。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/E4ch0Jk202.png?imageslim" alt="mark" /></p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">intersect_mins = np.maximum(box_mins, anchor_mins)
+intersect_maxes = np.minimum(box_maxes, anchor_maxes)
+intersect_wh = np.maximum(intersect_maxes - intersect_mins, 0.)
+intersect_area = intersect_wh[..., 0] * intersect_wh[..., 1]
+box_area = wh[..., 0] * wh[..., 1]
+anchor_area = anchors[..., 0] * anchors[..., 1]
+iou = intersect_area / (box_area + anchor_area - intersect_area)
+</code></pre>
+
+<p>接着，选择IoU最大的anchor索引，即：</p>
+
+<pre><code class="language-python">best_anchor = np.argmax(iou, axis=-1)
+</code></pre>
+
+<p>设置y_true的值：</p>
+
+<ul>
+<li>t是box的序号；n是最优anchor的序号；l是层号；</li>
+<li>如果最优anchor在层l中，则设置其中的值，否则默认为0；</li>
+<li>true_boxes是(16, 20, 5)，即批次、box数、框值；</li>
+<li>true_boxes[b, t, 0]，其中b是批次序号、t是box序号，第0位是x，第1位是y；</li>
+<li>grid_shapes是3个检测图的尺寸，将归一化的值，与框长宽相乘，恢复为具体值；</li>
+<li>k是在anchor box中的序号；</li>
+<li>c是类别，true_boxes的第4位；</li>
+<li>将xy和wh放入y_true中，将y_true的第4位框的置信度设为1，第5~n位的类别设为1；</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python">for t, n in enumerate(best_anchor):
+    for l in range(num_layers):
+        if n in anchor_mask[l]:
+            i = np.floor(true_boxes[b, t, 0] * grid_shapes[l][1]).astype('int32')
+            j = np.floor(true_boxes[b, t, 1] * grid_shapes[l][0]).astype('int32')
+            k = anchor_mask[l].index(n)
+            c = true_boxes[b, t, 4].astype('int32')
+            y_true[l][b, j, i, k, 0:4] = true_boxes[b, t, 0:4]
+            y_true[l][b, j, i, k, 4] = 1
+            y_true[l][b, j, i, k, 5 + c] = 1
+</code></pre>
+
+<p>y_true的第0和1位是中心点xy，范围是(0~13/26/52)，第2和3位是宽高wh，范围是0~1，第4位是置信度1或0，第5~n位是类别为1其余为0。</p>
+
+<hr />
+
+<h2 id="补充1-矩阵相加">补充1. 矩阵相加</h2>
+
+<p>NumPy支持不同维度的矩阵相加，如(1, 2) + (2, 1) = (2, 2)，如：</p>
+
+<pre><code class="language-python">import numpy as np
+
+a = np.array([[1, 2]])
+print(a.shape)  # (1, 2)
+b = np.array([[1], [2]])
+print(b.shape)  # (2, 1)
+c = a + b
+print(c.shape)  # (2, 2)
+print(c)
+&quot;&quot;&quot;[[2 3] [3 4]]&quot;&quot;&quot;
+</code></pre>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/5Sj7QadfVvx-5W9Cr4d3Yw">探索 YOLO v3 实现细节 - 第4篇 真值</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E7%AE%80%E6%98%8E%E7%AE%97%E6%B3%95%E7%B3%BB%E5%88%97%E9%A1%BA%E5%BA%8F%E6%9F%A5%E6%89%BE%E5%92%8C%E4%BA%8C%E5%88%86%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">简明算法系列：顺序查找和二分法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/05-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0loss/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

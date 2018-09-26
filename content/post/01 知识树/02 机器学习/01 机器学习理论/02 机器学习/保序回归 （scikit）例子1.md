@@ -3,32 +3,18 @@ title: 保序回归 （scikit）例子1
 toc: true
 date: 2018-07-13 16:32:13
 ---
+# 需要补充的
+
+- 保序回归是什么？
+- 没怎么看
 
 
+# 保序回归 （scikit）例子1
+
+这个应该是 scikit 例子中的源代码。
 
 
-
-## 相关资料
-
-1. [scikit学习心得——Isotonic Regression](https://blog.csdn.net/qq_14905099/article/details/49908089)
-
-
-
-
-## 需要补充的
-
-* **保序回归是什么？**
-* **没怎么看**
-
-
-
-
-这个应该是 scikit 例子中的源代码
-
-
-
-
-# 完整代码
+## 完整代码
 
 
 
@@ -79,3 +65,10 @@ plt.show()
 
 
 ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180713/6HJ7Jf0glJ.png?imageslim)
+
+
+
+
+# 相关资料
+
+1. [scikit学习心得——Isotonic Regression](https://blog.csdn.net/qq_14905099/article/details/49908089)

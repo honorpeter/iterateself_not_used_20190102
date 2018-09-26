@@ -10,7 +10,6 @@ YOLO，即 You Only Look Once 的缩写，是一个基于卷积神经网络的�
 YOLO v3 是 YOLO 的第 3 个版本，即YOLO、YOLO 9000、YOLO v3，检测效果，更准更强。
 
 
-
 更多细节，可以参考YOLO的官网。
 
 

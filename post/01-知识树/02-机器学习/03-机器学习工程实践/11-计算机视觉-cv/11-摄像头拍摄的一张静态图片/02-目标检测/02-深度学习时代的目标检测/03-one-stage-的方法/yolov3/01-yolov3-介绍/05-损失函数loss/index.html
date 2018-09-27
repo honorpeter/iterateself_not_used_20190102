@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 损失函数LOSS - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第5篇，损失函数Loss 精巧地设计，中心点、宽高、框置信度和类别置信度等4个部分的损失值，这是训练过程的最后一篇。当然还有第6篇，至第n篇，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/05-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0loss/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 损失函数LOSS" />
+<meta property="og:description" content="第5篇，损失函数Loss 精巧地设计，中心点、宽高、框置信度和类别置信度等4个部分的损失值，这是训练过程的最后一篇。当然还有第6篇，至第n篇，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/01-yolov3-%E4%BB%8B%E7%BB%8D/05-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0loss/" /><meta property="article:published_time" content="2018-09-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-09-25T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="05 损失函数LOSS">
+<meta itemprop="description" content="第5篇，损失函数Loss 精巧地设计，中心点、宽高、框置信度和类别置信度等4个部分的损失值，这是训练过程的最后一篇。当然还有第6篇，至第n篇，">
+
+
+<meta itemprop="datePublished" content="2018-09-25T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-25T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="4401">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 损失函数LOSS"/>
+<meta name="twitter:description" content="第5篇，损失函数Loss 精巧地设计，中心点、宽高、框置信度和类别置信度等4个部分的损失值，这是训练过程的最后一篇。当然还有第6篇，至第n篇，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 损失函数LOSS</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-09-25 </span>
+        
+        <span class="more-meta"> 4401 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#第5篇-损失函数loss">第5篇，损失函数Loss</a>
+<ul>
+<li><a href="#1-损失层">1. 损失层</a></li>
+<li><a href="#2-参数">2. 参数</a></li>
+<li><a href="#3-预测数据">3. 预测数据</a></li>
+<li><a href="#4-损失函数">4. 损失函数</a></li>
+<li><a href="#补充">补充</a></li>
+<li><a href="#1-操作符">1. “&hellip;”操作符</a></li>
+<li><a href="#2-遍历数值组合">2. 遍历数值组合</a></li>
+<li><a href="#3-1">3. ::-1</a></li>
+<li><a href="#4-session">4. Session</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="第5篇-损失函数loss">第5篇，损失函数Loss</h1>
+
+<p>精巧地设计，中心点、宽高、框置信度和类别置信度等4个部分的损失值，这是训练过程的最后一篇。当然还有第6篇，至第n篇，毕竟，这是一个完整版 ：）。</p>
+
+<h2 id="1-损失层">1. 损失层</h2>
+
+<p>在模型的训练过程中，不断调整网络中的参数，优化损失函数 loss 的值达到最小，完成模型的训练。在YOLO v3中，损失函数yolo_loss封装自定义Lambda的损失层中，作为模型的最后一层，参于训练。损失层Lambda的输入是已有模型的输出 model_body.output 和真值 y_true，输出是 1 个值，即损失值。</p>
+
+<p>损失层的核心逻辑位于 yolo_loss 中，yolo_loss 除了接收 Lambda 层的输入 model_body.output和 y_true，还接收锚框 anchors、类别数 num_classes 和过滤阈值 ignore_thresh 等3个参数。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">model_loss = Lambda(yolo_loss,
+                    output_shape=(1,), name='yolo_loss',
+                    arguments={'anchors': anchors,
+                               'num_classes': num_classes,
+                               'ignore_thresh': 0.5}
+                    )(model_body.output + y_true)
+</code></pre>
+
+<p>其中，model_body.output是已有模型的预测值，y_true是真实值，两者的格式相同，如下：</p>
+
+<pre><code>model_body: [(?, 13, 13, 18), (?, 26, 26, 18), (?, 52, 52, 18)]
+y_true: [(?, 13, 13, 18), (?, 26, 26, 18), (?, 52, 52, 18)]
+</code></pre>
+
+<p>接着，在yolo_loss方法中，参数是：</p>
+
+<ul>
+<li>args是Lambda层的输入，即model_body.output和y_true的组合；</li>
+<li>anchors是二维数组，结构是(9, 2)，即9个anchor box；</li>
+<li>num_classes是类别数；</li>
+<li>ignore_thresh是过滤阈值；</li>
+<li>print_loss是打印损失函数的开关；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">def yolo_loss(args, anchors, num_classes, ignore_thresh=.5, print_loss=True):
+</code></pre>
+
+<hr />
+
+<h2 id="2-参数">2. 参数</h2>
+
+<p>在损失方法yolo_loss中，设置若干参数：</p>
+
+<ul>
+<li>num_layers：层的数量，是anchors数量的3分之1；</li>
+<li>yolo_outputs和y_true：分离args，前3个是yolo_outputs预测值，后3个是y_true真值；</li>
+<li>anchor_mask：anchor box的索引数组，3个1组倒序排序，678对应13x13，345对应26x26，123对应52x52；即[[6, 7, 8], [3, 4, 5], [0, 1, 2]]；</li>
+<li>input_shape：K.shape(yolo_outputs[0])[1:3]，第1个预测矩阵yolo_outputs[0]的结构（shape）的第1~2位，即(?, 13, 13, 18)中的(13, 13)。再x32，就是YOLO网络的输入尺寸，即(416, 416)，因为在网络中，含有5个步长为(2, 2)的卷积操作，降维32=5^2倍；</li>
+<li>grid_shapes：与input_shape类似，K.shape()[1:3]，以列表的形式，选择3个尺寸的预测图维度，即[(13, 13), (26, 26), (52, 52)]；</li>
+<li>m：第1个预测图的结构的第1位，即K.shape()[0]，输入模型的图片总量，即批次数；</li>
+<li>mf：m的float类型，即K.cast(m, K.dtype())</li>
+<li>loss：损失值为0；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">num_layers = len(anchors) // 3  # default setting
+yolo_outputs = args[:num_layers]
+y_true = args[num_layers:]
+anchor_mask = [[6, 7, 8], [3, 4, 5], [0, 1, 2]] if num_layers == 3 else [[3, 4, 5], [1, 2, 3]]
+# input_shape是输出的尺寸*32, 就是原始的输入尺寸，[1:3]是尺寸的位置，即416x416
+input_shape = K.cast(K.shape(yolo_outputs[0])[1:3] * 32, K.dtype(y_true[0]))
+# 每个网格的尺寸，组成列表
+grid_shapes = [K.cast(K.shape(yolo_outputs[l])[1:3], K.dtype(y_true[0])) for l in range(num_layers)]
+
+m = K.shape(yolo_outputs[0])[0]  # batch size, tensor
+mf = K.cast(m, K.dtype(yolo_outputs[0]))
+
+loss = 0
+</code></pre>
+
+<hr />
+
+<h2 id="3-预测数据">3. 预测数据</h2>
+
+<p>在yolo_head中，将预测图yolo_outputs[l]，拆分为边界框的起始点xy、宽高wh、置信度confidence和类别概率class_probs。输入参数：</p>
+
+<ul>
+<li>yolo_outputs[l]或feats：第l个预测图，如(?, 13, 13, 18)；</li>
+<li>anchors[anchor_mask[l]]或anchors：第l个anchor box，如[(116, 90), (156,198), (373,326)]；</li>
+<li>num_classes：类别数，如1个；</li>
+<li>input_shape：输入图片的尺寸，Tensor，值为(416, 416)；</li>
+<li>calc_loss：计算loss的开关，在计算损失值时，calc_loss打开，为True；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">grid, raw_pred, pred_xy, pred_wh = \
+    yolo_head(yolo_outputs[l], anchors[anchor_mask[l]], num_classes, input_shape, calc_loss=True)
+
+def yolo_head(feats, anchors, num_classes, input_shape, calc_loss=False):
+</code></pre>
+
+<p>接着，统计anchors的数量num_anchors，即3个。将anchors转换为与预测图feats维度相同的Tensor，即anchors_tensor的结构是(1, 1, 1, 3, 2)，即：</p>
+
+<pre><code class="language-python">num_anchors = len(anchors)
+# Reshape to batch, height, width, num_anchors, box_params.
+anchors_tensor = K.reshape(K.constant(anchors), [1, 1, 1, num_anchors, 2])
+</code></pre>
+
+<p>下一步，创建网格grid：</p>
+
+<ul>
+<li>获取网格的尺寸grid_shape，即预测图feats的第1~2位，如13x13；</li>
+<li>grid_y和grid_x用于生成网格grid，通过arange、reshape、tile的组合，创建y轴的0~12的组合grid_y，再创建x轴的0~12的组合grid_x，将两者拼接concatenate，就是grid；</li>
+<li>grid是遍历二元数值组合的数值，结构是(13, 13, 1, 2)；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">grid_shape = K.shape(feats)[1:3]
+grid_shape = K.shape(feats)[1:3]  # height, width
+grid_y = K.tile(K.reshape(K.arange(0, stop=grid_shape[0]), [-1, 1, 1, 1]),
+                [1, grid_shape[1], 1, 1])
+grid_x = K.tile(K.reshape(K.arange(0, stop=grid_shape[1]), [1, -1, 1, 1]),
+                [grid_shape[0], 1, 1, 1])
+grid = K.concatenate([grid_x, grid_y])
+grid = K.cast(grid, K.dtype(feats))
+</code></pre>
+
+<p>下一步，将feats的最后一维展开，将anchors与其他数据（类别数+4个框值+框置信度）分离</p>
+
+<pre><code class="language-python">feats = K.reshape(
+    feats, [-1, grid_shape[0], grid_shape[1], num_anchors, num_classes + 5])
+</code></pre>
+
+<p>下一步，计算起始点xy、宽高wh、框置信度box_confidence和类别置信度box_class_probs：</p>
+
+<ul>
+<li>起始点xy：将feats中xy的值，经过sigmoid归一化，再加上相应的grid的二元组，再除以网格边长，归一化；</li>
+<li>宽高wh：将feats中wh的值，经过exp正值化，再乘以anchors_tensor的anchor box，再除以图片宽高，归一化；</li>
+<li>框置信度box_confidence：将feats中confidence值，经过sigmoid归一化；</li>
+<li>类别置信度box_class_probs：将feats中class_probs值，经过sigmoid归一化；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">box_xy = (K.sigmoid(feats[..., :2]) + grid) / K.cast(grid_shape[::-1], K.dtype(feats))
+box_wh = K.exp(feats[..., 2:4]) * anchors_tensor / K.cast(input_shape[::-1], K.dtype(feats))
+box_confidence = K.sigmoid(feats[..., 4:5])
+box_class_probs = K.sigmoid(feats[..., 5:])
+</code></pre>
+
+<p>其中，xywh的计算公式，tx、ty、tw和th是feats值，而bx、by、bw和bh是输出值，如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/E2Kgb34GCI.png?imageslim" alt="mark" /></p>
+
+<p>框的4个值</p>
+
+<p>这4个值box_xy, box_wh, confidence, class_probs的范围均在0~1之间。</p>
+
+<p>由于计算损失值，calc_loss为True，则返回：</p>
+
+<ul>
+<li>网格grid：结构是(13, 13, 1, 2)，数值为0~12的全遍历二元组；</li>
+<li>预测值feats：经过reshape变换，将18维数据分离出3维anchors，结构是(?, 13, 13, 3, 6)</li>
+<li>box_xy和box_wh归一化的起始点xy和宽高wh，xy的结构是(?, 13, 13, 3, 2)，wh的结构是(?, 13, 13, 3, 2)；box_xy的范围是(0~1)，box_wh的范围是(0~1)；即bx、by、bw、bh计算完成之后，再进行归一化。</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">if calc_loss == True:
+    return grid, feats, box_xy, box_wh
+</code></pre>
+
+<h2 id="4-损失函数">4. 损失函数</h2>
+
+<p>在计算损失值时，循环计算每1层的损失值，累加到一起，即</p>
+
+<pre><code class="language-python">for l in range(num_layers):
+        // ...
+        loss += xy_loss + wh_loss + confidence_loss + class_loss
+</code></pre>
+
+<p>在每个循环体中：</p>
+
+<ul>
+<li>获取物体置信度object_mask，最后1个维度的第4位，第0~3位是框，第4位是物体置信度；</li>
+<li>类别置信度true_class_probs，最后1个维度的第5位；</li>
+</ul>
+
+<p>即：</p>
+
+<pre><code class="language-python">object_mask = y_true[l][..., 4:5]
+true_class_probs = y_true[l][..., 5:]
+</code></pre>
+
+<p>接着，调用yolo_head重构预测图，输出：</p>
+
+<ul>
+<li>网格grid：结构是(13, 13, 1, 2)，数值为0~12的全遍历二元组；</li>
+<li>预测值raw_pred：经过reshape变换，将anchors分离，结构是(?, 13, 13, 3, 6)</li>
+<li>pred_xy和pred_wh归一化的起始点xy和宽高wh，xy的结构是(?, 13, 13, 3, 2)，wh的结构是(?, 13, 13, 3, 2)；</li>
+</ul>
+
+<p>再将xy和wh组合成预测框pred_box，结构是(?, 13, 13, 3, 4)。</p>
+
+<pre><code class="language-python">grid, raw_pred, pred_xy, pred_wh = \
+    yolo_head(yolo_outputs[l], anchors[anchor_mask[l]],
+              num_classes, input_shape, calc_loss=True)
+pred_box = K.concatenate([pred_xy, pred_wh])
+</code></pre>
+
+<p>接着，生成真值数据：</p>
+
+<ul>
+<li>raw_true_xy：在网格中的中心点xy，偏移数据，值的范围是0~1；y_true的第0和1位是中心点xy的相对位置，范围是0~1；</li>
+<li>raw_true_wh：在网络中的wh针对于anchors的比例，再转换为log形式，范围是有正有负；y_true的第2和3位是宽高wh的相对位置，范围是0~1；</li>
+<li>box_loss_scale：计算wh权重，取值范围(1~2)；</li>
+</ul>
+
+<p>实现：</p>
+
+<pre><code class="language-python"># Darknet raw box to calculate loss.
+raw_true_xy = y_true[l][..., :2] * grid_shapes[l][::-1] - grid
+raw_true_wh = K.log(y_true[l][..., 2:4] / anchors[anchor_mask[l]] * input_shape[::-1])  # 1
+raw_true_wh = K.switch(object_mask, raw_true_wh, K.zeros_like(raw_true_wh))  # avoid log(0)=-inf
+box_loss_scale = 2 - y_true[l][..., 2:3] * y_true[l][..., 3:4]  # 2-w*h
+</code></pre>
+
+<p>接着，根据IoU忽略阈值生成ignore_mask，将预测框pred_box和真值框true_box计算IoU，抑制不需要的anchor框的值，即IoU小于最大阈值的anchor框。ignore_mask的shape是(?, ?, ?, 3, 1)，第0位是批次数，第1~2位是特征图尺寸。</p>
+
+<p>实现：</p>
+
+<pre><code class="language-python">ignore_mask = tf.TensorArray(K.dtype(y_true[0]), size=1, dynamic_size=True)
+object_mask_bool = K.cast(object_mask, 'bool')
+
+def loop_body(b, ignore_mask):
+    true_box = tf.boolean_mask(y_true[l][b, ..., 0:4], object_mask_bool[b, ..., 0])
+    iou = box_iou(pred_box[b], true_box)
+    best_iou = K.max(iou, axis=-1)
+    ignore_mask = ignore_mask.write(b, K.cast(best_iou &lt; ignore_thresh, K.dtype(true_box)))
+    return b + 1, ignore_mask
+
+_, ignore_mask = K.control_flow_ops.while_loop(lambda b, *args: b &lt; m, loop_body, [0, ignore_mask])
+ignore_mask = ignore_mask.stack()
+ignore_mask = K.expand_dims(ignore_mask, -1)
+</code></pre>
+
+<p>损失函数：</p>
+
+<ul>
+<li>xy_loss：中心点的损失值。object_mask是y_true的第4位，即是否含有物体，含有是1，不含是0。box_loss_scale的值，与物体框的大小有关，2减去相对面积，值得范围是(1~2)。binary_crossentropy是二值交叉熵。</li>
+<li>wh_loss：宽高的损失值。除此之外，额外乘以系数0.5，平方K.square()。</li>
+<li>confidence_loss：框的损失值。两部分组成，第1部分是存在物体的损失值，第2部分是不存在物体的损失值，其中乘以忽略掩码ignore_mask，忽略预测框中IoU大于阈值的框。</li>
+<li>class_loss：类别损失值。</li>
+<li>将各部分损失值的和，除以均值，累加，作为最终的图片损失值。</li>
+</ul>
+
+<p>细节实现：</p>
+
+<pre><code class="language-python">object_mask = y_true[l][..., 4:5]  # 物体掩码
+box_loss_scale = 2 - y_true[l][..., 2:3] * y_true[l][..., 3:4]  # 框损失比例
+z * -log(sigmoid(x)) + (1 - z) * -log(1 - sigmoid(x))  # 二值交叉熵函数
+iou = box_iou(pred_box[b], true_box)  # 预测框与真正框的IoU
+</code></pre>
+
+<p>损失函数实现：</p>
+
+<pre><code class="language-python">xy_loss = object_mask * box_loss_scale * K.binary_crossentropy(raw_true_xy, raw_pred[..., 0:2],
+                                                               from_logits=True)
+wh_loss = object_mask * box_loss_scale * 0.5 * K.square(raw_true_wh - raw_pred[..., 2:4])
+confidence_loss = object_mask * K.binary_crossentropy(object_mask, raw_pred[..., 4:5], from_logits=True) + \
+                  (1 - object_mask) * K.binary_crossentropy(object_mask, raw_pred[..., 4:5],
+                                                            from_logits=True) * ignore_mask
+class_loss = object_mask * K.binary_crossentropy(true_class_probs, raw_pred[..., 5:], from_logits=True)
+
+xy_loss = K.sum(xy_loss) / mf
+wh_loss = K.sum(wh_loss) / mf
+confidence_loss = K.sum(confidence_loss) / mf
+class_loss = K.sum(class_loss) / mf
+loss += xy_loss + wh_loss + confidence_loss + class_loss
+</code></pre>
+
+<p>YOLO v1的损失函数公式，与v3略有不同，作为参考：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180925/J8K5ijBI3D.png?imageslim" alt="mark" /></p>
+
+<p>Loss</p>
+
+<hr />
+
+<h2 id="补充">补充</h2>
+
+<h2 id="1-操作符">1. “&hellip;”操作符</h2>
+
+<p>在Python中，“&hellip;”(ellipsis)操作符，表示其他维度不变，只操作最前或最后1维；</p>
+
+<pre><code class="language-python">import numpy as np
+
+x = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]])
+&quot;&quot;&quot;[[ 1  2  3  4] [ 5  6  7  8] [ 9 10 11 12]]&quot;&quot;&quot;
+print(x.shape)  # (3, 4)
+y = x[1:2, ...]
+&quot;&quot;&quot;[[5 6 7 8]]&quot;&quot;&quot;
+print(y)
+</code></pre>
+
+<h2 id="2-遍历数值组合">2. 遍历数值组合</h2>
+
+<p>在YOLO v3中，当计算网格值时，需要由相对位置，转换为绝对位置，就是相对值，加上网格的左上角的值，如相对值(0.2, 0.3)在第(1, 1)网格中的绝对值是(1.2, 1.3)。当转换坐标值时，根据坐标点的位置，添加相应的初始值即可。这样，就需要遍历两两的数值组合，如生成0至12的网格矩阵。</p>
+
+<p>通过arange -&gt; reshape -&gt; tile -&gt; concatenate的组合，即可快速完成。</p>
+
+<p>源码：</p>
+
+<pre><code class="language-python">from keras import backend as K
+
+grid_y = K.tile(K.reshape(K.arange(0, stop=3), [-1, 1, 1]), [1, 3, 1])
+grid_x = K.tile(K.reshape(K.arange(0, stop=3), [1, -1, 1]), [3, 1, 1])
+sess = K.get_session()
+
+print(grid_x.shape)  # (3, 3, 1)
+print(grid_y.shape)  # (3, 3, 1)
+
+z = K.concatenate([grid_x, grid_y])
+
+print(z.shape)  # (3, 3, 2)
+print(sess.run(z))
+&quot;&quot;&quot;创建3x3的二维矩阵，遍历全部数组0~2&quot;&quot;&quot;
+</code></pre>
+
+<h2 id="3-1">3. ::-1</h2>
+
+<p>“::-1”是颠倒数组的值，例如：</p>
+
+<pre><code class="language-python">import numpy as np
+
+a = np.array([1, 2, 3, 4, 5])
+print a[::-1]
+&quot;&quot;&quot;[5 4 3 2 1]&quot;&quot;&quot;
+</code></pre>
+
+<h2 id="4-session">4. Session</h2>
+
+<p>在Keras中，使用Session测试验证数据，实现：</p>
+
+<pre><code class="language-python">from keras import backend as K
+
+sess = K.get_session()
+a = K.constant([2, 4])
+b = K.constant([3, 2])
+c = K.square(a - b)
+
+print(sess.run(c))
+</code></pre>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/4L9E4WGSh0hzlD303036bQ">探索 YOLO v3 实现细节 - 第5篇 Loss</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/02-yolov3-%E4%BD%BF%E7%94%A8/01-keras-%E5%AE%9E%E7%8E%B0/04-%E7%9C%9F%E5%80%BC/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 真值</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/02-yolov3-%E4%BD%BF%E7%94%A8/01-keras-%E5%AE%9E%E7%8E%B0/05-%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0loss/">
+            <span class="next-text nav-default">05 损失函数LOSS</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法 序列化二叉树 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="相关资料 1. CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 请实现两个函数，分别用来序列化和反序列化二叉树。这里没有规定序列化的方式。 题目解答 遍历二叉树 其实这道" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E5%BA%8F%E5%88%97%E5%8C%96%E4%BA%8C%E5%8F%89%E6%A0%91/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法 序列化二叉树" />
+<meta property="og:description" content="相关资料 1. CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 请实现两个函数，分别用来序列化和反序列化二叉树。这里没有规定序列化的方式。 题目解答 遍历二叉树 其实这道" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E5%BA%8F%E5%88%97%E5%8C%96%E4%BA%8C%E5%8F%89%E6%A0%91/" /><meta property="article:published_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta itemprop="name" content="算法 序列化二叉树">
+<meta itemprop="description" content="相关资料 1. CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 请实现两个函数，分别用来序列化和反序列化二叉树。这里没有规定序列化的方式。 题目解答 遍历二叉树 其实这道">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="wordCount" content="1136">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法 序列化二叉树"/>
+<meta name="twitter:description" content="相关资料 1. CodingInterviews 需要补充的 aaa INTRODUCTION aaa 题目 题目描述 请实现两个函数，分别用来序列化和反序列化二叉树。这里没有规定序列化的方式。 题目解答 遍历二叉树 其实这道"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法 序列化二叉树</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 1136 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#遍历二叉树">遍历二叉树</a></li>
+<li><a href="#先序方式">先序方式</a></li>
+</ul></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="相关资料">相关资料</h2>
+
+<p>1.</p>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>请实现两个函数，分别用来序列化和反序列化二叉树。这里没有规定序列化的方式。</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="遍历二叉树">遍历二叉树</h2>
+
+<p>其实这道题约定的序列化没有固定的格式，只要你序列化后的结果，再反序列化后与原树相同即可，因此我们可以随意指定自己的格式，比如空节点用$表示，或则#表示，然后遍历采用先序、中序、后序或者层次都可以。</p>
+
+<p>示例程序中采用空结点用#表示，结点与结点用逗号 , 分隔。</p>
+
+<p>选择了合适的遍历算法，那么剩下的问题就是字符串序列和整数权值的相互转换问题，可以参考  <a href="http://106.15.37.116/2018/05/30/c-%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e%e6%95%b0%e5%ad%97%e7%9a%84%e8%bd%ac%e6%8d%a2/">字符串与数字的转换</a> 。</p>
+
+<h2 id="先序方式">先序方式</h2>
+
+<p>用递归实现</p>
+
+<p>序列化二叉树，按照先序遍历二叉树的顺序，先左节点，后右节点，当到‘#’时候，说明左节点或者右节点为NULL，同样反序列二叉树也一个道理，需要注意的是在序列和反序列二叉树的时候，注意字符串与整数的转换，一般字符串转换为整数，用迭代循环实现</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+#include &lt;cstring&gt;
+using namespace std;
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x = 0) :
+        val(x), left(NULL), right(NULL) {
+    }
+};
+
+
+class Solution {
+public:
+    /*  序列化二叉树  */
+    char* Serialize(TreeNode *root) {
+        if (root == NULL) {
+            char *serial = new char[3];
+            strcpy_s(serial, sizeof(char)* 3, &quot;#,&quot;);
+            return serial;
+        }
+        string str;
+        Serialize(root, str);
+        const char  *c_str = str.c_str();
+        char        *serial = new char[str.length() + 1];
+
+        strcpy_s(serial, sizeof(char)*(str.length() + 1), c_str);
+        return serial;
+    }
+
+    TreeNode* Deserialize(char *str) {
+        if (str == NULL || *str == '\0') {
+            return NULL;
+        }
+        int index = 0;
+        return Deserialize(str, index);
+    }
+
+private:
+    void Serialize(TreeNode *root, string &amp;str) {
+        if (root == NULL) {
+            str += &quot;#,&quot;;
+            return;
+        }
+        /*  先序遍历的方式, 序列化二叉树  */
+        str += (toString(root-&gt;val) + &quot;,&quot;);
+        Serialize(root-&gt;left, str);
+        Serialize(root-&gt;right, str);
+    }
+
+
+    /*  反序列化二叉树
+    *  将一个序列化的字符串转换成二叉树  */
+    TreeNode* Deserialize(char *str, int &amp;index) {
+        if (str[index] == '#') {
+            index += 2;
+            return NULL;
+        }
+
+        /*  获取到节点的数字权值  */
+        int num = 0;
+        while (str[index] != ',' &amp;&amp; str[index] != '\0') {
+            num = num * 10 + (str[index] - '0');
+            index++;
+        }
+        index++;
+
+        TreeNode *root = new TreeNode(num);
+        root-&gt;left = Deserialize(str, index);
+        root-&gt;right = Deserialize(str, index);
+
+        return root;
+    }
+    string toString(int num) {
+        stringstream ss;
+        ss &lt;&lt; num;
+        return ss.str();
+    }
+};
+
+
+int main() {
+    TreeNode tree[7];
+    tree[0].val = 8;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+    tree[1].val = 6;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+    tree[2].val = 10;
+    tree[2].left = &amp;tree[5];
+    tree[2].right = &amp;tree[6];
+    tree[3].val = 5;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+    tree[5].val = 9;
+    tree[5].left = NULL;
+    tree[5].right = NULL;
+    tree[6].val = 11;
+    tree[6].left = NULL;
+    tree[6].right = NULL;
+
+    Solution solu;
+    cout &lt;&lt; solu.Serialize(tree) &lt;&lt; endl;
+    cout &lt;&lt; solu.Serialize(solu.Deserialize(solu.Serialize(tree))) &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>8,6,5,#,#,7,#,#,10,9,#,#,11,#,#,
+8,6,5,#,#,7,#,#,10,9,#,#,11,#,#,
+</code></pre>
+
+<p>示例程序中将整数转换为字符串使用了stringstream, 当然我们可以充分的使用stringstream</p>
+
+<p>来完成序列化的读取, 如下所示：<strong>没看，要看下。</strong></p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+#include &lt;cstring&gt;
+using namespace std;
+
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x = 0) :
+        val(x), left(NULL), right(NULL) {
+    }
+};
+
+#define DELIMITERS  &quot; &quot;
+class Solution {
+    /*  先序遍历  */
+    void PreOrder(TreeNode *node, stringstream &amp;out) {
+        if (node == NULL) {
+            out &lt;&lt; &quot;#&quot; &lt;&lt; DELIMITERS;
+            return;
+        }
+        out &lt;&lt; node-&gt;val &lt;&lt; DELIMITERS;
+        PreOrder(node-&gt;left, out);
+        PreOrder(node-&gt;right, out);
+    }
+
+    /*   从字符流in中读取出数字num
+    *   成功返回true
+    *   失败返回false  */
+    bool GetNumber(stringstream &amp;in, int &amp;number) {
+        char buf[20];
+
+        /* 这里会有个问题, 只能以空格或者换行符分割
+        * 然后直接in &gt;&gt;buf读入单个节点的数据 */
+        in &gt;&gt; buf;
+        if (buf[0] == '#') {
+            return false;
+        }
+        number = atoi(buf);
+        return true;
+    }
+
+    TreeNode* Construct(stringstream &amp;in) {
+        int val;
+        if (GetNumber(in, val)) {
+            TreeNode *node = new TreeNode(val);
+            node-&gt;left = Construct(in);
+            node-&gt;right = Construct(in);
+            return node;
+        }
+        return NULL;
+    }
+
+public:
+
+    char* Serialize(TreeNode *root) {
+        stringstream ss;
+
+        PreOrder(root, ss);
+        const char *c_str = ss.str().c_str();
+        char *serial = new char[ss.str().length() + 1];
+        strcpy(serial, c_str);
+        return serial;
+    }
+    TreeNode* Deserialize(char *c_str) {
+        if (!c_str) return NULL;
+        string str(c_str);
+        stringstream ss(str);
+        return Construct(ss);
+    }
+};
+
+
+int main() {
+    TreeNode tree[7];
+    tree[0].val = 8;
+    tree[0].left = &amp;tree[1];
+    tree[0].right = &amp;tree[2];
+    tree[1].val = 6;
+    tree[1].left = &amp;tree[3];
+    tree[1].right = &amp;tree[4];
+    tree[2].val = 10;
+    tree[2].left = &amp;tree[5];
+    tree[2].right = &amp;tree[6];
+    tree[3].val = 5;
+    tree[3].left = NULL;
+    tree[3].right = NULL;
+    tree[4].val = 7;
+    tree[4].left = NULL;
+    tree[4].right = NULL;
+    tree[5].val = 9;
+    tree[5].left = NULL;
+    tree[5].right = NULL;
+    tree[6].val = 11;
+    tree[6].left = NULL;
+    tree[6].right = NULL;
+
+    Solution solu;
+    cout &lt;&lt; solu.Serialize(tree) &lt;&lt; endl;
+    cout &lt;&lt; solu.Serialize(solu.Deserialize(solu.Serialize(tree))) &lt;&lt; endl;
+    return 0;
+}
+</code></pre>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E5%AF%B9%E7%A7%B0%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法 对称的二叉树</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%8A%8A%E4%BA%8C%E5%8F%89%E6%A0%91%E6%89%93%E5%8D%B0%E6%88%90%E5%A4%9A%E8%A1%8C/">
+            <span class="next-text nav-default">算法 把二叉树打印成多行</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

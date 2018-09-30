@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法 把字符串转换成整数 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="相关资料 1. CodingInterviews 需要补充的 对这种判断是否 OVER_FLOW 的要总结下。 而且，为什么返回之前还要对范围进行限定？ INTRODUCTION aaa 题目 题目描述 将一个字符串转换成一个整数，要求不" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%8A%8A%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%88%90%E6%95%B4%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法 把字符串转换成整数" />
+<meta property="og:description" content="相关资料 1. CodingInterviews 需要补充的 对这种判断是否 OVER_FLOW 的要总结下。 而且，为什么返回之前还要对范围进行限定？ INTRODUCTION aaa 题目 题目描述 将一个字符串转换成一个整数，要求不" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%8A%8A%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%88%90%E6%95%B4%E6%95%B0/" /><meta property="article:published_time" content="2018-06-11T08:15:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:15:00&#43;00:00"/>
+<meta itemprop="name" content="算法 把字符串转换成整数">
+<meta itemprop="description" content="相关资料 1. CodingInterviews 需要补充的 对这种判断是否 OVER_FLOW 的要总结下。 而且，为什么返回之前还要对范围进行限定？ INTRODUCTION aaa 题目 题目描述 将一个字符串转换成一个整数，要求不">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:15:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:15:00&#43;00:00" />
+<meta itemprop="wordCount" content="922">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法 把字符串转换成整数"/>
+<meta name="twitter:description" content="相关资料 1. CodingInterviews 需要补充的 对这种判断是否 OVER_FLOW 的要总结下。 而且，为什么返回之前还要对范围进行限定？ INTRODUCTION aaa 题目 题目描述 将一个字符串转换成一个整数，要求不"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法 把字符串转换成整数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 922 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+<li><a href="#样例输入"><strong>样例输入</strong></a></li>
+<li><a href="#样例输出"><strong>样例输出</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a></li>
+<li><a href="#comment">COMMENT</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="相关资料">相关资料</h2>
+
+<p>1.</p>
+
+<p><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></p>
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><p><strong>对这种判断是否 OVER_FLOW 的要总结下。</strong></p></li>
+
+<li><p><strong>而且，为什么返回之前还要对范围进行限定？</strong></p></li>
+</ul>
+
+<hr />
+
+<h1 id="introduction">INTRODUCTION</h1>
+
+<ul>
+<li>aaa</li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>将一个字符串转换成一个整数，要求不能使用字符串转换整数的库函数。 数值为 0 或者字符串不是一个合法的数值则返回0</p>
+
+<p>字符串包括数字字母符号，可以为空。</p>
+
+<h2 id="样例输入"><strong>样例输入</strong></h2>
+
+<ul>
+<li><p>1a33</p></li>
+
+<li><p>-2147483648</p></li>
+</ul>
+
+<h2 id="样例输出"><strong>样例输出</strong></h2>
+
+<ul>
+<li><p>0</p></li>
+
+<li><p>-2147483648</p></li>
+</ul>
+
+<p>##</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<p>其实，看到这个题目，感觉就可以这样解：</p>
+
+<ul>
+<li><p>先检查一下每个字符是不是数字或者是正负号，如果不是，那么输出0</p></li>
+
+<li><p>然后再把每一位单独拿出来，计算减去 &ldquo;0&rdquo; 之后的值，作为哪一位的权重，然后加起来之后，设置符号就行了。</p></li>
+</ul>
+
+<p>不过，需要注意的是：</p>
+
+<ul>
+<li><p>要排除前导的一些空白字符</p></li>
+
+<li><p>数字前面可能有符号位 +/- 的，要进行处理</p></li>
+
+<li><p>overflow 的问题</p>
+
+<ul>
+<li><p>实际上，不管我们的 value 用什么保存，long,long long，他们都是有表示范围的，因此当字符串过长时都会溢出，溢出后可能会发生截断，或者甚至读取成一个负数，这样我们循环结束后再判断就不可行。</p></li>
+
+<li><p>因此，要在循环的过程中，只要一发生溢出就结束。</p></li>
+</ul></li>
+</ul>
+
+<p>OK，完整代码如下：</p>
+
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+class Solution {
+public:
+    int StrToInt(string str) {
+        string::iterator pstr = str.begin();
+        //  排除前导的空格
+        while (*pstr == ' ') {
+            pstr++;
+        }
+
+        //  判断符号位+ -
+        bool isMinus = false;
+        if (*pstr == '+') {
+            pstr++;
+        }
+        else if (*pstr == '-') {
+            pstr++;
+            isMinus = true;
+        }
+
+        long long int value = 0;
+        for (; pstr != str.end(); pstr++) {
+            if ('0' &lt;= *pstr &amp;&amp; *pstr &lt;= '9') {
+                value *= 10;
+                value += *pstr - '0';
+                cout &lt;&lt; &quot;current value = &quot; &lt;&lt; value &lt;&lt; endl;
+            }
+            else {
+                break;//存在除了0~9以外的字符
+            }
+
+            // 这个地方的判断没有理解？为什么这样是可以的？比如说，溢出之后符号不会改变吗？对于溢出要总结一下
+            //  解决OVER_FLOW的问题
+            //  INT_MAX     2147483647
+            //  INT_MIN     -2147483648  minus = true
+            if ((isMinus == true &amp;&amp; value &gt; (unsigned long)(INT_MAX)+1)     //  负数绝对值最大为INT_MAX + 1
+                || (isMinus == false &amp;&amp; value &gt; INT_MAX))                         //  正数最大值为INT_MAX
+            {
+                cout &lt;&lt; value &lt;&lt; &quot;, &quot; &lt;&lt; INT_MAX + 1 &lt;&lt; endl;
+                cout &lt;&lt; &quot;too max than int&quot; &lt;&lt; endl;
+                break;
+            }
+        }
+        if (pstr != str.end()) {
+            return 0;//说明是break出来的
+        }
+        else {
+            if (isMinus == true) {
+                value = -value;
+            }
+            //为什么这个地方还要对范围限定一下？
+            if (value &gt;= INT_MAX) {
+                value = INT_MAX;
+            }
+            else if (value &lt;= INT_MIN) {
+                value = INT_MIN;
+            }
+            return (int)value;
+        }
+    }
+};
+
+
+int main(void) {
+    Solution solu;
+    cout &lt;&lt; &quot;INT_MAX &quot; &lt;&lt; INT_MAX &lt;&lt; endl;
+    cout &lt;&lt; &quot;INT_MIN &quot; &lt;&lt; INT_MIN &lt;&lt; endl;
+    cout &lt;&lt; solu.StrToInt(&quot;1a33&quot;) &lt;&lt; endl;
+    cout &lt;&lt; endl;
+    cout &lt;&lt; solu.StrToInt(&quot;-2147483648&quot;) &lt;&lt; endl;
+    return EXIT_SUCCESS;//没想到还有 EXIT_SUCCESS
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>INT_MAX 2147483647
+INT_MIN -2147483648
+current value = 1
+0
+
+current value = 2
+current value = 21
+current value = 214
+current value = 2147
+current value = 21474
+current value = 214748
+current value = 2147483
+current value = 21474836
+current value = 214748364
+current value = 2147483648
+-2147483648
+</code></pre>
+
+<p><strong>上面的代码中的 判断 OVER_FLOW 的地方没看懂，要对这种判断是否 OVER_FLOW 的要总结下。</strong></p>
+
+<p><strong>而且，为什么返回之前还要对范围进行限定？</strong></p>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%89%91%E5%85%8B%E7%89%8C%E9%A1%BA%E5%AD%90/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法 扑克牌顺子</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%95%B0%E7%BB%84%E4%B8%AD%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/">
+            <span class="next-text nav-default">算法 数组中只出现一次的数字</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

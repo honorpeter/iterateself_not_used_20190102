@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法 滑动窗口的最大值 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充 看来每个基本的算法题都是有可能在某个场景下被用到的。以后在整理算法题的时候最好把它可能在什么场景下用到总结一下。 题目 题目描述 给定一个" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法 滑动窗口的最大值" />
+<meta property="og:description" content="需要补充 看来每个基本的算法题都是有可能在某个场景下被用到的。以后在整理算法题的时候最好把它可能在什么场景下用到总结一下。 题目 题目描述 给定一个" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/" /><meta property="article:published_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:15:01&#43;00:00"/>
+<meta itemprop="name" content="算法 滑动窗口的最大值">
+<meta itemprop="description" content="需要补充 看来每个基本的算法题都是有可能在某个场景下被用到的。以后在整理算法题的时候最好把它可能在什么场景下用到总结一下。 题目 题目描述 给定一个">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:15:01&#43;00:00" />
+<meta itemprop="wordCount" content="3270">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法 滑动窗口的最大值"/>
+<meta name="twitter:description" content="需要补充 看来每个基本的算法题都是有可能在某个场景下被用到的。以后在整理算法题的时候最好把它可能在什么场景下用到总结一下。 题目 题目描述 给定一个"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法 滑动窗口的最大值</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 3270 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充">需要补充</a></li>
+<li><a href="#题目">题目</a>
+<ul>
+<li><a href="#题目描述"><strong>题目描述</strong></a></li>
+</ul></li>
+<li><a href="#题目解答">题目解答</a>
+<ul>
+<li><a href="#暴力解法">暴力解法</a></li>
+<li><a href="#转化成队列中求最大值">转化成队列中求最大值</a>
+<ul>
+<li><a href="#最大堆的方法">最大堆的方法</a></li>
+<li><a href="#两个栈的方法">两个栈的方法</a></li>
+</ul></li>
+<li><a href="#单调队列">单调队列</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充">需要补充</h1>
+
+<ul>
+<li><strong>看来每个基本的算法题都是有可能在某个场景下被用到的。以后在整理算法题的时候最好把它可能在什么场景下用到总结一下。</strong></li>
+</ul>
+
+<h1 id="题目">题目</h1>
+
+<h2 id="题目描述"><strong>题目描述</strong></h2>
+
+<p>给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值</p>
+
+<p>例如，如果输入数组 {2,3,4,2,6,2,5,1} 及滑动窗口的大小 3，那么针对数组 {2,3,4,2,6,2,5,1} 的滑动窗口有以下6个：</p>
+
+<ul>
+<li><p>{[2,3,4],2,6,2,5,1}，最大值4</p></li>
+
+<li><p>{2,[3,4,2],6,2,5,1}，最大值4</p></li>
+
+<li><p>{2,3,[4,2,6],2,5,1}，最大值6</p></li>
+
+<li><p>{2,3,4,[2,6,2],5,1}，最大值6</p></li>
+
+<li><p>{2,3,4,2,[6,2,5],1}，最大值6</p></li>
+
+<li><p>{2,3,4,2,6,[2,5,1]}，最大值5</p></li>
+</ul>
+
+<p>一共存在6个滑动窗口，他们的最大值分别为 {4,4,6,6,6,5} 。</p>
+
+<h1 id="题目解答">题目解答</h1>
+
+<h2 id="暴力解法">暴力解法</h2>
+
+<p>如果采用蛮力法，这个问题似乎不难解决：可以扫描每一个滑动窗口的所有数字并找出其中的最大值。</p>
+
+<p>如果滑动窗口的大小为 k，需要 O(k) 时间才能找出滑动窗口里的最大值 。对于长度为 n 的输入数组，这个算法总的时间复杂度是 O(nk) 。</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+class Solution {
+public:
+    vector&lt;int&gt; maxInWindows(const vector&lt;int&gt;&amp; num, unsigned int size) {
+        vector&lt;int&gt; res;//用来存放最大值
+        if (num.size() == 0 || size == 0) {
+            return res;
+        }
+        //直接进行遍历
+        for (int start = 0; start &lt;= (int)(num.size() - size); start++) {
+            int end = start + size;
+            int max = INT_MIN;
+            //把窗口内的最大值存放起来
+            for (int index = start; index &lt; end; index++) {
+                if (num[index] &gt; max) {
+                    max = num[index];
+                }
+            }
+            res.push_back(max);
+        }
+        return res;
+    }
+};
+
+int main() {
+    int array[] = { 2, 3, 4, 2, 6, 2, 5, 1 };
+    vector&lt;int&gt; vec(array, array + 8);
+
+    Solution solu;
+    vector&lt;int&gt; res = solu.maxInWindows(vec, 3);
+    copy(res.begin(), res.end(), ostream_iterator&lt;int&gt;(cout, &quot; &quot;));//没想到还有这种操作
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>4 4 6 6 6 5
+</code></pre>
+
+<h2 id="转化成队列中求最大值">转化成队列中求最大值</h2>
+
+<p>实际上，一个滑动窗口可以看成是一个队列 queue 。因为：当窗口滑动时，处于窗口的第一个数字被删除，同时在窗口的末尾添加一个新的数字。这符合队列的先进先出特性。因此，如果可以从队列中找出队列的最大数，那么这个问题也就解决了。</p>
+
+<p>OK，怎么从队列中求出最大值呢？</p>
+
+<h3 id="最大堆的方法">最大堆的方法</h3>
+
+<p>我们可以把这个窗口中的数存放到一个大顶堆里面，这样有新的数进来的时候，把数加进来，同时把失效的数字去掉（随着窗口的滑动，有些数字会失效）。</p>
+
+<p>这样每次插入和删除数字的时候时间复杂度是 O(LogN)，查找最大值的操作复杂度为 O(1)。</p>
+
+<p>这个堆用的是：priority_queue</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+class Solution {
+
+    typedef pair&lt;int, int&gt; IntPair;
+
+public:
+    vector&lt;int&gt; maxInWindows(const vector&lt;int&gt; &amp;num, unsigned int size) {
+        vector&lt;int&gt; result;
+        priority_queue&lt;IntPair&gt; Q;//竟然还有这种 queue
+        if (num.size() &lt; size || size &lt; 1) {
+            return result;
+        }
+        //把开始的几个数据做成 IntPair 存放到队列中 ，优先级是 num[i] 。
+        for (int i = 0; i &lt; size - 1; i++) {
+            Q.push(IntPair(num[i], i));
+        }
+        //开始依次往后
+        for (int i = size - 1; i &lt; num.size(); i++) {
+            //把新数据加入到堆里面
+            Q.push(IntPair(num[i], i));
+            IntPair p = Q.top();
+            //把过期的数据去掉
+            while (p.second &lt; i - (size - 1)) {
+                Q.pop();
+                p = Q.top();
+            }
+            //把当前窗口的最大值存放起来
+            result.push_back(p.first);
+        }
+        return result;
+    }
+};
+
+int main() {
+    int array[] = { 2, 3, 4, 2, 6, 2, 5, 1 };
+    vector&lt;int&gt; vec(array, array + 8);
+
+    Solution solu;
+    vector&lt;int&gt; res = solu.maxInWindows(vec, 3);
+    copy(res.begin(), res.end(), ostream_iterator&lt;int&gt;(cout, &quot; &quot;));//没想到还有这种操作
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>4 4 6 6 6 5
+</code></pre>
+
+<p>这个的确是个好方法。</p>
+
+<p><strong>priority_queue 和 pair 的操作之前没有见到过，还是要总结下的。</strong></p>
+
+<p>OK，可见，堆是一个可以快速求出这个窗口对应的队列的最大值的方法，那么还有什么别的方法吗？</p>
+
+<h3 id="两个栈的方法">两个栈的方法</h3>
+
+<p>之前，我们遇到两个算法问题：</p>
+
+<ul>
+<li>一个是：实现一个栈，这个栈要能在 O(1) 的复杂度找到最小值。[包含min函数的栈]</li>
+<li>一个是：使用两个 stack  来实现一个 queue 的功能。 [用两个栈实现队列]</li>
+</ul>
+
+<p>OK，既然我们可以用两个stack实现一个队列，而且这两个stack都可以在O(1)的时间内找到最大值，那么我就可以用在这道题目中。</p>
+
+<p>我们用两个栈组成的队列来存放窗口的数字，由于我们存放和删除item都是O(1)，而查找对大值也是 O(1) ，因此整体是 O(3) 。</p>
+
+<p>比最大堆的 O(LogN) 快了不少。<strong>利害的。</strong></p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+#define MAX 100
+
+
+//自定义的stack
+class Stack {
+private:
+    int stackItem[MAX];
+    int link2NextMaxValueIndex[MAX];//这里面的[i] 存放的是 stackItem[i] 在添加进来之前 stackItem里面的最大值的index。
+    int stackTop;//top 对应的 index
+    int maxValueIndex;//用来记录最大值对应的 index
+public:
+    Stack() : stackTop(-1), maxValueIndex(-1) {
+    }
+
+    int size() {
+        return stackTop + 1;
+    }
+    int empty() {
+        return stackTop &lt; 0 ? 1 : 0;
+    }
+
+    //查找当前 stack的最大值
+    int max() {
+        if (maxValueIndex &gt;= 0)
+            return stackItem[maxValueIndex];
+        else
+            return -100;//为什么不存在 max 就返回 -100？
+    }
+    void push(int val) {
+        ++stackTop;
+        if (stackTop == MAX) {
+            cout &lt;&lt; &quot;The stack has been full!&quot; &lt;&lt; endl;
+            return;
+        }
+        else {
+            stackItem[stackTop] = val;
+            if (max() &lt; val) {
+                link2NextMaxValueIndex[stackTop] = maxValueIndex;//将此时的index存放到link2NextMaxValueIndex的对应的位置，这样，当 stackTop从 stackItem里面被pop出去的时候，我能根据那个之后的stackTop找到我pop出去之后此时的最大值的index。
+                maxValueIndex = stackTop;//更新我的最大值的index
+            }
+            else
+                link2NextMaxValueIndex[stackTop] = -1;//这个时候说明，如果这个压进来的val到时候被pop出去了，那么我的maxValueIndex不变，因为val并不是最大值。
+        }
+    }
+
+    int pop() {
+        int ret;
+        if (stackTop == -1) {
+            cout &lt;&lt; &quot;The stack is empty!&quot; &lt;&lt; endl;
+            return -1;
+        }
+        else {
+            ret = stackItem[stackTop];
+            if (stackTop == maxValueIndex) {
+                //这个时候要pop的这个是最大值，因此要把次大值准备好。
+                maxValueIndex = link2NextMaxValueIndex[stackTop];
+            }
+            --stackTop;
+            return ret;
+        }
+    }
+
+
+};
+
+
+class Queue {
+private:
+    Stack stackIn;//在入队的时候，直接把数据存到stackIn里面
+    Stack stackOut;//一个在队列出的时候，把stackIn内容放到stackOut，然后出
+public:
+    int size() {
+        return stackIn.size() + stackOut.size();
+    }
+    int max() {
+        //两个stack都是很方便查找最大值的，都是O(1)
+        return std::max(stackIn.max(), stackOut.max());
+    }
+    void enQueue(int val) {
+        stackIn.push(val);//直接压入 stackIn
+    }
+    int deQueue() {
+        if (stackOut.empty() &amp;&amp; !stackIn.empty()) {
+            //把stackIn里面的内容都压入 stackOut里面
+            while (!stackIn.empty()) {
+                stackOut.push(stackIn.pop());
+            }
+        }
+        //然后从stackOut里面 pop出去
+        return stackOut.pop();//从Stack里面，我们可以知道，如果stackOut是空的，那么pop出来的就是-1 。
+    }
+};
+
+class Solution {
+public:
+    vector&lt;int&gt; maxInWindows(const vector&lt;int&gt;&amp; num, unsigned int size) {
+        unsigned int    length = num.size();
+        vector&lt;int&gt;     res;
+        if (length == 0 || size == 0 || length &lt; size) {
+            return res;
+        }
+
+        Queue  que;
+        for (int i = 0; i &lt; num.size(); i++) {
+            if (que.size() &lt; size) {
+                //开始的时候一直是enQueue
+                que.enQueue(num[i]);
+            }
+            else {
+                //将最大值存放到res里面
+                res.push_back(que.max());
+                //把新的值enQueue进来，把就得值deQueue出去。
+                que.enQueue(num[i]);
+                que.deQueue();
+            }
+        }
+        if (que.size() == size) {
+            res.push_back(que.max());
+        }
+        return res;
+    }
+};
+
+
+int main() {
+    int array[] = { 2, 3, 4, 2, 6, 2, 5, 1 };
+    vector&lt;int&gt; vec(array, array + 8);
+    Solution solu;
+    vector&lt;int&gt; res = solu.maxInWindows(vec, 3);
+    copy(res.begin(), res.end(), ostream_iterator&lt;int&gt;(cout, &quot; &quot;));//没想到还有这种操作
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>4 4 6 6 6 5
+</code></pre>
+
+<p><strong>利害呀，看来每个基本的算法题都是有可能在某个场景下被用到的。以后在整理算法题的时候最好把它可能在什么场景下用到总结一下。</strong></p>
+
+<h2 id="单调队列">单调队列</h2>
+
+<p>我们使用一个双端队列来存放滑动窗口对应的值的index，但是这个双端队列里面的index对应的数值是从大到小排序的。</p>
+
+<p>具体如下：</p>
+
+<p>对于一个新来的元素 k，我们将其与双端队列中的元素相比较</p>
+
+<ul>
+<li><p>队列中前面比 k 小的数的 index 直接移出队列（因为不再可能成为后面滑动窗口的最大值了）。</p></li>
+
+<li><p>前面比 k 大的 X，比较两者下标，判断 X 是否已不在窗口之内，如果不在就直接移出队列。</p></li>
+</ul>
+
+<p>这样，队列的第一个元素就是滑动窗口中的最大值的index。</p>
+
+<p>看代码更清晰一些：</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+
+class Solution {
+public:
+    vector&lt;int&gt; maxInWindows(const vector&lt;int&gt;&amp; num, unsigned int size) {
+        unsigned int length = num.size();
+        vector&lt;int&gt; result;
+        if (length == 0 || size == 0 || length &lt; size) {
+            return result;
+        }
+
+        deque&lt;int&gt; indexQueue;
+
+        //第一个窗口的处理比较简单, 直接找到最大的那个即可
+        for (unsigned int i = 0;i &lt; size;i++) {
+            //如果当前元素num[i] 大于 队列最后的index指向的值，那么直接删除队尾的元素
+            while (indexQueue.empty() != true &amp;&amp; num[i] &gt;= num[indexQueue.back()]) {
+                indexQueue.pop_back();
+            }
+            //  将当前元素的下标压入队列中
+            indexQueue.push_back(i);
+        }
+        //这时候 indexQueue 里面的值都是从大到小排的数的 index，因为只要前面的数比较小，后面来一个大数就把它前面的小的数都干掉了。因此，最后，虽然前size个值不是都在 indexQueue里面，但是 indexQueue里面一定是从大到小的数的 index。
+
+
+        //对于后续的滑动窗口
+        for (unsigned int i = size; i &lt; length; i++) {
+            //把最大值放到result里面
+            result.push_back(num[indexQueue.front()]);
+            //还是 队尾的元素如果不够大就删除，这样可以确保indexQueue的第一个元素始终是最大值的index
+            while (indexQueue.empty() != true&amp;&amp; num[i] &gt;= num[indexQueue.back()]) {
+                indexQueue.pop_back();
+            }
+            //前面的index失效了，也删除
+            if (indexQueue.empty() != true&amp;&amp; indexQueue.front() &lt; (int)(i - size + 1)) {
+                indexQueue.pop_front();
+            }
+            //然后把当前的index push 进去
+            indexQueue.push_back(i);
+        }
+        result.push_back(num[indexQueue.front()]);//最后还有一个要添加进去，因为在 i=3 的时候才开始 push 第一个
+        return result;
+    }
+};
+
+
+int main() {
+    int array[] = { 2, 3, 4, 2, 6, 2, 5, 1 };
+    vector&lt;int&gt; vec(array, array + 8);
+    Solution solu;
+    vector&lt;int&gt; res = solu.maxInWindows(vec, 3);
+    copy(res.begin(), res.end(), ostream_iterator&lt;int&gt;(cout, &quot; &quot;));//没想到还有这种操作
+    return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>4 4 6 6 6 5
+</code></pre>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%8C%89%E4%B9%8B%E5%AD%97%E5%BD%A2%E9%A1%BA%E5%BA%8F%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">算法 按之字形顺序打印二叉树</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E8%A1%A8%E7%A4%BA%E6%95%B0%E5%80%BC%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+            <span class="next-text nav-default">算法 表示数值的字符串</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>算法 替换空格 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 C&#43;&#43;中的string是不是可变长度的？ 题目描述 请实现一个函数，将一个字符串中的空格替换成“%20”。 例如，当字符串为 We Are Happy 。则经" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="算法 替换空格" />
+<meta property="og:description" content="需要补充的 C&#43;&#43;中的string是不是可变长度的？ 题目描述 请实现一个函数，将一个字符串中的空格替换成“%20”。 例如，当字符串为 We Are Happy 。则经" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/04-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E5%89%91%E6%8C%87offer%E9%87%8C%E9%9D%A2%E7%9A%84/%E7%AE%97%E6%B3%95-%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC/" /><meta property="article:published_time" content="2018-06-27T08:26:07&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-27T08:26:07&#43;00:00"/>
+<meta itemprop="name" content="算法 替换空格">
+<meta itemprop="description" content="需要补充的 C&#43;&#43;中的string是不是可变长度的？ 题目描述 请实现一个函数，将一个字符串中的空格替换成“%20”。 例如，当字符串为 We Are Happy 。则经">
+
+
+<meta itemprop="datePublished" content="2018-06-27T08:26:07&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-27T08:26:07&#43;00:00" />
+<meta itemprop="wordCount" content="1044">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="算法 替换空格"/>
+<meta name="twitter:description" content="需要补充的 C&#43;&#43;中的string是不是可变长度的？ 题目描述 请实现一个函数，将一个字符串中的空格替换成“%20”。 例如，当字符串为 We Are Happy 。则经"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">算法 替换空格</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-27 </span>
+        
+        <span class="more-meta"> 1044 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#题目描述">题目描述</a></li>
+<li><a href="#问题解决">问题解决</a>
+<ul>
+<li><a href="#最粗暴的-新开数组-从前向后替换">最粗暴的：新开数组，从前向后替换</a></li>
+<li><a href="#比较暴力的从后往前替换">比较暴力的从后往前替换</a></li>
+<li><a href="#其实我们可以一开始统计一下空格数量">其实我们可以一开始统计一下空格数量</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>C++中的string是不是可变长度的？</strong></li>
+</ul>
+
+<h1 id="题目描述">题目描述</h1>
+
+<p>请实现一个函数，将一个字符串中的空格替换成“%20”。 例如，当字符串为 We Are Happy 。则经过替换之后的字符串为 We%20Are%20Happy 。</p>
+
+<h1 id="问题解决">问题解决</h1>
+
+<h2 id="最粗暴的-新开数组-从前向后替换">最粗暴的：新开数组，从前向后替换</h2>
+
+<p>如果不考虑在原来的字符串上替换的话, 那么我们直接再开一个数组，从前往后依次赋值，遇见空格，就填上%20, 否则就填当前字符。</p>
+
+<p>但是这个肯定不是面试官期待的</p>
+
+<p>那么怎么在原字符串上进行高效的替换呢？</p>
+
+<h2 id="比较暴力的从后往前替换">比较暴力的从后往前替换</h2>
+
+<p>最原始的方法，我们遍历一遍字符串，对字符中每一个空格，都用%20来替换， 由于用%20替换空格会导致字符串长度的增加，因此需要注意</p>
+
+<ul>
+<li>从后往前遍历字符串</li>
+<li>每找到一个空格，需要将<code>' '</code>后面的字符串依次后移两位，预留出%20的空间</li>
+</ul>
+
+<p>代码如下：</p>
+
+<pre><code class="language-cpp">#include &quot;stdafx.h&quot;
+#include &lt;iostream&gt;
+using namespace std;
+
+
+class Solution
+{
+public:
+	void replaceSpace(char *str, int length)
+	{
+		int i = length - 1, j;
+		int len = length;
+
+
+		for (i = length - 1; i &gt;= 0; i--)//  从后往前遍历
+		{
+
+			if (str[i] == ' ')
+			{
+				//  从空格变成%20长度增加了2
+				len += 2;
+
+				for (j = len - 1; j &gt; i + 2; j--)
+				{
+					str[j] = str[j - 2];
+				}
+				str[j--] = '0';
+				str[j--] = '2';
+				str[j--] = '%';
+			}
+			cout &lt;&lt;str &lt;&lt;endl;
+		}
+		str[len] = '\0';
+	}
+};
+
+
+int main()
+{
+	char str[16 + 1] = &quot;a b c d&quot;;
+
+	Solution solu;
+	solu.replaceSpace(str, 10);
+	cout &lt;&lt; str &lt;&lt; endl;
+
+	return 0;
+}
+</code></pre>
+
+<p>注：上述代码中，原文是：str[10+1]，报错： Stack around the variable &lsquo;str&rsquo; was corrupted。改为str[16+1] 后OK。<strong>但是如果一开始给你的str就是这么短怎么办？怎么增长？</strong></p>
+
+<p>输出：</p>
+
+<pre><code>a b c d
+a b c d
+a b c d
+a b c d
+a b c%20d
+a b c%20d
+a b%20c%20d
+a b%20c%20d
+a%20b%20c%20d
+a%20b%20c%20d
+a%20b%20c%20d
+</code></pre>
+
+<p>可见，可以在每次添加 %20 之后，i 可以多减几次。</p>
+
+<h2 id="其实我们可以一开始统计一下空格数量">其实我们可以一开始统计一下空格数量</h2>
+
+<p>上面那个方法还是太暴力了，那么有没有什么更好的方法呢？</p>
+
+<p>我们的代码，主要消耗的时间在于，如果有多个空格， 那么每遇到一个空格就进行移位。</p>
+
+<p>而其实前面的移位是没必要的，因为如果再遇到空格，那么之前的移位全是无用功，因此我们可以考虑<strong>先遍历一遍字符串, 计数空格的数目</strong>,</p>
+
+<p>我们知道了空格的数目，其实就是知道了替换后字符串的长度，那么只需要进行一次替换就可以了</p>
+
+<p>因为我们的工作变为：</p>
+
+<ul>
+<li>遍历一遍字符串， 统计字符出现的数目, 计算替换后的字符串长度</li>
+<li>再遍历一遍字符串，完成替换</li>
+</ul>
+
+<p>代码如下：</p>
+
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+using namespace std;
+
+
+
+class Solution
+{
+public:
+	void replaceSpace(char *str, int length)
+	{
+		int i, j;
+		int count = 0;
+		int len = length;
+
+		//统计出空格数量
+		for (int i = 0; i &lt; length; i++)
+		{
+			if (str[i] == ' ')
+			{
+				count++;
+			}
+		}
+
+		len = length + count * 2;
+		for (i = length - 1, j = len - 1; i &gt;= 0 &amp;&amp; j &gt;= 0;)
+		{
+			if (str[i] == ' ')
+			{
+				str[j--] = '0';
+				str[j--] = '2';
+				str[j--] = '%';
+				i--;
+			}
+			else
+			{
+				str[j--] = str[i--];
+			}
+		}
+		str[len] = '0';
+	}
+};
+
+
+int main()
+{
+	char str[16 + 1] = &quot;a b c d&quot;;//如果str的长度不够它后面扩充怎么办？
+
+	Solution solu;
+	solu.replaceSpace(str, 10);
+	cout &lt;&lt; str &lt;&lt; endl;
+
+	return 0;
+}
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>a%20b%20c%20d
+</code></pre>
+
+<p><strong>还是同样的疑问：如果str开始的长度不够怎么办？要确认下。str是不是可变长度的？</strong></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://github.com/gatieme/CodingInterviews">CodingInterviews</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/03-%E5%A4%A7%E6%95%B0%E6%8D%AE/01-hadoop/hadoop-%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/13-%E5%85%B3%E4%BA%8Eparquet/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">13 关于Parquet</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95/">
+            <span class="next-text nav-default">异常检测算法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

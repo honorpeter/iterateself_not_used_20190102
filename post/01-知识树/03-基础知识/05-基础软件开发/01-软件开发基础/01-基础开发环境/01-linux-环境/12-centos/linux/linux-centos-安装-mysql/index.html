@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Linux CentOS 安装 MySQL - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 还是有很多疑问的 Linux CentOS 安装 MySQL 在安装之前 首先检查 MySQL 是否已安装 yum list installed | grep mysql 如果有的话 就全部卸载 yum -y remove &#43;数据库名称 安装 MySQL MySQL 依赖 libaio" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/01-linux-%E7%8E%AF%E5%A2%83/12-centos/linux/linux-centos-%E5%AE%89%E8%A3%85-mysql/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Linux CentOS 安装 MySQL" />
+<meta property="og:description" content="需要补充的 还是有很多疑问的 Linux CentOS 安装 MySQL 在安装之前 首先检查 MySQL 是否已安装 yum list installed | grep mysql 如果有的话 就全部卸载 yum -y remove &#43;数据库名称 安装 MySQL MySQL 依赖 libaio" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/01-linux-%E7%8E%AF%E5%A2%83/12-centos/linux/linux-centos-%E5%AE%89%E8%A3%85-mysql/" /><meta property="article:published_time" content="2018-07-10T15:42:07&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-10T15:42:07&#43;00:00"/>
+<meta itemprop="name" content="Linux CentOS 安装 MySQL">
+<meta itemprop="description" content="需要补充的 还是有很多疑问的 Linux CentOS 安装 MySQL 在安装之前 首先检查 MySQL 是否已安装 yum list installed | grep mysql 如果有的话 就全部卸载 yum -y remove &#43;数据库名称 安装 MySQL MySQL 依赖 libaio">
+
+
+<meta itemprop="datePublished" content="2018-07-10T15:42:07&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-10T15:42:07&#43;00:00" />
+<meta itemprop="wordCount" content="1393">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Linux CentOS 安装 MySQL"/>
+<meta name="twitter:description" content="需要补充的 还是有很多疑问的 Linux CentOS 安装 MySQL 在安装之前 首先检查 MySQL 是否已安装 yum list installed | grep mysql 如果有的话 就全部卸载 yum -y remove &#43;数据库名称 安装 MySQL MySQL 依赖 libaio"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Linux CentOS 安装 MySQL</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-10 </span>
+        
+        <span class="more-meta"> 1393 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#linux-centos-安装-mysql">Linux CentOS 安装 MySQL</a></li>
+<li><a href="#在安装之前">在安装之前</a>
+<ul>
+<li><a href="#首先检查-mysql-是否已安装">首先检查 MySQL 是否已安装</a></li>
+<li><a href="#如果有的话-就全部卸载">如果有的话 就全部卸载</a></li>
+</ul></li>
+<li><a href="#安装-mysql">安装 MySQL</a>
+<ul>
+<li><a href="#mysql-依赖-libaio-所以先要安装-libaio">MySQL 依赖 libaio，所以先要安装 libaio</a></li>
+<li><a href="#准备好-repository">准备好 Repository</a></li>
+<li><a href="#查看-mysql-版本">查看 MySQL 版本</a></li>
+<li><a href="#安装-mysql-1">安装 MySQL</a></li>
+<li><a href="#查看安装好的-mysql-信息">查看安装好的 MySQL 信息</a></li>
+<li><a href="#尝试启动和关闭-mysql">尝试启动和关闭 MySQL</a></li>
+</ul></li>
+<li><a href="#一些设置">一些设置</a>
+<ul>
+<li><a href="#防火墙设置">防火墙设置</a></li>
+<li><a href="#mysql-安全设置">MySQL 安全设置</a></li>
+</ul></li>
+<li><a href="#设置外部可访问-mysql">设置外部可访问 MySQL</a></li>
+<li><a href="#comment">COMMENT</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>还是有很多疑问的</strong></li>
+</ul>
+
+<hr />
+
+<h1 id="linux-centos-安装-mysql">Linux CentOS 安装 MySQL</h1>
+
+<h1 id="在安装之前">在安装之前</h1>
+
+<h2 id="首先检查-mysql-是否已安装">首先检查 MySQL 是否已安装</h2>
+
+<ul>
+<li>yum list installed | grep mysql</li>
+</ul>
+
+<h2 id="如果有的话-就全部卸载">如果有的话 就全部卸载</h2>
+
+<ul>
+<li>yum -y remove +数据库名称</li>
+</ul>
+
+<h1 id="安装-mysql">安装 MySQL</h1>
+
+<h2 id="mysql-依赖-libaio-所以先要安装-libaio">MySQL 依赖 libaio，所以先要安装 libaio</h2>
+
+<p><strong>是这样吗？为什么有的教程不用装这个？</strong></p>
+
+<ul>
+<li><p>yum search libaio # 检索相关信息</p></li>
+
+<li><p>yum install libaio # 安装依赖包</p></li>
+</ul>
+
+<h2 id="准备好-repository">准备好 Repository</h2>
+
+<p>下载 MySQL Yum Repository：<strong>这个 noarch.rpm 是什么文件？一般来说我到哪里找这个地址？如果我想装 sqlite，那么地址应该怎么找？到网上找吗？还是说linux里面可以直接有命令查找到 对应的一些 repository 地址？</strong></p>
+
+<ul>
+<li>wget <a href="http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm">http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm</a></li>
+</ul>
+
+<p>添加 MySQL Yum Repository 到你的系统 repository 列表中：</p>
+
+<ul>
+<li>yum localinstall mysql-community-release-el7-5.noarch.rpm</li>
+</ul>
+
+<p>如果提示-bash: wget: 未找到命令，请先执行 yum install wget 安装 wget</p>
+
+<p>验证下是否添加成功：<strong>grep 的用法还是要总结下的。</strong></p>
+
+<ul>
+<li>yum repolist enabled | grep &ldquo;mysql.<em>-community.</em>&ldquo;</li>
+</ul>
+
+<h2 id="查看-mysql-版本">查看 MySQL 版本</h2>
+
+<ul>
+<li>yum repolist all | grep mysql</li>
+</ul>
+
+<p>可以看到 5.5、 5.7 版本是默认禁用的，因为现在最新的稳定版是 5.6</p>
+
+<ul>
+<li>yum repolist enabled | grep mysql</li>
+</ul>
+
+<h2 id="安装-mysql-1">安装 MySQL</h2>
+
+<ul>
+<li>yum install mysql-community-server</li>
+</ul>
+
+<p>Yum 会自动处理 MySQL 与其他组件的依赖关系。遇到提示，输入 y 继续，执行完成会提示“完毕！”。</p>
+
+<p>此时MySQL 安装完成，它包含了 mysql-community-server、mysql-community-client、mysql-community-common、mysql-community-libs 四个包。</p>
+
+<h2 id="查看安装好的-mysql-信息">查看安装好的 MySQL 信息</h2>
+
+<ul>
+<li><p>rpm -qi mysql-community-server.x86_64 0:5.6.24-3.el7</p></li>
+
+<li><p>whereis mysql</p></li>
+</ul>
+
+<p>可以看到 MySQL 的安装目录是 /usr/bin/</p>
+
+<h2 id="尝试启动和关闭-mysql">尝试启动和关闭 MySQL</h2>
+
+<p>启动 MySQL Server：</p>
+
+<ul>
+<li>systemctl start mysqld</li>
+</ul>
+
+<p>查看 MySQL Server 状态：</p>
+
+<ul>
+<li>systemctl status mysqld</li>
+</ul>
+
+<p>测试是否安装成功：</p>
+
+<ul>
+<li>mysql</li>
+</ul>
+
+<p>可以进入 mysql 命令行界面，输入 exit 然后回车，就会退出这个 mysql 命令行界面。</p>
+
+<p>关闭 MySQL Server：</p>
+
+<ul>
+<li>systemctl stop mysqld</li>
+</ul>
+
+<h1 id="一些设置">一些设置</h1>
+
+<h2 id="防火墙设置">防火墙设置</h2>
+
+<p><strong>没明白？防火墙没有开，要打开吗？防火墙的作用是什么？</strong></p>
+
+<p>远程访问 MySQL， 需开放默认端口号 3306：</p>
+
+<ul>
+<li><p>firewall-cmd &ndash;permanent &ndash;zone=public &ndash;add-port=3306/tcp</p></li>
+
+<li><p>firewall-cmd &ndash;permanent &ndash;zone=public &ndash;add-port=3306/udp</p></li>
+</ul>
+
+<p>这样就开放了相应的端口。</p>
+
+<p>重新加载防火墙：</p>
+
+<ul>
+<li>firewall-cmd &ndash;reload</li>
+</ul>
+
+<h2 id="mysql-安全设置">MySQL 安全设置</h2>
+
+<p>服务器启动后，可以执行：</p>
+
+<ul>
+<li>mysql_secure_installation;</li>
+</ul>
+
+<p>此时输入 root 原始密码（初始化安装的话为空），接下来，为了安全，MySQL 会提示你重置数据库的原始密码，移除其他用户账号，禁用 root 远程登录，移除 test 数据库，重新加载 privilege 表格等，你只需输入 y 继续执行即可。</p>
+
+<p><strong>至此，整个 MySQL 安装完成。</strong></p>
+
+<h1 id="设置外部可访问-mysql">设置外部可访问 MySQL</h1>
+
+<p>现在只能本机访问 mysql，如果要外部可以访问 mysql，那么可以这样：<strong>什么叫外部可访问 mysql ？什么是外部？通过 Xshell 远程登陆到linux上是外部吗？还是说 在程序中远程登陆连接到 mysql 是外部？嗯，应该是程序中远程登陆上来是外部。确认下。</strong></p>
+
+<p>首先，重启 mysql 服务，再次进入到mysql：</p>
+
+<ul>
+<li><p>systemctl start mysqld</p></li>
+
+<li><p>mysql -u root -p   <strong>#</strong><strong>为什么这么写？意思是什么？</strong></p></li>
+</ul>
+
+<p>现在已经在mysql 里面了，用查询语句查看 user 表：</p>
+
+<ul>
+<li><p>show databases;</p></li>
+
+<li><p>use mysql;</p></li>
+
+<li><p>select host,user,password from user;</p></li>
+</ul>
+
+<p>创建一个用户并授予最高的权限：<strong>没看懂这一段，为什么要这么设置？不设置会怎样？句子中每个是什么意思？我到时候要怎么远程连接过来？</strong></p>
+
+<ul>
+<li><p>grant all privileges on <em>.</em> to &lsquo;root&rsquo;@&lsquo;%&rsquo; identified by &lsquo;lam7&rsquo; with grant option;</p></li>
+
+<li><p>flush privileges;     #让刚刚修改的权限生效</p></li>
+</ul>
+
+<p>给root账户设置密码为 lam7 且 host 为 %，即外部任何主机均可访问。*.*这个本意是数据库名.表名，我们这里没有写任何表名也没有写数据库名，就是意思所有的数据库都可以用这个root账户访问。</p>
+
+<p>再看一下 users：</p>
+
+<ul>
+<li>select host,user,password from user;</li>
+</ul>
+
+<p>这时候可以看到 多了一个user。</p>
+
+<p>退出 mysql：按 Ctrl+C</p>
+
+<p>关闭 数据库：</p>
+
+<ul>
+<li>systemctl stop mysqld</li>
+</ul>
+
+<p>如果需要使用外部工具链接 mysql，还需要关闭防火墙：<strong>什么意思？之前不是开了端口了吗？为什么还要关闭防火墙？</strong></p>
+
+<ul>
+<li>systemctl stop firewalld</li>
+</ul>
+
+<p>然后查看状态：</p>
+
+<ul>
+<li>systemctl status firewalld</li>
+</ul>
+
+<hr />
+
+<h1 id="comment">COMMENT</h1>
+
+<p><strong>下面这个有用吗？要补充进来</strong></p>
+
+<pre><code># 使用root用户登录后创建新用户
+mysql&gt; CREATE USER 'demouser'@'localhost' IDENTIFIED BY 'demopassword';
+
+# 授权
+mysql&gt; GRANT ALL PRIVILEGES ON demodb.* to demouser@localhost;
+mysql&gt; FLUSH PRIVILEGES;
+
+# 使用新创建的用户登录后创建数据库
+mysql&gt; CREATE DATABASE demodb;
+</code></pre>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ol>
+<li><a href="https://blog.csdn.net/SmallTankPy/article/details/75451645">CentOS 7 安装 MySQL</a></li>
+</ol>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/01-linux-%E7%8E%AF%E5%A2%83/12-centos/linux/linux-centos-%E5%AE%89%E8%A3%85django/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Linux CentOS 安装Django</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/01-linux-%E7%8E%AF%E5%A2%83/12-centos/linux/linux-centos-yum/">
+            <span class="next-text nav-default">Linux CentOS yum</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

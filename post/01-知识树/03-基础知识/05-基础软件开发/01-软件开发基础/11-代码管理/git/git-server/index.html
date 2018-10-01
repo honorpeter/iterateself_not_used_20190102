@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Git Server - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 非常好，一定要按这个来，不然的化 CentOS 上会有一些问题， 安装过程 环境： 服务器 CentOS7 &#43; git（version 1.8.3.1-6.el7_2.1" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/11-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/git-server/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Git Server" />
+<meta property="og:description" content="需要补充的 非常好，一定要按这个来，不然的化 CentOS 上会有一些问题， 安装过程 环境： 服务器 CentOS7 &#43; git（version 1.8.3.1-6.el7_2.1" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/11-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/git-server/" /><meta property="article:published_time" content="2018-08-03T14:45:57&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T14:45:57&#43;00:00"/>
+<meta itemprop="name" content="Git Server">
+<meta itemprop="description" content="需要补充的 非常好，一定要按这个来，不然的化 CentOS 上会有一些问题， 安装过程 环境： 服务器 CentOS7 &#43; git（version 1.8.3.1-6.el7_2.1">
+
+
+<meta itemprop="datePublished" content="2018-08-03T14:45:57&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T14:45:57&#43;00:00" />
+<meta itemprop="wordCount" content="2057">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Git Server"/>
+<meta name="twitter:description" content="需要补充的 非常好，一定要按这个来，不然的化 CentOS 上会有一些问题， 安装过程 环境： 服务器 CentOS7 &#43; git（version 1.8.3.1-6.el7_2.1"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Git Server</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 2057 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#安装过程">安装过程</a>
+<ul>
+<li><a href="#①-安装-git">① 安装 Git</a></li>
+<li><a href="#③-服务器端创建-git-仓库">③ 服务器端创建 Git 仓库</a></li>
+<li><a href="#④-客户端-clone-远程仓库">④ 客户端 clone 远程仓库</a></li>
+<li><a href="#⑤-客户端创建-ssh-公钥和私钥">⑤ 客户端创建 SSH 公钥和私钥</a></li>
+<li><a href="#⑥-服务器端-git-打开-rsa-认证">⑥ 服务器端 Git 打开 RSA 认证</a></li>
+<li><a href="#⑦-将客户端公钥导入服务器端-home-git-ssh-authorized-keys-文件">⑦ 将客户端公钥导入服务器端 /home/git/.ssh/authorized_keys 文件</a></li>
+<li><a href="#⑨-禁止-git-用户-ssh-登录服务器">⑨ 禁止 git 用户 ssh 登录服务器</a>
+<ul>
+<li><a href="#管理公钥">管理公钥</a></li>
+<li><a href="#管理权限">管理权限</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#出现的一些问题">出现的一些问题</a>
+<ul>
+<li><a href="#clone-是没有密码了-但是-push-出现-error">clone 是没有密码了，但是 push 出现 error：</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li>非常好，一定要按这个来，不然的化 CentOS 上会有一些问题，</li>
+</ul>
+
+<hr />
+
+<h1 id="安装过程">安装过程</h1>
+
+<pre><code>环境：
+服务器 CentOS7 + git（version 1.8.3.1-6.el7_2.1.x86_64）
+客户端 Windows7 + git（version 2.13.0-64-bit）
+</code></pre>
+
+<h2 id="①-安装-git">① 安装 Git</h2>
+
+<p>centos7 做为服务器端系统，Windows 作为客户端系统，分别安装 Git</p>
+
+<p><strong>服务器端：</strong></p>
+
+<p>先检查服务器有没有自带或者安装git;查询Git版本</p>
+
+<pre><code>[root@localhost ~]# git --version
+git version 1.8.3.1
+
+[root@localhost ~]# rpm -qa git
+git-1.8.3.1-6.el7_2.1.x86_64
+</code></pre>
+
+<p>查询到没有的话就yum安装一下;</p>
+
+<pre><code>#yum install -y git
+</code></pre>
+
+<p>安装完后，查看 Git 版本</p>
+
+<pre><code>[root@localhost ~]# git --version
+git version 1.8.3.1
+</code></pre>
+
+<p><strong>客户端：</strong></p>
+
+<p>下载 <a href="https://github.com/git-for-windows/git/releases/download/v2.13.0.windows.1/Git-2.13.0-64-bit.exe">Git for Windows</a>，地址：<a href="https://git-for-windows.github.io/">https://git-for-windows.github.io/</a></p>
+
+<p>安装完之后，可以使用 Git Bash 作为命令行客户端。</p>
+
+<p>安装完之后，查看 Git 版本</p>
+
+<pre><code>Administrator@SG MINGW64 ~
+$ git --version
+git version 2.13.0.windows.1
+</code></pre>
+
+<p>② 服务器端创建 git 用户，用来管理 Git 服务，并为 git 用户设置密码</p>
+
+<pre><code>[root@localhost home]# id git
+id: git：无此用户
+[root@localhost home]# useradd git
+[root@localhost home]# passwd git
+</code></pre>
+
+<h2 id="③-服务器端创建-git-仓库">③ 服务器端创建 Git 仓库</h2>
+
+<p>设置 /home/data/git/gittest.git 为 Git 仓库</p>
+
+<p>然后把 Git 仓库的 owner 修改为 git</p>
+
+<pre><code>[root@localhost home]# mkdir -p data/git/gittest.git
+[root@localhost home]# git init --bare data/git/gittest.git
+初始化空的 Git 版本库于 /home/data/git/gittest.git/
+[root@localhost home]# cd data/git/
+[root@localhost git]# chown -R git:git gittest.git/
+</code></pre>
+
+<h2 id="④-客户端-clone-远程仓库">④ 客户端 clone 远程仓库</h2>
+
+<p>首先解释一下wamp这个目录,这个是一组常用来搭建动态网站或者服务器的开源软件,我安装的目录是D盘;</p>
+
+<p>进入 Git Bash 命令行客户端，创建项目地址（设置在 d:/wamp/www/gittest_gitbash）并进入:</p>
+
+<pre><code>Administrator@SG-20170206ABCD MINGW64 ~$ cd /d
+Administrator@SG-20170206ABCD MINGW64 /d$ cd wamp/www
+Administrator@SG-20170206ABCD MINGW64 /d/wamp/www$ mkdir gittest_gitbash
+Administrator@SG-20170206ABCD MINGW64 /d/wamp/www$ cd gittest_gitbash
+Administrator@SG-20170206ABCD MINGW64 /d/wamp/www/gittest_gitbash$ git clone git@192.168.20.101:/home/data/gittest.git
+</code></pre>
+
+<p>然后从Centos7 Git 服务器上 clone 项目：</p>
+
+<pre><code>$ git clone git@192.168.20.101:/home/data/gittest.git
+</code></pre>
+
+<p>执行过程如下图所示:</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/LFAGAgICbh.png?imageslim" alt="mark" /></p>
+
+<p>当第一次连接到目标 Git 服务器时会得到一个提示：</p>
+
+<p>输入 yes:</p>
+
+<pre><code>The authenticity of host '192.168.20.101 (192.168.20.101)' can't be established.
+ECDSA key fingerprint is SHA256:HEaAUZgd3tQkEuwzyVdpGowlI6YKeQDfTBS6vVkY6Zc.
+Are you sure you want to continue connecting (yes/no)?
+</code></pre>
+
+<p>输入git设置的密码:</p>
+
+<pre><code>Warning: Permanently added '192.168.20.101' (ECDSA) to the list of known hosts.
+git@192.168.20.101's password:
+</code></pre>
+
+<p>此时 C:\Users\用户名.ssh 下会多出一个文件 known_hosts，以后在这台电脑上再次连接目标 Git 服务器时不会再提示上面的语句。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7haGDagkLm.png?imageslim" alt="mark" /></p>
+
+<p>后面提示要输入密码，可以采用 SSH 公钥来进行验证。</p>
+
+<h2 id="⑤-客户端创建-ssh-公钥和私钥">⑤ 客户端创建 SSH 公钥和私钥</h2>
+
+<pre><code>$ ssh-keygen -t rsa -C &quot;1838370@qq.com&quot;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/e64e4cG99F.png?imageslim" alt="mark" /></p>
+
+<p>此时 C:\Users\用户名.ssh 下会多出两个文件 id_rsa 和 id_rsa.pub</p>
+
+<p>id_rsa 是私钥</p>
+
+<p>id_rsa.pub 是公钥</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/hl85b3deAA.png?imageslim" alt="mark" /></p>
+
+<h2 id="⑥-服务器端-git-打开-rsa-认证">⑥ 服务器端 Git 打开 RSA 认证</h2>
+
+<p>进入 /etc/ssh 目录，编辑 sshd_config，打开以下三个配置的注释：</p>
+
+<pre><code>[root@localhost git]# cd /etc/ssh/
+[root@localhost ssh]# vim sshd_config
+</code></pre>
+
+<pre><code>RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+</code></pre>
+
+<p>:wq 保存</p>
+
+<p>保存并重启 sshd 服务：</p>
+
+<pre><code>[root@localhost ssh]# systemctl restart sshd.service
+</code></pre>
+
+<p>由 AuthorizedKeysFile 得知公钥的存放路径是 .ssh/authorized_keys，</p>
+
+<p>实际上是 $Home/.ssh/authorized_keys，</p>
+
+<p>由于管理 Git 服务的用户是 git，所以实际存放公钥的路径是 /home/git/.ssh/authorized_keys</p>
+
+<p>在 /home/git/ 下创建目录 .ssh</p>
+
+<pre><code>[root@localhost git]# pwd
+/home/git
+[root@localhost git]# mkdir .ssh
+[root@localhost git]# ls -a
+. .. .bash_logout .bash_profile .bashrc .gnome2 .mozilla .ssh
+</code></pre>
+
+<p>然后把 .ssh 文件夹的 owner 修改为 git</p>
+
+<pre><code>[root@localhost git]# chown -R git:git .ssh
+[root@localhost git]# ll -a
+总用量 32
+drwx------. 5 git  git  4096 8月  28 20:04 .
+drwxr-xr-x. 8 root root 4096 8月  28 19:32 ..
+-rw-r--r--. 1 git  git    18 10月 16 2014 .bash_logout
+-rw-r--r--. 1 git  git   176 10月 16 2014 .bash_profile
+-rw-r--r--. 1 git  git   124 10月 16 2014 .bashrc
+drwxr-xr-x. 2 git  git  4096 11月 12 2010 .gnome2
+drwxr-xr-x. 4 git  git  4096 5月   8 12:22 .mozilla
+drwxr-xr-x. 2 git  git  4096 8月  28 20:08 .ssh
+</code></pre>
+
+<h2 id="⑦-将客户端公钥导入服务器端-home-git-ssh-authorized-keys-文件">⑦ 将客户端公钥导入服务器端 /home/git/.ssh/authorized_keys 文件</h2>
+
+<p>回到 Git Bash 下，导入文件：</p>
+
+<pre><code>Administrator@SG-20170206ABCD MINGW64 /d/wamp/www/gittest_gitbash
+
+$ ssh git@192.168.20.101 'cat &gt;&gt; .ssh/authorized_keys' &lt; ~/.ssh/id_rsa.pub
+
+</code></pre>
+
+<p>需要输入服务器端 git 用户的密码</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/AJ5f91gA7f.png?imageslim" alt="mark" /></p>
+
+<p>回到服务器端，查看 .ssh 下是否存在 authorized_keys 文件：</p>
+
+<pre><code>[root@localhost git]# cd .ssh
+[root@localhost .ssh]# ll
+总用量 4
+-rw-rw-r--. 1 git git 398 8月  28 20:08 authorized_keys
+</code></pre>
+
+<p>可以查看一下是否是客户端生成的公钥。</p>
+
+<p><strong>重要：</strong></p>
+
+<p><strong>修改 .ssh 目录的权限为 700</strong></p>
+
+<p><strong>修改 .ssh/authorized_keys 文件的权限为 600</strong></p>
+
+<pre><code>[root@localhost git]# chmod 700 .ssh
+[root@localhost git]# cd .ssh
+[root@localhost .ssh]# chmod 600 authorized_keys
+</code></pre>
+
+<p>⑧ 客户端再次 clone 远程仓库</p>
+
+<pre><code>$ git clone git@192.168.20.101:/home/data/git/gittest.git
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/iI98b34ab2.png?imageslim" alt="mark" /></p>
+
+<p>查看客户端项目目录：</p>
+
+<p>项目已经 clone 了。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/KF8dgeD6B3.png?imageslim" alt="mark" /></p>
+
+<p>也可以使用 tortoiseGit 客户端来管理项目：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/Jfh7m3gmBI.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/Gf2bIFC2Hi.png?imageslim" alt="mark" /></p>
+
+<h2 id="⑨-禁止-git-用户-ssh-登录服务器">⑨ 禁止 git 用户 ssh 登录服务器</h2>
+
+<p>之前在服务器端创建的 git 用户不允许 ssh 登录服务器</p>
+
+<p>编辑 /etc/passwd</p>
+
+<pre><code>[root@localhost .ssh]# vim /etc/passwd
+</code></pre>
+
+<p>找到：</p>
+
+<pre><code>git❌502:504::/home/git:/bin/bash
+</code></pre>
+
+<p>修改为</p>
+
+<pre><code>git❌502:504::/home/git:/bin/git-shell
+</code></pre>
+
+<p>此时 git 用户可以正常通过 ssh 使用 git，但无法通过 ssh 登录系统。</p>
+
+<h3 id="管理公钥">管理公钥</h3>
+
+<p>如果团队很小，把每个人的公钥收集起来放到服务器的<code>/home/git/.ssh/authorized_keys</code>文件里就是可行的。如果团队有几百号人，就没法这么玩了，这时，可以用<a href="https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Gitosis">Gitosis</a>来管理公钥。</p>
+
+<p>这里我们不介绍怎么玩<a href="https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Gitosis">Gitosis</a>了，几百号人的团队基本都在500强了，相信找个高水平的Linux管理员问题不大。</p>
+
+<h3 id="管理权限">管理权限</h3>
+
+<p>有很多不但视源代码如生命，而且视员工为窃贼的公司，会在版本控制系统里设置一套完善的权限控制，每个人是否有读写权限会精确到每个分支甚至每个目录下。因为Git是为Linux源代码托管而开发的，所以Git也继承了开源社区的精神，不支持权限控制。不过，因为Git支持钩子（hook），所以，可以在服务器端编写一系列脚本来控制提交等操作，达到权限控制的目的。<a href="https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Gitolite">Gitolite</a>就是这个工具。</p>
+
+<p>这里我们也不介绍<a href="https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Gitolite">Gitolite</a>了，不要把有限的生命浪费到权限斗争中。</p>
+
+<p><strong>小结</strong></p>
+
+<ul>
+<li>搭建Git服务器非常简单，通常10分钟即可完成；</li>
+<li>要方便管理公钥，用<a href="https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Gitosis">Gitosis</a>；</li>
+<li>要像SVN那样变态地控制权限，用<a href="https://git-scm.com/book/zh/v1/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-Gitosis">Gitolite</a>。</li>
+</ul>
+
+<p>介绍一个很不错的git教程 <a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000">参考:杜雪峰-git</a></p>
+
+<h1 id="出现的一些问题">出现的一些问题</h1>
+
+<h2 id="clone-是没有密码了-但是-push-出现-error">clone 是没有密码了，但是 push 出现 error：</h2>
+
+<p><a href="https://stackoverflow.com/questions/6448242/git-push-error-insufficient-permission-for-adding-an-object-to-repository-datab">insufficient permission for adding an object to repository database</a></p>
+
+<p>没看懂里面的方法，linux 的权限管理还是要弄明白的。</p>
+
+<p><a href="https://stackoverflow.com/questions/6448242/git-push-error-insufficient-permission-for-adding-an-object-to-repository-datab">Git Push Error: insufficient permission for adding an object to repository database</a></p>
+
+<p><a href="https://www.jianshu.com/p/f77edcf4163c">Git的push权限</a></p>
+
+<p><strong>弄明白之后这里补充一下。</strong></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://www.cnblogs.com/Sungeek/p/6928125.html">在Centos7下搭建Git服务器</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/06-%E5%9F%BA%E7%A1%80%E7%A1%AC%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%BC%80%E5%8F%91%E6%9D%BF/01-arduino/01-arduino-%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 Arduino 介绍</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/01-linux-%E7%8E%AF%E5%A2%83/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AE%B6%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%8A%80%E5%B7%A7/">
+            <span class="next-text nav-default">数据科学家的命令行技巧</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

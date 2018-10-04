@@ -1,3 +1,8 @@
+---
+title: Python入门之类(class)
+toc: true
+date: 2018-10-04
+---
 
 
 

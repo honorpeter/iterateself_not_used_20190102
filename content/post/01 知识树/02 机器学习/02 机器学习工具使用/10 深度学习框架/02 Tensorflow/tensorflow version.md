@@ -1,3 +1,8 @@
+---
+title: tensorflow version
+toc: true
+date: 2018-10-04
+---
 
 
 

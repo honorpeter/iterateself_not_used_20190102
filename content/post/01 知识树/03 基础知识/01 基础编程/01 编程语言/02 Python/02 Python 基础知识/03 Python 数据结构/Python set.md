@@ -1,3 +1,8 @@
+---
+title: Python set
+toc: true
+date: 2018-10-04
+---
 
 
 

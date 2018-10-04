@@ -120,114 +120,65 @@ import cv2
 
 前面章节已经提到过了单通道的灰度图像在计算机中的表示，就是一个 8 位无符号整形的矩阵。在 OpenCV 的 C++ 代码中，表示图像有个专门的结构`cv::Mat`，不过在 Python-OpenCV 中因为已经有了 NumPy 这种强大的基础工具，所以这个矩阵就用 NumPy 的 array 表示。
 
-如果是多通道情况，最常见的就是红绿蓝(RGB)三通道，则第一个维度是高度，第二个维度是高度，第三个维度是通道，如图 6-la 所示为一幅 3x3 图像在计算机中表示的例子。
+如果是多通道情况，最常见的就是红绿蓝(RGB)三通道，则第一个维度是高度，第二个维度是高度，第三个维度是通道，如图 6-la 所示为一幅 3x3 图像在计算机中表示的例子。<span style="color:red;">嗯，这个地方书上写错了，两个维度都是高度，到底哪一个是高度？</span>
 
 
+<span style="color:red;">此处缺少一张图</span>
 
-分通道表示
+在图6-1中，右上角的矩阵里每个元素都是一个三维数组，分别代表这个像素上的三个通道的值。最常见的 RGB 通道中，第一个元素就是红色(Red)的值，第二个元素是绿色(Green)的值，第三个元素是蓝色(Blue)，最终得到的图像如图6-la所示。
 
-◄-
+RGB 是最常见的情况，然而在 OpenCV 中，默认的图像表示却是反过来的，也就是 BGR，得到的图像如图6-lb所示。可以看到，前两行的颜色顺序都交换了，最后一行是三个通道等值的灰度图，所以没有影响。<span style="color:red;">嗯，这个的确是这样，opencv 使用的是 BGR</span>
 
-RBG表示
+至于 OpenCV 为什么不是大家喜闻乐见的 RGB，则是历史遗留问题。在OpenCV刚开始研发的年代，BGR是相机设备厂商的主流表示方法，虽然后来RGB成了主流和默认，但是这个底层的顺序却保留了下来，事实上Windows下的最常见格式之一 bmp 的底层字节的存储顺序还是 BGR。
 
-| 255,0,0     | 0,255,0     | 0,0,255   |
-| ----------- | ----------- | --------- |
-| 255,255,0   | 255,0,255   | 0,255,255 |
-| 255,255,255 | 128,128,128 | 0,0,0     |
+OpenCV的这个特殊之处还是需要注意的，比如在 Python 中，图像都是用 NumPy 的 array 表示，但是同样的 array 在 OpenCV 中的显示效果和 matplotlib 中的显示效果就会不一样。<span style="color:red;">这个还真的没注意过。嗯，matplotlib 是 RGB 吗？</span>
 
-| BGR表示
+下面的简单代码就可以生成两种表示方式下图 6-1 中矩阵对应的图像，生成图像后，放大看就能体会到二者的区别。
 
+```python
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+# 图 6-1 中的矩阵
+img=np.array([
+    [[225,0,0],[0,255,0],[0,0,255]],
+    [[225,255,0],[255,0,255],[0,255,255]],
+    [[225,255,255],[128,128,128],[0,0,0]],
+],dtype=np.uint8)
+# 用 matplotlib 存储
+plt.imsave('img_pyplot.jpg',img)
+# 用 OpenCV 存储
+cv2.imwrite('img_cv2.jpg',img)
+```
 
+<span style="color:red;">一直不知道 plt 还可以 save 图片的。对于 numpy 的掌握感觉还是不够。还是要详细的总结下的</span>
 
-a)
+不管是 RGB 还是 BGR,都是高度x宽度x通道数，HxWxC 的表达方式，而在深度学习中，因为要对不同通道应用卷积，所以用的是另一种方式：CxHxW，就是把每个通道都单独表达成一个二维矩阵，如图6-lc所示。<span style="color:red;">嗯，对这句的理解还是有些不是很清楚。</span>
 
-b)
-
-图6-1 RGB图像在计算机中表示的例子
-
-在图6-1中，右上角的矩阵里每个元素都是一个三维数组，分别代表这个像素上的三
-
-个通道的值。最常见的RGB通道中，第一个元素就是红色(Red)的值，第二个元素是绿
-
-色(Green)的值，第三个元素是蓝色(Blue)，最终得到的图像如图6-la所示。RGB是
-
-最常见的情况，然而在OpenCV中，默认的图像表示却是反过来的，也就是BGR，得到的
-
-图像如图6-lb所示。可以看到，前两行的颜色顺序都交换了，最后一行是三个通道等值的
-
-灰度图，所以没有影响。至于OpenCV为什么不是大家喜闻乐见的RGB,则是历史遗留问
-
-题。在OpenCV刚开始研发的年代，BGR是相机设备厂商的主流表示方法，虽然后来RGB
-
-成了主流和默认，但是这个底层的顺序却保留了下来，事实上Windows下的最常见格式之
-
-一 bmp的底层字节的存储顺序还是BGR。OpenCV的这个特殊之处还是需要注意的，比如
-
-在Python中，图像都是用NumPy的array表示，但是同样的array在OpenCV中的显示
-
-效果和matplotlib中的显示效果就会不一样。下面的简单代码就可以生成两种表示方式下
-
-图6-1中矩阵对应的图像，生成图像后，放大看就能体会到二者的区别。
-
-import numpy as np import cv2
-
-import matplotlib.pyplot as pit
-
-\#图6-1中的矩阵 img = np.array ([
-
-[[255, 0, 0],队 255, 0], [0, 0, 255]],
-
-[[255,    255,    0],    [255, 0r 255],    [0,    255,    255]],
-
-[[255, 255, 255], [128, 128, 128], [0, 0, 0/j <
-
-], dtype=np.uint8)
-
-\# 用 matplotlib 存储
-
-pit.imsave(* img_pyplot.jpg *, img)
-
-\#用OpenCV存储
-
-cv2 . imwrite (' img_cv2 .jpg', img)
-
-不管是RGB还是BGR,都是高度x宽度x通道数，HxWxC的表达方式，而在深度学 习中，因为要对不同通道应用卷积，所以用的是另一种方式：CxHxW,就是把每个通道都 单独表达成一个二维矩阵，如图6-lc所示。
-
-6.2.2基本图像处理
+### 基本图像处理
 
 1.存取图像
 
-读图像用CV2.imread()函数，可以按照不同模式读取，一般最常用到的是读取单通道灰 度图，或者直接默认读取多通道。保存图像用cv2.imwrite()函数，注意保存的时候是没有 单通道这一说的，根据保存文件名的后缀和当前的array维度，OpenCV自动判断存储的通 道。另外，压缩格式还可以指定存储质量，下面来看代码例子。
+读图像用 `cv2.imread()` 函数，可以按照不同模式读取，一般最常用到的是读取单通道灰度图，或者直接默认读取多通道。保存图像用 `cv2.imwrite()` 函数，注意保存的时候是没有单通道这一说的，根据保存文件名的后缀和当前的array维度，OpenCV 自动判断存储的通道。另外，压缩格式还可以指定存储质量，下面来看代码例子：<span style="color:red;">保存的时候是没有单通道的说法的吗？压缩格式怎么指定存储质量？</span>
 
+
+```
 import cv2
-
-\#读取一张400x600分辨率的图像
-
-color_img = cv2.imread(* test_400x600.jpg *)
-
+# 读取一张400x600分辨率的图像
+color_img=cv2.imread('test_400x600.jpg')
 print(color_img.shape)
-
-\#直接读取单i道
-
-gray_img = cv2.imread(* test_4 00x600.jpg', cv2.工MREAD—GRAYSCALE) print(gray_img.shape)
-
-\#把单通道菌片保存后，再读取，仍然是3通道，相当于把单通道值复制到3个通道保存 cv2.imwrite('test_grayscale.jpg', gray_img)
-
-reload_grayscale = cv2.imread(* test_grayscale.jpg *) print(reload—grayscale.shape)
-
-\#    cv2.IMWRITE_JPEG_QUALITY指定jpg质量，范围为0〜100,默认95,越高画质越好，文
-
-件越大
-
-cv2.imwrite('test_imwrite.jpg', color_img,    (cv2.工MWRITE一JPEG_QUALITY,
-
-80))
-
-\#    cv2.IMWRITE_PNG_COMPRESSION指定png质量，范围为0〜9:默认3，越高文件越小，画
-
-质越差
-
-cv2 . imwrite (* test_imwrite .png *, color_img, (cv2 .工MWR工TE—PNG—COMPRESS工ON, 5))
+# 直接读取单通道
+gray_img=cv2.imread('test_400x600.jpg',cv2.IMREAD_GRAYSCALE)
+print(gray_img.shape)
+# 把单通道图片保存后，再读取，仍然是3通道，相当于把单通道值复制到3个通道保存
+cv2.imwrite('test_grayscale.jpg')
+reload_grayscale=cv2.imread('test_grayscale.jpg')
+print(reload_grayscale)
+# cv2.IMWRITE_JPEG_QUALITY指定jpg质量，范围为0~100,默认95,越高画质越好，文件越大
+cv2.imwrite('test_imwrite.jpg', color_img,(cv2.IMWRITE_JPEG_QUALITY,80))
+# cv2.IMWRITE_PNG_COMPRESSION指定png质量，范围为0~9:默认3，越高文件越小，画质越差
+cv2.imwrite('test_imwrite.png', color_img,(cv2.IMWRITE_PNG_COMPRESSION,5))
+```
 
 \2.    缩放、裁剪和补边
 

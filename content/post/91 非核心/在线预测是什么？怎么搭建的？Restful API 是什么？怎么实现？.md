@@ -61,16 +61,3 @@ date: 2018-08-01 18:21:15
 [Python Flask RestfulAPI 基础篇](http://blog.csdn.net/bestallen/article/details/53767114)
 
 [利用Django实现ResutfulAPI](https://www.cnblogs.com/zhouyang123200/p/6606405.html)
-
-
-
-
-
-
-# COMMENT：
-
-
-
-
-
-## 相关资料：

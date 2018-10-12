@@ -7,7 +7,7 @@ anaconda 换源
 
 清华的anaconda镜像挂了，用中科大的镜像吧
 conda config –add channels https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
-conda config –set show_channel_urls yes  
+conda config –set show_channel_urls yes
 
 加个小tip:要删除 .condarc文件 。
 .condarc以点开头，一般表示 conda 应用程序的配置文件，在用户的根目录

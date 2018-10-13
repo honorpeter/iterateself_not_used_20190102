@@ -1,3 +1,8 @@
+---
+title: Ubuntu shadowsocks
+toc: true
+date: 2018-10-13
+---
 
 
 

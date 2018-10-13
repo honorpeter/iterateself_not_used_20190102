@@ -1,3 +1,8 @@
+---
+title: Pycharm 去掉波浪线
+toc: true
+date: 2018-10-13
+---
 刚开始使用的时候，pycharm 上是由很多波浪线的。
 
 

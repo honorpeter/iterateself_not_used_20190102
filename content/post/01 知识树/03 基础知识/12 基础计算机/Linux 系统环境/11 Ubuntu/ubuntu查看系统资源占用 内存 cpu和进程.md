@@ -1,3 +1,8 @@
+---
+title: ubuntu查看系统资源占用 内存 cpu和进程
+toc: true
+date: 2018-10-13
+---
 
 
 

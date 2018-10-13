@@ -1,3 +1,8 @@
+---
+title: ubuntu 16.04 安装64位 teamviewer13方法
+toc: true
+date: 2018-10-13
+---
 
 
 

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>GPU 相关 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="GPU和并行技术——深度学习和计算视觉发展的加速器 前面提到过，深度学习的概念早就有了，早期制约其发展的因素是方方面面的，其中一个很重要的方面" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E4%BB%8B%E7%BB%8D/gpu-%E7%9B%B8%E5%85%B3/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="GPU 相关" />
+<meta property="og:description" content="GPU和并行技术——深度学习和计算视觉发展的加速器 前面提到过，深度学习的概念早就有了，早期制约其发展的因素是方方面面的，其中一个很重要的方面" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E4%BB%8B%E7%BB%8D/gpu-%E7%9B%B8%E5%85%B3/" /><meta property="article:published_time" content="2018-08-30T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-30T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="GPU 相关">
+<meta itemprop="description" content="GPU和并行技术——深度学习和计算视觉发展的加速器 前面提到过，深度学习的概念早就有了，早期制约其发展的因素是方方面面的，其中一个很重要的方面">
+
+
+<meta itemprop="datePublished" content="2018-08-30T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-30T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1944">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GPU 相关"/>
+<meta name="twitter:description" content="GPU和并行技术——深度学习和计算视觉发展的加速器 前面提到过，深度学习的概念早就有了，早期制约其发展的因素是方方面面的，其中一个很重要的方面"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">GPU 相关</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-30 </span>
+        
+        <span class="more-meta"> 1944 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#gpu和并行技术-深度学习和计算视觉发展的加速器">GPU和并行技术——深度学习和计算视觉发展的加速器</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="gpu和并行技术-深度学习和计算视觉发展的加速器">GPU和并行技术——深度学习和计算视觉发展的加速器</h2>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180830/e26k6ACkK4.png?imageslim" alt="mark" /></p>
+
+<p>前面提到过，深度学习的概念早就有了，早期制约其发展的因素是方方面面的，其中一个很重要的方面就是计算能力的限制。相对其他许多传统的机器学习方法，深度神经网络本身就是一个消耗计算量的大户。另一方面，由于多层神经网络本身极强的表达能力， 对数据量也提出了很高的要求。如图1-8所示，一个普遍被接受的观点是，深度学习在数据量较少时，和传统算法差别不大，甚至有时候传统算法更胜一筹。而当数据量持续增加的情况下，传统的算法往 往会出现性能上的“饱和”，而深度学习则会随着 数据的增加持续提高性能。所以大数据和深度神经 网络的碰撞才擦出了今天深度学习的火花，而大数据之大更加大了对计算能力的需求。在GPU被广泛应用到深度学习训练之前，计算能力的低下限制了对算法的探索和实验，以及在海量数据上进行训练的可行性。</p>
+
+<p>从20世纪80年代开始人们就开始使用专门的运算单元负责对三维模型形成的图像进行渲染。不过直到1999年NVIDIA发布GeForce 256时，才正式提出了 GPU的概念。早期的GPU中，显卡的作用主要是渲染，但因为天然就很强的并行处理能力和少逻辑重计算 的属性，从2000年开始就有不少科研人员开始尝试用GPU来加速通用高密度、大吞吐量 的计算任务。2001 年，通用图形处理器(General-Purpose computing on GPU，GPGPU)的 概念被正式提出。2002年，多伦多大学的James Fung发布了 OpenVIDIA,利用GPU实现 了一些计算机视觉库的加速，这是第一次正式将GPU用到了渲染以外的用途上。到了 2006 年，NVIDIA推出了利用GPU进行通用计算的平台CUDA,让开发者不用再和着色器/ OpenGL打交道，而更专注于计算逻辑的实现。这时，GPU无论是在带宽还是浮点运算能 力上都已经接近同时期CPU能力的10倍，而CUDA的推出一下降低了 GPGPU编程的门槛，于是CUDA很快就流行开并成为了 GPU 通用计算的主流框架。后来深度学习诞生了，鉴于科研界对GPU计算的一贯偏爱，自然开始有人利用GPU进行深度网络的训练。之后 的事情前面也讲到了，GPU 助 Alex一战成名，同时也成为了训练深度神经网络的标配。</p>
+
+<p>除了 NVIDIA, ATI (后被AMD收购)也是另一大GPU厂商。事实上ATI在GPU通用计算领域的探索比NVIDIA还早，但也许是因为投入程度不够,或是其他原因，被NVIDIA 占尽先机，尤其是后来在深度学习领域。</p>
+
+<p>说完了 GPU 领域的风云变幻，接下来看一些实际的问题：如何选购一块做深度学习的 GPU？一提到用于深度学习的 GPU，很多人立刻会想到 NVIDIA 的 Tesla 系列。实际上根 据使用场景和预算的不同，选择是可以很多样化的。NVIDIA主要有3个系列的显卡： GeForce、Quadro 和 Tesla。GeForce 面向游戏，Quadro 面向3D设计、专业图像和CAD等， 而 Tesla 则是面向科学计算。所以这里主要讨论一下GeForce和Tesla的区别。</p>
+
+<p>GeForce 系列显卡面向游戏，所以性能要求是最高的，而精度上的限制就低很多，另外稳定性比Tesla也差很多。毕竟玩游戏的时候如果程序崩了也就丢个存档，但服务器要是崩了没准能“挂掉” 一个公司。当然从实际角度看最大的两个优点是：既可以进行深度学习又可以玩游戏；便宜。</p>
+
+<p>Tesla 从诞生之初就是瞄准高精度科学运算。所以Tesla严格意义上来说不是块显卡， 而是计算加速卡。对于不带视频输出的 Tesla 卡而言，玩游戏是指望不上的。由于Tesla开始面向的主要是高性能计算，尤其是科学计算，在许多科学计算领域，如大气等物理过程 的模拟中对精度的要求非常高，所以Tesla的设计上双精度浮点数的能力比起 GeForce 系列强很多。如 GTX Titan 和 K40 两块卡，GTX Titan的单精度浮点数运算能力是 K40 的1.5 倍，但是双精度浮点数运算能力却只有K40的不到15%。不过从深度学习的角度来看，双精度显得不是那么必要，如经典的 AlexNet 就是两块 GTX 580 训练出来的。所以，2016 年开始，NVIDIA 也在 Tesla 系列里推出了 M 系列加速卡，专门针对深度学习进行了优化， 并且牺牲双精度运算能力而大幅提升了单精度运算的性能。前面也提到了，除了精度，Tesla 主要面向工作站和服务器，所以稳定性特别好，同时也会有很多针对服务器的优化，如高 端的Tesla卡上的 GPUDirect 技术可以支持远程直接内存访问(Remote Direct Memory Access, RDMA)用来提升节点间数据交互的效率。当然，Tesla系列有一个最大的特点就是贵。</p>
+
+<p>综上所述，如果是在大规模集群上进行深度学习研发和部署，Tesla系列是首选，尤其是M和P子系列是不二之选。单机上开发的话，“土豪”或者追求稳定性高的人就选择 Tesla。而最有性价比且能兼顾日常使用的选择则是 GeForce。<span style="color:red;">嗯。</span></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>《深度学习与计算机视觉》</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/03-caffe/10-%E7%94%A8-caffe-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">10 用 Caffe 实现一个神经网络</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/01-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E4%BB%8B%E7%BB%8D/%E5%9F%BA%E4%BA%8E%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%BA%94%E7%94%A8/">
+            <span class="next-text nav-default">基于卷积神经网络的一些计算机视觉应用</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

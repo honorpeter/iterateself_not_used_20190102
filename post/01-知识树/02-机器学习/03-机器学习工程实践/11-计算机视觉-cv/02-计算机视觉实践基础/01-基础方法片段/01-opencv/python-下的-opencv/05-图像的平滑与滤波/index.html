@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>05 图像的平滑与滤波 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="对于图形的平滑与滤波，但从滤波角度来讲，一般主要的目的都是为了实现对图像噪声的消除，增强图像的效果。 首先介绍二维卷积运算，图像的滤波可以看成" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/05-%E5%9B%BE%E5%83%8F%E7%9A%84%E5%B9%B3%E6%BB%91%E4%B8%8E%E6%BB%A4%E6%B3%A2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="05 图像的平滑与滤波" />
+<meta property="og:description" content="对于图形的平滑与滤波，但从滤波角度来讲，一般主要的目的都是为了实现对图像噪声的消除，增强图像的效果。 首先介绍二维卷积运算，图像的滤波可以看成" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/05-%E5%9B%BE%E5%83%8F%E7%9A%84%E5%B9%B3%E6%BB%91%E4%B8%8E%E6%BB%A4%E6%B3%A2/" /><meta property="article:published_time" content="2018-08-12T20:43:39&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-12T20:43:39&#43;00:00"/>
+<meta itemprop="name" content="05 图像的平滑与滤波">
+<meta itemprop="description" content="对于图形的平滑与滤波，但从滤波角度来讲，一般主要的目的都是为了实现对图像噪声的消除，增强图像的效果。 首先介绍二维卷积运算，图像的滤波可以看成">
+
+
+<meta itemprop="datePublished" content="2018-08-12T20:43:39&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-12T20:43:39&#43;00:00" />
+<meta itemprop="wordCount" content="2439">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="05 图像的平滑与滤波"/>
+<meta name="twitter:description" content="对于图形的平滑与滤波，但从滤波角度来讲，一般主要的目的都是为了实现对图像噪声的消除，增强图像的效果。 首先介绍二维卷积运算，图像的滤波可以看成"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">05 图像的平滑与滤波</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-12 </span>
+        
+        <span class="more-meta"> 2439 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#一-统一的2d滤波器cv2-filter2d">（一）统一的2D滤波器cv2.filter2D</a></li>
+<li><a href="#二-均值滤波">（二）均值滤波</a></li>
+<li><a href="#三-高斯模糊模板">（三）高斯模糊模板</a></li>
+<li><a href="#四-中值滤波模板">（四）中值滤波模板</a></li>
+<li><a href="#五-双边滤波">（五）双边滤波</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>对于图形的平滑与滤波，但从滤波角度来讲，一般主要的目的都是为了实现对图像噪声的消除，增强图像的效果。
+首先介绍二维卷积运算，图像的滤波可以看成是滤波模板与原始图像对应部分的的卷积运算。关于卷积运算，找到几篇相关的博客：</p>
+
+<p><strong>图像处理：基础(模板、卷积运算)</strong>(<a href="http://blog.csdn.net/xiaoxin_ling/article/details/3587987">http://blog.csdn.net/xiaoxin_ling/article/details/3587987</a>)
+<strong>图像处理-模板、卷积的整理</strong>(<a href="http://blog.csdn.net/lanbing510/article/details/7425952">http://blog.csdn.net/lanbing510/article/details/7425952</a>)</p>
+
+<p>对于2D图像可以进行低通或者高通滤波操作，低通滤波（LPF）有利于去噪，模糊图像，高通滤波（HPF）有利于找到图像边界。</p>
+
+<h2 id="一-统一的2d滤波器cv2-filter2d">（一）统一的2D滤波器cv2.filter2D</h2>
+
+<p>Opencv提供的一个通用的2D滤波函数为cv2.filter2D()，滤波函数的使用需要一个核模板，对图像的滤波操作过程为：将和模板放在图像的一个像素A上，求与之对应的图像上的每个像素点的和，核不同，得到的结果不同，而滤波的使用核心也是对于这个核模板的使用，需要注意的是，该滤波函数是单通道运算的，也就是说对于彩色图像的滤波，需要将彩色图像的各个通道提取出来，对各个通道分别滤波才行。
+这里说一个与matlab相似的情况，matlab中也有一个类似的滤波函数imfilter,对于滤波函数的应用其实不只在于滤波，对于许多图像的整体处理上，其实都可以用滤波函数来组合实现，得到更快的效果，相关的介绍间下面这个博客：</p>
+
+<p><strong>图像滤波函数imfilter函数的应用及其扩展</strong>(<a href="http://blog.csdn.net/on2way/article/details/46722451">http://blog.csdn.net/on2way/article/details/46722451</a>)</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+img1 = np.float32(img) #转化数值类型
+kernel = np.ones((5,5),np.float32)/25
+
+dst = cv2.filter2D(img1,-1,kernel)
+#cv2.filter2D(src,dst,kernel,auchor=(-1,-1))函数：
+#输出图像与输入图像大小相同
+#中间的数为-1，输出数值格式的相同plt.figure()
+plt.subplot(1,2,1),plt.imshow(img1,'gray')#默认彩色，另一种彩色bgr
+plt.subplot(1,2,2),plt.imshow(dst,'gray')1234567891011121314
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/GCCL4d85ka.png?imageslim" alt="mark" /></p>
+
+<p>下面介绍的几种滤波部分可能是将函数cv2.filter2D()具体化，重新规定一个名字而已，贴一个好的博客参考：</p>
+
+<p><strong>图像平滑处理（归一化块滤波、高斯滤波、中值滤波、双边滤波）</strong>(<a href="http://blog.csdn.net/xw20084898/article/details/21822565">http://blog.csdn.net/xw20084898/article/details/21822565</a>)</p>
+
+<h2 id="二-均值滤波">（二）均值滤波</h2>
+
+<p>上述生成的5*5核模板其实就是一个均值滤波。而opencv有一个专门的平均滤波模板供使用–归一化卷积模板，所有的滤波模板都是使卷积框覆盖区域所有像素点与模板相乘后得到的值作为中心像素的值。Opencv中均值模板可以用cv2.blur和cv2.boxFilter,比如一个3*3的模板其实就可以如下表示：</p>
+
+<p>$$ M=\dfrac{1}{9}\left[ \begin{matrix} 1&amp;1&amp;1&amp;\ 1&amp;1&amp;1&amp; \1&amp;1&amp;1\end{matrix} \right] $$</p>
+
+<p>模板大小是m*n是可以设置的。如果你不想要前面的1/9,可以使用非归一化的模板cv2.boxFilter。一个实例如下：</p>
+
+<pre><code>import cv2
+import matplotlib.pyplot as plt
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+blur = cv2.blur(img,(3,5))#模板大小3*5
+plt.subplot(1,2,1),plt.imshow(img,'gray')#默认彩色，另一种彩色bgr
+plt.subplot(1,2,2),plt.imshow(blur,'gray')123456
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/8E75A1IIkh.png?imageslim" alt="mark" /></p>
+
+<h2 id="三-高斯模糊模板">（三）高斯模糊模板</h2>
+
+<p>现在把卷积模板中的值换一下，不是全1了，换成一组符合高斯分布的数值放在模板里面，比如这时中间的数值最大，往两边走越来越小，构造一个小的高斯包。实现的函数为cv2.GaussianBlur()。对于高斯模板，我们需要制定的是高斯核的高和宽（奇数），沿x与y方向的标准差(如果只给x，y=x，如果都给0，那么函数会自己计算)。高斯核可以有效的出去图像的高斯噪声。当然也可以自己构造高斯核，相关函数：cv2.GaussianKernel().</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+for i in range(2000): #添加点噪声
+    temp_x = np.random.randint(0,img.shape[0])
+    temp_y = np.random.randint(0,img.shape[1])
+    img[temp_x][temp_y] = 255
+blur = cv2.GaussianBlur(img,(5,5),0)
+plt.subplot(1,2,1),plt.imshow(img,'gray')#默认彩色，另一种彩色bgr
+plt.subplot(1,2,2),plt.imshow(blur,'gray') 123456789101112
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/fdhJji2dEL.png?imageslim" alt="mark" /></p>
+
+<h2 id="四-中值滤波模板">（四）中值滤波模板</h2>
+
+<p>中值滤波模板就是用卷积框中像素的中值代替中心值，达到去噪声的目的。这个模板一般用于去除椒盐噪声。前面的滤波器都是用计算得到的一个新值来取代中心像素的值，而中值滤波是用中心像素周围（也可以使他本身）的值来取代他，卷积核的大小也是个奇数。</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+for i in range(2000): #添加点噪声
+    temp_x = np.random.randint(0,img.shape[0])
+    temp_y = np.random.randint(0,img.shape[1])
+    img[temp_x][temp_y] = 255
+
+blur = cv2.medianBlur(img,5)
+plt.subplot(1,2,1),plt.imshow(img,'gray')#默认彩色，另一种彩色bgr
+plt.subplot(1,2,2),plt.imshow(blur,'gray') 12345678910111213
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/Ifd683IDeB.png?imageslim" alt="mark" /></p>
+
+<p>可以看到中值滤波对于这些白点噪声的去除是非常的好的。</p>
+
+<h2 id="五-双边滤波">（五）双边滤波</h2>
+
+<p>双边滤波函数为cv2.bilateralFilter()。该滤波器可以在保证边界清晰的情况下有效的去掉噪声。它的构造比较复杂，即考虑了图像的空间关系，也考虑图像的灰度关系。双边滤波同时使用了空间高斯权重和灰度相似性高斯权重，确保了边界不会被模糊掉。有一个介绍专门介绍双边滤波的博客：</p>
+
+<p><strong>双边滤波器的原理及实现</strong>(<a href="http://blog.csdn.net/abcjennifer/article/details/7616663">http://blog.csdn.net/abcjennifer/article/details/7616663</a>)</p>
+
+<p>cv2.bilateralFilter(img,d,’p1’,’p2’)函数有四个参数需要，d是领域的直径，后面两个参数是空间高斯函数标准差和灰度值相似性高斯函数标准差。一个实例如下：</p>
+
+<pre><code>import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+img = cv2.imread('flower.jpg',0) #直接读为灰度图像
+for i in range(2000): #添加点噪声
+    temp_x = np.random.randint(0,img.shape[0])
+    temp_y = np.random.randint(0,img.shape[1])
+    img[temp_x][temp_y] = 255
+
+#9---滤波领域直径
+#后面两个数字：空间高斯函数标准差，灰度值相似性标准差
+blur = cv2.bilateralFilter(img,9,75,75)
+plt.subplot(1,2,1),plt.imshow(img,'gray')#默认彩色，另一种彩色bgr
+plt.subplot(1,2,2),plt.imshow(blur,'gray')1234567891011121314
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/D71iABcF8c.png?imageslim" alt="mark" /></p>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li><a href="https://blog.csdn.net/on2way/article/details/46828567">Python下opencv使用笔记（五）（图像的平滑与滤波）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/06-%E5%9B%BE%E5%83%8F%E7%9A%84%E5%BD%A2%E6%80%81%E5%AD%A6%E5%8F%98%E6%8D%A2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">06 图像的形态学变换</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/python-%E4%B8%8B%E7%9A%84-opencv/04-%E5%9B%BE%E5%83%8F%E7%9A%84%E9%98%88%E5%80%BC%E5%A4%84%E7%90%86/">
+            <span class="next-text nav-default">04 图像的阈值处理</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

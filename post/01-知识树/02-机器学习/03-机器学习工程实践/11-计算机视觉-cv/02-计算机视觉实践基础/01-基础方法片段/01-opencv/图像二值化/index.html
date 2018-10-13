@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>图像二值化 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 图像的二值化应该是肯定会要使用的，尤其是在简单的图像场景下，可以直接分离出想要的东西。 图像的二值化 定义：图像的二值化，就是将图像上" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/%E5%9B%BE%E5%83%8F%E4%BA%8C%E5%80%BC%E5%8C%96/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="图像二值化" />
+<meta property="og:description" content="需要补充的 图像的二值化应该是肯定会要使用的，尤其是在简单的图像场景下，可以直接分离出想要的东西。 图像的二值化 定义：图像的二值化，就是将图像上" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/%E5%9B%BE%E5%83%8F%E4%BA%8C%E5%80%BC%E5%8C%96/" /><meta property="article:published_time" content="2018-10-04T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-04T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="图像二值化">
+<meta itemprop="description" content="需要补充的 图像的二值化应该是肯定会要使用的，尤其是在简单的图像场景下，可以直接分离出想要的东西。 图像的二值化 定义：图像的二值化，就是将图像上">
+
+
+<meta itemprop="datePublished" content="2018-10-04T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-04T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1417">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="图像二值化"/>
+<meta name="twitter:description" content="需要补充的 图像的二值化应该是肯定会要使用的，尤其是在简单的图像场景下，可以直接分离出想要的东西。 图像的二值化 定义：图像的二值化，就是将图像上"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">图像二值化</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-04 </span>
+        
+        <span class="more-meta"> 1417 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#图像的二值化">图像的二值化</a>
+<ul>
+<li><a href="#简单的阈值-全局阈值">简单的阈值-（全局阈值）</a></li>
+<li><a href="#自适应阈值">自适应阈值</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>图像的二值化应该是肯定会要使用的，尤其是在简单的图像场景下，可以直接分离出想要的东西。</li>
+</ul>
+
+<h1 id="图像的二值化">图像的二值化</h1>
+
+<p>定义：图像的二值化，就是将图像上的像素点的灰度值设置为 0 或 255，也就是将整个图像呈现出明显的只有黑和白的视觉效果。</p>
+
+<p>​一幅图像包括目标物体、背景还有噪声，要想从多值的数字图像中直接提取出目标物体，常用的方法就是设定一个阈值T，用T将图像的数据分成两部分：大于 T 的像素群和小于 T 的像素群。这是研究灰度变换的最特殊的方法，称为图像的<strong>二值化</strong>（<strong>Binarization</strong>）。</p>
+
+<h2 id="简单的阈值-全局阈值">简单的阈值-（全局阈值）</h2>
+
+<p>Python-OpenCV中提供了阈值（threshold）函数：</p>
+
+<p><strong>cv2.threshold（）</strong></p>
+
+<ul>
+<li>第一个参数 src 指原图像，原图像应该是灰度图。</li>
+<li>第二个参数 x 指用来对像素值进行分类的阈值。</li>
+<li>第三个参数 y 指当像素值高于（有时是小于）阈值时应该被赋予的新的像素值</li>
+<li>第四个参数 Methods 指，不同的不同的阈值方法，这些方法包括：</li>
+</ul>
+
+<p>Methods 指的不同方法如下：</p>
+
+<ul>
+<li>cv2.THRESH_BINARY ：破折线为将被阈值化的值；虚线为阈值<br /></li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/C41LiL28FJ.png?imageslim" alt="mark" />
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/B2HEcI9gI3.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>cv2.THRESH_BINARY_INV ：大于阈值的像素点的灰度值设定为最大值(如8位灰度值最大为255)，灰度值小于阈值的像素点的灰度值设定为0。</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/9d3787DD56.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>cv2.THRESH_TRUNC：大于阈值的像素点的灰度值设定为0，而小于该阈值的设定为255。</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/8F15LG1IDB.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>cv2.THRESH_TOZERO： 像素点的灰度值小于阈值不改变，大于阈值的灰度值的像素点就设定为该阈值。</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/4H20FF3J29.png?imageslim" alt="mark" /></p>
+
+<ul>
+<li>cv2.THRESH_TOZERO_INV：像素点的灰度值小于该阈值的不进行任何改变，而大于该阈值的部分，其灰度值全部变为0。</li>
+</ul>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/AI1bhcHkJ0.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+img=cv2.imread('1.bmp')
+GrayImage=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+ret,thresh1=cv2.threshold(GrayImage,127,255,cv2.THRESH_BINARY)
+ret,thresh2=cv2.threshold(GrayImage,127,255,cv2.THRESH_BINARY_INV)
+ret,thresh3=cv2.threshold(GrayImage,127,255,cv2.THRESH_TRUNC)
+ret,thresh4=cv2.threshold(GrayImage,127,255,cv2.THRESH_TOZERO)
+ret,thresh5=cv2.threshold(GrayImage,127,255,cv2.THRESH_TOZERO_INV)
+titles = ['Gray Image','BINARY','BINARY_INV','TRUNC','TOZERO','TOZERO_INV']
+images = [GrayImage, thresh1, thresh2, thresh3, thresh4, thresh5]
+for i in xrange(6):
+   plt.subplot(2,3,i+1),plt.imshow(images[i],'gray')
+   plt.title(titles[i])
+   plt.xticks([]),plt.yticks([])
+plt.show()
+</code></pre>
+
+<p>效果图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/2H6kfAjhd9.png?imageslim" alt="mark" /></p>
+
+<h2 id="自适应阈值">自适应阈值</h2>
+
+<p>当同一幅图像上的不同部分的具有不同亮度时。这种情况下我们需要采用自适应阈值。此时的阈值是根据图像上的每一个小区域计算与其对应的阈值。因此在同一幅图像上的不同区域采用的是不同的阈值，从而使我们能在亮度不同的情况下得到更好的结果。</p>
+
+<p><strong>cv2.adaptiveThreshold（）</strong></p>
+
+<ul>
+<li>第一个参数 src 指原图像，原图像应该是灰度图。</li>
+<li>第二个参数 x 指当像素值高于（有时是小于）阈值时应该被赋予的新的像素值</li>
+<li>第三个参数  adaptive_method  指： CV_ADAPTIVE_THRESH_MEAN_C 或 CV_ADAPTIVE_THRESH_GAUSSIAN_C</li>
+<li>第四个参数    threshold_type    指取阈值类型：必须是下者之
+
+<ul>
+<li>CV_THRESH_BINARY</li>
+<li>CV_THRESH_BINARY_INV</li>
+</ul></li>
+<li>第五个参数 block_size   指用来计算阈值的象素邻域大小: 3, 5, 7, &hellip;</li>
+<li>第六个参数 param1 指 与方法有关的参数。对方法 CV_ADAPTIVE_THRESH_MEAN_C 和 CV_ADAPTIVE_THRESH_GAUSSIAN_C， 它是一个从均值或加权均值提取的常数, 尽管它可以是负数。</li>
+</ul>
+
+<p>自适应阈值：</p>
+
+<ul>
+<li>对方法CV_ADAPTIVE_THRESH_MEAN_C，先求出块中的均值，再减掉 param1。</li>
+<li>对方法 CV_ADAPTIVE_THRESH_GAUSSIAN_C ，先求出块中的加权和(gaussian)， 再减掉 param1。</li>
+</ul>
+
+<p>例如：</p>
+
+<p>​采用方法 CV_ADAPTIVE_THRESH_MEAN_C，阈值类型：CV_THRESH_BINARY,  阈值的象素邻域大小 <strong>block_size 选取3，</strong>参数param1  取3和5时**：</p>
+
+<p>部分原图像像素值 到 当参数 param1 为 5 时</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/G2D5B10GaB.png?imageslim" alt="mark" /></p>
+
+<p>部分原图像像素值 到 当参数 param1 为 7 时</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/AB8BAa8k4h.png?imageslim" alt="mark" /></p>
+
+<p>选取对应领域（3*3）求其均值，然后减去参数 param1 的值为自适应阈值。测试时求得均值为小数时，貌似进行四舍五入之后再减去参数param1。（<strong>可能是我没测试准确，无聊时测试一下，共同学习</strong>）</p>
+
+<p>Python+opencv代码：</p>
+
+<pre><code class="language-python">import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+img = cv2.imread('1.bmp')
+GrayImage=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+# 中值滤波
+GrayImage= cv2.medianBlur(GrayImage,5)
+ret,th1 = cv2.threshold(GrayImage,127,255,cv2.THRESH_BINARY)
+#3 为Block size, 5为param1值
+th2 = cv2.adaptiveThreshold(GrayImage,255,cv2.ADAPTIVE_THRESH_MEAN_C,\
+                    cv2.THRESH_BINARY,3,5)
+th3 = cv2.adaptiveThreshold(GrayImage,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+                    cv2.THRESH_BINARY,3,5)
+titles = ['Gray Image', 'Global Thresholding (v = 127)',
+'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
+images = [GrayImage, th1, th2, th3]
+for i in xrange(4):
+   plt.subplot(2,2,i+1),plt.imshow(images[i],'gray')
+   plt.title(titles[i])
+   plt.xticks([]),plt.yticks([])
+plt.show()
+
+</code></pre>
+
+<p>效果图：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180928/2IBkKhbmj7.png?imageslim" alt="mark" /></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/11-ubuntu/%E5%8E%8B%E7%BC%A9%E5%8C%85%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%8E%8B%E7%BC%A9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">压缩包以及解压缩</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/windows-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/%E5%A4%A7%E7%BA%B2/">
+            <span class="next-text nav-default">大纲</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>data aug - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个是《深度学习与计算机视觉》中的某一章的内容，那一章还没有进行总结，因此先把部分程序放在这，后面对那一章进行总结后合并进来。 之所" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/21-%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/data-aug/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="data aug" />
+<meta property="og:description" content="需要补充的 这个是《深度学习与计算机视觉》中的某一章的内容，那一章还没有进行总结，因此先把部分程序放在这，后面对那一章进行总结后合并进来。 之所" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/21-%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/data-aug/" /><meta property="article:published_time" content="2018-09-01T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-09-01T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="data aug">
+<meta itemprop="description" content="需要补充的 这个是《深度学习与计算机视觉》中的某一章的内容，那一章还没有进行总结，因此先把部分程序放在这，后面对那一章进行总结后合并进来。 之所">
+
+
+<meta itemprop="datePublished" content="2018-09-01T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-01T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="857">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="data aug"/>
+<meta name="twitter:description" content="需要补充的 这个是《深度学习与计算机视觉》中的某一章的内容，那一章还没有进行总结，因此先把部分程序放在这，后面对那一章进行总结后合并进来。 之所"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">data aug</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-09-01 </span>
+        
+        <span class="more-meta"> 857 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#数据增强">数据增强</a>
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>这个是《深度学习与计算机视觉》中的某一章的内容，那一章还没有进行总结，因此先把部分程序放在这，后面对那一章进行总结后合并进来。</li>
+<li>之所以在这里占个位置，因为 CV 的关于手写数字识别的例子中涉及到了数据增强。</li>
+<li>后续把对应的章节总结合并到这里。</li>
+</ul>
+
+<h1 id="数据增强">数据增强</h1>
+
+<pre><code class="language-python">import numpy as np
+import cv2
+
+crop_image = lambda img, x0, y0, w, h: img[y0:y0+h, x0:x0+w]
+
+def random_crop(img, area_ratio, hw_vari):
+    h, w = img.shape[:2]
+    hw_delta = np.random.uniform(-hw_vari, hw_vari)
+    hw_mult = 1 + hw_delta
+    w_crop = int(round(w*np.sqrt(area_ratio*hw_mult)))
+    if w_crop &gt; w - 2:
+        w_crop = w - 2
+    h_crop = int(round(h*np.sqrt(area_ratio/hw_mult)))
+    if h_crop &gt; h - 2:
+        h_crop = h - 2
+    x0 = np.random.randint(0, w-w_crop-1)
+    y0 = np.random.randint(0, h-h_crop-1)
+    return crop_image(img, x0, y0, w_crop, h_crop)
+
+def rotate_image(img, angle, crop):
+    h, w = img.shape[:2]
+    angle %= 360
+    M_rotate = cv2.getRotationMatrix2D((w/2, h/2), angle, 1)
+    img_rotated = cv2.warpAffine(img, M_rotate, (w, h))
+
+    if crop:
+        angle_crop = angle % 180
+        if angle_crop &gt; 90:
+            angle_crop = 180 - angle_crop
+        theta = angle_crop * np.pi / 180.0
+        hw_ratio = float(h) / float(w)
+        tan_theta = np.tan(theta)
+        numerator = np.cos(theta) + np.sin(theta) * tan_theta
+        r = hw_ratio if h &gt; w else 1 / hw_ratio
+        denominator = r * tan_theta + 1
+        crop_mult = numerator / denominator
+        w_crop = int(round(crop_mult*w))
+        h_crop = int(round(crop_mult*h))
+        x0 = int((w-w_crop)/2)
+        y0 = int((h-h_crop)/2)
+
+        img_rotated = crop_image(img_rotated, x0, y0, w_crop, h_crop)
+
+    return img_rotated
+
+def random_rotate(img, angle_vari, p_crop):
+    angle = np.random.uniform(-angle_vari, angle_vari)
+    crop = False if np.random.random() &gt; p_crop else True
+    return rotate_image(img, angle, crop)
+
+def hsv_transform(img, hue_delta, sat_mult, val_mult):
+    img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV).astype(np.float)
+    img_hsv[:, :, 0] = (img_hsv[:, :, 0] + hue_delta) % 180
+    img_hsv[:, :, 1] *= sat_mult
+    img_hsv[:, :, 2] *= val_mult
+    img_hsv[img_hsv &gt; 255] = 255
+    return cv2.cvtColor(np.round(img_hsv).astype(np.uint8), cv2.COLOR_HSV2BGR)
+
+def random_hsv_transform(img, hue_vari, sat_vari, val_vari):
+    hue_delta = np.random.randint(-hue_vari, hue_vari)
+    sat_mult = 1 + np.random.uniform(-sat_vari, sat_vari)
+    val_mult = 1 + np.random.uniform(-val_vari, val_vari)
+    return hsv_transform(img, hue_delta, sat_mult, val_mult)
+
+def gamma_transform(img, gamma):
+    gamma_table = [np.power(x / 255.0, gamma) * 255.0 for x in range(256)]
+    gamma_table = np.round(np.array(gamma_table)).astype(np.uint8)
+    return cv2.LUT(img, gamma_table)
+
+def random_gamma_transform(img, gamma_vari):
+    log_gamma_vari = np.log(gamma_vari)
+    alpha = np.random.uniform(-log_gamma_vari, log_gamma_vari)
+    gamma = np.exp(alpha)
+    return gamma_transform(img, gamma)
+
+
+</code></pre>
+
+<pre><code class="language-python">import os
+import argparse
+import random
+import math
+from multiprocessing import Process, cpu_count
+
+import cv2
+
+import image_augmentation as ia
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='A Simple Image Data Augmentation Tool',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    parser.add_argument('input_dir',
+                        help='Directory containing images')
+    parser.add_argument('output_dir',
+                        help='Directory for augmented images')
+    parser.add_argument('num',
+                        help='Number of images to be augmented',
+                        type=int)
+
+    parser.add_argument('--num_procs',
+                        help='Number of processes for paralleled augmentation',
+                        type=int, default=cpu_count())
+
+    parser.add_argument('--p_mirror',
+                        help='Ratio to mirror an image',
+                        type=float, default=0.5)
+
+    parser.add_argument('--p_crop',
+                        help='Ratio to randomly crop an image',
+                        type=float, default=1.0)
+    parser.add_argument('--crop_size',
+                        help='The ratio of cropped image size to original image size, in area',
+                        type=float, default=0.8)
+    parser.add_argument('--crop_hw_vari',
+                        help='Variation of h/w ratio',
+                        type=float, default=0.1)
+
+    parser.add_argument('--p_rotate',
+                        help='Ratio to randomly rotate an image',
+                        type=float, default=1.0)
+    parser.add_argument('--p_rotate_crop',
+                        help='Ratio to crop out the empty part in a rotated image',
+                        type=float, default=1.0)
+    parser.add_argument('--rotate_angle_vari',
+                        help='Variation range of rotate angle',
+                        type=float, default=10.0)
+
+    parser.add_argument('--p_hsv',
+                        help='Ratio to randomly change gamma of an image',
+                        type=float, default=1.0)
+    parser.add_argument('--hue_vari',
+                        help='Variation of hue',
+                        type=int, default=10)
+    parser.add_argument('--sat_vari',
+                        help='Variation of saturation',
+                        type=float, default=0.1)
+    parser.add_argument('--val_vari',
+                        help='Variation of value',
+                        type=float, default=0.1)
+
+    parser.add_argument('--p_gamma',
+                        help='Ratio to randomly change gamma of an image',
+                        type=float, default=1.0)
+    parser.add_argument('--gamma_vari',
+                        help='Variation of gamma',
+                        type=float, default=2.0)
+
+    args = parser.parse_args()
+    args.input_dir = args.input_dir.rstrip('/')
+    args.output_dir = args.output_dir.rstrip('/')
+
+    return args
+
+def generate_image_list(args):
+    filenames = os.listdir(args.input_dir)
+    num_imgs = len(filenames)
+
+    num_ave_aug = int(math.floor(args.num/num_imgs))
+    rem = args.num - num_ave_aug*num_imgs
+    lucky_seq = [True]*rem + [False]*(num_imgs-rem)
+    random.shuffle(lucky_seq)
+
+    img_list = [
+        (os.sep.join([args.input_dir, filename]), num_ave_aug+1 if lucky else num_ave_aug)
+        for filename, lucky in zip(filenames, lucky_seq)
+    ]
+
+    random.shuffle(img_list)  # in case the file size are not uniformly distributed
+
+    length = float(num_imgs) / float(args.num_procs)
+    indices = [int(round(i * length)) for i in range(args.num_procs + 1)]
+    return [img_list[indices[i]:indices[i + 1]] for i in range(args.num_procs)]
+
+def augment_images(filelist, args):
+    for filepath, n in filelist:
+        img = cv2.imread(filepath)
+        filename = filepath.split(os.sep)[-1]
+        dot_pos = filename.rfind('.')
+        imgname = filename[:dot_pos]
+        ext = filename[dot_pos:]
+
+        print('Augmenting {} ...'.format(filename))
+        for i in range(n):
+            img_varied = img.copy()
+            varied_imgname = '{}_{:0&gt;3d}_'.format(imgname, i)
+            if random.random() &lt; args.p_mirror:
+                img_varied = cv2.flip(img_varied, 1)
+                varied_imgname += 'm'
+            if random.random() &lt; args.p_crop:
+                img_varied = ia.random_crop(
+                    img_varied,
+                    args.crop_size,
+                    args.crop_hw_vari)
+                varied_imgname += 'c'
+            if random.random() &lt; args.p_rotate:
+                img_varied = ia.random_rotate(
+                    img_varied,
+                    args.rotate_angle_vari,
+                    args.p_rotate_crop)
+                varied_imgname += 'r'
+            if random.random() &lt; args.p_hsv:
+                img_varied = ia.random_hsv_transform(
+                    img_varied,
+                    args.hue_vari,
+                    args.sat_vari,
+                    args.val_vari)
+                varied_imgname += 'h'
+            if random.random() &lt; args.p_gamma:
+                img_varied = ia.random_gamma_transform(
+                    img_varied,
+                    args.gamma_vari)
+                varied_imgname += 'g'
+            output_filepath = os.sep.join([
+                args.output_dir,
+                '{}{}'.format(varied_imgname, ext)])
+            cv2.imwrite(output_filepath, img_varied)
+
+def main():
+    args = parse_args()
+    params_str = str(args)[10:-1]
+
+    if not os.path.exists(args.output_dir):
+        os.mkdir(args.output_dir)
+
+    print('Starting image data augmentation for {}\n'
+          'with\n{}\n'.format(args.input_dir, params_str))
+
+    sublists = generate_image_list(args)
+    processes = [Process(target=augment_images, args=(x, args, )) for x in sublists]
+
+    for p in processes:
+        p.start()
+
+    for p in processes:
+        p.join()
+
+    print('\nDone!')
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+
+<h2 id="相关资料">相关资料</h2>
+
+<ul>
+<li>《深度学习与计算机视觉》</li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/02-%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/ubuntu-%E4%B8%8A%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Ubuntu 上的基本环境</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/02-%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/%E5%A4%A7%E7%BA%B2/">
+            <span class="next-text nav-default">大纲</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

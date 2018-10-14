@@ -1,3 +1,8 @@
+---
+title: Pycharm 中传入命令行参数
+toc: true
+date: 2018-10-14
+---
 
 # Pycharm 中传入命令行参数
 

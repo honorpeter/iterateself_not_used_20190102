@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="iterateself" />
-  <meta name="description" content="Python 文本的读写 Python中读取文件常用的三种方法：read(),readline(),readlines(). 0.准备 假设a.txt的内容如" />
+  <meta name="description" content="Python 文本的读写 Python中读取文件常用的三种方法： read() readline() readlines() linecache 模块 假设 a.txt 的内容如下所示： Hello Welcome What is the fuck... read([size])方法 read([si" />
 
   <meta name="keywords" content="Hugo, theme, even" />
 
@@ -50,24 +50,24 @@
 
 
 <meta property="og:title" content="Python 文本读取" />
-<meta property="og:description" content="Python 文本的读写 Python中读取文件常用的三种方法：read(),readline(),readlines(). 0.准备 假设a.txt的内容如" />
+<meta property="og:description" content="Python 文本的读写 Python中读取文件常用的三种方法： read() readline() readlines() linecache 模块 假设 a.txt 的内容如下所示： Hello Welcome What is the fuck... read([size])方法 read([si" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/07-python-%E6%96%87%E4%BB%B6%E5%92%8C%E6%B5%81/python-%E6%96%87%E6%9C%AC%E8%AF%BB%E5%8F%96/" /><meta property="article:published_time" content="2018-08-28T00:00:00&#43;00:00"/>
 <meta property="article:modified_time" content="2018-08-28T00:00:00&#43;00:00"/>
 <meta itemprop="name" content="Python 文本读取">
-<meta itemprop="description" content="Python 文本的读写 Python中读取文件常用的三种方法：read(),readline(),readlines(). 0.准备 假设a.txt的内容如">
+<meta itemprop="description" content="Python 文本的读写 Python中读取文件常用的三种方法： read() readline() readlines() linecache 模块 假设 a.txt 的内容如下所示： Hello Welcome What is the fuck... read([size])方法 read([si">
 
 
 <meta itemprop="datePublished" content="2018-08-28T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-08-28T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="533">
+<meta itemprop="wordCount" content="479">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python 文本读取"/>
-<meta name="twitter:description" content="Python 文本的读写 Python中读取文件常用的三种方法：read(),readline(),readlines(). 0.准备 假设a.txt的内容如"/>
+<meta name="twitter:description" content="Python 文本的读写 Python中读取文件常用的三种方法： read() readline() readlines() linecache 模块 假设 a.txt 的内容如下所示： Hello Welcome What is the fuck... read([size])方法 read([si"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -135,8 +135,8 @@
       <div class="post-meta">
         <span class="post-time"> 2018-08-28 </span>
         
-        <span class="more-meta"> 533 words </span>
-        <span class="more-meta"> 2 mins read </span>
+        <span class="more-meta"> 479 words </span>
+        <span class="more-meta"> 1 min read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
     </header>
@@ -151,14 +151,10 @@
 <ul>
 <li><a href="#python-文本的读写">Python 文本的读写</a>
 <ul>
-<li>
-<ul>
-<li><a href="#0-准备">0.准备</a></li>
-<li><a href="#1-read-size-方法">1. read([size])方法</a></li>
-<li><a href="#2-readline-方法">2.readline()方法</a></li>
-<li><a href="#3-readlines-方法读取整个文件所有行-保存在一个列表-list-变量中-每行作为一个元素-但读取大文件会比较占内存">3.readlines()方法读取整个文件所有行，保存在一个列表(list)变量中，每行作为一个元素，但读取大文件会比较占内存。</a></li>
-<li><a href="#4-linecache模块">4.linecache模块</a></li>
-</ul></li>
+<li><a href="#read-size-方法">read([size])方法</a></li>
+<li><a href="#readline-方法">readline()方法</a></li>
+<li><a href="#readlines-方法">readlines()方法</a></li>
+<li><a href="#linecache-模块">linecache 模块</a></li>
 <li><a href="#相关资料">相关资料</a></li>
 </ul></li>
 </ul>
@@ -175,18 +171,23 @@
 
 <h1 id="python-文本的读写">Python 文本的读写</h1>
 
-<p>Python中读取文件常用的三种方法：read(),readline(),readlines().</p>
+<p>Python中读取文件常用的三种方法：</p>
 
-<h3 id="0-准备">0.准备</h3>
+<ul>
+<li>read()</li>
+<li>readline()</li>
+<li>readlines()</li>
+<li>linecache 模块</li>
+</ul>
 
-<p>假设<code>a.txt</code>的内容如下所示：</p>
+<p>假设 <code>a.txt</code> 的内容如下所示：</p>
 
 <pre><code>Hello
 Welcome
 What is the fuck...
 </code></pre>
 
-<h3 id="1-read-size-方法">1. read([size])方法</h3>
+<h2 id="read-size-方法">read([size])方法</h2>
 
 <p><code>read([size])</code>方法从文件当前位置起读取size个字节，若无参数<code>size</code>，则表示读取至文件结束为止，它范围为字符串对象</p>
 
@@ -205,7 +206,7 @@ What is the fuck...
 &lt;type 'str'&gt; #字符串类型
 </code></pre>
 
-<h3 id="2-readline-方法">2.readline()方法</h3>
+<h2 id="readline-方法">readline()方法</h2>
 
 <p>从字面意思可以看出，该方法每次读出一行内容，所以，读取时占用内存小，比较适合大文件，该方法返回一个字符串对象。</p>
 
@@ -226,7 +227,9 @@ Welcome
 What is the fuck...
 </code></pre>
 
-<h3 id="3-readlines-方法读取整个文件所有行-保存在一个列表-list-变量中-每行作为一个元素-但读取大文件会比较占内存">3.readlines()方法读取整个文件所有行，保存在一个列表(list)变量中，每行作为一个元素，但读取大文件会比较占内存。</h3>
+<h2 id="readlines-方法">readlines()方法</h2>
+
+<p>读取整个文件所有行，保存在一个列表(list)变量中，每行作为一个元素，但读取大文件会比较占内存。</p>
 
 <pre><code class="language-python">f = open(&quot;a.txt&quot;)
 lines = f.readlines()
@@ -236,15 +239,17 @@ for line in lines:
 f.close()
 </code></pre>
 
-<p>输出结果：
- <type 'list'>
- Hello
- Welcome
- What is the fuck&hellip;</p>
+<p>输出结果：</p>
 
-<h3 id="4-linecache模块">4.linecache模块</h3>
+<pre><code>&lt;type 'list'&gt;
+Hello
+Welcome
+What is the fuck...
+</code></pre>
 
-<p>当然，有特殊需求还可以用linecache模块，比如你要输出某个文件的第n行：</p>
+<h2 id="linecache-模块">linecache 模块</h2>
+
+<p>当然，有特殊需求还可以用 linecache 模块，比如你要输出某个文件的第 n 行：</p>
 
 <pre><code class="language-python"># 输出第2行
 text = linecache.getline(‘a.txt’,2)
@@ -256,8 +261,7 @@ print text,
 <h2 id="相关资料">相关资料</h2>
 
 <ul>
-<li><a href="https://www.jianshu.com/p/a672f39287c4">Python中的read(),readline(),readlines()区别与用法</a> 作者：大阿拉伯人
-�</li>
+<li><a href="https://www.jianshu.com/p/a672f39287c4">Python中的read(),readline(),readlines()区别与用法</a> 作者：大阿拉伯人</li>
 </ul>
 
     </div>

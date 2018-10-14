@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 视频的读取 显示 保存 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="视频的读取 显示 保存 视频的来源有： 视频文件 摄像头 用摄像头捕获视频 我们经常需要使用摄像头捕获实时图像。OpenCV为这中应用提供了一个非常简单的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/02-%E6%91%84%E5%83%8F%E5%A4%B4%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/01-%E8%A7%86%E9%A2%91%E7%9A%84%E8%AF%BB%E5%8F%96-%E6%98%BE%E7%A4%BA-%E4%BF%9D%E5%AD%98/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 视频的读取 显示 保存" />
+<meta property="og:description" content="视频的读取 显示 保存 视频的来源有： 视频文件 摄像头 用摄像头捕获视频 我们经常需要使用摄像头捕获实时图像。OpenCV为这中应用提供了一个非常简单的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/02-%E6%91%84%E5%83%8F%E5%A4%B4%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/01-%E8%A7%86%E9%A2%91%E7%9A%84%E8%AF%BB%E5%8F%96-%E6%98%BE%E7%A4%BA-%E4%BF%9D%E5%AD%98/" /><meta property="article:published_time" content="2018-10-14T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-14T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="01 视频的读取 显示 保存">
+<meta itemprop="description" content="视频的读取 显示 保存 视频的来源有： 视频文件 摄像头 用摄像头捕获视频 我们经常需要使用摄像头捕获实时图像。OpenCV为这中应用提供了一个非常简单的">
+
+
+<meta itemprop="datePublished" content="2018-10-14T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-14T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2107">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 视频的读取 显示 保存"/>
+<meta name="twitter:description" content="视频的读取 显示 保存 视频的来源有： 视频文件 摄像头 用摄像头捕获视频 我们经常需要使用摄像头捕获实时图像。OpenCV为这中应用提供了一个非常简单的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 视频的读取 显示 保存</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-14 </span>
+        
+        <span class="more-meta"> 2107 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#视频的读取-显示-保存">视频的读取 显示 保存</a>
+<ul>
+<li><a href="#用摄像头捕获视频">用摄像头捕获视频</a></li>
+<li><a href="#从文件中播放视频-缺失了例子">从文件中播放视频（缺失了例子）</a></li>
+<li><a href="#保存视频">保存视频</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="视频的读取-显示-保存">视频的读取 显示 保存</h1>
+
+<p>视频的来源有：</p>
+
+<ul>
+<li>视频文件</li>
+<li>摄像头</li>
+</ul>
+
+<h2 id="用摄像头捕获视频">用摄像头捕获视频</h2>
+
+<p>我们经常需要使用摄像头捕获实时图像。OpenCV为这中应用提供了一个非常简单的接口。</p>
+
+<p>让我们使用摄像头来捕获一段视频，并把它转换成灰度视频显示出来。从这个简单的任务开始吧。</p>
+
+<p>为了获取视频，你应该创建一个 VideoCapture 对象。他的参数可以是设备的索引号，或者是一个视频文件。</p>
+
+<p>设备索引号就是在指定要使用的摄像头一般的笔记本电脑都有内置摄像头。所以参数就是0。你可以通过设置成1或者其他的来选择别的摄像头。</p>
+
+<p>之后，你就可以一帧一帧的捕获视频了。但是最后，别忘了停止捕获视频。</p>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import numpy as np
+import cv2
+
+cap = cv2.VideoCapture(0)
+while(True):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+
+    # Our operations on the frame come here
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    # Display the resulting frame
+    cv2.imshow('frame',gray)
+    if cv2.waitKey(1) &amp; 0xFF == ord('q'):
+        break
+
+# When everything done, release the capture
+cap.release()
+cv2.destroyAllWindows()
+</code></pre>
+
+<p>说明：</p>
+
+<ul>
+<li><p><code>cap.read()</code> 返回一个布尔值 (True/False)。如果帧读取的是正确的，就是True。所以最后你可以通过检查他的返回值来查看视频文件是否已经到了结尾。</p></li>
+
+<li><p>有时 <code>cap</code> 可能不能成功的初始化摄像头设备。这种情况下上面的代码会报错。你可以使用<code>cap.isOpened()</code>，来检查是否成功初始化了。如果返回值是 True，那就没有问题。否则就要使用函数<code>cap.open()</code>。<span style="color:red;"><code>cap.open()</code> 是不是会有一段时间卡在哪里，如果 cap 一直无法打开的话？而且，如果 <code>cap.open()</code> 还打不开怎么办？一般什么情况下会打不开？需要核对哪些地方？而且，好像有些摄像头打开的过程是不是很慢？</span></p></li>
+
+<li><p>你可以使用函数 <code>cap.get(propId)</code> 来获得视频的一些参数信息。这里 propId 可以是 0 到 18 之间的任何整数。每一个数代表视频的一个属性，见下表。其中的一些值可以使用 <code>cap.set(propId,value)</code> 来修改， <code>value</code> 就是你想要设置成的新值。例如，我可以使用 <code>cap.get(3)</code> 和 <code>cap.get(4)</code> 来查看每一帧的宽和高 默认情况下得到的值是 <code>640X480</code>。但是我可以使用 <code>ret=cap.set(3,320)</code> 和 <code>ret=cap.set(4,240)</code> 来把宽和高改成 <code>320X240</code>。<span style="color:red;">是每个摄像头都可以设置吗？每个摄像头的参数编号都相同吗？</span></p></li>
+</ul>
+
+<pre><code>CV_CAP_PROP_POS_MSEC Current position of the video file in milliseconds.
+CV_CAP_PROP_POS_FRAMES 0-based index of the frame to be decoded/captured next.
+CV_CAP_PROP_POS_AVI_RATIO Relative position of the video file: 0 - start of the film, 1 - end of the film.
+CV_CAP_PROP_FRAME_WIDTH Width of the frames in the video stream.
+CV_CAP_PROP_FRAME_HEIGHT Height of the frames in the video stream.
+CV_CAP_PROP_FPS Frame rate.
+CV_CAP_PROP_FOURCC 4-character code of codec.
+CV_CAP_PROP_FRAME_COUNT Number of frames in the video file.
+CV_CAP_PROP_FORMAT Format of the Mat objects returned by retrieve() .
+CV_CAP_PROP_MODE Backend-specific value indicating the current capture mode.
+CV_CAP_PROP_BRIGHTNESS Brightness of the image (only for cameras).
+CV_CAP_PROP_CONTRAST Contrast of the image (only for cameras).
+CV_CAP_PROP_SATURATION Saturation of the image (only for cameras).
+CV_CAP_PROP_HUE Hue of the image (only for cameras).
+CV_CAP_PROP_GAIN Gain of the image (only for cameras).
+CV_CAP_PROP_EXPOSURE Exposure (only for cameras).
+CV_CAP_PROP_CONVERT_RGB Boolean flags indicating whether images should be converted to RGB.
+CV_CAP_PROP_WHITE_BALANCE Currently unsupported
+CV_CAP_PROP_RECTIFICATION Rectification flag for stereo cameras (note: only supported by DC1394 v 2.x backend currently)
+</code></pre>
+
+<p><span style="color:red;">对于上面这个表中的属性，哪些是常用到的？</span></p>
+
+<p>注意： 当你的程序报错时，你首先应该检查的是你的摄像头是否能够在其他程序中正常工作(比如 linux 下的 Cheese )。<span style="color:red;">这个的确是这样，这个 Cheese 是什么？怎么使用？</span></p>
+
+<p>还有疑问的地方：</p>
+
+<ul>
+<li><span style="color:red;"><code>cap.release()</code> 会不会释放失败？而且，释放的时候，会不会停住一段时间？</span></li>
+<li><span style="color:red;">上面这个 <code>0xFF == ord('q')</code> 是什么？</span></li>
+<li><span style="color:red;">上面这个程序没有对 <code>cap.read()</code> 的 <code>ret</code> 进行判断，那么如果摄像头被手动拔掉了，这个程序会怎么样？卡死吗？</span></li>
+<li><span style="color:red;">而且，非常关键的是，假如说我的电脑上安装了3个摄像头，我想用其中的分辨率最大的那个，那么我怎么得到是哪一个？还是说都必须要通过 <code>cv2.VideoCapture</code> 连接上之后才知道？有什么别的方法吗？</span></li>
+</ul>
+
+<h2 id="从文件中播放视频-缺失了例子">从文件中播放视频（缺失了例子）</h2>
+
+<p>与从摄像头中捕获一样，你只需要把设备索引号改成视频文件的名字。</p>
+
+<p>在播放每一帧时，使用 <code>cv2.waiKey()</code> 设置适当的持续时间。如果设置的太低视频就会播放的非常快，如果设置的太高就会播放的很慢(你可以使用这种方法控制视频的播放速度)。通常情况下 25 毫秒就可以了。</p>
+
+<p><span style="color:red;">要怎么合适的播放？通常播放器是不是要先获得 视频文件的 帧率，然后按照这个帧率进行播放的？这样的播放是没有声音的吧。如果要有声音，是不是还要用到 ffmpeg？</span></p>
+
+<p><span style="color:red;">视频的播放肯定会遇到编码解码问题吧？还是要总结下的。</span></p>
+
+<p><span style="color:red;">这个地方还是需要补充一些实际的例子的。</span></p>
+
+<p>注意：你应该确保你已经装了合适版本的 ffmpeg 或者 gstreamer 。如果你装错了那就比较头疼了。<span style="color:red;">什么是 gstreamer？ 什么叫合适的 ffmpeg 或者 gstreamer 装一个就行吗？怎么知道合适不合适？怎么安装一个合适的 ffmpeg？ 而且，这样录制的视频是没有声音的是吧？</span></p>
+
+<h2 id="保存视频">保存视频</h2>
+
+<p>在我们捕获视频，并对每一帧都进行加工之后我们想要保存这个视频。对于图片来时很简单只需要使用 <code>cv2.imwrite()</code>。但对于视频来说就要多做点工作。</p>
+
+<p>这次我们要创建一个 VideoWriter 的对象。我们应该确定一个输出文件的名字。接下来指定 FourCC 编码(下面会介绍)。播放频率和帧的大小也都需要确定。最后一个是 <code>isColor</code> 标签。如果是 True，每一帧就是彩色图，否则就是灰度图。</p>
+
+<p>FourCC 就是一个 4 字节码，用来确定视频的编码格式。可用的编码列表 可以从 <a href="http://www.fourcc.org/codecs.php">fourcc.org</a> 查到。这是平台依赖的。下面是用到过的几个：</p>
+
+<ul>
+<li>In Fedora: DIVX,XVID,MJPG,X264,WMV1,WMV2. (XVID is more preferable. MJPG results in high size video. X264 gives very small size video)</li>
+<li>In Windows: DIVX (More to be tested and added)</li>
+<li>In OSX : (I don&rsquo;t have access to OSX. Can some one fill this?)</li>
+</ul>
+
+<p><span style="color:red;">这几种编码的方式还是不是很清楚。再总结下。</span></p>
+
+<p>FourCC 码以下面的格式传给程序，以 MJPG 为例：</p>
+
+<pre><code class="language-python">cv2.cv.FOURCC('M','J','P','G')
+# 或者
+cv2.cv.FOURCC(*'MJPG')
+</code></pre>
+
+<p>OK，完整的程序如下：</p>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+import numpy as np
+import cv2
+
+# Define the codec and create VideoWriter object
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
+
+cap = cv2.VideoCapture(0)
+while(cap.isOpened()):
+    ret, frame = cap.read()
+    if ret==True:
+        frame = cv2.flip(frame,0)
+
+        # write the flipped frame
+        out.write(frame)
+
+        cv2.imshow('frame',frame)
+        if cv2.waitKey(1) &amp; 0xFF == ord('q'):
+            break
+    else:
+        break
+
+# Release everything if job is finished
+cap.release()
+out.release()
+cv2.destroyAllWindows()
+</code></pre>
+
+<p>嗯，还是不错的，还有几个地方想弄清楚:</p>
+
+<ul>
+<li><span style="color:red;">不是说 cv2.cv.FOURCC 吗？为什么使用 cv2.VideoWriter_fourcc 还是说这两个是一样的？</span></li>
+<li><span style="color:red;">20.0 是保存的帧率吗？那么如果视频文件过来的帧率是 30.0 不是会有很多帧来不及保存，还在内存里，是吗？这样内存会不会爆掉。</span></li>
+<li><span style="color:red;">这个 XVID 格式的视频最后要怎么读取？</span></li>
+<li><span style="color:red;">为什么没有看到 <code>isColor</code> 标签？是默认的吗？如果我从摄像头中度过来的是一个灰度图像，那么我存的时候是彩色的还是灰度的？</span></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/02-bgr-%E4%B8%8E-rgb-%E7%9A%84%E8%BD%AC%E6%8D%A2/">
+            <span class="next-text nav-default">02 BGR 与 RGB 的转换</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

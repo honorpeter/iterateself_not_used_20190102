@@ -142,6 +142,8 @@ sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 
 # 相关资料
 
+
+- [TensorFlow显存设置](https://theqihao.github.io/2017/08/03/TensorFlow%E6%98%BE%E5%AD%98%E8%AE%BE%E7%BD%AE/) 这个还没补充进来
 - [（原）tensorflow中使用指定的GPU及GPU显存](https://www.cnblogs.com/darkknightzh/p/6591923.html)
 - [确定自己的TensorFlow是CPU还是GPU的版本](https://blog.csdn.net/Zlase/article/details/79261348)
 - [检测tensorflow是否使用gpu进行计算](https://blog.csdn.net/castle_cc/article/details/78389082)

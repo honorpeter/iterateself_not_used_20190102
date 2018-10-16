@@ -1,3 +1,8 @@
+---
+title: python打开网页获取网页内容方法总结
+toc: true
+date: 2018-10-15
+---
 
 
 

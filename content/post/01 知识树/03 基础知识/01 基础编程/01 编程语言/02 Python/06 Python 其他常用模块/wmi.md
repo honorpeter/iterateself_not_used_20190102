@@ -1,3 +1,8 @@
+---
+title: wmi
+toc: true
+date: 2018-10-15
+---
 ```
 # MAC地址、CPU序列号、硬盘序列号
 

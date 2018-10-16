@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>01 图片格式转换 - 迭代自己</title>
+  <title>02 图片缩放 - 迭代自己</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -17,7 +17,7 @@
 
 
 <meta name="author" content="iterateself" />
-  <meta name="description" content="需要补充的 各种转换的工具和手段都要总结到。 资料尚未整理。 png 转 ppm，tif 等等 图片格式转换 使用 FastStoneImage 进行图像转换 这个是我现在使用的，还是很方便的" />
+  <meta name="description" content="需要补充的 放大的时候各种插值的方式 除了 opencv 以外的一些缩放的方式 图片缩放 在计算机视觉中 # coding=utf-8 import Image import shutil import os class Graphics: infile = &#39;D:\\myimg.jpg&#39; outfile = &#39;D:\\adjust_img.jpg&#39; @classmethod def fixed_size(cls, width, height): &amp;quot;&amp;q" />
 
   <meta name="keywords" content="Hugo, theme, even" />
 
@@ -29,7 +29,7 @@
 <meta name="generator" content="Hugo 0.47.1" />
 
 
-<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/01-%E5%9B%BE%E7%89%87%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2/" />
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/23-%E5%9B%BE%E7%89%87%E7%BC%A9%E6%94%BE/" />
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -49,25 +49,25 @@
 
 
 
-<meta property="og:title" content="01 图片格式转换" />
-<meta property="og:description" content="需要补充的 各种转换的工具和手段都要总结到。 资料尚未整理。 png 转 ppm，tif 等等 图片格式转换 使用 FastStoneImage 进行图像转换 这个是我现在使用的，还是很方便的" />
+<meta property="og:title" content="02 图片缩放" />
+<meta property="og:description" content="需要补充的 放大的时候各种插值的方式 除了 opencv 以外的一些缩放的方式 图片缩放 在计算机视觉中 # coding=utf-8 import Image import shutil import os class Graphics: infile = &#39;D:\\myimg.jpg&#39; outfile = &#39;D:\\adjust_img.jpg&#39; @classmethod def fixed_size(cls, width, height): &quot;&q" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/01-%E5%9B%BE%E7%89%87%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2/" /><meta property="article:published_time" content="2018-10-13T00:00:00&#43;00:00"/>
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/23-%E5%9B%BE%E7%89%87%E7%BC%A9%E6%94%BE/" /><meta property="article:published_time" content="2018-10-13T00:00:00&#43;00:00"/>
 <meta property="article:modified_time" content="2018-10-13T00:00:00&#43;00:00"/>
-<meta itemprop="name" content="01 图片格式转换">
-<meta itemprop="description" content="需要补充的 各种转换的工具和手段都要总结到。 资料尚未整理。 png 转 ppm，tif 等等 图片格式转换 使用 FastStoneImage 进行图像转换 这个是我现在使用的，还是很方便的">
+<meta itemprop="name" content="02 图片缩放">
+<meta itemprop="description" content="需要补充的 放大的时候各种插值的方式 除了 opencv 以外的一些缩放的方式 图片缩放 在计算机视觉中 # coding=utf-8 import Image import shutil import os class Graphics: infile = &#39;D:\\myimg.jpg&#39; outfile = &#39;D:\\adjust_img.jpg&#39; @classmethod def fixed_size(cls, width, height): &quot;&q">
 
 
 <meta itemprop="datePublished" content="2018-10-13T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-10-13T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="151">
+<meta itemprop="wordCount" content="500">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="01 图片格式转换"/>
-<meta name="twitter:description" content="需要补充的 各种转换的工具和手段都要总结到。 资料尚未整理。 png 转 ppm，tif 等等 图片格式转换 使用 FastStoneImage 进行图像转换 这个是我现在使用的，还是很方便的"/>
+<meta name="twitter:title" content="02 图片缩放"/>
+<meta name="twitter:description" content="需要补充的 放大的时候各种插值的方式 除了 opencv 以外的一些缩放的方式 图片缩放 在计算机视觉中 # coding=utf-8 import Image import shutil import os class Graphics: infile = &#39;D:\\myimg.jpg&#39; outfile = &#39;D:\\adjust_img.jpg&#39; @classmethod def fixed_size(cls, width, height): &quot;&q"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -130,12 +130,12 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">01 图片格式转换</h1>
+      <h1 class="post-title">02 图片缩放</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2018-10-13 </span>
         
-        <span class="more-meta"> 151 words </span>
+        <span class="more-meta"> 500 words </span>
         <span class="more-meta"> 1 min read </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
       </div>
@@ -150,11 +150,7 @@
     <nav id="TableOfContents">
 <ul>
 <li><a href="#需要补充的">需要补充的</a></li>
-<li><a href="#图片格式转换">图片格式转换</a>
-<ul>
-<li><a href="#使用-faststoneimage-进行图像转换">使用 FastStoneImage 进行图像转换</a></li>
-<li><a href="#使用-opencv-进行图像转换">使用 opencv 进行图像转换</a></li>
-</ul></li>
+<li><a href="#图片缩放">图片缩放</a></li>
 <li><a href="#相关资料">相关资料</a></li>
 </ul>
 </nav>
@@ -171,23 +167,92 @@
 <h1 id="需要补充的">需要补充的</h1>
 
 <ul>
-<li>各种转换的工具和手段都要总结到。</li>
-<li>资料尚未整理。</li>
-<li>png 转 ppm，tif 等等</li>
+<li>放大的时候各种插值的方式</li>
+<li>除了 opencv 以外的一些缩放的方式</li>
 </ul>
 
-<h1 id="图片格式转换">图片格式转换</h1>
+<h1 id="图片缩放">图片缩放</h1>
 
-<h2 id="使用-faststoneimage-进行图像转换">使用 FastStoneImage 进行图像转换</h2>
+<p>在计算机视觉中</p>
 
-<p>这个是我现在使用的，还是很方便的。但是不可能一直使用这个，也不可能在程序中使用这个。因此最好还是使用自己写的转换的脚本，批量执行的时候也方便。</p>
+<pre><code class="language-python"># coding=utf-8
+import Image
+import shutil
+import os
 
-<h2 id="使用-opencv-进行图像转换">使用 opencv 进行图像转换</h2>
+
+class Graphics:
+    infile = 'D:\\myimg.jpg'
+    outfile = 'D:\\adjust_img.jpg'
+
+    @classmethod
+    def fixed_size(cls, width, height):
+        &quot;&quot;&quot;按照固定尺寸处理图片&quot;&quot;&quot;
+        im = Image.open(cls.infile)
+        out = im.resize((width, height),Image.ANTIALIAS)
+        out.save(cls.outfile)
+
+    @classmethod
+    def resize_by_width(cls, w_divide_h):
+        &quot;&quot;&quot;按照宽度进行所需比例缩放&quot;&quot;&quot;
+        im = Image.open(cls.infile)
+        (x, y) = im.size
+        x_s = x
+        y_s = x/w_divide_h
+        out = im.resize((x_s, y_s), Image.ANTIALIAS)
+        out.save(cls.outfile)
+
+    @classmethod
+    def resize_by_height(cls, w_divide_h):
+        &quot;&quot;&quot;按照高度进行所需比例缩放&quot;&quot;&quot;
+        im = Image.open(cls.infile)
+        (x, y) = im.size
+        x_s = y*w_divide_h
+        y_s = y
+        out = im.resize((x_s, y_s), Image.ANTIALIAS)
+        out.save(cls.outfile)
+
+    @classmethod
+    def resize_by_size(cls, size):
+        &quot;&quot;&quot;按照生成图片文件大小进行处理(单位KB)&quot;&quot;&quot;
+        size *= 1024
+        im = Image.open(cls.infile)
+        size_tmp = os.path.getsize(cls.infile)
+        q = 100
+        while size_tmp &gt; size and q &gt; 0:
+            print q
+            out = im.resize(im.size, Image.ANTIALIAS)
+            out.save(cls.outfile, quality=q)
+            size_tmp = os.path.getsize(cls.outfile)
+            q -= 5
+        if q == 100:
+            shutil.copy(cls.infile, cls.outfile)
+
+    @classmethod
+    def cut_by_ratio(cls, width, height):
+        &quot;&quot;&quot;按照图片长宽比进行分割&quot;&quot;&quot;
+        im = Image.open(cls.infile)
+        width = float(width)
+        height = float(height)
+        (x, y) = im.size
+        if width &gt; height:
+            region = (0, int((y-(y * (height / width)))/2), x, int((y+(y * (height / width)))/2))
+        elif width &lt; height:
+            region = (int((x-(x * (width / height)))/2), 0, int((x+(x * (width / height)))/2), y)
+        else:
+            region = (0, 0, x, y)
+
+        #裁切图片
+        crop_img = im.crop(region)
+        #保存裁切后的图片
+        crop_img.save(cls.outfile)
+
+</code></pre>
 
 <h1 id="相关资料">相关资料</h1>
 
 <ul>
-<li><a href="https://blog.csdn.net/wh_19910525/article/details/42237251">ppm格式图片转换 &ndash; linux kernel logo</a></li>
+<li><a href="https://blog.csdn.net/ln152315/article/details/42777149">Python 图片尺寸缩放的4种方式</a></li>
 </ul>
 
     </div>
@@ -204,14 +269,14 @@
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/12-centos/%E5%A4%A7%E7%BA%B2/">
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/33-%E5%9B%BE%E7%89%87%E6%A0%BC%E5%BC%8F%E8%BD%AC%E6%8D%A2/">
             <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">大纲</span>
+            <span class="prev-text nav-default">01 图片格式转换</span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
         
-          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/02-%E5%9B%BE%E7%89%87%E7%BC%A9%E6%94%BE/">
-            <span class="next-text nav-default">02 图片缩放</span>
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/02-%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/03-anaconda-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/">
+            <span class="next-text nav-default">03 Anaconda 环境安装</span>
             <span class="next-text nav-mobile">Next</span>
             <i class="iconfont icon-right"></i>
           </a>

@@ -1,6 +1,7 @@
 # 需要补充的
 
 - 感觉对于 ROI 还是有很多可以补充的
+- 应该是有一些对于 ROI 的使用的例子吧？找一下。总结一下。
 
 
 # 图像 ROI
@@ -19,7 +20,7 @@ ball = img[280:340, 330:390]
 img[273:333, 100:160] = ball
 ```
 
-看看结果吧:
+看看结果吧：
 
 
 ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181017/9JCkgcjH69.png?imageslim)

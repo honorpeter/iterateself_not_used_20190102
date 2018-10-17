@@ -1,5 +1,5 @@
 ---
-title: 03 Anaconda 环境安装
+title: 03 anaconda 环境安装
 toc: true
 date: 2018-10-13
 ---

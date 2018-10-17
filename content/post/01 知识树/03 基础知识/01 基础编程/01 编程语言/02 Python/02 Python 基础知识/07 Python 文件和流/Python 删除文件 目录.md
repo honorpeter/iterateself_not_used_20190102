@@ -1,3 +1,8 @@
+---
+title: Python 删除文件 目录
+toc: true
+date: 2018-10-17
+---
 本文讲述了python实现删除文件与目录的方法。分享给大家供大家参考。具体实现方法如下：
 os.remove(path)
 删除文件 path. 如果path是一个目录， 抛出 OSError错误。如果要删除目录，请使用rmdir().

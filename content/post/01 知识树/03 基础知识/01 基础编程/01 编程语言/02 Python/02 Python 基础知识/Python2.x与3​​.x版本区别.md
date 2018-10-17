@@ -9,12 +9,6 @@ date: 2018-06-14 14:58:20
 
 
 
-
-
-* * *
-
-
-
 Python的3​​.0版本，常被称为Python 3000，或简称Py3k。相对于Python的早期版本，这是一个较大的升级。
 
 为了不带入过多的累赘，Python 3.0在设计的时候没有考虑向下相容。
@@ -29,7 +23,7 @@ Python的3​​.0版本，常被称为Python 3000，或简称Py3k。相对于Py
 
 
 
-## 
+##
 
 
 除非执行环境无法安装Python 3.0或者程式本身使用了不支援Python 3.0的第三方库。目前不支援Python 3.0的第三方库有Twisted, py2exe, PIL等。
@@ -83,8 +77,8 @@ Python 2 有 ASCII str() 类型，unicode() 是单独的，不是 byte 类型。
 由于 Python3.X 源码文件默认使用utf-8编码，这就使得以下代码是合法的：
 
 
-    >>> 中国 = 'china' 
-    >>>print(中国) 
+    >>> 中国 = 'china'
+    >>>print(中国)
     china
 
 
@@ -220,12 +214,12 @@ python 3.x:
 
 
     import timeit
-    
+
     n = 10000
     def test_range(n):
         return for i in range(n):
             pass
-    
+
     def test_xrange(n):
         for i in xrange(n):
             pass
@@ -235,15 +229,15 @@ Python 2
 
 
     print 'Python', python_version()
-    
-    print '\ntiming range()' 
+
+    print '\ntiming range()'
     %timeit test_range(n)
-    
-    print '\n\ntiming xrange()' 
+
+    print '\n\ntiming xrange()'
     %timeit test_xrange(n)
-    
+
     Python 2.7.6
-    
+
     timing range()
     1000 loops, best of 3: 433 µs per loop
 
@@ -257,12 +251,12 @@ Python 3
 
 
     print('Python', python_version())
-    
+
     print('\ntiming range()')
     %timeit test_range(n)
-    
+
     Python 3.4.1
-    
+
     timing range()
     1000 loops, best of 3: 520 µs per loop
 
@@ -274,7 +268,7 @@ Python 3
     NameError                                 Traceback (most recent call last)
     <ipython-input-5-5d8f9b79ea70> in <module>()
     ----> 1 print(xrange(10))
-    
+
     NameError: name 'xrange' is not defined<span id="mce_marker" data-mce-type="bookmark" data-mce-fragment="1">​</span>
 
 
@@ -443,19 +437,19 @@ httplib, BaseHTTPServer, CGIHTTPServer, SimpleHTTPServer, Cookie, cookielib被�
 2）新增了bytes类型，对应于2.X版本的八位串，定义一个bytes字面量的方法如下：
 
 
-    >>> b = b'china' 
-    >>> type(b) 
+    >>> b = b'china'
+    >>> type(b)
     <type 'bytes'>
 
 
 str对象和bytes对象可以使用.encode() (str -> bytes) or .decode() (bytes -> str)方法相互转化。
 
 
-    >>> s = b.decode() 
-    >>> s 
-    'china' 
-    >>> b1 = s.encode() 
-    >>> b1 
+    >>> s = b.decode()
+    >>> s
+    'china'
+    >>> b1 = s.encode()
+    >>> b1
     b'china'
 
 
@@ -469,4 +463,3 @@ str对象和bytes对象可以使用.encode() (str -> bytes) or .decode() (bytes 
 
 1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
 2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
-

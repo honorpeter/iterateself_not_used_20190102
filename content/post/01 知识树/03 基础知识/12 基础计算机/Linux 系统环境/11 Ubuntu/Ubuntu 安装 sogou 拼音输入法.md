@@ -1,3 +1,8 @@
+---
+title: Ubuntu 安装 sogou 拼音输入法
+toc: true
+date: 2018-10-17
+---
 # Ubuntu 16.04 安装 sogou 拼音输入法
 
 安装完 Ubuntu 16.04 后，要更换为国内的软件源：

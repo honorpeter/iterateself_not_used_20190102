@@ -1,3 +1,8 @@
+---
+title: epoch、batch、training step 的区别
+toc: true
+date: 2018-10-20
+---
 
 
 

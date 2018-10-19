@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 一些基本概念 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 感觉一些东西可以拆出来，放到深度学习理论里面。 一些基本概念 符号计算 Keras 的底层库使用 Theano 或 TensorFlow，这两个库也称为 Keras 的后端。" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/02-keras-%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97/01-%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 一些基本概念" />
+<meta property="og:description" content="需要补充的 感觉一些东西可以拆出来，放到深度学习理论里面。 一些基本概念 符号计算 Keras 的底层库使用 Theano 或 TensorFlow，这两个库也称为 Keras 的后端。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/02-keras-%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97/01-%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/" /><meta property="article:published_time" content="2018-10-20T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-20T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="01 一些基本概念">
+<meta itemprop="description" content="需要补充的 感觉一些东西可以拆出来，放到深度学习理论里面。 一些基本概念 符号计算 Keras 的底层库使用 Theano 或 TensorFlow，这两个库也称为 Keras 的后端。">
+
+
+<meta itemprop="datePublished" content="2018-10-20T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-20T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2920">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 一些基本概念"/>
+<meta name="twitter:description" content="需要补充的 感觉一些东西可以拆出来，放到深度学习理论里面。 一些基本概念 符号计算 Keras 的底层库使用 Theano 或 TensorFlow，这两个库也称为 Keras 的后端。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 一些基本概念</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-20 </span>
+        
+        <span class="more-meta"> 2920 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#一些基本概念">一些基本概念</a>
+<ul>
+<li><a href="#符号计算">符号计算</a></li>
+<li><a href="#张量">张量</a></li>
+<li><a href="#data-format">data_format</a></li>
+<li><a href="#函数式模型">函数式模型</a></li>
+<li><a href="#batch">batch</a></li>
+<li><a href="#epochs">epochs</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>感觉一些东西可以拆出来，放到深度学习理论里面。</li>
+</ul>
+
+<h1 id="一些基本概念">一些基本概念</h1>
+
+<h2 id="符号计算">符号计算</h2>
+
+<p>Keras 的底层库使用 Theano 或 TensorFlow，这两个库也称为 Keras 的后端。无论是 Theano 还是 TensorFlow，都是一个“符号式”的库。<span style="color:red;">什么是 符号式 的库？还有什么别的形式的库吗？</span></p>
+
+<p>因此，这也使得 Keras 的编程与传统的 Python 代码有所差别。</p>
+
+<p>笼统的说，符号主义的计算首先定义各种变量，然后建立一个“计算图”，计算图规定了各个变量之间的计算关系。</p>
+
+<p>建立好的计算图需要编译以确定其内部细节，然而，此时的计算图还是一个“空壳子”，里面没有任何实际的数据，只有当你把需要运算的输入放进去后，才能在整个模型中形成数据流，从而形成输出值。<span style="color:red;">建立好的计算图需要编译以确定其内部细节是什么意思？怎么在编译的过程中确定其内部细节的？为什么是通过编译来确定内部细节？这样做有什么好处吗？</span></p>
+
+<p>就像用管道搭建供水系统，当你在拼水管的时候，里面是没有水的。只有所有的管子都接完了，才能送水。<span style="color:red;">嗯，是的，这个我知道。</span></p>
+
+<p>Keras 的模型搭建形式就是这种方法，在你搭建Keras模型完毕后，你的模型就是一个空壳子，只有实际生成可调用的函数后（K.function），输入数据，才会形成真正的数据流。<span style="color:red;">实际生成可调用的函数后，是什么意思？怎么生成的？还是说，在搭建模型的时候其实只是在描述管道是什么样子的，然后编译才是真正的搭建管子，然后才是向管子里送水，也就是数据。</span></p>
+
+<p>使用计算图的语言，如 Theano，以难以调试而闻名，当 Keras 的 Debug 进入 Theano 这个层次时，往往也令人头痛。没有经验的开发者很难直观的感受到计算图到底在干些什么。<span style="color:red;">对呀，这种调试的过程到底是怎么样的？比如 tensorflow 要怎么进行调试？</span></p>
+
+<p>尽管很让人头痛，但大多数的深度学习框架使用的都是符号计算这一套方法，因为符号计算能够提供关键的计算优化、自动求导等功能。<span style="color:red;">为什么符号计算能够提供关键的计算优化和自动求导的功能？别的计算方式不行吗？</span></p>
+
+<p>我们建议你在使用前稍微了解一下 Theano 或 TensorFlow，Bing/Google 一下即可。</p>
+
+<h2 id="张量">张量</h2>
+
+<p>张量，或 tensor，是本文档会经常出现的一个词汇，在此稍作解释。</p>
+
+<p>使用这个词汇的目的是为了表述统一，张量可以看作是向量、矩阵的自然推广，我们用张量来表示广泛的数据类型。</p>
+
+<p>规模最小的张量是 0 阶张量，即标量，也就是一个数。</p>
+
+<p>当我们把一些数有序的排列起来，就形成了 1 阶张量，也就是一个向量</p>
+
+<p>如果我们继续把一组向量有序的排列起来，就形成了 2 阶张量，也就是一个矩阵。</p>
+
+<p>把矩阵摞起来，就是 3 阶张量，我们可以称为一个立方体，具有 3 个颜色通道的彩色图片就是一个这样的立方体。</p>
+
+<p>把立方体摞起来，好吧这次我们真的没有给它起别名了，就叫 4 阶张量了，不要去试图想像 4 阶张量是什么样子，它就是个数学上的概念。</p>
+
+<p>张量的阶数有时候也称为维度，或者轴，轴这个词翻译自英文axis。譬如一个矩阵[[1,2],[3,4]]，是一个2阶张量，有两个维度或轴，沿着第0个轴（为了与python的计数方式一致，本文档维度和轴从0算起）你看到的是[1,2]，[3,4]两个向量，沿着第1个轴你看到的是[1,3]，[2,4]两个向量。</p>
+
+<p>要理解“沿着某个轴”是什么意思，不妨试着运行一下下面的代码：</p>
+
+<pre><code class="language-python">import numpy as np
+
+a = np.array([[1,2],[3,4]])
+sum0 = np.sum(a, axis=0)
+sum1 = np.sum(a, axis=1)
+
+print(sum0)
+print(sum1)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>[4 6]
+[3 7]
+</code></pre>
+
+<p><span style="color:red;">这个地方，第 0 个轴为什么是竖直方向的？一直以为是水平方向的。这还是两维的，要是三维的怎么知道是哪个轴？</span></p>
+
+<p>关于张量，目前知道这么多就足够了。</p>
+
+<h2 id="data-format">data_format</h2>
+
+<p>这是一个无可奈何的问题，在如何表示一组彩色图片的问题上，Theano和 TensorFlow 发生了分歧：</p>
+
+<ul>
+<li><p>Theano 模式会把 100 张 RGB 三通道的 16×32（高为16宽为32）彩色图表示为下面这种形式（100,3,16,32），Caffe采取的也是这种方式。第 0 个维度是样本维，代表样本的数目，第 1 个维度是通道维，代表颜色通道数。后面两个就是高和宽了。这种 theano 风格的数据组织方法，称为 “channels_first”，即通道维靠前。</p></li>
+
+<li><p>而 TensorFlow 的表达形式是（100,16,32,3），即把通道维放在了最后，这种数据组织方式称为 “channels_last”。</p></li>
+</ul>
+
+<p>Keras 默认的数据组织形式在 <code>~/.keras/keras.json</code> 中规定，可查看该文件的 <code>image_data_format</code> 一项查看，也可在代码中通过 <code>K.image_data_format()</code> 函数返回，请在网络的训练和测试中保持维度顺序一致。<span style="color:red;">好吧，这个看来在切换 backend 的时候还是要注意的，要进行数据格式的转换。</span></p>
+
+<h2 id="函数式模型">函数式模型</h2>
+
+<p>函数式模型算是本文档比较原创的词汇了，所以这里要说一下</p>
+
+<p>在 Keras 0.x 中，模型其实有两种：</p>
+
+<ul>
+<li>一种叫 Sequential，称为序贯模型，也就是单输入单输出，一条路通到底，层与层之间只有相邻关系，跨层连接统统没有。这种模型编译速度快，操作上也比较简单。</li>
+<li>第二种模型称为 Graph，即图模型，这个模型支持多输入多输出，层与层之间想怎么连怎么连，但是编译速度慢。<span style="color:red;">什么是多输入多输出？没大明白？</span></li>
+</ul>
+
+<p>可以看到，Sequential 其实是 Graph 的一个特殊情况。</p>
+
+<p>在 Keras1 和 Keras2 中，图模型被移除，而增加了了 “functional model API”，这个东西，更加强调了 Sequential 是特殊情况这一点：一般的模型就称为 Model，然后如果你要用简单的Sequential，OK，那还有一个快捷方式Sequential。</p>
+
+<p>由于 functional model API 在使用时利用的是“函数式编程”的风格，我们这里将其译为函数式模型。总而言之，只要这个东西接收一个或一些张量作为输入，然后输出的也是一个或一些张量，那不管它是什么鬼，统统都称作“模型”。<span style="color:red;">嗯。OK</span></p>
+
+<h2 id="batch">batch</h2>
+
+<p>这个概念与 Keras 无关，老实讲不应该出现在这里的，但是因为它频繁出现，而且不了解这个技术的话看函数说明会很头痛，这里还是简单说一下。</p>
+
+<p>深度学习的优化算法，说白了就是梯度下降。每次的参数更新有两种方式。</p>
+
+<ul>
+<li><p>第一种，遍历全部数据集算一次损失函数，然后算函数对各个参数的梯度，更新梯度。这种方法每更新一次参数都要把数据集里的所有样本都看一遍，计算量开销大，计算速度慢，不支持在线学习，这称为 Batch gradient descent，批梯度下降。</p></li>
+
+<li><p>另一种，每看一个数据就算一下损失函数，然后求梯度更新参数，这个称为随机梯度下降，stochastic gradient descent。这个方法速度比较快，但是收敛性能不太好，可能在最优点附近晃来晃去，hit 不到最优点。两次参数的更新也有可能互相抵消掉，造成目标函数震荡的比较剧烈。<span style="color:red;">是的，可以很明显的看出来。</span></p></li>
+</ul>
+
+<p>为了克服两种方法的缺点，现在一般采用的是一种折中手段：</p>
+
+<ul>
+<li>mini-batch gradient decent，小批的梯度下降，这种方法把数据分为若干个批，按批来更新参数，这样，一个批中的一组数据共同决定了本次梯度的方向，下降起来就不容易跑偏，减少了随机性。另一方面因为批的样本数与整个数据集相比小了很多，计算量也不是很大。</li>
+</ul>
+
+<p>基本上现在的梯度下降都是基于 mini-batch 的，所以 Keras 的模块中经常会出现 batch_size，就是指这个。<span style="color:red;">是的。看到这一句，想问下，现在的梯度下降都是基于 mini-batch 的，那么有没有不是梯度下降的？有吗？它们基于什么？</span></p>
+
+<p>顺便说一句，Keras 中用的优化器 SGD 是 stochastic gradient descent 的缩写，但不代表是一个样本就更新一回，还是基于mini-batch的。<span style="color:red;">嗯，好的，这个还是要明确的。</span></p>
+
+<h2 id="epochs">epochs</h2>
+
+<p>真的不是很想解释这个词，但是新手问的还挺多的……
+简单说，epochs 指的就是训练过程中数据将被“轮”多少次，就这样。<span style="color:red;">哦，这个知道了，就是总的训练样本被遍历训练的次数。</span></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://keras-cn.readthedocs.io/en/latest/">Keras中文文档</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/01-keras-%E4%BB%8B%E7%BB%8D/01-keras-%E5%9F%BA%E4%BA%8E-python-%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BA%93/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 Keras 基于 Python 的深度学习库</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/01-keras-%E4%BB%8B%E7%BB%8D/02-keras-%E5%AE%89%E8%A3%85/">
+            <span class="next-text nav-default">02 Keras 安装</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

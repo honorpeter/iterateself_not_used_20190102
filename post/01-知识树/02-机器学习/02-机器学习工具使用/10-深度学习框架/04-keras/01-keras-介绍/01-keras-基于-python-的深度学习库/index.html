@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 Keras 基于 Python 的深度学习库 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 感觉一些东西可以拆分出去 Keras:基于Python的深度学习库 这就是 Keras Keras 是一个高层神经网络 API，Keras 由纯 Python 编写而成并基T" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/01-keras-%E4%BB%8B%E7%BB%8D/01-keras-%E5%9F%BA%E4%BA%8E-python-%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BA%93/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 Keras 基于 Python 的深度学习库" />
+<meta property="og:description" content="需要补充的 感觉一些东西可以拆分出去 Keras:基于Python的深度学习库 这就是 Keras Keras 是一个高层神经网络 API，Keras 由纯 Python 编写而成并基T" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/01-keras-%E4%BB%8B%E7%BB%8D/01-keras-%E5%9F%BA%E4%BA%8E-python-%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E5%BA%93/" /><meta property="article:published_time" content="2018-10-20T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-20T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="01 Keras 基于 Python 的深度学习库">
+<meta itemprop="description" content="需要补充的 感觉一些东西可以拆分出去 Keras:基于Python的深度学习库 这就是 Keras Keras 是一个高层神经网络 API，Keras 由纯 Python 编写而成并基T">
+
+
+<meta itemprop="datePublished" content="2018-10-20T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-20T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1470">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 Keras 基于 Python 的深度学习库"/>
+<meta name="twitter:description" content="需要补充的 感觉一些东西可以拆分出去 Keras:基于Python的深度学习库 这就是 Keras Keras 是一个高层神经网络 API，Keras 由纯 Python 编写而成并基T"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 Keras 基于 Python 的深度学习库</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-20 </span>
+        
+        <span class="more-meta"> 1470 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#keras-基于python的深度学习库">Keras:基于Python的深度学习库</a>
+<ul>
+<li><a href="#这就是-keras">这就是 Keras</a></li>
+<li><a href="#关于keras-cn">关于Keras-cn</a></li>
+<li><a href="#当前版本与更新">当前版本与更新</a></li>
+<li><a href="#快速开始-30s上手keras">快速开始：30s上手Keras</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>感觉一些东西可以拆分出去</li>
+</ul>
+
+<h1 id="keras-基于python的深度学习库">Keras:基于Python的深度学习库</h1>
+
+<h2 id="这就是-keras">这就是 Keras</h2>
+
+<p>Keras 是一个高层神经网络 API，Keras 由纯 Python 编写而成并基<a href="https://github.com/tensorflow/tensorflow">Tensorflow</a>、<a href="https://github.com/Theano/Theano">Theano</a>以及<a href="https://github.com/Microsoft/cntk">CNTK</a>后端。<span style="color:red;">Tneano 和 CNTK 好像还没有用过，它们分别是在什么场景下使用的比较多？</span></p>
+
+<p>Keras 为支持快速实验而生，能够把你的 idea 迅速转换为结果，如果你有如下需求，请选择 Keras：</p>
+
+<ul>
+<li>简易和快速的原型设计（keras具有高度模块化，极简，和可扩充特性）</li>
+<li>支持 CNN 和 RNN，或二者的结合</li>
+<li>无缝 CPU 和 GPU 切换。</li>
+</ul>
+
+<p><span style="color:red;">感觉上面这些特点 tensorflow 也有。</span></p>
+
+<p>Keras 适用的Python版本是：Python 2.7-3.6</p>
+
+<p>Keras 的设计原则是</p>
+
+<ul>
+<li>用户友好：Keras是为人类而不是天顶星人设计的API。用户的使用体验始终是我们考虑的首要和中心内容。Keras遵循减少认知困难的最佳实践：Keras 提供一致而简洁的 API， 能够极大减少一般应用下用户的工作量，同时，Keras提供清晰和具有实践意义的bug反馈。</li>
+<li>模块性：模型可理解为一个层的序列或数据的运算图，完全可配置的模块可以用最少的代价自由组合在一起。具体而言，网络层、损失函数、优化器、初始化策略、激活函数、正则化方法都是独立的模块，你可以使用它们来构建自己的模型。<span style="color:red;">好东西，优化器是什么？</span></li>
+<li>易扩展性：添加新模块超级容易，只需要仿照现有的模块编写新的类或函数即可。创建新模块的便利性使得 Keras更适合于先进的研究工作。<span style="color:red;">怎样有易扩展性的？好想知道。</span></li>
+<li>与 Python 协作：Keras 没有单独的模型配置文件类型（作为对比，caffe有），模型由 python 代码描述，使其更紧凑和更易 debug，并提供了扩展的便利性。<span style="color:red;">是的，这个模型配置文件感觉是一个缺点吧，嗯，不知道，感觉这种模型配置文件给整个模型笼罩了一层迷雾。</span></li>
+</ul>
+
+<h2 id="关于keras-cn">关于Keras-cn</h2>
+
+<p>本文档 包括<a href="http://keras.io/">keras.io</a>的全部内容。</p>
+
+<h2 id="当前版本与更新">当前版本与更新</h2>
+
+<p>如果你发现本文档提供的信息有误，有两种可能：</p>
+
+<h2 id="快速开始-30s上手keras">快速开始：30s上手Keras</h2>
+
+<p>Keras 的核心数据结构是 “模型”，模型是一种组织网络层的方式。</p>
+
+<p>Keras 中主要的模型是 Sequential 模型，Sequential 是一系列网络层按顺序构成的栈。你也可以查看<a href="https://keras-cn.readthedocs.io/en/latest/getting_started/functional_API/">函数式模型</a>来学习建立更复杂的模型。<span style="color:red;">想看下，什么是函数式模型？怎么建立更复杂的模型的？什么是更复杂的模型？</span></p>
+
+<p>Sequential 模型如下</p>
+
+<pre><code class="language-python">from keras.models import Sequential
+model = Sequential()
+</code></pre>
+
+<p>将一些网络层通过 <code>.add()</code> 堆叠起来，就构成了一个模型：</p>
+
+<pre><code class="language-python">from keras.layers import Dense, Activation
+
+model.add(Dense(units=64, input_dim=100))
+model.add(Activation(&quot;relu&quot;))
+model.add(Dense(units=10))
+model.add(Activation(&quot;softmax&quot;))
+</code></pre>
+
+<p>完成模型的搭建后，我们需要使用 <code>.compile()</code> 方法来编译模型：<span style="color:red;">模型的编译过程是在做什么？</span></p>
+
+<pre><code class="language-python">model.compile(loss='categorical_crossentropy',
+              optimizer='sgd',
+              metrics=['accuracy'])
+</code></pre>
+
+<p>编译模型时必须指明损失函数和优化器，如果你需要的话，也可以自己定制损失函数。<span style="color:red;">怎么定制损失函数？metrics 是什么？</span></p>
+
+<p>Keras 的一个核心理念就是简明易用，同时保证用户对 Keras 的绝对控制力度，用户可以根据自己的需要定制自己的模型、网络层，甚至修改源代码。</p>
+
+<pre><code class="language-python">from keras.optimizers import SGD
+model.compile(loss='categorical_crossentropy',
+              optimizer=SGD(lr=0.01, momentum=0.9, nesterov=True))
+</code></pre>
+
+<p>完成模型编译后，我们在训练数据上按 batch 进行一定次数的迭代来训练网络</p>
+
+<pre><code class="language-python">model.fit(x_train,
+          y_train,
+          epochs=5,
+          batch_size=32)
+</code></pre>
+
+<p><span style="color:red;">看起来真的很方便，很好。再明确下 epochs 和 batch_size 的意思。</span></p>
+
+<p>当然，我们也可以手动将一个个batch的数据送入网络中训练，这时候需要使用：<span style="color:red;">什么时候会要用到这个？</span></p>
+
+<pre><code class="language-python">model.train_on_batch(x_batch,
+                      y_batch)
+</code></pre>
+
+<p>随后，我们可以使用一行代码对我们的模型进行评估，看看模型的指标是否满足我们的要求：<span style="color:red;">嗯。</span></p>
+
+<pre><code class="language-python">loss_and_metrics = model.evaluate(x_test,
+                                  y_test,
+                                  batch_size=128)
+</code></pre>
+
+<p>或者，我们可以使用我们的模型，对新的数据进行预测：</p>
+
+<pre><code class="language-python">classes = model.predict(x_test,
+                        batch_size=128)
+</code></pre>
+
+<p><span style="color:red;">predict 的时候，还有 batch_size 的吗？</span></p>
+
+<p>搭建一个问答系统、图像分类模型，或神经图灵机、word2vec 词嵌入器就是这么快。<span style="color:red;">真的吗？想知道到底是怎么搭建起来的。</span></p>
+
+<p><span style="color:red;">Sequntial模型 和 函数式模型还是要好好学的。</span></p>
+
+<p><span style="color:red;">Keras 自带的 examples 还是要系统的学习下的。有基于记忆网络的问答系统、基于LSTM的文本的文本生成等。嗯，都想知道。</span></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://keras-cn.readthedocs.io/en/latest/">Keras中文文档</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/02-keras-%E6%96%B0%E6%89%8B%E6%8C%87%E5%8D%97/01-%E4%B8%80%E4%BA%9B%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5/">
+            <span class="next-text nav-default">01 一些基本概念</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

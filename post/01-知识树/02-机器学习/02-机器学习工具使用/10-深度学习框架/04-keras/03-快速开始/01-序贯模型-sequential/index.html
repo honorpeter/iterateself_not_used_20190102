@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>01 序贯模型 Sequential - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 还是有很多东西不是很明白。 快速开始序贯（Sequential）模型 序贯模型是多个网络层的线性堆叠，也就是 “一条路走到黑”。 可以通过" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/03-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/01-%E5%BA%8F%E8%B4%AF%E6%A8%A1%E5%9E%8B-sequential/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="01 序贯模型 Sequential" />
+<meta property="og:description" content="需要补充的 还是有很多东西不是很明白。 快速开始序贯（Sequential）模型 序贯模型是多个网络层的线性堆叠，也就是 “一条路走到黑”。 可以通过" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/03-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/01-%E5%BA%8F%E8%B4%AF%E6%A8%A1%E5%9E%8B-sequential/" /><meta property="article:published_time" content="2018-10-20T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-20T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="01 序贯模型 Sequential">
+<meta itemprop="description" content="需要补充的 还是有很多东西不是很明白。 快速开始序贯（Sequential）模型 序贯模型是多个网络层的线性堆叠，也就是 “一条路走到黑”。 可以通过">
+
+
+<meta itemprop="datePublished" content="2018-10-20T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-20T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3257">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="01 序贯模型 Sequential"/>
+<meta name="twitter:description" content="需要补充的 还是有很多东西不是很明白。 快速开始序贯（Sequential）模型 序贯模型是多个网络层的线性堆叠，也就是 “一条路走到黑”。 可以通过"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">01 序贯模型 Sequential</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-20 </span>
+        
+        <span class="more-meta"> 3257 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#快速开始序贯-sequential-模型">快速开始序贯（Sequential）模型</a>
+<ul>
+<li><a href="#指定输入数据的shape-span-style-color-red-这个地方没看懂-span">指定输入数据的shape <span style="color:red;">这个地方没看懂</span></a></li>
+<li><a href="#编译">编译</a></li>
+<li><a href="#训练">训练</a></li>
+<li><a href="#例子">例子</a>
+<ul>
+<li><a href="#基于多层感知器的-softmax-多分类">基于多层感知器的 softmax 多分类：</a></li>
+<li><a href="#mlp的二分类">MLP的二分类：</a></li>
+<li><a href="#类似vgg的卷积神经网络">类似VGG的卷积神经网络：</a></li>
+<li><a href="#使用lstm的序列分类">使用LSTM的序列分类</a></li>
+<li><a href="#使用1d卷积的序列分类">使用1D卷积的序列分类</a></li>
+<li><a href="#用于序列分类的栈式lstm">用于序列分类的栈式LSTM</a></li>
+<li><a href="#采用-stateful-lstm-的相同模型">采用 stateful LSTM 的相同模型</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>还是有很多东西不是很明白。</li>
+</ul>
+
+<h1 id="快速开始序贯-sequential-模型">快速开始序贯（Sequential）模型</h1>
+
+<p>序贯模型是多个网络层的线性堆叠，也就是 “一条路走到黑”。</p>
+
+<p>可以通过向 <code>Sequential</code> 模型传递一个 layer 的 list 来构造该模型：</p>
+
+<pre><code class="language-python">from keras.models import Sequential
+from keras.layers import Dense, Activation
+
+model = Sequential([
+                    Dense(32, units=784),
+                    Activation('relu'),
+                    Dense(10),
+                    Activation('softmax'),
+                    ])
+</code></pre>
+
+<p>也可以通过 <code>.add()</code> 方法一个个的将layer加入模型中：</p>
+
+<pre><code class="language-python">model = Sequential()
+model.add(Dense(32, input_shape=(784,)))
+model.add(Activation('relu'))
+</code></pre>
+
+<h2 id="指定输入数据的shape-span-style-color-red-这个地方没看懂-span">指定输入数据的shape <span style="color:red;">这个地方没看懂</span></h2>
+
+<p>模型需要知道输入数据的 shape，因此，<code>Sequential</code> 的第一层需要接受一个关于输入数据shape的参数，后面的各个层则可以自动的推导出中间数据的shape，因此不需要为每个层都指定这个参数。<span style="color:red;">嗯。</span></p>
+
+<p>有几种方法来为第一层指定输入数据的 shape：<span style="color:red;">没看懂。</span></p>
+
+<ul>
+<li>传递一个<code>input_shape</code>的关键字参数给第一层，<code>input_shape</code>是一个tuple类型的数据，其中也可以填入<code>None</code>，如果填入<code>None</code>则表示此位置可能是任何正整数。数据的 batch 大小不应包含在其中。</li>
+<li>有些 2D 层，如<code>Dense</code>，支持通过指定其输入维度<code>input_dim</code>来隐含的指定输入数据 shape，是一个 Int 类型的数据。一些 3D 的时域层支持通过参数 <code>input_dim</code> 和 <code>input_length</code> 来指定输入shape。</li>
+<li>如果你需要为输入指定一个固定大小的 batch_size（常用于stateful RNN网络），可以传递<code>batch_size</code>参数到一个层中，例如你想指定输入张量的batch大小是32，数据shape是（6，8），则你需要传递<code>batch_size=32</code>和<code>input_shape=(6,8)</code>。</li>
+</ul>
+
+<pre><code class="language-python">model = Sequential()
+model.add(Dense(32, input_dim=784))
+</code></pre>
+
+<pre><code class="language-python">model = Sequential()
+model.add(Dense(32, input_shape=(784,)))
+</code></pre>
+
+<h2 id="编译">编译</h2>
+
+<p>在训练模型之前，我们需要通过<code>compile</code>来对学习过程进行配置。<code>compile</code>接收三个参数：</p>
+
+<ul>
+<li>优化器 optimizer：该参数可指定为已预定义的优化器名，如<code>rmsprop</code>、<code>adagrad</code>，或一个<code>Optimizer</code>类的对象。</li>
+<li>损失函数 loss：该参数为模型试图最小化的目标函数，它可为预定义的损失函数名，如<code>categorical_crossentropy</code>、<code>mse</code>，也可以为一个损失函数。</li>
+<li>指标列表 metrics：对分类问题，我们一般将该列表设置为<code>metrics=['accuracy']</code>。指标可以是一个预定义指标的名字，也可以是一个用户定制的函数。指标函数应该返回单个张量，或一个完成 <code>metric_name - &gt; metric_value</code> 映射的字典。<span style="color:red;">这个指标列表 metrics 是起到什么作用？</span></li>
+</ul>
+
+<pre><code class="language-python"># For a multi-class classification problem
+model.compile(optimizer='rmsprop',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+
+# For a binary classification problem
+model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+# For a mean squared error regression problem
+model.compile(optimizer='rmsprop',
+              loss='mse')
+
+# For custom metrics
+import keras.backend as K
+
+def mean_pred(y_true, y_pred):
+    return K.mean(y_pred)
+
+model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              metrics=['accuracy', mean_pred])
+</code></pre>
+
+<p><span style="color:red;">上面这个最后的 mean_pred 没明白，这个不是预测的数的均值吗？为什么作为 accuracy？</span></p>
+
+<h2 id="训练">训练</h2>
+
+<p>Keras 以 Numpy 数组作为输入数据和标签的数据类型。训练模型一般使用<code>fit</code>函数。</p>
+
+<p>下面是一些例子:</p>
+
+<p>一个二分类问题：</p>
+
+<pre><code class="language-python"># For a single-input model with 2 classes (binary classification):
+from keras.models import Sequential
+from keras.layers import Dense
+
+
+model = Sequential()
+model.add(Dense(32, activation='relu', input_dim=100))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+# Generate dummy data
+import numpy as np
+data = np.random.random((1000, 100))
+labels = np.random.randint(2, size=(1000, 1))
+
+# Train the model, iterating on the data in batches of 32 samples
+print(model.fit(data, labels, epochs=1100, batch_size=32))
+</code></pre>
+
+<p>输出的一部分:</p>
+
+<pre><code>Epoch 883/1100
+
+32/1000 [..............................] - ETA: 0s - loss: 2.8313e-06 - acc: 1.0000
+1000/1000 [==============================] - 0s 31us/step - loss: 1.9177e-06 - acc: 1.0000
+</code></pre>
+
+<p><span style="color:red;">这个输出有点没看懂。</span></p>
+
+<p>一个多分类问题：</p>
+
+<pre><code class="language-python"># For a single-input model with 10 classes (categorical classification):
+from keras.models import Sequential
+from keras.layers import Dense
+import keras
+
+model = Sequential()
+model.add(Dense(32, activation='relu', input_dim=100))
+model.add(Dense(10, activation='softmax'))
+model.compile(optimizer='rmsprop',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Generate dummy data
+import numpy as np
+
+data = np.random.random((1000, 100))
+labels = np.random.randint(10, size=(1000, 1))
+
+# Convert labels to categorical one-hot encoding
+one_hot_labels = keras.utils.to_categorical(labels, num_classes=10)
+
+# Train the model, iterating on the data in batches of 32 samples
+print(model.fit(data, one_hot_labels, epochs=1000, batch_size=32))
+</code></pre>
+
+<p>这个输出好像有点问题：</p>
+
+<p>之前用 1.2 版本的 tensorflow 有点问题：</p>
+
+<pre><code>TypeError: softmax() got an unexpected keyword argument 'axis'
+</code></pre>
+
+<p>因此使用了 1.8 版本的tensorflow ，好了，部分输出如下：</p>
+
+<pre><code>...
+Epoch 528/1000
+
+32/1000 [..............................] - ETA: 0s - loss: 0.1717 - acc: 1.0000
+1000/1000 [==============================] - 0s 22us/step - loss: 0.1358 - acc: 0.9990
+...
+</code></pre>
+
+<p><span style="color:red;">嗯，不错，keras.utils.to_categorical 也不错。</span></p>
+
+<h2 id="例子">例子</h2>
+
+<p>这里是一些帮助你开始的例子</p>
+
+<p>在 Keras 代码包的 examples 文件夹中，你将找到使用真实数据的示例模型：</p>
+
+<ul>
+<li>CIFAR10 小图片分类：使用CNN和实时数据提升</li>
+<li>IMDB 电影评论观点分类：使用LSTM处理成序列的词语</li>
+<li>Reuters（路透社）新闻主题分类：使用多层感知器（MLP）</li>
+<li>MNIST 手写数字识别：使用多层感知器和CNN</li>
+<li>字符级文本生成：使用LSTM
+&hellip;</li>
+</ul>
+
+<p><span style="color:red;">都要总结进来。</span></p>
+
+<h3 id="基于多层感知器的-softmax-多分类">基于多层感知器的 softmax 多分类：</h3>
+
+<pre><code class="language-python">from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.optimizers import SGD
+import keras
+
+# Generate dummy data
+import numpy as np
+
+x_train = np.random.random((1000, 20))
+y_train = keras.utils.to_categorical(np.random.randint(10, size=(1000, 1)), num_classes=10)
+x_test = np.random.random((100, 20))
+y_test = keras.utils.to_categorical(np.random.randint(10, size=(100, 1)), num_classes=10)
+
+model = Sequential()
+# Dense(64) is a fully-connected layer with 64 hidden units.
+# in the first layer, you must specify the expected input data shape:
+# here, 20-dimensional vectors.
+model.add(Dense(64, activation='relu', input_dim=20))
+model.add(Dropout(0.5))
+model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(10, activation='softmax'))
+
+sgd = SGD(lr=0.01,
+          decay=1e-6,
+          momentum=0.9,
+          nesterov=True)
+model.compile(loss='categorical_crossentropy',
+              optimizer=sgd,
+              metrics=['accuracy'])
+
+model.fit(x_train, y_train,
+          epochs=100,
+          batch_size=128)
+
+
+print(&quot;***&quot;)
+score = model.evaluate(x_test,
+                       y_test,
+                       batch_size=128)
+print(score)
+</code></pre>
+
+<p>部分输出：</p>
+
+<pre><code>Epoch 99/100
+
+ 128/1000 [==&gt;...........................] - ETA: 0s - loss: 2.2526 - acc: 0.1484
+1000/1000 [==============================] - 0s 14us/step - loss: 2.2779 - acc: 0.1530
+Epoch 100/100
+
+ 128/1000 [==&gt;...........................] - ETA: 0s - loss: 2.2465 - acc: 0.1562
+1000/1000 [==============================] - 0s 14us/step - loss: 2.2755 - acc: 0.1450
+***
+
+100/100 [==============================] - 0s 350us/step
+[2.3050098419189453, 0.11999999731779099]
+</code></pre>
+
+<h3 id="mlp的二分类">MLP的二分类：</h3>
+
+<pre><code class="language-python">import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+
+# Generate dummy data
+x_train = np.random.random((1000, 20))
+y_train = np.random.randint(2, size=(1000, 1))
+x_test = np.random.random((100, 20))
+y_test = np.random.randint(2, size=(100, 1))
+
+model = Sequential()
+model.add(Dense(64, input_dim=20, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(64, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy',
+              optimizer='rmsprop',
+              metrics=['accuracy'])
+model.fit(x_train,
+          y_train,
+          epochs=100,
+          batch_size=128)
+print(&quot;***&quot;)
+score = model.evaluate(x_test,
+                       y_test,
+                       batch_size=128)
+print(score)
+</code></pre>
+
+<p>部分输出：</p>
+
+<pre><code>Epoch 99/100
+
+ 128/1000 [==&gt;...........................] - ETA: 0s - loss: 0.6388 - acc: 0.6406
+1000/1000 [==============================] - 0s 13us/step - loss: 0.6555 - acc: 0.6130
+Epoch 100/100
+
+ 128/1000 [==&gt;...........................] - ETA: 0s - loss: 0.6563 - acc: 0.6250
+1000/1000 [==============================] - 0s 13us/step - loss: 0.6582 - acc: 0.6120
+***
+
+100/100 [==============================] - 0s 360us/step
+[0.70203381776809692, 0.52999997138977051]
+</code></pre>
+
+<h3 id="类似vgg的卷积神经网络">类似VGG的卷积神经网络：</h3>
+
+<p><span style="color:red;">这个例子还真的挺好的，信手拈来的感觉，有些厉害。</span></p>
+
+<pre><code class="language-python">import numpy as np
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras.optimizers import SGD
+
+# Generate dummy data
+x_train = np.random.random((200, 100, 100, 3))
+y_train = keras.utils.to_categorical(np.random.randint(10, size=(200, 1)), num_classes=10)
+x_test = np.random.random((20, 100, 100, 3))
+y_test = keras.utils.to_categorical(np.random.randint(10, size=(20, 1)), num_classes=10)
+
+model = Sequential()
+# input: 100x100 images with 3 channels -&gt; (100, 100, 3) tensors.
+# this applies 32 convolution filters of size 3x3 each.
+model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(100, 100, 3)))
+model.add(Conv2D(32, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Dropout(0.25))
+
+model.add(Flatten())
+model.add(Dense(256, activation='relu'))
+model.add(Dropout(0.5))
+model.add(Dense(10, activation='softmax'))
+
+sgd = SGD(lr=0.01,
+          decay=1e-6,
+          momentum=0.9,
+          nesterov=True)  # 这个 nesterov 是什么？
+
+model.compile(loss='categorical_crossentropy',
+              optimizer=sgd)  # 为什么没有 metrics ？
+
+model.fit(x_train,
+          y_train,
+          batch_size=32,
+          epochs=10)
+print(&quot;***&quot;)
+score = model.evaluate(x_test,
+                       y_test,
+                       batch_size=32)
+print(score)
+
+</code></pre>
+
+<p>部分输出：</p>
+
+<pre><code>Epoch 9/10
+
+ 32/200 [===&gt;..........................] - ETA: 6s - loss: 2.3001
+ 64/200 [========&gt;.....................] - ETA: 5s - loss: 2.2850
+ 96/200 [=============&gt;................] - ETA: 4s - loss: 2.2847
+128/200 [==================&gt;...........] - ETA: 3s - loss: 2.2686
+160/200 [=======================&gt;......] - ETA: 1s - loss: 2.2763
+192/200 [===========================&gt;..] - ETA: 0s - loss: 2.2823
+200/200 [==============================] - 9s 43ms/step - loss: 2.2832
+Epoch 10/10
+
+ 32/200 [===&gt;..........................] - ETA: 7s - loss: 2.2554
+ 64/200 [========&gt;.....................] - ETA: 5s - loss: 2.2685
+ 96/200 [=============&gt;................] - ETA: 4s - loss: 2.2522
+128/200 [==================&gt;...........] - ETA: 3s - loss: 2.2682
+160/200 [=======================&gt;......] - ETA: 1s - loss: 2.2649
+192/200 [===========================&gt;..] - ETA: 0s - loss: 2.2829
+200/200 [==============================] - 9s 43ms/step - loss: 2.2914
+***
+
+20/20 [==============================] - 0s 16ms/step
+2.34389066696
+</code></pre>
+
+<p>感觉这个看的还是听清楚的，9s 一个 epoch，处理每张图片的时间大概是  44ms，因为是随机生成的图像数据，所以 loss 一直没怎么降。</p>
+
+<p>最后预测的时候，20 张图片，用了不到 1s，每张图片大概用了 16ms。<span style="color:red;">不知道这个地方我理解的对不对。</span></p>
+
+<h3 id="使用lstm的序列分类">使用LSTM的序列分类</h3>
+
+<pre><code class="language-python">from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.layers import Embedding
+from keras.layers import LSTM
+
+model = Sequential()
+model.add(Embedding(max_features, output_dim=256))
+model.add(LSTM(128))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy',
+              optimizer='rmsprop',
+              metrics=['accuracy'])
+
+model.fit(x_train, y_train, batch_size=16, epochs=10)
+score = model.evaluate(x_test, y_test, batch_size=16)
+</code></pre>
+
+<p><span style="color:red;">这个例子不完整，找一下完整的例子在哪里。可以提一个 issus 问一下。</span></p>
+
+<h3 id="使用1d卷积的序列分类">使用1D卷积的序列分类</h3>
+
+<pre><code class="language-python">from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.layers import Embedding
+from keras.layers import Conv1D, GlobalAveragePooling1D, MaxPooling1D
+
+model = Sequential()
+model.add(Conv1D(64, 3, activation='relu', input_shape=(seq_length, 100)))
+model.add(Conv1D(64, 3, activation='relu'))
+model.add(MaxPooling1D(3))
+model.add(Conv1D(128, 3, activation='relu'))
+model.add(Conv1D(128, 3, activation='relu'))
+model.add(GlobalAveragePooling1D())
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+
+model.compile(loss='binary_crossentropy',
+              optimizer='rmsprop',
+              metrics=['accuracy'])
+
+model.fit(x_train, y_train, batch_size=16, epochs=10)
+score = model.evaluate(x_test, y_test, batch_size=16)
+</code></pre>
+
+<p><span style="color:red;">这个例子也不完整，这个 x_train 是什么？</span>
+<span style="color:red;">以前好像还没有见到过 一维的卷积，嗯，这个一般在什么时候使用呢？</span></p>
+
+<h3 id="用于序列分类的栈式lstm">用于序列分类的栈式LSTM</h3>
+
+<p>在该模型中，我们将三个 LSTM 堆叠在一起，是该模型能够学习更高层次的时域特征表示。<span style="color:red;">为什么堆叠的 LSTM 能够学习到更高层次的时域特征表示？</span></p>
+
+<p>开始的两层 LSTM 返回其全部输出序列，而第三层 LSTM 只返回其输出序列的最后一步结果，从而其时域维度降低（即将输入序列转换为单个向量）。<span style="color:red;">没明白？</span></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181020/dd44K3GjAg.png?imageslim" alt="mark" /></p>
+
+<pre><code class="language-python">from keras.models import Sequential
+from keras.layers import LSTM, Dense
+import numpy as np
+
+data_dim = 16
+timesteps = 8
+num_classes = 10
+
+# expected input data shape: (batch_size, timesteps, data_dim)
+model = Sequential()
+model.add(LSTM(32,
+               return_sequences=True,
+               input_shape=(timesteps, data_dim)))  # returns a sequence of vectors of dimension 32
+model.add(LSTM(32,
+               return_sequences=True))  # returns a sequence of vectors of dimension 32
+model.add(LSTM(32))  # return a single vector of dimension 32
+model.add(Dense(10, activation='softmax'))
+
+model.compile(loss='categorical_crossentropy',
+              optimizer='rmsprop',
+              metrics=['accuracy'])
+
+# Generate dummy training data
+x_train = np.random.random((1000, timesteps, data_dim))
+y_train = np.random.random((1000, num_classes))
+
+# Generate dummy validation data
+x_val = np.random.random((100, timesteps, data_dim))
+y_val = np.random.random((100, num_classes))
+
+model.fit(x_train,
+          y_train,
+          batch_size=64,
+          epochs=5,
+          validation_data=(x_val, y_val))
+</code></pre>
+
+<p>部分输出：</p>
+
+<pre><code>Epoch 5/5
+
+  64/1000 [&gt;.............................] - ETA: 0s - loss: 11.5359 - acc: 0.0781
+ 448/1000 [============&gt;.................] - ETA: 0s - loss: 11.5902 - acc: 0.1183
+ 832/1000 [=======================&gt;......] - ETA: 0s - loss: 11.6615 - acc: 0.1142
+1000/1000 [==============================] - 0s 146us/step - loss: 11.6525 - acc: 0.1170 - val_loss: 11.5541 - val_acc: 0.0500
+</code></pre>
+
+<p><span style="color:red;">嗯，对于验证集的使用，还是不错的，可以方便的看出当前模型是否过拟合。</span></p>
+
+<h3 id="采用-stateful-lstm-的相同模型">采用 stateful LSTM 的相同模型</h3>
+
+<p>stateful LSTM的特点是，在处理过一个 batch 的训练数据后，其内部状态（记忆）会被作为下一个 batch 的训练数据的初始状态。</p>
+
+<p><span style="color:red;">还是有点没理解，普通的模型也会在 一个 batch 之后更新权重，那么内部状态是什么意思？对于上面那个程序来说，它在训练一个 新的 batch 的时候，内部的状态是清零的，而这个 stateful LSTM ，内部的状态却是不清零的，是吗？</span></p>
+
+<p>状态 LSTM 使得我们可以在合理的计算复杂度内处理较长序列。<span style="color:red;">为什么能够在合理的计算复杂度内处理较长序列？上面的LSTM 的方法处理较长序列复杂度会很高吗？</span></p>
+
+<pre><code class="language-python">from keras.models import Sequential
+from keras.layers import LSTM, Dense
+import numpy as np
+
+data_dim = 16
+timesteps = 8
+num_classes = 10
+batch_size = 32
+
+# Expected input batch shape: (batch_size, timesteps, data_dim)
+# Note that we have to provide the full batch_input_shape since the network is stateful.
+# the sample of index i in batch k is the follow-up for the sample i in batch k-1.
+model = Sequential()
+model.add(LSTM(32,
+               return_sequences=True,
+               stateful=True,
+               batch_input_shape=(batch_size, timesteps, data_dim)))
+model.add(LSTM(32,
+               return_sequences=True,
+               stateful=True))
+model.add(LSTM(32,
+               stateful=True))
+model.add(Dense(10,
+                activation='softmax'))
+
+model.compile(loss='categorical_crossentropy',
+              optimizer='rmsprop',
+              metrics=['accuracy'])
+
+# Generate dummy training data
+x_train = np.random.random((batch_size * 10, timesteps, data_dim))
+y_train = np.random.random((batch_size * 10, num_classes))
+
+# Generate dummy validation data
+x_val = np.random.random((batch_size * 3, timesteps, data_dim))
+y_val = np.random.random((batch_size * 3, num_classes))
+
+model.fit(x_train,
+          y_train,
+          batch_size=batch_size,
+          epochs=5,
+          shuffle=False,
+          validation_data=(x_val, y_val))
+</code></pre>
+
+<p>部分输出：</p>
+
+<pre><code>Epoch 4/5
+
+ 32/320 [==&gt;...........................] - ETA: 0s - loss: 11.8298 - acc: 0.0312
+320/320 [==============================] - 0s 175us/step - loss: 11.5966 - acc: 0.1000 - val_loss: 11.6352 - val_acc: 0.1458
+Epoch 5/5
+
+ 32/320 [==&gt;...........................] - ETA: 0s - loss: 11.8293 - acc: 0.0625
+320/320 [==============================] - 0s 187us/step - loss: 11.5959 - acc: 0.1031 - val_loss: 11.6354 - val_acc: 0.1250
+</code></pre>
+
+<p><span style="color:red;">为什么这个地方 shuffle 设定为 False？ </span></p>
+
+<p><span style="color:red;">对这个 stateful LSTM 还是不是很理解。</span></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://keras-cn.readthedocs.io/en/latest/">Keras中文文档</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/02-%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/01-%E4%BD%BF%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 使用的操作系统</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/01-keras-%E4%BB%8B%E7%BB%8D/02-keras-%E5%AE%89%E8%A3%85/">
+            <span class="next-text nav-default">02 Keras 安装</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

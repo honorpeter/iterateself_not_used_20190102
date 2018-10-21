@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="快速开始函数式（Functional）模型 我们起初将 Functional 一词译作泛型，想要表达该类模型能够表达任意张量映射的含义，但表达的不是很精确，在 Keras 2 里" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/03-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/02-%E5%87%BD%E6%95%B0%E5%BC%8F%E6%A8%A1%E5%9E%8B-functional/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="快速开始函数式（Functional）模型 我们起初将 Functional 一词译作泛型，想要表达该类模型能够表达任意张量映射的含义，但表达的不是很精确，在 Keras 2 里" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/04-keras/03-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/02-%E5%87%BD%E6%95%B0%E5%BC%8F%E6%A8%A1%E5%9E%8B-functional/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="快速开始函数式（Functional）模型 我们起初将 Functional 一词译作泛型，想要表达该类模型能够表达任意张量映射的含义，但表达的不是很精确，在 Keras 2 里">
+
+
+
+<meta itemprop="wordCount" content="4127">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="快速开始函数式（Functional）模型 我们起初将 Functional 一词译作泛型，想要表达该类模型能够表达任意张量映射的含义，但表达的不是很精确，在 Keras 2 里"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 4127 words </span>
+        <span class="more-meta"> 9 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#快速开始函数式-functional-模型">快速开始函数式（Functional）模型</a>
+<ul>
+<li><a href="#第一个模型-全连接网络">第一个模型：全连接网络</a></li>
+<li><a href="#所有的模型都是可调用的-就像层一样">所有的模型都是可调用的，就像层一样</a></li>
+<li><a href="#多输入和多输出模型">多输入和多输出模型</a></li>
+<li><a href="#共享层">共享层</a></li>
+<li><a href="#层-节点-的概念">层“节点”的概念</a></li>
+<li><a href="#更多的例子">更多的例子</a>
+<ul>
+<li><a href="#inception模型">inception模型</a></li>
+<li><a href="#卷积层的残差连接">卷积层的残差连接</a></li>
+<li><a href="#共享视觉模型">共享视觉模型</a></li>
+<li><a href="#视觉问答模型">视觉问答模型</a></li>
+<li><a href="#视频问答模型">视频问答模型</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="快速开始函数式-functional-模型">快速开始函数式（Functional）模型</h1>
+
+<p>我们起初将 Functional 一词译作泛型，想要表达该类模型能够表达任意张量映射的含义，但表达的不是很精确，在 Keras 2 里我们将这个词改译为“函数式”，对函数式编程有所了解的同学应能够快速get到该类模型想要表达的含义。函数式模型称作Functional，但它的类名是 Model，因此我们有时候也用 Model 来代表函数式模型。</p>
+
+<p>Keras 函数式模型接口是用户定义多输出模型、非循环有向模型或具有共享层的模型等复杂模型的途径。<span style="color:red;">怎么用函数式模型接口搭建非循环有向模型？具有共享层的模型是什么意思？什么样的模型会有共享层？</span></p>
+
+<p>一句话，只要你的模型不是类似 VGG 一样一条路走到黑的模型，或者你的模型需要多于一个的输出，那么你总应该选择函数式模型。函数式模型是最广泛的一类模型，序贯模型（Sequential）只是它的一种特殊情况。<span style="color:red;">什么样的模型需要多余一个的输出？是需要对中间的某些曾结果进行合并或什么操作的时候吗？</span></p>
+
+<p>这部分的文档假设你已经对 Sequential 模型已经比较熟悉</p>
+
+<p>让我们从简单一点的模型开始</p>
+
+<h2 id="第一个模型-全连接网络">第一个模型：全连接网络</h2>
+
+<pre><code class="language-Sequential```当然是实现全连接网络的最好方式，但我们从简单的全连接网络开始，有助于我们学习这部分的内容。在开始前，有几个概念需要澄清：">
+* 层对象接受张量为参数，返回一个张量。
+* 输入是张量，输出也是张量的一个框架就是一个模型，通过```Model```定义。&lt;span style=&quot;color:red;&quot;&gt;嗯，这个描述 感觉 这个东西可以很通用&lt;/span&gt;
+* 这样的模型可以被像Keras的```Sequential```一样被训练
+
+```python
+from keras.layers import Input, Dense
+from keras.models import Model
+
+# This returns a tensor
+inputs = Input(shape=(784,))
+
+# a layer instance is callable on a tensor, and returns a tensor
+x = Dense(64, activation='relu')(inputs)
+x = Dense(64, activation='relu')(x)
+predictions = Dense(10, activation='softmax')(x)
+
+# This creates a model that includes
+# the Input layer and three Dense layers
+model = Model(inputs=inputs,
+              outputs=predictions)
+model.compile(optimizer='rmsprop',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
+
+model.fit(data, labels)  # starts training
+</code></pre>
+
+<p><span style="color:red;">嗯，感觉这个还是不错的，像是 Sequential 的一种更加灵活的封装。</span></p>
+
+<h2 id="所有的模型都是可调用的-就像层一样">所有的模型都是可调用的，就像层一样</h2>
+
+<p>利用函数式模型的接口，我们可以很容易的重用已经训练好的模型：你可以把模型当作一个层一样，通过提供一个 tensor 来调用它。注意当你调用一个模型时，你不仅仅重用了它的结构，也重用了它的权重。</p>
+
+<pre><code class="language-python">x = Input(shape=(784,))
+# This works, and returns the 10-way softmax we defined above.
+y = model(x)
+</code></pre>
+
+<p><span style="color:red;">这个有什么特殊的吗？没大注意？</span></p>
+
+<p>这种方式可以允许你快速的创建能处理序列信号的模型，你可以很快将一个图像分类的模型变为一个对视频分类的模型，只需要一行代码：</p>
+
+<pre><code class="language-python">from keras.layers import TimeDistributed
+
+# Input tensor for sequences of 20 timesteps,
+# each containing a 784-dimensional vector
+input_sequences = Input(shape=(20, 784))
+
+# This applies our previous model to every timestep in the input sequences.
+# the output of the previous model was a 10-way softmax,
+# so the output of the layer below will be a sequence of 20 vectors of size 10.
+processed_sequences = TimeDistributed(model)(input_sequences)
+</code></pre>
+
+<p><span style="color:red;">嗯，听起来好像只是一种封装的形式，好像没有太特殊。。还是要明确下的。</span></p>
+
+<h2 id="多输入和多输出模型">多输入和多输出模型</h2>
+
+<p>使用函数式模型的一个典型场景是搭建多输入、多输出的模型。</p>
+
+<p>考虑这样一个模型。我们希望预测 Twitter 上一条新闻会被转发和点赞多少次。模型的主要输入是新闻本身，也就是一个词语的序列。但我们还可以拥有额外的输入，如新闻发布的日期等。这个模型的损失函数将由两部分组成，辅助的损失函数评估仅仅基于新闻本身做出预测的情况，主损失函数评估基于新闻和额外信息的预测的情况，即使来自主损失函数的梯度发生弥散，来自辅助损失函数的信息也能够训练 Embeddding 和 LSTM 层。在模型中早点使用主要的损失函数是对于深度网络的一个良好的正则方法。<span style="color:red;">Embedding 层是什么？这一段没明白？</span></p>
+
+<p>总而言之，该模型框图如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181020/IajEbC3i60.png?imageslim" alt="mark" /></p>
+
+<p>让我们用函数式模型来实现这个框图</p>
+
+<p>主要的输入接收新闻本身，即一个整数的序列（每个整数编码了一个词）。这些整数位于1到10，000之间（即我们的字典有10，000个词）。这个序列有100个单词。</p>
+
+<pre><code class="language-python">from keras.layers import Input, Embedding, LSTM, Dense
+from keras.models import Model
+
+# Headline input: meant to receive sequences of 100 integers, between 1 and 10000.
+# Note that we can name any layer by passing it a &quot;name&quot; argument.
+main_input = Input(shape=(100,),
+                   dtype='int32',
+                   name='main_input')
+
+# This embedding layer will encode the input sequence
+# into a sequence of dense 512-dimensional vectors.
+x = Embedding(output_dim=512,
+              input_dim=10000,
+              input_length=100)(main_input)
+
+# A LSTM will transform the vector sequence into a single vector,
+# containing information about the entire sequence
+lstm_out = LSTM(32)(x)
+</code></pre>
+
+<p>然后，我们插入一个额外的损失，使得即使在主损失很高的情况下，LSTM和Embedding层也可以平滑的训练。<span style="color:red;">什么意思？</span></p>
+
+<pre><code class="language-python">auxiliary_output = Dense(1,
+                         activation='sigmoid',
+                         name='aux_output')(lstm_out)
+</code></pre>
+
+<p>再然后，我们将 LSTM 与额外的输入数据串联起来组成输入，送入模型中：</p>
+
+<pre><code class="language-python">auxiliary_input = Input(shape=(5,),
+                        name='aux_input')
+x = keras.layers.concatenate([lstm_out,
+                              auxiliary_input])
+
+# We stack a deep densely-connected network on top
+x = Dense(64, activation='relu')(x)
+x = Dense(64, activation='relu')(x)
+x = Dense(64, activation='relu')(x)
+
+# And finally we add the main logistic regression layer
+main_output = Dense(1,
+                    activation='sigmoid',
+                    name='main_output')(x)
+</code></pre>
+
+<p>最后，我们定义整个 2 输入，2 输出的模型：</p>
+
+<pre><code class="language-python">model = Model(inputs=[main_input, auxiliary_input],
+              outputs=[main_output, auxiliary_output])
+</code></pre>
+
+<p>模型定义完毕，下一步编译模型。我们给额外的损失赋 0.2 的权重。我们可以通过关键字参数 <code>loss_weights</code> 或 <code>loss</code> 来为不同的输出设置不同的损失函数或权值。这两个参数均可为 Python 的列表或字典。这里我们给 <code>loss</code> 传递单个损失函数，这个损失函数会被应用于所有输出上。</p>
+
+<pre><code class="language-python">model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              loss_weights=[1., 0.2])
+</code></pre>
+
+<p>编译完成后，我们通过传递训练数据和目标值训练该模型：</p>
+
+<pre><code class="language-python">model.fit([headline_data, additional_data],
+          [labels, labels],
+          epochs=50,
+          batch_size=32)
+</code></pre>
+
+<p>因为我们输入和输出是被命名过的（在定义时传递了“name”参数），我们也可以用下面的方式编译和训练模型：<span style="color:red;">嗯，感觉这样写更好，更清晰。</span></p>
+
+<pre><code class="language-python">model.compile(optimizer='rmsprop',
+              loss={'main_output': 'binary_crossentropy', 'aux_output': 'binary_crossentropy'},
+              loss_weights={'main_output': 1., 'aux_output': 0.2})
+
+# And trained it via:
+model.fit({'main_input': headline_data, 'aux_input': additional_data},
+          {'main_output': labels, 'aux_output': labels},
+          epochs=50, batch_size=32)
+</code></pre>
+
+<h2 id="共享层">共享层</h2>
+
+<p>另一个使用函数式模型的场合是使用共享层的时候。</p>
+
+<p>考虑微博数据，我们希望建立模型来判别两条微博是否是来自同一个用户，这个需求同样可以用来判断一个用户的两条微博的相似性。</p>
+
+<p>一种实现方式是，我们建立一个模型，它分别将两条微博的数据映射到两个特征向量上，然后将特征向量串联并加一个logistic回归层，输出它们来自同一个用户的概率。这种模型的训练数据是一对对的微博。<span style="color:red;">怎么串联再加上一个 logistic 回归层的？</span></p>
+
+<p>因为这个问题是对称的，所以处理第一条微博的模型当然也能重用于处理第二条微博。所以这里我们使用一个共享的 LSTM 层来进行映射。</p>
+
+<p>首先，我们将微博的数据转为（140，256）的矩阵，即每条微博有140个字符，每个单词的特征由一个256维的词向量表示，向量的每个元素为1表示某个字符出现，为0表示不出现，这是一个one-hot编码。</p>
+
+<p>之所以是（140，256）是因为一条微博最多有140个字符，而扩展的 ASCII 码表编码了常见的256个字符。原文中此处为 Tweet，所以对外国人而言这是合理的。如果考虑中文字符，那一个单词的词向量就不止 256 了。<span style="color:red;">嗯。</span></p>
+
+<pre><code class="language-python">import keras
+from keras.layers import Input, LSTM, Dense
+from keras.models import Model
+
+tweet_a = Input(shape=(140, 256))
+tweet_b = Input(shape=(140, 256))
+</code></pre>
+
+<p>若要对不同的输入共享同一层，就初始化该层一次，然后多次调用它</p>
+
+<pre><code class="language-python"># This layer can take as input a matrix
+# and will return a vector of size 64
+shared_lstm = LSTM(64)
+
+# When we reuse the same layer instance
+# multiple times, the weights of the layer
+# are also being reused
+# (it is effectively *the same* layer)
+encoded_a = shared_lstm(tweet_a)
+encoded_b = shared_lstm(tweet_b)
+
+# We can then concatenate the two vectors:
+merged_vector = keras.layers.concatenate([encoded_a, encoded_b], axis=-1)
+
+# And add a logistic regression on top
+predictions = Dense(1, activation='sigmoid')(merged_vector)
+
+# We define a trainable model linking the
+# tweet inputs to the predictions
+model = Model(inputs=[tweet_a, tweet_b], outputs=predictions)
+
+model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+model.fit([data_a, data_b], labels, epochs=10)
+</code></pre>
+
+<p>先暂停一下，看看共享层到底输出了什么，它的输出数据shape又是什么</p>
+
+<hr />
+
+<h2 id="层-节点-的概念">层“节点”的概念</h2>
+
+<p>无论何时，当你在某个输入上调用层时，你就创建了一个新的张量（即该层的输出），同时你也在为这个层增加一个“（计算）节点”。这个节点将输入张量映射为输出张量。当你多次调用该层时，这个层就有了多个节点，其下标分别为0，1，2&hellip;</p>
+
+<p>在上一版本的Keras中，你可以通过<code>layer.get_output()</code>方法来获得层的输出张量，或者通过<code>layer.output_shape</code>获得其输出张量的shape。这个版本的Keras你仍然可以这么做（除了<code>layer.get_output()</code>被<code>output</code>替换）。但如果一个层与多个输入相连，会出现什么情况呢？</p>
+
+<p>如果层只与一个输入相连，那没有任何困惑的地方。<code>.output</code>将会返回该层唯一的输出</p>
+
+<pre><code class="language-python">a = Input(shape=(140, 256))
+
+lstm = LSTM(32)
+encoded_a = lstm(a)
+
+assert lstm.output == encoded_a
+</code></pre>
+
+<p>但当层与多个输入相连时，会出现问题</p>
+
+<pre><code>a = Input(shape=(140, 256))
+b = Input(shape=(140, 256))
+
+lstm = LSTM(32)
+encoded_a = lstm(a)
+encoded_b = lstm(b)
+
+lstm.output
+</code></pre>
+
+<p>上面这段代码会报错</p>
+
+<pre><code class="language-python">&gt;&gt; AssertionError: Layer lstm_1 has multiple inbound nodes,
+hence the notion of &quot;layer output&quot; is ill-defined.
+Use `get_output_at(node_index)` instead.
+</code></pre>
+
+<p>通过下面这种调用方式即可解决</p>
+
+<pre><code class="language-python">assert lstm.get_output_at(0) == encoded_a
+assert lstm.get_output_at(1) == encoded_b
+</code></pre>
+
+<p></font>
+</a></p>
+
+<p>对于<code>input_shape</code>和<code>output_shape</code>也是一样，如果一个层只有一个节点，或所有的节点都有相同的输入或输出shape，那么<code>input_shape</code>和<code>output_shape</code>都是没有歧义的，并也只返回一个值。但是，例如你把一个相同的<code>Conv2D</code>应用于一个大小为(32,32,3)的数据，然后又将其应用于一个(64,64,3)的数据，那么此时该层就具有了多个输入和输出的shape，你就需要显式的指定节点的下标，来表明你想取的是哪个了</p>
+
+<pre><code class="language-python">a = Input(shape=(32, 32, 3))
+b = Input(shape=(64, 64, 3))
+
+conv = Conv2D(16, (3, 3), padding='same')
+conved_a = conv(a)
+
+# Only one input so far, the following will work:
+assert conv.input_shape == (None, 32, 32, 3)
+
+conved_b = conv(b)
+# now the `.input_shape` property wouldn't work, but this does:
+assert conv.get_input_shape_at(0) == (None, 32, 32, 3)
+assert conv.get_input_shape_at(1) == (None, 64, 64, 3)
+</code></pre>
+
+<hr />
+
+<h2 id="更多的例子">更多的例子</h2>
+
+<p>代码示例依然是学习的最佳方式，这里是更多的例子</p>
+
+<h3 id="inception模型">inception模型</h3>
+
+<p>inception的详细结构参见Google的这篇论文：<a href="http://arxiv.org/abs/1409.4842">Going Deeper with Convolutions</a></p>
+
+<pre><code class="language-python">from keras.layers import Conv2D, MaxPooling2D, Input
+
+input_img = Input(shape=(256, 256, 3))
+
+tower_1 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_img)
+tower_1 = Conv2D(64, (3, 3), padding='same', activation='relu')(tower_1)
+
+tower_2 = Conv2D(64, (1, 1), padding='same', activation='relu')(input_img)
+tower_2 = Conv2D(64, (5, 5), padding='same', activation='relu')(tower_2)
+
+tower_3 = MaxPooling2D((3, 3), strides=(1, 1), padding='same')(input_img)
+tower_3 = Conv2D(64, (1, 1), padding='same', activation='relu')(tower_3)
+
+output = keras.layers.concatenate([tower_1, tower_2, tower_3], axis=1)
+</code></pre>
+
+<h3 id="卷积层的残差连接">卷积层的残差连接</h3>
+
+<p>残差网络（Residual Network）的详细信息请参考这篇文章：<a href="http://arxiv.org/abs/1512.03385">Deep Residual Learning for Image Recognition</a></p>
+
+<pre><code class="language-python">from keras.layers import Conv2D, Input
+
+# input tensor for a 3-channel 256x256 image
+x = Input(shape=(256, 256, 3))
+# 3x3 conv with 3 output channels (same as input channels)
+y = Conv2D(3, (3, 3), padding='same')(x)
+# this returns x + y.
+z = keras.layers.add([x, y])
+</code></pre>
+
+<h3 id="共享视觉模型">共享视觉模型</h3>
+
+<p>该模型在两个输入上重用了图像处理的模型，用来判别两个MNIST数字是否是相同的数字</p>
+
+<pre><code class="language-python">from keras.layers import Conv2D, MaxPooling2D, Input, Dense, Flatten
+from keras.models import Model
+
+# First, define the vision modules
+digit_input = Input(shape=(27, 27, 1))
+x = Conv2D(64, (3, 3))(digit_input)
+x = Conv2D(64, (3, 3))(x)
+x = MaxPooling2D((2, 2))(x)
+out = Flatten()(x)
+
+vision_model = Model(digit_input, out)
+
+# Then define the tell-digits-apart model
+digit_a = Input(shape=(27, 27, 1))
+digit_b = Input(shape=(27, 27, 1))
+
+# The vision model will be shared, weights and all
+out_a = vision_model(digit_a)
+out_b = vision_model(digit_b)
+
+concatenated = keras.layers.concatenate([out_a, out_b])
+out = Dense(1, activation='sigmoid')(concatenated)
+
+classification_model = Model([digit_a, digit_b], out)
+</code></pre>
+
+<h3 id="视觉问答模型">视觉问答模型</h3>
+
+<p>在针对一幅图片使用自然语言进行提问时，该模型能够提供关于该图片的一个单词的答案</p>
+
+<p>这个模型将自然语言的问题和图片分别映射为特征向量，将二者合并后训练一个logistic回归层，从一系列可能的回答中挑选一个。</p>
+
+<pre><code class="language-python">from keras.layers import Conv2D, MaxPooling2D, Flatten
+from keras.layers import Input, LSTM, Embedding, Dense
+from keras.models import Model, Sequential
+
+# First, let's define a vision model using a Sequential model.
+# This model will encode an image into a vector.
+vision_model = Sequential()
+vision_model.add(Conv2D(64, (3, 3), activation='relu', padding='same', input_shape=(224, 224, 3)))
+vision_model.add(Conv2D(64, (3, 3), activation='relu'))
+vision_model.add(MaxPooling2D((2, 2)))
+vision_model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
+vision_model.add(Conv2D(128, (3, 3), activation='relu'))
+vision_model.add(MaxPooling2D((2, 2)))
+vision_model.add(Conv2D(256, (3, 3), activation='relu', padding='same'))
+vision_model.add(Conv2D(256, (3, 3), activation='relu'))
+vision_model.add(Conv2D(256, (3, 3), activation='relu'))
+vision_model.add(MaxPooling2D((2, 2)))
+vision_model.add(Flatten())
+
+# Now let's get a tensor with the output of our vision model:
+image_input = Input(shape=(224, 224, 3))
+encoded_image = vision_model(image_input)
+
+# Next, let's define a language model to encode the question into a vector.
+# Each question will be at most 100 word long,
+# and we will index words as integers from 1 to 9999.
+question_input = Input(shape=(100,), dtype='int32')
+embedded_question = Embedding(input_dim=10000, output_dim=256, input_length=100)(question_input)
+encoded_question = LSTM(256)(embedded_question)
+
+# Let's concatenate the question vector and the image vector:
+merged = keras.layers.concatenate([encoded_question, encoded_image])
+
+# And let's train a logistic regression over 1000 words on top:
+output = Dense(1000, activation='softmax')(merged)
+
+# This is our final model:
+vqa_model = Model(inputs=[image_input, question_input], outputs=output)
+
+# The next stage would be training this model on actual data.
+
+</code></pre>
+
+<h3 id="视频问答模型">视频问答模型</h3>
+
+<p>在做完图片问答模型后，我们可以快速将其转为视频问答的模型。在适当的训练下，你可以为模型提供一个短视频（如100帧）然后向模型提问一个关于该视频的问题，如“what sport is the boy playing？”-&gt;“football”</p>
+
+<pre><code class="language-python">from keras.layers import TimeDistributed
+
+video_input = Input(shape=(100, 224, 224, 3))
+# This is our video encoded via the previously trained vision_model (weights are reused)
+encoded_frame_sequence = TimeDistributed(vision_model)(video_input)  # the output will be a sequence of vectors
+encoded_video = LSTM(256)(encoded_frame_sequence)  # the output will be a vector
+
+# This is a model-level representation of the question encoder, reusing the same weights as before:
+question_encoder = Model(inputs=question_input, outputs=encoded_question)
+
+# Let's use it to encode the question:
+video_question_input = Input(shape=(100,), dtype='int32')
+encoded_video_question = question_encoder(video_question_input)
+
+# And this is our video question answering model:
+merged = keras.layers.concatenate([encoded_video, encoded_video_question])
+output = Dense(1000, activation='softmax')(merged)
+video_qa_model = Model(inputs=[video_input, video_question_input], outputs=output)
+</code></pre>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/02-%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/04-tensorflow-%E5%AE%89%E8%A3%85/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/02-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/01-%E5%BC%80%E5%8F%91%E9%98%B6%E6%AE%B5/01-%E5%BC%80%E5%8F%91%E7%AB%8B%E6%A1%88%E4%B8%8E%E9%A1%B9%E7%9B%AE%E8%A7%84%E5%88%92/%E5%A4%A7%E7%BA%B2/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

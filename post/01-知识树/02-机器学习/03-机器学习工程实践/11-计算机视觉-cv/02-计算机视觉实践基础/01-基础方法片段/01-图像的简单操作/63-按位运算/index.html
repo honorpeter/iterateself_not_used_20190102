@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>63 按位运算 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="按位运算 这里包括的按位操作有： AND， OR， NOT， XOR 等。当我们提取图像的一部分，选择非矩形 ROI 时这些操作会很有用（下一章你就会明白）。嗯，的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/63-%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="63 按位运算" />
+<meta property="og:description" content="按位运算 这里包括的按位操作有： AND， OR， NOT， XOR 等。当我们提取图像的一部分，选择非矩形 ROI 时这些操作会很有用（下一章你就会明白）。嗯，的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/63-%E6%8C%89%E4%BD%8D%E8%BF%90%E7%AE%97/" /><meta property="article:published_time" content="2018-10-22T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-22T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="63 按位运算">
+<meta itemprop="description" content="按位运算 这里包括的按位操作有： AND， OR， NOT， XOR 等。当我们提取图像的一部分，选择非矩形 ROI 时这些操作会很有用（下一章你就会明白）。嗯，的">
+
+
+<meta itemprop="datePublished" content="2018-10-22T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="534">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="63 按位运算"/>
+<meta name="twitter:description" content="按位运算 这里包括的按位操作有： AND， OR， NOT， XOR 等。当我们提取图像的一部分，选择非矩形 ROI 时这些操作会很有用（下一章你就会明白）。嗯，的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">63 按位运算</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-22 </span>
+        
+        <span class="more-meta"> 534 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#按位运算">按位运算</a></li>
+<li><a href="#加载图像">加载图像</a></li>
+<li><a href="#i-want-to-put-logo-on-top-left-corner-so-i-create-a-roi-rows-cols-channels-img2-shape-roi-img1-0-rows-0-cols">I want to put logo on top-left corner, So I create a ROI rows,cols,channels = img2.shape roi = img1[0:rows, 0:cols ]</a></li>
+<li><a href="#now-create-a-mask-of-logo-and-create-its-inverse-mask-also-img2gray-cv2-cvtcolor-img2-cv2-color-bgr2gray-ret-mask-cv2-threshold-img2gray-175-255-cv2-thresh-binary-mask-inv-cv2-bitwise-not-mask">Now create a mask of logo and create its inverse mask also img2gray = cv2.cvtColor(img2,cv2.COLOR_BGR2GRAY) ret, mask = cv2.threshold(img2gray, 175, 255, cv2.THRESH_BINARY) mask_inv = cv2.bitwise_not(mask)</a></li>
+<li><a href="#now-black-out-the-area-of-logo-in-roi-取-roi-中与-mask-中不为零的值对应的像素的值-其他值为-0-注意这里必须有-mask-mask-或者-mask-mask-inv-其中的-mask-不能忽略-img1-bg-cv2-bitwise-and-roi-roi-mask-mask">Now black-out the area of logo in ROI # 取 roi 中与 mask 中不为零的值对应的像素的值，其他值为 0 # 注意这里必须有 mask=mask 或者 mask=mask_inv, 其中的 mask= 不能忽略 img1_bg = cv2.bitwise_and(roi,roi,mask = mask)</a></li>
+<li><a href="#取-roi-中与-mask-inv-中不为零的值对应的像素的值-其他值为-0">取 roi 中与 mask_inv 中不为零的值对应的像素的值，其他值为 0 。</a></li>
+<li><a href="#take-only-region-of-logo-from-logo-image">Take only region of logo from logo image.</a></li>
+<li><a href="#put-logo-in-roi-and-modify-the-main-image-dst-cv2-add-img1-bg-img2-fg-img1-0-rows-0-cols-dst">Put logo in ROI and modify the main image dst = cv2.add(img1_bg,img2_fg) img1[0:rows, 0:cols ] = dst</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="按位运算">按位运算</h1>
+
+<p>这里包括的按位操作有： AND， OR， NOT， XOR 等。当我们提取图像的一部分，选择非矩形 ROI 时这些操作会很有用（下一章你就会明白）。<span style="color:red;">嗯，的确，相当于用一个 mask 限定住了我们想要的范围。</span></p>
+
+<p>下面的例子就是教给我们如何改变一幅图的特定区域。</p>
+
+<p>我想把 OpenCV 的标志放到另一幅图像上。</p>
+
+<p>如果我使用加法，颜色会改变，如果使用混合，会得到透明效果，但是我不想要透明。</p>
+
+<p>如果他是矩形我可以象上一章那样使用ROI。但是他不是矩形。</p>
+
+<p>但是我们可以通过下面的按位运</p>
+
+<p>算实现：</p>
+
+<p>Created on Sun Jan 5 20:34:30 2014</p>
+
+<p>@author: duan</p>
+
+<p>import cv2</p>
+
+<p>import numpy as np</p>
+
+<h1 id="加载图像">加载图像</h1>
+
+<p>img1 = cv2.imread(&lsquo;roi.jpg&rsquo;)</p>
+
+<p>img2 = cv2.imread(&lsquo;opencv_logo.png&rsquo;)</p>
+
+<h1 id="i-want-to-put-logo-on-top-left-corner-so-i-create-a-roi-rows-cols-channels-img2-shape-roi-img1-0-rows-0-cols">I want to put logo on top-left corner, So I create a ROI rows,cols,channels = img2.shape roi = img1[0:rows, 0:cols ]</h1>
+
+<h1 id="now-create-a-mask-of-logo-and-create-its-inverse-mask-also-img2gray-cv2-cvtcolor-img2-cv2-color-bgr2gray-ret-mask-cv2-threshold-img2gray-175-255-cv2-thresh-binary-mask-inv-cv2-bitwise-not-mask">Now create a mask of logo and create its inverse mask also img2gray = cv2.cvtColor(img2,cv2.COLOR_BGR2GRAY) ret, mask = cv2.threshold(img2gray, 175, 255, cv2.THRESH_BINARY) mask_inv = cv2.bitwise_not(mask)</h1>
+
+<h1 id="now-black-out-the-area-of-logo-in-roi-取-roi-中与-mask-中不为零的值对应的像素的值-其他值为-0-注意这里必须有-mask-mask-或者-mask-mask-inv-其中的-mask-不能忽略-img1-bg-cv2-bitwise-and-roi-roi-mask-mask">Now black-out the area of logo in ROI # 取 roi 中与 mask 中不为零的值对应的像素的值，其他值为 0 # 注意这里必须有 mask=mask 或者 mask=mask_inv, 其中的 mask= 不能忽略 img1_bg = cv2.bitwise_and(roi,roi,mask = mask)</h1>
+
+<h1 id="取-roi-中与-mask-inv-中不为零的值对应的像素的值-其他值为-0">取 roi 中与 mask_inv 中不为零的值对应的像素的值，其他值为 0 。</h1>
+
+<h1 id="take-only-region-of-logo-from-logo-image">Take only region of logo from logo image.</h1>
+
+<p>img2_fg = cv2.bitwise_and(img2,img2,mask = mask_inv)</p>
+
+<h1 id="put-logo-in-roi-and-modify-the-main-image-dst-cv2-add-img1-bg-img2-fg-img1-0-rows-0-cols-dst">Put logo in ROI and modify the main image dst = cv2.add(img1_bg,img2_fg) img1[0:rows, 0:cols ] = dst</h1>
+
+<p>cv2.imshow(&lsquo;res&rsquo;,img1)</p>
+
+<p>cv2.waitKey(0)</p>
+
+<p>cv2.destroyAllWindows()</p>
+
+<p>结果如下。左面的图像是我们创建的掩码。右边的是最终结果。为了帮助大
+家理解我把上面程序的中间结果也显示了出来，特别是img1_bg和img2_fg。</p>
+
+<p>UTMoef.</p>
+
+<p>OpenCV Oper)CV</p>
+
+<p>45
+更多资源
+练习
+1. 创建一个幻灯片用来演示一幅图如何平滑的转换成另一幅图（使用函数 cv2.addWeighted）</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/62-%E5%9B%BE%E5%83%8F%E6%B7%B7%E5%90%88/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">62 图像混合</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/11-ubuntu/ll-command-not-found-%E5%BD%93ll-%E6%97%A0%E6%B3%95%E8%AF%86%E5%88%AB%E6%97%B6%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">
+            <span class="next-text nav-default">ll command not found 当ll 无法识别时解决办法</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,3 +1,8 @@
+---
+title: 02 函数式模型 Functional
+toc: true
+date: 2018-10-22
+---
 # 快速开始函数式（Functional）模型
 
 我们起初将 Functional 一词译作泛型，想要表达该类模型能够表达任意张量映射的含义，但表达的不是很精确，在 Keras 2 里我们将这个词改译为“函数式”，对函数式编程有所了解的同学应能够快速get到该类模型想要表达的含义。函数式模型称作Functional，但它的类名是 Model，因此我们有时候也用 Model 来代表函数式模型。
@@ -226,7 +231,8 @@ model = Model(inputs=[tweet_a, tweet_b], outputs=predictions)
 model.compile(optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
-model.fit([data_a, data_b], labels, epochs=10)
+model.fit([data_a, data_b],
+labels, epochs=10)
 ```
 
 先暂停一下，看看共享层到底输出了什么，它的输出数据shape又是什么

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="使用 Python 和 OpenCV 检测图像中的物体并将物体裁剪下来 这个还是会用到的，比如，我之前做的项目，图片很大，如果直接放到 yolo 里跑，resize 到 (416,41" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/%E4%BD%BF%E7%94%A8python%E5%92%8Copencv%E6%A3%80%E6%B5%8B%E5%9B%BE%E5%83%8F%E4%B8%AD%E7%9A%84%E7%89%A9%E4%BD%93%E5%B9%B6%E5%B0%86%E7%89%A9%E4%BD%93%E8%A3%81%E5%89%AA%E4%B8%8B%E6%9D%A5/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="使用 Python 和 OpenCV 检测图像中的物体并将物体裁剪下来 这个还是会用到的，比如，我之前做的项目，图片很大，如果直接放到 yolo 里跑，resize 到 (416,41" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/%E4%BD%BF%E7%94%A8python%E5%92%8Copencv%E6%A3%80%E6%B5%8B%E5%9B%BE%E5%83%8F%E4%B8%AD%E7%9A%84%E7%89%A9%E4%BD%93%E5%B9%B6%E5%B0%86%E7%89%A9%E4%BD%93%E8%A3%81%E5%89%AA%E4%B8%8B%E6%9D%A5/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="使用 Python 和 OpenCV 检测图像中的物体并将物体裁剪下来 这个还是会用到的，比如，我之前做的项目，图片很大，如果直接放到 yolo 里跑，resize 到 (416,41">
+
+
+
+<meta itemprop="wordCount" content="1696">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="使用 Python 和 OpenCV 检测图像中的物体并将物体裁剪下来 这个还是会用到的，比如，我之前做的项目，图片很大，如果直接放到 yolo 里跑，resize 到 (416,41"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 1696 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#使用-python-和-opencv-检测图像中的物体并将物体裁剪下来">使用 Python 和 OpenCV 检测图像中的物体并将物体裁剪下来</a>
+<ul>
+<li><a href="#step1-加载图片-转成灰度图">step1：加载图片，转成灰度图</a></li>
+<li><a href="#step2-留下具有高水平梯度和低垂直梯度的图像区域">step2: 留下具有高水平梯度和低垂直梯度的图像区域</a></li>
+<li><a href="#step3-去除图像上的噪声">step3：去除图像上的噪声。</a></li>
+<li><a href="#step4-用白色填充昆虫身体的空白区域">step4: 用白色填充昆虫身体的空白区域</a></li>
+<li><a href="#step5-去掉图上的一些小的白色斑点">step5: 去掉图上的一些小的白色斑点</a></li>
+<li><a href="#step6-找出昆虫区域的轮廓">step6：找出昆虫区域的轮廓。</a></li>
+<li><a href="#step7-裁剪">step7：裁剪。</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="使用-python-和-opencv-检测图像中的物体并将物体裁剪下来">使用 Python 和 OpenCV 检测图像中的物体并将物体裁剪下来</h1>
+
+<p>这个还是会用到的，比如，我之前做的项目，图片很大，如果直接放到 yolo 里跑，resize 到 (416,416)，感觉很多小的地方都够呛能够识别出来。</p>
+
+<p>怎么办呢？之前的图片中有比较大的一部分的黑色边缘，因此，就想把这一部分的黑色边缘去掉。</p>
+
+<p>那么怎么去掉呢？</p>
+
+<p>原图片举例（将红色矩形框部分裁剪出来））：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/gh4F6EDbib.png?imageslim" alt="mark" /></p>
+
+<h2 id="step1-加载图片-转成灰度图">step1：加载图片，转成灰度图</h2>
+
+<pre><code>image = cv2.imread(&quot;353.jpg&quot;)
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+</code></pre>
+
+<h2 id="step2-留下具有高水平梯度和低垂直梯度的图像区域">step2: 留下具有高水平梯度和低垂直梯度的图像区域</h2>
+
+<p>用 Sobel 算子计算 x，y 方向上的梯度，之后在 x 方向上减去 y 方向上的梯度，通过这个减法，我们留下具有高水平梯度和低垂直梯度的图像区域。</p>
+
+<p><span style="color:red;">为什么要这么做？原因是什么？</span></p>
+
+<pre><code>gradX = cv2.Sobel(gray, ddepth=cv2.cv.CV_32F, dx=1, dy=0, ksize=-1)
+gradY = cv2.Sobel(gray, ddepth=cv2.cv.CV_32F, dx=0, dy=1, ksize=-1)
+
+# subtract the y-gradient from the x-gradient
+gradient = cv2.subtract(gradX, gradY)
+gradient = cv2.convertScaleAbs(gradient)
+</code></pre>
+
+<p>执行完这一步，得到的图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/l8e7LfJLC7.png?imageslim" alt="mark" /></p>
+
+<h2 id="step3-去除图像上的噪声">step3：去除图像上的噪声。</h2>
+
+<p>首先使用低通滤泼器平滑图像（9x9内核）,这将有助于平滑图像中的高频噪声。低通滤波器的目标是降低图像的变化率。如将每个像素替换为该像素周围像素的均值。这样就可以平滑并替代那些强度变化明显的区域。</p>
+
+<p><span style="color:red;">嗯，是的。这样的确是可以去除噪声的。为什么是高频噪声？有低频噪声吗？</span></p>
+
+<p>然后，对模糊图像二值化。梯度图像中不大于 90 的任何像素都设置为 0（黑色）。 否则，像素设置为 255（白色）。</p>
+
+<pre><code># blur and threshold the image
+blurred = cv2.blur(gradient, (9, 9))
+(_, thresh) = cv2.threshold(blurred, 90, 255, cv2.THRESH_BINARY)
+</code></pre>
+
+<p>执行完这一步，得到的图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/jF1Ef0dcaI.png?imageslim" alt="mark" /></p>
+
+<h2 id="step4-用白色填充昆虫身体的空白区域">step4: 用白色填充昆虫身体的空白区域</h2>
+
+<p>在上图中我们看到蜜蜂身体区域有很多黑色的空余，我们要用白色填充这些空余，使得后面的程序更容易识别昆虫区域，这需要做一些形态学方面的操作。</p>
+
+<pre><code>kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (25, 25))
+closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+</code></pre>
+
+<p>处理之后的图像如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/IIACE06C7B.png?imageslim" alt="mark" /></p>
+
+<h2 id="step5-去掉图上的一些小的白色斑点">step5: 去掉图上的一些小的白色斑点</h2>
+
+<p>从上图我们发现图像上还有一些小的白色斑点，这会干扰之后的昆虫轮廓的检测，要把它们去掉。</p>
+
+<p>分别执行4次形态学腐蚀与膨胀。</p>
+
+<pre><code># perform a series of erosions and dilations
+closed = cv2.erode(closed, None, iterations=4)
+closed = cv2.dilate(closed, None, iterations=4)
+</code></pre>
+
+<p>执行完这步，得到的图形如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/8iJFBD3eGm.png?imageslim" alt="mark" /></p>
+
+<h2 id="step6-找出昆虫区域的轮廓">step6：找出昆虫区域的轮廓。</h2>
+
+<p><code>cv2.findContours()</code> 函数有三个参数：</p>
+
+<ul>
+<li>第一个参数是要检索的图片，必须是为二值图，即黑白的（不是灰度图），所以读取的图像要先转成灰度的，再转成二值图，我们在第三步用<code>cv2.threshold()</code>函数已经得到了二值图。</li>
+<li>第二个参数表示轮廓的检索模式，有四种：
+
+<ul>
+<li><code>cv2.RETR_EXTERNAL</code> 表示只检测外轮廓</li>
+<li><code>cv2.RETR_LIST</code> 检测的轮廓不建立等级关系</li>
+<li><code>cv2.RETR_CCOMP</code> 建立两个等级的轮廓，上面的一层为外边界，里面的一层为内孔的边界信息。如果内孔内还有一个连通物体，这个物体的边界也在顶层。</li>
+<li><code>cv2.RETR_TREE</code> 建立一个等级树结构的轮廓。</li>
+</ul></li>
+<li>第三个参数为轮廓的近似方法
+
+<ul>
+<li><code>cv2.CHAIN_APPROX_NONE</code> 存储所有的轮廓点，相邻的两个点的像素位置差不超过 1，即 <code>max(abs（x1-x2)，abs(y2-y1))==1</code></li>
+<li><code>cv2.CHAIN_APPROX_SIMPLE</code> 压缩水平方向，垂直方向，对角线方向的元素，只保留该方向的终点坐标，例如一个矩形轮廓只需4个点来保存轮廓信息</li>
+</ul></li>
+</ul>
+
+<p><code>cv2.findContours()</code> 函数返回两个值：</p>
+
+<ul>
+<li>一个是轮廓本身，</li>
+<li>还有一个是每条轮廓对应的属性。</li>
+</ul>
+
+<p><code>cv2.findContours()</code> 函数返回第一个值是 list，list 中每个元素都是图像中的一个轮廓，用 numpy 中的 ndarray 表示。每一个 ndarray 里保存的是轮廓上的各个点的坐标。我们把list排序，点最多的那个轮廓就是我们要找的昆虫的轮廓。</p>
+
+<p>然后，我们可以通过 <code>cv2.drawContours</code> 在图像上绘制轮廓：</p>
+
+<ul>
+<li>第一个参数是指明在哪幅图像上绘制轮廓</li>
+<li>第二个参数是轮廓本身，在 Python 中是一个 list</li>
+<li>第三个参数指定绘制轮廓 list 中的哪条轮廓，如果是 -1，则绘制其中的所有轮廓</li>
+<li>第四个参数是轮廓线条的颜色</li>
+<li>第五个参数是轮廓线条的粗细</li>
+</ul>
+
+<p><code>cv2.minAreaRect()</code> 函数:</p>
+
+<p>主要求得包含点集最小面积的矩形，这个矩形是可以有偏转角度的，可以与图像的边界不平行。</p>
+
+<pre><code>(cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+c = sorted(cnts, key=cv2.contourArea, reverse=True)[0]
+
+# compute the rotated bounding box of the largest contour
+rect = cv2.minAreaRect(c)
+box = np.int0(cv2.cv.BoxPoints(rect))
+
+# draw a bounding box arounded the detected barcode and display the image
+cv2.drawContours(image, [box], -1, (0, 255, 0), 3)
+cv2.imshow(&quot;Image&quot;, image)
+cv2.imwrite(&quot;contoursImage2.jpg&quot;, image)
+cv2.waitKey(0)
+</code></pre>
+
+<p><span style="color:red;">上面这里，他只是选择了第一个找到的矩形，如果项目中有很多物体，遍历这些矩形，都画出来就行。</span></p>
+
+<p>执行完这步得到的图形如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/hEDgFHhlIl.png?imageslim" alt="mark" /></p>
+
+<h2 id="step7-裁剪">step7：裁剪。</h2>
+
+<p>box里保存的是绿色矩形区域四个顶点的坐标。我将按下图红色矩形所示裁剪昆虫图像。找出四个顶点的x，y坐标的最大最小值。新图像的高=maxY-minY，宽=maxX-minX。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/iIC3CAfaIl.png?imageslim" alt="mark" /></p>
+
+<pre><code>Xs = [i[0] for i in box]
+Ys = [i[1] for i in box]
+x1 = min(Xs)
+x2 = max(Xs)
+y1 = min(Ys)
+y2 = max(Ys)
+hight = y2 - y1
+width = x2 - x1
+cropImg = image[y1:y1+hight, x1:x1+width]
+</code></pre>
+
+<p>裁剪出的图片如下：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181027/5Bbah84aJL.png?imageslim" alt="mark" /></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://blog.csdn.net/liqiancao/article/details/55670749">使用Python和OpenCV检测图像中的物体并将物体裁剪下来</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/python-opencv-%E6%A0%BC%E5%BC%8F-%E5%92%8C-pil.image-%E6%A0%BC%E5%BC%8F%E4%BA%92%E8%BD%AC/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/11-%E7%94%BB%E7%BA%BF/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,3 +1,8 @@
+---
+title: 72 opencv 中的默认优化
+toc: true
+date: 2018-10-27
+---
 # OpenCV 中的默认优化
 
 OpenCV 中的很多函数都被优化过(使用 SSE2， AVX 等)。<span style="color:red;">这些是什么？SSE2 和 AVX？ 之前在跑 tensorflow 的时候，开头总是有这题提示时候你的 CPU 不支持这个。确认下这个是什么</span>

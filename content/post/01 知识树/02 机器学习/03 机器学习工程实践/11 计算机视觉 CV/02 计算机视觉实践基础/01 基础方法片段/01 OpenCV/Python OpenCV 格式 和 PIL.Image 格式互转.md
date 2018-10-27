@@ -1,3 +1,8 @@
+---
+title: Python OpenCV 格式 和 PIL.Image 格式互转
+toc: true
+date: 2018-10-27
+---
 
 # OpenCV 和 PIL.Image 互转
 

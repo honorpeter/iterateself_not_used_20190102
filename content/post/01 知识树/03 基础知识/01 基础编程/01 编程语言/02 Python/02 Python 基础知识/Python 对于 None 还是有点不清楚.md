@@ -1,3 +1,8 @@
+---
+title: Python 对于 None 还是有点不清楚
+toc: true
+date: 2018-10-27
+---
 
 今天遇到一个问题：
 

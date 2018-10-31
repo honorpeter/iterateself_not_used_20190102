@@ -36,3 +36,4 @@ img[273:333, 100:160] = ball
 # 相关资料
 
 - 《OpenCV-Python 中文教程》
+- [Python提取图片的ROI](https://www.cnblogs.com/cpointer/p/4899800.html) 这个是 Pillow 的用法，也要总结到这里。

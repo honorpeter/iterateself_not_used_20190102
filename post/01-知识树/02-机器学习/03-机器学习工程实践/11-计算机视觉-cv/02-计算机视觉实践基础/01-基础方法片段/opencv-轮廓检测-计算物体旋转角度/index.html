@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>OpenCV 轮廓检测 计算物体旋转角度 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 感觉这个还是很厉害的，是怎么判断这个的旋转角度的？ 还是要自己跑一遍的。 【OpenCV】OpenCV轮廓检测，计算物体旋转角度 Ope" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/opencv-%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B-%E8%AE%A1%E7%AE%97%E7%89%A9%E4%BD%93%E6%97%8B%E8%BD%AC%E8%A7%92%E5%BA%A6/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="OpenCV 轮廓检测 计算物体旋转角度" />
+<meta property="og:description" content="需要补充的 感觉这个还是很厉害的，是怎么判断这个的旋转角度的？ 还是要自己跑一遍的。 【OpenCV】OpenCV轮廓检测，计算物体旋转角度 Ope" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/opencv-%E8%BD%AE%E5%BB%93%E6%A3%80%E6%B5%8B-%E8%AE%A1%E7%AE%97%E7%89%A9%E4%BD%93%E6%97%8B%E8%BD%AC%E8%A7%92%E5%BA%A6/" /><meta property="article:published_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="OpenCV 轮廓检测 计算物体旋转角度">
+<meta itemprop="description" content="需要补充的 感觉这个还是很厉害的，是怎么判断这个的旋转角度的？ 还是要自己跑一遍的。 【OpenCV】OpenCV轮廓检测，计算物体旋转角度 Ope">
+
+
+<meta itemprop="datePublished" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1388">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OpenCV 轮廓检测 计算物体旋转角度"/>
+<meta name="twitter:description" content="需要补充的 感觉这个还是很厉害的，是怎么判断这个的旋转角度的？ 还是要自己跑一遍的。 【OpenCV】OpenCV轮廓检测，计算物体旋转角度 Ope"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">OpenCV 轮廓检测 计算物体旋转角度</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-31 </span>
+        
+        <span class="more-meta"> 1388 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#opencv-opencv轮廓检测-计算物体旋转角度">【OpenCV】OpenCV轮廓检测，计算物体旋转角度</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>感觉这个还是很厉害的，是怎么判断这个的旋转角度的？</li>
+<li>还是要自己跑一遍的。</li>
+</ul>
+
+<h1 id="opencv-opencv轮廓检测-计算物体旋转角度">【OpenCV】OpenCV轮廓检测，计算物体旋转角度</h1>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/6k4hl17Am2.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/5K7E46Gg34.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/5KFbdF9hji.png?imageslim" alt="mark" /></p>
+
+<p>OpenCV轮廓检测，计算物体旋转角度</p>
+
+<p>效果还是有点问题的，希望大家共同探讨一下</p>
+
+<pre><code class="language-python">// FindRotation-angle.cpp : 定义控制台应用程序的入口点。
+//
+
+// findContours.cpp : 定义控制台应用程序的入口点。
+//
+
+#include &quot;stdafx.h&quot;
+
+
+
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;opencv2/opencv.hpp&gt;
+#include &lt;opencv2/core/core.hpp&gt;
+#include &lt;opencv2/imgproc/imgproc.hpp&gt;
+#include &lt;opencv2/highgui/highgui.hpp&gt;
+
+
+#pragma comment(lib,&quot;opencv_core2410d.lib&quot;)      
+#pragma comment(lib,&quot;opencv_highgui2410d.lib&quot;)      
+#pragma comment(lib,&quot;opencv_imgproc2410d.lib&quot;)
+
+#define PI 3.1415926
+
+using namespace std;
+using namespace cv;
+
+
+
+int hough_line(Mat src)
+{
+ //【1】载入原始图和Mat变量定义  
+ Mat srcImage = src;//imread(&quot;1.jpg&quot;);  //工程目录下应该有一张名为1.jpg的素材图
+ Mat midImage,dstImage;//临时变量和目标图的定义
+
+ //【2】进行边缘检测和转化为灰度图
+ Canny(srcImage, midImage, 50, 200, 3);//进行一此canny边缘检测
+ cvtColor(midImage,dstImage, CV_GRAY2BGR);//转化边缘检测后的图为灰度图
+
+ //【3】进行霍夫线变换
+ vector&lt;Vec4i&gt; lines;//定义一个矢量结构lines用于存放得到的线段矢量集合
+ HoughLinesP(midImage, lines, 1, CV_PI/180, 80, 50, 10 );
+
+ //【4】依次在图中绘制出每条线段
+ for( size_t i = 0; i &lt; lines.size(); i++ )
+ {
+  Vec4i l = lines[i];
+  line( dstImage, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(186,88,255), 1, CV_AA);
+ }
+
+ //【5】显示原始图  
+ imshow(&quot;【原始图】&quot;, srcImage);
+
+ //【6】边缘检测后的图
+ imshow(&quot;【边缘检测后的图】&quot;, midImage);
+
+ //【7】显示效果图  
+ imshow(&quot;【效果图】&quot;, dstImage);
+
+ //waitKey(0);
+
+ return 0;  
+}
+
+int main()
+{
+ // Read input binary image
+
+ char *image_name = &quot;test.jpg&quot;;
+ cv::Mat image = cv::imread(image_name,0);
+ if (!image.data)
+  return 0;
+
+ cv::namedWindow(&quot;Binary Image&quot;);
+ cv::imshow(&quot;Binary Image&quot;,image);
+
+
+
+ // 从文件中加载原图  
+​    IplImage *pSrcImage = cvLoadImage(image_name, CV_LOAD_IMAGE_UNCHANGED);  
+
+    // 转为2值图
+
+  cvThreshold(pSrcImage,pSrcImage,200,255,cv::THRESH_BINARY_INV);
+​    
+
+    image = cv::Mat(pSrcImage,true);
+
+    cv::imwrite(&quot;binary.jpg&quot;,image);
+
+ // Get the contours of the connected components
+ std::vector&lt;std::vector&lt;cv::Point&gt;&gt; contours;
+ cv::findContours(image,
+  contours, // a vector of contours
+  CV_RETR_EXTERNAL, // retrieve the external contours
+  CV_CHAIN_APPROX_NONE); // retrieve all pixels of each contours
+
+ // Print contours' length
+ std::cout &lt;&lt; &quot;Contours: &quot; &lt;&lt; contours.size() &lt;&lt; std::endl;
+ std::vector&lt;std::vector&lt;cv::Point&gt;&gt;::const_iterator itContours= contours.begin();
+ for ( ; itContours!=contours.end(); ++itContours)
+ {
+
+  std::cout &lt;&lt; &quot;Size: &quot; &lt;&lt; itContours-&gt;size() &lt;&lt; std::endl;
+ }
+
+ // draw black contours on white image
+ cv::Mat result(image.size(),CV_8U,cv::Scalar(255));
+ cv::drawContours(result,contours,
+  -1, // draw all contours
+  cv::Scalar(0), // in black
+  2); // with a thickness of 2
+
+ cv::namedWindow(&quot;Contours&quot;);
+ cv::imshow(&quot;Contours&quot;,result);
+
+
+
+
+
+
+ // Eliminate too short or too long contours
+ int cmin= 100;  // minimum contour length
+ int cmax= 1000; // maximum contour length
+ std::vector&lt;std::vector&lt;cv::Point&gt;&gt;::const_iterator itc= contours.begin();
+ while (itc!=contours.end()) {
+
+  if (itc-&gt;size() &lt; cmin || itc-&gt;size() &gt; cmax)
+   itc= contours.erase(itc);
+  else
+   ++itc;
+ }
+
+ // draw contours on the original image
+ cv::Mat original= cv::imread(image_name);
+ cv::drawContours(original,contours,
+  -1, // draw all contours
+  cv::Scalar(255,255,0), // in white
+  2); // with a thickness of 2
+
+ cv::namedWindow(&quot;Contours on original&quot;);
+ cv::imshow(&quot;Contours on original&quot;,original);
+
+
+
+ // Let's now draw black contours on white image
+ result.setTo(cv::Scalar(255));
+ cv::drawContours(result,contours,
+  -1, // draw all contours
+  cv::Scalar(0), // in black
+  1); // with a thickness of 1
+ image= cv::imread(&quot;binary.jpg&quot;,0);
+
+ //imshow(&quot;lll&quot;,result);
+ //waitKey(0);
+
+ // testing the bounding box
+ //////////////////////////////////////////////////////////////////////////////
+ //霍夫变换进行直线检测，此处使用的是probabilistic Hough transform（cv::HoughLinesP）而不是standard Hough transform（cv::HoughLines）
+
+ cv::Mat result_line(image.size(),CV_8U,cv::Scalar(255));
+ result_line = result.clone();
+
+ hough_line(result_line);
+
+ //Mat tempimage;
+
+ //【2】进行边缘检测和转化为灰度图
+ //Canny(result_line, tempimage, 50, 200, 3);//进行一此canny边缘检测
+ //imshow(&quot;canny&quot;,tempimage);
+ //waitKey(0);
+
+ //cvtColor(tempimage,result_line, CV_GRAY2BGR);//转化边缘检测后的图为灰度图
+ vector&lt;Vec4i&gt; lines;
+
+ cv::HoughLinesP(result_line,lines,1,CV_PI/180,80,50,10);
+
+ for(int i = 0; i &lt; lines.size(); i++)
+ {
+  line(result_line,cv::Point(lines[i][0],lines[i][1]),cv::Point(lines[i][2],lines[i][3]),Scalar(0,0,0),2,8,0);
+ }
+ cv::namedWindow(&quot;line&quot;);
+ cv::imshow(&quot;line&quot;,result_line);
+ //waitKey(0);
+
+ /////////////////////////////////////////////////////////////////////////////////////////////
+ //
+
+ //std::vector&lt;std::vector&lt;cv::Point&gt;&gt;::const_iterator itc_rec= contours.begin();
+ //while (itc_rec!=contours.end())
+ //{
+ // cv::Rect r0= cv::boundingRect(cv::Mat(*(itc_rec)));
+ // cv::rectangle(result,r0,cv::Scalar(0),2);
+ //  ++itc_rec;
+ //}
+
+
+
+ //cv::namedWindow(&quot;Some Shape descriptors&quot;);
+ //cv::imshow(&quot;Some Shape descriptors&quot;,result);
+
+
+ CvBox2D    End_Rage2D;
+ CvPoint2D32f rectpoint[4];
+ CvMemStorage *storage = cvCreateMemStorage(0);  //开辟内存空间
+
+
+ CvSeq*      contour = NULL;    //CvSeq类型 存放检测到的图像轮廓边缘所有的像素值，坐标值特征的结构体以链表形式
+
+ cvFindContours( pSrcImage, storage, &amp;contour, sizeof(CvContour),CV_RETR_CCOMP, CV_CHAIN_APPROX_NONE);//这函数可选参数还有不少
+
+
+
+ for(; contour; contour = contour-&gt;h_next)  //如果contour不为空，表示找到一个以上轮廓，这样写法只显示一个轮廓
+  //如改为for(; contour; contour = contour-&gt;h_next) 就可以同时显示多个轮廓
+ {
+
+  End_Rage2D = cvMinAreaRect2(contour);  
+  //代入cvMinAreaRect2这个函数得到最小包围矩形  这里已得出被测物体的角度，宽度,高度，和中点坐标点存放在CvBox2D类型的结构体中，
+  //主要工作基本结束。
+  for(int i = 0;i&lt; 4;i++)
+  {
+​    //CvArr* s=(CvArr*)&amp;result;
+   //cvLine(s,cvPointFrom32f(rectpoint[i]),cvPointFrom32f(rectpoint[(i+1)%4]),CV_G(0,0,255),2);
+   line(result,cvPointFrom32f(rectpoint[i]),cvPointFrom32f(rectpoint[(i+1)%4]),Scalar(125),2);
+  }
+  cvBoxPoints(End_Rage2D,rectpoint);
+
+ std::cout &lt;&lt;&quot; angle:\n&quot;&lt;&lt;(float)End_Rage2D.angle &lt;&lt; std::endl;      //被测物体旋转角度
+
+ }
+ cv::imshow(&quot;lalalal&quot;,result);
+ cv::waitKey();
+ return 0;
+
+
+}
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/GgC8Elib7K.png?imageslim" alt="mark" /></p>
+
+<p>这个是原来实现的代码的博客文章：<a href="http://www.linuxidc.com/Linux/2015-02/114135.htm">http://www.linuxidc.com/Linux/2015-02/114135.htm</a></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://blog.csdn.net/Taily_Duan/article/details/54964380?utm_source=blogkpcl14">【OpenCV】OpenCV轮廓检测，计算物体旋转角度</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E8%81%9A%E7%B1%BB/dbscan-%E5%AF%86%E5%BA%A6%E8%81%9A%E7%B1%BB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">DBSCAN 密度聚类</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/01-%E4%BC%A0%E7%BB%9F%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95/opencv_contri-%E6%89%BE%E5%87%BA%E4%BB%BB%E6%84%8F%E7%89%A9%E4%BD%93%E5%8F%AF%E8%83%BD%E5%9C%A8%E7%9A%84%E4%BD%8D%E7%BD%AE-selective-search-%E7%89%A9%E4%BD%93%E6%A3%80%E6%B5%8B/">
+            <span class="next-text nav-default">OpenCV_contri 找出任意物体可能在的位置 Selective search 物体检测</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

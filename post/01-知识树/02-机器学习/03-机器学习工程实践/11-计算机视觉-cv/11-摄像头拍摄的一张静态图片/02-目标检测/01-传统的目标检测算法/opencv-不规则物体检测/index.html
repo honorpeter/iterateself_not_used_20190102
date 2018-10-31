@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Opencv 不规则物体检测 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 对于这种不规则物体的检测也是要知道的，这个没准就用上了。 Opencv&amp;ndash;不规则物体检测 如图所示，一副不规则物体离散分布的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/01-%E4%BC%A0%E7%BB%9F%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95/opencv-%E4%B8%8D%E8%A7%84%E5%88%99%E7%89%A9%E4%BD%93%E6%A3%80%E6%B5%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Opencv 不规则物体检测" />
+<meta property="og:description" content="需要补充的 对于这种不规则物体的检测也是要知道的，这个没准就用上了。 Opencv&ndash;不规则物体检测 如图所示，一副不规则物体离散分布的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/01-%E4%BC%A0%E7%BB%9F%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95/opencv-%E4%B8%8D%E8%A7%84%E5%88%99%E7%89%A9%E4%BD%93%E6%A3%80%E6%B5%8B/" /><meta property="article:published_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="Opencv 不规则物体检测">
+<meta itemprop="description" content="需要补充的 对于这种不规则物体的检测也是要知道的，这个没准就用上了。 Opencv&ndash;不规则物体检测 如图所示，一副不规则物体离散分布的">
+
+
+<meta itemprop="datePublished" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="746">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Opencv 不规则物体检测"/>
+<meta name="twitter:description" content="需要补充的 对于这种不规则物体的检测也是要知道的，这个没准就用上了。 Opencv&ndash;不规则物体检测 如图所示，一副不规则物体离散分布的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Opencv 不规则物体检测</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-31 </span>
+        
+        <span class="more-meta"> 746 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#opencv-不规则物体检测">Opencv&ndash;不规则物体检测</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>对于这种不规则物体的检测也是要知道的，这个没准就用上了。</li>
+</ul>
+
+<h1 id="opencv-不规则物体检测">Opencv&ndash;不规则物体检测</h1>
+
+<p>如图所示，一副不规则物体离散分布的灰度图，要想检测并标记。需要以下步骤：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/HFG5BD7GC6.png?imageslim" alt="mark" /></p>
+
+<p>1、 二值化，这个过程很简单</p>
+
+<pre><code>def thresh_img(img):
+​    if img.ndim==3:
+​        img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+​    img=cv2.medianBlur(img,3)
+​    _,thresh=cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+​    return thresh
+</code></pre>
+
+<p>2、 利用opencv 中connectedComponents这个函数返回两个值，一个是标记总个数，从0开始，一个是标记的举证。其中，物体的个数==max(标记矩阵最大值)</p>
+
+<pre><code>def label_image(thresh):
+​    h,w=thresh.shape[:2]
+​    _,markers=cv2.connectedComponents(thresh)#返回两个值，一个是label总个数，一个是label后的矩阵吧
+​    objects_total_number=np.max(markers)
+​    print(&quot;总共有%g物体&quot;%objects_total_number)
+​    center_pts=[]# 存储每个label的坐标的重心作为对象重心
+​    for i in range(1,objects_total_number):
+​        temp=[[j,i] for i,j in zip(*np.where(markers==i))]
+​        mean_pts=np.mean(temp,0)
+​        center_pts.append([np.float32(mean_pts[0]),np.float32(mean_pts[1])])
+​    return markers,center_pts
+</code></pre>
+
+<p>3、 将灰度图转为色彩图，首先将标记矩阵值扩展到0-179之间作为HIS中H，S,I 分别等于与其同样大小的白色矩阵。再将HIS图像转为BGR即可</p>
+
+<pre><code>def gray_to_bgr_image(markers,center_pts):
+​    h,w=markers.shape[:2]
+​    hue_markers = np.uint8(179*np.float32(markers)/np.max(markers))
+​    blank_channel = 255*np.ones((h, w), dtype=np.uint8)
+​    marker_img = cv2.merge([hue_markers, blank_channel-50, blank_channel])
+​    marker_img = cv2.cvtColor(marker_img, cv2.COLOR_HSV2BGR)
+​    i=1
+​    for pt in center_pts:
+​        cv2.putText(marker_img,&quot;%s&quot;%str(i),(pt[0],pt[1]),cv2.FONT_HERSHEY_SIMPLEX,0.5,[0,0,0],2)
+​        i+=1
+​    cv2.putText(marker_img,&quot;objects number is:%g&quot;%i,(20,10),cv2.FONT_HERSHEY_SIMPLEX,0.5,[0,0,0],2)
+​    cv2.imshow('Colored markers', marker_img)
+​    cv2.waitKey(0)
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/igbiK0LcEH.png?imageslim" alt="mark" /></p>
+
+<p>完整代码如下：</p>
+
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+#discrete irregular objects detect and asssign color
+import cv2
+import numpy as np
+from numba import autojit
+@autojit
+def thresh_img(img):
+​    if img.ndim==3:
+​        img=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+​    img=cv2.medianBlur(img,3)
+​    _,thresh=cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+​    return thresh
+def label_image(thresh):
+​    h,w=thresh.shape[:2]
+​    _,markers=cv2.connectedComponents(thresh)#返回两个值，一个是label总个数，一个是label后的矩阵吧
+​    objects_total_number=np.max(markers)
+​    print(&quot;总共有%g物体&quot;%objects_total_number)
+​    center_pts=[]
+​    for i in range(1,objects_total_number):
+​        temp=[[j,i] for i,j in zip(*np.where(markers==i))]
+​        mean_pts=np.mean(temp,0)
+​        center_pts.append([np.float32(mean_pts[0]),np.float32(mean_pts[1])])
+​    return markers,center_pts
+def gray_to_bgr_image(markers,center_pts):
+​    h,w=markers.shape[:2]
+​    hue_markers = np.uint8(179*np.float32(markers)/np.max(markers))
+​    blank_channel = 255*np.ones((h, w), dtype=np.uint8)
+​    marker_img = cv2.merge([hue_markers, blank_channel-50, blank_channel])
+​    marker_img = cv2.cvtColor(marker_img, cv2.COLOR_HSV2BGR)
+​    i=1
+​    for pt in center_pts:
+​        cv2.putText(marker_img,&quot;%s&quot;%str(i),(pt[0],pt[1]),cv2.FONT_HERSHEY_SIMPLEX,0.5,[0,0,0],2)
+​        i+=1
+​    cv2.putText(marker_img,&quot;objects number is:%g&quot;%i,(20,10),cv2.FONT_HERSHEY_SIMPLEX,0.5,[0,0,0],2)
+​    cv2.imshow('Colored markers', marker_img)
+​    cv2.waitKey(0)
+if __name__==&quot;__main__&quot;:
+​    im=cv2.imread(r'C:\Users\Y\Desktop\w.png')
+​    thresh=thresh_img(im)
+​    markers,center_pts=label_image(thresh)
+    gray_to_bgr_image(markers,center_pts)
+
+
+</code></pre>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://blog.csdn.net/qq_15642411/article/details/80462581?utm_source=blogkpcl1">Opencv 不规则物体检测</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/opencv%E5%9C%A8%E5%9B%BE%E5%83%8F%E4%B8%AD%E5%AF%BB%E6%89%BE%E8%BD%AE%E5%BB%93%E5%92%8C%E8%AE%A1%E7%AE%97%E5%9B%BE%E5%83%8F%E4%B8%AD%E7%89%A9%E4%BD%93%E7%9A%84%E5%87%B8%E5%8C%85/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">OpenCV在图像中寻找轮廓和计算图像中物体的凸包</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-opencv/opencv-%E5%BD%A2%E6%80%81%E5%AD%A6%E6%93%8D%E4%BD%9C/">
+            <span class="next-text nav-default">Opencv 形态学操作</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>感兴趣区域的移动 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个感觉还是有很多场景可以使用的，还是要总结下的。 感兴趣区域、特定区域、框出移动物体的轮廓、越界检测、入侵物体检测、使用 openc" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/12-%E6%91%84%E5%83%8F%E5%A4%B4%E6%98%AF%E9%9D%99%E6%AD%A2%E7%9A%84%E8%BF%9B%E8%A1%8C%E7%9B%91%E6%8E%A7/%E6%84%9F%E5%85%B4%E8%B6%A3%E5%8C%BA%E5%9F%9F%E7%9A%84%E7%A7%BB%E5%8A%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="感兴趣区域的移动" />
+<meta property="og:description" content="需要补充的 这个感觉还是有很多场景可以使用的，还是要总结下的。 感兴趣区域、特定区域、框出移动物体的轮廓、越界检测、入侵物体检测、使用 openc" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/12-%E6%91%84%E5%83%8F%E5%A4%B4%E6%98%AF%E9%9D%99%E6%AD%A2%E7%9A%84%E8%BF%9B%E8%A1%8C%E7%9B%91%E6%8E%A7/%E6%84%9F%E5%85%B4%E8%B6%A3%E5%8C%BA%E5%9F%9F%E7%9A%84%E7%A7%BB%E5%8A%A8/" /><meta property="article:published_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="感兴趣区域的移动">
+<meta itemprop="description" content="需要补充的 这个感觉还是有很多场景可以使用的，还是要总结下的。 感兴趣区域、特定区域、框出移动物体的轮廓、越界检测、入侵物体检测、使用 openc">
+
+
+<meta itemprop="datePublished" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="3306">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="感兴趣区域的移动"/>
+<meta name="twitter:description" content="需要补充的 这个感觉还是有很多场景可以使用的，还是要总结下的。 感兴趣区域、特定区域、框出移动物体的轮廓、越界检测、入侵物体检测、使用 openc"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">感兴趣区域的移动</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-31 </span>
+        
+        <span class="more-meta"> 3306 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a>
+<ul>
+<li><a href="#感兴趣区域-特定区域-框出移动物体的轮廓-越界检测-入侵物体检测-使用-opencv-python库的函数-cv2-findcontours-cv2-approxpolydp-cv2-arclength-利用固定摄像头拍摄的实时视频-框出移动物体的轮廓-即frogeyes蛙眼移动物体侦测"><strong>感兴趣区域、特定区域、框出移动物体的轮廓、越界检测、入侵物体检测、使用 opencv-python库的函数</strong>cv2.findContours、cv2.approxPolyDP、cv2.arcLength<strong>，利用固定摄像头拍摄的实时视频，框出移动物体的轮廓（即FrogEyes蛙眼移动物体侦测）</strong></a></li>
+<li><a href="#不能简单地对比前后两帧的图片">不能简单地对比前后两帧的图片</a></li>
+<li><a href="#下面讲流程图中-对比并有策略地更新背景图片-的策略">下面讲流程图中<strong>【对比并有策略地更新背景图片】</strong>的策略：</a></li>
+<li><a href="#相关代码">相关代码</a></li>
+<li><a href="#感兴趣区域的设定">感兴趣区域的设定</a></li>
+<li><a href="#用在自动生成训练集上">用在自动生成训练集上：</a></li>
+<li><a href="#用在固定摄像头实时目标检测上">用在固定摄像头实时目标检测上：</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>这个感觉还是有很多场景可以使用的，还是要总结下的。</li>
+</ul>
+
+<h2 id="感兴趣区域-特定区域-框出移动物体的轮廓-越界检测-入侵物体检测-使用-opencv-python库的函数-cv2-findcontours-cv2-approxpolydp-cv2-arclength-利用固定摄像头拍摄的实时视频-框出移动物体的轮廓-即frogeyes蛙眼移动物体侦测"><strong>感兴趣区域、特定区域、框出移动物体的轮廓、越界检测、入侵物体检测、使用 opencv-python库的函数</strong>cv2.findContours、cv2.approxPolyDP、cv2.arcLength<strong>，利用固定摄像头拍摄的实时视频，框出移动物体的轮廓（即FrogEyes蛙眼移动物体侦测）</strong></h2>
+
+<p>对移动目标的轮廓的框选，将使用下面这篇文章提及的方法：</p>
+
+<p>曾伊言：边缘检测，框出物体的轮廓(使用opencv-python的函数cv2.findContours() )zhuanlan.zhihu.com<img src="https://pic2.zhimg.com/v2-2a34f4ed2aa4bd8d2b7a8d10e868f715_180x120.jpg" alt="图标" /></p>
+
+<p>移动物体框选结果预览（即便镜头被移动了，它也<strong>能够自己调整回来</strong>，方法后面会讲）：</p>
+
+<p>核心代码预览（可以先看看我用到了哪些函数，<a href="https://link.zhihu.com/?target=https%3A//github.com/Yonv1943/Python/blob/master/Demo/DEMO_edge_detection.py">完整版代码（点击查看）</a>已上传到github）：</p>
+
+<pre><code class="language-python3">...
+# 差值提取的核心代码
+dif = np.abs(dif - img_back)
+gray = cv2.cvtColor(dif, cv2.COLOR_BGR2GRAY)
+ret, thresh = cv2.threshold(gray, self.min_thresh, 255, 0)  # 对差值取阈值，和激活函数Relu有点像
+thresh = cv2.blur(thresh, (self.thresh_blur, self.thresh_blur))  # 模糊的这个操作是很重要的
+...
+...
+# 计算得出轮廓的核心代码
+thresh, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+...
+approxs = [cv2.approxPolyDP(cnt, self.min_side_len, True) for cnt in contours]
+approxs = [approx for approx in approxs
+           if len(approx) &gt; self.min_side_num and cv2.arcLength(approx, True) &gt; self.min_poly_len]
+contours = approxs
+...
+</code></pre>
+
+<blockquote>
+<p>2018-06-30 初版 Yonv1943
+2018-07-02 对RrawROI的注释方案，即对region_of_interest_pts 的赋值</p>
+
+<p>传言青蛙蹲在地上不动的时候，将死掉不动的小昆虫摆放在它的眼前，青蛙也无动于衷。而当某些小昆虫在青蛙眼前飞来飞去的时候，青蛙会注意到它们，然后将它们吃了。我这个程序也可“注意到”镜头拍摄到的移动物体，因此我也将它称为 FrogEyes。</p>
+
+<p>这是传统的图像处理（不涉及深度学习），所以<strong>算法的本质是：对固定摄像头前后两帧图片做差值，得到并框出不同的区域</strong>（使用opencv-python 的 cv2.findContours()函数）
+<strong>因此，该方法只适用于固定镜头的移动物体识别</strong>，如果拍摄实时图像的时候镜头是移动的，那么此时移动物体的识别就只能交由深度学习去解决了。</p>
+</blockquote>
+
+<hr />
+
+<h2 id="不能简单地对比前后两帧的图片">不能简单地对比前后两帧的图片</h2>
+
+<ul>
+<li>如果简单地对比前后两帧图片，那么对图片做差值，将会得到前后帧图片中不同的区域，这个区域并不是目标的轮廓</li>
+<li>如果目标是纯色的，那么对图片做差值得到的结果，将不能得到目标的完整轮廓</li>
+</ul>
+
+<p><img src="https://pic3.zhimg.com/80/v2-527497ff78127cda062c09050e223232_hd.jpg" alt="img" />左边是背景图片，右边是实时图片</p>
+
+<p>若将实时图片与背景图片做差值，那么将会得到红色区域</p>
+
+<p>若将实时图片与先前图片做差值，那么将会得到黄色区域</p>
+
+<p>实际情况中，当图片帧率比较高，目标移动速度慢（甚至不移动），由<strong>前后两帧图片做对比</strong>的算法的黄色区域会非常小。当然可以通过对比更久前的图片（两帧差别更大）来得到更大的不同区域，不过，这样一来，黄色的区域就不是目标的轮廓了，而是目标在两个时段区域的并集。所以，如果事先保存好背景图片，那么就可以<strong>将实时图片与背景图片对比</strong>，并得到准确的目标轮廓。</p>
+
+<p><img src="https://pic2.zhimg.com/80/v2-c2558c650f9392c478937419b72a829e_hd.jpg" alt="img" />代码的流程图</p>
+
+<p>简单地设置背景图片会来两个新的问题：</p>
+
+<ul>
+<li>若<strong>相机视角被移动</strong>（比如路过的人不小心碰了一下），那么实时图片和背景图片做差值，将会得到整个画面，目标检测失效</li>
+<li>若<strong>背景发生变化</strong>，比如镜头中的桌子被移动了，或者环境光突然发生变化，或者有目标进入镜头后，赖着不走，etc. 那么镜头如实将会一直把这变化为框出来，这不智能</li>
+</ul>
+
+<p>这些都是<strong>不更新背景图片</strong>导致的，所以要设置更新背景图片的策略</p>
+
+<h2 id="下面讲流程图中-对比并有策略地更新背景图片-的策略">下面讲流程图中<strong>【对比并有策略地更新背景图片】</strong>的策略：</h2>
+
+<p><img src="https://pic4.zhimg.com/80/v2-ac31f09c818aa3445a09bbd60f785af9_hd.jpg" alt="img" />背景图片更新策略</p>
+
+<h2 id="相关代码">相关代码</h2>
+
+<p>由边缘检测改写而来的函数，它根据输入的两张图片，返回被检测出的目标轮廓，如果两张图片相似，那么就返回一个空列表 [] ，空列表在Python的逻辑判断中，是False，方便背景图片更改的逻辑判断：</p>
+
+<pre><code class="language-text">def get_polygon_contours(self, img, img_back):
+    img = np.copy(img)
+    dif = np.array(img, dtype=np.int16)
+    dif = np.abs(dif - img_back)
+    dif = np.array(dif, dtype=np.uint8)  # get different
+
+    gray = cv2.cvtColor(dif, cv2.COLOR_BGR2GRAY)
+    ret, thresh = cv2.threshold(gray, self.min_thresh, 255, 0)
+    thresh = cv2.blur(thresh, (self.thresh_blur, self.thresh_blur))
+
+    if np.max(thresh) == 0:  # have not different
+        contours = []  # 空列表在Python的逻辑判断中，是False
+    else:
+        thresh, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        # hulls = [cv2.convexHull(cnt) for cnt, hie in zip(contours, hierarchy[0]) if hie[2] == -1]
+        # hulls = [hull for hull in hulls if cv2.arcLength(hull, True) &gt; self.min_hull_len]
+        # contours = hulls
+
+        approxs = [cv2.approxPolyDP(cnt, self.min_side_len, True) for cnt in contours]
+        approxs = [approx for approx in approxs
+                   if len(approx) &gt; self.min_side_num and cv2.arcLength(approx, True) &gt; self.min_poly_len]
+        contours = approxs
+    return contours
+</code></pre>
+
+<p>位于类EdgeDetection 中的 函数main_get_img_show()，<strong>执行更换背景的逻辑判断</strong>：</p>
+
+<pre><code class="language-text">...
+contours = self.get_polygon_contours(img, self.img_back)  # 这个函数框出并返回目标轮廓
+
+self.img_list.append(img)  # 将实时图片加入历史图片队列
+img_prev = self.img_list.pop(0)  # 取出最在的历史图片
+
+# 两个逻辑判断，决定是否更换背景图片
+# 一个是背景图片微调，即背景与实时相似的时候，更新背景图片
+# 另一个是背景图片更换，当历史图片与实时图片相似的时候，证明背景已经更改一段时间了，因此更新背景
+self.img_back = img \
+    if not contours or not self.get_polygon_contours(img, img_prev) \
+    else self.img_back
+...
+</code></pre>
+
+<p>需要明白的Python小技巧——空列表在Python的逻辑判断中，是False</p>
+
+<pre><code class="language-text">print(&quot;[] is %s&quot; % bool([]))
+if []:
+    print(&quot;[] is True&quot;)
+else:
+    print(&quot;[] is False&quot;)
+</code></pre>
+
+<p>如下，被视为背景的卡片移动了，出现两个框，一段时间后红框消失，证明背景图片被更换，伸入手进行测试，其他功能正常：</p>
+
+<p>还有一个对目标轮廓的筛选过程——根据轮廓多边形的边数、周长进行筛选：</p>
+
+<pre><code class="language-text">...
+# 在 类的初始化中 def __init__(self, img, roi_pts):
+self.min_side_len = int(self.img_len0 / 24)  # min side len of polygon
+self.min_poly_len = int(self.img_len0 / 12)
+self.thresh_blur = int(self.img_len0 / 8)
+...
+# 在 类的函数 get_polygon_contours() 中
+approxs = [cv2.approxPolyDP(cnt, self.min_side_len, True) for cnt in contours]
+approxs = [approx for approx in approxs
+           if len(approx) &gt; self.min_side_num and cv2.arcLength(approx, True) &gt; self.min_poly_len]
+contours = approxs
+...
+</code></pre>
+
+<p>视频的前面几秒，手指在灰色部分，即ROI（Regin of Interest）以外，没有触发轮廓框选，进入区域后，出现了一个四边形将目标框出，而且周长足够：</p>
+
+<p>（从这个视频中还可以看出，我的移动目标轮廓框选算法还是有疏漏的，比如影子也框进去了、手指退出后，还留有错误的红框）</p>
+
+<h2 id="感兴趣区域的设定">感兴趣区域的设定</h2>
+
+<p>上面也提及了感兴趣区域，这里就顺便贴出用OpenCV-Python的GUI实现的 ROI区域设置代码，这部分代码就是从<a href="https://link.zhihu.com/?target=https%3A//stackoverflow.com/questions/37099262/drawing-filled-polygon-using-mouse-events-in-open-cv-using-python">Drawing filled polygon using mouse events in open cv using python</a> 网页上 <a href="https://link.zhihu.com/?target=https%3A//stackoverflow.com/users/3962537/dan-ma%25c5%25a1ek">Dan Mašek</a> 的答案改写而来。就放在 <a href="https://link.zhihu.com/?target=https%3A//github.com/Yonv1943/Python/blob/master/Demo/DEMO_edge_detection.py">完整版 DEMO_edge_detction.py</a> 中命名为 DrawROI 的类里面。</p>
+
+<p>↑ 视频中的操作：按退格键重新划定ROI ，鼠标点击定义多边形，按enter 确认ROI</p>
+
+<hr />
+
+<p><strong>应用讨论</strong></p>
+
+<p>移动物体识别的这个特性，在<strong>固定摄像头</strong>实时视频侦测的时候比较有用，比如：</p>
+
+<ol>
+<li>监控摄像头，检测到镜头画面有变化（移动物体出现）的时候，才开启记录功能，录下视频，避免记录重复视频，节省磁盘空间。（即电子蛙眼）</li>
+<li>保留前景，过滤掉无关的背景。</li>
+</ol>
+
+<p>它还可以和<strong>实时视频的移动目标检测结合</strong>，可以用在自动生成训练集上，也可以用在固定摄像头实时目标检测上。</p>
+
+<h2 id="用在自动生成训练集上">用在自动生成训练集上：</h2>
+
+<p>将要识别的物体放在镜头前，不断地移动物体（最好是换不同高度环绕拍摄），识别出物体轮廓，处理成边缘羽化的png图片，然后和其他背景合成大量训练集（此时可以通过轮廓输出框选完毕的box，再批量创建label，自动导出成为xml格式，就可以为所欲为了）（可以看我的另外一篇：利用初步训练的深度学习模型自动生成训练图片，包括csv文件、Python字典、TensorFlow目标检测训练图片xml注释 相互转换（还没写完））</p>
+
+<p>用传统图像识别将目标准确框出，并过滤掉背景，传给目标检测模型，甚至可以取代目标检测提取候选框的那一步，将目标检测的工作，从：</p>
+
+<blockquote>
+<p>生成候选框 → 分类器处理多个候选框，得到类别匹配度信息 →
+计算匹配度，筛选出得分高的目标 → 调整对应候选框的位置 →
+输出目标及对应的候选框</p>
+</blockquote>
+
+<p>简化为：</p>
+
+<blockquote>
+<p>传统图形识别框出待分类的目标移动目标 →
+分类器计算目标匹配度，判断目标类别 →
+输出目标轮廓，以及目标的类别</p>
+</blockquote>
+
+<p>简化的内容如下：</p>
+
+<ul>
+<li>简化目标检测的任务：从“判断目标位置，确定目标类型”简化为“判断目标类型”</li>
+<li>处理的图片变小了：从原来的全图检测 缩减为对移动目标对应图片的检测</li>
+<li>减小背景的影响：框出移动目标轮廓，并删去背景，减少了影响分类判断的干扰因素</li>
+</ul>
+
+<p>在缩小了目标检测应用范围的情况下（只能用来检测固定镜头的移动物体/入侵物体，用在安防摄像头上面最好了），预计这样子处理可以减少计算量，提高检测准确率。</p>
+
+<h2 id="用在固定摄像头实时目标检测上">用在固定摄像头实时目标检测上：</h2>
+
+<p>移动物体框选结果预览（深度学习结合目标检测结合（这里用的是Yolo目标检测），假装把segmentation 做出来了）</p>
+
+<p><img src="https://pic2.zhimg.com/80/v2-05dea7651b0f52a840d7a735abd73ca2_hd.jpg" alt="img" /></p>
+
+<hr />
+
+<p>参考资料：</p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/38739563">边缘检测，框出物体的轮廓(使用opencv-python的函数cv2.findContours() )</a></p>
+
+<p><a href="https://link.zhihu.com/?target=https%3A//stackoverflow.com/questions/37099262/drawing-filled-polygon-using-mouse-events-in-open-cv-using-python">Drawing filled polygon using mouse events in open cv using python</a></p>
+
+<hr />
+
+<p>在评论区指出的问题，我会修改到正文中，并注明贡献者的名字。</p>
+
+<p>在评论区提出的问题，我可能会尝试解答，并添加到正文中。</p>
+
+<p>交流可以促进社区与自身成长，<strong>欢迎评论，谢谢大家。</strong></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/38720146">感兴趣区域的移动物体检测，框出移动物体的轮廓 (固定摄像头, opencv-python)</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">异常处理</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%90%86%E8%AE%BA/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/11-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95/02-%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AD%A6%E4%B9%A0/02-%E8%81%9A%E7%B1%BB/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-k-means-%E8%81%9A%E7%B1%BB%E7%AE%97%E6%B3%95-python-/">
+            <span class="next-text nav-default">机器学习 k-means 聚类算法 python</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>寻找复杂背景下物体的轮廓 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个还是要仔细消化下的。感觉非常好 寻找复杂背景下物体的轮廓 一、问题提出 这是一个来自&amp;rdquo;answerOpenCV&amp;rdqu" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E5%AF%BB%E6%89%BE%E5%A4%8D%E6%9D%82%E8%83%8C%E6%99%AF%E4%B8%8B%E7%89%A9%E4%BD%93%E7%9A%84%E8%BD%AE%E5%BB%93/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="寻找复杂背景下物体的轮廓" />
+<meta property="og:description" content="需要补充的 这个还是要仔细消化下的。感觉非常好 寻找复杂背景下物体的轮廓 一、问题提出 这是一个来自&rdquo;answerOpenCV&rdqu" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E5%AF%BB%E6%89%BE%E5%A4%8D%E6%9D%82%E8%83%8C%E6%99%AF%E4%B8%8B%E7%89%A9%E4%BD%93%E7%9A%84%E8%BD%AE%E5%BB%93/" /><meta property="article:published_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-10-31T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="寻找复杂背景下物体的轮廓">
+<meta itemprop="description" content="需要补充的 这个还是要仔细消化下的。感觉非常好 寻找复杂背景下物体的轮廓 一、问题提出 这是一个来自&rdquo;answerOpenCV&rdqu">
+
+
+<meta itemprop="datePublished" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-10-31T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="902">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="寻找复杂背景下物体的轮廓"/>
+<meta name="twitter:description" content="需要补充的 这个还是要仔细消化下的。感觉非常好 寻找复杂背景下物体的轮廓 一、问题提出 这是一个来自&rdquo;answerOpenCV&rdqu"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">寻找复杂背景下物体的轮廓</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-10-31 </span>
+        
+        <span class="more-meta"> 902 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#寻找复杂背景下物体的轮廓">寻找复杂背景下物体的轮廓</a>
+<ul>
+<li><a href="#一-问题提出">一、问题提出</a></li>
+<li><a href="#五-经验小结">五、经验小结</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>这个还是要仔细消化下的。感觉非常好</li>
+</ul>
+
+<h1 id="寻找复杂背景下物体的轮廓">寻找复杂背景下物体的轮廓</h1>
+
+<h2 id="一-问题提出">一、问题提出</h2>
+
+<p>这是一个来自&rdquo;answerOpenCV&rdquo;（<a href="https://link.zhihu.com/?target=http%3A//answers.opencv.org/question/200422/opencv-c-filling-holes/">http://answers.opencv.org/question/200422/opencv-c-filling-holes/</a>）</p>
+
+<p>整编如下：
+<strong>title：</strong>OpenCV / C++ - Filling holes
+<strong>content:</strong>
+Hello there,
+For a personnel projet, I&rsquo;m trying to detect object and there shadow. These are the result I have for now: Original:</p>
+
+<p><img src="https://pic3.zhimg.com/80/v2-1b2e6eedc98a6fa2c880a83671886570_hd.jpg" alt="img" /></p>
+
+<p>题，原始问题</p>
+
+<p><img src="https://pic4.zhimg.com/80/v2-a38df1275d8e7c65f2771f1ab04f75ec_hd.jpg" alt="img" /></p>
+
+<p>Object:
+Shadow:
+The external contours of the object are quite good, but as you can see, my object is not full. Same for the shadow. I would like to get full contours, filled, for the object and its shadow, and I don&rsquo;t know how to get better than this (I juste use &ldquo;dilate&rdquo; for the moment). Does someone knows a way to obtain a better result please? Regards.
+<strong>二、问题分析</strong>
+从原始图片上来看，这张图片的拍摄的背景比较复杂，此外光照也存在偏光现象；而提问者虽然提出的是“将缝隙合并”的要求，实际上他还是想得到目标物体的准确轮廓。
+<strong>三、问题解决</strong>
+基于现有经验，和OpenCV，GOCVhelper等工具，能够很快得出以下结果
+h通道：</p>
+
+<p><img src="https://pic4.zhimg.com/80/v2-9f2c43b928d97e62e9b653308bbe35c7_hd.jpg" alt="img" /></p>
+
+<p>去光差：</p>
+
+<p><img src="https://pic4.zhimg.com/80/v2-75763762a497b1942a0779003debe56e_hd.jpg" alt="img" /></p>
+
+<p>阈值：</p>
+
+<p><img src="https://pic1.zhimg.com/80/v2-4598a3cf118c1b9b08bc87dc15cf6767_hd.jpg" alt="img" /></p>
+
+<p>标注：</p>
+
+<p><img src="https://pic4.zhimg.com/80/v2-5dbec8609ed67962a6d4939a5cd6b735_hd.jpg" alt="img" /></p>
+
+<p><strong>四、算法关键</strong></p>
+
+<p>这套算法首先解决了这个问题，而且我认为也是稳健鲁棒的。其中，算法中除了经典的“hsv分解-&gt;ostu阈值-&gt;最大轮廓标注”外，最为关键的算法为顶帽去光差。这个算法来自于冈萨雷斯《数字图像处理教程》形态学篇章，完全按照书本建议实现，体现良好作用。<span style="color:red;">这么厉害，不知道我什么时候才能这么信手拈来</span></p>
+
+<pre><code class="language-cpp">//answerOpenCV OpenCV / C++ - Filling holes
+#include &quot;stdafx.h&quot;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+
+
+using namespace cv;
+using namespace std;
+
+//find the biggest contour
+vector&lt;Point&gt; FindBigestContour(Mat src){
+    int imax = 0;
+    int imaxcontour = -1;
+    std::vector&lt;std::vector&lt;Point&gt; &gt;contours;
+    findContours(src,contours,CV_RETR_LIST,CV_CHAIN_APPROX_SIMPLE);
+    for (int i=0;i&lt;contours.size();i++){
+        int itmp = contourArea(contours[i]);
+        if (imaxcontour &lt; itmp ){
+            imax = i;
+            imaxcontour = itmp;
+        }
+    }
+    return contours[imax];
+}
+
+//remove Light difference by using top hat
+Mat moveLightDiff(Mat src,int radius){
+    Mat dst;
+    Mat srcclone = src.clone();
+    Mat mask = Mat::zeros(radius*2,radius*2,CV_8U);
+    circle(mask,Point(radius,radius),radius,Scalar(255),-1);
+    //top hat
+    erode(srcclone,srcclone,mask);
+    dilate(srcclone,srcclone,mask);
+    dst = src - srcclone;
+    return dst;
+}
+
+int main( void )
+{
+    Mat src = imread(&quot;e:/sandbox/question.png&quot;);
+    Mat src_hsv;
+    Mat bin;
+    Mat src_h;
+
+    cvtColor(src,src_hsv,COLOR_BGR2HSV);
+    vector&lt;Mat&gt; rgb_planes;
+    split(src_hsv, rgb_planes );
+    src_h = rgb_planes[0]; // h channel is useful
+
+    src_h = moveLightDiff(src_h,40);
+    threshold(src_h,bin,100,255,THRESH_OTSU);
+
+    //find and draw the biggest contour
+    vector&lt;Point&gt; bigestcontrour = FindBigestContour(bin);
+    vector&lt;vector&lt;Point&gt; &gt; controus;
+    controus.push_back(bigestcontrour);
+    cv::drawContours(src,controus,0,Scalar(0,0,255),3);
+
+    waitKey();
+    return 0;
+}
+
+</code></pre>
+
+<h2 id="五-经验小结">五、经验小结</h2>
+
+<p>解决这个问题我只用了10分钟的时间，写博客10分钟。能够快速解决问题并书写出来的关键为：</p>
+
+<p><span style="color:red;">震惊了，这么厉害！要做好自己的知识体系和工具体系的维护。</span></p>
+
+<p>1、积累维护的代码库:GOCVHelper(<a href="https://link.zhihu.com/?target=https%3A//github.com/jsxyhelu/GOCvHelper">https://github.com/jsxyhelu/GOCvHelper</a>）
+2、不断阅读思考实践的习惯；</p>
+
+<p><span style="color:red;">上面这个代码库还是要融入进来的</span></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/46340090">寻找复杂背景下物体的轮廓（OpenCV / C++ - Filling holes）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E5%9B%BE%E5%83%8F%E7%9B%B4%E6%96%B9%E5%9B%BE%E4%B8%8E%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">图像直方图与直方图均衡化</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/python-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/">
+            <span class="next-text nav-default">异常处理</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

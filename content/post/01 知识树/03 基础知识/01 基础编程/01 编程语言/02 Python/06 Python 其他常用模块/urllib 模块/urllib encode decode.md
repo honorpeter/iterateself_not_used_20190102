@@ -1,3 +1,8 @@
+---
+title: urllib encode decode
+toc: true
+date: 2018-10-31
+---
 # 需要补充的
 
 - 其实非常想知道，json 打包后，是不是就可以直接放在 url 中传递了？还需要 urlencode 来打包吗？

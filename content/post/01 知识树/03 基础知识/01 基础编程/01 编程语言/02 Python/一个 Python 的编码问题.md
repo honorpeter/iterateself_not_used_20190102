@@ -1,3 +1,8 @@
+---
+title: 一个 Python 的编码问题
+toc: true
+date: 2018-10-31
+---
  今天遇到一个 Python 的编码问题，一个 txt 的 UTF-8 格式的文件，文件里面存放了路径，我用 with open('1.txt',r,encoding='utf-8') as f 读出来的东西，print() 出来是正确的路径，
  但是使用 cv2.imread('path') 来读取文件的时候，总是说读不到。
 

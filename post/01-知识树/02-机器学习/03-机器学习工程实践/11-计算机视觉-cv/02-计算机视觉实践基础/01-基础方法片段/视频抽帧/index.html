@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 一直不是很清楚，cv2 的抽帧方法，对任何视频编码格式都可以吗？是因为 cv2 自带了对于视频编码的解码吗？还是说它内部其实就是调用了 ffm" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E8%A7%86%E9%A2%91%E6%8A%BD%E5%B8%A7/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="需要补充的 一直不是很清楚，cv2 的抽帧方法，对任何视频编码格式都可以吗？是因为 cv2 自带了对于视频编码的解码吗？还是说它内部其实就是调用了 ffm" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E8%A7%86%E9%A2%91%E6%8A%BD%E5%B8%A7/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="需要补充的 一直不是很清楚，cv2 的抽帧方法，对任何视频编码格式都可以吗？是因为 cv2 自带了对于视频编码的解码吗？还是说它内部其实就是调用了 ffm">
+
+
+
+<meta itemprop="wordCount" content="1221">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="需要补充的 一直不是很清楚，cv2 的抽帧方法，对任何视频编码格式都可以吗？是因为 cv2 自带了对于视频编码的解码吗？还是说它内部其实就是调用了 ffm"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 1221 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#将视频的每一帧提取并保存">将视频的每一帧提取并保存</a>
+<ul>
+<li><a href="#用-ffmpeg-工具来抽帧">用 FFmpeg 工具来抽帧</a></li>
+<li><a href="#用-cv2-模块中的-videocapture-videowriter-来抽帧">用 <code>cv2</code> 模块中的 <code>VideoCapture</code>、<code>VideoWriter</code> 来抽帧</a></li>
+<li><a href="#通过imageio库和skimage库">通过imageio库和skimage库</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li><span style="color:red;">一直不是很清楚，cv2 的抽帧方法，对任何视频编码格式都可以吗？是因为 cv2 自带了对于视频编码的解码吗？还是说它内部其实就是调用了 ffmpeg？</span></li>
+</ul>
+
+<h1 id="将视频的每一帧提取并保存">将视频的每一帧提取并保存</h1>
+
+<p>抽帧还是会经常用到的，比如，我们通过录像的形式采集图像数据，然后想要对图像进行打标。那么就需要从视频中抽帧。</p>
+
+<p>嗯，相关资料的一篇文章抽帧是为了做光流法 Optical Flow ，提取运动的光流特征。</p>
+
+<p>基本上有两种方法：</p>
+
+<h2 id="用-ffmpeg-工具来抽帧">用 FFmpeg 工具来抽帧</h2>
+
+<p>这种是比较简单的，用 FFmpeg 工具来完成。</p>
+
+<p>具体的网上有很多这方面的资料，本人只是简单了解了一下如何使用。如下图，有一个名为 ffmpeg_test.avi 的视频：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181104/BAD6kmAfE5.png?imageslim" alt="mark" /></p>
+
+<p>在当前目录打开终端，输入如下命令：</p>
+
+<pre><code>$ffmpeg -i ffmpeg_test.avi frames_%03d.jpg -hide_banner
+</code></pre>
+
+<p>以上我没有指定太多的参数，实际上有很多参数可以指定，如起止的时间，几秒钟取一帧等等。</p>
+
+<p>输入即可获得每一帧。</p>
+
+<p><span style="color:red;">嗯，之前使用的是 opencv 抽帧的方法，嗯，什么时候会要用到这个方法呢？而且，python 可以方便调用 ffmpeg 吗？</span></p>
+
+<h2 id="用-cv2-模块中的-videocapture-videowriter-来抽帧">用 <code>cv2</code> 模块中的 <code>VideoCapture</code>、<code>VideoWriter</code> 来抽帧</h2>
+
+<p>下面就是可以用 cv2 模块中的 VideoCapture、VideoWriter 来提取了，具体代码如下：</p>
+
+<pre><code class="language-python">#! encoding: UTF-8
+
+import os
+
+import cv2
+import cv
+
+videos_src_path = '/home/ou-lc/chenxp/Downloads/Youtube/youtube_select'
+videos_save_path = '/home/ou-lc/chenxp/Downloads/Youtube/youtube_frames'
+
+videos = os.listdir(videos_src_path)
+videos = filter(lambda x: x.endswith('avi'), videos)
+
+for each_video in videos:
+​    print each_video
+
+    # get the name of each video, and make the directory to save frames
+    each_video_name, _ = each_video.split('.')
+    os.mkdir(videos_save_path + '/' + each_video_name)               
+
+    each_video_save_full_path = os.path.join(videos_save_path, each_video_name) + '/'
+
+    # get the full path of each video, which will open the video tp extract frames
+    each_video_full_path = os.path.join(videos_src_path, each_video)
+
+    cap  = cv2.VideoCapture(each_video_full_path)
+    frame_count = 1
+    success = True
+    while(success):
+        success, frame = cap.read()
+        print 'Read a new frame: ', success
+
+        params = []
+        params.append(cv.CV_IMWRITE_PXM_BINARY)
+        params.append(1)
+        cv2.imwrite(each_video_save_full_path + each_video_name + &quot;_%d.ppm&quot; % frame_count, frame, params)
+
+        frame_count = frame_count + 1
+
+cap.release()
+</code></pre>
+
+<p>在最后，我将每一帧保存为 PPM 格式。</p>
+
+<p>保存时，根据 opencv 的 Doc：OpenCV 2.4.9 cv2.imwrite，其参数的指定方式如上。一开始在这里跌了好几个跟头，因为不知道如何将参数正确的指定。<span style="color:red;">这个地方有什么需要注意的吗？后续补充下</span></p>
+
+<h2 id="通过imageio库和skimage库">通过imageio库和skimage库</h2>
+
+<p>通过imageio库和skimage库</p>
+
+<p>安装环境：</p>
+
+<pre><code>pip install imageio
+pip install skimage
+</code></pre>
+
+<p>这时候会报错 Please install the <code>scikit-image</code> package (instead of <code>skimage</code>)</p>
+
+<p>所以按照提示操作即可：</p>
+
+<pre><code>pip install scikit-image
+</code></pre>
+
+<p>环境安装成功。</p>
+
+<p>通过 python 安装 ffmpge（用来解码视频流）</p>
+
+<pre><code>import imageio
+imageio.plugins.ffmpeg.download()
+</code></pre>
+
+<p>这时候会提示：</p>
+
+<pre><code>Imageio: 'ffmpeg.linux64' was not found on your computer; downloading it now.Try 1. Download from https://github.com/imageio/imageio-binaries/raw/master/ffmpeg/ffmpeg.linux64 (27.2 MB)Downloading: 8192/28549024 bytes
+</code></pre>
+
+<p>开始进行下载 ffmpeg</p>
+
+<p>注意：下载这个文件很容易断线，所有可以先拿下载工具下载后，再放到下面路径，然后系统就会认为文件已经下载完了。
+文件路径： /root/.imageio/ffmpeg/ffmpeg.linux6</p>
+
+<p>如果不断线的话，文件就会存放在上述路径中。</p>
+
+<p>下次执行就可以直接读取视频流了。</p>
+
+<p>使用 imageio 库提取视频帧</p>
+
+<p>imageio官方文档地址：<a href="http://imageio.readthedocs.io/en/latest/examples.html">http://imageio.readthedocs.io/en/latest/examples.html</a></p>
+
+<p>用法：</p>
+
+<pre><code># coding:utf-8
+import pylab
+import imageio
+#注释的代码执行一次就好，以后都会默认下载完成
+#imageio.plugins.ffmpeg.download()
+import skimage
+import numpy as np
+
+#视频的绝对路径
+filename = 'video/01_01.wmv'
+#可以选择解码工具
+vid = imageio.get_reader(filename,  'ffmpeg')
+for num,im in enumerate(vid):
+​    #image的类型是mageio.core.util.Image可用下面这一注释行转换为arrary
+​    print im.mean()
+​    image = skimage.img_as_float(im).astype(np.float64)
+​    fig = pylab.figure()
+​    fig.suptitle('image #{}'.format(num), fontsize=20)
+​    pylab.imshow(im)
+pylab.show()
+</code></pre>
+
+<p><span style="color:red;">上面这种方法没有试过，不知道是否可以。嗯，cv2 内部是使用了 ffmpeg 吗？不然是怎么进行解码的？</span></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://blog.csdn.net/u010167269/article/details/53268686">python tools：将视频的每一帧提取并保存</a></li>
+<li><a href="https://blog.csdn.net/NFMSR/article/details/78559930">python读取视频流提取视频帧的方法</a></li>
+<li><a href="http://www.bugcodemaster.com/article/extract-images-frame-frame-video-file-using-ffmpeg">http://www.bugcodemaster.com/article/extract-images-frame-frame-video-file-using-ffmpeg</a></li>
+<li><a href="http://stackoverflow.com/questions/33311153/python-extracting-and-saving-video-frames">http://stackoverflow.com/questions/33311153/python-extracting-and-saving-video-frames</a></li>
+<li><a href="http://stackoverflow.com/questions/12216333/opencv-imread-imwrite-increases-the-size-of-png">http://stackoverflow.com/questions/12216333/opencv-imread-imwrite-increases-the-size-of-png</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/19-%E7%94%A8%E9%BC%A0%E6%A0%87%E8%BF%9B%E8%A1%8C%E7%94%BB%E7%94%BB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/02-yolov3-%E4%BD%BF%E7%94%A8/01-keras-%E5%AE%9E%E7%8E%B0/00-%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

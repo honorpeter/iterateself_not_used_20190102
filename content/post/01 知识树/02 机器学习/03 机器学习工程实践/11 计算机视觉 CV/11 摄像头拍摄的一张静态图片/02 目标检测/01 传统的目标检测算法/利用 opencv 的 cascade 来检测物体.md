@@ -161,7 +161,6 @@ cv2.destroyAllWindows()
 
 
 所有需要用到的文件下载地址：  http://download.csdn.net/download/qq_27063119/10238488  
-（需要5积分，没有的至我邮箱 nuohy@qq.com）
 
 
 

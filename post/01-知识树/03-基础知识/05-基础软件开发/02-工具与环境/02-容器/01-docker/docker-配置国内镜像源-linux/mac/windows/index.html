@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个是不是所有的镜像都在上面？ docker 配置国内镜像源 linux/mac/windows 部分内容来自：http://guide.daocloud.io/dcs/daocl" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%8E%AF%E5%A2%83/02-%E5%AE%B9%E5%99%A8/01-docker/docker-%E9%85%8D%E7%BD%AE%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E6%BA%90-linux/mac/windows/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="需要补充的 这个是不是所有的镜像都在上面？ docker 配置国内镜像源 linux/mac/windows 部分内容来自：http://guide.daocloud.io/dcs/daocl" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%8E%AF%E5%A2%83/02-%E5%AE%B9%E5%99%A8/01-docker/docker-%E9%85%8D%E7%BD%AE%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E6%BA%90-linux/mac/windows/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="需要补充的 这个是不是所有的镜像都在上面？ docker 配置国内镜像源 linux/mac/windows 部分内容来自：http://guide.daocloud.io/dcs/daocl">
+
+
+
+<meta itemprop="wordCount" content="870">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="需要补充的 这个是不是所有的镜像都在上面？ docker 配置国内镜像源 linux/mac/windows 部分内容来自：http://guide.daocloud.io/dcs/daocl"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 870 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#docker-配置国内镜像源-linux-mac-windows">docker 配置国内镜像源 linux/mac/windows</a>
+<ul>
+<li>
+<ul>
+<li><a href="#linux">linux</a></li>
+<li><a href="#docker-for-mac">Docker for Mac</a></li>
+<li><a href="#docker-for-windows">Docker for Windows</a></li>
+<li><a href="#docker-toolbox">Docker Toolbox</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>这个是不是所有的镜像都在上面？</li>
+</ul>
+
+<h1 id="docker-配置国内镜像源-linux-mac-windows">docker 配置国内镜像源 linux/mac/windows</h1>
+
+<blockquote>
+<p>部分内容来自：<a href="https://link.jianshu.com?t=http://guide.daocloud.io/dcs/daocloud-9153151.html">http://guide.daocloud.io/dcs/daocloud-9153151.html</a>
+加速器官方DaoCloud承诺：加速器服务永久免费且无流量限制
+<strong>使用前提：</strong><a href="https://link.jianshu.com?t=https://account.daocloud.io/signin">注册DaoCloud账号</a> 并 确保Docker 版本 &gt; 1.8
+命令<code>docker --version</code></p>
+</blockquote>
+
+<p>使用 Docker 需要经常从官方获取镜像，国内拉取镜像的过程非常耗时。</p>
+
+<p>DaoCloud 推出<a href="https://link.jianshu.com?t=https://www.daocloud.io/mirror">DaoCloud 加速器</a> ，通过智能路由和缓存机制，极大提升了国内网络访问 Docker Hub 的速度，并得到了 Docker 官方的大力推荐。</p>
+
+<h3 id="linux">linux</h3>
+
+<p>自动配置 Docker 加速器（推荐）
+ <em>适用于 Ubuntu14.04、Debian、CentOS6 、CentOS7、Fedora、Arch Linux、openSUSE Leap 42.1</em></p>
+
+<p><a href="https://link.jianshu.com?t=https://www.daocloud.io/mirror#accelerator-doc">registry-mirror配置命令</a>  如下（注意修改为自己的地址）：</p>
+
+<pre><code>curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://你的的地址.m.daocloud.io
+</code></pre>
+
+<p><strong>在配置完成后根据终端中的提示重启 docker使配置生效。</strong></p>
+
+<p>手动配置 Docker 加速器
+ Docker 版本在 1.8 - 1.11
+ 找到 Docker 配置文件，不同的 Linux 发行版的配置路径不同，具体路径请参考 <a href="https://link.jianshu.com?t=https://docs.docker.com/engine/admin/">Docker官方文档</a>
+ 在配置文件中的 DOCKER_OPTS 加入</p>
+
+<pre><code>--registry-mirror=你的加速地址
+</code></pre>
+
+<p>重启Docker（不同的 Linux 发行版的重启命令不一定相同）
+ <code>service docker restart</code></p>
+
+<h3 id="docker-for-mac">Docker for Mac</h3>
+
+<p>获取<a href="https://link.jianshu.com?t=https://www.daocloud.io/mirror#accelerator-doc">加速地址</a>
+ 操作如图所示
+ 点击 Apply &amp; Restart 按钮使设置生效</p>
+
+<p><img src="https:////upload-images.jianshu.io/upload_images/2795885-4ffcb0c48c005ae2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/330/format/webp" alt="img" /></p>
+
+<p><img src="https:////upload-images.jianshu.io/upload_images/2795885-18216c0a9772aa4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/378/format/webp" alt="img" /></p>
+
+<p>建议加入其他国内镜像</p>
+
+<pre><code>https://docker.mirrors.ustc.edu.cn
+https://hub-mirror.c.163.com
+</code></pre>
+
+<h3 id="docker-for-windows">Docker for Windows</h3>
+
+<p>在桌面右下角状态栏中右键 docker 图标，修改在 Docker Daemon 标签页中的 json ，把 加速地址(在<a href="https://link.jianshu.com?t=https://www.daocloud.io/mirror#accelerator-doc">加速器</a>页面获取)加到&rdquo;registry-mirrors&rdquo;的数组里。点击 Apply 使设置生效。
+ 如图所示</p>
+
+<p><img src="https:////upload-images.jianshu.io/upload_images/2795885-595dd1726679ad2e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/519/format/webp" alt="img" /></p>
+
+<p>注意!
+ 上方的文本为 json 语法，请确定您的修改符合语法规则，否则将无法配置成功。</p>
+
+<h3 id="docker-toolbox">Docker Toolbox</h3>
+
+<p>（不推荐使用 docker toolbox，建议使用新的 docker for mac 及 docker for windows 以在这两种平台运行 docker ）
+ 请确认你的 Docker Toolbox 已经启动，并执行下列命令（请将 <strong>加速地址</strong> 替换为在<a href="https://link.jianshu.com?t=https://www.daocloud.io/mirror#accelerator-doc">加速器</a>页面获取的专属地址）</p>
+
+<pre><code>docker-machine ssh defaultsudo sed -i &quot;s|EXTRA_ARGS='|EXTRA_ARGS='--registry-mirror=加速地址 |g&quot; /var/lib/boot2docker/profileexitdocker-machine restart default
+</code></pre>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://www.jianshu.com/p/9fce6e583669">docker 配置国内镜像源 linux/mac/windows</a></li>
+<li><a href="https://www.daocloud.io/mirror#accelerator-doc">Docker 加速器</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%8E%AF%E5%A2%83/02-%E5%AE%B9%E5%99%A8/01-docker/docker-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%95%99%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/11-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/02-linux-%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B/%E5%A4%A7%E7%BA%B2/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

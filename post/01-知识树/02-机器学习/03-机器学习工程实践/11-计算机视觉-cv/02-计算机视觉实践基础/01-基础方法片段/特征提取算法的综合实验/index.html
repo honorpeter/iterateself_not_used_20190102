@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="特征提取算法的综合实验（多种角度比较sift/surf/brisk/orb/akze） 一、基本概念： 作用：特征点提取在“目标识别、图像拼接、" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95%E7%9A%84%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="特征提取算法的综合实验（多种角度比较sift/surf/brisk/orb/akze） 一、基本概念： 作用：特征点提取在“目标识别、图像拼接、" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95%E7%9A%84%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="特征提取算法的综合实验（多种角度比较sift/surf/brisk/orb/akze） 一、基本概念： 作用：特征点提取在“目标识别、图像拼接、">
+
+
+
+<meta itemprop="wordCount" content="3242">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="特征提取算法的综合实验（多种角度比较sift/surf/brisk/orb/akze） 一、基本概念： 作用：特征点提取在“目标识别、图像拼接、"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 3242 words </span>
+        <span class="more-meta"> 7 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>特征提取算法的综合实验（多种角度比较sift/surf/brisk/orb/akze）</p>
+
+<p>一、基本概念：</p>
+
+<p><strong>作用</strong>：特征点提取在“目标识别、图像拼接、运动跟踪、图像检索、自动定位”等研究中起着重要作用；</p>
+
+<p><strong>主要算法</strong>：</p>
+
+<p>•FAST ,<a href="http://link.zhihu.com/?target=http%3A//www.edwardrosten.com/work/fast.html">Machine Learning forHigh-speed Corner Detection, 2006</a></p>
+
+<p>•SIFT,<a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Scale-invariant_feature_transform">Distinctive</a><a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Scale-invariant_feature_transform"> ImageFeatures from Scale-Invariant Keypoints,2004</a>,invariant
+to image translation, scaling, and rotation, partially invariant
+toillumination changes and robust to local geometric distortion</p>
+
+<p>•SURF,<a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Speeded_up_robust_features">Speeded</a><a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Speeded_up_robust_features"> Up RobustFeatures,2006</a>,受SIFT启发，比SIFT快，健壮</p>
+
+<p>•ORB,<a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/ORB_%28feature_descriptor%29">ORB: an efficientalternative to SIFT or SURF,2011</a>，基于FAST，比SIFT快两个数量级，可作为SIFT的替代</p>
+
+<p>•BRISK，<a href="http://link.zhihu.com/?target=http%3A//www.asl.ethz.ch/people/lestefan/personal/iccv2011.pdf">BRISK:Binary Robust Invariant Scalable </a><a href="http://link.zhihu.com/?target=http%3A//www.asl.ethz.ch/people/lestefan/personal/iccv2011.pdf">Keypoints</a></p>
+
+<p>•STAR，<a href="http://link.zhihu.com/?target=http%3A//blog.csdn.net/vonzhoufz/article/details/46461849">Censure: Centersurround </a><a href="http://link.zhihu.com/?target=http%3A//blog.csdn.net/vonzhoufz/article/details/46461849">extremas</a><a href="http://link.zhihu.com/?target=http%3A//blog.csdn.net/vonzhoufz/article/details/46461849"> for </a><a href="http://link.zhihu.com/?target=http%3A//blog.csdn.net/vonzhoufz/article/details/46461849">realtime</a><a href="http://link.zhihu.com/?target=http%3A//blog.csdn.net/vonzhoufz/article/details/46461849"> featuredetection and matching</a>,引用次数不高</p>
+
+<p>•MSER，<a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Maximally_stable_extremal_regions">RobustWide Baseline Stereo from Maximally Stable </a><a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Maximally_stable_extremal_regions">Extremal</a><a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Maximally_stable_extremal_regions">Regions,2002</a>,斑点检测</p>
+
+<p>•GFTT，<a href="http://link.zhihu.com/?target=http%3A//docs.opencv.org/modules/imgproc/doc/feature_detection.html">GoodFeatures to Track,1994</a>,Determines strong corners on animage</p>
+
+<p>•HARRIS,<a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Corner_detection">Harris</a><a href="http://link.zhihu.com/?target=http%3A//en.wikipedia.org/wiki/Corner_detection"> and M. Stephens (1988).“A combined corner and edge detector”</a>,也是一种角点检测方法</p>
+
+<p>•FREAK</p>
+
+<p>•AKAZE等</p>
+
+<p>其中标红的5项是在OpenCV中已经进行了实现的。</p>
+
+<p><strong>特征点识别主要流程为:</strong></p>
+
+<p>1、检测关键点、提取描述向量和特征匹配；</p>
+
+<p>2、通过检测关键点和提取描述向量构造出局部特征描述子，</p>
+
+<p>3、然后进行特征匹配</p>
+
+<p>二、数据准备：</p>
+
+<p>数据集为pascal中取出的6个数据，分别针对特征点提取的6个方面</p>
+
+<p><img src="https://pic1.zhimg.com/80/v2-6daa3117110b30ee5f4a021723c4280c_hd.jpg" alt="img" /></p>
+
+<p><img src="https://pic1.zhimg.com/80/v2-9d89c941cbf29cad15cd4b62b8583c4c_hd.jpg" alt="img" /></p>
+
+<p>其中<strong>特征点识别在以下6个方面进行比较</strong></p>
+
+<p>1、算法匹配速度比较 （ubc）</p>
+
+<p>测试方法：在相同的匹配环境下，即使用同样配置的计算机，对相同的一对图像进行比较，测试算法的执行时间</p>
+
+<p>2、旋转变换鲁棒性比较 （bark）</p>
+
+<p>测试方法：对同一图像进行一定角度的旋转，旋转角度逐步递增，旋转后的图像逐一与原始图像进行匹配，比较能够正确匹配的特征点对数，并观察正确匹配对数的变化幅度</p>
+
+<p>3、模糊变换鲁棒性比较 （bikes）</p>
+
+<p>测试方法：对同一图像用不同的高斯核进行模糊处理，模糊处理后的图像逐一与原始图像进</p>
+
+<p>行匹配，比较能够正确匹配的特征点对数，并观察正确匹配对数的变化幅度</p>
+
+<p>4、光照变换鲁棒性比较 （leuven）</p>
+
+<p>测试方法：对同一图像的亮度进行改变，逐</p>
+
+<p>渐降低亮度，改变亮度后的图像逐一与原始图像进行匹配，比较能够正确匹配的特征点对数，并观察正确匹配对数的变化幅度</p>
+
+<p>5、尺度变换鲁棒性比较 （bark）</p>
+
+<p>测试方法：对原图像的尺度大小进行改变，尺度变化后的图像逐一与原始图像进行匹配，比较能够正确匹配的特征点对数，并观察正确匹配对数的变化幅度</p>
+
+<p>6、视角变换鲁棒性比较 （graf）</p>
+
+<p>测试方法：对原场景转一定角度进行拍摄，不同视角的图像逐一与原始图像进行匹配，比较能够正确匹配的特征点对数，并观察正确匹配对</p>
+
+<p>数的变化幅度</p>
+
+<p>三、实验步骤：</p>
+
+<p><strong>1、依次对各个数据集进行特征点提取并进行两两特征点的比较，也就是match。这个流程是正常的流程，执行的过程中要注意错误控制</strong></p>
+
+<p><img src="https://pic3.zhimg.com/80/v2-7aa8a5d956d7df699763e8cee70ddff6_hd.jpg" alt="img" /></p>
+
+<p>//使用img1对比余下的图片，得出结果</p>
+
+<p>img1 = <em>imread</em>(files[0],0);</p>
+
+<p>imgn = <em>imread</em>(files[iimage],0);</p>
+
+<p>//生成特征点算法及其匹配方法</p>
+
+<p><em>Ptr</em>&lt;<em>Feature2D</em>&gt; extractor;</p>
+
+<p><em>BFMatcher</em> matcher;</p>
+
+<p>switch (imethod)</p>
+
+<p>{</p>
+
+<p>case 0: //&ldquo;SIFT&rdquo;</p>
+
+<p>extractor= <em>SIFT</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_L2</em>);</p>
+
+<p>break;</p>
+
+<p>case 1: //&ldquo;SURF&rdquo;</p>
+
+<p>extractor= <em>SURF</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_L2</em>);</p>
+
+<p>break;</p>
+
+<p>case 2: //&ldquo;BRISK&rdquo;</p>
+
+<p>extractor = <em>BRISK</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_HAMMING</em>);</p>
+
+<p>break;</p>
+
+<p>case 3: //&ldquo;ORB&rdquo;</p>
+
+<p>extractor= <em>ORB</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_HAMMING</em>);</p>
+
+<p>break;</p>
+
+<p>case 4: //&ldquo;AKAZE&rdquo;</p>
+
+<p>extractor= <em>AKAZE</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_HAMMING</em>);</p>
+
+<p>break;</p>
+
+<p>}</p>
+
+<p>try</p>
+
+<p>{</p>
+
+<p>extractor-&gt;<em>detectAndCompute</em>(img1,<em>Mat</em>(),keypoints1,descriptors1);</p>
+
+<p>extractor-&gt;<em>detectAndCompute</em>(imgn,<em>Mat</em>(),keypoints2,descriptors2);</p>
+
+<p>matcher.<em>match</em>( descriptors1, descriptors2, matches );</p>
+
+<p>}</p>
+
+<p>catch (*CException** e)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; 特征点提取时发生错误 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p>//对特征点进行粗匹配</p>
+
+<p>double max_dist = 0;</p>
+
+<p>double min_dist = 100;</p>
+
+<p>for( int a = 0; a &lt; matches.<em>size</em>(); a++ )</p>
+
+<p>{</p>
+
+<p>double dist = matches[a].<em>distance</em>;</p>
+
+<p>if( dist &lt; min_dist ) min_dist = dist;</p>
+
+<p>if( dist &gt; max_dist ) max_dist = dist;</p>
+
+<p>}</p>
+
+<p>for( int a = 0; a &lt; matches.<em>size</em>(); a++ )</p>
+
+<p>{</p>
+
+<p>if( matches[a].<em>distance</em> &lt;= <em>max</em>(2*min_dist, 0.02) )</p>
+
+<p>good_matches.<em>push_back</em>( matches[a]);</p>
+
+<p>}</p>
+
+<p>if (good_matches.<em>size</em>()&lt;4)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; 有效特征点数目小于4个，粗匹配失败 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p><strong>2、对match的结果进行RANSAC提纯计算，计算“内点”。主要是RANSAC提纯的一个过程，这个过程在图像拼接中也是很常见的。</strong></p>
+
+<p><img src="https://pic4.zhimg.com/80/v2-e3e140b45d27903c889480fabc349ed3_hd.jpg" alt="img" /></p>
+
+<p>//通过RANSAC方法，对现有的特征点对进行“提纯”</p>
+
+<p><em>std</em>::<em>vector</em>&lt;<em>Point2f</em>&gt; obj;</p>
+
+<p><em>std</em>::<em>vector</em>&lt;<em>Point2f</em>&gt; scene;</p>
+
+<p>for( int a = 0; a &lt; (int)good_matches.<em>size</em>(); a++ )</p>
+
+<p>{</p>
+
+<p>//分别将两处的good_matches对应的点对压入向量,只需要压入点的信息就可以</p>
+
+<p>obj.<em>push_back</em>( keypoints1[good_matches[a].<em>queryIdx</em> ].pt );</p>
+
+<p>scene.<em>push_back</em>( keypoints2[good_matches[a].<em>trainIdx</em> ].pt );</p>
+
+<p>}</p>
+
+<p>//计算单应矩阵（在calib3d中)</p>
+
+<p><em>Mat</em> H ;</p>
+
+<p>try</p>
+
+<p>{</p>
+
+<p>H = <em>findHomography</em>( obj, scene, <em>CV_RANSAC</em> );</p>
+
+<p>}</p>
+
+<p>catch (*CException** e)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; findHomography失败 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p>if (H.<em>rows</em> &lt; 3)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; findHomography失败 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p>//计算内点数目</p>
+
+<p><em>Mat</em> matObj;</p>
+
+<p><em>Mat</em> matScene;</p>
+
+<p>*CvMat** pcvMat = &amp;(<em>CvMat</em>)H;</p>
+
+<p>const double* Hmodel = pcvMat-&gt;<em>data</em>.<em>db</em>;</p>
+
+<p>double Htmp = Hmodel[6];</p>
+
+<p>for( int isize = 0; isize &lt; obj.<em>size</em>(); isize++ )</p>
+
+<p>{</p>
+
+<p>double ww = 1./(Hmodel[6]*obj[isize].<em>x</em> + Hmodel[7]*obj[isize].<em>y</em> + 1.);</p>
+
+<p>double dx = (Hmodel[0]*obj[isize].<em>x</em> + Hmodel[1]*obj[isize].<em>y</em> + Hmodel[2])*ww - scene[isize].<em>x</em>;</p>
+
+<p>double dy = (Hmodel[3]*obj[isize].<em>x</em> + Hmodel[4]*obj[isize].<em>y</em> + Hmodel[5])*ww - scene[isize].<em>y</em>;</p>
+
+<p>float err = (float)(dx*dx + dy*dy); //3个像素之内认为是同一个点</p>
+
+<p>if (err&lt; 9)</p>
+
+<p>{</p>
+
+<p>innersize = innersize+1;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p><strong>3、比较“耗时”和“内点比例”两个因素。其中建立数学模型，就是用&rdquo;准确率“/“内点比例”，这样得到一个正向的结论。</strong></p>
+
+<p><img src="https://pic1.zhimg.com/80/v2-5a68e4e4256490cbb6fa4737077b4848_hd.jpg" alt="img" /></p>
+
+<p><strong>4、结合相关数据，得出综合结论</strong></p>
+
+<p><img src="https://pic3.zhimg.com/80/v2-c5f78417ced0aaefbab9df4ae5402456_hd.jpg" alt="img" /></p>
+
+<p>四、实验结果：</p>
+
+<p><strong>1、sift和surf一直提供了较高的准确率，并且结果比较稳定；sift较surf更准一些，但是也有brisk最好的时候；</strong></p>
+
+<p><img src="https://pic2.zhimg.com/80/v2-0fc34a083df26de373bb5ea1ae10aee5_hd.jpg" alt="img" /></p>
+
+<p><strong>2、orb的速度非常快，但是最容易出现问题；</strong></p>
+
+<p><img src="https://pic3.zhimg.com/80/v2-fd8fd2a132c7fcbeaaf78bfdf20ded3e_hd.jpg" alt="img" /></p>
+
+<p><img src="https://pic2.zhimg.com/80/v2-c8084e97e498acbe231c8037e4dc6129_hd.jpg" alt="img" /></p>
+
+<p><strong>3、AKAZA也很容易出现问题；</strong></p>
+
+<p><img src="https://pic1.zhimg.com/80/v2-973b1c44be59e756ac5e1eceffd27e08_hd.jpg" alt="img" /></p>
+
+<p><strong>4、其他算法，包括AKAZA，速度的差别都不是很大。</strong></p>
+
+<p><img src="https://pic4.zhimg.com/80/v2-9cf58f8513dd15ddc399fe5aaaabb9cf_hd.jpg" alt="img" /></p>
+
+<p>五、结论</p>
+
+<p>那么我们在做大型特征点提取的算法的时候，就需要综合考虑速度、准确率等多种要素；很可能要自己设计新的算法，将这几种典型算法包含其中，扬长避短了。</p>
+
+<p>附：</p>
+
+<p>配套课程：<a href="http://link.zhihu.com/?target=http%3A//edu.51cto.com/course/11555.html">http://edu.51cto.com/course/11555.html (实验可以免费观看）</a></p>
+
+<p>//遍历dateset,分别对ＳＩＦＴ、ＳＵＲＦ、ＢＲＩＳＫ、ＯＲＢ、ＦＲＥＡＫ算法进行运算，得出初步结论</p>
+
+<p>//jsxyhelu 2017年11月3日</p>
+
+<p>#include &ldquo;stdafx.h&rdquo;</p>
+
+<p>#include <opencv2/core/utility.hpp></p>
+
+<p>#include &ldquo;opencv2/imgproc.hpp&rdquo;</p>
+
+<p>#include &ldquo;opencv2/videoio.hpp&rdquo;</p>
+
+<p>#include &ldquo;opencv2/highgui.hpp&rdquo;</p>
+
+<p>#include &ldquo;opencv2/calib3d.hpp&rdquo;</p>
+
+<p>#include &ldquo;opencv2/xfeatures2d.hpp&rdquo;</p>
+
+<p>#include <iostream></p>
+
+<p>#include <ctype.h></p>
+
+<p>#include &ldquo;GOCVHelper.h&rdquo;</p>
+
+<p>#define DATESET_COUNT 8</p>
+
+<p>#define METHOD_COUNT 5</p>
+
+<p>using namespace cv;</p>
+
+<p>using namespace <em>std</em>;</p>
+
+<p>using namespace <em>xfeatures2d</em>;</p>
+
+<p>void <em>main</em>()</p>
+
+<p>{</p>
+
+<p><em>string</em> strDateset[DATESET_COUNT];</p>
+
+<p>strDateset[0] = &ldquo;bark&rdquo;;strDateset[1] = &ldquo;bikes&rdquo;;strDateset[2] = &ldquo;boat&rdquo;;strDateset[3] = &ldquo;graf&rdquo;;strDateset[4] = &ldquo;leuven&rdquo;;</p>
+
+<p>strDateset[5] = &ldquo;trees&rdquo;;strDateset[6] = &ldquo;ubc&rdquo;;strDateset[7] = &ldquo;wall&rdquo;;</p>
+
+<p><em>string</em> strMethod[METHOD_COUNT];</p>
+
+<p>strMethod[0] = &ldquo;SIFT&rdquo;;strMethod[1]=&ldquo;SURF&rdquo;;strMethod[2]=&ldquo;BRISK&rdquo;;strMethod[3]=&ldquo;ORB&rdquo;;strMethod[4]=&ldquo;AKAZE&rdquo;;</p>
+
+<p>////递归读取目录下全部文件</p>
+
+<p><em>vector</em>&lt;<em>string</em>&gt; files;</p>
+
+<p><em>Mat</em> descriptors1;</p>
+
+<p><em>std</em>::<em>vector</em>&lt;<em>KeyPoint</em>&gt; keypoints1;</p>
+
+<p><em>Mat</em> descriptors2;</p>
+
+<p><em>std</em>::<em>vector</em>&lt;<em>KeyPoint</em>&gt; keypoints2;</p>
+
+<p><em>std</em>::<em>vector</em>&lt; <em>DMatch</em> &gt; matches;</p>
+
+<p><em>std</em>::<em>vector</em>&lt; <em>DMatch</em> &gt; good_matches;</p>
+
+<p>////用于模型验算</p>
+
+<p>int innersize = 0;</p>
+
+<p><em>Mat</em> img1;</p>
+
+<p><em>Mat</em> imgn;</p>
+
+<p><em>int64</em> t = <em>getTickCount</em>();</p>
+
+<p><em>std</em>::<em>cout</em>&lt;&lt;&ldquo;ＳＩＦＴ、ＳＵＲＦ、ＢＲＩＳＫ、ＯＲＢ、A K A Z E算法测试实验开始&rdquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>//遍历各种特征点寻找方法</p>
+
+<p>for (int imethod=METHOD_COUNT-1;imethod&lt;METHOD_COUNT;imethod++)</p>
+
+<p>{</p>
+
+<p><em>string</em> _strMethod = strMethod[imethod];</p>
+
+<p><em>std</em>::<em>cout</em>&lt;&lt;&ldquo;开始测试&rdquo;&lt;&lt;_strMethod&lt;&lt;&ldquo;方法&rdquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>//遍历各个路径</p>
+
+<p>for (int idateset = 0;idateset&lt;DATESET_COUNT;idateset++)</p>
+
+<p>{</p>
+
+<p>//获得测试图片绝对地址</p>
+
+<p><em>string</em> path = &ldquo;E:/template/dateset/&ldquo;+strDateset[idateset];</p>
+
+<p><em>std</em>::<em>cout</em>&lt;&lt;&ldquo;数据集为&rdquo;&lt;&lt;strDateset[idateset];</p>
+
+<p>//获得当个数据集中的图片</p>
+
+<p>GO::getFiles(path,files,&ldquo;r&rdquo;);</p>
+
+<p><em>std</em>::<em>cout</em>&lt;&lt;&rdquo; 共&rdquo;&lt;&lt;files.<em>size</em>()&lt;&lt;&ldquo;张图片&rdquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>for (int iimage=1;iimage&lt;files.<em>size</em>();iimage++)</p>
+
+<p>{</p>
+
+<p>//使用img1对比余下的图片，得出结果</p>
+
+<p>img1 = <em>imread</em>(files[0],0);</p>
+
+<p>imgn = <em>imread</em>(files[iimage],0);</p>
+
+<p>//生成特征点算法及其匹配方法</p>
+
+<p><em>Ptr</em>&lt;<em>Feature2D</em>&gt; extractor;</p>
+
+<p><em>BFMatcher</em> matcher;</p>
+
+<p>switch (imethod)</p>
+
+<p>{</p>
+
+<p>case 0: //&ldquo;SIFT&rdquo;</p>
+
+<p>extractor= <em>SIFT</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_L2</em>);</p>
+
+<p>break;</p>
+
+<p>case 1: //&ldquo;SURF&rdquo;</p>
+
+<p>extractor= <em>SURF</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_L2</em>);</p>
+
+<p>break;</p>
+
+<p>case 2: //&ldquo;BRISK&rdquo;</p>
+
+<p>extractor = <em>BRISK</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_HAMMING</em>);</p>
+
+<p>break;</p>
+
+<p>case 3: //&ldquo;ORB&rdquo;</p>
+
+<p>extractor= <em>ORB</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_HAMMING</em>);</p>
+
+<p>break;</p>
+
+<p>case 4: //&ldquo;AKAZE&rdquo;</p>
+
+<p>extractor= <em>AKAZE</em>::<em>create</em>();</p>
+
+<p>matcher = <em>BFMatcher</em>(<em>NORM_HAMMING</em>);</p>
+
+<p>break;</p>
+
+<p>}</p>
+
+<p>try</p>
+
+<p>{</p>
+
+<p>extractor-&gt;<em>detectAndCompute</em>(img1,<em>Mat</em>(),keypoints1,descriptors1);</p>
+
+<p>extractor-&gt;<em>detectAndCompute</em>(imgn,<em>Mat</em>(),keypoints2,descriptors2);</p>
+
+<p>matcher.<em>match</em>( descriptors1, descriptors2, matches );</p>
+
+<p>}</p>
+
+<p>catch (*CException** e)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; 特征点提取时发生错误 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p>//对特征点进行粗匹配</p>
+
+<p>double max_dist = 0;</p>
+
+<p>double min_dist = 100;</p>
+
+<p>for( int a = 0; a &lt; matches.<em>size</em>(); a++ )</p>
+
+<p>{</p>
+
+<p>double dist = matches[a].<em>distance</em>;</p>
+
+<p>if( dist &lt; min_dist ) min_dist = dist;</p>
+
+<p>if( dist &gt; max_dist ) max_dist = dist;</p>
+
+<p>}</p>
+
+<p>for( int a = 0; a &lt; matches.<em>size</em>(); a++ )</p>
+
+<p>{</p>
+
+<p>if( matches[a].<em>distance</em> &lt;= <em>max</em>(2*min_dist, 0.02) )</p>
+
+<p>good_matches.<em>push_back</em>( matches[a]);</p>
+
+<p>}</p>
+
+<p>if (good_matches.<em>size</em>()&lt;4)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; 有效特征点数目小于4个，粗匹配失败 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p>//通过RANSAC方法，对现有的特征点对进行“提纯”</p>
+
+<p><em>std</em>::<em>vector</em>&lt;<em>Point2f</em>&gt; obj;</p>
+
+<p><em>std</em>::<em>vector</em>&lt;<em>Point2f</em>&gt; scene;</p>
+
+<p>for( int a = 0; a &lt; (int)good_matches.<em>size</em>(); a++ )</p>
+
+<p>{</p>
+
+<p>//分别将两处的good_matches对应的点对压入向量,只需要压入点的信息就可以</p>
+
+<p>obj.<em>push_back</em>( keypoints1[good_matches[a].<em>queryIdx</em> ].pt );</p>
+
+<p>scene.<em>push_back</em>( keypoints2[good_matches[a].<em>trainIdx</em> ].pt );</p>
+
+<p>}</p>
+
+<p>//计算单应矩阵（在calib3d中)</p>
+
+<p><em>Mat</em> H ;</p>
+
+<p>try</p>
+
+<p>{</p>
+
+<p>H = <em>findHomography</em>( obj, scene, <em>CV_RANSAC</em> );</p>
+
+<p>}</p>
+
+<p>catch (*CException** e)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; findHomography失败 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p>if (H.<em>rows</em> &lt; 3)</p>
+
+<p>{</p>
+
+<p><em>cout</em>&lt;&lt;&rdquo; findHomography失败 &ldquo;&lt;&lt;<em>endl</em>;</p>
+
+<p>continue;</p>
+
+<p>}</p>
+
+<p>//计算内点数目</p>
+
+<p><em>Mat</em> matObj;</p>
+
+<p><em>Mat</em> matScene;</p>
+
+<p>*CvMat** pcvMat = &amp;(<em>CvMat</em>)H;</p>
+
+<p>const double* Hmodel = pcvMat-&gt;<em>data</em>.<em>db</em>;</p>
+
+<p>double Htmp = Hmodel[6];</p>
+
+<p>for( int isize = 0; isize &lt; obj.<em>size</em>(); isize++ )</p>
+
+<p>{</p>
+
+<p>double ww = 1./(Hmodel[6]*obj[isize].<em>x</em> + Hmodel[7]*obj[isize].<em>y</em> + 1.);</p>
+
+<p>double dx = (Hmodel[0]*obj[isize].<em>x</em> + Hmodel[1]*obj[isize].<em>y</em> + Hmodel[2])*ww - scene[isize].<em>x</em>;</p>
+
+<p>double dy = (Hmodel[3]*obj[isize].<em>x</em> + Hmodel[4]*obj[isize].<em>y</em> + Hmodel[5])*ww - scene[isize].<em>y</em>;</p>
+
+<p>float err = (float)(dx*dx + dy*dy); //3个像素之内认为是同一个点</p>
+
+<p>if (err&lt; 9)</p>
+
+<p>{</p>
+
+<p>innersize = innersize+1;</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>//打印内点占全部特征点的比率</p>
+
+<p>float ff = (float)innersize / (float)good_matches.<em>size</em>();</p>
+
+<p><em>cout</em>&lt;&lt;ff;</p>
+
+<p>//打印时间</p>
+
+<p><em>cout</em> &lt;&lt;&rdquo; &ldquo;&lt;&lt;((<em>getTickCount</em>() - t) / <em>getTickFrequency</em>())&lt;&lt; <em>endl</em>;</p>
+
+<p>t = <em>getTickCount</em>();</p>
+
+<p>//如果效果较好，则打印出来</p>
+
+<p><em>Mat</em> matTmp;</p>
+
+<p>if (ff == 1.0)</p>
+
+<p>{</p>
+
+<p><em>drawMatches</em>(img1,keypoints1,imgn,keypoints2,good_matches,matTmp);</p>
+
+<p>char charJ[255];<em>sprintf_s</em>(charJ,&rdquo;_%d.jpg&rdquo;,iimage);</p>
+
+<p><em>string</em> strResult = &ldquo;E:/template/result/&ldquo;+strDateset[idateset]+_strMethod+charJ;</p>
+
+<p><em>imwrite</em>(strResult,matTmp);</p>
+
+<p>}</p>
+
+<p>ff = 0;</p>
+
+<p>innersize = 0;</p>
+
+<p>matches.<em>clear</em>();</p>
+
+<p>good_matches.<em>clear</em>();</p>
+
+<p>}</p>
+
+<p>files.<em>clear</em>();</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p><em>getchar</em>();</p>
+
+<p><em>waitKey</em>();</p>
+
+<p>return;</p>
+
+<p>};</p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/32084529">特征提取算法的综合实验（多种角度比较sift/surf/brisk/orb/akze）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/rgb-%E5%9B%BE%E5%83%8F%E8%BD%AC%E6%88%90%E7%81%B0%E5%BA%A6%E5%9B%BE%E5%83%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E7%9B%B4%E7%BA%BF%E5%92%8C%E5%9C%86%E7%9A%84%E6%A3%80%E6%B5%8B/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

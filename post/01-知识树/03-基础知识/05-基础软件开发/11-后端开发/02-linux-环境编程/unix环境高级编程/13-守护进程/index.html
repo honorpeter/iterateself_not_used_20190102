@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>13 守护进程 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="第13章 13.1引言 守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关 闭时才终止。因为它们没有控制终端，" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/11-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/02-linux-%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="13 守护进程" />
+<meta property="og:description" content="第13章 13.1引言 守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关 闭时才终止。因为它们没有控制终端，" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/11-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/02-linux-%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/13-%E5%AE%88%E6%8A%A4%E8%BF%9B%E7%A8%8B/" /><meta property="article:published_time" content="2018-06-26T19:06:08&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-26T19:06:08&#43;00:00"/>
+<meta itemprop="name" content="13 守护进程">
+<meta itemprop="description" content="第13章 13.1引言 守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关 闭时才终止。因为它们没有控制终端，">
+
+
+<meta itemprop="datePublished" content="2018-06-26T19:06:08&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-26T19:06:08&#43;00:00" />
+<meta itemprop="wordCount" content="11090">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="13 守护进程"/>
+<meta name="twitter:description" content="第13章 13.1引言 守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关 闭时才终止。因为它们没有控制终端，"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">13 守护进程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-26 </span>
+        
+        <span class="more-meta"> 11090 words </span>
+        <span class="more-meta"> 23 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#第13章">第13章</a>
+<ul>
+<li>
+<ul>
+<li><a href="#13-1引言">13.1引言</a>
+<ul>
+<li><a href="#13-3编程规则">13.3编程规则</a></li>
+<li><a href="#13-4出错记录">13.4出错记录</a></li>
+</ul></li>
+<li><a href="#13-8小结">13.8小结</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h3 id="第13章">第13章</h3>
+
+<h5 id="13-1引言">13.1引言</h5>
+
+<p>守护进程（daemon）是生存期长的一种进程。它们常常在系统引导装入时启动，仅在系统关 闭时才终止。因为它们没有控制终端，所以说它们是在后台运行的。UNIX系统有很多守护进程， 它们执行日常事务活动。</p>
+
+<p>本章将说明守护进程结构，以及如何编写守护进程程序。因为守护进程没有控制终端，我们 需要了解在出现问题时，守护进程如何报告出错情况。</p>
+
+<p>有关守护进程这一术语被应用于计算机系统的历史背景，详见Raymond[1996]。</p>
+
+<p>13,2守护进程的特征</p>
+
+<p>让我们先来看一些常用的系统守护进程，以及它们是怎样和第9章中叙述的进程组、控制终 端和会话这三个概念相关联的。ps（l）命令打印系统中各个进程的状态。该命令有多个选项，有关 细节请参考系统手册。为了解本节讨论中所需的信息，我们在基于BSD的系统下执行：</p>
+
+<p>ps -axj</p>
+
+<p>选项-a显示由其他用户所拥有的进程的状态，-x显示没有控制终端的进程状态，-j显示与作业 闹有关的信息：会话ID、进程组ID、控制终端以及终端进程组江＞。在基于System V的系统中，与</p>
+
+<p>此相类似的命令是ps -efj （为了提高安全性，某些UNIX系统不允许用户使用ps命令查看不 属于自己的进程）。ps的输出大致是：</p>
+
+<table>
+<thead>
+<tr>
+<th>UID</th>
+<th>PID</th>
+<th>PPID</th>
+<th>PGID</th>
+<th>SID</th>
+<th>TTY</th>
+<th>COMD</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>root</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>■p</td>
+<td>/sbin/init</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>[kthreadd]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>3</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[ksoftirqd/O]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>6</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[raigration/O]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>7</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[watchdog/0]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>21</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[cpuset]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>22</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>[khelper]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>26</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>(sync_supers]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>27</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[bdi-default]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>29</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>[kblockd]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>35</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>■p</td>
+<td>[kswapdO]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>49</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[scsi_eh_0]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>256</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[jbd2/sda5-8]</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th>root</th>
+<th>257</th>
+<th>2</th>
+<th>0</th>
+<th>0</th>
+<th>7</th>
+<th>[ext4-dio-unwrit]</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>syslog</td>
+<td>847</td>
+<td>1</td>
+<td>843</td>
+<td>843</td>
+<td>?</td>
+<td>rsyslogd -c5</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>906</td>
+<td>1</td>
+<td>906</td>
+<td>906</td>
+<td>7</td>
+<td>/usr/sbin/cupsd -F</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>1037</td>
+<td>1</td>
+<td>1037</td>
+<td>1037</td>
+<td>7</td>
+<td>/usr/sbin/inetd</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>1067</td>
+<td>1</td>
+<td>1067</td>
+<td>1067</td>
+<td>q</td>
+<td>cron</td>
+</tr>
+
+<tr>
+<td>daemon</td>
+<td>1068</td>
+<td>1</td>
+<td>1068</td>
+<td>1068</td>
+<td>7</td>
+<td>atd</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>8196</td>
+<td>1</td>
+<td>8196</td>
+<td>8196</td>
+<td>■&gt;</td>
+<td>/usr/sbin/sshd -D</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>13047</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+<td>[kworker/1:0]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>14596</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[flush-8:0]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>26464</td>
+<td>1</td>
+<td>26464</td>
+<td>26464</td>
+<td>7</td>
+<td>rpcbind -w</td>
+</tr>
+
+<tr>
+<td>statd</td>
+<td>28490</td>
+<td>1</td>
+<td>28490</td>
+<td>28490</td>
+<td>■&gt;</td>
+<td>rpc.statd -L</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>28553</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[rpciod]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>28554</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>■?</td>
+<td>[nfsiodj</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>28561</td>
+<td>1</td>
+<td>28561</td>
+<td>28561</td>
+<td>7</td>
+<td>rpc.idmapd</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>28761</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>?</td>
+<td>[lockd]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>28764</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>[nfsd]</td>
+</tr>
+
+<tr>
+<td>root</td>
+<td>28775</td>
+<td>1</td>
+<td>28775</td>
+<td>28775</td>
+<td>7</td>
+<td>Zusr/sbin/rpc. mountd &ndash;tnanage-gids</td>
+</tr>
+</tbody>
+</table>
+
+<p>其中，已移去了一些我们不感兴趣的列，如累计CPU时间。按照顺序，各列标题的意义分别是用 户ID、进程ID、父进程UX进程组ID、会话ID、终端名称以及命令字符串。</p>
+
+<p>此ps命令在支持会话1D的系统（Linux 3.2.0）上运行，9.5节的setsid函数中曾提及会话 ID。简单地说，它就是会话首进程的进程ID。但是，一些基于BSD的系统，如Mac OS X 10.6.8, 将打印与本进程所属进程组对应的session结构的地址（见9.11节），而非会话ID的地址。</p>
+
+<p>系统进程依赖于操作系统实现。父进程ID为0的各进程通常是内核进程，它们作为系统引 导装入过程的一部分而启动。（init是个例外，它是一个由内核在引导装入时启动的用户层次的 命令。）内核进程是特殊的，通常存在于系统的整个生命期中。它们以超级用户特权运行，无控 制终端，无命令行。    E64]</p>
+
+<p>在ps的输出实例中，内核守护进程的名字出现在方括号中。该版本的Linux使用一个名为 kthreadd的特殊内核进程来创建其他内核进程，所以kthreadd表现为其他内核进程的父进 程。对于需要在进程上下文执行工作但却不被用户层进程上下文调用的每一个内核组件，通常有 它自己的内核守护进程。例如，在Linux中：</p>
+
+<p>•    kswapd守护进程也称为内存换页守护进程。它支持虚拟内存子系统在经过一段时间后将 脏页面慢慢地写回磁盘来回收这些页面。</p>
+
+<p>.flush守护进程在可用内存运到设置的最小阈值时将脏页面冲洗至磁盘:。它也定期地将脏页面 冲洗回磁盘来减少在系统出现故障时发生的数据丢失。多个冲洗守护进程可以同时存在，每个 写回的设备都有一个冲洗守护进程。输出实例中显示出一^名为flush-8:0的冲洗守护进程。 从名字中可以看出，写回设备是通过主设备号（8）和副设备号（0）来识别的。</p>
+
+<p>.sync_supers守护进程定期将文件系统元数据冲洗至磁盘。</p>
+
+<p>•    jbd守护进程帮助实现了 ext4文件系统中的日志功能。</p>
+
+<p>进程1通常是init （Mac OS X中是launchd），8.2节对此做过说明，它是一个系统守护 进程，除了其他工作外，主要负责启动各运行层次特定的系统服务。这些服务通常是在它们自己 拥有的守护进程的帮助下实现的。</p>
+
+<p>rpcbind守护进程提供将远程过程调用（RemoteProcedureCaU, RPC）程序号映射为网络端口号 的服务。rsyslogd守护进程可以被由管理员启用的将系统消息记入日志的任何程序使用。可以在一台</p>
+
+<p>实际的控制台上打印这些消息，也可将它们写到一个文件中。（13.4节将对syslog设施进行说明。）</p>
+
+<p>9.3节己谈到inetd守护进程。它侦听系统网络接口，以便取得来自网络的对各种网络服务 进程的请求。nfsd、nfsiod、lockd、rpciod、rpc. idmapd、rpc. statd 和 rpc .mountd 守护进程提供对网络文件系统（NetworkFile System，NFS）的支持。注意，前4个是内核守护进 程，后3个是用户级守护进程。</p>
+
+<p>cron守护进程在定期安排的日期和时间执行命令。许多系统管瑾任务是通过cron每隔一段固 定的时间就运行相关程序而得以实现的。atd守护进程与cron类＜以，它允许用户在指定的时间执行 任务，但是每个任务它只执行一次，而定期安排的时间反复执行。cupsd守护进程是个打印假 脱机进程，它处理对系统提出的各个打印请求。sshd守护进程提供了安全的远程登录和执行设施。</p>
+
+<p>注意，大多数守护进程都以超级用户（root）特权运行。所有的守护进程都没有控制终端， 其终端名设置为问号。内核守护进程以无控制终端方式启动。用户层守护进程缺少控制终端可能 是守护进程调用了 setsid的结果。大多数用户层守护进程都是进程组的组长进程以及会话的首 进程，而且是这些进程组和会话中的唯一进程（rsyslogd是一个例外），最后，应当引起注意</p>
+
+<p>S65］的是用户层守护进程的父进程是init进程。</p>
+
+<h6 id="13-3编程规则">13.3编程规则</h6>
+
+<p>在编写守护进程程序时需遵循一些基本规则，以防止产生不必要的交互作用。下面先说明这 些规则，然后给出一个按照这些规则编写的函数daemonize。</p>
+
+<p>（1）    首先要做的是调用umask将文件模式创建屏蔽字设置为一个己知值（通常是0）。由继 承得来的文件模式创建屏蔽字可能会被设置为拒绝某些权限。如果守护进程要创建文件，那么它 可能要设置特定的权限。例如，若守护进程要创建组可读、组可写的文件，继承的文件模式创建 屏蔽字可能会屏蔽上述两种权限中的一种，而使其无法发挥作用。另一方面，如果守护进程调用 的库函数创建了文件，那么将文件模式创建屏蔽字设置为一个限制性更强的值（如007）可能会 更明智，因为库函数可能不允许调用者通过一个显式的函数参数来设置权限，</p>
+
+<p>（2）    调用fork,然后使父进程exit。这样做实现了下面几点。第一，如果该守护进程是作 为一条简单的shell命令启动的，那么父进程终止会让shell认为这条命令己经执行完毕，第二， 虽然子进程继承了父进程的进程组ID,但获得了一个新的进程ID，这就保证了子进程不是一个 进程组的组长进程，这是下面将要进行的setsid调用的先决条件。</p>
+
+<p>（3）    调用setsid创建一个新会话，然后执行9.5节中列出的3个步骤，使调用进程：（a）成为 新会话的首进程，（b）成为一个新进程组的组长进程，（c）没有控制终端。</p>
+
+<p>在基于System V的系统中.有些人建议在此时再次调用fork,终止父进程，继续使用子进 程中的守护进程。这就保证了该守护进程不是会话首进程，于是按照System V规则（见9.6节） 可以防止它取得控制终端。为了避免取得控制终端的另一种方法是，无论何时打开一个终端设备， 都一定要指定O_NOCTTY„</p>
+
+<p>（4）    将当前工作目录更改为根目录。从父进程处继承过来的当前工作目录可能在一个挂载的 文件系统中。因为守护进程通常在系统再引导之前是一直存在的，所以如果守护进程的当前工作 目录在一个挂载文件系统中，那么该文件系统就不能被卸载。</p>
+
+<p>或者，某些守护进程还可能会把当前工作目录更改到某个指定位置，并在此位置进行它们的</p>
+
+<p>全部工作。例如，行式打印机假脱机守护进程就可能将其工作目录更改到它们的spool目录上，</p>
+
+<p>（5）    关闭不再需要的文件描述符。这使守护进程不再持有从其父进程继承来的任何文件描述 符（父进程可能是shell进程，或某个其他进程）。可以使用oPen_max函数（见2.17节）或 getrlimit函数（见7.11节）来判定最高文件描述符值，并关闭直到该值的所有描述符。</p>
+
+<p>（6）    某些守护进程打开/dev/null使其具有文件描述符0、1和2,这样，任何一个试图读标准 输入、写标准输出或标准错误的库例程都不会产生任何效果。因为守护进程并不与终端设备相关联，E66] 所以其输出无处显示，也无处从交互式用户那里接收输入。即使守护进程是从交互式会话启动的，但</p>
+
+<p>是守护进程是在后台运行的，所以登录会话的终止并不影响守护进程。如果其他用户在同一终端设备 上登录，我们不希望在该终端上见到守护进程的输出，用户也不期望他们在终端上的输入被守护进程 读取。</p>
+
+<p>■实例</p>
+
+<p>图13-1所示的函数可由一个想要初始化为守护进程的程序调用。</p>
+
+<p>|467|    sigeraptyset{&amp;sa.sa_mask)；</p>
+
+<p>sa.sa_flags = 0；</p>
+
+<p>if (sigaction(SIGHUP, &amp;sa, NULL) &lt; 0)</p>
+
+<p>err_quit(&ldquo;%s: can’t ignore SIGHUP&rdquo;, cmd)；</p>
+
+<p>if ((pid = forkO) &lt; 0)</p>
+
+<p>err_quit{&ldquo;%s: can&rsquo;t fork&rdquo;, cmd);</p>
+
+<p>else if (pid != 0) /* parent */ exit (0);</p>
+
+<p>*    Change the current working directory to the root so</p>
+
+<p>*    we won&rsquo;t prevent file systems from being unmounted. */</p>
+
+<p>if (chdir(&ldquo;/&rdquo;&gt; &lt; 0)</p>
+
+<p>err_quit(&ldquo;%s: can&rsquo;t change directory to /&ldquo;, cmd);</p>
+
+<p>* Close all open file descriptors. *Z</p>
+
+<p>if (rl.rlim_max == RLIM_INFINITY) rl.rlim_max = 1024;</p>
+
+<p>for (i = 0; i &lt; rl.rlim_nax； i++) close (i);</p>
+
+<p>/*</p>
+
+<p>*    Attach file descriptors 0, 1, and 2 to /dev/null.</p>
+
+<p>*/</p>
+
+<p>fdO = open(&ldquo;/dev/null&rdquo;, O_RDWR);</p>
+
+<p>fdl = dup (0);</p>
+
+<p>fd2 = dup (0);</p>
+
+<p>/*</p>
+
+<p>*    Initialize the log file.</p>
+
+<p>*Z</p>
+
+<p>openlog(crad, LOG_CONS, LOG_DAEMON);</p>
+
+<p>if (fdO != 0 I I fdl != 1 |I fd2 != 2) {</p>
+
+<p>syslog(LOG_ERR, &ldquo;unexpected file descriptors %d %d %d&rdquo;,</p>
+
+<p>fdO, fdl, fd2); exit ⑴；</p>
+
+<p>I</p>
+
+<p>图13-1初始化一个守护进程</p>
+
+<p>若daemonize函数由main程序调用，然后main程序进入休眠状志，那么可以用ps命令 检査垓守护进程的状态：</p>
+
+<table>
+<thead>
+<tr>
+<th>$ ./a.out</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>$ ps</td>
+<td>-af j</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>UID</td>
+<td>PID</td>
+<td>PPID</td>
+<td>PGID</td>
+<td>SID</td>
+<td>TTY</td>
+<td>CMD</td>
+</tr>
+
+<tr>
+<td>sar</td>
+<td>13800</td>
+<td>1</td>
+<td>13799</td>
+<td>13799</td>
+<td>?</td>
+<td>./a.out</td>
+</tr>
+
+<tr>
+<td>S ps</td>
+<td>-afj |</td>
+<td>grep</td>
+<td>13799</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>sar</td>
+<td>13800</td>
+<td>1</td>
+<td>13799</td>
+<td>13799</td>
+<td></td>
+<td>./a.out</td>
+</tr>
+</tbody>
+</table>
+
+<p>我们也可用ps命令验证，没有活动进程存在的ID是13799。这意味着，守护进程在一个孤JL进程 组中（见9.10节），它不是会话首进程，因此没有机会被分配到一个控制终端。这一结果是在</p>
+
+<p>daemonize函数中执行第二个fork造成的。可以看出，守护进程己经被正确地初始化了。    ■&rdquo;</p>
+
+<h6 id="13-4出错记录">13.4出错记录</h6>
+
+<p>守护进程存在的一个问题是如何处理出错消息。因为它本就不应该有控制终端，所以不能只 是简单地写到标准错误上。我们不希望所有守护进程都写到控制台设备上，因为在很多工作站上 控制台设备都运行着一个窗口系统。我们也不希望每个守护进程将它自己的出错消息写到一个单 独的文件中。对任何一个系统管理人员而言，如果要关心哪一个守护进程写到哪一个记录文件中， 并定期地检查这些文件，那么一定会使他感到头痛。所以，需要有一个集中的守护进程出错记录 设施。</p>
+
+<p>BSD syslog设施是在伯克利开发的，广泛应用于4.2BSD。从BSD派生的很多系统都支持 syslog。在SVR4之前，System V中从来没有一个集中的守护进程记录设施。在Single UNIX</p>
+
+<p>;Specification的XSI扩展中包括了 syslog函数。</p>
+
+<p>自4.2BSD以采，BSD的syslog设施得到了广泛的应用。大多数守护进程都使用这一设施。 图13-2显示了 syslog设施的详细组织结构。</p>
+
+<p>被写入文件或已 登录用户或发送至 另一个主机</p>
+
+<p>TCP/IP网络</p>
+
+<p>图 13-2 BSD 的 syslog 设施    [469]</p>
+
+<p>有以下3种产生日志消息的方法。</p>
+
+<p>(1)    内核例程可以调用log函数。任何一个用户进程都可以通过打开(open)并读取 (read) /dev/klog设备來读取这些消息。因为我们无意编写内核例程，所以不再进一步说 明此函数。</p>
+
+<p>(2)    大多数用户进程(守护进程)调用syslOg(3)函数来产生日志消息。我们将在下面说明 其调用序列。这使消息被发送至UNIX域数据报套接字/dev/log。</p>
+
+<p>(3)    无论一个用户进程是在此主机上，还是在通过TCP/IP网络连接到此主机的其他主机上， 都可将日志消息发向UDP端口 514。注意，syslog函数从不产生这些UDP数据报，它们要求</p>
+
+<p>产生此日志消息的进程进行显式的网络编程。</p>
+
+<p>关于UNIX域套接字以及UDP套接字的细节，请参阅Stevens、Fenner和Rudofi[2004]， 通常，syslogd守护进程读取所有3种格式的日志消息。此守护进程在启动时读一个配置文</p>
+
+<p>件，其文件名一般为/etc/syslog.conf，该文件决定了不同种类的消息应送向何处。例如， 紧急消息可发送至系统管理员（若已登录），并在控制台上打印，而警告消息则可记录到一个文 件中。</p>
+
+<p>该设施的接口是syslog函数。</p>
+
+<p>#include <syslog.h></p>
+
+<p>void openlog (const char *ident, int option, int facility); void syslog(int priority, const char * format, .，，)； void closelog(void);</p>
+
+<p>int setlogmask (int maskpri};</p>
+
+<p>返回值，前日志记录优先级屏蔽字值</p>
+
+<p>调用openlog是可选择的。如果不调用openlog，则在第一狄调用syslog时，自动调用 openlog。调用closelog也是可选择的，因为它只是关闭曾被用于与syslogd守护进程进行 通信的描述符。</p>
+
+<p>调用openlog使我们可以指定一个zWe/iZ，以后，此将被加至每则日志消息中&lt;,ident 一般是程序的名称（如cron、inetd）o cprtTw参数是指定各种选项的位屏蔽，图13-3介绍了可 用的option （逸项）。若在Single UNIX Specification的openlog定义中包括了该选颂，则在XSI 列中用一个黑点表示。</p>
+
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>XSI</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>LOG_CONSLOG_NDELAYLOG_NOWAIT</td>
+<td>•</td>
+<td>若日志消息不能通过UNIX域数据报送至syslogd,则将该消息写至控制台 立即打开至syslogd守护进程的UNIX域数据报套接字，不要等到第一条消息 已经被记录时再打开。通常.在记录第一条消息之前，不打开该套接字 不要等待在将消息记入日志过程中可能已创建的子进程，因为在syslog调用 wait时，应用程序可能己获得了子进程的状态，这种处理阻止了与捕捉SIGCHLD 信号的应用程序之间产生的冲突</td>
+</tr>
+
+<tr>
+<td>LOG_ODELAYLOG_PERRORLOG_PID</td>
+<td>•</td>
+<td>在第一条消息被记录之前延迟打开至syslogd守护进程的连接 除将日志消息发送给syslogd以外，还将它写至标准出错（在Solaris上不可用） 记录每条消息都要包含进程ID。此选项可供对每个不同的请求都fork —个子进 程的守护进程使用（与从不调用fork的守护进程相比较，如syslogd）</td>
+</tr>
+</tbody>
+</table>
+
+<p>图 13-3 openlog 的 option 参数</p>
+
+<p>openlog 的办参数值选取自图 13&gt;4。注意，Single UNIX Specification 只定义了 所有参数值中的一个子集，该子集一般只能用在一个给定的平台上。设置yac山参数的目的是可 以让配置文件说明，来自不同设施的消息将以不同的方式进行处理。如果不调用openlog,或者 以山/y为0来调用它，那么在调用syslog时，可将作为prfor办参数的一个部分进行 说明。</p>
+
+<p>调用syslog产生一个日志消息。其参数是和ZeveZ的组合，它们可选取 的值分别列于办（见图13-4）和/eve/ （见图13-5）中。/eve/值按优先级从最高到最低依 次排列。</p>
+
+<table>
+<thead>
+<tr>
+<th>facility</th>
+<th>XSI</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>LOG_AUDIT</td>
+<td></td>
+<td>审计设施</td>
+</tr>
+
+<tr>
+<td>LOG_AUTH</td>
+<td></td>
+<td>授权程序：login、su、getty等</td>
+</tr>
+
+<tr>
+<td>LOG AUTHPRIV</td>
+<td></td>
+<td>与LOG_AUTH相同，但写日志文件时具</td>
+</tr>
+
+<tr>
+<td></td>
+<td></td>
+<td>有权限限制</td>
+</tr>
+
+<tr>
+<td>LOG_CONSOLE</td>
+<td></td>
+<td>消息写入/dev/console</td>
+</tr>
+
+<tr>
+<td>LOG_CRON</td>
+<td></td>
+<td>cron 和 at</td>
+</tr>
+
+<tr>
+<td>LOG_DAEMON</td>
+<td></td>
+<td>系统守护进程：inetd、routed等</td>
+</tr>
+
+<tr>
+<td>LOG_FTP</td>
+<td></td>
+<td>FTP守护进程（ftpd）</td>
+</tr>
+
+<tr>
+<td>LOG_KERN</td>
+<td></td>
+<td>内核产生的消息</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL0</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL1</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL2</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL3</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL4</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL5</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL6</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LOCAL7</td>
+<td></td>
+<td>保留由本地使用</td>
+</tr>
+
+<tr>
+<td>LOG_LPR</td>
+<td></td>
+<td>行式打印机系统：lpd、Ipc等</td>
+</tr>
+
+<tr>
+<td>LOG_MAIL</td>
+<td></td>
+<td>邮件系统</td>
+</tr>
+
+<tr>
+<td>LOG_NEWS</td>
+<td></td>
+<td>Usenet网络新闻系统</td>
+</tr>
+
+<tr>
+<td>LOG_NTP</td>
+<td></td>
+<td>网络时间协议系统</td>
+</tr>
+
+<tr>
+<td>LOG_SECURITY</td>
+<td></td>
+<td>安全子系统</td>
+</tr>
+
+<tr>
+<td>LOG_SYSLOG</td>
+<td></td>
+<td>syslogd守护进程本身</td>
+</tr>
+
+<tr>
+<td>LOG_USER</td>
+<td>•</td>
+<td>来自其他用户进程的消息（馱认）</td>
+</tr>
+
+<tr>
+<td>LOG UUCP</td>
+<td></td>
+<td>UUCP系统</td>
+</tr>
+</tbody>
+</table>
+
+<p>图13-4 openlog的为c/7办参数</p>
+
+<table>
+<thead>
+<tr>
+<th>level</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>LOG_EMERG</td>
+<td>紧急（系统不可使用）（最髙优先级〉</td>
+</tr>
+
+<tr>
+<td>LOG_ALERT</td>
+<td>必须立即修复的情况</td>
+</tr>
+
+<tr>
+<td>LOG_CRIT</td>
+<td>严重情况（如硬件设备出错）</td>
+</tr>
+
+<tr>
+<td>LOG.ERR</td>
+<td>出错情况</td>
+</tr>
+
+<tr>
+<td>LOG_WARNING</td>
+<td>警告情况</td>
+</tr>
+
+<tr>
+<td>LOG_NOTICE</td>
+<td>正常但重要的情况</td>
+</tr>
+
+<tr>
+<td>LOG_INFO</td>
+<td>信息性消息</td>
+</tr>
+
+<tr>
+<td>LOG DEBUG</td>
+<td>调试消息（最低优先级）</td>
+</tr>
+</tbody>
+</table>
+
+<p>图13-5 syslog中的/eve/ （按序排列）</p>
+
+<p>将/orm也参数以及其他所有参数传至vsprintf函数以便进行格式化。在/onnar中，每个 出现的%m字符都先被代换成与errno值財应的出错消息字符串（strerror）。</p>
+
+<p>setlogmask函数用于设置进程的记录优先级屏蔽字。它返回调用它之前的屏蔽字。当设置 了记录优先级屏蔽字时，各条消息除非已在记录优先级屏蔽字中进行了设置.否则将不被记录。 注意，试图将记录优先级屏蔽字设置为0并不会有什么作用。</p>
+
+<p>很多系统也将logger（l）程序作为向syslog设施发送日志消息的方法。虽然Single UNIX Specification没有定义任何可选参数，但某些实现允许将该程序的可选参数指定为facility、level 和ident。logger命令是专门为以非交互方式运行的需要产生日志消息的shell脚本设计的。</p>
+
+<p>■实例</p>
+
+<p>在一个(假定的)行式打印机假脱机守护进程中，可能包含有下面的调用序列： openlogC&rsquo;lpd&rdquo;, LOG.PID, LOG_LPR);</p>
+
+<p>syslog (LOG_ERR, &ldquo;open error for %s: % in&rdquo;, filename);</p>
+
+<p>第&ndash;个调用将ident字符串设置为程序名，指定该进程ID要始终被打印，并且将系统默认的facility 设定为行式打印机系统。对syslog的调用指定一个出错条件和一个消息字符串。如若不调用 oPenlog＞则第二个调用的形式可能是：</p>
+
+<p>syslog(LOG_ERR I LOG_LPR, &ldquo;open error for %s: %m&rdquo;, filename);</p>
+
+<p>其中，将priority参数指定为/eve/和facility的组合。</p>
+
+<p>除了 syslog,很多平台还提供它的一种变体來处理可变参数列表。</p>
+
+<p>♦include <syslog.h></p>
+
+<p>#include <stdarg.h></p>
+
+<p>void vsyslog(int priority, const char * formal, va list g/g);</p>
+
+<p>470</p>
+
+<p>t</p>
+
+<p>472</p>
+
+<p>本书说明的所有4种平台都提供vsyslog,但Single UNIX Specification中并不包括它。注 意，如果要使它的声明对应用程序可见，可能需要定义一个额外的符号，例如，在FreeBSD中定 义_BSD_VISIBLE 或在 Linux 中定义_USE_BSD。</p>
+
+<p>大多数syslog实现将使消息短时间处于队列中。如果在此段时间中有重复消息到达，那么 syslog守护进程不会把它写到日志记录中，而是会打印输出一条类似于“上一条消息重复了 7V 次”的消息。</p>
+
+<p>13.5单实例守护进程</p>
+
+<p>为了正常运作，某些守护进程会实现为，在任一时刻只运行该守护进程的一个副本。例如， 这种守护进程可能需要排它地访问一个设备。对cron守护进程而言，如果同时有多个实例运行， 那么每个副本都可能试图开始某个预定的操作，于是造成该操作的重复执行，这很可能导致出错。</p>
+
+<p>如果守护进程需要访问一个设备，而该设备驱动程序有时会阻止想要多次打开/dev目录下 相应设备节点的尝试。这就限制了在一个时刻只能运行守护进程的一个副本。但是如果没有这种 设备可供使用，那么我们就需要自行处理。</p>
+
+<p>文件和记录锁机制为一种方法提供了基础，该方法保证一个守护进程只有一个副本在运行。 (文件和记录锁将在14.3节中讨论。)如果每一个守护进程创建一个有固定名字的文件，并在该文 件的整体上加一把写锁.那么只允许创建一把这样的写锁。在此之后创建写锁的尝试都会失败， 这向后续守护进程副本指明己有一个副本正在运行，</p>
+
+<p>文件和记录锁提供了一种方便的互斥机制。如果守护进程在一个文件的整体上得到一把写 锁，那么在该守护进程终止时，这把锁将被自动删除。这就简化了复原所需的处理，去除了对以 前的守护进程实例需要进行清理的有关操作。</p>
+
+<p>■实例</p>
+
+<p>图13-6所示的函数说明了如何使用文件和记录锁来保证只运行一个守护进程的一个副本。</p>
+
+<p>#include</p>
+
+<p>#include</p>
+
+<p>#include</p>
+
+<p>^include</p>
+
+<p>♦include</p>
+
+<p>^include</p>
+
+<p>#include</p>
+
+<p>^include</p>
+
+<p><unistd.h></p>
+
+<p><stdlib.h></p>
+
+<p><fcntl.h></p>
+
+<p><syslog.h></p>
+
+<p>cstring.h&gt;</p>
+
+<p><errno.h></p>
+
+<p><stdio.h></p>
+
+<p><sys/stat.h></p>
+
+<p>掉define LOCKFILE &ldquo;/var/run/daemon.pid&rdquo;</p>
+
+<p>#define LOCKMODE (S_IRUSRIS_IWUSR|S_IRGRP|S_IROTH)</p>
+
+<p>extern int lockfile (int);    _</p>
+
+<p>画</p>
+
+<p>int</p>
+
+<p>already_running(void)</p>
+
+<p>int    fd;</p>
+
+<p>char    buf[16J;</p>
+
+<p>fd = open(LOCKFILE, O_RDWR|O_CREAT, LOCKMODE); if (fd &lt; 0) {</p>
+
+<p>syslog(LOG_ERR, &ldquo;can*t open %s: %s&rdquo;, LOCKFILE, strerror(errno)); exit(1);</p>
+
+<p>if &lt;lockfile(fd) &lt; 0) {</p>
+
+<p>if (errno == EACCES || errno == EAGAIN) {</p>
+
+<p>close(fd); return(1);</p>
+
+<p>syslog(LOG_ERR, &ldquo;can&rsquo;t lock %s: %s&rdquo;, LOCKFILE, strerror(errno)); exit ⑴；</p>
+
+<p>1</p>
+
+<p>ftruncate(fd, 0);</p>
+
+<p>sprint f (buf,    (long) getpidt));</p>
+
+<p>write(fd, buf, strlen(buf)+1); return(0);</p>
+
+<p>J</p>
+
+<p>图13~6保证只运行一个守护进程的一个副本</p>
+
+<p>守护进程的每个副本都将试图创建一个文件，并将其进程ID写到该文件中。这使管理人员 易于标识垓进程。如果垓文件已经加了锁，那么lockfile函数将失败，emo设置为EACCES 或EAGAIN，图13-6中的函数返回1,表明该守护进程已在运行。否则将文件长度截断为0,将 进程1D写入该文件，图13-6中的函数返回0。</p>
+
+<p>需要将文件长度截断为0,其原因是之前的守护进程实例的进程ID字符串可能长于调用此函数的 当前迸程的进程ID字符串。例如，若以前的守护进程的进程ID是12345,而新实例的进程ID是9999, 那么将此进程ID写入文件后，在文件中留下的是99995。将文件松度截断为0就解决了此问题。■3</p>
+
+<p>13.6守护进程的惯例</p>
+
+<p>在UNIX系统中，守护进程遵循下列通用惯例</p>
+
+<p>•若守护进程使用锁文件，那么该文件通常存储在/var/run目录中。然而需要注意的是, 守护进程可能需要具有超级用户权限才能在此目录下创建文件。锁文件的名字通常是 name.pid,其中，name是该守护进程或服务的名字。例如，cron守护进程锁文件的名</p>
+
+<p>网    字是/var/run/crond.pid。</p>
+
+<p>•若守护进程支持配置选项，那么配置文件通常存放在/etc目录中。配置文件的名字通常 是腑we. conf,其中，zwme是读守护进程或服务的名字。例如，syslogd守护进程的 配置文件通常是/etc/syslog.conf。</p>
+
+<p>•守护进程可用命令行启动，但通常它们是由系统初始化脚本之一(/etc/rc<em>或 /etc/init.d/</em>)启动的。如果在守护进程终止时，应当自动地重新启动它，则我们可 在/etc/inittab中为该守护进程包括respawn记录项，这样，init就将重新启动该 守护进程。(假定系统使用System V风格的init命令。)</p>
+
+<p>•若一个守护进程有一个配置文件，那么当该守护进程启动时会读该文件，但在此之后一 般就不会再查看它。若某个管理员更改了配置文件，那么孩守护进程可能需要被停止， 然后再启动，以使配置文件的更改生效。为避免此种麻烦，某些守护进程将捕捉SIGHUP 信号，当它们接收到该信号时，重新读配置文件。因为守护进程并不与终端相结合，它 们或者是无控制终端的会话首进程，或者是孤儿进程组的成员，所以守护进程没有理由 期望接收SIGHUP。于是，守护进程可以安全地重复使用SIGHUP。</p>
+
+<p>•实例</p>
+
+<p>图13-7所示的程序说明了守护进程可以重读其配置文件的一种方法。该程序使用sigwait 以及多线程，对此我们已经在12.8节讨论过。</p>
+
+<p>♦include &ldquo;apue.h&rdquo;</p>
+
+<p>♦include <pthread.h></p>
+
+<p>#include <syslog.h></p>
+
+<p>sigset_t mask;</p>
+
+<p>extern int already_running(void);</p>
+
+<p>void</p>
+
+<p>reread(void) void *</p>
+
+<p>thr_fn(void *arg)</p>
+
+<p>I</p>
+
+<p>int err, signo;</p>
+
+<p>for (;;) {</p>
+
+<p>err = sigwait(smask, Ssigno); if (err != 0)    {</p>
+
+<p>syslog(LOG_ERR, &ldquo;sigwait failed&rdquo;); [4751    exit(l) &lsquo;•</p>
+
+<p>switch (signo) { case SIGHUP;</p>
+
+<p>syslog(LOG_INF0, &ldquo;Re-reading configuration file&rdquo;);</p>
+
+<p>reread ();</p>
+
+<p>break;</p>
+
+<p>case SIGTERM:</p>
+
+<p>syslog(LOG_INFO, &ldquo;got SIGTERM; exiting&rdquo;); exit(0);</p>
+
+<p>default:</p>
+
+<p>syslog(LOG_INFO, &ldquo;unexpected signal %d\n&rdquo;, signo);</p>
+
+<p>I</p>
+
+<p>return(0);</p>
+
+<p>}</p>
+
+<p>int</p>
+
+<p>main(int argc, char *argv[])</p>
+
+<p>(</p>
+
+<p>int    err;</p>
+
+<p>pthread_t    tid;</p>
+
+<p>char    *crad;</p>
+
+<p>struct sigaction sa;</p>
+
+<p>if ((cmd = strrchr(argv[0], &lsquo;/&rsquo;)) == NULL) cmd = argv[0];</p>
+
+<p>else</p>
+
+<p>cmd++;</p>
+
+<p>Become a daemon.</p>
+
+<p>*/</p>
+
+<p>daemonize(cmd);</p>
+
+<p>* Make sure only one copy of the daemon is running. */</p>
+
+<p>if (already^running(1) {</p>
+
+<p>syslog(LOG_ERR, &ldquo;daemon already running&rdquo;); exit ⑴；</p>
+
+<p>}</p>
+
+<p>/*</p>
+
+<p>* Restore SIGHUP default and block all signals.</p>
+
+<p>*/</p>
+
+<p>sa.sa_handler = SIG_DFL;</p>
+
+<p>sigemptyset{&amp;sa.sa_mask};</p>
+
+<p>sa.sa_flags = 0;    _</p>
+
+<p>if (sigaction (SIGHUP, &amp;sa, NULL) &lt; 0)    |476_|</p>
+
+<p>err_quit(&ldquo;%s: can&rsquo;t restore SIGHUP default&rdquo;); sigfillset(smask);</p>
+
+<p>if ((err = pthread_sigmask(SIG_BLOCK, smask, NULL)) != 0) err_exit(err, &ldquo;SIG.BLOCK error&rdquo;);</p>
+
+<p>* Create a thread to handle SIGHUP and SIGTERM. */</p>
+
+<p>err = pthread^create(stid, NULL, thr_fn, 0); if (err != 0)</p>
+
+<p>err_exit(err, &ldquo;can&rsquo;t create thread&rdquo;);</p>
+
+<p>* Proceed with the rest of the daemon. */</p>
+
+<p>&ldquo;■■■*/ exit(0);</p>
+
+<p>}</p>
+
+<p>图13-7守护进程重读配置文件</p>
+
+<p>该程序调用了图13-1中的daemonize来初始化守护进程。从该函数返回后，调用图134中的 already_running函数以确保读守护进程只有一个副本在运行。到述这一点时，SIGHUP信号仍被 忽略，所以需恢复対该信号的系统默认处理方式；否则调用sigwait的线程决不会见到该信号。</p>
+
+<p>如同对多线程程序所推荐的那样，阻塞所有信号，然后创建一个线程处理信号。该线程的唯 一工作是等待SIGHUP和SIGTERM。当接收到SIGHUP信号时，该线程调用reread函数重读 它的配置文件。当它接收到SIGTERM信号时，会记录消息并退出。</p>
+
+<p>回顾图10-1，SIGHUP和SIGTERM的默认动作是终止进程。因为我们阻塞了这些信号，所 以当SIGHUP和SIGTERM的其中一个被发送到守护进程时，守护进程不会消亡。作为替代，调 用sigwait的线程在返回时将指示已接收到该信号。    ■胃</p>
+
+<p>⑶■实例</p>
+
+<p>并非所有守护进程都是多线程的。图13-8中的程序说明一个单线程守护进程如何捕捉 SIGHUP并重读其配置文件。</p>
+
+<p>♦include &ldquo;apue.b&rdquo;</p>
+
+<p>#include <syslog.h></p>
+
+<p>#include <errno.h></p>
+
+<p>extern int lockfile(int); extern int already_running(void);</p>
+
+<p>void</p>
+
+<p>reread(void)</p>
+
+<p>{</p>
+
+<p>[47?1    &ldquo;…&rdquo;</p>
+
+<p>J</p>
+
+<p>void</p>
+
+<p>sigterm(int signo)</p>
+
+<p>syslog(LOG_INFO, &ldquo;got SIGTERM; exiting&rdquo;); exit(0);</p>
+
+<p>void</p>
+
+<p>sighup{int signo}</p>
+
+<p>t</p>
+
+<p>syslog(LOG_INFO, &ldquo;Re-reading configuration file&rdquo;); reread ();</p>
+
+<p>}</p>
+
+<p>int</p>
+
+<p>main(int argc, char <a href="#bookmark10">1</a>argv[])</p>
+
+<p>char    <a href="#bookmark10">1</a>cmd;</p>
+
+<p>struct sigaction sa;</p>
+
+<p>if ((cmd = strrchr(argv[0】，&rsquo;/<a href="#bookmark10">1</a>)) == NULL) crad = argv[0];</p>
+
+<p>else</p>
+
+<p>cmd++；</p>
+
+<p>/<a href="#bookmark10">1</a></p>
+
+<p>* Become a daemon. */</p>
+
+<p>daemonize(cmd);</p>
+
+<p>* Make sure only one copy of the daemon is running. */</p>
+
+<p>if (already_running()) {</p>
+
+<p>syslog(LOG_ERR, &ldquo;daemon already running&rdquo;); exit(l);</p>
+
+<p>* Handle signals of interest.</p>
+
+<p>*/</p>
+
+<p>sa.sa_handler = sigterm;</p>
+
+<p>sigemptyset(&amp;sa.sa_maskj;</p>
+
+<p>sigaddset(&amp;sa.sa_mask, SIGHUP);</p>
+
+<p>sa.sa_flags = 0;</p>
+
+<p>if (sigaction(SIGTERM, &amp;sa, NULL) &lt; 0) {</p>
+
+<p>syslog(LOG_ERR, &ldquo;can&rsquo;t catch SIGTERM: %s&rdquo;, strerror(errno)}; exit(1);</p>
+
+<p>J</p>
+
+<p>sa.sa_handler = sighup；</p>
+
+<p>sigemptyset(Ssa.sa_mask);</p>
+
+<p>sigaddset &lt;&amp;sa.sa_mask, SIGTERM);</p>
+
+<p>sa.sa_flags = 0;</p>
+
+<p>if (sigaction{SIGHUP, &amp;sa, NULL) &lt; 0) t</p>
+
+<p>syslog(LOG_ERR, &ldquo;can&rsquo;t catch SIGHUP: %s&rdquo;, strerror(errno)); exit (1) &lsquo;•</p>
+
+<p>exit(0);</p>
+
+<p>)</p>
+
+<p>图13-8守护进程重读配置文件的另一种实现</p>
+
+<p>在初始化守护进程后，我们为SIGHUP和SIGTERM配置了信号处理程序。可以将重读逻耩 放在信号处理程序中，也可以只在信号处理程序中设置一个标志，并由守护进程的主线程完成所 有的工作。    ■</p>
+
+<p>13.7客户进程-服务器进程模型</p>
+
+<p>守护进程常常用作服务器进程。确实，我们可以称图13-2中的syslogd进程为服务器进程， 用户进程(客户进程〉用UNIX域数据报套接字向其发送消息。</p>
+
+<p>—般而言，服务器进程等待客户进程与其联系，提出某种类型的服务要求。图13-2中，由 syslogd服务器进程提供的服务是将一条出错消息记录到日志文件中。</p>
+
+<p>图13-2中，客户进程和服务器进程之间的通信是单向的。客户进程向服务器进程发送服务请求， 服务器进程则不向客户进程回送任何消息。在下面有关进程通信的几章中，我们将见到大量客户进程和 服务器进程之间双向通信的实例。客户进程向服务器进程发送请求，服务器进程则向客户进程回送应答-</p>
+
+<p>在服务器进程中调用fork然后exec另一个程序来向客户进程提供服务是很常见的。这些 服务器进程通常管理着多个文件描述符：通信端点、配置文件、日志文件和类似的文件。最好的 情况下，让子进程中的这些文件描述符保持打开状态并无大碍，因为它们很可能不会被在子进程 中执行的程序所使用，尤其是那些与服务器端无关的程序。最坏情况下，保持它们的打开状态会 导致安全问题一被执行的程序可能有一些恶意行为，如更改服务器端配置文件或欺骗客户端程 序使其认为正在与服务器端通信，从而获取未授权的信息。</p>
+
+<p>解决此问题的一个简单方法是对所有被执行程序不需要的文件描述符设置执行时关闭 (close-on-exec)标志。图13-9展示了一个可以用来在服务器端进程中执行上述工作的函数。</p>
+
+<p>#include &ldquo;apue.h&rdquo;</p>
+
+<p>#include <fcntl.h></p>
+
+<p>int</p>
+
+<p>set_cloexec(int fd)</p>
+
+<p>(</p>
+
+<p>int    val;</p>
+
+<p>if ( (val = fcntl (fd, F.GETFD, 0)) &lt; 0) return(-1);</p>
+
+<p>val |= FD_CLOEXEC;    /* enable close-on-exec */</p>
+
+<p>return(fcntl(fd, F_SETFD, val));</p>
+
+<p>图13-9设置执行时关闭标志</p>
+
+<h5 id="13-8小结">13.8小结</h5>
+
+<p>在大多数UNIX系统中，守护进程是一直运行的。为了初始化我们自己的进程，使之作为守</p>
+
+<p>护进程运行，需要一些审慎的思索并理解第9章中说明的进程之间的关系。本章开发了一个可由 守护进程调用的能对其自身正确初始化的函数。</p>
+
+<p>因为守护进程通常没有控制终端，所以本章还讨论了守护进程记录出错消息的几种方法。我们 讨论了在大多数UNIX系统中，守护进程遵循的若干惯例，给出了几个如何实现某些惯例的实例。</p>
+
+<p>习题</p>
+
+<p>13.1从图13-2可以推测出，直接调用openlog或第一次调用syslog都可以初始化syslog 设施，此时一定要打开用于UNIX域数据报套接字的特殊设备文件/dev/log。如果调用 openlog前，用户进程（守护进程）先调用了 chroot,结果会怎么样？</p>
+
+<p>13.2回顾13.2节中ps输出的示例。唯一一个不是会话首进程的用户层守护进程是rsyslogd 进程。请解释为什么rsyslogd守护进程不是会话首进程。</p>
+
+<p>13.3列出你系统中所有有效的守护进程，并说明它们各自的功能。</p>
+
+<p>13.4编写一段程序调用图13-1中daemonize函数。调用该函数后，它已成为守护进程，再调 用getlogin （见8.15节）查看该进程是否有登录名。将结果打印到一个文件中，</p>
+
+<p><a href="#footnote1">1</a></p>
+
+<p>Proceed with the rest of the daemon. */</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/11-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/02-linux-%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/12-%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">12 线程控制</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/11-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/02-linux-%E7%8E%AF%E5%A2%83%E7%BC%96%E7%A8%8B/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/15-%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/">
+            <span class="next-text nav-default">15 进程间通信</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

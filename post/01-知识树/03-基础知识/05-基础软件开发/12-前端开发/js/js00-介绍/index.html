@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JS00 介绍 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 第四版好像要出了，看看有必要的话跟进下。 [TOC] JavaScript 的起源与发展 起源与发展 1995年，Brendan Eich创造了JavaScript。 2" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/12-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/js/js00-%E4%BB%8B%E7%BB%8D/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="JS00 介绍" />
+<meta property="og:description" content="需要补充的 第四版好像要出了，看看有必要的话跟进下。 [TOC] JavaScript 的起源与发展 起源与发展 1995年，Brendan Eich创造了JavaScript。 2" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/12-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/js/js00-%E4%BB%8B%E7%BB%8D/" /><meta property="article:published_time" content="2018-06-20T20:26:33&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-20T20:26:33&#43;00:00"/>
+<meta itemprop="name" content="JS00 介绍">
+<meta itemprop="description" content="需要补充的 第四版好像要出了，看看有必要的话跟进下。 [TOC] JavaScript 的起源与发展 起源与发展 1995年，Brendan Eich创造了JavaScript。 2">
+
+
+<meta itemprop="datePublished" content="2018-06-20T20:26:33&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-20T20:26:33&#43;00:00" />
+<meta itemprop="wordCount" content="3989">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JS00 介绍"/>
+<meta name="twitter:description" content="需要补充的 第四版好像要出了，看看有必要的话跟进下。 [TOC] JavaScript 的起源与发展 起源与发展 1995年，Brendan Eich创造了JavaScript。 2"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JS00 介绍</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-20 </span>
+        
+        <span class="more-meta"> 3989 words </span>
+        <span class="more-meta"> 8 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+</ul></li>
+<li><a href="#javascript-的起源与发展">JavaScript 的起源与发展</a>
+<ul>
+<li><a href="#起源与发展">起源与发展</a></li>
+<li><a href="#本次的主要内容">本次的主要内容</a></li>
+</ul></li>
+<li><a href="#各章节内容">各章节内容</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h2 id="需要补充的">需要补充的</h2>
+
+<ul>
+<li><strong>第四版好像要出了，看看有必要的话跟进下。</strong></li>
+</ul>
+
+<hr />
+
+<p>[TOC]</p>
+
+<h1 id="javascript-的起源与发展">JavaScript 的起源与发展</h1>
+
+<h2 id="起源与发展">起源与发展</h2>
+
+<p>1995年，Brendan Eich创造了JavaScript。</p>
+
+<p>2005年，席卷全球的“Ajax热”激发了全世界Web开发人员学习JavaScript的热情。</p>
+
+<p>2005年到2009年，前端开发社区在实践中充分检验了这门语言的各种实现和扩展，JavaScript 从被戏谑的 “玩具语言&rdquo; 一跃成为软件业举足轻重的通用编程语言。</p>
+
+<p>2009年到2011年，ECMAScript 5 和 HTML5 在标准之争中双双胜出，使大量专有实现和客户端扩展正式进入规范，同时也为这门语言增添了很多适应未来发展的新特性。</p>
+
+<h2 id="本次的主要内容">本次的主要内容</h2>
+
+<p>在详细讲解了JavaScript语言的核心之后，条分缕析地为读者展示现有规范及实现为开发Web应用提供的各种支持和特性。</p>
+
+<p>内容包括：</p>
+
+<ul>
+<li>对 JavaScript 实现各个组成部分的详尽解读；</li>
+<li>对 JavaScrip 面向对象编程的全方位阐述；</li>
+<li>对 DOM、BOM 及浏览器事件模型的透彻剖析；</li>
+<li>Web 应用基本数据格式 JSON、XML 及其存取；</li>
+<li>Ajax、Comet 服务器端通信和基于File API的拖放式文件上传；$\color{red}\large \textbf{非常想知道这个 Ajax 到底是怎么用的} $</li>
+<li>ECMAScript 5 定义的最新核心语言特性；$\color{red}\large \textbf{什么是ECMAScript？与 JavaScript 有什么区别？}$</li>
+<li>HTML 5涵盖的表单、媒体、Canvas （包括WebGL ）;</li>
+<li>Selectors、Web Workers、地理定位及跨文档传递消息等最新API;</li>
+<li>离线应用及客户端存储（包括IndexedDB ）;</li>
+<li>维护、性能、部署相关的最佳开发实践；$\color{red}\large \textbf{对呀，怎么部署}$</li>
+<li>新兴 API 及 ECMAScript Harmony 展望o</li>
+</ul>
+
+<h1 id="各章节内容">各章节内容</h1>
+
+<blockquote>
+<p>这本书为读者成为全方位的 JavaScript 髙手提供丁  “一揽子方案 ”。</p>
+</blockquote>
+
+<p>本书共25章，各章简介如下。</p>
+
+<p>第1章 “JavaScript简介”，讲述 JavaScript的起源：为何而生，如何发展，现状如何。涉及的概念主要有 JavaScript 与 ECMAScript 之间的关系$\color{red}\large \textbf{是的，我一直想知道两者是什么关系}$、DOM （Document Object Model,文抬对象模型）、 BOM （ Browser Object Model,浏览器对象模型）。此外，还将讨论 ECMA （ European Computer Manufacturer&rsquo;s Association，欧洲计算机制迫商&rsquo;协会）和 W3C （ World Wide Web Consortium,万维网联盟）制定的一些相关标准。</p>
+
+<p>第2章“在HTML中使用JavaScript”，介绍了如何在HTML中使用JavaScript创建动态网页。 这章不仅展尔了在网页中嵌入JavaScript的各种方式，还讨论了 JavaScript内容类型（content-type）及 其与＜script＞元素的关系。$\color{red}\large \textbf{好的好的}$</p>
+
+<p>第3章“基本概念”，讨论了 JavaScript语言的基本概念，包括语法和流控制语句。这一章也分析 T JavaScript与其他基于C的语言在语法的相同和不同之处，还介绍了与内置操作符有关的类型转换 问题。</p>
+
+<p>第4章“变量、作用域和内存问题”，探讨 JavaScript如何处理其松散类型的变量。这一章还讨论了原始值和引用值之间的差别，以及与变有关的执行环境的相应内容。最后，通过介绍 JavaScript 的垃圾收集机制，解释了变量在退出作用域吋释放其内存的问题。$\color{red}\large \textbf{是的，从 C#中我就没有弄得很明白关于这个垃圾回收}$</p>
+
+<p>第5章“引用类型”，洋尽介绍了 JavaScript内置的所有引用类型，如Object和Array。这一 章对 ECMA-262 规范中描述的每一种引用类型既做了理论上的阐释，又从浏览器实现的角度给出了 介绍。</p>
+
+<p>第6章“面向对象的程序设计”，讲述了在JavaScript中如何实现面向对象的程序设计。由于 JavaScript没有类的概念，因此这一章从对象创建和继承的层面上展示了一些流行的技术。此外，还讲解了函数原型的概念，并对函数原型与整个面向对象方法的关系进行了探讨。$\color{red}\large \textbf{JS中没有类的概念吗？}$</p>
+
+<p>第7章&rdquo;函数表达式”，集中介绍了 JavaScript中最为强大的一个特性——函数表达式。相关的内容涉及闭包、this对象的角色、模块模式和创建私有对象成K等。$\color{red}\large \textbf{非常想知道 JS中的函数表达式是什么样子的，怎么进行闭包的。}$</p>
+
+<p>第8章“BOM”，介绍BOM （Browser Object Model，浏览器对象模型），即负责处理与浏览器身有关的交互操作的对象集合。这一章全面介绍了每一个BOM对象，包括 window, document, location、navigator 和 screeno。$\color{red}\large \textbf{我才知道 BOM 是浏览器对象模型，以前一直与DOM弄混，以为对应 XML 文件的。}$</p>
+
+<p>第9章“客户端检测”，讨论了检测客户端机器及其支持特性的各种手段，包括特性检测及用户代理字符串检测的不同技术。这一章还就每种手段段的优缺点及适用悄形给出了详细说明。$\color{red}\large \textbf{的确要知道客户端是什么及其，比如是不是收集什么的}$</p>
+
+<p>第 10 章“DOM”,介绍 DOM（ Document Object Model,文裆对象模型），即 DOM1 规定的 JavaScript 中的DOM对象。这一章也简要介绍了 XML及其与DOM的关系，为深人探讨所存D0M规范及其定义 的操作网页的方式奠定了基础。</p>
+
+<p>第11章“DOM扩展”，介绍了其他API以及浏览器木身为D0M添加的各种功能。涉及内容包括 Selectors API、Element Traversal API 和 HTML5 扩展，</p>
+
+<p>第12章“DOM2和DOM3&rsquo;”，在前两章的苺础h继续探讨了 DOM2和DOM3中新增的D0M属 性、方法和对象。这一章还讨论了 IE与其他浏览器的兼容性问题。</p>
+
+<p>第13章“事件”，解释了 JavaScript中事件的本质，对遗留机制的支持，以及DOM对事件机制的 重新定义。这一章讨论了多种没备，包括Wii和iPhone。</p>
+
+<p>第14章“表单脚本&rsquo; 讲述如何使用JavaScript增强表单的交互性，突破浏览器的局限性。这一 章的讨论主要围绕单个表单元索如文本框、选择框，以及围绕数据验证和操作展开。$\color{red}\large \textbf{怎么突破浏览器的局限的？}$</p>
+
+<p>第15章“使用Canvas绘图”，讨论了＜canvas&gt; 标签以及如何通过它来动态绘图。仅涵盖2D 上下文，也将讨论WebGL （3D）上下文，可以为创建动画和游戏夯实基础。</p>
+
+<p>第16章“HTML5脚本编程”，介绍了 HTML5规定的JavaScript API,涉及跨文挡传递消息、拖放API和以编程方式控制<audio> 和&lt; video&gt; 元索，以及管理历史状态。</p>
+
+<p>第17章“错误处理与调试”，讨论浏览器如何处理 JavaScript代码错误，并展示了一些处理错误 的方式。这一章针对每种浏览器分别讨论了相应的调试工具和技术，还给出了简化调试工作的建议。</p>
+
+<p>第 18 章 “JavaScript 与 XML”，展示了 JavaScript 中用于读取和操作 XML （ extensible Markup Language，可扩展标记语言）的特性。这一章分析不同浏览器提供的XML支持和对象的差异，给出 了编写跨浏览器代码的简易方法。此外，这一章还介绍了用于在客户端转换XML数据的 XSIM extensible Stylesheet Language Transformations,可扩展样成去语言转换）技术。$\color{red}\large \textbf{这个有什么用处吗？}$</p>
+
+<p>第 19 章 “E4X”，讨论了 E4X （ECMAScriptforXML, ECMAScript 中的 XML 扩展）；设计 E4X 的 出发点是简化XML处理任务。这一章探讨了在处理XML时，使用 E4X 与使用DOM相比有哪些 优势。</p>
+
+<p>第20章“JSON”，介绍了作为XML替代格式的JSON,包含浏览器原生支持的JSON解析和序 列化，以及使用JSON时要注意的安全问题。$\color{red}\large \textbf{JSON 使用的时候还有安全问题吗？}$</p>
+
+<p>第21章“Ajax与Comet”，讲解广常用的Ajax技术，包括使用XMLHttpRequest对象及CORS （Cross-Origin Resource Sharing,跨来源资源共享）API实现跨域Ajax通信。这一章展示了浏览器在实现与支持方面存在的差异，同时也给出了 一些使用建议。$\color{red}\large \textbf{这个CORS 是什么？}$</p>
+
+<p>第22章“高级技巧”，深人讲解r一些JavaScript中较复杂的模式，包括函数科里化（currying ）、 部分函数应和动态函数。这一章还讨论了如何创建&amp;定义的事件框架和使用ECMAScript 5创建防篡改对象。$\color{red}\large \textbf{科里化 是什么？}$</p>
+
+<p>第23章“离线应用与客户端存储”，讨论了如何检测应用离线以及在客户端机器中存储数据的各 种技术。先从受到最广泛支持的特性 cookie 谈起，继而介绍了新兴的客户端存储技术，如 Web Storage 和 IndexedDB 。$\color{red}\large \textbf{关于 cookie，一直想知道，而且一直不清楚，而且，现在是不是都不用 cookie了？}$</p>
+
+<p>第24章&rdquo;最佳实践”，探讨了在企业级环境中使用JavaScript的各种方式。其中，着眼于提高可维护性的内容包括编码技巧、格式化和通用编程实践。这一章还介绍了改善代码执行性能及速度优化的 一些技术。然后讨论了部署问题，包括如何创建构建过程。$\color{red}\large \textbf{嗯，想知道怎么部署和构建}$</p>
+
+<p>第25章“新兴的API”，介绍了为增强浏览器中的JavaScript而创建的新API。虽然这些API还没 有得到完整或全面的支持，但它们已经崭露头角，有些浏览器也已经部分地实现了这些API。这一章的 内容主要是 Web 计时和文件 API。</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/02-%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E4%B8%8E%E8%AE%A1%E7%AE%97/02-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/%E5%A4%A7%E7%BA%B2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">大纲</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/12-%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/bootstrap/bootstrap-%E9%80%89%E9%A1%B9%E5%8D%A1/">
+            <span class="next-text nav-default">Bootstrap 选项卡</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

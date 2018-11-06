@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="直接可以用的Python和OpenCV检测及分割图像的目标区域例子 在用深度学习的时候，比如说面对一张图像，对某个区域感兴趣怎么办？切割出来啊" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/01-%E4%BC%A0%E7%BB%9F%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95/%E7%9B%B4%E6%8E%A5%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%9A%84python%E5%92%8Copencv%E6%A3%80%E6%B5%8B%E5%8F%8A%E5%88%86%E5%89%B2%E5%9B%BE%E5%83%8F%E7%9A%84%E7%9B%AE%E6%A0%87%E5%8C%BA%E5%9F%9F%E4%BE%8B%E5%AD%90/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="直接可以用的Python和OpenCV检测及分割图像的目标区域例子 在用深度学习的时候，比如说面对一张图像，对某个区域感兴趣怎么办？切割出来啊" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/01-%E4%BC%A0%E7%BB%9F%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95/%E7%9B%B4%E6%8E%A5%E5%8F%AF%E4%BB%A5%E7%94%A8%E7%9A%84python%E5%92%8Copencv%E6%A3%80%E6%B5%8B%E5%8F%8A%E5%88%86%E5%89%B2%E5%9B%BE%E5%83%8F%E7%9A%84%E7%9B%AE%E6%A0%87%E5%8C%BA%E5%9F%9F%E4%BE%8B%E5%AD%90/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="直接可以用的Python和OpenCV检测及分割图像的目标区域例子 在用深度学习的时候，比如说面对一张图像，对某个区域感兴趣怎么办？切割出来啊">
+
+
+
+<meta itemprop="wordCount" content="2680">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="直接可以用的Python和OpenCV检测及分割图像的目标区域例子 在用深度学习的时候，比如说面对一张图像，对某个区域感兴趣怎么办？切割出来啊"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 2680 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#直接可以用的python和opencv检测及分割图像的目标区域例子">直接可以用的Python和OpenCV检测及分割图像的目标区域例子</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="直接可以用的python和opencv检测及分割图像的目标区域例子">直接可以用的Python和OpenCV检测及分割图像的目标区域例子</h1>
+
+<p>在用深度学习的时候，比如说面对一张图像，对某个区域感兴趣怎么办？切割出来啊，只需要训练感兴趣的部分就好啦。</p>
+
+<p>用一个可爱的虫子做为一个示例，目标是把虫子区域抠出来：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/hGhGh0Lhbk.png?imageslim" alt="mark" /></p>
+
+<p>具体思路如下：</p>
+
+<p>1.获取图片，这个简单哈</p>
+
+<pre><code>img_path = r'C:\Users\aixin\Desktop\chongzi.png'
+img = cv2.imread(img_path)
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+</code></pre>
+
+<p>看，这不就是你处理初始的样子？</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/4IC8gGBakb.png?imageslim" alt="mark" /></p>
+
+<p>2.转换灰度并去噪声</p>
+
+<pre><code>gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+blurred = cv2.GaussianBlur(gray, (9, 9),0)
+</code></pre>
+
+<p>我们可以得到这两张图，第一张是灰度图，第二张是去噪之后的，另外说一下，去噪咱们有很多种方法，均值滤波器、高斯滤波器、中值滤波器、双边滤波器等。</p>
+
+<p>这里取高斯是因为高斯去噪效果是最好的。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/f04JK94IA4.png?imageslim" alt="mark" /></p>
+
+<p>3.提取图像的梯度</p>
+
+<pre><code>gradX = cv2.Sobel(gray, ddepth=cv2.CV_32F, dx=1, dy=0)
+gradY = cv2.Sobel(gray, ddepth=cv2.CV_32F, dx=0, dy=1)
+
+gradient = cv2.subtract(gradX, gradY)
+gradient = cv2.convertScaleAbs(gradient)
+</code></pre>
+
+<p>以Sobel算子计算x，y方向上的梯度，之后在x方向上减去y方向上的梯度，通过这个减法，我们留下具有高水平梯度和低垂直梯度的图像区域。</p>
+
+<p>此时，我们会得到</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/Gi9jeHc0DJ.png?imageslim" alt="mark" /></p>
+
+<p>4.我们继续去噪声</p>
+
+<p>考虑到图像的孔隙 首先使用低通滤泼器平滑图像, 这将有助于平滑图像中的高频噪声。 低通滤波器的目标是降低图像的变化率。
+如将每个像素替换为该像素周围像素的均值， 这样就可以平滑并替代那些强度变化明显的区域。</p>
+
+<p>对模糊图像二值化，顾名思义，就是把图像数值以某一边界分成两种数值，细节我会附在文章底部，如果还是不懂，去cao文档吧。</p>
+
+<pre><code>blurred = cv2.GaussianBlur(gradient, (9, 9),0)
+(_, thresh) = cv2.threshold(blurred, 90, 255, cv2.THRESH_BINARY)
+</code></pre>
+
+<p>此时，我们会得到</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/ELIC3DEhaE.png?imageslim" alt="mark" /></p>
+
+<p>其实就算手动分割我们也是需要找到一个边界吧，可以看到轮廓出来了，但是我们最终要的是整个轮廓，所以内部小区域就不要了</p>
+
+<p>5.图像形态学（牛逼吧、唬人的）</p>
+
+<p>在这里我们选取ELLIPSE核，采用CLOSE操作，具体细节你依旧可以参考我的附录文档，及拓展。</p>
+
+<pre><code>kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25))
+closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+</code></pre>
+
+<p>此时，我们会得到</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/ibhCc6Bac8.png?imageslim" alt="mark" /></p>
+
+<p>6.细节刻画</p>
+
+<p>从上图我们可以发现和原图对比，发现有细节丢失，这会干扰之后的昆虫轮廓的检测，要把它们扩充，分别执行4次形态学腐蚀与膨胀（附录文档）</p>
+
+<pre><code>
+closed = cv2.erode(closed, None, iterations=4)
+closed = cv2.dilate(closed, None, iterations=4)
+</code></pre>
+
+<p>此时，我们会得到</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/IkBHb5khl2.png?imageslim" alt="mark" /></p>
+
+<p>7.找出昆虫区域的轮廓</p>
+
+<p>此时用cv2.findContours()函数
+第一个参数是要检索的图片，必须是为二值图，即黑白的（不是灰度图）</p>
+
+<pre><code>
+(_, cnts, _) = cv2.findContours(
+​    参数一： 二值化图像
+​    closed.copy(),
+​    参数二：轮廓类型
+​    # cv2.RETR_EXTERNAL,             #表示只检测外轮廓
+​    # cv2.RETR_CCOMP,                #建立两个等级的轮廓,上一层是边界
+​    # cv2.RETR_LIST,                 #检测的轮廓不建立等级关系
+​    # cv2.RETR_TREE,                 #建立一个等级树结构的轮廓
+​    # cv2.CHAIN_APPROX_NONE,         #存储所有的轮廓点，相邻的两个点的像素位置差不超过1
+​    参数三：处理近似方法
+​    # cv2.CHAIN_APPROX_SIMPLE,         #例如一个矩形轮廓只需4个点来保存轮廓信息
+​    # cv2.CHAIN_APPROX_TC89_L1,
+​    # cv2.CHAIN_APPROX_TC89_KCOS
+​    )
+</code></pre>
+
+<p>8.画出轮廓</p>
+
+<p>找到轮廓了，接下来，要画出来的，即用cv2.drawContours()函数。</p>
+
+<pre><code>
+c = sorted(cnts, key=cv2.contourArea, reverse=True)[0]
+
+# compute the rotated bounding box of the largest contour
+rect = cv2.minAreaRect(c)
+box = np.int0(cv2.boxPoints(rect))
+
+# draw a bounding box arounded the detected barcode and display the image
+draw_img = cv2.drawContours(img.copy(), [box], -1, (0, 0, 255), 3)
+cv2.imshow(&quot;draw_img&quot;, draw_img)
+</code></pre>
+
+<p>此时，我们会得到</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/k75DlGCaK8.png?imageslim" alt="mark" /></p>
+
+<p>9.裁剪出来就完成啦</p>
+
+<p>方法嘛，这不就是么，找到这四个点切出来就好啦
+我们放大一点看一下细节</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/iKJ6ga8bmE.png?imageslim" alt="mark" /></p>
+
+<pre><code>Xs = [i[0] for i in box]
+Ys = [i[1] for i in box]
+x1 = min(Xs)
+x2 = max(Xs)
+y1 = min(Ys)
+y2 = max(Ys)
+hight = y2 - y1
+width = x2 - x1
+crop_img= img[y1:y1+hight, x1:x1+width]
+cv2.imshow('crop_img', crop_img)
+</code></pre>
+
+<p>其实，box里保存的是绿色矩形区域四个顶点的坐标。 我将按下图红色矩形所示裁剪昆虫图像。
+找出四个顶点的x，y坐标的最大最小值。新图像的高=maxY-minY，宽=maxX-minX</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/181106/0dCC856J07.png?imageslim" alt="mark" /></p>
+
+<p>终于我们得到了可爱的小虫子。
+得到了目标区域，那么你想拿它干什么就干什么！我不管你哈。</p>
+
+<p>考虑到现在的python教程一般都是一上来就是list、tuple什么的，而不是文件的读写和保存，包括批量读取等等，我特地加入了python版的文件批量读写和保存等附录文件。</p>
+
+<p>完整代码如下：</p>
+
+<pre><code>#-*- coding: UTF-8 -*-
+
+'''
+Author: Steve Wang
+Time: 2017/12/8 10:00
+Environment: Python 3.6.2 |Anaconda 4.3.30 custom (64-bit) Opencv 3.3
+'''
+
+import cv2
+import numpy as np
+
+
+def get_image(path):
+​    #获取图片
+​    img=cv2.imread(path)
+​    gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+    return img, gray
+
+def Gaussian_Blur(gray):
+​    # 高斯去噪
+​    blurred = cv2.GaussianBlur(gray, (9, 9),0)
+
+    return blurred
+
+def Sobel_gradient(blurred):
+​    # 索比尔算子来计算x、y方向梯度
+​    gradX = cv2.Sobel(blurred, ddepth=cv2.CV_32F, dx=1, dy=0)
+​    gradY = cv2.Sobel(blurred, ddepth=cv2.CV_32F, dx=0, dy=1)
+
+    gradient = cv2.subtract(gradX, gradY)
+    gradient = cv2.convertScaleAbs(gradient)
+
+    return gradX, gradY, gradient
+
+def Thresh_and_blur(gradient):
+
+    blurred = cv2.GaussianBlur(gradient, (9, 9),0)
+    (_, thresh) = cv2.threshold(blurred, 90, 255, cv2.THRESH_BINARY)
+
+    return thresh
+
+def image_morphology(thresh):
+​    # 建立一个椭圆核函数
+​    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25))
+​    # 执行图像形态学, 细节直接查文档，很简单
+​    closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+​    closed = cv2.erode(closed, None, iterations=4)
+​    closed = cv2.dilate(closed, None, iterations=4)
+
+    return closed
+
+def findcnts_and_box_point(closed):
+​    # 这里opencv3返回的是三个参数
+​    (_, cnts, _) = cv2.findContours(closed.copy(),
+​        cv2.RETR_LIST,
+​        cv2.CHAIN_APPROX_SIMPLE)
+​    c = sorted(cnts, key=cv2.contourArea, reverse=True)[0]
+​    # compute the rotated bounding box of the largest contour
+​    rect = cv2.minAreaRect(c)
+​    box = np.int0(cv2.boxPoints(rect))
+
+    return box
+
+def drawcnts_and_cut(original_img, box):
+​    # 因为这个函数有极强的破坏性，所有需要在img.copy()上画
+​    # draw a bounding box arounded the detected barcode and display the image
+​    draw_img = cv2.drawContours(original_img.copy(), [box], -1, (0, 0, 255), 3)
+
+    Xs = [i[0] for i in box]
+    Ys = [i[1] for i in box]
+    x1 = min(Xs)
+    x2 = max(Xs)
+    y1 = min(Ys)
+    y2 = max(Ys)
+    hight = y2 - y1
+    width = x2 - x1
+    crop_img = original_img[y1:y1+hight, x1:x1+width]
+
+    return draw_img, crop_img
+
+def walk():
+
+    img_path = r'C:\Users\aixin\Desktop\chongzi.png'
+    save_path = r'C:\Users\aixin\Desktop\chongzi_save.png'
+    original_img, gray = get_image(img_path)
+    blurred = Gaussian_Blur(gray)
+    gradX, gradY, gradient = Sobel_gradient(blurred)
+    thresh = Thresh_and_blur(gradient)
+    closed = image_morphology(thresh)
+    box = findcnts_and_box_point(closed)
+    draw_img, crop_img = drawcnts_and_cut(original_img,box)
+
+    # 暴力一点，把它们都显示出来看看
+
+    cv2.imshow('original_img', original_img)
+    cv2.imshow('blurred', blurred)
+    cv2.imshow('gradX', gradX)
+    cv2.imshow('gradY', gradY)
+    cv2.imshow('final', gradient)
+    cv2.imshow('thresh', thresh)
+    cv2.imshow('closed', closed)
+    cv2.imshow('draw_img', draw_img)
+    cv2.imshow('crop_img', crop_img)
+    cv2.waitKey(20171219)
+    cv2.imwrite(save_path, crop_img)
+
+walk()
+</code></pre>
+
+<p>附录2.本篇文章精华函数说明</p>
+
+<pre><code>
+# 用来转化图像格式的
+img = cv2.cvtColor(src,
+​    COLOR_BGR2HSV # BGR----&gt;HSV
+​    COLOR_HSV2BGR # HSV----&gt;BGR
+​    ...)
+# For HSV, Hue range is [0,179], Saturation range is [0,255] and Value range is [0,255]
+
+
+# 返回一个阈值，和二值化图像，第一个阈值是用来otsu方法时候用的
+# 不过现在不用了，因为可以通过mahotas直接实现
+T = ret = mahotas.threshold(blurred)
+ret, thresh_img = cv2.threshold(src, # 一般是灰度图像
+​    num1, # 图像阈值
+​    num2, # 如果大于或者num1, 像素值将会变成 num2
+# 最后一个二值化参数
+    cv2.THRESH_BINARY      # 将大于阈值的灰度值设为最大灰度值，小于阈值的值设为0
+    cv2.THRESH_BINARY_INV  # 将大于阈值的灰度值设为0，大于阈值的值设为最大灰度值
+    cv2.THRESH_TRUNC       # 将大于阈值的灰度值设为阈值，小于阈值的值保持不变
+    cv2.THRESH_TOZERO      # 将小于阈值的灰度值设为0，大于阈值的值保持不变
+    cv2.THRESH_TOZERO_INV  # 将大于阈值的灰度值设为0，小于阈值的值保持不变
+)
+thresh = cv2.AdaptiveThreshold(src,
+​    dst,
+​    maxValue,
+​    # adaptive_method
+​    ADAPTIVE_THRESH_MEAN_C,      
+​    ADAPTIVE_THRESH_GAUSSIAN_C,      
+​    # thresholdType
+​    THRESH_BINARY,
+​    THRESH_BINARY_INV,
+​    blockSize=3,
+​    param1=5
+)
+
+
+# 一般是在黑色背景中找白色物体，所以原始图像背景最好是黑色
+# 在执行找边缘的时候，一般是threshold 或者是canny 边缘检测后进行的。
+# warning:此函数会修改原始图像、
+# 返回：坐标位置（x,y）,
+(_, cnts, _) = cv2.findContours(mask.copy(),
+​    # cv2.RETR_EXTERNAL,             #表示只检测外轮廓
+​    # cv2.RETR_CCOMP,                #建立两个等级的轮廓,上一层是边界
+​    cv2.RETR_LIST,                 #检测的轮廓不建立等级关系
+​    # cv2.RETR_TREE,                   #建立一个等级树结构的轮廓
+​    # cv2.CHAIN_APPROX_NONE,           #存储所有的轮廓点，相邻的两个点的像素位置差不超过1
+​    cv2.CHAIN_APPROX_SIMPLE,       #例如一个矩形轮廓只需4个点来保存轮廓信息
+​    # cv2.CHAIN_APPROX_TC89_L1,
+​    # cv2.CHAIN_APPROX_TC89_KCOS
+   )
+img = cv2.drawContours(src, cnts, whichToDraw(-1), color, line)
+
+
+img = cv2.imwrite(filename, dst,  # 文件路径，和目标图像文件矩阵
+
+    # 对于JPEG，其表示的是图像的质量，用0-100的整数表示，默认为95
+    # 注意，cv2.IMWRITE_JPEG_QUALITY类型为Long，必须转换成int
+    [int(cv2.IMWRITE_JPEG_QUALITY), 5]
+    [int(cv2.IMWRITE_JPEG_QUALITY), 95]
+    # 从0到9,压缩级别越高，图像尺寸越小。默认级别为3
+    [int(cv2.IMWRITE_PNG_COMPRESSION), 5])
+    [int(cv2.IMWRITE_PNG_COMPRESSION), 9])
+
+# 如果你不知道用哪个flags，毕竟太多了哪能全记住，直接找找。
+寻找某个函数或者变量
+events = [i for i in dir(cv2) if 'PNG' in i]
+print( events )
+
+寻找某个变量开头的flags
+flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
+print flags
+
+批量读取文件名字
+import os
+filename_rgb = r'C:\Users\aixin\Desktop\all_my_learning\colony\20170629'
+for filename in os.listdir(filename_rgb):              #listdir的参数是文件夹的路径
+    print (filename)
+</code></pre>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://blog.csdn.net/sinat_36458870/article/details/78825571">直接可以用的Python和OpenCV检测及分割图像的目标区域例子</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E8%AF%86%E5%88%AB%E5%A4%8D%E6%9D%82%E7%9A%84%E7%AD%94%E9%A2%98%E5%8D%A1%E7%9A%84%E7%AE%97%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/02-yolov3-%E4%BD%BF%E7%94%A8/01-keras-%E5%AE%9E%E7%8E%B0/00-%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

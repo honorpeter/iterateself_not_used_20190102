@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="定义结构元素 形态学处理的核心就是定义结构元素，在OpenCV-Python中，可以使用其自带的getStructuringElement函数" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E5%BD%A2%E6%80%81%E5%AD%A6%E5%A4%84%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="定义结构元素 形态学处理的核心就是定义结构元素，在OpenCV-Python中，可以使用其自带的getStructuringElement函数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E5%BD%A2%E6%80%81%E5%AD%A6%E5%A4%84%E7%90%86/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="定义结构元素 形态学处理的核心就是定义结构元素，在OpenCV-Python中，可以使用其自带的getStructuringElement函数">
+
+
+
+<meta itemprop="wordCount" content="2240">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="定义结构元素 形态学处理的核心就是定义结构元素，在OpenCV-Python中，可以使用其自带的getStructuringElement函数"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 2240 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#如果觉得本文写的还可以的话-请轻点-顶-方便读者-以及您的支持是我写下去的最大的两个动力">如果觉得本文写的还可以的话，请轻点“顶”，方便读者、以及您的支持是我写下去的最大的两个动力。</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<p>定义结构元素
+形态学处理的核心就是定义结构元素，在OpenCV-Python中，可以使用其自带的getStructuringElement函数，也可以直接使用NumPy的ndarray来定义一个结构元素。首先来看用getStructuringElement函数定义一个结构元素：</p>
+
+<p>element = cv2.getStructuringElement(cv2.MORPH_CROSS,(5,5))
+这就定义了一个5×5的十字形结构元素，如下：</p>
+
+<p>也可以用NumPy来定义结构元素，如下：</p>
+
+<p>NpKernel = np.uint8(np.zeros((5,5)))
+for i in range(5):
+​   NpKernel[2, i] = 1 #感谢chenpingjun1990的提醒，现在是正确的
+​   NpKernel[i, 2] = 1
+这两者方式定义的结构元素完全一样：
+[[0 0 1 0 0]
+ [0 0 1 0 0]
+ [1 1 1 1 1]
+ [0 0 1 0 0]
+ [0 0 1 0 0]]</p>
+
+<p>这里可以看出，用OpenCV-Python内置的常量定义椭圆（MORPH_ELLIPSE）和十字形结构（MORPH_CROSS）元素要简单一些，如果定义矩形（MORPH_RECT）和自定义结构元素，则两者差不多。</p>
+
+<p>本篇文章将用参考资料1中的相关章节的图片做测试：</p>
+
+<p>腐蚀和膨胀
+下面先以腐蚀图像为例子介绍如何使用结构元素：</p>
+
+<p>#coding=utf-8
+import cv2
+import numpy as np</p>
+
+<p>img = cv2.imread(&rsquo;D:/binary.bmp&rsquo;,0)
+#OpenCV定义的结构元素
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(3, 3))</p>
+
+<p>#腐蚀图像
+eroded = cv2.erode(img,kernel)
+#显示腐蚀后的图像
+cv2.imshow(&ldquo;Eroded Image&rdquo;,eroded);</p>
+
+<p>#膨胀图像
+dilated = cv2.dilate(img,kernel)
+#显示膨胀后的图像
+cv2.imshow(&ldquo;Dilated Image&rdquo;,dilated);
+#原图像
+cv2.imshow(&ldquo;Origin&rdquo;, img)</p>
+
+<p>#NumPy定义的结构元素
+NpKernel = np.uint8(np.ones((3,3)))
+Nperoded = cv2.erode(img,NpKernel)
+#显示腐蚀后的图像
+cv2.imshow(&ldquo;Eroded by NumPy kernel&rdquo;,Nperoded);</p>
+
+<p>cv2.waitKey(0)
+cv2.destroyAllWindows()
+如上所示，腐蚀和膨胀的处理很简单，只需设置好结构元素，然后分别调用cv2.erode(&hellip;)和cv2.dilate(&hellip;)函数即可，其中第一个参数是需要处理的图像，第二个是结构元素。返回处理好的图像。</p>
+
+<p>结果如下：</p>
+
+<p>开运算和闭运算
+了解形态学基本处理的同学都知道，开运算和闭运算就是将腐蚀和膨胀按照一定的次序进行处理。但这两者并不是可逆的，即先开后闭并不能得到原先的图像。代码示例如下：</p>
+
+<p>#coding=utf-8
+import cv2
+import numpy as np</p>
+
+<p>img = cv2.imread(&rsquo;D:/binary.bmp&rsquo;,0)
+#定义结构元素
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(5, 5))</p>
+
+<p>#闭运算
+closed = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+#显示腐蚀后的图像
+cv2.imshow(&ldquo;Close&rdquo;,closed);</p>
+
+<p>#开运算
+opened = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
+#显示腐蚀后的图像
+cv2.imshow(&ldquo;Open&rdquo;, opened);</p>
+
+<p>cv2.waitKey(0)
+cv2.destroyAllWindows()</p>
+
+<p>闭运算用来连接被误分为许多小块的对象，而开运算用于移除由图像噪音形成的斑点。因此，某些情况下可以连续运用这两种运算。如对一副二值图连续使用闭运算和开运算，将获得图像中的主要对象。同样，如果想消除图像中的噪声（即图像中的“小点”），也可以对图像先用开运算后用闭运算，不过这样也会消除一些破碎的对象。</p>
+
+<p>对原始图像进行开运算和闭运算的结果如下：</p>
+
+<p>用形态学运算检测边和角点
+这里通过一个较复杂的例子介绍如何用形态学算子检测图像中的边缘和拐角（这里只是作为介绍形态学处理例子，实际使用时请用Canny或Harris等算法）。</p>
+
+<p>检测边缘
+形态学检测边缘的原理很简单，在膨胀时，图像中的物体会想周围“扩张”；腐蚀时，图像中的物体会“收缩”。比较这两幅图像，由于其变化的区域只发生在边缘。所以这时将两幅图像相减，得到的就是图像中物体的边缘。这里用的依然是参考资料1中相关章节的图片：</p>
+
+<p>代码如下：</p>
+
+<p>#coding=utf-8
+import cv2
+import numpy</p>
+
+<p>image = cv2.imread(&ldquo;D:/building.jpg&rdquo;,0);
+#构造一个3×3的结构元素
+element = cv2.getStructuringElement(cv2.MORPH_RECT,(3, 3))
+dilate = cv2.dilate(image, element)
+erode = cv2.erode(image, element)</p>
+
+<p>#将两幅图像相减获得边，第一个参数是膨胀后的图像，第二个参数是腐蚀后的图像
+result = cv2.absdiff(dilate,erode);</p>
+
+<p>#上面得到的结果是灰度图，将其二值化以便更清楚的观察结果
+retval, result = cv2.threshold(result, 40, 255, cv2.THRESH_BINARY);
+#反色，即对二值图每个像素取反
+result = cv2.bitwise_not(result);
+#显示图像
+cv2.imshow(&ldquo;result&rdquo;,result);
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+处理结果如下：</p>
+
+<p>检测拐角
+与边缘检测不同，拐角的检测的过程稍稍有些复杂。但原理相同，所不同的是先用十字形的结构元素膨胀像素，这种情况下只会在边缘处“扩张”，角点不发生变化。接着用菱形的结构元素腐蚀原图像，导致只有在拐角处才会“收缩”，而直线边缘都未发生变化。</p>
+
+<p>第二步是用X形膨胀原图像，角点膨胀的比边要多。这样第二次用方块腐蚀时，角点恢复原状，而边要腐蚀的更多。所以当两幅图像相减时，只保留了拐角处。示意图如下（示意图来自参考资料1）：</p>
+
+<p>代码如下：</p>
+
+<p>#coding=utf-8
+import cv2</p>
+
+<p>image = cv2.imread(&ldquo;D:/building.jpg&rdquo;, 0)
+origin = cv2.imread(&ldquo;D:/building.jpg&rdquo;)
+#构造5×5的结构元素，分别为十字形、菱形、方形和X型
+cross = cv2.getStructuringElement(cv2.MORPH_CROSS,(5, 5))
+#菱形结构元素的定义稍麻烦一些
+diamond = cv2.getStructuringElement(cv2.MORPH_RECT,(5, 5))
+diamond[0, 0] = 0
+diamond[0, 1] = 0
+diamond[1, 0] = 0
+diamond[4, 4] = 0
+diamond[4, 3] = 0
+diamond[3, 4] = 0
+diamond[4, 0] = 0
+diamond[4, 1] = 0
+diamond[3, 0] = 0
+diamond[0, 3] = 0
+diamond[0, 4] = 0
+diamond[1, 4] = 0
+square = cv2.getStructuringElement(cv2.MORPH_RECT,(5, 5))
+x = cv2.getStructuringElement(cv2.MORPH_CROSS,(5, 5))
+#使用cross膨胀图像
+result1 = cv2.dilate(image,cross)
+#使用菱形腐蚀图像
+result1 = cv2.erode(result1, diamond)</p>
+
+<p>#使用X膨胀原图像
+result2 = cv2.dilate(image, x)
+#使用方形腐蚀图像
+result2 = cv2.erode(result2,square)</p>
+
+<p>#result = result1.copy()
+#将两幅闭运算的图像相减获得角
+result = cv2.absdiff(result2, result1)
+#使用阈值获得二值图
+retval, result = cv2.threshold(result, 40, 255, cv2.THRESH_BINARY)</p>
+
+<p>#在原图上用半径为5的圆圈将点标出。
+for j in range(result.size):
+​   y = j / result.shape[0]
+​   x = j % result.shape[0]</p>
+
+<pre><code>if result[x, y] == 255:
+    cv2.circle(image, (y, x), 5, (255,0,0))
+</code></pre>
+
+<p>cv2.imshow(&ldquo;Result&rdquo;, image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+注意，由于封装的缘故，OpenCV中函数参数中使用的坐标系和NumPy的ndarray的坐标系是不同的，在46行可以看出来。抽空我向OpenCV邮件列表提一下，看我的理解是不是正确的。
+大家可以验证一下，比如在代码中插入这两行代码，就能知道结果了：</p>
+
+<p>cv2.circle(image, (5, 10), 5, (255,0,0))
+image[5, 10] = 0
+通过上面的代码就能检测到图像中的拐角并标出来，效果图如下：</p>
+
+<p>当然，这只是个形态学处理示例，检测结果并不好。</p>
+
+<p>未完待续&hellip;</p>
+
+<p>在将来的某一篇文章中将做个总结，介绍下OpenCV中常用的函数，如threshold、bitwise_xxx，以及绘制函数等。</p>
+
+<p>参考资料：
+1、《Opencv2 Computer Vision Application Programming Cookbook》</p>
+
+<p>2、《OpenCV References Manule》</p>
+
+<h2 id="如果觉得本文写的还可以的话-请轻点-顶-方便读者-以及您的支持是我写下去的最大的两个动力">如果觉得本文写的还可以的话，请轻点“顶”，方便读者、以及您的支持是我写下去的最大的两个动力。</h2>
+
+<p>作者：Daetalus
+来源：CSDN
+原文：<a href="https://blog.csdn.net/sunny2038/article/details/9137759">https://blog.csdn.net/sunny2038/article/details/9137759</a>
+版权声明：本文为博主原创文章，转载请附上博文链接！</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/rgb-%E5%9B%BE%E5%83%8F%E8%BD%AC%E6%88%90%E7%81%B0%E5%BA%A6%E5%9B%BE%E5%83%8F/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95%E7%9A%84%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

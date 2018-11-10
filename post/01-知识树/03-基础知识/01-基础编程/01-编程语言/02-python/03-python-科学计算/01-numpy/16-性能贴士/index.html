@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>16 性能贴士 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="A.9 Performance Tips（性能贴士） 把python loop和conditional logic（条件逻辑）转换为数组操作和布尔数组操作 尽可能是用广播 使用数" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-numpy/16-%E6%80%A7%E8%83%BD%E8%B4%B4%E5%A3%AB/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="16 性能贴士" />
+<meta property="og:description" content="A.9 Performance Tips（性能贴士） 把python loop和conditional logic（条件逻辑）转换为数组操作和布尔数组操作 尽可能是用广播 使用数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-numpy/16-%E6%80%A7%E8%83%BD%E8%B4%B4%E5%A3%AB/" /><meta property="article:published_time" content="2018-07-08T13:36:55&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-08T13:36:55&#43;00:00"/>
+<meta itemprop="name" content="16 性能贴士">
+<meta itemprop="description" content="A.9 Performance Tips（性能贴士） 把python loop和conditional logic（条件逻辑）转换为数组操作和布尔数组操作 尽可能是用广播 使用数">
+
+
+<meta itemprop="datePublished" content="2018-07-08T13:36:55&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-08T13:36:55&#43;00:00" />
+<meta itemprop="wordCount" content="491">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="16 性能贴士"/>
+<meta name="twitter:description" content="A.9 Performance Tips（性能贴士） 把python loop和conditional logic（条件逻辑）转换为数组操作和布尔数组操作 尽可能是用广播 使用数"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">16 性能贴士</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-08 </span>
+        
+        <span class="more-meta"> 491 words </span>
+        <span class="more-meta"> 1 min read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#a-9-performance-tips-性能贴士">A.9 Performance Tips（性能贴士）</a></li>
+<li><a href="#1-the-importance-of-contiguous-memory-邻近内存的重要性">1 The Importance of Contiguous Memory（邻近内存的重要性）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="a-9-performance-tips-性能贴士">A.9 Performance Tips（性能贴士）</h1>
+
+<ul>
+<li>把python loop和conditional logic（条件逻辑）转换为数组操作和布尔数组操作</li>
+<li>尽可能是用广播</li>
+<li>使用数组视图（切片）来方式复制数据</li>
+<li>使用ufuncs和ufunc方法</li>
+</ul>
+
+<h1 id="1-the-importance-of-contiguous-memory-邻近内存的重要性">1 The Importance of Contiguous Memory（邻近内存的重要性）</h1>
+
+<p>如果访问相邻的内存，速度会快很多。在内存中创建数组的时候，存储顺序有Fortran（列为主）和C（行为主）两种。默认，numpy数组是按C邻近的方式创建的。可以通过flags属性来查看：</p>
+
+<pre><code class="language-python">import numpy as np
+</code></pre>
+
+<pre><code class="language-python">arr_c = np.ones((1000, 1000), order='C')
+arr_f = np.ones((1000, 1000), order='F')
+</code></pre>
+
+<pre><code class="language-python">arr_c.flags
+</code></pre>
+
+<pre><code>  C_CONTIGUOUS : True
+  F_CONTIGUOUS : False
+  OWNDATA : True
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</code></pre>
+
+<pre><code class="language-python">arr_f.flags
+</code></pre>
+
+<pre><code>  C_CONTIGUOUS : False
+  F_CONTIGUOUS : True
+  OWNDATA : True
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</code></pre>
+
+<pre><code class="language-python">arr_f.flags.f_contiguous
+</code></pre>
+
+<pre><code>True
+</code></pre>
+
+<p>在这个例子里，如果要计算每一行的和，理论上arr_c是比arr_f要快的，因为行在内存里是邻近的。我们可以检查一下：</p>
+
+<pre><code class="language-python">%timeit arr_c.sum(1)
+</code></pre>
+
+<pre><code>1000 loops, best of 3: 576 µs per loop
+</code></pre>
+
+<pre><code class="language-python">%timeit arr_f.sum(1)
+</code></pre>
+
+<pre><code>1000 loops, best of 3: 672 µs per loop
+</code></pre>
+
+<p>当我们在numpy之外想要提高性能的话，这是个不错的选择。如果我们想要数组按我们想要的顺序在内存上进行存储，可以使用copy，并传入C或F：</p>
+
+<pre><code class="language-python">arr_f.copy('C').flags
+</code></pre>
+
+<pre><code>  C_CONTIGUOUS : True
+  F_CONTIGUOUS : False
+  OWNDATA : True
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</code></pre>
+
+<p>当在一个数组上构建视图的时候，记住其结果不一定保证是相邻的：</p>
+
+<pre><code class="language-python">arr_c[:50].flags.contiguous
+</code></pre>
+
+<pre><code>True
+</code></pre>
+
+<pre><code class="language-python">arr_c[:, :50].flags
+</code></pre>
+
+<pre><code>  C_CONTIGUOUS : False
+  F_CONTIGUOUS : False
+  OWNDATA : False
+  WRITEABLE : True
+  ALIGNED : True
+  UPDATEIFCOPY : False
+</code></pre>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-numpy/15-%E6%95%B0%E7%BB%84%E8%BE%93%E5%85%A5%E5%92%8C%E8%BE%93%E5%87%BA%E7%9A%84%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">15 数组输入和输出的高级用法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/51-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90/02-movielens-1m%E6%95%B0%E6%8D%AE%E9%9B%86/">
+            <span class="next-text nav-default">02 MovieLens 1M数据集</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>python中的字符串 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="缘由 以前在写程序的时候，遇到字符串的时候总是感觉到很棘手，用起来也很忐忑，比如字符串的转换，转换成数字，转换成ascii，转换成list，中" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/03-python-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/python%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="python中的字符串" />
+<meta property="og:description" content="缘由 以前在写程序的时候，遇到字符串的时候总是感觉到很棘手，用起来也很忐忑，比如字符串的转换，转换成数字，转换成ascii，转换成list，中" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/03-python-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/python%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/" /><meta property="article:published_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta property="article:modified_time" content="2018-06-11T08:14:29&#43;00:00"/>
+<meta itemprop="name" content="python中的字符串">
+<meta itemprop="description" content="缘由 以前在写程序的时候，遇到字符串的时候总是感觉到很棘手，用起来也很忐忑，比如字符串的转换，转换成数字，转换成ascii，转换成list，中">
+
+
+<meta itemprop="datePublished" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-11T08:14:29&#43;00:00" />
+<meta itemprop="wordCount" content="972">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="python中的字符串"/>
+<meta name="twitter:description" content="缘由 以前在写程序的时候，遇到字符串的时候总是感觉到很棘手，用起来也很忐忑，比如字符串的转换，转换成数字，转换成ascii，转换成list，中"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">python中的字符串</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-06-11 </span>
+        
+        <span class="more-meta"> 972 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#缘由">缘由</a>
+<ul>
+<li><a href="#要点">要点：</a>
+<ul>
+<li><a href="#字符串是不可以修改的-可以当作一个数组访问">字符串是不可以修改的，可以当作一个数组访问：</a></li>
+<li><a href="#去除空格">去除空格：</a></li>
+<li><a href="#大小写">大小写：</a></li>
+<li><a href="#字符串内部一小串的index">字符串内部一小串的index：</a></li>
+<li><a href="#字符串之间的比较">字符串之间的比较：</a></li>
+<li><a href="#字符串长度">字符串长度：</a></li>
+<li><a href="#空字符串与none">空字符串与None：</a></li>
+<li><a href="#字符串的分割与连接">字符串的分割与连接：</a></li>
+<li><a href="#字符串以什么开始与结束的判断">字符串以什么开始与结束的判断：</a></li>
+<li><a href="#对字符串里面包含的字符的验证">对字符串里面包含的字符的验证：</a></li>
+<li><a href="#数字转化为字符串">数字转化为字符串：</a></li>
+<li><a href="#字符串转化为数字-这个要补充下">字符串转化为数字：(这个要补充下）</a></li>
+<li><a href="#字符串转化为list">字符串转化为list：</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="缘由">缘由</h1>
+
+<p>以前在写程序的时候，遇到字符串的时候总是感觉到很棘手，用起来也很忐忑，比如字符串的转换，转换成数字，转换成ascii，转换成list，中文字符串，打印字符串时候的参数的形式，format，字符串的查找，等等。。这导致我一遇到这种类似的问题，就感觉心里忐忑，没有把握，因此还是要好好总结一下，让心里有个底。</p>
+
+<h2 id="要点">要点：</h2>
+
+<h3 id="字符串是不可以修改的-可以当作一个数组访问">字符串是不可以修改的，可以当作一个数组访问：</h3>
+
+<pre><code>a='abc'
+a[0]='b'
+</code></pre>
+
+<p>会有如下异常：</p>
+
+<pre><code>'str' object does not support item assignment
+</code></pre>
+
+<h3 id="去除空格">去除空格：</h3>
+
+<pre><code>s='  abc  egf  '
+print(s)
+print(s.strip())# 返回的是一个新的字符串 删掉了前后的空格
+print(s.lstrip())
+print(s.rstrip())
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>  abc  egf  
+abc  egf
+abc  egf  
+  abc  egf
+</code></pre>
+
+<h3 id="大小写">大小写：</h3>
+
+<pre><code>s='abc def'
+print(s.upper())
+print(s.upper().lower())
+print(s.capitalize())
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>ABC DEF
+abc def
+Abc def
+</code></pre>
+
+<h3 id="字符串内部一小串的index">字符串内部一小串的index：</h3>
+
+<pre><code>s_1='abcdefg'
+s_2='abdeffxx'
+print(s_1.index('bcd'))
+print(s_2.index('bcd'))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>1
+Traceback (most recent call last):
+  File &quot;E:\11.ProgramFiles\Anaconda3\lib\site-packages\IPython\core\interactiveshell.py&quot;, line 2881, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File &quot;&lt;ipython-input-5-5a1ccae7cee2&gt;&quot;, line 4, in &lt;module&gt;
+    print(s_2.index('bcd'))
+ValueError: substring not found
+</code></pre>
+
+<h3 id="字符串之间的比较">字符串之间的比较：</h3>
+
+<pre><code>s_1 = 'abcdefg'
+s_2 = 'abdeffxx'
+print(s_1 == s_2)
+print(s_1 &lt; s_2)
+print(s_1 &gt; s_2)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>False
+True
+False
+</code></pre>
+
+<h3 id="字符串长度">字符串长度：</h3>
+
+<pre><code>print(len('abcdefg'))
+print(len(''))
+print(len(None))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>7
+0
+Traceback (most recent call last):
+  File &quot;E:\11.ProgramFiles\Anaconda3\lib\site-packages\IPython\core\interactiveshell.py&quot;, line 2881, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File &quot;&lt;ipython-input-7-672cccf559af&gt;&quot;, line 3, in &lt;module&gt;
+    print(len(None))#object of type 'NoneType' has no len()
+TypeError: object of type 'NoneType' has no len()
+</code></pre>
+
+<h3 id="空字符串与none">空字符串与None：</h3>
+
+<pre><code># 空字符串并不等于None
+s = ''
+if s is None:
+    print('None')
+else:
+    print('is not None')
+# 空字符串在内存中还是有一个对象的
+# 对于空字符串，与False是等价的
+if not s:
+    print(&quot;Empty&quot;)
+# 但是这样比较是错误的
+if s == False:
+    print(&quot;s is False&quot;)
+else:
+    print(&quot;s is not False&quot;)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>is not None
+Empty
+s is not False
+</code></pre>
+
+<h3 id="字符串的分割与连接">字符串的分割与连接：</h3>
+
+<pre><code># 字符串的分割和连接
+# 在python大数据分析处理的时候，经常拿到csv格式的数据，经常要分割csv的每一个行，然后】#
+# 在输出的时候又合并成一个整体
+s = 'abc,def,ghi'
+splitted = s.split(',')
+print(type(splitted))  # 返回的是一个数组
+print(splitted)
+
+s = 'abc,,def,,ghi'
+splitted = s.split(',,')
+print(type(splitted))  # 返回的是一个数组
+print(splitted)
+s = &quot;&quot;&quot;abc
+def
+ghi
+efg&quot;&quot;&quot;
+s_1 = s.split('\n')  # 这两者是等价的，因为三引号的换行本身就是\n
+s_2 = s.splitlines()
+print(s_1)
+print(s_2)
+
+s = ['abc', 'def', 'ghi']
+print(''.join(s))  # 可以很轻松的把结果拼回去
+print('\n'.join(s))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>&lt;class 'list'&gt;
+['abc', 'def', 'ghi']
+&lt;class 'list'&gt;
+['abc', 'def', 'ghi']
+['abc', 'def', 'ghi', 'efg']
+['abc', 'def', 'ghi', 'efg']
+abcdefghi
+abc
+def
+ghi
+</code></pre>
+
+<h3 id="字符串以什么开始与结束的判断">字符串以什么开始与结束的判断：</h3>
+
+<pre><code>s = 'abcdefg'
+print(s.startswith('a'))
+print(s.startswith('abc'))
+print(s.endswith('g'))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>True
+True
+True
+</code></pre>
+
+<h3 id="对字符串里面包含的字符的验证">对字符串里面包含的字符的验证：</h3>
+
+<pre><code># 判断是不是只有 abcdefg 或者 12345
+print('1234abcd'.isalnum())
+print('\t12ab'.isalnum())
+print('abcd'.isalpha())
+print('12345'.isdigit())
+print('   '.isspace())
+print('abcd12345'.islower())
+print('ABCD12345'.isupper())
+print('Hello world'.istitle())
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>True
+False
+True
+True
+True
+True
+True
+False
+</code></pre>
+
+<h3 id="数字转化为字符串">数字转化为字符串：</h3>
+
+<pre><code>print(str(5))
+print(str(5.))  # 注意 这个地方会自动补0  因此有时候需要特别处理
+print(str(5.1234))
+print(str(-5.1234))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>5
+5.0
+5.1234
+-5.1234
+</code></pre>
+
+<h3 id="字符串转化为数字-这个要补充下">字符串转化为数字：(这个要补充下）</h3>
+
+<pre><code>print(int('1234'))
+print(float('1234.4'))
+# 系统不会自动做转换，
+# print(int('1234.1234'))#invalid literal for int() with base 10: '1234.1234'
+print(int('1111', 2))
+# 当你拿到一个16进制的数据想转换为10进制的时候一定要加上这个base是多少
+print(int('ffff', 16))
+print(int('7777', 8))
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>1234
+1234.4
+15
+65535
+4095
+</code></pre>
+
+<h3 id="字符串转化为list">字符串转化为list：</h3>
+
+<pre><code># 因为字符串不可以修改，因此想复制到一个数组里面
+s = 'abcdefg'
+l = list(s)
+print(l)
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>['a', 'b', 'c', 'd', 'e', 'f', 'g']
+</code></pre>
+
+<p><strong>缘由里面还有很多问题没有解答，要补充</strong></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/20-python-%E7%BC%96%E7%A8%8B%E9%A3%8E%E6%A0%BC/python%E4%B8%AD%E7%9A%84%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">python中的命名规范</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/02-python-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/07-python-%E6%96%87%E4%BB%B6%E5%92%8C%E6%B5%81/python%E4%B8%AD%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+            <span class="next-text nav-default">python中的序列化与反序列化</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

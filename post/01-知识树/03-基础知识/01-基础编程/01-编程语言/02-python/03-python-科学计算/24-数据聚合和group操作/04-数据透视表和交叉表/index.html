@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>04 数据透视表和交叉表 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="10.4 Pivot Tables and Cross-Tabulation（数据透视表和交叉表） Pivot Tables（数据透视表）是一种常见的数据汇总工具，常见与各种spreads" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/24-%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88%E5%92%8Cgroup%E6%93%8D%E4%BD%9C/04-%E6%95%B0%E6%8D%AE%E9%80%8F%E8%A7%86%E8%A1%A8%E5%92%8C%E4%BA%A4%E5%8F%89%E8%A1%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="04 数据透视表和交叉表" />
+<meta property="og:description" content="10.4 Pivot Tables and Cross-Tabulation（数据透视表和交叉表） Pivot Tables（数据透视表）是一种常见的数据汇总工具，常见与各种spreads" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/24-%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88%E5%92%8Cgroup%E6%93%8D%E4%BD%9C/04-%E6%95%B0%E6%8D%AE%E9%80%8F%E8%A7%86%E8%A1%A8%E5%92%8C%E4%BA%A4%E5%8F%89%E8%A1%A8/" /><meta property="article:published_time" content="2018-08-03T11:29:51&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:29:51&#43;00:00"/>
+<meta itemprop="name" content="04 数据透视表和交叉表">
+<meta itemprop="description" content="10.4 Pivot Tables and Cross-Tabulation（数据透视表和交叉表） Pivot Tables（数据透视表）是一种常见的数据汇总工具，常见与各种spreads">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:29:51&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:29:51&#43;00:00" />
+<meta itemprop="wordCount" content="1643">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="04 数据透视表和交叉表"/>
+<meta name="twitter:description" content="10.4 Pivot Tables and Cross-Tabulation（数据透视表和交叉表） Pivot Tables（数据透视表）是一种常见的数据汇总工具，常见与各种spreads"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">04 数据透视表和交叉表</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 1643 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#10-4-pivot-tables-and-cross-tabulation-数据透视表和交叉表">10.4 Pivot Tables and Cross-Tabulation（数据透视表和交叉表）</a></li>
+<li><a href="#1-cross-tabulations-crosstab-交叉表-crosstab">1 Cross-Tabulations: Crosstab（交叉表：Crosstab）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="10-4-pivot-tables-and-cross-tabulation-数据透视表和交叉表">10.4 Pivot Tables and Cross-Tabulation（数据透视表和交叉表）</h1>
+
+<p>Pivot Tables（数据透视表）是一种常见的数据汇总工具，常见与各种spreadsheet programs（电子表格程序，比如Excel）和一些数据分析软件。它能按一个或多个keys来把数据聚合为表格，能沿着行或列，根据组键来整理数据。</p>
+
+<p>数据透视表可以用pandas的groupby来制作，这个本节会进行介绍，除此之外还会有介绍如何利用多层级索引来进行reshape（更改形状）操作。DataFrame有一个pivot_table方法，另外还有一个pandas.pivot_table函数。为了有一个更方便的groupby借口，pivot_table能添加partial totals（部分合计）,也被称作margins(边界)。</p>
+
+<p>回到之前提到的tipping数据集，假设我们想要计算一个含有组平均值的表格(a table of group means，这个平均值也是pivot_table默认的聚合类型)，按day和smoker来分组：</p>
+
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+</code></pre>
+
+<pre><code class="language-python">tips = pd.read_csv('../examples/tips.csv')
+# Add tip percentage of total bill
+tips['tip_pct'] = tips['tip'] / tips['total_bill']
+</code></pre>
+
+<pre><code class="language-python">tips.head()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>smoker</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+      <th>tip_pct</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>16.99</td>
+      <td>1.01</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>0.059447</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10.34</td>
+      <td>1.66</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+      <td>0.160542</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>21.01</td>
+      <td>3.50</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+      <td>0.166587</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>23.68</td>
+      <td>3.31</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+      <td>0.139780</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>24.59</td>
+      <td>3.61</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>4</td>
+      <td>0.146808</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">tips.pivot_table(index=['day', 'smoker'])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>size</th>
+      <th>tip</th>
+      <th>tip_pct</th>
+      <th>total_bill</th>
+    </tr>
+    <tr>
+      <th>day</th>
+      <th>smoker</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">Fri</th>
+      <th>No</th>
+      <td>2.250000</td>
+      <td>2.812500</td>
+      <td>0.151650</td>
+      <td>18.420000</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>2.066667</td>
+      <td>2.714000</td>
+      <td>0.174783</td>
+      <td>16.813333</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Sat</th>
+      <th>No</th>
+      <td>2.555556</td>
+      <td>3.102889</td>
+      <td>0.158048</td>
+      <td>19.661778</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>2.476190</td>
+      <td>2.875476</td>
+      <td>0.147906</td>
+      <td>21.276667</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Sun</th>
+      <th>No</th>
+      <td>2.929825</td>
+      <td>3.167895</td>
+      <td>0.160113</td>
+      <td>20.506667</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>2.578947</td>
+      <td>3.516842</td>
+      <td>0.187250</td>
+      <td>24.120000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Thur</th>
+      <th>No</th>
+      <td>2.488889</td>
+      <td>2.673778</td>
+      <td>0.160298</td>
+      <td>17.113111</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>2.352941</td>
+      <td>3.030000</td>
+      <td>0.163863</td>
+      <td>19.190588</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这个结果也可以通过groupby直接得到。</p>
+
+<p>现在假设我们想要按time分组，然后对tip_pct和size进行聚合。我们会把smoker放在列上，而day用于行：</p>
+
+<pre><code class="language-python">tips.pivot_table(['tip_pct', 'size'], index=['time', 'day'],
+                 columns='smoker')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th colspan="2" halign="left">tip_pct</th>
+      <th colspan="2" halign="left">size</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>smoker</th>
+      <th>No</th>
+      <th>Yes</th>
+      <th>No</th>
+      <th>Yes</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th>day</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="4" valign="top">Dinner</th>
+      <th>Fri</th>
+      <td>0.139622</td>
+      <td>0.165347</td>
+      <td>2.000000</td>
+      <td>2.222222</td>
+    </tr>
+    <tr>
+      <th>Sat</th>
+      <td>0.158048</td>
+      <td>0.147906</td>
+      <td>2.555556</td>
+      <td>2.476190</td>
+    </tr>
+    <tr>
+      <th>Sun</th>
+      <td>0.160113</td>
+      <td>0.187250</td>
+      <td>2.929825</td>
+      <td>2.578947</td>
+    </tr>
+    <tr>
+      <th>Thur</th>
+      <td>0.159744</td>
+      <td>NaN</td>
+      <td>2.000000</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Lunch</th>
+      <th>Fri</th>
+      <td>0.187735</td>
+      <td>0.188937</td>
+      <td>3.000000</td>
+      <td>1.833333</td>
+    </tr>
+    <tr>
+      <th>Thur</th>
+      <td>0.160311</td>
+      <td>0.163863</td>
+      <td>2.500000</td>
+      <td>2.352941</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>我们也快成把这个表格加强一下，通过设置margins=True来添加部分合计（partial total）。这么做的话有一个效果，会给行和列各添加All标签，这个All表示的是当前组对于整个数据的统计值：</p>
+
+<pre><code class="language-python">tips.pivot_table(['tip_pct', 'size'], index=['time', 'day'],
+                 columns='smoker', margins=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th colspan="3" halign="left">tip_pct</th>
+      <th colspan="3" halign="left">size</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>smoker</th>
+      <th>No</th>
+      <th>Yes</th>
+      <th>All</th>
+      <th>No</th>
+      <th>Yes</th>
+      <th>All</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th>day</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="4" valign="top">Dinner</th>
+      <th>Fri</th>
+      <td>0.139622</td>
+      <td>0.165347</td>
+      <td>0.158916</td>
+      <td>2.000000</td>
+      <td>2.222222</td>
+      <td>2.166667</td>
+    </tr>
+    <tr>
+      <th>Sat</th>
+      <td>0.158048</td>
+      <td>0.147906</td>
+      <td>0.153152</td>
+      <td>2.555556</td>
+      <td>2.476190</td>
+      <td>2.517241</td>
+    </tr>
+    <tr>
+      <th>Sun</th>
+      <td>0.160113</td>
+      <td>0.187250</td>
+      <td>0.166897</td>
+      <td>2.929825</td>
+      <td>2.578947</td>
+      <td>2.842105</td>
+    </tr>
+    <tr>
+      <th>Thur</th>
+      <td>0.159744</td>
+      <td>NaN</td>
+      <td>0.159744</td>
+      <td>2.000000</td>
+      <td>NaN</td>
+      <td>2.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Lunch</th>
+      <th>Fri</th>
+      <td>0.187735</td>
+      <td>0.188937</td>
+      <td>0.188765</td>
+      <td>3.000000</td>
+      <td>1.833333</td>
+      <td>2.000000</td>
+    </tr>
+    <tr>
+      <th>Thur</th>
+      <td>0.160311</td>
+      <td>0.163863</td>
+      <td>0.161301</td>
+      <td>2.500000</td>
+      <td>2.352941</td>
+      <td>2.459016</td>
+    </tr>
+    <tr>
+      <th>All</th>
+      <th></th>
+      <td>0.159328</td>
+      <td>0.163196</td>
+      <td>0.160803</td>
+      <td>2.668874</td>
+      <td>2.408602</td>
+      <td>2.569672</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这里，对于All列，这一列的值是不考虑吸烟周和非吸烟者的平均值（smoker versus nonsmoker）。对于All行，这一行的值是不考虑任何组中任意两个组的平均值（any of the two levels of grouping）。</p>
+
+<p>想要使用不同的聚合函数，传递给aggfunc即可。例如，count或len可以给我们一个关于组大小（group size）的交叉表格：</p>
+
+<pre><code class="language-python">tips.pivot_table('tip_pct', index=['time', 'smoker'], columns='day',
+                 aggfunc=len, margins=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>day</th>
+      <th>Fri</th>
+      <th>Sat</th>
+      <th>Sun</th>
+      <th>Thur</th>
+      <th>All</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th>smoker</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">Dinner</th>
+      <th>No</th>
+      <td>3.0</td>
+      <td>45.0</td>
+      <td>57.0</td>
+      <td>1.0</td>
+      <td>106.0</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>9.0</td>
+      <td>42.0</td>
+      <td>19.0</td>
+      <td>NaN</td>
+      <td>70.0</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Lunch</th>
+      <th>No</th>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>44.0</td>
+      <td>45.0</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>6.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>17.0</td>
+      <td>23.0</td>
+    </tr>
+    <tr>
+      <th>All</th>
+      <th></th>
+      <td>19.0</td>
+      <td>87.0</td>
+      <td>76.0</td>
+      <td>62.0</td>
+      <td>244.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果一些组合是空的（或NA），我们希望直接用fill_value来填充：</p>
+
+<pre><code class="language-python">tips.pivot_table('tip_pct', index=['time', 'size', 'smoker'],
+                 columns='day', aggfunc='mean', fill_value=0)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>day</th>
+      <th>Fri</th>
+      <th>Sat</th>
+      <th>Sun</th>
+      <th>Thur</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th>size</th>
+      <th>smoker</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="11" valign="top">Dinner</th>
+      <th rowspan="2" valign="top">1</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.137931</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.000000</td>
+      <td>0.325733</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">2</th>
+      <th>No</th>
+      <td>0.139622</td>
+      <td>0.162705</td>
+      <td>0.168859</td>
+      <td>0.159744</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.171297</td>
+      <td>0.148668</td>
+      <td>0.207893</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">3</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.154661</td>
+      <td>0.152663</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.000000</td>
+      <td>0.144995</td>
+      <td>0.152660</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">4</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.150096</td>
+      <td>0.148143</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.117750</td>
+      <td>0.124515</td>
+      <td>0.193370</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">5</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.206928</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.000000</td>
+      <td>0.106572</td>
+      <td>0.065660</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.103799</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="10" valign="top">Lunch</th>
+      <th rowspan="2" valign="top">1</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.181728</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.223776</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">2</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.166005</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.181969</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.158843</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">3</th>
+      <th>No</th>
+      <td>0.187735</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.084246</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.204952</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">4</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.138919</td>
+    </tr>
+    <tr>
+      <th>Yes</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.155410</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.121389</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <th>No</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.173706</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>下面是关于pivot_table方法的一些选项：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/jk3JdJg46H.png?imageslim" alt="mark" /></p>
+
+<h1 id="1-cross-tabulations-crosstab-交叉表-crosstab">1 Cross-Tabulations: Crosstab（交叉表：Crosstab）</h1>
+
+<p>cross-tabulation（交叉表，简写为crosstab），是数据透视表的一个特殊形式，只计算组频率（group frequencies）。这里有个例子：</p>
+
+<pre><code class="language-python">data = pd.DataFrame({'Sample': np.arange(1, 11),
+        'Nationality': ['USA', 'Japan', 'USA', 'Japan', 'Japan', 'Japan', 'USA', 'USA', 'Japan', 'USA'],
+        'Handedness': ['Right-handed', 'Left-handed', 'Right-handed', 'Right-handed', 'Left-handed', 'Right-handed', 'Right-handed', 'Left-handed', 'Right-handed', 'Right-handed']})
+data
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Handedness</th>
+      <th>Nationality</th>
+      <th>Sample</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Right-handed</td>
+      <td>USA</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Left-handed</td>
+      <td>Japan</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Right-handed</td>
+      <td>USA</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Right-handed</td>
+      <td>Japan</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Left-handed</td>
+      <td>Japan</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Right-handed</td>
+      <td>Japan</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Right-handed</td>
+      <td>USA</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Left-handed</td>
+      <td>USA</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Right-handed</td>
+      <td>Japan</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Right-handed</td>
+      <td>USA</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>作为调查分析（survey analysis）的一部分，我们想要按国家和惯用手来进行汇总。我们可以使用pivot_table来做到这点，不过pandas.crosstab函数会更方便一些：</p>
+
+<pre><code class="language-python">pd.crosstab(data.Nationality, data.Handedness, margins=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Handedness</th>
+      <th>Left-handed</th>
+      <th>Right-handed</th>
+      <th>All</th>
+    </tr>
+    <tr>
+      <th>Nationality</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Japan</th>
+      <td>2</td>
+      <td>3</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>USA</th>
+      <td>1</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>All</th>
+      <td>3</td>
+      <td>7</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>crosstab的前两个参数可以是数组或Series或由数组组成的列表（a list of array）。对于tips数据，可以这么写：</p>
+
+<pre><code class="language-python">pd.crosstab([tips.time, tips.day], tips.smoker, margins=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>smoker</th>
+      <th>No</th>
+      <th>Yes</th>
+      <th>All</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th>day</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="4" valign="top">Dinner</th>
+      <th>Fri</th>
+      <td>3</td>
+      <td>9</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>Sat</th>
+      <td>45</td>
+      <td>42</td>
+      <td>87</td>
+    </tr>
+    <tr>
+      <th>Sun</th>
+      <td>57</td>
+      <td>19</td>
+      <td>76</td>
+    </tr>
+    <tr>
+      <th>Thur</th>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">Lunch</th>
+      <th>Fri</th>
+      <td>1</td>
+      <td>6</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>Thur</th>
+      <td>44</td>
+      <td>17</td>
+      <td>61</td>
+    </tr>
+    <tr>
+      <th>All</th>
+      <th></th>
+      <td>151</td>
+      <td>93</td>
+      <td>244</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/31-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/01-%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%8F%8A%E5%85%B6%E5%B7%A5%E5%85%B7/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 日期和时间数据类型及其工具</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/24-%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88%E5%92%8Cgroup%E6%93%8D%E4%BD%9C/03-%E5%BA%94%E7%94%A8%E9%80%9A%E5%B8%B8%E7%9A%84%E5%88%86%E5%89%B2-%E5%BA%94%E7%94%A8-%E5%90%88%E5%B9%B6/">
+            <span class="next-text nav-default">03 应用：通常的分割-应用-合并</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

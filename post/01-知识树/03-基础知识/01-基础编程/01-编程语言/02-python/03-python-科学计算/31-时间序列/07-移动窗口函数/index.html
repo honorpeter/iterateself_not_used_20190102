@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>07 移动窗口函数 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="11.7 Moving Window Functions（移动窗口函数） 一种用于时间序列操作的重要用法，是使用滑窗（sliding windown）或呈指数降低的权重（exp" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/31-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/07-%E7%A7%BB%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="07 移动窗口函数" />
+<meta property="og:description" content="11.7 Moving Window Functions（移动窗口函数） 一种用于时间序列操作的重要用法，是使用滑窗（sliding windown）或呈指数降低的权重（exp" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/31-%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/07-%E7%A7%BB%E5%8A%A8%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" /><meta property="article:published_time" content="2018-07-08T14:33:15&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-08T14:33:15&#43;00:00"/>
+<meta itemprop="name" content="07 移动窗口函数">
+<meta itemprop="description" content="11.7 Moving Window Functions（移动窗口函数） 一种用于时间序列操作的重要用法，是使用滑窗（sliding windown）或呈指数降低的权重（exp">
+
+
+<meta itemprop="datePublished" content="2018-07-08T14:33:15&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-08T14:33:15&#43;00:00" />
+<meta itemprop="wordCount" content="1994">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="07 移动窗口函数"/>
+<meta name="twitter:description" content="11.7 Moving Window Functions（移动窗口函数） 一种用于时间序列操作的重要用法，是使用滑窗（sliding windown）或呈指数降低的权重（exp"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">07 移动窗口函数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-08 </span>
+        
+        <span class="more-meta"> 1994 words </span>
+        <span class="more-meta"> 4 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#11-7-moving-window-functions-移动窗口函数">11.7 Moving Window Functions（移动窗口函数）</a></li>
+<li><a href="#1-exponentially-weighted-functions-指数权重函数">1 Exponentially Weighted Functions（指数权重函数）</a></li>
+<li><a href="#2-binary-moving-window-functions-二元移动窗口函数">2 Binary Moving Window Functions（二元移动窗口函数）</a></li>
+<li><a href="#3-user-defined-moving-window-functions-用户自定义的移动窗口函数">3 User-Defined Moving Window Functions（用户自定义的移动窗口函数）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="11-7-moving-window-functions-移动窗口函数">11.7 Moving Window Functions（移动窗口函数）</h1>
+
+<p>一种用于时间序列操作的重要用法，是使用滑窗（sliding windown）或呈指数降低的权重（exponentially decaying weights），来对时间序列进行统计值计算和其他一些函数计算。 这个对于消除噪声或有缺陷的数据是很有用的。这里我们称之为Moving Window Functions（移动窗口函数），不过其中也包括了不适用固定长度窗口的函数(functions without a fixed-length window)，比如指数加权移动平均数（exponentially weighted moving average）。和其他一些统计函数以后，这些函数也会自动无视缺失值。</p>
+
+<p>我们先加载一些时间序列数据并按工作日频度进行重采样：</p>
+
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+</code></pre>
+
+<pre><code class="language-python">%matplotlib inline
+</code></pre>
+
+<pre><code class="language-python">close_px_all = pd.read_csv('../examples/stock_px_2.csv',
+                           parse_dates=True, index_col=0)
+
+close_px = close_px_all[['AAPL', 'MSFT', 'XOM']]
+
+close_px = close_px.resample('B').ffill()
+</code></pre>
+
+<p>接下面介绍rolling操作符，效果和resample及groupby一样。通过window（用于表示周期的数字），这个操作符可以在Series或DataFrame上调用：</p>
+
+<pre><code class="language-python">close_px.AAPL.plot()
+close_px.AAPL.rolling(250).mean().plot(figsize=(15, 8))
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11dc5ce10&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/hCGAhe5J4h.png?imageslim" alt="mark" /></p>
+
+<p>这里的<code>rolling(250)</code>和groupby的效果一样，但并不是直接进行分组，而是创建了一个新的对象，并在一个有250天的滑窗上进行了分组。所以这里对于苹果的股价，我们得到了一个250天移动窗口平均值（moving window average）。</p>
+
+<p>默认情况下滚动函数（rolling functions）需要窗口中所有的值为non-NA。如果有缺失值的话，我们会得到更少的windown周期：</p>
+
+<pre><code class="language-python">appl_std250 = close_px.AAPL.rolling(250, min_periods=10).std()
+appl_std250[5:12]
+</code></pre>
+
+<pre><code>2003-01-09         NaN
+2003-01-10         NaN
+2003-01-13         NaN
+2003-01-14         NaN
+2003-01-15    0.077496
+2003-01-16    0.074760
+2003-01-17    0.112368
+Freq: B, Name: AAPL, dtype: float64
+</code></pre>
+
+<pre><code class="language-python">appl_std250.plot(figsize=(15, 8))
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11d66fc50&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/lcL2AHGjEh.png?imageslim" alt="mark" /></p>
+
+<p>为了计算扩张窗口平均（expanding window mean），我们要使用expanding操作符，而不是用rolling。这个扩张平均的时间窗口是从时间序列开始的地方作为开始，窗口的大小会逐渐递增，直到包含整个序列。一个扩张窗口平均在时间序列上的计算像下面这样，我们拿apple_std250来做例子：</p>
+
+<pre><code class="language-python">expanding_mean = appl_std250.expanding().mean()
+</code></pre>
+
+<p>在一个DataFrame上的每一列调用移动窗口函数：</p>
+
+<pre><code class="language-python">close_px.rolling(60).mean().plot(logy=True, figsize=(15, 8))
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11d1cf3c8&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/4KmHCGHGAD.png?imageslim" alt="mark" /></p>
+
+<p>rolling函数也接收字符串，用来指定一个大小固定的时间偏移量（fixed-size time offset），而不是用一组周期数字（a set number of periods）来表示。使用这种计划对于没有规律的时间序列很有用。同样的字符串也可以传递给resample使用。例如，我们可以计算一个20天的滑动平均（rolling mean）：</p>
+
+<blockquote>
+<p>译者：在运行下面的代码时，出现了报错，发现是pandas版本的问题，运行<code>conda update numpy</code>会把包括numpy，pandas之类的很多库进行更新，之后就不会报错了</p>
+</blockquote>
+
+<pre><code class="language-python">rolling_mean = close_px.rolling('20D').mean()
+print(rolling_mean.head())
+print(rolling_mean.tail())
+</code></pre>
+
+<pre><code>                AAPL       MSFT        XOM
+2003-01-02  7.400000  21.110000  29.220000
+2003-01-03  7.425000  21.125000  29.230000
+2003-01-06  7.433333  21.256667  29.473333
+2003-01-07  7.432500  21.425000  29.342500
+2003-01-08  7.402000  21.402000  29.240000
+                  AAPL       MSFT        XOM
+2011-10-10  389.351429  25.602143  72.527857
+2011-10-11  388.505000  25.674286  72.835000
+2011-10-12  388.531429  25.810000  73.400714
+2011-10-13  388.826429  25.961429  73.905000
+2011-10-14  391.038000  26.048667  74.185333
+</code></pre>
+
+<h1 id="1-exponentially-weighted-functions-指数权重函数">1 Exponentially Weighted Functions（指数权重函数）</h1>
+
+<p>另一个用相同权重计算固定窗口大小的方法是指定一个常数衰减因子（constant decay factor），把更多的权重给最近观测到的数据上。有很多方法可以指定衰减引子，一种方法是用span，生成的结果与滑动窗口函数是有可比性的，当然，窗口大小与span的大小要一致。</p>
+
+<p>因为一个指数权重统计方法会把更大的权重基于最近观测到的数据上，这种方法带来的变化比平均权重方法要快很多。</p>
+
+<p>pandas有一个ewm操作符，可以与rolling和expanding一起使用。这里有一个例子，在设置EW移动平均（moving average）为span=60的情况下，比较苹果股价的60天移动平均：</p>
+
+<pre><code class="language-python">aapl_px = close_px.AAPL['2006':'2007']
+</code></pre>
+
+<pre><code class="language-python">ma60 = aapl_px.rolling(30, min_periods=20).mean()
+</code></pre>
+
+<pre><code class="language-python">ewma60 = aapl_px.ewm(span=30).mean()
+</code></pre>
+
+<pre><code class="language-python">ma60.plot(style='k--', label='Simple MA', figsize=(15, 8))
+ewma60.plot(style='k-', label='EW MA', figsize=(15, 8))
+plt.legend()
+</code></pre>
+
+<pre><code>&lt;matplotlib.legend.Legend at 0x11cf9f128&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/cFjkCh2mfc.png?imageslim" alt="mark" /></p>
+
+<h1 id="2-binary-moving-window-functions-二元移动窗口函数">2 Binary Moving Window Functions（二元移动窗口函数）</h1>
+
+<p>一些统计计算符，比如相关性和协方差，需要在两个时间序列上进行计算。例如，经济分析通常喜欢比较一只股票与基础指数标普500之间的相关性。我们先计算一下时间序列的百分比变化：</p>
+
+<pre><code class="language-python">spx_px = close_px_all['SPX']
+</code></pre>
+
+<pre><code class="language-python">spx_rets = spx_px.pct_change()
+</code></pre>
+
+<pre><code class="language-python">returns = close_px.pct_change()
+</code></pre>
+
+<p>在我们调用rolling后，corr聚合函数会去计算spx_rets的滚动相关性（rolling correlation）：</p>
+
+<pre><code class="language-python">corr = returns.AAPL.rolling(125, min_periods=100).corr(spx_rets)
+corr.plot(figsize=(15, 8))
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x110babcf8&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/3jGa05IKcJ.png?imageslim" alt="mark" /></p>
+
+<p>假设我们想要一次计算很多股票与标普500指数的相关性。写一个循环，创建一个新的DataFrame虽然简单但是重复性高，所以我们可以传入一个Series和DataFrame，然后用rolling_corr这样的函数来计算每一列与Series的相关性（在这里例子里，Series指的是spx_rets）：</p>
+
+<pre><code class="language-python">corr = returns.rolling(125, min_periods=100).corr(spx_rets)
+</code></pre>
+
+<pre><code class="language-python">corr.plot(figsize=(15, 8))
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11165deb8&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/fHDHLI1BiI.png?imageslim" alt="mark" /></p>
+
+<h1 id="3-user-defined-moving-window-functions-用户自定义的移动窗口函数">3 User-Defined Moving Window Functions（用户自定义的移动窗口函数）</h1>
+
+<p>在rolling上使用apply或其他一些方法，可以在自己设计的移动窗口上应用函数。唯一需要满足的是，在数组的每一个片段上，函数必须产生单个值。例如，如我们想要用<code>rolling(...).quantile(q)</code>计算样本分位数，我们可能对于某个特定值的分位数排名感兴趣。scipy.stats.percentileofscore函数就是用来做这个的：</p>
+
+<pre><code class="language-python">from scipy.stats import percentileofscore
+</code></pre>
+
+<pre><code class="language-python">score_at_2percent = lambda x: percentileofscore(x, 0.02)
+</code></pre>
+
+<pre><code class="language-python">result = returns.AAPL.rolling(250).apply(score_at_2percent)
+</code></pre>
+
+<pre><code class="language-python">result.plot(figsize=(15, 8))
+</code></pre>
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1135d4dd8&gt;
+</code></pre>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/bBK1ae48GE.png?imageslim" alt="mark" /></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/51-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90/04-usda%E9%A3%9F%E5%93%81%E6%95%B0%E6%8D%AE%E5%BA%93/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">04 USDA食品数据库</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/51-%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90/05-2012%E8%81%94%E9%82%A6%E9%80%89%E4%B8%BE%E5%A7%94%E5%91%98%E4%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93/">
+            <span class="next-text nav-default">05 2012联邦选举委员会数据库</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

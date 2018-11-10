@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>03 字符串处理 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="7.3 String Manipulation（字符串处理） python很多内建方法很适合处理string。而且对于更复杂的模式，可以配合使用正则表达式。而p" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/22-%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97%E5%92%8C%E5%87%86%E5%A4%87/03-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="03 字符串处理" />
+<meta property="og:description" content="7.3 String Manipulation（字符串处理） python很多内建方法很适合处理string。而且对于更复杂的模式，可以配合使用正则表达式。而p" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/22-%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97%E5%92%8C%E5%87%86%E5%A4%87/03-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/" /><meta property="article:published_time" content="2018-08-03T11:26:27&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:26:27&#43;00:00"/>
+<meta itemprop="name" content="03 字符串处理">
+<meta itemprop="description" content="7.3 String Manipulation（字符串处理） python很多内建方法很适合处理string。而且对于更复杂的模式，可以配合使用正则表达式。而p">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:26:27&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:26:27&#43;00:00" />
+<meta itemprop="wordCount" content="2301">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="03 字符串处理"/>
+<meta name="twitter:description" content="7.3 String Manipulation（字符串处理） python很多内建方法很适合处理string。而且对于更复杂的模式，可以配合使用正则表达式。而p"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">03 字符串处理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 2301 words </span>
+        <span class="more-meta"> 5 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#7-3-string-manipulation-字符串处理">7.3 String Manipulation（字符串处理）</a></li>
+<li><a href="#1-string-object-methods-字符串对象方法">1 String Object Methods（字符串对象方法）</a></li>
+<li><a href="#2-regular-expressions-正则表达式">2 Regular Expressions（正则表达式）</a></li>
+<li><a href="#3-vectorized-string-functions-in-pandas-pandas中的字符串向量化函数">3 Vectorized String Functions in pandas（pandas中的字符串向量化函数）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="7-3-string-manipulation-字符串处理">7.3 String Manipulation（字符串处理）</h1>
+
+<p>python很多内建方法很适合处理string。而且对于更复杂的模式，可以配合使用正则表达式。而pandas则混合了两种方式。</p>
+
+<h1 id="1-string-object-methods-字符串对象方法">1 String Object Methods（字符串对象方法）</h1>
+
+<p>大部分string处理，使用内建的一些方法就足够了。比如，可以用split来分割用逗号区分的字符串：</p>
+
+<pre><code class="language-python">val = 'a,b, guido'
+</code></pre>
+
+<pre><code class="language-python">val.split(',')
+</code></pre>
+
+<pre><code>['a', 'b', ' guido']
+</code></pre>
+
+<p>split经常和strip一起搭配使用来去除空格（包括换行符）:</p>
+
+<pre><code class="language-python">pieces = [x.strip() for x in val.split(',')]
+pieces
+</code></pre>
+
+<pre><code>['a', 'b', 'guido']
+</code></pre>
+
+<p>可以使用+号把::和字符串连起来：</p>
+
+<pre><code class="language-python">first, second, third = pieces
+</code></pre>
+
+<pre><code class="language-python">first + '::' + second + '::' + third
+</code></pre>
+
+<pre><code>'a:🅱️:guido'
+</code></pre>
+
+<p>但这种方法并不python，更快的方法是直接用join方法：</p>
+
+<pre><code class="language-python">'::'.join(pieces)
+</code></pre>
+
+<pre><code>'a:🅱️:guido'
+</code></pre>
+
+<p>其他一些方法适合锁定子字符串位置相关的。用in关键字是检测substring最好的方法，当然，index和find也能完成任务：</p>
+
+<pre><code class="language-python">'guido' in val
+</code></pre>
+
+<pre><code>True
+</code></pre>
+
+<pre><code class="language-python">val.index(',')
+</code></pre>
+
+<pre><code>1
+</code></pre>
+
+<pre><code class="language-python">val.find(':')
+</code></pre>
+
+<pre><code>-1
+</code></pre>
+
+<p>注意index和find的区别。如果要找的string不存在的话，index会报错。而find会返回-1:</p>
+
+<pre><code class="language-python">val.index(':')
+</code></pre>
+
+<pre><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-11-280f8b2856ce&gt; in &lt;module&gt;()
+----&gt; 1 val.index(':')
+
+
+ValueError: substring not found
+</code></pre>
+
+<p>count会返回一个substring出现的次数：</p>
+
+<pre><code class="language-python">val.count(',')
+</code></pre>
+
+<pre><code>2
+</code></pre>
+
+<p>replace会取代一种出现方式（pattern）。也通常用于删除pattern，传入一个空字符串即可：</p>
+
+<pre><code class="language-python">val.replace(',', '::')
+</code></pre>
+
+<pre><code>'a:🅱️: guido'
+</code></pre>
+
+<pre><code class="language-python">val.replace(',', '')
+</code></pre>
+
+<pre><code>'ab guido'
+</code></pre>
+
+<p>这里一些内建的string方法：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/ADCDhCa24C.png?imageslim" alt="mark" /></p>
+
+<h1 id="2-regular-expressions-正则表达式">2 Regular Expressions（正则表达式）</h1>
+
+<p>正则表达式能让我们寻找更复杂的pattern。通常称一个表达式为regex，由正则表达语言来代表一个字符串模式。可以使用python内建的re模块来使用。</p>
+
+<blockquote>
+<p>关于正则表达式，有很多教学资源，可以自己找几篇来学一些，这里不会介绍太多。</p>
+</blockquote>
+
+<p>re模块有以下三个类别：patther matching（模式匹配）, substitution（替换）, splitting（分割）。通常这三种都是相关的，一个regex用来描述一种pattern，这样会有很多种用法。这里举个例子，假设我们想要根据空格（tabs，spaces，newlines）来分割一个字符串。用于描述一个或多个空格的regex是<code>\s+</code>:</p>
+
+<pre><code class="language-python">import re
+</code></pre>
+
+<pre><code class="language-python">text = &quot;foo    bar\t baz  \tqux&quot;
+</code></pre>
+
+<pre><code class="language-python">re.split('\s+', text)
+</code></pre>
+
+<pre><code>['foo', 'bar', 'baz', 'qux']
+</code></pre>
+
+<p>当调用<code>re.split('\s+', text)</code>的时候，正则表达式第一次被compile编译，并且split方法会被调用搜索text。我们可以自己编译regex，用re.compile，可以生成一个可以多次使用的regex object：</p>
+
+<pre><code class="language-python">regex = re.compile('\s+')
+</code></pre>
+
+<pre><code class="language-python">regex.split(text)
+</code></pre>
+
+<pre><code>['foo', 'bar', 'baz', 'qux']
+</code></pre>
+
+<p>如果想要得到符合regex的所有结果，以一个list结果返回，可以使用findall方法：</p>
+
+<pre><code class="language-python">regex.findall(text)
+</code></pre>
+
+<pre><code>['    ', '\t ', '  \t']
+</code></pre>
+
+<blockquote>
+<p>为了防止\在正则表达式中的逃逸，推荐使用raw string literal，比如<code>r'C:\x'</code>，而不是使用<code>'C:\\x</code></p>
+</blockquote>
+
+<p>使用re.compile创建一个regex object是被强烈推荐的，如果你打算把一个表达式用于很多string上的话，这样可以节省CPU的资源。</p>
+
+<p>match和search，与findall关系紧密。不过findall会返回所有匹配的结果，而search只会返回第一次匹配的结果。更严格地说，match只匹配string开始的部分。这里举个例子说明，我们想要找到所有的邮件地址：</p>
+
+<pre><code class="language-python">text = &quot;&quot;&quot;Dave dave@google.com
+          Steve steve@gmail.com
+          Rob rob@gmail.com
+          Ryan ryan@yahoo.com &quot;&quot;&quot;
+
+pattern = r'[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}'
+</code></pre>
+
+<pre><code class="language-python"># re.IGNORECASE makes the regex case-insensitive
+regex = re.compile(pattern, flags=re.IGNORECASE)
+</code></pre>
+
+<p>使用findall找到一组邮件地址：</p>
+
+<pre><code class="language-python">regex.findall(text)
+</code></pre>
+
+<pre><code>['dave@google.com', 'steve@gmail.com', 'rob@gmail.com', 'ryan@yahoo.com']
+</code></pre>
+
+<p>search返回text中的第一个匹配结果。match object能告诉我们找到的结果在text中开始和结束的位置：</p>
+
+<pre><code class="language-python">m = regex.search(text)
+</code></pre>
+
+<pre><code class="language-python">m
+</code></pre>
+
+<pre><code>&lt;_sre.SRE_Match object; span=(5, 20), match='dave@google.com'&gt;
+</code></pre>
+
+<pre><code class="language-python">text[m.start():m.end()]
+</code></pre>
+
+<pre><code>'dave@google.com'
+</code></pre>
+
+<p>regex.match返回None，因为它只会在pattern存在于stirng开头的情况下才会返回匹配结果：</p>
+
+<pre><code class="language-python">print(regex.match(text))
+</code></pre>
+
+<pre><code>None
+</code></pre>
+
+<p>而sub返回一个新的string，把pattern出现的地方替换为我们指定的string：</p>
+
+<pre><code class="language-python">print(regex.sub('REDACTED', text))
+</code></pre>
+
+<pre><code>Dave REDACTED
+          Steve REDACTED
+          Rob REDACTED
+          Ryan REDACTED
+</code></pre>
+
+<p>假设你想要找到邮件地址，同时，想要把邮件地址分为三个部分，username, domain name, and domain suffix.（用户名，域名，域名后缀）。需要给每一个pattern加一个括号：</p>
+
+<pre><code class="language-python">pattern = r'([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\.([A-Z]{2,4})'
+</code></pre>
+
+<pre><code class="language-python">regex = re.compile(pattern, flags=re.IGNORECASE)
+</code></pre>
+
+<p>match object会返回一个tuple，包含多个pattern组份，通过groups方法：</p>
+
+<pre><code class="language-python">m = regex.match('wesm@bright.net')
+</code></pre>
+
+<pre><code class="language-python">m.groups()
+</code></pre>
+
+<pre><code>('wesm', 'bright', 'net')
+</code></pre>
+
+<p>findall会返回a list of tuples:</p>
+
+<pre><code class="language-python">regex.findall(text)
+</code></pre>
+
+<pre><code>[('dave', 'google', 'com'),
+ ('steve', 'gmail', 'com'),
+ ('rob', 'gmail', 'com'),
+ ('ryan', 'yahoo', 'com')]
+</code></pre>
+
+<p>sub也能访问groups的结果，不过要使用特殊符号 \1, \2。\1表示第一个匹配的group，\2表示第二个匹配的group，以此类推：</p>
+
+<pre><code class="language-python">print(regex.sub(r'Username: \1, Domain: \2, Suffix: \3', text))
+</code></pre>
+
+<pre><code>Dave Username: dave, Domain: google, Suffix: com
+          Steve Username: steve, Domain: gmail, Suffix: com
+          Rob Username: rob, Domain: gmail, Suffix: com
+          Ryan Username: ryan, Domain: yahoo, Suffix: com
+</code></pre>
+
+<p>这里给一些正则表达式的方法：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/5C890EiD0m.png?imageslim" alt="mark" /></p>
+
+<h1 id="3-vectorized-string-functions-in-pandas-pandas中的字符串向量化函数">3 Vectorized String Functions in pandas（pandas中的字符串向量化函数）</h1>
+
+<p>一些复杂的数据清理中，string会有缺失值：</p>
+
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+</code></pre>
+
+<pre><code class="language-python">data = {'Dave': 'dave@google.com', 'Steve': 'steve@gmail.com',
+        'Rob': 'rob@gmail.com', 'Wes': np.nan}
+</code></pre>
+
+<pre><code class="language-python">data = pd.Series(data)
+data
+</code></pre>
+
+<pre><code>Dave     dave@google.com
+Rob        rob@gmail.com
+Steve    steve@gmail.com
+Wes                  NaN
+dtype: object
+</code></pre>
+
+<pre><code class="language-python">data.isnull()
+</code></pre>
+
+<pre><code>Dave     False
+Rob      False
+Steve    False
+Wes       True
+dtype: bool
+</code></pre>
+
+<p>可以把一些字符串方法和正则表达式（用lambda或其他函数）用于每一个value上，通过data.map，但是这样会得到NA(null)值。为了解决这个问题，series有一些数组导向的方法可以用于字符串操作，来跳过NA值。这些方法可以通过series的str属性；比如，我们想检查每个电子邮箱地址是否有&rsquo;gmail&rsquo; with str.contains:</p>
+
+<pre><code class="language-python">data.str
+</code></pre>
+
+<pre><code>&lt;pandas.core.strings.StringMethods at 0x111f305c0&gt;
+</code></pre>
+
+<pre><code class="language-python">data.str.contains('gmail')
+</code></pre>
+
+<pre><code>Dave     False
+Rob       True
+Steve     True
+Wes        NaN
+dtype: object
+</code></pre>
+
+<p>正则表达式也可以用，配合任意的re选项，比如IGNORECASE：</p>
+
+<pre><code class="language-python">pattern
+</code></pre>
+
+<pre><code>'([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\\.([A-Z]{2,4})'
+</code></pre>
+
+<pre><code class="language-python">data.str.findall(pattern, flags=re.IGNORECASE)
+</code></pre>
+
+<pre><code>Dave     [(dave, google, com)]
+Rob        [(rob, gmail, com)]
+Steve    [(steve, gmail, com)]
+Wes                        NaN
+dtype: object
+</code></pre>
+
+<p>有很多方法用于向量化。比如str.get或index索引到str属性：</p>
+
+<pre><code class="language-python">matches = data.str.match(pattern, flags=re.IGNORECASE)
+matches
+</code></pre>
+
+<pre><code>/Users/xu/anaconda/envs/py35/lib/python3.5/site-packages/ipykernel/__main__.py:1: FutureWarning: In future versions of pandas, match will change to always return a bool indexer.
+  if __name__ == '__main__':
+
+
+
+
+
+Dave     (dave, google, com)
+Rob        (rob, gmail, com)
+Steve    (steve, gmail, com)
+Wes                      NaN
+dtype: object
+</code></pre>
+
+<p>为了访问嵌套list里的元素，我们可以传入一个index给函数：</p>
+
+<pre><code class="language-python">matches.str.get(1)
+</code></pre>
+
+<pre><code>Dave     google
+Rob       gmail
+Steve     gmail
+Wes         NaN
+dtype: object
+</code></pre>
+
+<pre><code class="language-python">matches.str.get(0)
+</code></pre>
+
+<pre><code>Dave      dave
+Rob        rob
+Steve    steve
+Wes        NaN
+dtype: object
+</code></pre>
+
+<p>也可以使用这个语法进行切片：</p>
+
+<pre><code class="language-python">data.str[:5]
+</code></pre>
+
+<pre><code>Dave     dave@
+Rob      rob@g
+Steve    steve
+Wes        NaN
+dtype: object
+</code></pre>
+
+<p>这里有一些字符串向量化的方法：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/JFEbg55fDj.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7K5DK39CC3.png?imageslim" alt="mark" /></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/23-%E6%95%B0%E6%8D%AE%E6%95%B4%E5%90%88-join-combine-reshape/02-combining-and-merging-datasets-%E5%90%88%E5%B9%B6%E6%95%B0%E6%8D%AE%E9%9B%86/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">02 Combining and Merging Datasets 合并数据集</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/22-%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97%E5%92%8C%E5%87%86%E5%A4%87/01-%E5%A4%84%E7%90%86%E7%BC%BA%E5%A4%B1%E6%95%B0%E6%8D%AE/">
+            <span class="next-text nav-default">01 处理缺失数据</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

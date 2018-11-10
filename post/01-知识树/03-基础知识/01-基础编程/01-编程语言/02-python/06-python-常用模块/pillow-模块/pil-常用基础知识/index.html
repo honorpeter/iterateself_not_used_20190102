@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>PIL 常用基础知识 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="PIL中设计的几个基本概念 通道（bands）：即使图像的波段数，RGB图像，灰度图像 以RGB图像为例： from PIL import Image im = Image.open(&#39;*.jpg&#39;) # 打开一张RGB图像 im_bands =" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/06-python-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/pillow-%E6%A8%A1%E5%9D%97/pil-%E5%B8%B8%E7%94%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="PIL 常用基础知识" />
+<meta property="og:description" content="PIL中设计的几个基本概念 通道（bands）：即使图像的波段数，RGB图像，灰度图像 以RGB图像为例： from PIL import Image im = Image.open(&#39;*.jpg&#39;) # 打开一张RGB图像 im_bands =" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/06-python-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/pillow-%E6%A8%A1%E5%9D%97/pil-%E5%B8%B8%E7%94%A8%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" /><meta property="article:published_time" content="2018-11-10T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-11-10T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="PIL 常用基础知识">
+<meta itemprop="description" content="PIL中设计的几个基本概念 通道（bands）：即使图像的波段数，RGB图像，灰度图像 以RGB图像为例： from PIL import Image im = Image.open(&#39;*.jpg&#39;) # 打开一张RGB图像 im_bands =">
+
+
+<meta itemprop="datePublished" content="2018-11-10T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-11-10T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="848">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PIL 常用基础知识"/>
+<meta name="twitter:description" content="PIL中设计的几个基本概念 通道（bands）：即使图像的波段数，RGB图像，灰度图像 以RGB图像为例： from PIL import Image im = Image.open(&#39;*.jpg&#39;) # 打开一张RGB图像 im_bands ="/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">PIL 常用基础知识</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-11-10 </span>
+        
+        <span class="more-meta"> 848 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#pil中设计的几个基本概念">PIL中设计的几个基本概念</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="pil中设计的几个基本概念">PIL中设计的几个基本概念</h1>
+
+<ol>
+<li>通道（bands）：即使图像的波段数，RGB图像，灰度图像</li>
+</ol>
+
+<ul>
+<li>以RGB图像为例：</li>
+</ul>
+
+<pre><code class="language-text">from PIL import Image
+im = Image.open('*.jpg')      # 打开一张RGB图像
+im_bands = im.g
+etbands()  # 获取RGB三个波段
+len(im_bands)
+print im_bands[0,1,2]          # 输出RGB三个值
+</code></pre>
+
+<p>2.模式（mode）：定义了图像的类型和像素的位宽。共计9种模式：</p>
+
+<pre><code class="language-text">im.mode
+</code></pre>
+
+<ul>
+<li>1：1位像素，表示黑和白，但是存储的时候每个像素存储为8bit。</li>
+<li>L：8位像素，表示黑和白。</li>
+<li>P：8位像素，使用调色板映射到其他模式。</li>
+<li>RGB：3x8位像素，为真彩色。</li>
+<li>RGBA：4x8位像素，有透明通道的真彩色。</li>
+<li>CMYK：4x8位像素，颜色分离。</li>
+<li>YCbCr：3x8位像素，彩色视频格式。</li>
+<li>I：32位整型像素。</li>
+<li>F：32位浮点型像素。</li>
+</ul>
+
+<p>3.尺寸（size）：获取图像水平和垂直方向上的像素数</p>
+
+<pre><code class="language-text">im.size()
+</code></pre>
+
+<p>4.坐标系统（coordinate system）：</p>
+
+<p>PIL使用笛卡尔像素坐标系统，坐标(0，0)位于左上角。</p>
+
+<p>注意：坐标值表示像素的角；位于坐标（0，0）处的像素的中心实际上位于（0.5，0.5）。</p>
+
+<p>5.调色板（palette）：</p>
+
+<p>调色板模式（&rdquo;P&rdquo;）适用一个颜色调色板为每一个像素定义具体的颜色值。</p>
+
+<p>6.信息（info）</p>
+
+<pre><code class="language-text">im.info() # 返回值为字典对象
+</code></pre>
+
+<p>7.滤波器（filters）：将多个输入像素映射为一个输出像素的几何操作</p>
+
+<p>PIL提供了4种不同的采样滤波器：</p>
+
+<ul>
+<li>NEAREST：最近滤波。从输入图像中选取最近的像素作为输出像素。</li>
+<li>BILINEAR：双线性内插滤波。在输入图像的2*2矩阵上进行线性插值。</li>
+<li>BICUBIC：双立方滤波。在输入图像的4*4矩阵上进行立方插值。</li>
+<li>ANTIALIAS：平滑滤波。对所有可以影响输出像素的输入像素进行高质量的重采样滤波，以计算输出像素值。</li>
+</ul>
+
+<p>im.resize()和im.thumbnail()用到了滤波器
+方法一：resize(size,filter = None)</p>
+
+<pre><code class="language-text">from PIL import Image
+im = Image.open('*.jpg')
+im.size
+im_resize = im.resize((256,256)) #default 情况下是NEAREST插值方法
+im_resize0 = im.resize((256,256), Image.BILINEAR)
+im_resize0.size
+im_resize1 = im.resize((256,256), Image.BICUBIC)
+im_resize2 = im.resize((256,256), Image.ANTIALIAS)
+</code></pre>
+
+<p>方法二：im.thumbnail(size,filter = None)</p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/27504020">Python—PIL基本概念介绍</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/opencv%E4%B8%AD%E5%A6%82%E4%BD%95%E6%B1%82%E8%A7%A3%E5%90%91%E9%87%8F%E5%92%8C%E8%BD%AE%E5%BB%93%E7%9A%84%E4%BA%A4%E7%82%B9/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">OpenCV中如何求解向量和轮廓的交点</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/rgb-%E5%9B%BE%E5%83%8F%E8%BD%AC%E6%88%90%E7%81%B0%E5%BA%A6%E5%9B%BE%E5%83%8F/">
+            <span class="next-text nav-default">RGB 图像转成灰度图像</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

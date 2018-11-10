@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>模拟 PID - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="Python 模拟 PID 之前，想模拟一个东西的运动到的位置，但是后来发现我相差了，实际上，这个与PID 没啥关系，而是单纯的回归的方式进行拟合。 对于这个 PID" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/31-%E4%B8%80%E4%BA%9B%E5%B0%8F%E7%89%87%E6%AE%B5/%E6%A8%A1%E6%8B%9F-pid/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="模拟 PID" />
+<meta property="og:description" content="Python 模拟 PID 之前，想模拟一个东西的运动到的位置，但是后来发现我相差了，实际上，这个与PID 没啥关系，而是单纯的回归的方式进行拟合。 对于这个 PID" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/31-%E4%B8%80%E4%BA%9B%E5%B0%8F%E7%89%87%E6%AE%B5/%E6%A8%A1%E6%8B%9F-pid/" /><meta property="article:published_time" content="2018-11-10T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-11-10T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="模拟 PID">
+<meta itemprop="description" content="Python 模拟 PID 之前，想模拟一个东西的运动到的位置，但是后来发现我相差了，实际上，这个与PID 没啥关系，而是单纯的回归的方式进行拟合。 对于这个 PID">
+
+
+<meta itemprop="datePublished" content="2018-11-10T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-11-10T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="521">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="模拟 PID"/>
+<meta name="twitter:description" content="Python 模拟 PID 之前，想模拟一个东西的运动到的位置，但是后来发现我相差了，实际上，这个与PID 没啥关系，而是单纯的回归的方式进行拟合。 对于这个 PID"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">模拟 PID</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-11-10 </span>
+        
+        <span class="more-meta"> 521 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#python-模拟-pid">Python 模拟 PID</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="python-模拟-pid">Python 模拟 PID</h1>
+
+<p>之前，想模拟一个东西的运动到的位置，但是后来发现我相差了，实际上，这个与PID 没啥关系，而是单纯的回归的方式进行拟合。</p>
+
+<p>对于这个 PID，以前学习过，但是基本都忘记了，现在还是把这个代码记一下：</p>
+
+<p>pid.py 如下：</p>
+
+<pre><code class="language-py"># PID控制一阶惯性系统测试程序
+
+
+
+
+# 增量式PID系统
+class IncrementalPID:
+    def __init__(self, p, i, d):
+        self.kp = p
+        self.ki = i
+        self.kd = d
+
+        self.pid_output = 0.0  # PID控制器输出
+        self.system_output = 0.0  # 系统输出值
+        self.last_system_output = 0.0  # 上次系统输出值
+
+        self.error = 0.0  # 输出值与输入值的偏差
+        self.last_error = 0.0
+        self.last_last_error = 0.0
+
+    # 设置一阶惯性环节系统  其中InertiaTime为惯性时间常数
+    def set_inertia_time(self, inertia_time, sample_time):
+        self.system_output = (inertia_time * self.last_system_output + sample_time * self.pid_output) / (
+            sample_time + inertia_time)
+        self.last_system_output = self.system_output
+
+    # 设置PID控制器参数
+    def set_step_signal(self, step_signal):
+        self.error = step_signal - self.system_output
+        increment_value = self.kp * (self.error - self.last_error) + self.ki * self.error + self.kd * (
+            self.error - 2 * self.last_error + self.last_last_error)
+        self.pid_output += increment_value
+        self.last_last_error = self.last_error
+        self.last_error = self.error
+
+
+# 位置式PID系统
+class PositionalPID:
+    def __init__(self, p, i, d):
+        self.kp = p
+        self.ki = i
+        self.kd = d
+
+        self.system_output = 0.0
+        self.result_value_back = 0.0
+        self.pid_output = 0.0
+        self.pid_error_add = 0.0
+        self.err_back = 0.0
+
+    def set_inertia_time(self, inertia_time, sample_time):
+        self.system_output = (inertia_time * self.result_value_back + sample_time * self.pid_output) / (
+            sample_time + inertia_time)
+        self.result_value_back = self.system_output
+
+    def set_step_signal(self, step_signal):
+        err = step_signal - self.system_output
+        kp_work = self.kp * err
+        ki_work = self.ki * self.pid_error_add
+        kd_work = self.kd * (err - self.err_back)
+        self.pid_output = kp_work + ki_work + kd_work
+        self.pid_error_add += err
+        self.err_back = err
+
+</code></pre>
+
+<p>调用：</p>
+
+<p>pid_simu.py 如下：</p>
+
+<pre><code class="language-py">from pid import IncrementalPID,PositionalPID
+import matplotlib.pyplot as plt
+
+plt.figure(1)  # 创建图表1
+plt.figure(2)  # 创建图表2
+
+
+# 测试PID程序
+def try_pid(p, i, d):
+    incremental_pid = IncrementalPID(p, i, d)
+    positional_pid = PositionalPID(p, i, d)
+    incremental_xaxis = [0]
+    incremental_yaxis = [0]
+    positional_xaxis = [0]
+    positional_yaxis = [0]
+
+    for i in range(1, 500):
+        # 增量式
+        incremental_pid.set_step_signal(100.2)
+        incremental_pid.set_inertia_time(3, 0.1)
+        incremental_yaxis.append(incremental_pid.system_output)
+        incremental_xaxis.append(i)
+
+        # 位置式
+        positional_pid.set_step_signal(100.2)
+        positional_pid.set_inertia_time(3, 0.1)
+        positional_yaxis.append(positional_pid.system_output)
+        positional_xaxis.append(i)
+
+    plt.figure(1)  # 选择图表1
+    plt.plot(incremental_xaxis, incremental_yaxis, 'r')
+    plt.xlim(0, 120)
+    plt.ylim(0, 140)
+    plt.title(&quot;IncrementalPID&quot;)
+
+    plt.figure(2)  # 选择图表2
+    plt.plot(positional_xaxis, positional_yaxis, 'b')
+    plt.xlim(0, 120)
+    plt.ylim(0, 140)
+    plt.title(&quot;PositionalPID&quot;)
+
+    plt.show()
+
+
+if __name__ == &quot;__main__&quot;:
+    try_pid(4.5, 0.5, 0.1)
+
+</code></pre>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E6%9C%89%E5%93%AA%E4%BA%9B%E6%88%90%E7%86%9F%E7%9A%84%E5%8C%B9%E9%85%8D%E5%AE%9A%E4%BD%8D%E7%AE%97%E6%B3%95/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">有哪些成熟的匹配定位算法</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E7%89%B9%E5%BE%81%E6%8F%90%E5%8F%96%E7%AE%97%E6%B3%95%E7%9A%84%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/">
+            <span class="next-text nav-default">特征提取算法的综合实验</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

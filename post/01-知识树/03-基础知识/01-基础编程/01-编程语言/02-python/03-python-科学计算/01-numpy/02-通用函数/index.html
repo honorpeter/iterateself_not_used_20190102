@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 通用函数 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="4.2 Universal Functions: Fast Element-Wise Array Functions（通用函数：快速点对点数组函数） universal function, 或 ufunc, 是用来在ndarray中实现element-wise操作的。 可以认为这" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-numpy/02-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 通用函数" />
+<meta property="og:description" content="4.2 Universal Functions: Fast Element-Wise Array Functions（通用函数：快速点对点数组函数） universal function, 或 ufunc, 是用来在ndarray中实现element-wise操作的。 可以认为这" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-numpy/02-%E9%80%9A%E7%94%A8%E5%87%BD%E6%95%B0/" /><meta property="article:published_time" content="2018-07-28T23:21:36&#43;00:00"/>
+<meta property="article:modified_time" content="2018-07-28T23:21:36&#43;00:00"/>
+<meta itemprop="name" content="02 通用函数">
+<meta itemprop="description" content="4.2 Universal Functions: Fast Element-Wise Array Functions（通用函数：快速点对点数组函数） universal function, 或 ufunc, 是用来在ndarray中实现element-wise操作的。 可以认为这">
+
+
+<meta itemprop="datePublished" content="2018-07-28T23:21:36&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-28T23:21:36&#43;00:00" />
+<meta itemprop="wordCount" content="670">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 通用函数"/>
+<meta name="twitter:description" content="4.2 Universal Functions: Fast Element-Wise Array Functions（通用函数：快速点对点数组函数） universal function, 或 ufunc, 是用来在ndarray中实现element-wise操作的。 可以认为这"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 通用函数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-28 </span>
+        
+        <span class="more-meta"> 670 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#4-2-universal-functions-fast-element-wise-array-functions-通用函数-快速点对点数组函数">4.2 Universal Functions: Fast Element-Wise Array Functions（通用函数：快速点对点数组函数）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="4-2-universal-functions-fast-element-wise-array-functions-通用函数-快速点对点数组函数">4.2 Universal Functions: Fast Element-Wise Array Functions（通用函数：快速点对点数组函数）</h1>
+
+<p>universal function, 或 ufunc, 是用来在ndarray中实现element-wise操作的。</p>
+
+<p>可以认为这个ufunc可以把一些简单的函数做快速的向量化封装，输入是一个以上的标量，输出也是一个以上的标量。</p>
+
+<p>很多ufuncs都是点对点的变换，像sqrt或exp：</p>
+
+<pre><code class="language-python">import numpy as np
+arr = np.arange(10)
+arr
+</code></pre>
+
+<pre><code>array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+</code></pre>
+
+<pre><code class="language-python">np.sqrt(arr)
+</code></pre>
+
+<pre><code>array([ 0.        ,  1.        ,  1.41421356,  1.73205081,  2.        ,
+        2.23606798,  2.44948974,  2.64575131,  2.82842712,  3.        ])
+</code></pre>
+
+<pre><code class="language-python">np.exp(arr)
+</code></pre>
+
+<pre><code>array([  1.00000000e+00,   2.71828183e+00,   7.38905610e+00,
+         2.00855369e+01,   5.45981500e+01,   1.48413159e+02,
+         4.03428793e+02,   1.09663316e+03,   2.98095799e+03,
+         8.10308393e+03])
+</code></pre>
+
+<p>这些函数叫做一元通用函数（unary ufuncs）。其他一些函数，比如add或maximum，需要两个数组（binary ufuncs）,并返回一个数组作为结果：</p>
+
+<pre><code class="language-python">x = np.random.randn(8)
+y = np.random.randn(8)
+x
+</code></pre>
+
+<pre><code>array([ 0.18373557, -1.82728347, -0.11149882, -1.34286776, -1.09016986,
+        1.63308   ,  1.05205535, -0.32746706])
+</code></pre>
+
+<pre><code class="language-python">y
+</code></pre>
+
+<pre><code>array([-0.42410809,  1.89603273, -1.13649816, -0.98559379, -0.16827718,
+        0.52828569,  1.57543351,  1.50045399])
+</code></pre>
+
+<pre><code class="language-python">np.maximum(x, y)
+</code></pre>
+
+<pre><code>array([ 0.18373557,  1.89603273, -0.11149882, -0.98559379, -0.16827718,
+        1.63308   ,  1.57543351,  1.50045399])
+</code></pre>
+
+<p>这里mamimum点对点的比较x和y中的元素。</p>
+
+<p>尽管不常见，但ufunc也能返回多个数组。例如modf，这是一个向量版的divmod（python内建函数），modf会返回小数部分和整数部分：</p>
+
+<blockquote>
+<p>本函数是实现a除以b，然后返回商与余数的元组。如果两个参数a,b都是整数，那么会采用整数除法，结果相当于（a//b, a % b)。如果a或b是浮点数，相当于（math.floor(a/b), a%b)。</p>
+</blockquote>
+
+<pre><code class="language-python">arr = np.random.randn(7) * 5
+arr
+</code></pre>
+
+<pre><code>array([ 1.51538382, -0.75054846,  0.02863286,  8.74026861, -3.44529124,
+       -9.18401768, -0.68469611])
+</code></pre>
+
+<pre><code class="language-python">remainder, whole_part = np.modf(arr)
+remainder
+</code></pre>
+
+<pre><code>array([ 0.51538382, -0.75054846,  0.02863286,  0.74026861, -0.44529124,
+       -0.18401768, -0.68469611])
+</code></pre>
+
+<pre><code class="language-python">whole_part
+</code></pre>
+
+<pre><code>array([ 1., -0.,  0.,  8., -3., -9., -0.])
+</code></pre>
+
+<p>ufunc能接受一个可选参数作为输出，这样可以直接更改原有的数组：</p>
+
+<pre><code class="language-python">arr
+</code></pre>
+
+<pre><code>array([ 1.51538382, -0.75054846,  0.02863286,  8.74026861, -3.44529124,
+       -9.18401768, -0.68469611])
+</code></pre>
+
+<pre><code class="language-python">np.sqrt(arr) # 没有改变原有的arr
+</code></pre>
+
+<pre><code>/Users/xu/anaconda/envs/py35/lib/python3.5/site-packages/ipykernel/__main__.py:1: RuntimeWarning: invalid value encountered in sqrt
+  if __name__ == '__main__':
+
+
+
+
+
+array([ 1.23100927,         nan,  0.16921248,  2.95639453,         nan,
+               nan,         nan])
+</code></pre>
+
+<pre><code class="language-python">np.sqrt(arr, arr) # 改变了原有的arr
+</code></pre>
+
+<pre><code>/Users/xu/anaconda/envs/py35/lib/python3.5/site-packages/ipykernel/__main__.py:1: RuntimeWarning: invalid value encountered in sqrt
+  if __name__ == '__main__':
+
+
+
+
+
+array([ 1.23100927,         nan,  0.16921248,  2.95639453,         nan,
+               nan,         nan])
+</code></pre>
+
+<pre><code class="language-python">arr
+</code></pre>
+
+<pre><code>array([ 1.23100927,         nan,  0.16921248,  2.95639453,         nan,
+               nan,         nan])
+</code></pre>
+
+<p>一些一元通用函数：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/G178B0k6C7.png?imageslim" alt="mark" /></p>
+
+<p>一些二元通用函数：
+<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/gggf7cGcg6.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/iaF67CLH3j.png?imageslim" alt="mark" /></p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/12-%E5%9F%BA%E7%A1%80%E8%AE%A1%E7%AE%97%E6%9C%BA/linux-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83/12-centos/centos-nginx/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">CentOS nginx</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/01-numpy/01-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84%E5%AF%B9%E8%B1%A1/">
+            <span class="next-text nav-default">01 多维数组对象</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

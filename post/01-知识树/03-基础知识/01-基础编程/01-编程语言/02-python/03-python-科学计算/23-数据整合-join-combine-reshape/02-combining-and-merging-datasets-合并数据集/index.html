@@ -1,0 +1,2867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>02 Combining and Merging Datasets 合并数据集 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="8.2 Combining and Merging Datasets（合并数据集） 8.1中的操作名 - join：连接 - combine：合并 - reshape：整形 8.2中的操作名 - merg" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/23-%E6%95%B0%E6%8D%AE%E6%95%B4%E5%90%88-join-combine-reshape/02-combining-and-merging-datasets-%E5%90%88%E5%B9%B6%E6%95%B0%E6%8D%AE%E9%9B%86/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="02 Combining and Merging Datasets 合并数据集" />
+<meta property="og:description" content="8.2 Combining and Merging Datasets（合并数据集） 8.1中的操作名 - join：连接 - combine：合并 - reshape：整形 8.2中的操作名 - merg" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/23-%E6%95%B0%E6%8D%AE%E6%95%B4%E5%90%88-join-combine-reshape/02-combining-and-merging-datasets-%E5%90%88%E5%B9%B6%E6%95%B0%E6%8D%AE%E9%9B%86/" /><meta property="article:published_time" content="2018-08-03T11:27:40&#43;00:00"/>
+<meta property="article:modified_time" content="2018-08-03T11:27:40&#43;00:00"/>
+<meta itemprop="name" content="02 Combining and Merging Datasets 合并数据集">
+<meta itemprop="description" content="8.2 Combining and Merging Datasets（合并数据集） 8.1中的操作名 - join：连接 - combine：合并 - reshape：整形 8.2中的操作名 - merg">
+
+
+<meta itemprop="datePublished" content="2018-08-03T11:27:40&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-03T11:27:40&#43;00:00" />
+<meta itemprop="wordCount" content="4942">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="02 Combining and Merging Datasets 合并数据集"/>
+<meta name="twitter:description" content="8.2 Combining and Merging Datasets（合并数据集） 8.1中的操作名 - join：连接 - combine：合并 - reshape：整形 8.2中的操作名 - merg"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">02 Combining and Merging Datasets 合并数据集</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-03 </span>
+        
+        <span class="more-meta"> 4942 words </span>
+        <span class="more-meta"> 10 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#8-2-combining-and-merging-datasets-合并数据集">8.2 Combining and Merging Datasets（合并数据集）</a></li>
+<li><a href="#1-database-style-dataframe-joins-数据库风格的dataframe-joins">1 Database-Style DataFrame Joins（数据库风格的DataFrame Joins）</a></li>
+<li><a href="#2-merging-on-index-在index上做归并">2 Merging on Index（在index上做归并）</a></li>
+<li><a href="#2-concatenating-along-an-axis-沿着轴串联">2 Concatenating Along an Axis（沿着轴串联）</a></li>
+<li><a href="#3-combining-data-with-overlap-用重叠来合并数据">3 Combining Data with Overlap（用重叠来合并数据）</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="8-2-combining-and-merging-datasets-合并数据集">8.2 Combining and Merging Datasets（合并数据集）</h1>
+
+<blockquote>
+<p>8.1中的操作名
+- join：连接
+- combine：合并
+- reshape：整形</p>
+
+<p>8.2中的操作名
+- merge：归并
+- concatenate：串联</p>
+
+<p>8.3中的操作名
+- pivot：旋转
+- stack：堆叠</p>
+
+<p>我在整个第八章对这些翻译做了更新，其他章节可能没有统一，如果有发现到不统一的翻译，可以在issue里提出，也可以直接pull request</p>
+</blockquote>
+
+<p>pandas里有几种方法可以合并数据：</p>
+
+<ol>
+<li>pandas.merge 按一个或多个key把DataFrame中的行连接起来。这个和SQL或其他一些关系型数据库中的join操作相似。</li>
+<li>pandas.concat 在一个axis（轴）上，串联或堆叠（stack）多个对象。</li>
+<li>combine_first 实例方法（instance method）能合并相互之间有重复的数据，并用一个对象里的值填满缺失值</li>
+</ol>
+
+<p>这里每一个都会给出一些例子。这些用法贯穿这本书。</p>
+
+<h1 id="1-database-style-dataframe-joins-数据库风格的dataframe-joins">1 Database-Style DataFrame Joins（数据库风格的DataFrame Joins）</h1>
+
+<p>Merge或join操作，能通过一个或多个key，把不同的数据集的行连接在一起。这种操作主要集中于关系型数据库。pandas中的merge函数是这种操作的主要切入点：</p>
+
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+</code></pre>
+
+<pre><code class="language-python">df1 = pd.DataFrame({'key': ['b', 'b', 'a', 'c', 'a', 'a', 'b'],
+                    'data1': range(7)})
+
+df1
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>key</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>c</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>b</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">df2 = pd.DataFrame({'key': ['a', 'b', 'd'],
+                    'data2': range(3)})
+df2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data2</th>
+      <th>key</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>d</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这个例子是many-to-one join（多个变为一个的连接）；在df1中有标签为a和b的行，而df2中的key列，每一行只有对应的一个值。调用merge我们可以得到：</p>
+
+<pre><code class="language-python">pd.merge(df1, df2)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>key</th>
+      <th>data2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这里我们并没有指定按哪一列来连接。如果我们没有指定，merge会用两个对象中都存在的列名作为key（键）。当然，最好还是清楚指定比较好：</p>
+
+<pre><code class="language-python">pd.merge(df1, df2, on='key')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>key</th>
+      <th>data2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果每一个对象中的列名不一会，我们可以分别指定：</p>
+
+<pre><code class="language-python">df3 = pd.DataFrame({'lkey': ['b', 'b', 'a', 'c', 'a', 'a', 'b'],
+                             'data1': range(7)})
+
+df4 = pd.DataFrame({'rkey': ['a', 'b', 'd'],
+                             'data2': range(3)})
+</code></pre>
+
+<pre><code class="language-python">pd.merge(df3, df4, left_on='lkey', right_on='rkey')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>lkey</th>
+      <th>data2</th>
+      <th>rkey</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+      <td>1</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+      <td>1</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6</td>
+      <td>b</td>
+      <td>1</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>a</td>
+      <td>0</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>a</td>
+      <td>0</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>a</td>
+      <td>0</td>
+      <td>a</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>我们可能注意到，在结果中并没有c和d。因为merge默认是inner join(内连接)，结果中的key是交集的结果，或者在两个表格中都有的集合。其他一些可选项，比如left, right, outer。outer join（外连接）取key的合集，其实就是left join和right join同时应用的效果：</p>
+
+<pre><code class="language-python">pd.merge(df1, df2, how='outer')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>key</th>
+      <th>data2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>b</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>b</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6.0</td>
+      <td>b</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2.0</td>
+      <td>a</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4.0</td>
+      <td>a</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5.0</td>
+      <td>a</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>3.0</td>
+      <td>c</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>NaN</td>
+      <td>d</td>
+      <td>2.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这里是how的一些选项：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/9Ff5BI1JBk.png?imageslim" alt="mark" /></p>
+
+<p>many-to-many(多对多)连接也被定义好了，不过可能不是那么直观。这里有一个例子：</p>
+
+<pre><code class="language-python">df1 = pd.DataFrame({'key': ['b', 'b', 'a', 'c', 'a', 'b'],
+                    'data1': range(6)})
+
+df1
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>key</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>c</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>b</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">df2 = pd.DataFrame({'key': ['a', 'b', 'a', 'b', 'd'],
+                    'data2': range(5)})
+df2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data2</th>
+      <th>key</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>b</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>d</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.merge(df1, df2, on='key', how='left')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>key</th>
+      <th>data2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>b</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>b</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>b</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2</td>
+      <td>a</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2</td>
+      <td>a</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>3</td>
+      <td>c</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>4</td>
+      <td>a</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>4</td>
+      <td>a</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>5</td>
+      <td>b</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>5</td>
+      <td>b</td>
+      <td>3.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>many-to-many join是对行进行笛卡尔集运算。（两个集合X和Y的笛卡儿积（Cartesian product），又称直积，在集合论中表示为X × Y，是所有可能的有序对组成的集合。比如1到13是一个集合，四种花色是一个集合，二者的笛卡尔积就有52个元素）。这里在左侧的DataFrame中有三行含b，右边的DataFrame则有两行含b，于是结果是有六行含b。这个join方法只会让不相同的key值出现在最后的结果里：</p>
+
+<pre><code class="language-python">pd.merge(df1, df2, how='inner')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data1</th>
+      <th>key</th>
+      <th>data2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>b</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>b</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>b</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2</td>
+      <td>a</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>4</td>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>4</td>
+      <td>a</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>用多个key来连接的话，用一个含有多个列名的list来指定：</p>
+
+<pre><code class="language-python">left = pd.DataFrame({'key1': ['foo', 'foo', 'bar'],
+                     'key2': ['one', 'two', 'one'],
+                     'lval': [1, 2, 3]})
+
+right = pd.DataFrame({'key1': ['foo', 'foo', 'bar', 'bar'],
+                      'key2': ['one', 'one', 'one', 'two'],
+                      'rval': [4, 5, 6, 7]})
+</code></pre>
+
+<pre><code class="language-python">pd.merge(left, right, on=['key1', 'key2'], how='outer')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key1</th>
+      <th>key2</th>
+      <th>lval</th>
+      <th>rval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>foo</td>
+      <td>one</td>
+      <td>1.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>foo</td>
+      <td>one</td>
+      <td>1.0</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>foo</td>
+      <td>two</td>
+      <td>2.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>bar</td>
+      <td>one</td>
+      <td>3.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>bar</td>
+      <td>two</td>
+      <td>NaN</td>
+      <td>7.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>哪一种key组合会出现在结果里取决于merge方法的选择，可以把多个key当做一个tuple组成的单一key（尽管实际上并不是这样）。</p>
+
+<p>注意：当我们讲列和列进行连接时，DataFrame中的index对象会被丢弃。</p>
+
+<p>最后一个问题是在做merge操作的时候，如何处理重叠的列名。当我们想要手动去解决重叠问题时（参考重命名axis labels的部分），merge有一个suffixes选项，能让我们指定字符串，添加重叠的列名到左、右DataFrame：</p>
+
+<pre><code class="language-python">pd.merge(left, right, on='key1')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key1</th>
+      <th>key2_x</th>
+      <th>lval</th>
+      <th>key2_y</th>
+      <th>rval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>foo</td>
+      <td>one</td>
+      <td>1</td>
+      <td>one</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>foo</td>
+      <td>one</td>
+      <td>1</td>
+      <td>one</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>foo</td>
+      <td>two</td>
+      <td>2</td>
+      <td>one</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>foo</td>
+      <td>two</td>
+      <td>2</td>
+      <td>one</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>bar</td>
+      <td>one</td>
+      <td>3</td>
+      <td>one</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>bar</td>
+      <td>one</td>
+      <td>3</td>
+      <td>two</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.merge(left, right, on='key1', suffixes=('_left', '_right'))
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key1</th>
+      <th>key2_left</th>
+      <th>lval</th>
+      <th>key2_right</th>
+      <th>rval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>foo</td>
+      <td>one</td>
+      <td>1</td>
+      <td>one</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>foo</td>
+      <td>one</td>
+      <td>1</td>
+      <td>one</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>foo</td>
+      <td>two</td>
+      <td>2</td>
+      <td>one</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>foo</td>
+      <td>two</td>
+      <td>2</td>
+      <td>one</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>bar</td>
+      <td>one</td>
+      <td>3</td>
+      <td>one</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>bar</td>
+      <td>one</td>
+      <td>3</td>
+      <td>two</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>下表是mege的一些参数。用DataFrame的row index来联结会在下一部分讲到。</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7LHBaBEBFa.png?imageslim" alt="mark" /></p>
+
+<h1 id="2-merging-on-index-在index上做归并">2 Merging on Index（在index上做归并）</h1>
+
+<p>在一些情况下，用于归并的key（键），可能是DataFrame中的index。这种情况下，可以使用left_index=True 或 right_index=True来指明，哪一个index被用来作为归并键：</p>
+
+<pre><code class="language-python">left1 = pd.DataFrame({'key': ['a', 'b', 'a', 'a', 'b', 'c'],
+                      'value': range(6)})
+
+left1
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>a</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>b</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>a</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>a</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>b</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>c</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">right1 = pd.DataFrame({'group_val': [3.5, 7]}, index=['a', 'b'])
+right1
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>group_val</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>7.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.merge(left1, right1, left_on='key', right_index=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>value</th>
+      <th>group_val</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>a</td>
+      <td>0</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>a</td>
+      <td>2</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>a</td>
+      <td>3</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>b</td>
+      <td>1</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>b</td>
+      <td>4</td>
+      <td>7.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>merge的默认方法是用key的交集，我们也可以设定用合集，即outer join:</p>
+
+<pre><code class="language-python">pd.merge(left1, right1, left_on='key', right_index=True, how='outer')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>value</th>
+      <th>group_val</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>a</td>
+      <td>0</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>a</td>
+      <td>2</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>a</td>
+      <td>3</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>b</td>
+      <td>1</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>b</td>
+      <td>4</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>c</td>
+      <td>5</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>对于那些有多层级索引的数据，就更复杂了。index上的merge默认会是multiple-key merge(复数键归并)：</p>
+
+<pre><code class="language-python">lefth = pd.DataFrame({'key1': ['Ohio', 'Ohio', 'Ohio',
+                               'Nevada', 'Nevada'],
+                      'key2': [2000, 2001, 2002, 2001, 2002],
+                      'data': np.arange(5.)})
+lefth
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data</th>
+      <th>key1</th>
+      <th>key2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>Ohio</td>
+      <td>2000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>Ohio</td>
+      <td>2001</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.0</td>
+      <td>Ohio</td>
+      <td>2002</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.0</td>
+      <td>Nevada</td>
+      <td>2001</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4.0</td>
+      <td>Nevada</td>
+      <td>2002</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">righth = pd.DataFrame(np.arange(12).reshape((6, 2)),
+                      index=[['Nevada', 'Nevada', 'Ohio', 'Ohio',
+                              'Ohio', 'Ohio'],
+                             [2001, 2000, 2000, 2000, 2001, 2002]],
+                      columns=['event1', 'event2'])
+righth
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>event1</th>
+      <th>event2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">Nevada</th>
+      <th>2001</th>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">Ohio</th>
+      <th>2000</th>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>2000</th>
+      <td>6</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>2001</th>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>2002</th>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>在这个例子里，我们必须指明将多列归并作为一个list（注意处理重复index的方法是令how=&lsquo;outer&rsquo;）:</p>
+
+<pre><code class="language-python">pd.merge(lefth, righth, left_on=['key1', 'key2'],
+         right_index=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data</th>
+      <th>key1</th>
+      <th>key2</th>
+      <th>event1</th>
+      <th>event2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>Ohio</td>
+      <td>2000</td>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>Ohio</td>
+      <td>2000</td>
+      <td>6</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>Ohio</td>
+      <td>2001</td>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.0</td>
+      <td>Ohio</td>
+      <td>2002</td>
+      <td>10</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.0</td>
+      <td>Nevada</td>
+      <td>2001</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.merge(lefth, righth, left_on=['key1', 'key2'],
+         right_index=True, how='outer')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>data</th>
+      <th>key1</th>
+      <th>key2</th>
+      <th>event1</th>
+      <th>event2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>Ohio</td>
+      <td>2000.0</td>
+      <td>4.0</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>Ohio</td>
+      <td>2000.0</td>
+      <td>6.0</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>Ohio</td>
+      <td>2001.0</td>
+      <td>8.0</td>
+      <td>9.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2.0</td>
+      <td>Ohio</td>
+      <td>2002.0</td>
+      <td>10.0</td>
+      <td>11.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.0</td>
+      <td>Nevada</td>
+      <td>2001.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4.0</td>
+      <td>Nevada</td>
+      <td>2002.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>Nevada</td>
+      <td>2000.0</td>
+      <td>2.0</td>
+      <td>3.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>同时使用两个对象里的index来归并也是可能的：</p>
+
+<pre><code class="language-python">left2 = pd.DataFrame([[1., 2.], [3., 4.], [5., 6.]],
+                     index=['a', 'c', 'e'],
+                     columns=['Ohio', 'Nevada'])
+
+left2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Ohio</th>
+      <th>Nevada</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>3.0</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>5.0</td>
+      <td>6.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">right2 = pd.DataFrame([[7., 8.], [9., 10.], [11., 12.], [13, 14]],
+                      index=['b', 'c', 'd', 'e'],
+                      columns=['Missouri', 'Alabama'])
+right2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Missouri</th>
+      <th>Alabama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>b</th>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>9.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>11.0</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>13.0</td>
+      <td>14.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.merge(left2, right2, how='outer', left_index=True, right_index=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Ohio</th>
+      <th>Nevada</th>
+      <th>Missouri</th>
+      <th>Alabama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>3.0</td>
+      <td>4.0</td>
+      <td>9.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>11.0</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>5.0</td>
+      <td>6.0</td>
+      <td>13.0</td>
+      <td>14.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>DataFrame有一个很便利的join实例，可以直接用index来连接。这个也可以用于与其他DataFrame进行连接，要有一样的index但不能有重叠的列：</p>
+
+<pre><code class="language-python">left2.join(right2, how='outer')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Ohio</th>
+      <th>Nevada</th>
+      <th>Missouri</th>
+      <th>Alabama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>3.0</td>
+      <td>4.0</td>
+      <td>9.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>11.0</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>5.0</td>
+      <td>6.0</td>
+      <td>13.0</td>
+      <td>14.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>由于一些历史原因，在早期的pandas版本中，DataFrame的join方法是在连接键上做left join（左连接），这样会保留左侧Dataframe的行索引。这也支持把传入的dataframe的index与被调用的DataFrame的column连接在一起：</p>
+
+<pre><code class="language-python">left1.join(right1, on='key')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>key</th>
+      <th>value</th>
+      <th>group_val</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>a</td>
+      <td>0</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>b</td>
+      <td>1</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>a</td>
+      <td>2</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>a</td>
+      <td>3</td>
+      <td>3.5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>b</td>
+      <td>4</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>c</td>
+      <td>5</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>最后，对于简单的index-on-index连接，可以直接给join传入一个DataFrame。（作为备选，也可以使用最普遍的concat函数，这个在下一节会做介绍）：</p>
+
+<pre><code class="language-python">another = pd.DataFrame([[7., 8.], [9., 10.], [11., 12.], [16., 17.]],
+                       index=['a', 'c', 'e', 'f'],
+                       columns=['New York', 'Oregon'])
+another
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>New York</th>
+      <th>Oregon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>9.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>11.0</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>f</th>
+      <td>16.0</td>
+      <td>17.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">left2.join([right2, another])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Ohio</th>
+      <th>Nevada</th>
+      <th>Missouri</th>
+      <th>Alabama</th>
+      <th>New York</th>
+      <th>Oregon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>3.0</td>
+      <td>4.0</td>
+      <td>9.0</td>
+      <td>10.0</td>
+      <td>9.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>5.0</td>
+      <td>6.0</td>
+      <td>13.0</td>
+      <td>14.0</td>
+      <td>11.0</td>
+      <td>12.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">left2.join([right2, another], how='outer')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Ohio</th>
+      <th>Nevada</th>
+      <th>Missouri</th>
+      <th>Alabama</th>
+      <th>New York</th>
+      <th>Oregon</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>7.0</td>
+      <td>8.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>3.0</td>
+      <td>4.0</td>
+      <td>9.0</td>
+      <td>10.0</td>
+      <td>9.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>11.0</td>
+      <td>12.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>5.0</td>
+      <td>6.0</td>
+      <td>13.0</td>
+      <td>14.0</td>
+      <td>11.0</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>f</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>16.0</td>
+      <td>17.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="2-concatenating-along-an-axis-沿着轴串联">2 Concatenating Along an Axis（沿着轴串联）</h1>
+
+<p>另一种结合方式被称为可互换的，比如concatenation, binding, or stacking(串联，绑定，堆叠)。Numpy中的concatenate函数可以作用于numpy 数组：</p>
+
+<pre><code class="language-python">arr = np.arange(12.).reshape((3, 4))
+arr
+</code></pre>
+
+<pre><code>array([[  0.,   1.,   2.,   3.],
+       [  4.,   5.,   6.,   7.],
+       [  8.,   9.,  10.,  11.]])
+</code></pre>
+
+<pre><code class="language-python">np.concatenate([arr, arr], axis=1)
+</code></pre>
+
+<pre><code>array([[  0.,   1.,   2.,   3.,   0.,   1.,   2.,   3.],
+       [  4.,   5.,   6.,   7.,   4.,   5.,   6.,   7.],
+       [  8.,   9.,  10.,  11.,   8.,   9.,  10.,  11.]])
+</code></pre>
+
+<p>而在pandas的对象中，比如Series和DataFrame，labeled axes（便签化的轴）能让我们做更泛化的数组串联操作。不过我们可能会有下面一些疑问：</p>
+
+<ul>
+<li><p>如果一个对象在其他轴上的index不同，我们应不应该在这些轴上把不同的元素合并起来，或者只用交集?</p></li>
+
+<li><p>经过串联操作后，连接的部分在输出对象里应不应该是可被识别的？</p></li>
+
+<li><p>concatenation axis（串联轴）含有的数据需要被保留吗？在很多情况下，DataFrame中一些用整数做的label（标签）其实最好在串联后被删除。</p></li>
+</ul>
+
+<p>pandas中的concat函数能解决上面这些问题。这里会给出几个例子来说明。假设我们有三个Series，他们指明没有index overlap(索引重叠)：</p>
+
+<pre><code class="language-python">s1 = pd.Series([0, 1], index=['a', 'b'])
+
+s2 = pd.Series([2, 3, 4], index=['c', 'd', 'e'])
+
+s3 = pd.Series([5, 6], index=['f', 'g'])
+</code></pre>
+
+<p>调用concat，把上面的series放在一个list里，结果会把值和索引都整合在一起：</p>
+
+<pre><code class="language-python">pd.concat([s1, s2, s3])
+</code></pre>
+
+<pre><code>a    0
+b    1
+c    2
+d    3
+e    4
+f    5
+g    6
+dtype: int64
+</code></pre>
+
+<p>默认情况下，concat中axis=0,结果会得到一个新的而series。如果令axis=1, 结果会变成一个DataFrame（axis=1 是列）：</p>
+
+<pre><code class="language-python">pd.concat([s1, s2, s3], axis=1)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>NaN</td>
+      <td>4.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>f</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>g</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>6.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这种情况下，不会与其他轴产生重叠，效果与join中的outer join一样。你也可以通过设定join=&lsquo;inner&rsquo;来使用交集：</p>
+
+<pre><code class="language-python">s4 = pd.concat([s1, s3])
+s4
+</code></pre>
+
+<pre><code>a    0
+b    1
+f    5
+g    6
+dtype: int64
+</code></pre>
+
+<pre><code class="language-python">pd.concat([s1, s4], axis=1)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>1.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>f</th>
+      <td>NaN</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>g</th>
+      <td>NaN</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.concat([s1, s4], axis=1, join='inner')
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>因为join=&lsquo;inner&rsquo;，所以f和g标签消失了。</p>
+
+<p>你也可以在join_axes中指定使用哪些轴：</p>
+
+<pre><code class="language-python">pd.concat([s1, s4], axis=1, join_axes=[['a', 'c', 'b', 'e']])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>1.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>一个潜在的问题是串联的部分在结果里是不可辨识的。假设我们想在串联轴上创建一个多层级索引，我们需要用到keys参数：</p>
+
+<pre><code class="language-python">result = pd.concat([s1, s1, s3], keys=['one', 'two', 'three'])
+result
+</code></pre>
+
+<pre><code>one    a    0
+       b    1
+two    a    0
+       b    1
+three  f    5
+       g    6
+dtype: int64
+</code></pre>
+
+<pre><code class="language-python">result.unstack()
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>f</th>
+      <th>g</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>one</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>two</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>three</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>5.0</td>
+      <td>6.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果是设定axis=1，那么keys会变为DataFrame的column header(列头):</p>
+
+<pre><code class="language-python">print(s1)
+print(s2)
+print(s3)
+</code></pre>
+
+<pre><code>a    0
+b    1
+dtype: int64
+c    2
+d    3
+e    4
+dtype: int64
+f    5
+g    6
+dtype: int64
+</code></pre>
+
+<pre><code class="language-python">pd.concat([s1, s2, s3], axis=1, keys=['one', 'two', 'three'])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>one</th>
+      <th>two</th>
+      <th>three</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>d</th>
+      <td>NaN</td>
+      <td>3.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>e</th>
+      <td>NaN</td>
+      <td>4.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>f</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>g</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>6.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这种逻辑也可以扩展到DataFrame对象上：</p>
+
+<pre><code class="language-python">df1 = pd.DataFrame(np.arange(6).reshape(3, 2), index=['a', 'b', 'c'],
+                   columns=['one', 'two'])
+
+df1
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>one</th>
+      <th>two</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>4</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">df2 = pd.DataFrame(5 + np.arange(4).reshape(2, 2), index=['a', 'c'],
+                   columns=['three', 'four'])
+df2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>three</th>
+      <th>four</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">pd.concat([df1, df2], axis=1, keys=['level1', 'level2'])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">level1</th>
+      <th colspan="2" halign="left">level2</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>one</th>
+      <th>two</th>
+      <th>three</th>
+      <th>four</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0</td>
+      <td>1</td>
+      <td>5.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>2</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>4</td>
+      <td>5</td>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>如果导入一个dict而不是list，那么dict的key会被用于上面concat中的keys选项：</p>
+
+<pre><code class="language-python">pd.concat({'level1': df1, 'level2': df2}, axis=1)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">level1</th>
+      <th colspan="2" halign="left">level2</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>one</th>
+      <th>two</th>
+      <th>three</th>
+      <th>four</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0</td>
+      <td>1</td>
+      <td>5.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>2</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>4</td>
+      <td>5</td>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>还有其他一些选项负责多层级索引的设定（表8-3）。比如，可以给创建的axis level(轴层级)用names参数来命名：</p>
+
+<pre><code class="language-python">pd.concat([df1, df2], axis=1, keys=['level1', 'level2'],
+          names=['upper', 'lower'])
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th>upper</th>
+      <th colspan="2" halign="left">level1</th>
+      <th colspan="2" halign="left">level2</th>
+    </tr>
+    <tr>
+      <th>lower</th>
+      <th>one</th>
+      <th>two</th>
+      <th>three</th>
+      <th>four</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>a</th>
+      <td>0</td>
+      <td>1</td>
+      <td>5.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>b</th>
+      <td>2</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>c</th>
+      <td>4</td>
+      <td>5</td>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>最后我们关心的是，在DataFrame中，行索引（row index）没有包含相关的数据：</p>
+
+<pre><code class="language-python">df1 = pd.DataFrame(np.random.randn(3, 4), columns=['a', 'b', 'c', 'd'])
+df1
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.049308</td>
+      <td>-0.660746</td>
+      <td>1.152071</td>
+      <td>-1.447441</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.484170</td>
+      <td>-0.096755</td>
+      <td>-0.815349</td>
+      <td>1.839818</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.277541</td>
+      <td>0.164721</td>
+      <td>-0.012481</td>
+      <td>0.477152</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">df2 = pd.DataFrame(np.random.randn(2, 3), columns=['b', 'd', 'a'])
+df2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>b</th>
+      <th>d</th>
+      <th>a</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.556378</td>
+      <td>-2.286601</td>
+      <td>-0.494776</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.152716</td>
+      <td>0.270165</td>
+      <td>-0.222289</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>这种情况下，可以设置ignore_index=True:</p>
+
+<pre><code class="language-python">pd.concat([df1, df2], ignore_index=True)
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.049308</td>
+      <td>-0.660746</td>
+      <td>1.152071</td>
+      <td>-1.447441</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.484170</td>
+      <td>-0.096755</td>
+      <td>-0.815349</td>
+      <td>1.839818</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.277541</td>
+      <td>0.164721</td>
+      <td>-0.012481</td>
+      <td>0.477152</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.494776</td>
+      <td>-0.556378</td>
+      <td>NaN</td>
+      <td>-2.286601</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.222289</td>
+      <td>1.152716</td>
+      <td>NaN</td>
+      <td>0.270165</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>concat函数的一些参数：</p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/j0BdBHdCej.png?imageslim" alt="mark" /></p>
+
+<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/fj7H9dB8dg.png?imageslim" alt="mark" /></p>
+
+<h1 id="3-combining-data-with-overlap-用重叠来合并数据">3 Combining Data with Overlap（用重叠来合并数据）</h1>
+
+<p>另一种数据合并方法既不属于merge，也不属于concatenation。比如两个数据集，index可能完全覆盖，或覆盖一部分。这里举个例子，考虑下numpy的where函数，可以在数组上进行类似于if-else表达式般的判断：</p>
+
+<pre><code class="language-python">a = pd.Series([np.nan, 2.5, np.nan, 3.5, 4.5, np.nan],
+              index=['f', 'e', 'd', 'c', 'b', 'a'])
+
+a
+</code></pre>
+
+<pre><code>f    NaN
+e    2.5
+d    NaN
+c    3.5
+b    4.5
+a    NaN
+dtype: float64
+</code></pre>
+
+<pre><code class="language-python">b = pd.Series(np.arange(len(a), dtype=np.float64),
+              index=['f', 'e', 'd', 'c', 'b', 'a'])
+b
+</code></pre>
+
+<pre><code>f    0.0
+e    1.0
+d    2.0
+c    3.0
+b    4.0
+a    5.0
+dtype: float64
+</code></pre>
+
+<pre><code class="language-python">np.where(pd.isnull(a), b, a)
+</code></pre>
+
+<pre><code>array([ 0. ,  2.5,  2. ,  3.5,  4.5,  5. ])
+</code></pre>
+
+<p>Series有一个combine_first方法，效果和上面是一样，而且还会自动对齐（比如把index按字母进行排列）：</p>
+
+<pre><code class="language-python">b[:-2].combine_first(a[2:])
+</code></pre>
+
+<pre><code>a    NaN
+b    4.5
+c    3.0
+d    2.0
+e    1.0
+f    0.0
+dtype: float64
+</code></pre>
+
+<p>对于DataFrame， combine_first可以在列与列之间做到同样的事情，可以认为是用传递的对象，给调用对象中的缺失值打补丁：</p>
+
+<pre><code class="language-python">df1 = pd.DataFrame({'a': [1., np.nan, 5., np.nan],
+                    'b': [np.nan, 2., np.nan, 6.],
+                    'c': range(2, 18, 4)})
+
+df1
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5.0</td>
+      <td>NaN</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>6.0</td>
+      <td>14</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">df2 = pd.DataFrame({'a': [5., 4., np.nan, 3., 7.],
+                    'b': [np.nan, 3., 4., 6., 8.]})
+df2
+</code></pre>
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.0</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4.0</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7.0</td>
+      <td>8.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<pre><code class="language-python">df1.combine_first(df2)
+</code></pre>
+
+<p><div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>NaN</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4.0</td>
+      <td>2.0</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5.0</td>
+      <td>4.0</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.0</td>
+      <td>6.0</td>
+      <td>14.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7.0</td>
+      <td>8.0</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+div&gt;</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/02-matplotlib/01-%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84matplotlib-api%E5%85%A5%E9%97%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">01 一个简单的matplotlib API入门</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01-%E5%9F%BA%E7%A1%80%E7%BC%96%E7%A8%8B/01-%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/02-python/03-python-%E7%A7%91%E5%AD%A6%E8%AE%A1%E7%AE%97/22-%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97%E5%92%8C%E5%87%86%E5%A4%87/03-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86/">
+            <span class="next-text nav-default">03 字符串处理</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

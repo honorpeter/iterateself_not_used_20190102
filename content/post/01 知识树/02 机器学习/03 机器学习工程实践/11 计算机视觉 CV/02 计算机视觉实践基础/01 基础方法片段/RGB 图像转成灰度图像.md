@@ -1,3 +1,8 @@
+---
+title: RGB 图像转成灰度图像
+toc: true
+date: 2018-11-10
+---
 # 需要补充的
 
 - 这个地方还是要再消化下的，之前是想找 PIL 的 RGB 转 gray 的，应该就是：`img = Image.open('image.png').convert('L')`，如果是 LA 就是有 alpha 通道的，即 RGBA 。

@@ -1,3 +1,8 @@
+---
+title: 直接可以用的Python和OpenCV检测及分割图像的目标区域例子
+toc: true
+date: 2018-11-10
+---
 
 # 直接可以用的Python和OpenCV检测及分割图像的目标区域例子
 

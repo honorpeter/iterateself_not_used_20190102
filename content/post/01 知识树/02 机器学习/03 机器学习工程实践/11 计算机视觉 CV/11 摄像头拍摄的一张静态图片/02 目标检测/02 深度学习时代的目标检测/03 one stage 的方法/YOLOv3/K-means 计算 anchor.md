@@ -1,3 +1,8 @@
+---
+title: K-means 计算 anchor
+toc: true
+date: 2018-11-10
+---
 # YOLOv3使用笔记——Kmeans聚类计算anchor boxes
 
 

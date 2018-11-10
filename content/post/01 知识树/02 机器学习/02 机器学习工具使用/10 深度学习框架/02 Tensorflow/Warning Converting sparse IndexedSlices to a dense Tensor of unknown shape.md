@@ -1,3 +1,8 @@
+---
+title: Warning Converting sparse IndexedSlices to a dense Tensor of unknown shape
+toc: true
+date: 2018-11-10
+---
 # Tensorflow dense gradient explanation?
 
 

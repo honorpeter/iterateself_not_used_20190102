@@ -1,3 +1,8 @@
+---
+title: CTC Loss InvalidArgumentError
+toc: true
+date: 2018-11-10
+---
 # 需要补充的
 
 - 这个问题也遇到了，但是没看懂这个地方是说的什么。<span style="color:red;">看来还是要好好掌握 keras</span>

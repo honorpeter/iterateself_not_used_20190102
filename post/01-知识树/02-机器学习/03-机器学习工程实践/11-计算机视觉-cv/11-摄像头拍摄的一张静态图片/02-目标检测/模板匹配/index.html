@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个是一个比较简单的例子。 使用OpenCV，Python和模板匹配来播放“Waldo在哪里？” 在这个谜题中找到Waldo需要多长时" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E6%A8%A1%E6%9D%BF%E5%8C%B9%E9%85%8D/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="需要补充的 这个是一个比较简单的例子。 使用OpenCV，Python和模板匹配来播放“Waldo在哪里？” 在这个谜题中找到Waldo需要多长时" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/%E6%A8%A1%E6%9D%BF%E5%8C%B9%E9%85%8D/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="需要补充的 这个是一个比较简单的例子。 使用OpenCV，Python和模板匹配来播放“Waldo在哪里？” 在这个谜题中找到Waldo需要多长时">
+
+
+
+<meta itemprop="wordCount" content="2871">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="需要补充的 这个是一个比较简单的例子。 使用OpenCV，Python和模板匹配来播放“Waldo在哪里？” 在这个谜题中找到Waldo需要多长时"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 2871 words </span>
+        <span class="more-meta"> 6 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#使用opencv-python和模板匹配来播放-waldo在哪里">使用OpenCV，Python和模板匹配来播放“Waldo在哪里？”</a>
+<ul>
+<li><a href="#目标">目标：</a></li>
+<li><a href="#我们的拼图和查询图像">我们的拼图和查询图像</a></li>
+<li><a href="#进一步的探讨">进一步的探讨</a></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>这个是一个比较简单的例子。</li>
+</ul>
+
+<h1 id="使用opencv-python和模板匹配来播放-waldo在哪里">使用OpenCV，Python和模板匹配来播放“Waldo在哪里？”</h1>
+
+<p><img src="https://ask.qcloudimg.com/http-save/1207540/icnlsysbpj.jpeg?imageView2/2/w/1620" alt="img" /></p>
+
+<p>在这个谜题中找到Waldo需要多长时间？</p>
+
+<p>《Waldo在哪里》是一套由英国插画家Martin Handford创作的儿童书籍，目标就是在一张人山人海的图片中找出一个特定的人物——沃尔多。</p>
+
+<p>沃尔多是考察眼力的终极游戏。他实际上就“隐藏”在眼前 - 但由于各种干扰因素令人分心，我们不能马上把他挑出来。</p>
+
+<p>归根到底，Waldo只是一个视觉模式。他戴眼镜，一顶帽子，身着他的经典白色和红色水平条纹衬衫。我们可能需要一点时间在页面上下左右扫视，但是我们的大脑能够挑选出这种模式，即使周围有各种东西令人分心。</p>
+
+<p>使用计算机视觉技术，我们可以在一秒钟内找到沃尔多。</p>
+
+<p>在这篇博客文章中，我将向您展示如何使用OpenCV和模板匹配功能来查找总是隐藏在视野之外的讨厌的Waldo。</p>
+
+<p>利用Python，OpenCV，并在其中使用模板匹配<code>cv2.matchTemplate</code>和<code>cv2.minMaxLoc</code>。使用这些功能，我们将能够在我们的拼图图像中找到Waldo。</p>
+
+<h2 id="目标">目标：</h2>
+
+<p>那么我们创建Python脚本的最终目标是什么？</p>
+
+<p><strong>目标是：给出沃尔多的查询图像和拼图图像后，找到沃尔登在拼图里的形象，并突出显示他的位置。</strong></p>
+
+<p>正如你将在本文后面看到的那样，我们只能用两行Python代码来完成这个任务  。其余的代码只是处理逻辑，如参数解析，以及显示解决的难题到我们的屏幕上。</p>
+
+<h2 id="我们的拼图和查询图像">我们的拼图和查询图像</h2>
+
+<p>我们需要两个图像来构建我们的Python脚本来执行模板匹配。</p>
+
+<p>第一个图像是我们要解决的*沃尔多之谜*。您可以在本文的顶部看到<strong>图1</strong>中的谜题。</p>
+
+<p>第二个图像是我们的Waldo查询图像：</p>
+
+<p><img src="https://ask.qcloudimg.com/http-save/1207540/z23r5aiy4x.jpeg?imageView2/2/w/1620" alt="img" /></p>
+
+<p>通过使用Waldo查询图像，我们将在原来的谜题中找到他。</p>
+
+<p>不幸的是，这里是我们方法的实用性缺失的地方。</p>
+
+<p>为了在我们的拼图中找到沃尔多，我们首先需要有沃尔多本身的形象。你可能会问，如果我已经有了沃尔多的形象，我为什么要去解开这个谜题呢？</p>
+
+<p>好问题。</p>
+
+<p><span style="color:red;">是的，这个是已经知道Waldo 的图像了，但是，如果没有知道图像呢？</span></p>
+
+<p>那么只能使用计算机视觉和图像处理技术在图像中找到 Waldo 。</p>
+
+<p>但是，它需要一些稍微更先进的技术，例如：</p>
+
+<ol>
+<li>过滤掉不是红色的颜色。</li>
+<li>计算条纹图案的相关性，以匹配 Waldo 衬衫的红色和白色的过渡。<span style="color:red;">怎么计算图案的相关性？</span></li>
+<li>对与条纹图案具有高相关性的图像区域进行二值化。</li>
+</ol>
+
+<p>现在我们还是回到模板匹配的方法。</p>
+
+<h2 id="进一步的探讨">进一步的探讨</h2>
+
+<p>准备看一些代码？好的，让我们看一看：</p>
+
+<pre><code class="language-py"># 导入（import）必要的包
+import numpy as np
+import argparse
+import imutils
+import cv2
+
+# 构造参数解析器并解析参数
+ap = argparse.ArgumentParser()
+ap.add_argument(&quot;-p&quot;, &quot;--puzzle&quot;, required = True,
+    help = &quot;Path to the puzzle image&quot;)
+ap.add_argument(&quot;-w&quot;, &quot;--waldo&quot;, required = True,
+    help = &quot;Path to the waldo image&quot;)
+args = vars(ap.parse_args())
+
+# 加载谜题和Waldo的图像
+puzzle = cv2.imread(args[&quot;puzzle&quot;])
+waldo = cv2.imread(args[&quot;waldo&quot;])
+(waldoHeight, waldoWidth) = waldo.shape[:2]
+</code></pre>
+
+<p><strong>1-13行</strong> 简单地导入我们要使用的包并配置我们的参数解析器。我们将使用NumPy进行数组操作，<code>argparse</code>来解析我们的命令行参数，以及<code>cv2</code>来把我们的OpenCV绑定。这个包<code>imutils</code>实际上是一组便利功能，用于处理基本的图像操作，如旋转，调整大小和平移。您可以<a href="http://www.pyimagesearch.com/2014/01/20/basic-image-manipulations-in-python-and-opencv-resizing-scaling-rotating-and-cropping/">在这里</a>阅读更多关于这些类型的基本图像操作。</p>
+
+<p>之后，我们需要设置我们的两个命令行参数。首先，<code>--puzzle</code>是我们的沃尔多谜题图像，而<code>--waldo</code>的路径，是沃尔多查询图像的路径。</p>
+
+<p>再一次提醒，我们的目标是使用模板匹配在谜题图像中查找查询图像。</p>
+
+<p>现在我们已经有了我们的图像的路径，我们使用<code>cv2.imread</code>函数将它们从<strong>第16行和第17行</strong>的磁盘加载进来-——这种方法只是从磁盘上读取图像，然后将其存储为多维的NumPy数组。</p>
+
+<p>由于图像在OpenCV中被表示为NumPy数组，我们可以很容易地访问图像的尺寸。在<strong>第18行，</strong> 我们分别获取了Waldo查询图像 的高度和宽度</p>
+
+<p>我们现在准备好执行我们的模板匹配：</p>
+
+<pre><code class="language-py"># 在谜题中找出Waldo
+result = cv2.matchTemplate(puzzle, waldo, cv2.TM_CCOEFF)
+(_, _, minLoc, maxLoc) = cv2.minMaxLoc(result)
+</code></pre>
+
+<p>我们用<code>cv2.matchTemplate function</code>在 <strong>第21行</strong> 完成了模板匹配。这个方法需要三个参数。首先是我们的<code>puzzle</code>图像，这个图像包含了我们正在寻找的内容。第二个是我们的查询图像<code>waldo</code>。该图像包含在谜题图像中，我们正在寻找它的确切位置。最后，第三个参数是我们的模板匹配方法。有多种方法可以进行模板匹配，但在这种情况下，我们使用的是由标志指定的相关系数<code>cv2.TM_CCOEFF</code>。</p>
+
+<p>那么这个<code>cv2.matchTemplate</code>函数到底在做什么呢？</p>
+
+<p>本质上，这个函数将我们的<code>waldo</code>查询图像作为“滑块”，并一次一个像素地将它从左到右，从上到下滑过我们的拼图谜题。然后，对于每一个位置，我们计算相关系数以确定匹配“好”还是“差”。具有足够高的相关性的区域可以视作我们的waldo模板的“匹配”。</p>
+
+<p>由此，我们需要做的调用位于<strong>第22行</strong>的<code>cv2.minMaxLoc</code>以找到我们的“好的”匹配在哪。</p>
+
+<p>这就是模板匹配的全部内容！</p>
+
+<p>实际上，以上只需要我们两行代码。</p>
+
+<p>我们其余的源代码涉及提取包含Waldo的区域，然后在原始谜题图像中突出显示他：</p>
+
+<pre><code class="language-py"># 找到包含Waldo 的滑块并将它从谜题图像中突出显示
+topLeft = maxLoc
+botRight = (topLeft[0] + waldoWidth, topLeft[1] + waldoHeight)
+roi = puzzle[topLeft[1]:botRight[1], topLeft[0]:botRight[0]]
+
+# 创建一个变暗的透明“图层”覆盖住除了Waldo之外的一切
+mask = np.zeros(puzzle.shape, dtype = &quot;uint8&quot;)
+puzzle = cv2.addWeighted(puzzle, 0.25, mask, 0.75, 0)
+</code></pre>
+
+<p><strong>第26行</strong> 根据我们的滑动窗口抓取包含最佳匹配的图像的左上角（x，y）坐标。然后，我们根据 <strong>第27行</strong> 的<code>waldo</code>图像宽度和高度计算右下（x，y）坐标。最后我们提取<strong>第28行的</strong><code>roi</code>（Region of Interest兴趣区）。</p>
+
+<p>下一步是构建一个透明的图层，使图像中<em>除了</em>  Waldo所有东西都变黑。在 <strong>第32行，</strong> 我们首先用零填充和我们谜题图像一样大小的<code>mask</code>来进行初始化。通过用零填充图像，我们可以创建一个全黑的图像。</p>
+
+<p>为了创建透明效果，我们使用第 <strong>33行</strong> 的<code>cv2.addWeighted</code>功能。第一个参数是我们的谜题图像<code>puzzle</code>，第二个参数表明我们希望它对我们输出图像的25％有贡献。然后，我们提供<code>mask</code>作为我们的第三个参数，使其对我们输出图像的75％有贡献。通过利用<code>puzzlemaskcv2.addWeighted</code>功能，我们就能够创造透明效果。</p>
+
+<p>但是，我们仍然需要突出沃尔多！这很简单：</p>
+
+<pre><code class="language-py"># 将原本的Waldo的图形放入图片中，他就会比其余部分“更亮”
+puzzle[topLeft[1]:botRight[1], topLeft[0]:botRight[0]] = roi
+
+# 显示图像
+cv2.imshow(&quot;Puzzle&quot;, imutils.resize(puzzle, height = 650))
+cv2.imshow(&quot;Waldo&quot;, waldo)
+cv2.waitKey(0)
+</code></pre>
+
+<p>在这里，我们只是使用 <strong>第37行</strong> 的NumPy数组剪切技术把Waldo的图形放回到原始图像中，这没有什么。</p>
+
+<p>最后，<strong>第40-42行</strong> 在屏幕上显示我们的Waldo查询结果和（突出显示后的）谜题图像并等待按键。</p>
+
+<p>要运行我们的脚本，请启动您的shell并执行以下命令：</p>
+
+<pre><code class="language-py">$ python find_waldo.py --puzzle puzzle.png --waldo waldo.png
+</code></pre>
+
+<p>当你的脚本执行后，你应该在你的屏幕上看到类似这样的内容：</p>
+
+<p><img src="https://ask.qcloudimg.com/http-save/1207540/23oqnjr2qn.jpeg?imageView2/2/w/1620" alt="img" /></p>
+
+<p>我们在图片的左下角找到了Waldo！</p>
+
+<p>使用Python和OpenCV进行模板匹配其实很简单。首先，您只需要两个图像 - 要匹配的对象的图像和包含该对象的图像。然后，你只需要调用<code>cv2.matchTemplate</code>和<code>cv2.minMaxLaoc</code>。剩下的只是封装代码，将这些函数的输出粘贴在一起。</p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://cloud.tencent.com/developer/article/1036801">使用OpenCV，Python和模板匹配来播放“Waldo在哪里？”</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/02-yolov3-%E4%BD%BF%E7%94%A8/01-keras-%E5%AE%9E%E7%8E%B0/00-%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/03-%E6%96%87%E5%AD%97%E8%AF%86%E5%88%AB-ocr/05-%E5%BC%80%E6%BA%90-ocr-%E5%BA%93/01-tesseract/01-tesseract-%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

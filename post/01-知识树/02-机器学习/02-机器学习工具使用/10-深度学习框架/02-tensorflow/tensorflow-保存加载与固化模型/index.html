@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 Tensorflow 保存及加载模型的典型的3种方法 1. 利用Saver 通常我们使用 TensorFlow保存模型时都使用ckpt格式的模型文件（实际上有4" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/02-tensorflow/tensorflow-%E4%BF%9D%E5%AD%98%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%9B%BA%E5%8C%96%E6%A8%A1%E5%9E%8B/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="需要补充的 Tensorflow 保存及加载模型的典型的3种方法 1. 利用Saver 通常我们使用 TensorFlow保存模型时都使用ckpt格式的模型文件（实际上有4" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/10-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%A1%86%E6%9E%B6/02-tensorflow/tensorflow-%E4%BF%9D%E5%AD%98%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%9B%BA%E5%8C%96%E6%A8%A1%E5%9E%8B/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="需要补充的 Tensorflow 保存及加载模型的典型的3种方法 1. 利用Saver 通常我们使用 TensorFlow保存模型时都使用ckpt格式的模型文件（实际上有4">
+
+
+
+<meta itemprop="wordCount" content="1344">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="需要补充的 Tensorflow 保存及加载模型的典型的3种方法 1. 利用Saver 通常我们使用 TensorFlow保存模型时都使用ckpt格式的模型文件（实际上有4"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 1344 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#tensorflow-保存及加载模型的典型的3种方法">Tensorflow 保存及加载模型的典型的3种方法</a>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#1-利用saver">1. 利用Saver</a>
+<ul>
+<li><a href="#利用saver保存模型">利用saver保存模型</a></li>
+</ul></li>
+<li><a href="#2-利用graph-util">2.利用graph_util</a>
+<ul>
+<li><a href="#保存-pb-文件">保存 PB 文件</a></li>
+<li><a href="#加载-pb-文件">加载 PB 文件</a></li>
+</ul></li>
+<li><a href="#3-利用builder">3. 利用builder</a>
+<ul>
+<li><a href="#利用builder保存模型">利用builder保存模型</a></li>
+<li><a href="#利用builder加载模型">利用builder加载模型</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<h1 id="tensorflow-保存及加载模型的典型的3种方法">Tensorflow 保存及加载模型的典型的3种方法</h1>
+
+<h4 id="1-利用saver">1. 利用Saver</h4>
+
+<p>通常我们使用 TensorFlow保存模型时都使用ckpt格式的模型文件（实际上有4个文件）,模型的结构和数据是分离的。</p>
+
+<h5 id="利用saver保存模型">利用saver保存模型</h5>
+
+<p>``</p>
+
+<pre><code>#模型保存在.meta文件，变量保存在checkpoint文件
+model_save_path = &quot;./model/model_save&quot;
+saver = tf.train.Saver()
+saver.save(sess, model_save_path)
+利用saver加载模型try:
+    # 恢复所有变量信息
+    saver.restore(sess, tf.train.latest_checkpoint(model_save_path))
+    print(&quot;成功加载模型参数&quot;)
+except:
+    # 如果是第一次运行，通过init加载并初始化变量
+    print(&quot;未加载模型参数，第一次运行或者模型文件被删除&quot;)
+    sess.run(tf.global_variables_initializer())
+</code></pre>
+
+<p>``</p>
+
+<p>上面的方式在模型调试的时候可以使用，反正模型网络结构都已经定义在文件前面了，只是加载模型继续训练而已。如果需要另外new一个文件去加载模型，可以用下面的方式：</p>
+
+<p>``</p>
+
+<pre><code>    sess = tf.Session()
+    # 加载模型结构
+    saver = tf.train.import_meta_graph(&quot;./model/model_save.meta&quot;)
+    # 只需要指定目录就可以恢复所有变量信息
+    saver.restore(sess, tf.train.latest_checkpoint(model_save_path))
+
+    # 直接获取保存的变量
+    print(sess.run(&quot;b:0&quot;))
+
+    # 获取placeholder变量
+    input_x = sess.graph.get_tensor_by_name(&quot;input_x:0&quot;)
+    input_y = sess.graph.get_tensor_by_name(&quot;input_y:0&quot;)
+    # 获取需要进行计算的operator
+    op = sess.graph.get_tensor_by_name(&quot;sum:0&quot;)
+
+    # 加入新的操作
+    add_on_op = tf.multiply(op, 2)
+
+    print(sess.run(add_on_op, {input_x: 5, input_y: 5}))
+</code></pre>
+
+<p>``</p>
+
+<h4 id="2-利用graph-util">2.利用graph_util</h4>
+
+<p>谷歌推荐的保存模型的方式是固化模型参数并序列化为PB文件，它具有语言独立性，可独立运行，封闭的序列化格式，任何语言都可以解析它，它允许其他语言和深度学习框架读取、继续训练和迁移TensorFlow的模型。</p>
+
+<p>它的主要使用场景是实现模型训练与模型预测的解耦。模型的参数和模型结构固化在一起，就可以迁移到需要的地方前向传播即可得到网络结果。</p>
+
+<h5 id="保存-pb-文件">保存 PB 文件</h5>
+
+<pre><code>import tensorflow as tf
+from tensorflow.python.framework import graph_util
+
+with tf.Session(graph=tf.Graph()) as sess:
+    x = tf.placeholder(tf.int32, name='input_x')
+    y = tf.placeholder(tf.int32, name='input_y')
+    b = tf.Variable(1, name='b')
+    xy = tf.multiply(x, y)
+    op = tf.add(xy, b, name='sum')
+    # 初始化变量
+    sess.run(tf.global_variables_initializer())
+
+    # 测试 OP
+    print(sess.run(op, feed_dict = {x: 10, y: 3}))
+
+    # 固化需要用到的变量
+    # 这里的输出需要加上name属性 需要指定output_node_names，可以多个
+    constant_graph = graph_util.convert_variables_to_constants(sess, sess.graph_def, ['sum'])
+
+    # 写入序列化的PB文件
+    with tf.gfile.FastGFile(&quot;./test/test.pb&quot;, mode='wb') as f:
+        f.write(constant_graph.SerializeToString())
+
+    # 输出
+    # Converted 1 variables to const ops.
+    # 31
+</code></pre>
+
+<p>``</p>
+
+<h5 id="加载-pb-文件">加载 PB 文件</h5>
+
+<p>``</p>
+
+<pre><code>with tf.Session() as sess:
+    with tf.gfile.FastGFile(&quot;./test/test.pb&quot;, 'rb') as f:
+        graph_def = tf.GraphDef()
+        graph_def.ParseFromString(f.read()) #加载图
+        # 从图上读取张量（第一种方法），同时把图设为默认图
+        input_x,input_y,op=tf.import_graph_def(graph_def, return_elements=[&quot;input_x:0&quot;,&quot;input_y:0&quot;,&quot;sum:0&quot;])
+
+    # 需要有一个初始化的过程
+    sess.run(tf.global_variables_initializer())
+
+    print(sess.run(op,  feed_dict={input_x: 5, input_y: 5}))
+    #26
+</code></pre>
+
+<h4 id="3-利用builder">3. 利用builder</h4>
+
+<h5 id="利用builder保存模型">利用builder保存模型</h5>
+
+<pre><code>with tf.Session(graph=tf.Graph()) as sess:
+    x = tf.placeholder(tf.int32, name='input_x')
+    y = tf.placeholder(tf.int32, name='input_y')
+    b = tf.Variable(1, name='b')
+    xy = tf.multiply(x, y)
+    op = tf.add(xy, b, name=&quot;sum&quot;)
+
+    sess.run(tf.global_variables_initializer())
+
+    constant_graph = graph_util.convert_variables_to_constants(sess, sess.graph_def, [&quot;sum&quot;])
+
+    # 测试 OP
+    feed_dict = {x: 10, y: 3}
+    print(sess.run(op, feed_dict))
+
+    # 构造器，模型保存的路径
+    builder = tf.saved_model.builder.SavedModelBuilder(&quot;./test/savemodel&quot;)
+
+    # 保存sess，标签，输入输出映射
+    builder.add_meta_graph_and_variables(sess, [tf.saved_model.tag_constants.SERVING])
+    # 保存为PB模型
+    builder.save()
+</code></pre>
+
+<p>保存好以后到saved_model_dir目录下，会有一个saved_model.pb文件以及variables文件夹。顾名思义，variables保存所有变量，saved_model.pb用于保存模型结构等信息。</p>
+
+<h5 id="利用builder加载模型">利用builder加载模型</h5>
+
+<pre><code>with tf.Session(graph=tf.Graph()) as sess:
+    # 依标签加载模型
+    tf.saved_model.loader.load(sess, [tf.saved_model.tag_constants.SERVING], &quot;./test/savemodel&quot;)
+    # 初始化变量
+    sess.run(tf.global_variables_initializer())
+    # 查看图中的op
+    for op in sess.graph.get_operations():
+        print(op.name,op.values())
+    # 获取张量的第二种方法
+    input_x = sess.graph.get_tensor_by_name('input_x:0')
+    input_y = sess.graph.get_tensor_by_name('input_y:0')
+    op = sess.graph.get_tensor_by_name('sum:0')
+    # 在模型中前向传播
+    ret = sess.run(op,  feed_dict={input_x:5,input_y:5})
+    print(ret)
+</code></pre>
+
+<p>只需要指定要恢复模型的session，模型的 tag，模型的保存路径即可,使用起来比第一种方法简单</p>
+
+<h4 id="总结">总结</h4>
+
+<ul>
+<li>如果需要迁移模型，例如使用opencv运行tensorflow模型，就需要将模型的参数和模型结构固化到一起并序列化为.pb文件，也就是使用第二种方式。</li>
+<li>第一种和第三种方法都将模型结构和模型参数分离了，并且依赖于tensorflow框架。</li>
+<li>总体建议日常还是将模型保存为pb文件。</li>
+</ul>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/32887066">TensorFlow 保存模型为 PB 文件</a></li>
+<li><a href="https://me.aimao.co/2018/05/tensorflow-save-load-frezen-model/">TensorFlow 保存加载与固化模型</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/02-%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/04-tensorflow-%E5%AE%89%E8%A3%85/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/02-%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/01-%E5%BC%80%E5%8F%91%E9%98%B6%E6%AE%B5/01-%E5%BC%80%E5%8F%91%E7%AB%8B%E6%A1%88%E4%B8%8E%E9%A1%B9%E7%9B%AE%E8%A7%84%E5%88%92/%E5%A4%A7%E7%BA%B2/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

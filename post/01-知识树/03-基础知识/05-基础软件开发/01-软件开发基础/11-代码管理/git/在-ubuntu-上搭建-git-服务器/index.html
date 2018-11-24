@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>在 ubuntu 上搭建 git 服务器 - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个还是很好的，按照这个搭建完成了，嗯。 文章中提到的两个工具还是要总结下的。Gitosis，Gitolite 感觉廖雪峰的这个网站还" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/11-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/%E5%9C%A8-ubuntu-%E4%B8%8A%E6%90%AD%E5%BB%BA-git-%E6%9C%8D%E5%8A%A1%E5%99%A8/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="在 ubuntu 上搭建 git 服务器" />
+<meta property="og:description" content="需要补充的 这个还是很好的，按照这个搭建完成了，嗯。 文章中提到的两个工具还是要总结下的。Gitosis，Gitolite 感觉廖雪峰的这个网站还" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/11-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/%E5%9C%A8-ubuntu-%E4%B8%8A%E6%90%AD%E5%BB%BA-git-%E6%9C%8D%E5%8A%A1%E5%99%A8/" /><meta property="article:published_time" content="2018-11-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2018-11-25T00:00:00&#43;00:00"/>
+<meta itemprop="name" content="在 ubuntu 上搭建 git 服务器">
+<meta itemprop="description" content="需要补充的 这个还是很好的，按照这个搭建完成了，嗯。 文章中提到的两个工具还是要总结下的。Gitosis，Gitolite 感觉廖雪峰的这个网站还">
+
+
+<meta itemprop="datePublished" content="2018-11-25T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-11-25T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1483">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="在 ubuntu 上搭建 git 服务器"/>
+<meta name="twitter:description" content="需要补充的 这个还是很好的，按照这个搭建完成了，嗯。 文章中提到的两个工具还是要总结下的。Gitosis，Gitolite 感觉廖雪峰的这个网站还"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">在 ubuntu 上搭建 git 服务器</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-11-25 </span>
+        
+        <span class="more-meta"> 1483 words </span>
+        <span class="more-meta"> 3 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#搭建git服务器">搭建Git服务器</a>
+<ul>
+<li>
+<ul>
+<li><a href="#管理公钥">管理公钥</a></li>
+<li><a href="#管理权限">管理权限</a></li>
+<li><a href="#小结">小结</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>这个还是很好的，按照这个搭建完成了，嗯。</li>
+<li>文章中提到的两个工具还是要总结下的。Gitosis，Gitolite</li>
+<li>感觉廖雪峰的这个网站还是很好的，最起码知识很准确，按照这个来是可行的。嗯，还是要把上面的东西融入进来。</li>
+</ul>
+
+<h1 id="搭建git服务器">搭建Git服务器</h1>
+
+<p>在<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/001374385852170d9c7adf13c30429b9660d0eb689dd43a000">远程仓库</a>一节中，我们讲了远程仓库实际上和本地仓库没啥不同，纯粹为了7x24小时开机并交换大家的修改。</p>
+
+<p>GitHub就是一个免费托管开源代码的远程仓库。但是对于某些视源代码如生命的商业公司来说，既不想公开源代码，又舍不得给GitHub交保护费，那就只能自己搭建一台Git服务器作为私有仓库使用。</p>
+
+<p>搭建Git服务器需要准备一台运行Linux的机器，强烈推荐用Ubuntu或Debian，这样，通过几条简单的<code>apt</code>命令就可以完成安装。</p>
+
+<p>假设你已经有<code>sudo</code>权限的用户账号，下面，正式开始安装。</p>
+
+<p>第一步，安装<code>git</code>：</p>
+
+<pre><code>$ sudo apt-get install git
+</code></pre>
+
+<p>第二步，创建一个<code>git</code>用户，用来运行<code>git</code>服务：</p>
+
+<pre><code>$ sudo adduser git
+</code></pre>
+
+<p><span style="color:red;">这个地方创建的 git 账户最好再按照这个地方设置下：<a href="https://www.linuxidc.com/Linux/2010-12/30386.htm">Ubuntu技巧之 is not in the sudoers file解决方法</a></span></p>
+
+<p>第三步，创建证书登录：</p>
+
+<p>收集所有需要登录的用户的公钥，就是他们自己的<code>id_rsa.pub</code>文件，把所有公钥导入到<code>/home/git/.ssh/authorized_keys</code>文件里，一行一个。</p>
+
+<p>第四步，初始化Git仓库：</p>
+
+<p>先选定一个目录作为Git仓库，假定是<code>/srv/sample.git</code>，在<code>/srv</code>目录下输入命令：</p>
+
+<pre><code>$ sudo git init --bare sample.git
+</code></pre>
+
+<p>Git就会创建一个裸仓库，裸仓库没有工作区，因为服务器上的Git仓库纯粹是为了共享，所以不让用户直接登录到服务器上去改工作区，并且服务器上的Git仓库通常都以<code>.git</code>结尾。然后，把owner改为<code>git</code>：</p>
+
+<pre><code>$ sudo chown -R git:git sample.git
+</code></pre>
+
+<p>第五步，禁用shell登录：</p>
+
+<p>出于安全考虑，第二步创建的git用户不允许登录shell，这可以通过编辑<code>/etc/passwd</code>文件完成。找到类似下面的一行：</p>
+
+<pre><code>git❌1001:1001:,,,:/home/git:/bin/bash
+</code></pre>
+
+<p>改为：</p>
+
+<pre><code>git❌1001:1001:,,,:/home/git:/usr/bin/git-shell
+</code></pre>
+
+<p>这样，<code>git</code>用户可以正常通过ssh使用git，但无法登录shell，因为我们为<code>git</code>用户指定的<code>git-shell</code>每次一登录就自动退出。</p>
+
+<p>第六步，克隆远程仓库：</p>
+
+<p>现在，可以通过<code>git clone</code>命令克隆远程仓库了，在各自的电脑上运行：</p>
+
+<pre><code>$ git clone git@server:/srv/sample.git
+Cloning into 'sample'...
+warning: You appear to have cloned an empty repository.
+</code></pre>
+
+<p>剩下的推送就简单了。</p>
+
+<h3 id="管理公钥">管理公钥</h3>
+
+<p>如果团队很小，把每个人的公钥收集起来放到服务器的<code>/home/git/.ssh/authorized_keys</code>文件里就是可行的。如果团队有几百号人，就没法这么玩了，这时，可以用<a href="https://github.com/res0nat0r/gitosis">Gitosis</a>来管理公钥。</p>
+
+<p>这里我们不介绍怎么玩<a href="https://github.com/res0nat0r/gitosis">Gitosis</a>了，几百号人的团队基本都在500强了，相信找个高水平的Linux管理员问题不大。</p>
+
+<h3 id="管理权限">管理权限</h3>
+
+<p>有很多不但视源代码如生命，而且视员工为窃贼的公司，会在版本控制系统里设置一套完善的权限控制，每个人是否有读写权限会精确到每个分支甚至每个目录下。因为Git是为Linux源代码托管而开发的，所以Git也继承了开源社区的精神，不支持权限控制。不过，因为Git支持钩子（hook），所以，可以在服务器端编写一系列脚本来控制提交等操作，达到权限控制的目的。<a href="https://github.com/sitaramc/gitolite">Gitolite</a>就是这个工具。</p>
+
+<p>这里我们也不介绍<a href="https://github.com/sitaramc/gitolite">Gitolite</a>了，不要把有限的生命浪费到权限斗争中。</p>
+
+<h3 id="小结">小结</h3>
+
+<ul>
+<li>搭建Git服务器非常简单，通常10分钟即可完成；</li>
+<li>要方便管理公钥，用<a href="https://github.com/sitaramc/gitolite">Gitosis</a>；</li>
+<li>要像SVN那样变态地控制权限，用<a href="https://github.com/sitaramc/gitolite">Gitolite</a>。</li>
+</ul>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/00137583770360579bc4b458f044ce7afed3df579123eca000">搭建Git服务器</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/01-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/11-%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/git/gitignore-%E7%9A%84%E4%BD%BF%E7%94%A8/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">gitignore 的使用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/03-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/05-%E5%9F%BA%E7%A1%80%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/02-%E5%B7%A5%E5%85%B7%E4%B8%8E%E7%8E%AF%E5%A2%83/02-%E5%AE%B9%E5%99%A8/01-docker/docker-python-%E9%A1%B9%E7%9B%AE/">
+            <span class="next-text nav-default">Docker python 项目</span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

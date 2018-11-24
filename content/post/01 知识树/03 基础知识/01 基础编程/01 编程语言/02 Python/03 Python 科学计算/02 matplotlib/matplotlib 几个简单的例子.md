@@ -1,3 +1,8 @@
+---
+title: matplotlib 几个简单的例子
+toc: true
+date: 2018-11-23
+---
 # 需要补充的
 
 - 还是要自己运行下的

@@ -1,12 +1,17 @@
+---
+title: Python 输入和输出
+toc: true
+date: 2018-11-23
+---
 ### 输出
 
-用`print()`在括号中加上字符串，就可以向屏幕上输出指定的文字。比如输出`'hello, world'`，用代码实现如下：
+用 `print()` 在括号中加上字符串，就可以向屏幕上输出指定的文字。比如输出`'hello, world'`，用代码实现如下：
 
 ```
 >>> print('hello, world')
 ```
 
-`print()`函数也可以接受多个字符串，用逗号“,”隔开，就可以连成一串输出：
+`print()` 函数也可以接受多个字符串，用逗号“,”隔开，就可以连成一串输出：
 
 ```
 >>> print('The quick brown fox', 'jumps over', 'the lazy dog')
@@ -14,7 +19,7 @@ The quick brown fox jumps over the lazy dog
 ```
 
 
-`print()`会依次打印每个字符串，遇到逗号“,”会输出一个空格，因此，输出的字符串是这样拼起来的：
+`print()`会依次打印每个字符串，遇到逗号“,”会输出一个空格，因此，输出的字符串是这样拼起来的：<span style="color:red;">嗯，这个注意一下</span>
 
 ![print-explain](https://cdn.liaoxuefeng.com/cdn/files/attachments/001431643506965540b8016b45c4d27b84c734543f78840000/l)
 
@@ -40,7 +45,9 @@ The quick brown fox jumps over the lazy dog
 ### 输入
 
 
-现在，你已经可以用`print()`输出你想要的结果了。但是，如果要让用户从电脑输入一些字符怎么办？Python提供了一个`input()`，可以让用户输入字符串，并存放到一个变量里。比如输入用户的名字：
+现在，你已经可以用`print()`输出你想要的结果了。但是，如果要让用户从电脑输入一些字符怎么办？
+
+Python提供了一个 `input()`，可以让用户输入字符串，并存放到一个变量里。比如输入用户的名字：<span style="color:red;">input 还真的很少用，一般什么样的程序会用到 input ？感觉一般的脚本程序也很少要用 input 来输入变量的。</span>
 
 ```
 >>> name = input()
@@ -88,7 +95,7 @@ Michael
 hello, Michael
 ```
 
-但是程序运行的时候，没有任何提示信息告诉用户：“嘿，赶紧输入你的名字”，这样显得很不友好。幸好，`input()`可以让你显示一个字符串来提示用户，于是我们把代码改成：
+但是程序运行的时候，没有任何提示信息告诉用户：“嘿，赶紧输入你的名字”，这样显得很不友好。幸好，`input()`可以让你显示一个字符串来提示用户，于是我们把代码改成：<span style="color:red;">嗯，这个挺好的。</span>
 
 ```
 name = input('please enter your name: ')
@@ -113,6 +120,4 @@ hello, Michael
 
 输入是Input，输出是Output，因此，我们把输入输出统称为Input/Output，或者简写为IO。
 
-`input()`和`print()`是在命令行下面最基本的输入和输出，但是，用户也可以通过其他更高级的图形界面完成输入和输出，比如，在网页上的一个文本框输入自己的名字，点击“确定”后在网页上看到输出信息。
-
-### 练习
+`input()`和`print()`是在命令行下面最基本的输入和输出，但是，用户也可以通过其他更高级的图形界面完成输入和输出，比如，在网页上的一个文本框输入自己的名字，点击“确定”后在网页上看到输出信息。<span style="color:red;">嗯，是的。</span>

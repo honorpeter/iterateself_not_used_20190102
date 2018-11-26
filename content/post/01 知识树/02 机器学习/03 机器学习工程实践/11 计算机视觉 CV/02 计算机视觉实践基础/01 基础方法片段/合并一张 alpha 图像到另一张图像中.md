@@ -1,3 +1,8 @@
+---
+title: 合并一张 alpha 图像到另一张图像中
+toc: true
+date: 2018-11-26
+---
 # How to merge a transparent png image with another image using PIL
 
 

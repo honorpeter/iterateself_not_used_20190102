@@ -111,7 +111,7 @@ tags:
 Builder模式结构图为：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HEFLeGjlJb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HEFLeGjlJb.png?imageslim)
 
 它的关键是其中的 Director 对象并不直接返回对象，而是通过Builder 一步步 （BuildPartA，BuildPartB，BuildPartC）的来创建对象。当然这里 Director 可以提供一个默认的返回对象的接口（即返回通用的复杂对象的创建，即不指定或者特定唯一指定BuildPart中的参数）。**什么意思？**
 

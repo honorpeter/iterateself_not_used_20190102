@@ -89,7 +89,7 @@ ipython shell的设置文件为`ipython_config.py`，通常位于主目录下的
 
 新创建的配置文件在profile_secret_project目录下，我们可以按需要更改配置文件。然后按下面的方式启动ipython：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/l6hfm4Icj9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/l6hfm4Icj9.png?imageslim)
 
 创建jupyter的配置文件：
 

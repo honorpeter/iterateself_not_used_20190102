@@ -121,7 +121,7 @@ Observer 模式应该可以说是应用最多、影响最广的模式之一，�
 ■模式选择
 Observer模式典型的结构图为:
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ckh3K1hbc6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ckh3K1hbc6.png?imageslim)
 
 图 2-1: Observer Pattern 结构图
 

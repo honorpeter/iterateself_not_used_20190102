@@ -90,7 +90,7 @@ tags:
 Composite模式的典型结构图为：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/587D9CBh1G.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/587D9CBh1G.png?imageslim)
 
 -实现
 ♦完整代码示例(code)

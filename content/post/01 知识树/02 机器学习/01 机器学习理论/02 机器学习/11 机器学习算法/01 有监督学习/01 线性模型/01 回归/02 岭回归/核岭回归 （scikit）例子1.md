@@ -177,10 +177,10 @@ KRR prediction for 100000 inputs in 0.327 s
 输出图像：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/47EF4iICC3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/47EF4iICC3.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DmJhk1Hb1G.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jbh9legB3i.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/DmJhk1Hb1G.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/jbh9legB3i.png?imageslim)
 
 
 

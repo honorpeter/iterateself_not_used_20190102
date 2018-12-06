@@ -58,7 +58,7 @@ We stick to this question through the entire project course. In our project prop
 
 For some large scale buildings in Harvard, <b>there are three types energy consumption, electricity, chilled water and steam. Chilled water is for cooling and steam is for heating</b>. The following figure shows the buildings with chilled water and steam supply from Harvard plants.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/6bDiAGb7Bd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/6bDiAGb7Bd.png?imageslim)
 
 <p align="center">Fig. Harvard chilled water and steam supply. (Left: chilled water, highlighted in blue. Right: Steam, highlighted in yellow.)</p>
 
@@ -98,9 +98,9 @@ pd.options.display.mpl_style = 'default'
 
 Original data are downloaded from <b>Harvard Energy Witness Website</b>
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/f96a11H2E8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/f96a11H2E8.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/FHJB3KAJD3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/FHJB3KAJD3.png?imageslim)
 
 Then we use Pandas to put them together into one dataframe.
 
@@ -376,7 +376,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/AHhc1Ib9cA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/AHhc1Ib9cA.png?imageslim)
 
 
 > Above is a plot of monthly electricity consumption using our data processing method. Obviously, the two meters malfunctioned for several months. There are two sets of dots "CE603B" and "CE604B", which come from two meters. There are two electricity meters. The sum of them is the total electricity consumption of the building.
@@ -448,10 +448,10 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/cDDc1JIag4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/cDDc1JIag4.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/3LD5eCaBKb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/3LD5eCaBKb.png?imageslim)
 
 
 红色的是机构提供的，蓝色的是累加得到的。大部分情况是一致的。
@@ -590,7 +590,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/7hLGIE26FF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/7hLGIE26FF.png?imageslim)
 
 之所以是断裂的，是因为官方说计量的仪表坏了，数据没有记录到。
 
@@ -609,7 +609,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Gl44JBeCI6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/Gl44JBeCI6.png?imageslim)
 
 可以明显看到白天和晚上是有差别的，而且周末与工作日也是差别很大的。也可以看出，时间是一个很重要的特征。
 
@@ -688,7 +688,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/H441BG1fC6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/H441BG1fC6.png?imageslim)
 
 
 ```
@@ -697,7 +697,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/mLkgk5HJb0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/mLkgk5HJb0.png?imageslim)
 
 可以看到每个学期期末考试之后用电就往下降了。
 
@@ -800,7 +800,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/8i2k3mLaLm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/8i2k3mLaLm.png?imageslim)
 
 需要做的很严谨。
 
@@ -841,7 +841,7 @@ hourlyChilledWater.head()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/E0h7m7Egdi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/E0h7m7Egdi.png?imageslim)
 
 不要着急，就从绘制简单的折线图开始，最简单的曲线图。而且这个代码大家都可以看得懂。你可以做得不像他这么漂亮，但是一定要做，最起码画个 plot.
 
@@ -895,7 +895,7 @@ dailyChilledWater.head()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/b80HAiFa7e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/b80HAiFa7e.png?imageslim)
 
 冬天的时候就不用这个冷凝水了。
 
@@ -1001,7 +1001,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Gh130KB8f4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/Gh130KB8f4.png?imageslim)
 
 
 ```python
@@ -1041,7 +1041,7 @@ hourlySteam.head()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/b7l58e9fl8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/b7l58e9fl8.png?imageslim)
 
 可见，1,2 月份的时候要供暖。
 
@@ -1091,7 +1091,7 @@ dailySteam.head()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h2efBk4jE9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/h2efBk4jE9.png?imageslim)
 
 
 |            | steam-LBS   | startDay   | endDay     |
@@ -1322,7 +1322,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/A6DglgKjEI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/A6DglgKjEI.png?imageslim)
 
 可以看出，哈佛所在的地区的气温没有太受工业的影响，还是比较符合预期的。
 
@@ -1332,7 +1332,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Ig13i84LBl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/Ig13i84LBl.png?imageslim)
 
 
 ```
@@ -1341,7 +1341,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/c14B26kF1A.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/c14B26kF1A.png?imageslim)
 
 
 ```
@@ -1350,7 +1350,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Fdm6Gjf6H5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/Fdm6Gjf6H5.png?imageslim)
 
 ### Daily weather data
 
@@ -1406,7 +1406,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/EdDIlgeic8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/EdDIlgeic8.png?imageslim)
 
 
 ```
@@ -1415,7 +1415,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/BCbDb3jcaC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/BCbDb3jcaC.png?imageslim)
 
 
 ```
@@ -1424,7 +1424,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/0iJ89HkBcj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/0iJ89HkBcj.png?imageslim)
 
 
 
@@ -1615,7 +1615,7 @@ plt.legend( (b1, b2, b3), ('Electricity', 'Steam', 'Chilled Water') )
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/hF4e68LLI0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/hF4e68LLI0.png?imageslim)
 
 图非常的漂亮，可以明显的看出，电能是一直要使用的，供暖是冬天用，冷凝水是夏天用。
 
@@ -1684,7 +1684,7 @@ plt.colorbar(im, cax=cax)
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/10f3463b1i.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/10f3463b1i.png?imageslim)
 
 他使用的是 `from mpl_toolkits.axes_grid1 import make_axes_locatable` 这个库，没有听说过。
 
@@ -1743,7 +1743,7 @@ Data length:  172.0  weeks
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/DAF07408Ld.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/DAF07408Ld.png?imageslim)
 
 
 ```
@@ -1752,7 +1752,7 @@ Data length:  172.0  weeks
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ikb23IhJB8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/ikb23IhJB8.png?imageslim)
 
 > Above are a heatmap and a plot of daily electricity use. Blank part indicates missing data.
 
@@ -1777,7 +1777,7 @@ plt.show()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/lKd3ibi1hg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/lKd3ibi1hg.png?imageslim)
 
 > Above is a plot of <b>weekly</b> consumption. Broken line part indicates missing data.
 
@@ -1912,7 +1912,7 @@ ax[0,1].set_title('Hourly energy use versus cooling/heating degrees', fontsize =
 plt.show()
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/mKk3H8HG5J.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/mKk3H8HG5J.png?imageslim)
 
 横坐标是 temperture 温度，纵坐标是各种能源的消耗。我们可以看到，随着温度的升高，电能的使用并没有明显的变化。中间是冷凝水随着温度的上升迅速的升高，热蒸汽也是。
 
@@ -1951,7 +1951,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h8k98lEc34.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/h8k98lEc34.png?imageslim)
 
 > Daily chilled water and steam has a strong linear relationship with outdoor temperature. If using cooling/heating degrees instead of T-C, one mihgt avoid stepwise linear regression.
 
@@ -1986,7 +1986,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/GGb9i3jd6I.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/GGb9i3jd6I.png?imageslim)
 
 > Humidity ratio definitely will help predict chilled water consumption and it is better than RH and Tdrew.
 
@@ -2021,7 +2021,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/dGldfBLlHF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/dGldfBLlHF.png?imageslim)
 
 > Dehumidification is designed for chilled water prediction, not steam.
 
@@ -2057,7 +2057,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/0JAIDcKjBl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/0JAIDcKjBl.png?imageslim)
 
 > Occupancy is derived from academic calendar, holidays and weekends. Basiaclly, we just assign a lower value to holidays, weekends and summer. cosHour, occupancy might help, might not, since they are just estimation of occupancy.
 
@@ -2084,7 +2084,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/17ai0101kj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/17ai0101kj.png?imageslim)
 
 > There is some strend between energy use and cosHour.
 
@@ -2120,7 +2120,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/k35A6a0216.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/k35A6a0216.png?imageslim)
 
 
 ```python
@@ -2154,7 +2154,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/bLBeiIIDDC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/bLBeiIIDDC.png?imageslim)
 
 > Solar radiation and wind speed are not that important and it is correlated with temperature.
 

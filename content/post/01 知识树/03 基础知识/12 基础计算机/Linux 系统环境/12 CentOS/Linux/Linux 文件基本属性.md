@@ -51,7 +51,7 @@ Linux系统是一种典型的多用户系统，不同的用户处于不同的地
 每个文件的属性由左边第一部分的10个字符来确定（如下图）。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/KiJgbADjc0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/KiJgbADjc0.png?imageslim)
 
 从左至右用0-9这些数字来表示。
 

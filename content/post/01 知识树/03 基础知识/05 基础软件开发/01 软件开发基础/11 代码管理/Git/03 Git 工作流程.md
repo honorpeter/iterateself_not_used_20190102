@@ -21,7 +21,7 @@ date: 2018-08-03 20:57:16
 下图展示了 Git 的工作流程：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180709/i1JLekkGad.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180709/i1JLekkGad.png?imageslim)
 
 
 

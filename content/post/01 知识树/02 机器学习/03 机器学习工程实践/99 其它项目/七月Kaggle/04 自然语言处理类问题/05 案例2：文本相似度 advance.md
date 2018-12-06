@@ -582,7 +582,7 @@ plt.title("Param vs CV Error");
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180724/5JGK3eIKi1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180724/5JGK3eIKi1.png?imageslim)
 
 大概 9 的时候达到了最优解。直观的来看 可能跟前文的差别不大。
 

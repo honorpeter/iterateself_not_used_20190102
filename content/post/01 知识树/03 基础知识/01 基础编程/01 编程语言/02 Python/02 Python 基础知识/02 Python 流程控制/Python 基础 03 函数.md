@@ -449,7 +449,7 @@ S ['Steven']
 W ['Wes', 'Will']
 ```
 
-一些迭代工具函数：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180615/g24jae5ALg.png?imageslim)
+一些迭代工具函数：![mark](http://images.iterate.site/blog/image/180615/g24jae5ALg.png?imageslim)
 
 # 7 Errors and Exception Handling（错误和异常处理）
 

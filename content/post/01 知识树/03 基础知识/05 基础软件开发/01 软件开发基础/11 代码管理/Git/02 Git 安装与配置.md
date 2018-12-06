@@ -79,7 +79,7 @@ git version 1.7.1
 
 安装包下载地址：[http://msysgit.github.io/](https://msysgit.github.io/)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180709/8GkbiLJ1DD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180709/8GkbiLJ1DD.png?imageslim)
 
 
 完成安装之后，就可以使用命令行的 git 工具（已经自带了 ssh 客户端）了，另外还有一个图形界面的 Git 项目管理工具。

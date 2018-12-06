@@ -59,7 +59,7 @@ $$y(\mathbf{x}) = w_0+ \sum_{i=1}^n w_i x_i + \sum_{i=1}^n \sum_{j=i+1}^n w_{ij}
 
 矩阵分解提供了一种解决思路。在 model-based 的协同过滤中，一个 rating 矩阵可以分解为 user 矩阵和 item 矩阵，每个 user 和 item 都可以采用一个隐向量表示[8]。比如在下图中的例子中，我们把每个 user 表示成一个二维向量，同时把每个 item 表示成一个二维向量，两个向量的点积就是矩阵中 user 对 item 的打分。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/eb3fDkkGfL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180722/eb3fDkkGfL.png?imageslim)
 
 <span style="color:red;">这个问题是推荐系统里面的问题，我们有m 个电影，有 n 个用户，每个用户只会给一部分电影打分，其他的就是空着的，用户给这些电影是否打分或者打分的高低应该是由隐含在底层的一些因素决定的。比如说，可能是由电影的题材决定的，那么题材就是一个因素 factor，也可能是演员决定的，也可以认为是一个factor，我们可以认为用户给电影打分是基于这些 factor 决定的，所以我们可以把这个得分矩阵拆成两个矩阵，一个是用户对于这些  factor 的打分，一个是电影里面对于这些 factor 的含量。比如说，用户非常喜欢“喜剧”，“王宝强”，那么一个既有王宝强又是喜剧的一个电影就会有很高的分数。</span>
 
@@ -142,7 +142,7 @@ $$\phi(\mathbf{w}, \mathbf{x}) = \sum_{j_1, j_2 \in \mathcal{C}_2} \langle \math
 $$\min_{\mathbf{w} } \sum_{i=1}^L \log \big( 1 + \exp\{ -y_i \phi (\mathbf{w}, \mathbf{x}_i ) \} \big) + \frac{\lambda}{2} \| \mathbf{w} \|^2$$
 其中，$y_i \in \{-1, 1\}$ 是第 i 个样本的label，$L$ 是训练样本数量，$\lambda$ 是惩罚项系数。模型采用SGD优化，优化流程如下。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180723/B6k3GIH4l9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180723/B6k3GIH4l9.png?imageslim)
 
 参考 $Algorithm\; 1$, 下面简单解释一下FFM的SGD优化过程。
 算法的输入 tr、va、pa 分别是训练样本集、验证样本集和训练参数设置。

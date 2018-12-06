@@ -469,7 +469,7 @@ plt.plot(params, test_scores)
 plt.title("Param vs CV AUC Score");
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180724/jLdfh2K6Dl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180724/jLdfh2K6Dl.png?imageslim)
 
 ### 用CNN来提升逼格
 

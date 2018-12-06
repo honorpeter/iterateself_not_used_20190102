@@ -20,13 +20,13 @@ date: 2018-07-27 20:08:23
 你会看到如下图所示:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6dba4848af.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/6dba4848af.png?imageslim)
 树状目录结构：
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/H7EHCLL0d2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/H7EHCLL0d2.png?imageslim)
 
 以下是对这些目录的解释：
 

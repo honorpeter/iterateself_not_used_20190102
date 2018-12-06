@@ -34,7 +34,7 @@ State模式就是被用来解决上面列出的两个问题的，在State模式�
 图 2-1: State Pattern 结构图
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ChG7j7lICe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ChG7j7lICe.png?imageslim)
 
 ## 实现
 

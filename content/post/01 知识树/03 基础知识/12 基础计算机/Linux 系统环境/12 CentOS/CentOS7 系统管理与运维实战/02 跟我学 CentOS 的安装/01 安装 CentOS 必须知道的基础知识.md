@@ -68,7 +68,7 @@ date: 2018-07-11 21:14:39
 
 VMware公司是最早从事虚拟化技术的公司之一，也是虚拟化技术的领导厂商，公司针对不同的客户需求开发了许多虚拟化产品。例如针对个人桌面的 Workstation，用于企业环境的 VMware vSphere 等。本书中多使用 VMware Workstation 作演示，VMware Workstation 运行时 界面如图2.1所示。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180711/caEbmAFEkL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180711/caEbmAFEkL.png?imageslim)
 
 Workstation 可以虚拟许多操作系统，例如 Windows 7、各种发行版的 Linux 和 Unix、Solaris、 Novell NetWare等。为了读者能更好地使用Workstation，现将一些常见使用技巧列举如下：
 
@@ -88,7 +88,7 @@ VMware Workstation 是一个收费软件，读者完全可以选择 Oracle VM Vi
 
 目前最新的版本为CentOS 7,要安装首先需要从其官方网站上下载，其官方网站为 (http://www.centos.org/) 然后在搜索结果中选择其官方网站访问，如图2.2所示。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180711/2BAj2HIhiJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180711/2BAj2HIhiJ.png?imageslim)
 
 在其官方网站中单击左上方的“GET CENTOS”或单击下方的 “Get CentOS 7 Now” 按钮，在下载页面中选择安装镜像类型。此处选择 “DVD ISO” 标准安装镜像即可，接下来的页面将选择从哪个镜像站点下载，国内通常可以使用网易、中国科技大学(网址开头为 http://centos.ustc.edu.cn ）等速度不错的站点。<span style="color:red;">嗯。</span>
 

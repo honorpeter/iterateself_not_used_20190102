@@ -114,12 +114,12 @@ Adapter模式解决的问题在生活中经常会遇到，比如说：
 Adapter Pattern（类模式）的结构图为：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/9bFhL9E7Be.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/9bFhL9E7Be.png?imageslim)
 
 Adapter Pattern（对象模式）的结构图为：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HlI109084H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HlI109084H.png?imageslim)
 
 可见：
 

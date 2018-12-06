@@ -12,7 +12,7 @@ date: 2018-08-03 11:23:43
 
 numpy的ufuncs有特别的方法用来进行特殊的向量化操作。下表进行了总结。这里我们给一些更具体的例子。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/33ak1DaBfe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/33ak1DaBfe.png?imageslim)
 
 reduce接受一个数组，并对其进行聚合，可以选择沿着哪个轴。例如，用np.add.reduce来对一个数组中的元素进行相加：
 

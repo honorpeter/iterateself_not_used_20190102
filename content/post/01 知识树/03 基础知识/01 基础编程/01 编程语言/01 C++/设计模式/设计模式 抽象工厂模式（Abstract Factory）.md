@@ -91,7 +91,7 @@ AbstractFactory 模式就是用来解决这类问题的：要创建一组相关�
 
 # AbstractFactory 模式介绍
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/A09j3A7gIC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/A09j3A7gIC.png?imageslim)
 
 上面这个就是 AbstractFactory 模式的典型结构图，这个模式的关键就是将这一组对象的创建封装到一个用于创建对象的具体类  ConcreteFactory 中。这样，维护这样一个创建类就比维护很多相关对象的创建过程要简单的多。
 

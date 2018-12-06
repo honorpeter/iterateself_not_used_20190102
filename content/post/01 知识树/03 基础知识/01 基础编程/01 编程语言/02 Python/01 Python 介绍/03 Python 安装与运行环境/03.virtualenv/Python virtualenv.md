@@ -247,7 +247,7 @@ virtualenv 是一个创建 Python 独立环境的包，virtualenvwrapper 使得v
 
 创建的环境是独立的，互不干扰，无需sudo权限即可使用 pip 来进行包的管理。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ALFB73ef8d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ALFB73ef8d.png?imageslim)
 
 
 

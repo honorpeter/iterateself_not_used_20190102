@@ -36,7 +36,7 @@ date: 2018-07-26 16:05:52
 
 了解摄影的同学，都知道，图片有个色彩直方图，可以看出 RGB 三种颜色的分布，来判断图片的好坏，因为可以判断图片的色彩是否均匀。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/hHIaKfL72l.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180726/hHIaKfL72l.jpg?imageslim)
 
 同时这个也可以作为我们图片的特征，因为对于一个指定的物体来说，他的色彩分布应该是固定的。
 
@@ -172,7 +172,7 @@ def search(search_dir):
 
 我们选一个图片来试试
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/adI3fbG3EH.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180726/adI3fbG3EH.jpg?imageslim)
 
 ```python
 results = search('../input/train/dog.10011.jpg')
@@ -189,11 +189,11 @@ print(results)
 
 我们看到，最相似的就是他自己：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/adI3fbG3EH.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180726/adI3fbG3EH.jpg?imageslim)
 
 这是最不相似的图片，是一张完全不同风格的猫：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/j6aFDLlA0G.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180726/j6aFDLlA0G.jpg?imageslim)
 
 ## 总结：
 

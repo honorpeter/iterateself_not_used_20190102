@@ -33,7 +33,7 @@ date: 2018-08-12 19:44:54
 每个样本都是以txt文档的形式存放的，类似如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AG80GlFkGE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/AG80GlFkGE.png?imageslim)
 
 
 

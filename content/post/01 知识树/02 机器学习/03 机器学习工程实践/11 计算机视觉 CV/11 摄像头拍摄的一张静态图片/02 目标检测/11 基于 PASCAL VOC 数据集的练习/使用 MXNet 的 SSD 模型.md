@@ -18,7 +18,7 @@ date: 2018-08-29
 
 MXNet 的 SSD 的实现其实就是把 SSD 作者 Wei Liu 基于 Caffe 的官方实现(网址为 <https://github.com/weiliu89/caffe/tree/ssd> )。在 MXNet 上的重新实现，原作者是 Missouri-Columbia 大学的博士生 Zhi (Joshua) Zhang。具体实现是在mxnet根目录中的 example\ssd目录下，如图11-8所示。<span style="color:red;">原作者的 Caffe 的实现也要总结进来。</span>
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/glc9h1kIgC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/glc9h1kIgC.png?imageslim)
 
 其中：
 
@@ -104,8 +104,8 @@ python train.py --batch-size=24 --epoch=20
 
 训练过程中会得到实时的训练精度和 loss 的输出，每个 epoch 结束会在验证集上测试模型，输出例子如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/F55jI59gFl.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/I2DIGHGbHd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/F55jI59gFl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/I2DIGHGbHd.png?imageslim)
 
 ### 测试和评估模型效果
 
@@ -120,7 +120,7 @@ python evaluate.py
 就会默认执行 vggl6_reduced, epoch 为 0 的模型在 VOC2007 测试集上的评估，输出每个类别的 AP
  和最后的 mAP。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/3BbkDij5KB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/3BbkDij5KB.png?imageslim)
 
 如果要评估别的模型可以在输入参数中指定，如下面命令评估训练完 3 个 epoch 得到的模型，并且 batch-size 指定为24。<span style="color:red;">什么意思？不是说评估别的模型吗？这个参数是用来评估的时候用的还是用来标识之前训练得到的这个模型的？</span>
 
@@ -154,7 +154,7 @@ python demo.py
 
 得到图11-9所示的结果。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/Ib8HEhaBB8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/Ib8HEhaBB8.png?imageslim)
 
 如果要指定图片就用-image选项，下面用前面也用过的照片来试试:
 
@@ -164,7 +164,7 @@ python demo.py --images beihong_village.jpg
 
 得到结果如图11-10所示。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/4gdk9l4L0e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/4gdk9l4L0e.png?imageslim)
 
 下面来简单看一下demo.py到底做了什么，demo.py 中主要就是一个交互的总逻辑，通过 `get_detector()` 获取了一个定义在 `detect` 文件夹下的 `Detector` 对象。在 `detect/detector.py` 中，定义了 `Detector` 的类。
 
@@ -174,9 +174,9 @@ python demo.py --images beihong_village.jpg
 
 (代码中的省略号表示省略了部分代码)：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/39K094g3gE.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/gKFmH7lKlg.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180902/3j13ek0aK0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/39K094g3gE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/gKFmH7lKlg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180902/3j13ek0aK0.png?imageslim)
 
 <span style="color:red;">还是要自己跑一下，并且把全部的代码都总结进来。</span>
 

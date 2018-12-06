@@ -36,7 +36,7 @@ Git是一个开源的分布式版本控制系统，用于敏捷高效地处理�
 
 ## Git 常用命令速查表
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180709/Ca99D86lDF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180709/Ca99D86lDF.png?imageslim)
 
 ## Git 相关资料：
 

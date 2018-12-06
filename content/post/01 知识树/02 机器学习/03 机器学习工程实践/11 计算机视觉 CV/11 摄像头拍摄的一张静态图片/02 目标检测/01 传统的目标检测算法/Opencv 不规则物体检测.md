@@ -13,7 +13,7 @@ date: 2018-10-31
 
 如图所示，一副不规则物体离散分布的灰度图，要想检测并标记。需要以下步骤：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/HFG5BD7GC6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181031/HFG5BD7GC6.png?imageslim)
 
 
 1、 二值化，这个过程很简单
@@ -63,7 +63,7 @@ def gray_to_bgr_image(markers,center_pts):
 ​    cv2.waitKey(0)
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181031/igbiK0LcEH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181031/igbiK0LcEH.png?imageslim)
 
 
 完整代码如下：

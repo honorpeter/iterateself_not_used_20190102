@@ -30,7 +30,7 @@ date: 2018-07-27 17:55:13
 图 2-1: Flyweight Pattern 结构图
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mDkbE3mL3C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mDkbE3mL3C.png?imageslim)
 
 可以从图2-1中看出，Flyweight模式中有一个类似Factory模式的对象构造工厂 FlyweightFactory，当客户程序员（Client）需要一个对象时候就会向FlyweightFactory发出 请求对象的消息GetFlyweight （）消息，FlyweightFactory拥有一个管理、存储对象的“仓 库”（或者叫对象池，vector实现），GetFlyweight （）消息会遍历对象池中的对象，如果已 经存在则直接返回给Client，否则创建一个新的对象返回给Client。当然可能也有不想被共 享的对象（例如结构图中的UnshareConcreteFlyweight），但不在本模式的讲解范围，故在实 现中不给出。
 

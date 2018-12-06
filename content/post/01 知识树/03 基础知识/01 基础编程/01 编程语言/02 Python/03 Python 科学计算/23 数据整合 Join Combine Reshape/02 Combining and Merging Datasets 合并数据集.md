@@ -426,7 +426,7 @@ pd.merge(df1, df2, how='outer')
 
 这里是how的一些选项：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/9Ff5BI1JBk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/9Ff5BI1JBk.png?imageslim)
 
 many-to-many(多对多)连接也被定义好了，不过可能不是那么直观。这里有一个例子：
 
@@ -949,7 +949,7 @@ pd.merge(left, right, on='key1', suffixes=('_left', '_right'))
 
 下表是mege的一些参数。用DataFrame的row index来联结会在下一部分讲到。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7LHBaBEBFa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/7LHBaBEBFa.png?imageslim)
 
 # 2 Merging on Index（在index上做归并）
 
@@ -2741,9 +2741,9 @@ pd.concat([df1, df2], ignore_index=True)
 
 concat函数的一些参数：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/j0BdBHdCej.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/j0BdBHdCej.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/fj7H9dB8dg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/fj7H9dB8dg.png?imageslim)
 
 # 3 Combining Data with Overlap（用重叠来合并数据）
 

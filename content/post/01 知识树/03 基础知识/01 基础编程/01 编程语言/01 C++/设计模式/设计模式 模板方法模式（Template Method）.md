@@ -111,7 +111,7 @@ Template模式是采用继承的方式实现这一点：将逻辑（算法）框
 图2-1: Template 模式结构图
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ja28mA5giB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ja28mA5giB.png?imageslim)
 
 Template模式实际上就是利用面向对象中多态的概念实现算法实现细节和高层接口的 松耦合。可以看到Template模式采取的是继承方式实现这一点的，由于继承是一种强约束 性的条件，因此也给 Template 模式带来一些许多不方便的地方（有关这一点将在讨论中展
 

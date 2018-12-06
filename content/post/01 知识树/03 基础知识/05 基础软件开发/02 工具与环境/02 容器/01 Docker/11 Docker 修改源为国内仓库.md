@@ -62,6 +62,6 @@ Docker 要求 CentOS 系统的内核版本高于 3.10 ，查看本页面的前�
 登录阿里云，访问 [https://cr.console.aliyun.com/#/accelerator](https://link.zhihu.com/?target=https%3A//cr.console.aliyun.com/%23/accelerator) 获取专属Docker加速器地址：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/124jm53mj7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/124jm53mj7.png?imageslim)
 
 直接把他给你的代码运行一下，就可以了。

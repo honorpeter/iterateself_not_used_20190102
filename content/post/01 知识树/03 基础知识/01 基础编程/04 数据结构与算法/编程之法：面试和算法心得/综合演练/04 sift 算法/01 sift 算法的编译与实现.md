@@ -13,11 +13,11 @@ date: 2018-07-08 10:56:16
 
 以下便是sift源码库编译后的效果图：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/Fc2Ak23lDD.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/Fc2Ak23lDD.jpg?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/lb92ikGff6.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/lb92ikGff6.jpg?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/1gLhgbkigi.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/1gLhgbkigi.jpg?imageslim)
 
 为了给有兴趣实现sift算法的朋友提供个参考，特整理此文如下。要了解什么是sift算法，请参考：[九、图像特征提取与匹配之SIFT算法](http://blog.csdn.net/v_JULY_v/article/details/6186942)。ok，咱们下面，就来利用Rob Hess维护的sift 库来实现sift算法：
 
@@ -43,7 +43,7 @@ date: 2018-07-08 10:56:16
 
 1. **安装注意：**假如你是将OpenCV安装到**C**:/Program Files/OpenCV（**如果你安装的时候选择不是安装在C盘，则下面所有对应的C盘都改为你所安装在的那个“X盘”，即可**），在安装时选择"将/OpenCV/bin加入系统变量"，打上“勾”。（Add/OpenCV/bin to the systerm PATH。**这一步确认选上了之后，下面的检查环境变量的步骤，便可免去**）
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/9CF0ILK23C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/9CF0ILK23C.png?imageslim)
 
 2. **检查环境变量。**为了确保上述步骤中，加入了系统变量，在安装opencv1.0成功后，还得检查C:/Program Files/OpenCV/bin是否已经被加入到环境变量PATH，如果没有，请加入。
 
@@ -59,7 +59,7 @@ date: 2018-07-08 10:56:16
 **C:/Program Files/OpenCV/ml/include**
 **C:/Program Files/OpenCV/otherlibs/highgui**
 **C:/Program Files/OpenCV/otherlibs/cvcam/include**
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/ffi65BEgd8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/ffi65BEgd8.png?imageslim)
 最后选择source files，在下方填入路径：
 **C:/Program Files/OpenCV/cv/src**
 **C:/Program Files/OpenCV/cxcore/src**
@@ -72,7 +72,7 @@ date: 2018-07-08 10:56:16
 cxcore.lib cv.lib ml.lib cvaux.lib highgui.lib cvcam.lib
 当然，你不需要这么多lib，你可以只添加你需要的lib(见下图)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/DDF7La3DCa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/DDF7La3DCa.png?imageslim)
 
 ### 三、下载gsl，gsl也是一个库，也需要下载：
 <http://sourceforge.net/projects/gnuwin32/files/gsl/1.8/gsl-1.8.exe/download>。在编译时候GSL也是和OpenCV一样要把头文件和lib的路径指定好。
@@ -98,6 +98,6 @@ updated
 
 今天下午试了下sift + KD + BBF，然后用两幅不同的图片做了下匹配（当然，运行结果显示是不匹配的），效果还不错：<http://weibo.com/1580904460/yDmzAEwcV#1348475194313>!
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/LagCe566d1.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/LagCe566d1.jpg?imageslim)
 
 同时，编译的过程中，直接用的VS2010 + opencv（并没下gsl）。2012.09.24。完。

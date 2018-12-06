@@ -93,7 +93,7 @@ Singleton 模式应该是最常用到的了。
 Singleton模式结构图如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gk9emjI3C9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/gk9emjI3C9.png?imageslim)
 
 可以看到，我们是通过维护一个 static 的成员变量来记录这个唯一的对象实例的。然后通过提供一个 staitc 的接口 instance 来获得这个唯一的实例。
 

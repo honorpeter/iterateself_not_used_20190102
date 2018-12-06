@@ -44,11 +44,11 @@ s.plot()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/f8dHcICFBH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/f8dHcICFBH.png?imageslim)
 
 Series对象的index（索引），被matplotlib用来当做x轴，当然，我们也可以自己设定不这么做，use_index=False。x轴的ticks（标记）和limits（范围）能通过xticks和xlim选项来设定，而y轴的可以用yticks和ylim来设定。下面是关于plot的一些选项。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/BJ71dfCCcK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/BJ71dfCCcK.png?imageslim)
 
 大部分的pandas绘图方法接受一个ax参数，可以作为一个matplotlib subplot对象。这给我们更强的灵活性在gird layout（网格样式）中放置subplot。
 
@@ -74,7 +74,7 @@ df.plot()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/C1Ek1kfDL8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/C1Ek1kfDL8.png?imageslim)
 
 plot属性中，包含一组方法，来画出不同类型的绘图。例如，df.plot()等同于df.plot.line()。
 
@@ -82,7 +82,7 @@ plot属性中，包含一组方法，来画出不同类型的绘图。例如，d
 
 DataFrame有一些选项在处理列的时候提供了灵活性；例如，是否把所有列都画在一个子图中，或者把不同列画在不同的子图中。下图有更多的设定：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/H8aij3LjGA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/H8aij3LjGA.png?imageslim)
 
 # 2 Bar Plots（条形图）
 
@@ -109,7 +109,7 @@ data.plot.barh(ax=axes[1], color='k', alpha=0.7)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/A9Lfl1I1fe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/A9Lfl1I1fe.png?imageslim)
 
 color='k'设置颜色为黑，而alpha=0.7则设置局部透明度（靠近1越明显，靠近0则虚化）。
 
@@ -203,7 +203,7 @@ df.plot.bar()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/m9Fdihj1IL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/m9Fdihj1IL.png?imageslim)
 
 
 ```python
@@ -223,7 +223,7 @@ df.plot.bar() # 可以看到导入seaborn后画出来的图漂亮多了
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/4adGgbhcfH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/4adGgbhcfH.png?imageslim)
 
 注意这里DataFrame列名的"Genus"，被作为图例。
 
@@ -242,7 +242,7 @@ df.plot.barh(stacked=True, alpha=0.5)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/F5KgEFmBiL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/F5KgEFmBiL.png?imageslim)
 
 > 一个小窍门，在画series的值出现的频率的条形图时，可以使用value_counts: `s.value_counts().plot.bar()`
 
@@ -545,7 +545,7 @@ party_pcts.plot.bar()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/10L5DFHH72.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/10L5DFHH72.png?imageslim)
 
 这样我们可以看出来，在周末的时候组大小（party size）是增大的。
 
@@ -653,7 +653,7 @@ sns.barplot(x='tip_pct', y='day', data=tips, orient='h')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/g2Id52kfji.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/g2Id52kfji.png?imageslim)
 
 seaborn的绘图函数中有一个data参数，这里可以导入pandas的DataFrame。其他参数指的是列名。因为每一天（比如一个固定的周六）可能会有多个不同的值，所以条形图表示的是tip_pct的平均值。条形图上的黑线表示95%的置信区间（confidence interval）（这个可以通过可选参数进行更改）。
 
@@ -678,7 +678,7 @@ sns.barplot(x='tip_pct', y='day', hue='time', data=tips, orient='h')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/hHba9376cD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/hHba9376cD.png?imageslim)
 
 注意seaborn会自动更改绘图的外观：默认的调色板，绘图背景，网格颜色。我们可以自己设定不同的绘图外观，通过seaborn.set:
 
@@ -704,7 +704,7 @@ tips['tip_pct'].plot.hist(bins=50)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/2gFDamceIE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/2gFDamceIE.png?imageslim)
 
 另一种相关的绘图类型是density plot（密度图），这个是用来计算观测数据中，连续概率分布的推测值。通常的步骤是用一组混合的“kernels”（核）来近似这个分布————核指的是，像正态分布一样的简单分布。因此，概率图也经常被叫做kernel density estimate(KDE, 核密度估计)图。用plot.kde，通过conventional mixture-of-normals estimate（常规混合估计
 ）制作一个密度图：
@@ -722,7 +722,7 @@ tips['tip_pct'].plot.density()
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/bG62cCH6h9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/bG62cCH6h9.png?imageslim)
 
 seaborn能更方便地绘制柱状图和概率图，通过distplot方法，这个方法可以同时绘制一个柱状图和a continuous density estimate（一个连续密度估计）。举个例子，考虑一个bimodal distribution（双峰分布，二项分布），它由连个不同的标准正态分布组成：
 
@@ -768,7 +768,7 @@ sns.distplot(values, bins=100, color='k')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/3g0kJ2lK9b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/3g0kJ2lK9b.png?imageslim)
 
 （我在运行上面的代码时，报错提示为ypeError: slice indices must be integers or None or have an __index__ method。通过更新statsmodels这个包解决了问题，原先的版本是0.6，更新到0.8后就没问题了。可以直接输入`conda install -c statsmodels statsmodels=0.8.0
 `）
@@ -1054,7 +1054,7 @@ sns.regplot('m1', 'unemp', data=trans_data)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/GH0g7aBjIG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/GH0g7aBjIG.png?imageslim)
 
 在数据探索阶段，散点图能把一组变量之间所有的散点图都画出来，这种图被称之为pairs plot（多变量图）或scatter plot matrix（散点图矩阵）。画这样的图很麻烦，所以seaborn有一个非常方便的pairplot函数，这个函数可以把每一个参数的柱状图或密度估计画在对角线上：
 
@@ -1071,7 +1071,7 @@ sns.pairplot(trans_data, diag_kind='kde', plot_kws={'alpha': 0.2})
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/7f59D40Dc1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/7f59D40Dc1.png?imageslim)
 
 这里要注意一下plot_kws关键字。这个让我们能导入设置选项，用来控制非对角线上的绘图。查看seaborn.pairplot的字符串文档查看更多的设定选项。
 
@@ -1098,7 +1098,7 @@ sns.factorplot(x='day', y='tip_pct', hue='time', col='smoker',
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/iC3JbiF5IG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/iC3JbiF5IG.png?imageslim)
 
 在一个facet（面）内，不是通过time和不同的柱状颜色来分组，我们也能通过添加给每一个time值添加一行的方式来扩展多面网格：
 
@@ -1195,7 +1195,7 @@ sns.factorplot(x='day', y='tip_pct', row='time',
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/DcDecGHFa1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/DcDecGHFa1.png?imageslim)
 
 factorplot支持其他一些绘图类型，是否有用取决于我们想要如何展示。例如，box plots（箱线图，可以展示中位数，分位数和利群店）可能是一种有效的视觉类型：
 
@@ -1213,6 +1213,6 @@ sns.factorplot(x='tip_pct', y='day', kind='box',
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/kl2bk5fL01.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/kl2bk5fL01.png?imageslim)
 
 通过seaborn.FacetGrid，我们可以创建自己的多面网格图。更多信息请查看seaborn的文档。

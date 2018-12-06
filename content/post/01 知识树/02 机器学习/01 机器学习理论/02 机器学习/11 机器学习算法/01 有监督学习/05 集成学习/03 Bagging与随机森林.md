@@ -27,7 +27,7 @@ Bagging 是并行式集成学习方法最著名的代表.从名字即 可看出�
 
 照这样，我们可采样出 T 个含 m 个训练样本的采样集，然后基于每个采样 集训练出一个基学习器，再将这些基学习器进行结合.这就是 Bagging 的基本流程.在对预测输出进行结合时，Bagging通常对分类任务使用简单投票法，对回归任务使用简单平均法.若分类预测时出现两个类收到同样票数的情形，则最简单的做法是随机选择一个，也可进一步考察学习器投票的置信度来确定最终胜者.Bagging的算法描述如图8.5所示.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/eG9glEFeci.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180628/eG9glEFeci.png?imageslim)
 
 
 假定基学习器的计算复杂度为 $O(m)$ 则Bagging的复杂度大致为  $T(O(m)+O(s))$ ，考虑到采样与投票/平均过程的复杂度 $O(s)$ 很小，而 T 通常是一个不太大的常数，因此，训练一个 Bagging 集成与直接使用基学习算法训练一个学习器的复杂度同阶，这说明 Bagging 是一个很高效的集成学习算法.另外，与标准AdaBoost只适用于二分类任务不同，Bagging 能不经修改地 用于多分类、回归等任务.
@@ -36,11 +36,11 @@ Bagging 是并行式集成学习方法最著名的代表.从名字即 可看出�
 
 值得一提的是，自助采样过程还给Bagging带来了另一个优点：由于每个基学习器只使用了初始训练集中约63.2%的样本，剩下约36.8%的样本可用作验证集来对泛化性能进行 “包外估计”(out-of-bag estimate) .为此需记录每个基学习器所使用的训练样本. 不妨令 $D_t$ 表示 $h_t$ 实际使用的训练样本集，令 $H^{oob}(x)$ 表示对样本 x 的包外预 测，即仅考虑那些未使用 x 训练的基学习器在 x 上的预测，有
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/5ea2I7I7cH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180628/5ea2I7I7cH.png?imageslim)
 
 则 Bagging 泛化误差的包外估计为 1
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/9A43BdefKf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180628/9A43BdefKf.png?imageslim)
 
 
 事实上,包外样本还有许多其他用途.例如当基学习器是决策树时，可使用包外样本来辅助剪枝，或用于估计决策树中各结点的后验概率以辅助对零训练样本结点的处理；当基学习器是神经网络时，可使用包外样本来辅助早期停止 以减小过拟合风险.
@@ -48,7 +48,7 @@ Bagging 是并行式集成学习方法最著名的代表.从名字即 可看出�
 
 从偏差一方差分解的角度看，Bagging 主要关注降低方差，因此它在不剪枝决策树、神经网络等易受样本扰动的学习器上效用更为明显.我们以基于信息増益划分的决策树为基学习器，在表 4.5 的西瓜数据集 3.0a 上运行Bagging算法，不同规模的集成及其基学习器所对应的分类边界如图8.6所示.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/39IfBdI599.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180628/39IfBdI599.png?imageslim)
 
 # 2 随机森林
 
@@ -58,7 +58,7 @@ Bagging 是并行式集成学习方法最著名的代表.从名字即 可看出�
 
 随机森林的收敛性与Bagging相似.如图 8.7 所示，随机森林的起始性能 往往相对较差，特别是在集成中只包含一个基学习器时.这很容易理解，因为通 过引入属性扰动，随机森林中个体学习器的性能往往有所降低.然而，随着个体学习器数目的增加，随机森林通常会收敛到更低的泛化误差.值得一提的是，随 机森林的训练效率常优于Bagging,因为在个体决策树的构建过程中，Bagging 使用的是“确定型”决策树，在选择划分属性时要对结点的所有属性进行考察， 而随机森林使用的“随机型”决策树则只需考察一个属性子集.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/HH5bbcADlE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180628/HH5bbcADlE.png?imageslim)
 
 
 

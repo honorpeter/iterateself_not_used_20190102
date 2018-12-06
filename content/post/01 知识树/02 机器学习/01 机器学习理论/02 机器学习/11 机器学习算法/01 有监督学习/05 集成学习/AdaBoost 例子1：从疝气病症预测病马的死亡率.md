@@ -365,7 +365,7 @@ the Area Under the Curve is:  0.8740830160646289
 
 AdaBoost算法权重计算公式
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/bFmfIlcLAl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/bFmfIlcLAl.png?imageslim)
 
 
 

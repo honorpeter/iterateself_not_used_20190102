@@ -1397,7 +1397,7 @@ letter—prop[.M'].plot(kind=,bar,, rot=0, ax=axes[O], title^'Male')
 
 letter_prop['F1].plot(kind='bar', rot=0, ax=axes[l], title=.Female., legend=False)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/EcakckiCcj.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/EcakckiCcj.jpg?imageslim)
 
 
 图2-8:男孩女孩名字中各个末字母的比例
@@ -1430,7 +1430,7 @@ In [4ll]: dnyts = letter_prop.ix[['d''n', *y'], 'M1].T
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/1mF9ClCgf9.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/1mF9ClCgf9.jpg?imageslim)
 
 
 有了这个时间序列的DataFrame之后，就可以通过其plot方法绘制出一张趋势图了（如图 2-9所示）：

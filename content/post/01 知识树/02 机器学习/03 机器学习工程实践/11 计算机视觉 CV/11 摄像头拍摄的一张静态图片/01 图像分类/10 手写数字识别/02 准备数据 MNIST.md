@@ -92,7 +92,7 @@ for dataname, dataset in datasets.items():
 
 这个脚本首先创建了一个叫 mnist 的文件夹，然后在 mnist 下创建3个子文件夹 train、 val和 test，分别用来保存对应的3个数据集转换后产生的图片。每个文件的命名规则为第一个字段是序号，第二个字段是数字的值，保存为 JPG 格式。一些图片的例子如图8-1所示。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/2Gb5H8C48m.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/2Gb5H8C48m.png?imageslim)
 
 
 

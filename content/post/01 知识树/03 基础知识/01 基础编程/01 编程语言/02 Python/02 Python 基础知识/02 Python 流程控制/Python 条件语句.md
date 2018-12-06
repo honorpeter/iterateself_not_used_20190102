@@ -19,7 +19,7 @@ Python条件语句是通过一条或多条语句的执行结果（True或者Fals
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/j62kLg0kkd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/j62kLg0kkd.png?imageslim)
 
 Python程序语言指定任何非0和非空（null）值为true，0 或者 null为false。
 

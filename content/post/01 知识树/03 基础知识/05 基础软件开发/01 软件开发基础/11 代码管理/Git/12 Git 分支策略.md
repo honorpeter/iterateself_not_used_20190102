@@ -13,7 +13,7 @@ OK，基本的内容已经基本上讲完了，现在开始说一下在实际的
 
 要展现的模型本质上是一个流程的集合，每个团队成员都有必要遵守这些流程，来达到管理软件开发流程的目的。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180710/g9BCGbhjCJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180710/g9BCGbhjCJ.png?imageslim)
 
 
 这张图非常易于团队成员理解这个优雅有效的模型，并在团队内部达成共识。<span style="color:red;">是的。</span>
@@ -23,7 +23,7 @@ OK，基本的内容已经基本上讲完了，现在开始说一下在实际的
 
 我们的分支模型中使用良好的代码库的设置方式，是围绕一个真实的中心代码库的。注意，这里的代码库仅仅被看做是一个中心代码库（因为 git 是 DVCS，即分散版本控制系统，从技术层面看，是没有所谓的中心代码库的）。我们习惯于把这个中心代码库命名为 origin，这同时也是所有 git 用户的习惯。<span style="color:red;">中心代码块是 origin 吗？</span>
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180710/BgGDaLI11f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180710/BgGDaLI11f.png?imageslim)
 
 每一位开发者都向 origin 这个中心结点 pull 和 push。但是除此之外，每一位开发者也可以向其它结点 pull 改变形成子团队。比如，对于两个以上开发者同时开发一项大的新特性来说，为了不必过早向 origin 推送开发进度，这就非常有用。<span style="color:red;">嗯，是这样。</span>在上面的这个例子中，Alice 和 Bob、Alice 和 David、Clair 和 David 都是这样的子团队。<span style="color:red;">这样挺好的。</span>
 
@@ -33,7 +33,7 @@ OK，基本的内容已经基本上讲完了，现在开始说一下在实际的
 ## 主分支 master 和 develop
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180710/D1K0kKJ1H2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180710/D1K0kKJ1H2.png?imageslim)
 
 该开发模型的核心基本和现有的模型是一样的。中心代码库永远维持着两个主要的分支：
 
@@ -71,7 +71,7 @@ OK，基本的内容已经基本上讲完了，现在开始说一下在实际的
 ### feature 分支
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180710/kgFaCEbJB5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180710/kgFaCEbJB5.png?imageslim)
 
 
   * 可能派发自：develop
@@ -113,7 +113,7 @@ $ git push origin develop
 
 **`-no-ff`** 标记使得合并操作总是产生一次新的提交，哪怕合并操作可以快速完成。这个标记避免将 feature 分支和团队协作的所有提交的历史信息混在主分支的其它提交之后。比较一下：<span style="color:red;">嗯，这个真的很不错。</span>
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180710/f9I922DjcK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180710/f9I922DjcK.png?imageslim)
 
 在右边的例子里，我们不可能从 git 的历史记录中看出来哪些提交实现了这一特性<span style="color:red;">是的。</span>，你可能不得不查看每一笔提交日志。恢复一个完整的特性(比如通过一组提交)在右边变成了一个头疼事情，而如果使用了 `--no-ff` 之后，就变得简单了。
 
@@ -207,7 +207,7 @@ Deleted branch release-1.2 (was ff452fe).
 ### hotfix 分支
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180710/e6Bk2GLCB7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180710/e6Bk2GLCB7.png?imageslim)
 
   * 可能派发自：master
   * 必须合并回：develop 和 master

@@ -146,7 +146,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ah48jiBeDd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/ah48jiBeDd.png?imageslim)
 
 Choose number of trees as 20.
 
@@ -170,7 +170,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/d2G5F9LDAl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/d2G5F9LDAl.png?imageslim)
 
 
 ```python
@@ -195,7 +195,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/6im2jgj784.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/6im2jgj784.png?imageslim)
 
 Analysis of chilled water data.
 
@@ -244,7 +244,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Fg3I1m1jGl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/Fg3I1m1jGl.png?imageslim)
 
 Choose number of trees as 20.
 
@@ -266,7 +266,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/efc23g655l.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/efc23g655l.png?imageslim)
 
 
 ```python
@@ -291,7 +291,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ea9eHEIGLe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/ea9eHEIGLe.png?imageslim)
 
 Analysis of steam data.
 
@@ -339,7 +339,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/I2Dlm7kHfE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/I2Dlm7kHfE.png?imageslim)
 
 Choose number of trees as 21.
 
@@ -361,7 +361,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ckChjk7KJg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/ckChjk7KJg.png?imageslim)
 
 
 ```python
@@ -386,7 +386,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/04lmAgaL6e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/04lmAgaL6e.png?imageslim)
 
 ## 4.5 K-Nearest Neighbours
 
@@ -534,7 +534,7 @@ The optimal value of k is: 30
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/IJimh8gdEH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/IJimh8gdEH.png?imageslim)
 
 
 ```python
@@ -554,7 +554,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/jJe0LDkK72.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/jJe0LDkK72.png?imageslim)
 
 
 ```python
@@ -581,7 +581,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/DG17mD72ce.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/DG17mD72ce.png?imageslim)
 
 Analysis of chilled water data.
 
@@ -635,7 +635,7 @@ The optimal value of k is: 6
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/a5a6kdk9C6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/a5a6kdk9C6.png?imageslim)
 
 
 ```python
@@ -655,7 +655,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/eF8cJC5dBf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/eF8cJC5dBf.png?imageslim)
 
 
 ```python
@@ -680,7 +680,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/52kFEbeLkb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/52kFEbeLkb.png?imageslim)
 
 Analysis of steam data.
 
@@ -733,7 +733,7 @@ The optimal value of k is: 3
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/I4KhD177Aa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/I4KhD177Aa.png?imageslim)
 
 
 ```python
@@ -753,7 +753,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ChD5hh31l6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/ChD5hh31l6.png?imageslim)
 
 
 ```python
@@ -779,4 +779,4 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/l7I0GdiH3d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/l7I0GdiH3d.png?imageslim)

@@ -28,7 +28,7 @@ LDA 的思想非常朴素：给定训练样例集，设法将样例投影到一�
 示意图如下： LDA 的二维示意图"+"、 "-"分别代表正例和反例，椭圆表示数据簇的外轮廓，虚线表示投影， 红色实心园和实心三角形分别表示两类样本投影后的中心点.
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/ih4CF1e14C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/ih4CF1e14C.png?imageslim)
 
 
 在对新样本进行分类时，将其投影到同样的这条直线上，再根据投影点的位置来确定新样本的类别。
@@ -44,24 +44,24 @@ LDA 的思想非常朴素：给定训练样例集，设法将样例投影到一�
 欲使同类样例的投影点尽可能接近，我们可以让同类样例投影点的协方差尽可 能小，即 $w^T\Sigma_0w+w^T\Sigma_1w$ 尽可能小；而欲使异类样例的投影点尽可能远离, 可以让类中心之间的距离尽可能大，即 $||w^T\mu_0-w^T\mu_1||_2^2$ 尽可能大。同时考虑二者，则可得到欲最大化的目标：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/f854k2KdHG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/f854k2KdHG.png?imageslim)
 
 
 我们定义 “类内散度矩阵” (within-class scatter matrix)：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/4KAfCk12jl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/4KAfCk12jl.png?imageslim)
 
 
 以及 “类间散度矩阵”  (between-class scatter matrix)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/K7j1al2FgI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/K7j1al2FgI.png?imageslim)
 
 
 则上面的最大化的目标 J 可以重写为：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/E93ig0Jaf5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/E93ig0Jaf5.png?imageslim)
 
 
 这就是 LDA 欲最大化的目标，即 $S_b$ 与 $S_w$ 的 “广义瑞利商” (generalized Rayleigh quotient)。
@@ -71,23 +71,23 @@ LDA 的思想非常朴素：给定训练样例集，设法将样例投影到一�
 不失一般性，令 $w^TS_ww=1$ ，则上面的式子等价于：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/ji8GGa7627.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/ji8GGa7627.png?imageslim)
 
 
 由拉格朗日乘子法，上式等价于：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/md3blfaAF3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/md3blfaAF3.png?imageslim)
 
 
 其中 $\lambda$ 是拉格朗日乘子，我们注意到 $S_bw$ 的方向恒为 $\mu_0-\mu_1$ ，我们不妨令
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/eLHjFcKgal.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/eLHjFcKgal.png?imageslim)
 
 
 代入上面的式子得：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/BgGka8Df96.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/BgGka8Df96.png?imageslim)
 
 
 
@@ -98,38 +98,38 @@ LDA 的思想非常朴素：给定训练样例集，设法将样例投影到一�
 可以将 LDA 推广到多分类任务中。假定存在 N 个类，且第 i 类示例数为 $m_i$ 。我们先定义“全局散度矩阵”：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/HDcAd9LcFJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/HDcAd9LcFJ.png?imageslim)
 
 
 
 其中 \(\mu\) 是所有示例的均值向量。将类内散度矩阵 \(S_w\) 重定义为每个类别的散度矩阵之和，即
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/3G5KD4FfkC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/3G5KD4FfkC.png?imageslim)
 
 
 其中
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/lchkJh4mHh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/lchkJh4mHh.png?imageslim)
 
 
 得到：
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/86D5mKLHHB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/86D5mKLHHB.png?imageslim)
 
 
 显然，多分类 LDA 可以有多种实现方法：使用 $S_b$ 、$S_w$ 、$S_t$ 三者中的任何两个即可。常见的一种实现是采用优化目标：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/AdIgELbkml.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/AdIgELbkml.png?imageslim)
 
 
 其中 $W\in \mathbb{R}^{d\times (N-1)}$ ，$tr(\cdot )$ 表示矩阵的迹(trace)，上式可以通过如下广义特征值问题求解：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180626/GgkHkF0ab9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180626/GgkHkF0ab9.png?imageslim)
 
 
 W 的闭式解则是 $S_w^{-1}S_b$ 的 N-1 个最大广义特征值所对应的特征向量组成的矩阵.

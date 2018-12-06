@@ -64,7 +64,7 @@ TEST_F(CommandFixture, command_test) {
 然后他的路径是这样的：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7h21C6mc6c.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7h21C6mc6c.png?imageslim)
 
 他用的是make 不是 vs ，看来 make 还是一定要掌握的，不然连一些东西都不好用。
 

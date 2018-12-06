@@ -108,7 +108,7 @@ Strategy模式和Template模式要解决的问题是相同（类似）的，都�
 Strategy 模式典型的结构图为:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/K2EIbCaAkj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/K2EIbCaAkj.png?imageslim)
 
 图 2-1: Strategy Pattern 结构图
 

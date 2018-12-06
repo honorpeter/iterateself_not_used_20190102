@@ -484,7 +484,7 @@ seq[::-1]
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image//180615/h8Lf4eHgBH.png?imageslim)
+![mark](http://images.iterate.site/blog/image//180615/h8Lf4eHgBH.png?imageslim)
 
 # 3 Built-in Sequence Functions(内建的序列函数)
 
@@ -862,7 +862,7 @@ a & b
 
 一些集合操作
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180615/BmL8G1d58C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180615/BmL8G1d58C.png?imageslim)
 
 上面这些逻辑操作都是直接更改 set 本身。如果是一个很大的 set ，下面的操作会更有效率：
 

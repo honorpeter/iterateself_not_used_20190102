@@ -32,7 +32,7 @@ date: 2018-08-12 20:14:55
 
 对于左边的这张图，如何划分红球和篮球？
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Al6kdc2LBK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Al6kdc2LBK.png?imageslim)
 
 显然这个问题用一个线性分类器的话很难取得最好的效果。
 
@@ -56,14 +56,14 @@ date: 2018-08-12 20:14:55
   * OK，像这样，不断重复。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/B0mec4d1Gk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/B0mec4d1Gk.png?imageslim)
 
 
 
 最终我们得到了很多个线性分类器，这时候，我们把这些线性分类器的结果做一个线性组合，就得到了整个集成模型的结果。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ldfhdbFh9a.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ldfhdbFh9a.png?imageslim)
 
 
 
@@ -88,10 +88,10 @@ OK，这个过程基本就是AdaBoost算法的过程。
 
 **自己写一下**
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cFa0AKmbAa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/cFa0AKmbAa.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/d8GDK5HfeI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/d8GDK5HfeI.png?imageslim)
 
 
 # Adaptive Boosting (AdaBoost)
@@ -111,30 +111,30 @@ OK，这个过程基本就是AdaBoost算法的过程。
 对同样的算法，相同的训练集，如果样本的权重不一样，能够得到不同的函数。**什么叫样本的权重不一样？权重是什么意思？为什么能够得到不同的函数？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/c0C51DLLfD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/c0C51DLLfD.png?imageslim)
 
 \([g_t(x_i)\neq y_i]\)  这个的输出是 0 或 1 。
 
 反过来，已知一个函数，可以通过设置权重，使得这个函数看起来像随机的。**为什么要使它看起来是随机的？为什么可以设置为1/2？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gBA0K4I2iC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/gBA0K4I2iC.png?imageslim)
 
 权重->函数，函数->权重，因此构造出一个迭代的方式，通过这个迭代的方法可以制造出一系列的g(x)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LfHeF2l95D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/LfHeF2l95D.png?imageslim)
 
 **完全没明白怎么就可以构造出来了？**
 
 即在已有的权重下，迭代构造新的权重（对应新的判别函数）：把分错样本的权重放大，分队样本的权重缩小即可
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/KAfE4GAF7F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/KAfE4GAF7F.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/BedhDKeCaK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/BedhDKeCaK.png?imageslim)
 
 ## 基于权重构造系列函数的方法：
 
@@ -162,7 +162,7 @@ OK，这个过程基本就是AdaBoost算法的过程。
 AdaBoost 是一个在迭代中直接构造权重alpha的算法：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AhkB8BJm7C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/AhkB8BJm7C.png?imageslim)
 
 当加权错误率接近0的时候，a变得非常大
 
@@ -174,7 +174,7 @@ AdaBoost 是一个在迭代中直接构造权重alpha的算法：
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8B7EJ127mK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8B7EJ127mK.png?imageslim)
 
 **基本每怎么听明白，看书的话倒是比较快的就明白了。虽然看书也有一些疑问。还是看书吧。**
 
@@ -204,24 +204,24 @@ AdaBoost 是一个在迭代中直接构造权重alpha的算法：
 前向分步算法：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DibhHC4c66.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/DibhHC4c66.png?imageslim)
 
 **什么是基函数。为什么这个是前向分布算法？**
 
 前向分步算法的含义：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/I4Ch42f96c.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/I4Ch42f96c.png?imageslim)
 
 ### 前向分步算法的算法框架：
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ajelE1JgiL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ajelE1JgiL.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jAklc799L2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/jAklc799L2.png?imageslim)
 
 
 
@@ -231,45 +231,45 @@ AdaBoost 是一个在迭代中直接构造权重alpha的算法：
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dmgBg1c4KB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/dmgBg1c4KB.png?imageslim)
 
 证明：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Afd8m9bHFg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Afd8m9bHFg.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/K3H2441f5F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/K3H2441f5F.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FfleDGf9hF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/FfleDGf9hF.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FIa4dcmgLA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/FIa4dcmgLA.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/04cE71Feai.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/04cE71Feai.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/66E6e8LIK0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/66E6e8LIK0.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/h9lfJD93Lk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/h9lfJD93Lk.png?imageslim)
 
 图示：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Kf87fhm1bg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Kf87fhm1bg.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/KBIA6HdCK0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/KBIA6HdCK0.png?imageslim)
 
 
 
@@ -277,7 +277,7 @@ AdaBoost 是一个在迭代中直接构造权重alpha的算法：
 # 著名案例：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/hJmBidG303.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/hJmBidG303.png?imageslim)
 
 
 # AdaBoost 开发过程中要注意的

@@ -9,4 +9,4 @@ date: 2018-09-22
 
 相比于原来的YOLO是利用全连接层直接预测bounding box的坐标，YOLOv2 借鉴了 Faster R-CNN 的思想，引入 anchor 机制，利用 K-Means 聚类的方式在训练集中聚类计算出更好的 anchor 模板，在卷积层使用anchor boxes操作，增加候选框的预测，同时采用较强约束的定位方法，大大提高算法召回率。结合图像细粒度特征，将浅层特征与深层特征相连，有助于对小尺寸目标的检测。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180922/de04HBLHG7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180922/de04HBLHG7.png?imageslim)

@@ -39,11 +39,11 @@ cv2.destroyAllWindows()
 
 Matplotlib 输出如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181014/ELeIIhFE7c.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181014/ELeIIhFE7c.png?imageslim)
 
 OpenCV 输出如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181014/Blfcg8e1ch.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181014/Blfcg8e1ch.png?imageslim)
 
 <span style="color:red;">一直不知道 cv2 还有 split 和 merge 的功能。有些厉害，这个功能做出来是为了什么情况下使用的呢？就是为了这种情况的吗？</span>
 

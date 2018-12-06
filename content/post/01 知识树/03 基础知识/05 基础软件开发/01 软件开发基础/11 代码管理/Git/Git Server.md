@@ -109,7 +109,7 @@ $ git clone git@192.168.20.101:/home/data/gittest.git
 
 执行过程如下图所示:
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/LFAGAgICbh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/LFAGAgICbh.png?imageslim)
 
 当第一次连接到目标 Git 服务器时会得到一个提示：
 
@@ -130,7 +130,7 @@ git@192.168.20.101's password:
 
  此时 C:\Users\用户名\.ssh 下会多出一个文件 known_hosts，以后在这台电脑上再次连接目标 Git 服务器时不会再提示上面的语句。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7haGDagkLm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/7haGDagkLm.png?imageslim)
 
 后面提示要输入密码，可以采用 SSH 公钥来进行验证。
 
@@ -142,7 +142,7 @@ git@192.168.20.101's password:
 $ ssh-keygen -t rsa -C "1838370@qq.com"
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/e64e4cG99F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/e64e4cG99F.png?imageslim)
 
 此时 C:\Users\用户名\.ssh 下会多出两个文件 id_rsa 和 id_rsa.pub
 
@@ -150,7 +150,7 @@ id_rsa 是私钥
 
 id_rsa.pub 是公钥
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/hl85b3deAA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/hl85b3deAA.png?imageslim)
 
 ## ⑥ 服务器端 Git 打开 RSA 认证
 
@@ -222,7 +222,7 @@ $ ssh git@192.168.20.101 'cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
 
 需要输入服务器端 git 用户的密码
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/AJ5f91gA7f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/AJ5f91gA7f.png?imageslim)
 
 
 回到服务器端，查看 .ssh 下是否存在 authorized_keys 文件：
@@ -256,22 +256,22 @@ $ ssh git@192.168.20.101 'cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
 $ git clone git@192.168.20.101:/home/data/git/gittest.git
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/iI98b34ab2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/iI98b34ab2.png?imageslim)
 
 
   查看客户端项目目录：
 
  项目已经 clone 了。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/KF8dgeD6B3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/KF8dgeD6B3.png?imageslim)
 
 
  也可以使用 tortoiseGit 客户端来管理项目：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/Jfh7m3gmBI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/Jfh7m3gmBI.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/Gf2bIFC2Hi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/Gf2bIFC2Hi.png?imageslim)
 
 
 ## ⑨ 禁止 git 用户 ssh 登录服务器

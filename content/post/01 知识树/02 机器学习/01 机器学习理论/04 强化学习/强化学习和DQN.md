@@ -38,12 +38,12 @@ date: 2018-07-27 15:02:31
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IfhlKH06m1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IfhlKH06m1.png?imageslim)
 
 Human-level control through deep reinforcement learning 2015 Nature
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mLg1j55kGe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mLg1j55kGe.png?imageslim)
 
 
 
@@ -53,7 +53,7 @@ Human-level control through deep reinforcement learning 2015 Nature
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/bA0hd32CEG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/bA0hd32CEG.png?imageslim)
 
 
 
@@ -129,15 +129,15 @@ Human-level control through deep reinforcement learning 2015 Nature
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2Fl5710he4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/2Fl5710he4.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ai70Bgl458.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ai70Bgl458.png?imageslim)
 
 David Silver reinforcement leanring Lecture 1
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FgJDe3L4Ga.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/FgJDe3L4Ga.png?imageslim)
 
 Atari Breakout游戏
 
@@ -206,11 +206,11 @@ Atari Breakout游戏
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/c0GHl3f745.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/c0GHl3f745.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/71mkb8aj79.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/71mkb8aj79.png?imageslim)
 
 
 
@@ -282,7 +282,7 @@ Q-learning的核心思想是：我们能够通过贝尔曼公式迭代地近似Q
 最简单的情况下，我们可以采用一种填表的方式学习Q-函数。这个表包含状态空间大小的行，以及动作个数大小的列。填表的算法伪码如下所示：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lHA3eDGI4e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/lHA3eDGI4e.png?imageslim)
 
 其中α是在更新Q[s, a]时，调节旧Q[s, a]与新Q[s, a]比例的学习速率。如果α=1，Q[s, a]就被消掉，而更新方式就完全与贝尔曼公式相同。
 
@@ -292,11 +292,11 @@ Q-learning的核心思想是：我们能够通过贝尔曼公式迭代地近似Q
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/elmkc0b96f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/elmkc0b96f.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/f0F5F6ml24.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/f0F5F6ml24.png?imageslim)
 
 http://fromwiz.com/share/s/1CGZRH2S1Aro2gtjMB0TJPbh2WMt0I1fPkJq26Z6cI3pS8GI
 
@@ -305,7 +305,7 @@ http://fromwiz.com/share/s/1CGZRH2S1Aro2gtjMB0TJPbh2WMt0I1fPkJq26Z6cI3pS8GI
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/d9ckh3EE3E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/d9ckh3EE3E.png?imageslim)
 
 
 
@@ -333,14 +333,14 @@ http://fromwiz.com/share/s/1CGZRH2S1Aro2gtjMB0TJPbh2WMt0I1fPkJq26Z6cI3pS8GI
 改造一下：只接受一个状态作为输入，然后输出所有动作的分数（具体来讲是动作个数大小的向量），这样一次前向运算可以得到所有动作的得分
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LB1gGFBea9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/LB1gGFBea9.png?imageslim)
 
 Deep Q Network
 
 DeepMind论文中使用优化的Q网络 DeepMind在论文中使用的网络结构
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/429d0hHdi8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/429d0hHdi8.png?imageslim)
 
 没有池化层！！
 
@@ -349,7 +349,7 @@ DeepMind论文中使用优化的Q网络 DeepMind在论文中使用的网络结�
 回归问题，loss function如下
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/f0AmGeAGGA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/f0AmGeAGGA.png?imageslim)
 
 
 
@@ -409,7 +409,7 @@ Q-learning算法尝试解决信用分配问题
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/G3A9d9b8l7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/G3A9d9b8l7.png?imageslim)
 
 DeepMind还使用了一系列其他的技巧，比如：**目标网络、误差截断、回馈截断  要学习**
 
@@ -423,18 +423,18 @@ DeepMind还使用了一系列其他的技巧，比如：**目标网络、误差�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AGhiLhjicG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/AGhiLhjicG.png?imageslim)
 
 https://github.com/yenchenlin/DeepLearningFlappyBird
 
 Deep Q Network algorithm
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CF7KfBAIb1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/CF7KfBAIb1.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mbmiHdEeag.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mbmiHdEeag.png?imageslim)
 
 
 

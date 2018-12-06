@@ -41,7 +41,7 @@ $$ h_\theta (x)=g(\theta^Tx)=\frac{1}{1+e^{-\theta^Tx} }$$
 
 而 $g(x)=\frac{1}{1+e^{-z} }$ 的图像是：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180731/dDjJimALF8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180731/dDjJimALF8.png?imageslim)
 
 可以看到，将无穷映射到了(0,1)。
 
@@ -67,12 +67,12 @@ $$g(x)=\left\{\begin{matrix} 1 & z\geq 0 \\ -1 & z< 0 \end{matrix}\right.$$
 
 下面举个简单的例子。如下图所示，现在有一个二维平面，平面上有两种不同的数据，分别用圈和叉表示。由于这些数据是线性可分的，所以可以用一条直线将这两类数据分开，这条直线就相当于一个超平面，超平面一边的数据点所对应的 $y$ 全是 $-1$ ，另一边所对应的 $y$ 全是 $1$。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/I211gIe3ji.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/I211gIe3ji.png?imageslim)
 
 
 ​这个超平面可以用分类函数 $f(x)=w^Tx+b$ 表示，当 $f(x)$ 等于 $0$ 的时候，$x$ 便是位于超平面上的点，而 $f(x)$ 大于 $0$ 的点对应 $y=1$ 的数据点，$f(x)$ 小于 $0$ 的点对应 $y=-1$ 的点，如下图所示：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/57BA2HGcEL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/57BA2HGcEL.png?imageslim)
 ​
 
 注：有的资料上定义特征到结果的输出函数 $u=\overrightarrow{w}\overrightarrow{x}-b$ ，与这里定义的 $f(x)=w^Tx+b$ 实质是一样的。为什么？因为无论是 $u=\overrightarrow{w}\overrightarrow{x}-b$ ，还是 $f(x)=w^Tx+b$ ，不影响最终优化结果。下文你将看到，当我们转化到优化 $max\frac{1}{||w||}$,$s.t.,y_i(w^Tx_i+b)\geq 1,i=1,2,\ldots ,n$ 的时候，为了求解方便，会把 $yf(x)$ 令为 $1$ ，即 $yf(x)$ 是 $y(w^Tx + b)$，还是 $y(w^Tx - b)$，对我们要优化的式子 $max\frac{1}/{||w||}$ 已无影响。
@@ -101,7 +101,7 @@ $$\hat{\gamma}=min\hat{\gamma}_i\;i=1,\ldots ,n)$$
 
 假定对于一个点 $x$ ，令其垂直投影到超平面上的对应点为 $x_0$ ，$w$ 是垂直于超平面的一个向量，$\gamma$ 为样本 $x$ 到超平面的距离，如下图所示：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/75I0faHJkm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/75I0faHJkm.png?imageslim)
 
 
 
@@ -127,7 +127,7 @@ $$\widetilde{\gamma}=y\gamma=\frac{\hat{\gamma} }{||w||}$$
 
 对一个数据点进行分类，当超平面离数据点的“间隔”越大，分类的确信度（confidence）也越大。所以，为了使得分类的确信度尽量高，需要让所选择的超平面能够最大化这个“间隔”值。这个间隔就是下图中的 Gap 的一半。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/k1HmGIj3Ck.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/k1HmGIj3Ck.png?imageslim)
 
 通过由前面的分析可知：函数间隔不适合用来最大化间隔值，因为在超平面固定以后，可以等比例地缩放 $w$ 的长度和 $b$ 的值，这样可以使得 $f(x)=w^Tx+b$ 的值任意大，亦即函数间隔 $\hat{\gamma}$ 可以在超平面保持不变的情况下被取得任意大。但几何间隔因为除上了 $||w||$ ，使得在缩放 $w$ 和 $b$ 的时候几何间隔 $\widetilde{\gamma}$ 的值是不会改变的，它只随着超平面的变动而变动，因此，这是更加合适的一个间隔。换言之，这里要找的最大间隔分类超平面中的“间隔”指的是几何间隔。
 
@@ -147,7 +147,7 @@ $$max\frac{1}{||w||},\;s.t.,y_i(w^Tx_i+b)\geq 1,i=1,2,\ldots,n$$
 
 ​如下图所示，中间的实线便是寻找到的最优超平面（Optimal Hyper Plane），其到两条虚线边界的距离相等，这个距离便是几何间隔   $\widetilde{\gamma}$ ，两条虚线间隔边界之间的距离等于 $2\widetilde{\gamma}$，而虚线**间隔边界上的点则是支持向量**。由于这些支持向量刚好在虚线间隔边界上，所以它们满足 $y(w^Tx+b)=1$ （还记得我们把 functional margin 定为 $1$ 了吗？上节中：处于方便推导和优化的目的，我们可以令 $\widetilde{\gamma}=1$ ），而对于所有不是支持向量的点，则显然有 $y(w^Tx+b)>1$ 。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/lC16Abag6c.png?imageslim)> >
+![mark](http://images.iterate.site/blog/image/180801/lC16Abag6c.png?imageslim)> >
 
 ​OK，到此为止，算是了解到了SVM的第一层，对于那些只关心怎么用 SVM 的朋友便已足够，不必再更进一层深究其更深的原理。
 
@@ -229,7 +229,7 @@ $$\begin{align*} min. \;& f(x)\\ s.t. \; & h_j(x)=0,j=1,\ldots,p,\\ & g_k(x)\leq
 
 ​而 KKT 条件就是指上面最优化数学模型的标准形式中的最小点 $x^*$ 必须满足下面的条件：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/AlhHe8ALIa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/AlhHe8ALIa.png?imageslim)
 
 
 ​经过论证，我们这里的问题是满足 KKT 条件的（首先已经满足Slater条件，再者 $f$ 和 $g_i$ 也都是可微的，即 $L$ 对 $w$ 和 $b$ 都可导），因此现在我们便转化为求解第二个问题。
@@ -240,7 +240,7 @@ $$\begin{align*} min. \;& f(x)\\ s.t. \; & h_j(x)=0,j=1,\ldots,p,\\ & g_k(x)\leq
 
 **（1）**、首先固定 $\alpha$ ，要让 $L$ 关于 $w$ 和 $b$ 最小化，我们分别对 $w$ ，$b$ 求偏导数，即令 $\partial{L}/\partial{w}$ 和 $\partial{L}/\partial{b}$ 等于零（对 $w$ 求导结果的解释请看本文评论下第45楼回复）：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/ghcjI3g5j8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/ghcjI3g5j8.png?imageslim)
 
 ​将以上结果代入之前的 $L$
 
@@ -249,16 +249,16 @@ $$\mathcal{L}(w,b,\alpha)=\frac{1}{2}||w||^2-\sum_{i=1}^{n}\alpha_i(y_i(w^Tx_i+b
 
 得到：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/bGc1DEADI6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/bGc1DEADI6.png?imageslim)
 
 提醒：有读者可能会问上述推导过程如何而来？说实话，其具体推导过程是比较复杂的，如下图所示：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/eG9kGckmHB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/eG9kGckmHB.png?imageslim)
 
 
 最后，得到：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/L6bEe5aig7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/L6bEe5aig7.png?imageslim)
 
 ​如 jerrylead所说：“倒数第4步” 推导到 “倒数第3步” 使用了线性代数的转置运算，由于 $a_i$ 和 $y_i$ 都是实数，因此转置后与自身一样。“倒数第3步” 推导到 “倒数第2步” 使用了`(a+b+c+…)(a+b+c+…)=aa+ab+ac+ba+bb+bc+…` 的乘法运算法则。最后一步是上一步的顺序调整。
 
@@ -266,13 +266,13 @@ $$\mathcal{L}(w,b,\alpha)=\frac{1}{2}||w||^2-\sum_{i=1}^{n}\alpha_i(y_i(w^Tx_i+b
 
 **（2）**、求对 $\alpha$ 的极大，即是关于对偶问题的最优化问题。经过上面第一个步骤的求 $w$ 和 $b$，得到的拉格朗日函数式子已经没有了变量 $w$，$b$，只有 $\alpha$ 。从上面的式子得到：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/4BKgajK8i4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/4BKgajK8i4.png?imageslim)
 
 ​这样，求出了 $\alpha_i$ ，根据 $w=\sum_{i=1}^{m}\alpha_iy^{(i)}x^{(i)}$ ，即可求出 $w$，然后通过 $b^*=-\frac{max_{i:y^{(i)}=-1}w^{*T}x^{(i)}+min_{i:y^{(i)}=1}w^{*T}x^{(i)} }{2}$ ，即可求出 $b$，最终得出分离超平面和分类决策函数。
 
 ​**（3）** 在求得 $L(w, b, a)$ 关于 $w$ 和 $b$ 最小化，以及对 $\alpha$ 的极大之后，最后一步则可以利用 SMO 算法求解对偶问题中的拉格朗日乘子 $\alpha$ 。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180801/cGbj0L2Kma.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180801/cGbj0L2Kma.png?imageslim)
 
 上述式子要解决的是在参数 $\{\alpha_1,\alpha_2,\ldots,\alpha_n\}$ 上求最大值 $W$ 的问题，至于 $x^{(i)}$ 和  $y^{(i)}$ 都是已知数。要了解这个SMO算法是如何推导的，请跳到下文第3.5节、SMO 算法。
 

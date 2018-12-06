@@ -154,7 +154,7 @@ tags:
 我们经常就是声明一个创建对象的接口，并封装了对象的创建过程。Factory 在这里就类似于一个真正意义上的工厂（生产对象）。**封装了对象的创建过程？什么意思？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/22dmKLFJ59.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/22dmKLFJ59.png?imageslim)
 
 上图所示的 Factory 模式经常在系统开发中用到，但是这个
 
@@ -167,7 +167,7 @@ tags:
 我们不仅提供了一个对象创建对象的接口，还在子类中提供其具体实现（因为只有在子类中可以决定到底实例化哪一个类）。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3aKKICLm1h.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/3aKKICLm1h.png?imageslim)
 
 如上图，Factory 中只是提供了对象创建的接口，对象创建的实现被放在 Factory 的子类  ConcreteFactory 中进行。这个与之前的图是不同的。
 
@@ -182,7 +182,7 @@ tags:
 ## 代码如下
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/G8K11d6fiK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/G8K11d6fiK.png?imageslim)
 
 
 factory_method.h：

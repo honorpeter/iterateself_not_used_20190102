@@ -8,11 +8,11 @@ date: 2018-08-25 22:27:00
 
 之前，我在使用 hugo 的时候，clone 了一个 theme 到 themes 文件夹，但是，我把整个repo push 到github 的时候，发现，好像并没有真的把 这个 even 的theme push 上去，而且，在 github 上看的话，这个文件夹是这样的：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180825/fcF8J3JJlC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180825/fcF8J3JJlC.png?imageslim)
 
 而普通的文件夹是这样的：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180825/98kDhfAIlB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180825/98kDhfAIlB.png?imageslim)
 
 因此查了下：
 

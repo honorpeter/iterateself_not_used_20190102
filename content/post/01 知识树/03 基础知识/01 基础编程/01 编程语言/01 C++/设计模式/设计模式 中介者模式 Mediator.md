@@ -22,7 +22,7 @@ date: 2018-07-27 17:56:05
 Mediator模式典型的结构图为：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8ekD4baGDF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8ekD4baGDF.png?imageslim)
 
 图 2-1: Mediator Pattern 结构图
 

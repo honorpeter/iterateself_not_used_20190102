@@ -60,7 +60,7 @@ date: 2018-08-03 13:53:08
 
 循环语句允许我们执行一个语句或语句组多次，下面是在大多数编程语言中的循环语句的一般形式：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/dkKc1J2J6H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/dkKc1J2J6H.png?imageslim)
 
 
 Python提供了for循环和while循环（在Python中没有do..while循环）:
@@ -163,7 +163,7 @@ Python 编程中 while 语句用于循环执行程序，即在某条件下，循
 执行流程图如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/e4DgkLmKH2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/e4DgkLmKH2.png?imageslim)
 
 
 

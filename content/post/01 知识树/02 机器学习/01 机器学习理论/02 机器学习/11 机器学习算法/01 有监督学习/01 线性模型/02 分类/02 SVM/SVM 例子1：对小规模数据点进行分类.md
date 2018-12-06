@@ -120,7 +120,7 @@ if __name__ == "__main__":
 输出图像：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Idhc43mf57.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Idhc43mf57.png?imageslim)
 
 OK，下面看完整的代码：
 

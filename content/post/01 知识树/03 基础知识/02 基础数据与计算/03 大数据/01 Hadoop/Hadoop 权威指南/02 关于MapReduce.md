@@ -17,12 +17,12 @@ MapReduce是一种可用于数据处理的编程模型。该模型比较简单�
 
 范例2-1显示了一行采样数据，其中重要字段加了注释。这一行数据被分成很多行以突出每个字段，但在实际文件中，这些字段合并成一行，没有任何分隔符。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/BJc0421l3B.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/BJc0421l3B.png?imageslim)
 
 
 数据文件按照日期和气象站进行组织。从 1901 年到 2001 年，每一年都有一个目 录，每一个目录中包含各个气象站该年气象数据的打包文件及其说明文件。例如，1999年对应文件夹下面就包含下面的记录：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/meC7eEBeB6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/meC7eEBeB6.png?imageslim)
 
 气象台有成千上万个，所以整个数据集由大量的小文件组成。通常情况下，处理 少量的大型文件更容易、更有效，因此，这些数据需要经过预处理，将每年的数据文件拼接成一个单独的文件。具体做法请参见附录C。<span style="color:red;">怎么拼接的？</span>
 
@@ -32,7 +32,7 @@ MapReduce是一种可用于数据处理的编程模型。该模型比较简单�
 
 传统处理按行存储数据的工具是范例 2-2 是一个程序脚本，用于计算每年的最高气温。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/H8A5lgmDkL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/H8A5lgmDkL.png?imageslim)
 
 <span style="color:red;">看来 bash 也要会写的，因为最初的处理还是需要部分的脚本来处理的。</span>
 
@@ -40,7 +40,7 @@ MapReduce是一种可用于数据处理的编程模型。该模型比较简单�
 
 下面是某次运行结果的起始部分:
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/6KcgF4haCH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/6KcgF4haCH.png?imageslim)
 
 由于源文件中的气温值被放大10倍，所以1901年的最高气温是31.7°C (20世纪初记录的气温数据比较少，所以这个结果也是可能的)。使用亚马逊的 EC2 High-CPU Extra Large Instance 运行这个程序，只需要42分钟就可以处理完一个世纪的气象数据，找出最高气温。
 
@@ -68,32 +68,32 @@ map 阶段的输入是 NCDC 原始数据。我们选择文本格式作为输入�
 
 为了全面了解map的工作方式，我们考虑以下输入数据的示例数据（考虑到篇 幅，去除了一些未使用的列，并用省略号表示）：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/m5BJACAKEg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/m5BJACAKEg.png?imageslim)
 
 
 这些行以键-值对的方式作为map函数的输入：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/GL1HlHec5H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/GL1HlHec5H.png?imageslim)
 
 键（key）是文件中的行偏移量，map 函数并不需要这个信息，所以将其忽略。map 函数的功能仅限干提取年份和气温信息（以粗体显示），并将它们作为输出（气温值已用整数表示）：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/901aLk4315.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/901aLk4315.png?imageslim)
 
 
 map 函数的输出经由 MapReduce 框架处理后，最后发送到 reduce 函数。这个处理过程基于键来对键-值对进行排序和分组。因此，在这一示例中，reduce函数看到 的是如下输入：嗯，剩下的就是排序了。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/3DEjg52BcA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/3DEjg52BcA.png?imageslim)
 
 每一年份后紧跟着一系列气温数据。reduce 函数现在要做的是遍历整个列表并从 中找出最大的读数：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/EJj5k59G4b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/EJj5k59G4b.png?imageslim)
 
 这是最终输出结果，每一年的全球最高气温记录。
 
 
 整个数据流如图2-1 所示。在图的底部是Unix管线，用于模拟整个MapReduce的流程，部分内容将在讨论 Hadoop Streaming 时再次涉及。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/DjJ7h0Gkm1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/DjJ7h0Gkm1.png?imageslim)
 
 <span style="color:red;">嗯，大概知道了，但是，为什么这个就叫做 map 了？</span>
 
@@ -104,7 +104,7 @@ map 函数的输出经由 MapReduce 框架处理后，最后发送到 reduce 函
 
 范例2-3显示了我们的 map函数实现。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/leJFCD23Ag.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/leJFCD23Ag.png?imageslim)
 
 范例2-3.查找最高气温的Mapper类
 ```java

@@ -197,7 +197,7 @@ date: 2018-08-03 12:13:58
 输出图像如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AeAckL2EKj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/AeAckL2EKj.png?imageslim)
 
 上面的代码的一些疑问和总结：
 
@@ -230,7 +230,7 @@ date: 2018-08-03 12:13:58
 下图展示了 stoc_gradient_descent0 算法在 200 次迭代过程中回归系数的变化情况。其中的系数2，也就是 X2 很快就稳定了，但系数 1 和 0 则需要更多次的迭代。如下图所示：**这个图哪里来的？随机梯度下降很容易震荡吗？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EAeDCBbk6B.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EAeDCBbk6B.png?imageslim)
 
 因此 stoc_gradient_descent1 做出了改进：
 
@@ -327,7 +327,7 @@ if __name__ == "__main__":
 图像如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0KJcAIf0Fj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/0KJcAIf0Fj.png?imageslim)
 
 
 

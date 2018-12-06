@@ -97,7 +97,7 @@ tags:
 Prototype模式的结构图为：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EaLk2GCiIG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EaLk2GCiIG.png?imageslim)
 
 Prototype 模式提供了一个通过已存在对象进行新对象创建的接口 Clone() ，Clone () 的实现和具体的语言相关，在 C++ 中我们将通过拷贝构造函数来进行实现。
 

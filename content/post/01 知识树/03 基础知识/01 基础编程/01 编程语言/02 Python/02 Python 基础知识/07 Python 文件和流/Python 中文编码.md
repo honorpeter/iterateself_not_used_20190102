@@ -63,7 +63,7 @@ print "你好，世界";
 * 找到 **Editor > File encodings**，将 **IDE Encoding** 和 **Project Encoding** 设置为 utf-8。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aaJ4e3e2Be.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/aaJ4e3e2Be.png?imageslim)
 
 
 

@@ -55,7 +55,7 @@ Python可应用于多平台包括 Linux 和 Mac OS X，这些系统已经自带p
 
 Windows 下直接下载最新版的 Python 2.7.9，安装的时候注意选择
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mkFlcLlE4d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/mkFlcLlE4d.png?imageslim)
 
 你可以通过终端窗口输入 "python" 命令来查看本地是否已经安装Python以及Python的安装版本。
 
@@ -312,7 +312,7 @@ Unix或Windows中路径变量为PATH（UNIX区分大小写，Windows不区分大
   * 最后设置成功以后，在cmd命令行，输入命令"python"，就可以有相关显示。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2A94eFBAhj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/2A94eFBAhj.png?imageslim)
 
 
 

@@ -12,7 +12,7 @@ date: 2018-08-20 20:38:45
 如下图所示
 我在github库中对某个文件进行了在线的编辑，并且没有同步到本地库，之后我在本地库添加了文件test.txt，并想提交到github，出现以下错误：error：failed to push some refs to。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180820/g5kDfcAfIk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180820/g5kDfcAfIk.png?imageslim)
 
 
 # **解决方案**
@@ -28,23 +28,23 @@ git pull --rebase origin master1
 
 如图：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180820/jE2CfFC3l0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180820/jE2CfFC3l0.png?imageslim)
 
 
 ## **下面我用图形象的解释下错误情况的发生和解决**
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180820/1DDc8BhFbA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180820/1DDc8BhFbA.png?imageslim)
 
 
 git pull –rebase origin master意为先取消commit记录，并且把它们临时 保存为补丁(patch)(这些补丁放到”.git/rebase”目录中)，之后同步远程库到本地，最后合并补丁到本地库之中。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180820/Ejl9hIHhIE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180820/Ejl9hIHhIE.png?imageslim)
 
 接下来就可以把本地库push到远程库当中了。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180820/Jhkli1586m.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180820/Jhkli1586m.png?imageslim)
 
 
 

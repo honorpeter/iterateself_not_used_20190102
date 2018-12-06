@@ -162,11 +162,11 @@ int readFlippedInteger(FILE *fp) {
 60000 train + 10000 test 96.88%
 K = 5
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/FfaCDFLk6F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180806/FfaCDFLk6F.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180806/6Hk6JA871g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180806/6Hk6JA871g.png?imageslim)
 
 
 

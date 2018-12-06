@@ -49,7 +49,7 @@ Expection Maximium 期望最大化算法
 再复习一下K-means算法的计算过程。K-means算法可以对样本进行聚类，但是没办法给出某个样本属于该簇的后验概率。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/46LHE5H9Ih.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/46LHE5H9Ih.png?imageslim)
 
 比如：这个黄色的点被标记成蓝色有多大的可靠性呢？是80%的概率被标记成蓝色还是什么？实际上极大似然估计就可以。
 老师说实际上极大似然估计与k-means算法非常像。**那里像？**
@@ -88,14 +88,14 @@ OK 到这里，我们本章需要的基础知识就已经完备了。
 问题：随机变量无法直接(完全)观察到
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/04d0jimlFD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/04d0jimlFD.png?imageslim)
 
 也就是说：现在我们手头上只拿到了样本的高度，没有拿到样本的性别。这种情况就是不完全观测的。
 
 
 ## GMM 要研究的问题
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/L6dL49d09h.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/L6dL49d09h.png?imageslim)
 
 这个就是高斯混合模型要研究的内容，手段就是EM算法。
 
@@ -105,28 +105,28 @@ OK 到这里，我们本章需要的基础知识就已经完备了。
 
 对数似然函数
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/87IGidhbBk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/87IGidhbBk.png?imageslim)
 
 注意，这个地方强调一下：似然函数只有在指数族分布的情况下才能得到全局最优，而GMM并不是，他是有多个极值点的。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2H5Ihf22gB.png?imageslim)就是那个正态分布。这个是第k个高斯分布
+![mark](http://images.iterate.site/blog/image/180727/2H5Ihf22gB.png?imageslim)就是那个正态分布。这个是第k个高斯分布
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/fEF1hfJ3l4.png?imageslim)这就是一个混合的高斯分布。
+![mark](http://images.iterate.site/blog/image/180727/fEF1hfJ3l4.png?imageslim)这就是一个混合的高斯分布。
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gmca9de20C.png?imageslim)对这样的混合高斯分布求极大似然估计，就可以先乘起来，然后取对数，就相当于先取对数再求和
+![mark](http://images.iterate.site/blog/image/180727/gmca9de20C.png?imageslim)对这样的混合高斯分布求极大似然估计，就可以先乘起来，然后取对数，就相当于先取对数再求和
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mDB7kbCkeE.png?imageslim)由于这是一个对数似然，所以是小写的l
+![mark](http://images.iterate.site/blog/image/180727/mDB7kbCkeE.png?imageslim)由于这是一个对数似然，所以是小写的l
 
 
 那么怎么求上面这个式子的最大值时的各个参数呢？
@@ -143,7 +143,7 @@ OK 到这里，我们本章需要的基础知识就已经完备了。
 
 **这个地方的公式为最核心的东西。**
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5ifJi7I5bK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5ifJi7I5bK.png?imageslim)
 
 对上面的公式进行解释：
 
@@ -170,7 +170,7 @@ $N(x_i|\mu_k,\Sigma _k)$的意思是：对于第 $k$ 个高斯分布来说，如
 
 ### 第二步：估计每个组份的参数
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EBjflFiIb7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EBjflFiIb7.png?imageslim)
 
 厉害了，这样\(\gamma(i,k)x_i\)乘出来的点的确是满足第k组的高斯分布的。那么高斯根部如何取进行参数估计呢？就是我们刚才极大似然估计得到的式子，而讲这些高斯分布的样本带入到这两个式子就得到了这个高斯分布的均值和方差，也就是这个高斯分布的参数。
 
@@ -220,7 +220,7 @@ $N(x_i|\mu_k,\Sigma _k)$的意思是：对于第 $k$ 个高斯分布来说，如
 OK，GMM到这里应该是讲的很详细了，那么EM算法到底怎么去做呢？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EJj8AHEk1d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EJj8AHEk1d.png?imageslim)
 
 像得出样本的概率是p(x)，但是有隐变量z。所以我们希望得到带隐变量的概率分布。
 
@@ -255,7 +255,7 @@ OK，GMM到这里应该是讲的很详细了，那么EM算法到底怎么去做�
 对上面的式子说明一下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7gfJj1e6g3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7gfJj1e6g3.png?imageslim)
 
 这个\(log\sum_{z^{(i)} } Q_i(z^{(i)})\frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)其实可以看成是一个log函数，里面是Ex，那么x是什么呢？就是\(\frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)。也就是说这个式子可以看成是\(f(Ex)\)，那么由Jensen公式，我们自然可以想到它对应的\(Ef(x)\)，写出来是：\(\sum_{z^{(i)} } Q_i(z^{(i)})log\frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}\)，正是上面的最后一个式子。而这个时候要注意了，Jensen不等式的前提条件是\(f(x)\)是一个凸函数，而这个地方的\(log\)却是一个凹函数。所以上面的最后一个就不是小于等于，而是大于等于。
 
@@ -271,7 +271,7 @@ OK，GMM到这里应该是讲的很详细了，那么EM算法到底怎么去做�
 
 下界函数最大能多大呢？大于等于符号取等于的时候最大。那么这个地方取等于是什么情况？
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6e3AbJjIB9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/6e3AbJjIB9.png?imageslim)
 
 我们看一下右侧的图：\(f(Ex)\leq Ef(x)\) 在什么情况下取等于？
 
@@ -317,7 +317,7 @@ OK，这一步就是EM算法的M。也就是第二步。
 ## EM算法整体框架
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DdIJlIDAk5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/DdIJlIDAk5.png?imageslim)
 
 即：先写出给定样本的时候隐变量的条件分布，然后将 \(Q\) 带入这个式子中求出他的极大值。不管用任何一种求极值的方法。 当你求出了 \(\theta\) 的时候，你吧 \(\theta\) 待会到第一步就能求出这个 \(Q\) ，新的 \(Q\) 得到了，再带入第二步。不断循环。
 
@@ -334,79 +334,79 @@ OK，这一步就是EM算法的M。也就是第二步。
 坐标上升
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DHfDd2FAaL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/DHfDd2FAaL.png?imageslim)
 
 从理论公式推导GMM
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/e07kB0mBFE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/e07kB0mBFE.png?imageslim)
 
 E-step
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/b4LBE36Kfe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/b4LBE36Kfe.png?imageslim)
 
 M-step
 
 将多项分布和高斯分布的参数带入：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/e16ci6ALbE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/e16ci6ALbE.png?imageslim)
 
 对均值求偏导
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/iaJ8k3AmIJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/iaJ8k3AmIJ.png?imageslim)
 
 高斯分布的均值
 
 令上式等于0，解的均值：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FECa04DD19.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/FECa04DD19.png?imageslim)
 
 高斯分布的方差：求偏导，等于0
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eiB98gFcKB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/eiB98gFcKB.png?imageslim)
 
 ### 多项分布的参数
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IlJHECHKEm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IlJHECHKEm.png?imageslim)
 
 拉格朗日乘子法
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/14Bd1LdlbC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/14Bd1LdlbC.png?imageslim)
 
 求偏导，等于0
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/degmddE8K4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/degmddE8K4.png?imageslim)
 
 总结
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/j85fGJG7gi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/j85fGJG7gi.png?imageslim)
 
 
 
 
 ### EM 代码如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/9dBE0EgKFD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/9dBE0EgKFD.png?imageslim)
 
 ### GMM与图像：
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/12iDhl02J7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/12iDhl02J7.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HmKgh3e1a4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/HmKgh3e1a4.png?imageslim)
 
 
 
@@ -435,55 +435,55 @@ M-step
 基于概率统计的pLSA模型(probabilistic Latent Semantic Analysis，概率隐语义分析)，增加了主题模型，形成简单的贝叶斯网络，可以使用EM算法学习模型参数。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/BD5ghJKB8K.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/BD5ghJKB8K.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cfg6Ac0fLI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/cfg6Ac0fLI.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5D10D4gj34.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5D10D4gj34.png?imageslim)
 
 极大似然估计：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ja4C235HG5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ja4C235HG5.png?imageslim)
 
 目标函数分析：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1Klfb1e1k3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1Klfb1e1k3.png?imageslim)
 
 求隐含变量主题\(z_k\)的后验概率
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/abaHId1DdH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/abaHId1DdH.png?imageslim)
 
 分析似然函数期望：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Cab0C11DF1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Cab0C11DF1.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/I9CFHb8k1K.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/I9CFHb8k1K.png?imageslim)
 
 完成目标函数的建立：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/IBhJclC1dl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/IBhJclC1dl.png?imageslim)
 
 目标函数的求解
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FcFLc43Flg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/FcFLc43Flg.png?imageslim)
 
 分析第一个等式
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/55cGLmmC3g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/55cGLmmC3g.png?imageslim)
 
 同时分析第二个等式：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aAAEHIDA3l.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/aAAEHIDA3l.png?imageslim)
 
 pLSA的总结：
 
@@ -508,7 +508,7 @@ pLSA不需要先验信息即可完成自学习——这是它的优势。如果�
 * 三层结构的贝叶斯模型
 * 需要超参数
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LEFEcaAJ18.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/LEFEcaAJ18.png?imageslim)
 
 
 

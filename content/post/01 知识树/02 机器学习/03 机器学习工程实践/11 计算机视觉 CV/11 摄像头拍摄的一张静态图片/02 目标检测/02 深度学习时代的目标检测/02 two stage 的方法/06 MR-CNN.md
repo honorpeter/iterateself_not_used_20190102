@@ -8,7 +8,7 @@ date: 2018-09-22
 
 2015年巴黎科技大学提出 MR-CNN 算法，结合样本区域本身的特征，利用样本区域周围采样的特征和图像分割的特征来提高识别率，可将检测问题分解为分类和定位问题。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180922/0EfgDdLe1E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180922/0EfgDdLe1E.png?imageslim)
 
 
 

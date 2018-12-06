@@ -57,11 +57,11 @@ $\propto$ 这个符号是正比于的意思。
 考察降维后的样本方差
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ih2iaGEBje.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ih2iaGEBje.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/H36lH5B2l6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/H36lH5B2l6.png?imageslim)
 
 
 
@@ -71,21 +71,21 @@ $\propto$ 这个符号是正比于的意思。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ejm8aL35jc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ejm8aL35jc.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/El7amiG0kf.png?imageslim)就是做投影的意义吗？
+![mark](http://images.iterate.site/blog/image/180728/El7amiG0kf.png?imageslim)就是做投影的意义吗？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lCDCbbFDFh.png?imageslim)就是投影到那条直线上的m个数。这m个数总可以进行求方差。
+![mark](http://images.iterate.site/blog/image/180728/lCDCbbFDFh.png?imageslim)就是投影到那条直线上的m个数。这m个数总可以进行求方差。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3EI3Jkhd4H.png?imageslim)为什么是这样求方差的？
+![mark](http://images.iterate.site/blog/image/180728/3EI3Jkhd4H.png?imageslim)为什么是这样求方差的？
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c90hK44CAD.png?imageslim)这个目标函数是关于u的。现在想去求u。这个1/2是要去掉的，笔误。
+![mark](http://images.iterate.site/blog/image/180728/c90hK44CAD.png?imageslim)这个目标函数是关于u的。现在想去求u。这个1/2是要去掉的，笔误。
 
 
 
@@ -94,14 +94,14 @@ $\propto$ 这个符号是正比于的意思。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lAIfG3Akch.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/lAIfG3Akch.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7AiiBfcjBl.png?imageslim)即u的模是1。
+![mark](http://images.iterate.site/blog/image/180728/7AiiBfcjBl.png?imageslim)即u的模是1。
 
 
 给一个目标函数，求约束条件下的目标函数的极值，那么就可以用Lagrange
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4E7K53E365.png?imageslim)这个式子能高速我们什么信息呢？一个方阵乘以一个方向等于一个常数乘以这个方向。因此这个u就是去![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CAC7bjE1be.png?imageslim)的特征向量，而且对应的特征值就是这个Lagrange乘子 \(\lambda\)
+![mark](http://images.iterate.site/blog/image/180728/4E7K53E365.png?imageslim)这个式子能高速我们什么信息呢？一个方阵乘以一个方向等于一个常数乘以这个方向。因此这个u就是去![mark](http://images.iterate.site/blog/image/180728/CAC7bjE1be.png?imageslim)的特征向量，而且对应的特征值就是这个Lagrange乘子 \(\lambda\)
 
 这就是PCA的推导的核心过程
 
@@ -111,33 +111,33 @@ $\propto$ 这个符号是正比于的意思。
 ## 方差核特征值
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aI1GCDEk8K.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/aI1GCDEk8K.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/iGCLEH3hac.png?imageslim)给定方差的时候那种分布的熵最大？正态分布。
+![mark](http://images.iterate.site/blog/image/180728/iGCLEH3hac.png?imageslim)给定方差的时候那种分布的熵最大？正态分布。
 
 
 
 所以想弄到方差最大的方向上去，其实PCA适合的数据的特征其中一点就是比较适合高斯分布的情况。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2jKGAD7E0i.png?imageslim)用最小二乘拟合的直线也是这个直线
+![mark](http://images.iterate.site/blog/image/180728/2jKGAD7E0i.png?imageslim)用最小二乘拟合的直线也是这个直线
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mckfHfL1Jb.png?imageslim)上面三条都没有很明白
+![mark](http://images.iterate.site/blog/image/180728/mckfHfL1Jb.png?imageslim)上面三条都没有很明白
 
 
 现在说一下降维体现在那里？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fF9l0jKEAg.png?imageslim)我现在可以对![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1E23EDF0hK.png?imageslim)这个方阵求出特征值最大的一个u出来，然后把它列成一列，然后把它特征值次大的一个u拿出来裂成第二列。以此类推，这样，原来的n*n的一个矩阵，通过特征值写成一个新的n*n的矩阵，我只取前面的前k个。那么我就只用了k列，而没有用到n列
+![mark](http://images.iterate.site/blog/image/180728/fF9l0jKEAg.png?imageslim)我现在可以对![mark](http://images.iterate.site/blog/image/180728/1E23EDF0hK.png?imageslim)这个方阵求出特征值最大的一个u出来，然后把它列成一列，然后把它特征值次大的一个u拿出来裂成第二列。以此类推，这样，原来的n*n的一个矩阵，通过特征值写成一个新的n*n的矩阵，我只取前面的前k个。那么我就只用了k列，而没有用到n列
 
-由于![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/IlijJffkim.png?imageslim)是对称阵，那么它的不同的特征值对应的特征向量一定是正交的，也就是说第二个方向一定是垂直于第一个的主方向的。所以球出来的维度都是相互垂直的。
+由于![mark](http://images.iterate.site/blog/image/180728/IlijJffkim.png?imageslim)是对称阵，那么它的不同的特征值对应的特征向量一定是正交的，也就是说第二个方向一定是垂直于第一个的主方向的。所以球出来的维度都是相互垂直的。
 
 
 
 PCA的两个特征向量
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3k3gKI6amE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/3k3gKI6amE.png?imageslim)
 
 OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 
@@ -163,9 +163,9 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 ### PCA的重要应用-去噪
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a9FL6L9Ebg.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/amgBkBFJhh.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b55ffDA94D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/a9FL6L9Ebg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/amgBkBFJhh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/b55ffDA94D.png?imageslim)
 
 怎么去噪呢？
 
@@ -179,7 +179,7 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4iH5Lg7H1D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/4iH5Lg7H1D.png?imageslim)
 
 
 主要是降维，x，y就发生变化了，也就是说降维后的特征已经不一样了，这个是PCA的恶一个限制。这个时候，特征是什么已经有一点怪异了。就有点混在一起了。 **是的呀。**
@@ -220,7 +220,7 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 
 正常去求协方差矩阵，应该是去均值的。去均值的作用是什么？
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0J7L6i9Kj2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0J7L6i9Kj2.png?imageslim)
 
 正常而言我的均值的方向就是我的绿色的箭头的方向。但是如果不去均值，算出来的是紫色的方向，因为你从0开始数，从0开始画一条线使它方差最大。那么就是这个紫色的线。**为什么？**
 
@@ -239,7 +239,7 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 若A是m×n阶矩阵，不妨认为m>n，则\(A^TA\)是n×n阶方阵。根据下式计算：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kFeAD9799b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kFeAD9799b.png?imageslim)
 
 
 我就用PCA的计算过程把A这个矩阵分成了U和V这两个方阵和一个对角阵 \(\Sum\) 的乘积。
@@ -253,24 +253,24 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 仔细看下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/36gb385jDD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/36gb385jDD.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CJBLKJKekG.png?imageslim)这个就是u
+![mark](http://images.iterate.site/blog/image/180728/CJBLKJKekG.png?imageslim)这个就是u
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/A1Lfda5jef.png?imageslim)单位化之后的特征向量相乘还是1。
+![mark](http://images.iterate.site/blog/image/180728/A1Lfda5jef.png?imageslim)单位化之后的特征向量相乘还是1。
 
 
 **利害的。**
 
 # 再琢磨一下这个SVD：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CGI7dBl2LH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/CGI7dBl2LH.png?imageslim)
 
 ## SVD举例：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GbiE876fH6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/GbiE876fH6.png?imageslim)
 
 
 注意：虽然 $\sum$ 是唯一确定的，但是 SVD 却不是唯一确定的：
@@ -278,12 +278,12 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 
 ## 奇异值分解不是唯一的
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4ch9iEJBbb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/4ch9iEJBbb.png?imageslim)
 
 
 ## SVD的四个矩阵
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kbJgA5fBAA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kbJgA5fBAA.png?imageslim)
 
 
 实践中我们得 到这个分解之后，可以进行数据压缩，或者降维，或者数据整理，比如上图中的只保留前面的前k个。**什么是伪逆？为什么这里谈到了伪逆？**
@@ -302,7 +302,7 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 基于概率统计的pLSA模型(probabilistic latentsemantic analysis, 概率隐语义分析)，增加了主题模型，形成简单的贝叶斯网络，可以使用EM算法学习模型参数。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c9IiHhHJIe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/c9IiHhHJIe.png?imageslim)
 
 所以可以把SVD应用到求主题的这种思路上去。为什么呢？手头上有m篇文档，每个文档有n个词，那么这就是一个m*n的大矩阵，可以进行奇异值分解SVD得到三个矩阵相乘，然后U的前k个就是所谓的主题，因为这k个是原来的很多的特征转换而来的，这些PCA生成的新的特征就可以称作主题。这个是SVD的一种应用。这个方法在十几年前还是i可以的。。现在用的少了
 
@@ -315,13 +315,13 @@ OK 到这里PCA基本上介绍好了，那么PCA有什么用呢？
 附：参数含义
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3mF3m7c98D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/3mF3m7c98D.png?imageslim)
 
 
 pLSA模型
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hIlD37mlA0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/hIlD37mlA0.png?imageslim)
 
 
 
@@ -333,7 +333,7 @@ pLSA模型
 假定Ben、Tom、John、Fred对6种产品进行了评价，评分越高，代表对该产品越喜欢。0表示未评价。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a76Dcemlkl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/a76Dcemlkl.png?imageslim)
 
 
 
@@ -344,9 +344,9 @@ pLSA模型
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3eJlLmAfl2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/3eJlLmAfl2.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Cmjhe0DBai.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Cmjhe0DBai.png?imageslim)
 
 
 
@@ -357,14 +357,14 @@ pLSA模型
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ahfEL8EI79.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ahfEL8EI79.png?imageslim)
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ladBeAdc5e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ladBeAdc5e.png?imageslim)
 
-注意：这个![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ImLhj9j68B.png?imageslim)里面是V不是VT。要修改下。所以才是前两列
+注意：这个![mark](http://images.iterate.site/blog/image/180728/ImLhj9j68B.png?imageslim)里面是V不是VT。要修改下。所以才是前两列
 
 把U的前两列画出来：为什么要把前两列画出来？
 
@@ -374,7 +374,7 @@ pLSA模型
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9h481e9D80.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9h481e9D80.png?imageslim)
 
 在这里面，用夹角余弦去度量它们之间的距离。那么这些点里面5和6是最近的。我们看一下A中5和6是不是最近的，的确是比较接近的。**为什么可以用余弦是度量它们之间距离？**
 
@@ -384,7 +384,7 @@ pLSA模型
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8K9kJEgGd5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/8K9kJEgGd5.png?imageslim)
 
 可以看到Fred和Ben是比较近的。**为什么这两列能表示出这些东西？**
 
@@ -396,7 +396,7 @@ pLSA模型
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a92e57d337.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/a92e57d337.png?imageslim)
 
 
 
@@ -406,14 +406,14 @@ pLSA模型
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7HHjCibbC0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/7HHjCibbC0.png?imageslim)
 
 **为什么可以这样乘？ 最后的结果的意义又是什么？**
 
 再把Bob的值放到图上去：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/78Fa7AlaFi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/78Fa7AlaFi.png?imageslim)
 
 由于Bob有三个没有评分，而Ben距离他最近，所以，我给他推荐Ben的最好的评价的东西。
 

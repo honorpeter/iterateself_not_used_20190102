@@ -111,7 +111,7 @@ Memento模式的关键就是要在不破坏封装行的前提下，捕获并保�
 图 2-1: Memento Pattern 结构图
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/4g71H88Jhg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/4g71H88Jhg.png?imageslim)
 
 -实现
 ♦完整代码示例(code)

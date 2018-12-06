@@ -245,7 +245,7 @@ plt.legend()
 plt.show()
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180726/da5mll8c7d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180726/da5mll8c7d.png?imageslim)
 
 
 由于是第5次的时候停止的，而patience =3，所以是在第2次的时候停下来最好。<span style="color:red;">这个地方是5-3=2 还是 5-3+1=3？ 确认下。而且，我最后生成的模型在哪里？我怎么生成第二个 epoch 的时候的模型？而且模型要怎么加载？这些这里没有讲。</span>

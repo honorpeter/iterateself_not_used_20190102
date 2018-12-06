@@ -295,7 +295,7 @@ OK，现在万事俱备，调用下面命令就可以进行训练了。
 
 执行命令后，得到如下输出，并且同步在log中。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/1c8m2kmDja.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/1c8m2kmDja.png?imageslim)
 
 注意因为指定了 TEST的数据层，所以输出里按照 solver 中指定的间隔会输出当前模型在 val_lmdb 上的准确率和 loss。
 
@@ -330,7 +330,7 @@ python plot_training_log.py 2 test_loss_vs_iters.png mnist_train.log
 
 得到如图 8-2 所示的两个曲线，注意这里为了方便可视化，在窗口上做了局部放大。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/ddC5l8K189.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/ddC5l8K189.png?imageslim)
 
 <span style="color:red;">不知道还有没有别的工具可以来处理 Caffe 的 log 的。</span>
 
@@ -500,7 +500,7 @@ OK，接下来就可以进行测试了，比如想测试一下最后一个 mnist
 
 和训练不同的是，第一个输入参数从 `train` 变成了 `test`，然后通过 `-model` 参数指定 `lenet_test.prototxt` 作为测试的模型和数据，`-weights` 用来从一个 `caffemodel` 文件中读取参数 的值，`-gpu` 用来指定测试 GPU 的序号，最后的参数 `-iterations` 和 solver 中的 `test_iter` 意思相似，`iterations` 和 `batch_size` 相乘是最终测试的样本量，这个值默认是 50，所以这里要显式地指定为 100 好遍历所有测试数据。执行后输出如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/LDhAm5IFCK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/LDhAm5IFCK.png?imageslim)
 
 程序中的每个 batch 的准确率都进行了计算，最后得到一个总的准确率。对于本书的例子，生成的模型存档数量不多，对照验证数据 loss 小、准确率高的区域，手动运行所有模型就可以挑选一个最优的模型。如果是模型存档很多的情况下，利用测试集挑选模型，最好自己写成脚本来比较所有模型中最好的一个。<span style="color:red;">嗯，也是哦，即使验证集能说明某几个模型是好的，但是测试集还是有必要把所有的模型都测试一遍的，然后总结进行选择。这种脚本要怎么写？ `os.system` 可不可以？</span>
 
@@ -522,10 +522,10 @@ OK，接下来就可以进行测试了，比如想测试一下最后一个 mnist
 得到输出如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/l922BfdeKI.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/Cmeh7CcDEE.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/63kh6cEB8H.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/lFgeGf6J2H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/l922BfdeKI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/Cmeh7CcDEE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/63kh6cEB8H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/lFgeGf6J2H.png?imageslim)
 
 <span style="color:red;">要自己跑一下看看。</span>
 
@@ -749,7 +749,7 @@ python recognize_digit.py test.txt
 
 得到如下的输出，对于前几行而言，结果还是很准的：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/B6eCJ98bm5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/B6eCJ98bm5.png?imageslim)
 
 
 
@@ -770,7 +770,7 @@ python plot_training_log.py 2 test_loss_vs_iters.png mnist_train.log mnist_train
 输出结果如图8-3所示。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/96c4jh9LJK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/96c4jh9LJK.png?imageslim)
 
 从验证集来看，增加扰动数据后的指标还是有提升的，loss 在训练后期明显比原始数据集低，准确率最高达到了 99.27%，提高了约 0.3%。不过收敛速度比原始数据要慢，并且到了 36000 次迭代的时候仍然很不稳定。这是因为原始训练数据只有 5 万张，每个 batch 里 50 个数据的情况下，迭代 1000 次就是一代（epoch），从图8-3中看，超过20代之后 就已经比较稳定了。而增加后的数据总量是 30 万，迭代 6000 次才是一代，到了 36000 次 结束时，才迭代了 6 代。那么如果希望接着 36000 次的状态继续训练呢？比如继续训练到 20 代，也就是 12 万次的时候，那么需要到 solver 文件中将 `max_iter` 的值改为 120000，然后执行如下命令就能接着 36000 次的状态存档继续训练。<span style="color:red;">嗯，是的，不过已经可以感觉到这个增加扰动数据之后，效果的确提升了比较多。</span>
 
@@ -780,7 +780,7 @@ python plot_training_log.py 2 test_loss_vs_iters.png mnist_train.log mnist_train
 
 最后得到的loss和准确率随训练的曲线如图8-4所示，可以看到 loss 还在缓慢下降， 最高的验证集准确率超过了 93%。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180901/Cem0aicC6D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180901/Cem0aicC6D.png?imageslim)
 
 最后还要提一下的是，直接在样本基础上做扰动增加数据只是数据增加的方法之一，并且不是一个好的方案，因为增加的数据量有限，并且还要占用原有样本额外的硬盘空间。最好的办法是训练的时候实时对数据进行扰动，这样等效于无限多的随机扰动。<span style="color:red;">哇，厉害！这个要怎么做？</span>
 

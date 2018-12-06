@@ -56,7 +56,7 @@ Python语言与Perl，C和Java等语言有许多相似之处。但是，也存�
 用一张图概况Python学习
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/63ACC8L3Eb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/63ACC8L3Eb.png?imageslim)
 
 
 
@@ -95,7 +95,7 @@ linux上你只需要在命令行中输入 Python 命令即可启动交互式编�
 Window上在安装Python时已经安装了默认的交互式编程客户端，提示窗口如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CEEHFld91F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/CEEHFld91F.png?imageslim)
 
 在 python 提示符中输入以下文本信息，然后按 Enter 键查看运行效果：
 

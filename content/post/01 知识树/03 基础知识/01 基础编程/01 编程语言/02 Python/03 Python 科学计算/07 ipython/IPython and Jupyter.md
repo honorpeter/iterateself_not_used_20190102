@@ -56,7 +56,7 @@ IPython是Python科学计算标准工具集的组成部分，它将其他所有�
 
 Python是一门解释性语言。Python的解释器一次只能运行一个命令。标准的Python解释器环境可以用通过输入python进入（在 terminal 中输入python后，就能进入解释器）：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/idHm83GeIB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180722/idHm83GeIB.png?imageslim)
 
 `>>>`是提示符（prompt），告诉你可以输入指令。如果想要退出，可以输入`exit()`或者按Ctrl-D。
 
@@ -68,13 +68,13 @@ print('Hello world')
 
 可以通过下面的命令来运行（我们需要先 cd 到 hello_world.py 所在的文件夹）：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/CAD0Gd0ilC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180722/CAD0Gd0ilC.png?imageslim)
 
 # 我们再看看 IPython
 
 在做科学计算和数据分析的时候，我们通常使用 IPython，这是一个强化版的python 解释器，当我们使用`%run`命令的时候，IPython会按执行代码的方式来执行文件，可以让我们直观地看到交互的结果：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/G2DlE7hJH5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180722/G2DlE7hJH5.png?imageslim)
 
 默认的IPython提示符会显示数字，比如图片中的`In [2]:`，而不是普通的`>>>`提示符。
 
@@ -386,7 +386,7 @@ Pasting code; enter '--' alone on the line to stop or use Ctrl-D.
 
 这个还没怎么用过。==在实际中真的会使用这个吗？应该是都是用 Jupyternotebook了吧？==
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/F2F4HiEd02.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180722/F2F4HiEd02.jpg?imageslim)
 
 
 异常和跟踪
@@ -442,7 +442,7 @@ File:      e:\11.programfiles\anaconda3\lib\site-packages\ipython\core\magics\na
 
 实际上，魔术命令默认是可以不带百分号使用的，只要没有定义与其同名的变量即可。这个技术叫做 automagic，可以通过 %automagic 打开或关闭。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/eL7l2g3ea0.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180722/eL7l2g3ea0.jpg?imageslim)
 
 ==真不知道什么时候会使用这些。==
 
@@ -464,7 +464,7 @@ plt.plot(np.random.randn(50).cumsum())
 
 同时在block 内输出了一个图：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180722/CiIEH2DeL7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180722/CiIEH2DeL7.png?imageslim)
 
 
 

@@ -127,7 +127,7 @@ Chain of Responsibility 模式描述其实就是这样一类问题将可能处�
 Chain of Responsibility模式典型的结构图为：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Gg7HKFk8J8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Gg7HKFk8J8.png?imageslim)
 
 图 2-1： Chain of Responsibility Pattern 结构图
 

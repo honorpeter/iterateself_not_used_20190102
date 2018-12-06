@@ -92,7 +92,7 @@ tags:
 Decorator模式典型的结构图为:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5h8hleceA1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5h8hleceA1.png?imageslim)
 
 在结构图中， ConcreteComponent 和 Decorator 需要有同样的接口，因此 ConcreteComponent和Decorator有着一个共同的父类。这里有人会问，让Decorator直接维 护一个指向ConcreteComponent引用（指针）不就可以达到同样的效果，答案是肯定并且是 否定的。肯定的是你可以通过这种方式实现，否定的是你不要用这种方式实现，因为通过这 种方式你就只能为这个特定的 ConcreteComponent 提供修饰操作了，当有了一个新的
 

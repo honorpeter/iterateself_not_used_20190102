@@ -48,7 +48,7 @@ Linux系统的启动过程并不是大家想象中的那么复杂，其过程可
 操作系统接管硬件以后，首先读入 /boot 目录下的内核文件。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/DhmLlaH8Gk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/DhmLlaH8Gk.png?imageslim)
 
 
 ## 运行init
@@ -58,7 +58,7 @@ init 进程是系统所有进程的起点，你可以把它比拟成系统所有
 
 init 程序首先是需要读取配置文件 /etc/inittab。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/L2Jfj1JCB9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/L2Jfj1JCB9.png?imageslim)
 
 ### 运行级别
 
@@ -72,7 +72,7 @@ init进程的一大任务，就是去运行这些开机启动的程序。
 Linux允许为不同的场合，分配不同的开机启动程序，这就叫做"运行级别"（runlevel）。也就是说，启动时根据"运行级别"，确定要运行哪些程序。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dAHKGbEI0J.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/dAHKGbEI0J.png?imageslim)
 
 Linux系统有7个运行级别(runlevel)：
 
@@ -117,7 +117,7 @@ Linux系统有7个运行级别(runlevel)：
 
 至于在每个运行级中将运行哪些守护进程，用户可以通过chkconfig或setup中的"System Services"来自行设定。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GeF16gB6GF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/GeF16gB6GF.png?imageslim)
 
 
 
@@ -170,7 +170,7 @@ init接下来会打开6个终端，以便用户登录系统。在inittab中的�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EL4emejFg4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EL4emejFg4.png?imageslim)
 
 对于运行级别为5的图形方式用户来说，他们的登录是通过一个图形化的登录界面。登录成功后可以直接进入KDE、Gnome等窗口管理器。
 
@@ -210,7 +210,7 @@ Linux预设提供了六个命令窗口终端机让我们来登录。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/L7LIeEjfkd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/L7LIeEjfkd.png?imageslim)
 
 
 

@@ -75,7 +75,7 @@ date: 2018-08-21 18:16:22
 
 ## 共轭先验分布：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ceehb3b1fL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ceehb3b1fL.png?imageslim)
 
 不同的参数\theta的时候都是除以p(x)的，所以p(x)本身跟我是没有关系的，只是样本存在的证据，它本身无法对我的\theta 提供更多信息
 
@@ -95,7 +95,7 @@ date: 2018-08-21 18:16:22
 ##
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/B04kEfJ5fe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/B04kEfJ5fe.png?imageslim)
 
 
 
@@ -105,16 +105,16 @@ date: 2018-08-21 18:16:22
 共轭先验分步的实践意义
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l38Kba4G7j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/l38Kba4G7j.png?imageslim)
 
 其实我们已经接触过了：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/L0FmmCKHcJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/L0FmmCKHcJ.png?imageslim)
 
 $\lambda$ 是乘法因子。
 
-为什么敢加这个![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/e3h2I37cIe.png?imageslim)？本质上平方和损失就是假定参数\theta 服从高斯分布的贝叶斯学派的思想。没明白？
+为什么敢加这个![mark](http://images.iterate.site/blog/image/180728/e3h2I37cIe.png?imageslim)？本质上平方和损失就是假定参数\theta 服从高斯分布的贝叶斯学派的思想。没明白？
 
 $f(x)=a*e^(b*x^2)$  这里面的a和b都是系数，如果能得到这个，这里面的x一定是高斯分布的，只不过这里面的均值是0。好像有这么一回事。再看下。
 
@@ -124,7 +124,7 @@ $f(x)=a*e^(b*x^2)$  这里面的a和b都是系数，如果能得到这个，这
 
 OK，继续复习：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b19CcldlcC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/b19CcldlcC.png?imageslim)
 
 
 这个东西可以在一定程度上解释：频率的极限是概率。
@@ -134,9 +134,9 @@ OK，继续复习：
 
 那么我们现在给出一个问题：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0FI6D99EGA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0FI6D99EGA.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8e2m4gaH9f.png?imageslim)不能，因为我们的样本太少了。
+![mark](http://images.iterate.site/blog/image/180728/8e2m4gaH9f.png?imageslim)不能，因为我们的样本太少了。
 
 
 如果对公式进行修正，感觉就合理了一些了。那么这个修正的值是什么？为什么可以加上这个修正值？这个加几这个背后有什么理论吗？
@@ -145,7 +145,7 @@ OK，继续复习：
 
 上述过程的理论解释：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5ccmAC36Al.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/5ccmAC36Al.png?imageslim)
 
 **我还是没有明白为什么要用共轭先验？普通的先验为什么不行？为什么后验与先验一定是同分布的？**
 
@@ -154,9 +154,9 @@ Beta分布就是二项分布的共轭分布。
 先验概率和后验概率的关系：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KCmK1Hd8cg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/KCmK1Hd8cg.png?imageslim)
 
-到![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/higL6m7mjk.png?imageslim)这一步，是把归化因子去掉了。
+到![mark](http://images.iterate.site/blog/image/180728/higL6m7mjk.png?imageslim)这一步，是把归化因子去掉了。
 
 可见，上面的二项分布，乘以一个Beta分布，结果仍然服从一个Beta分布。
 
@@ -172,13 +172,13 @@ Beta分布就是二项分布的共轭分布。
 ## 伪计数
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AjGh5JEbiF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/AjGh5JEbiF.png?imageslim)
 
 而上面的例子中的5和10就对应 $\alpha$ 和 $\beta$ ，可以看到，这个5和10在样本数量很少的时候，可以极大的调节这个结论使更合理，但是如果在样本很大的时候，5和10 就不起作用了，
 
 这个其实就是用贝叶斯这套机制的重要内容：能够在小样本的时候，使它在一定程度上是合理的。我们发现，如果不加上5和10，那么结果显然过拟合了，而有了这个先验的条件就可以避免过拟合。
 
-实际上之前我们讲的![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KIc0c3IF8L.png?imageslim)也就是为了防止过拟合。
+实际上之前我们讲的![mark](http://images.iterate.site/blog/image/180728/KIc0c3IF8L.png?imageslim)也就是为了防止过拟合。
 
 感觉上面的这还是很厉害的，但是只支持二项分布吗？
 
@@ -202,7 +202,7 @@ Beta分布就是二项分布的共轭分布。
 
 Γ函数是阶乘在实数上的推广
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fb0hkfdEe9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/fb0hkfdEe9.png?imageslim)
 
 所以，当我们看到\(\Gamma(n)\)的时候，一定要知道这个是\((n-1)!\)
 
@@ -216,12 +216,12 @@ OK，我们继续看Dirichlet分布：
 
 参照Beta分步的定义：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d3EkcDfaCI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/d3EkcDfaCI.png?imageslim)
 
 ## Dirichlet分步的定义：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Fhc6Fl9kID.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Fhc6Fl9kID.png?imageslim)
 
 解释一下：
 
@@ -232,23 +232,23 @@ OK，我们继续看Dirichlet分布：
 把\alpha 写成k个，组成一个向量\(overrightarrow{\alpha}\)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ihldJDkClc.png?imageslim)就是对应的![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3iL52b41Cf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ihldJDkClc.png?imageslim)就是对应的![mark](http://images.iterate.site/blog/image/180728/3iL52b41Cf.png?imageslim)
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mHgiekgkjD.png?imageslim)就是对应的![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a3aaHBfb2k.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/mHgiekgkjD.png?imageslim)就是对应的![mark](http://images.iterate.site/blog/image/180728/a3aaHBfb2k.png?imageslim)
 
 
 比如说$\alpha_1=2$，$\alpha_2=3$，$\alpha_3=4$ 那么：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jJL85d19G4.png?imageslim)就是： $9!/(1!2!3!)$
+![mark](http://images.iterate.site/blog/image/180728/jJL85d19G4.png?imageslim)就是： $9!/(1!2!3!)$
 
 
 
 
-我们假定![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/55Ei454I9C.png?imageslim)记作：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/f55Fbcd3d7.png?imageslim)也就是说：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FI9gCbaeI5.png?imageslim)
+我们假定![mark](http://images.iterate.site/blog/image/180728/55Ei454I9C.png?imageslim)记作：![mark](http://images.iterate.site/blog/image/180728/f55Fbcd3d7.png?imageslim)也就是说：![mark](http://images.iterate.site/blog/image/180728/FI9gCbaeI5.png?imageslim)
 
 我们说一下 $\alpha$ 对我们的分布的影响：
 
@@ -256,12 +256,12 @@ OK，我们继续看Dirichlet分布：
 ## Dirichlet 分步分析
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AbakBGhC3g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/AbakBGhC3g.png?imageslim)
 
 参数决定的是 $p1,p2...pk$  的概率。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1cm8lD07Fk.png?imageslim)所以它的自由度是k-1维的，所以，我们的Dirichlet分布是用k个变量来约束k-1个变量。
+![mark](http://images.iterate.site/blog/image/180728/1cm8lD07Fk.png?imageslim)所以它的自由度是k-1维的，所以，我们的Dirichlet分布是用k个变量来约束k-1个变量。
 
 
 比如说，抛硬币那个例子中的\theta 朝上的概率，实际上只有这一个参数，但是到了Beta分布里面，就有了\alpha 和\beta 两个参数 来决定一个\theta 。
@@ -284,10 +284,10 @@ A very common special case is the symmetric Dirichlet distribution, where all of
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9lhgcbLF21.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9lhgcbLF21.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5AACLcFfmh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/5AACLcFfmh.png?imageslim)
 
 
 
@@ -297,7 +297,7 @@ A very common special case is the symmetric Dirichlet distribution, where all of
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HEHC73d2Bg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/HEHC73d2Bg.png?imageslim)
 
 \alpha 等于1 时候是平的
 
@@ -311,14 +311,14 @@ A very common special case is the symmetric Dirichlet distribution, where all of
 
 
 
-比如我有![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HF7eh92fDk.png?imageslim)这几个点的分布，取第一个值的概率是0.2，取第二个是0.3.。。，如果我以概率来从这几个数中取，可能有30%的情况取到第二个数，虽然第三个数取到的概率是0.03，但是仍然是可能被取到的，如果做了1000次实验，正常而言，可能有30次被取到。
+比如我有![mark](http://images.iterate.site/blog/image/180728/HF7eh92fDk.png?imageslim)这几个点的分布，取第一个值的概率是0.2，取第二个是0.3.。。，如果我以概率来从这几个数中取，可能有30%的情况取到第二个数，虽然第三个数取到的概率是0.03，但是仍然是可能被取到的，如果做了1000次实验，正常而言，可能有30次被取到。
 
-而上图：比如说这个点![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/EA9690BH1E.png?imageslim)有0.2的概率被取到而![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/572Ihkg00B.png?imageslim)可能有0.1的概率被取到。
+而上图：比如说这个点![mark](http://images.iterate.site/blog/image/180728/EA9690BH1E.png?imageslim)有0.2的概率被取到而![mark](http://images.iterate.site/blog/image/180728/572Ihkg00B.png?imageslim)可能有0.1的概率被取到。
 
 **上面这个图是从wiki上下载的，最好到wiki上再看一下，因为还没怎么理解它的意思。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/gCC09b4B4C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/gCC09b4B4C.png?imageslim)
 
 
 
@@ -328,7 +328,7 @@ A very common special case is the symmetric Dirichlet distribution, where all of
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/L6ffAkJ1EA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/L6ffAkJ1EA.png?imageslim)
 
 \(x_1,x_2,p(x_1,x_2)\)这张图更重要，x1是一个轴，x2是一个轴，纵轴是p(x1,x2) 是一个概率值，所以
 
@@ -343,7 +343,7 @@ A very common special case is the symmetric Dirichlet distribution, where all of
 当\alpha=1的时候，这个
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/62LDaFab1I.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/62LDaFab1I.png?imageslim)
 
 式子里面的 \(p_k^{\alpha-1}\) 就是1 ，其实就是均匀分布。
 
@@ -375,7 +375,7 @@ mass will be concentrated in a few of the values.
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ckd0fii7DC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ckd0fii7DC.png?imageslim)
 
 
 
@@ -406,7 +406,7 @@ m篇文档是样本给定的，K是我们自己设的。
 任何一个主题在词典中的所有词上都有一个概率值，只不过有的概率值是极小的而已，
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/iHkdmG7mBE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/iHkdmG7mBE.png?imageslim)
 
 这个w表示的是文档的第n个词，是一个可以观测的变量。
 
@@ -428,7 +428,7 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b2IElhdKEA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/b2IElhdKEA.png?imageslim)
 
 一般用term和token来表示词汇或词项，也就是字典里面的词，这个是不可重复的，
 
@@ -448,7 +448,7 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ci8fcmK536.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ci8fcmK536.png?imageslim)
 
 上面这个式子根据的是贝叶斯网络
 
@@ -476,25 +476,25 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KBf22BD114.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/KBf22BD114.png?imageslim)
 
-\(W_{mn}\) 指的是第m篇文档的第n个词。这个词是 t 的概率就是：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0G9577hHfH.png?imageslim)
+\(W_{mn}\) 指的是第m篇文档的第n个词。这个词是 t 的概率就是：![mark](http://images.iterate.site/blog/image/180728/0G9577hHfH.png?imageslim)
 
 比如p(Wmn="好")
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9ClF1B2HHa.png?imageslim)这个就是整个看到的整个语料的联合概率。厉害了
+![mark](http://images.iterate.site/blog/image/180728/9ClF1B2HHa.png?imageslim)这个就是整个看到的整个语料的联合概率。厉害了
 
 
 实际上由于每个
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/IHfhc3L709.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/IHfhc3L709.png?imageslim)
 
 非常小，也就是说这个
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/f0KECBFhBd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/f0KECBFhBd.png?imageslim)
 
 会非常非常小，而这个时候计算机里面就要取对数，不然实在太小。这个问题在HMM中也会介绍
 
@@ -514,7 +514,7 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8L1faH5h4e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/8L1faH5h4e.png?imageslim)
 
 给定了\alpha 和 \beta  我们想推测一下这个词与某个主题出现的联合概率。
 
@@ -523,7 +523,7 @@ m篇文档是样本给定的，K是我们自己设的。
 联合分布：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7la33312jj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/7la33312jj.png?imageslim)
 
 \(p(\overrightarrow{w}\mid \overrightarrow{z},\overrightarrow{\beta})\) 相当于是给定了某个主题之下的采样的某个词的概率。
 
@@ -531,9 +531,9 @@ m篇文档是样本给定的，K是我们自己设的。
 
 虽然这两个式子看起来不同，但是实际上在网络上是类似的：
 
-\(p(overrightarrow{z}\mid \overrightarrow{\alpha})\) 对应![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6D8eJ78dD3.png?imageslim)
+\(p(overrightarrow{z}\mid \overrightarrow{\alpha})\) 对应![mark](http://images.iterate.site/blog/image/180728/6D8eJ78dD3.png?imageslim)
 
-\(p(\overrightarrow{w}\mid \overrightarrow{z},\overrightarrow{\beta})\) 对应![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/F2IE7c96F3.png?imageslim)
+\(p(\overrightarrow{w}\mid \overrightarrow{z},\overrightarrow{\beta})\) 对应![mark](http://images.iterate.site/blog/image/180728/F2IE7c96F3.png?imageslim)
 
 \(n_m^{(k)}\)  即第m个文档里面主题k出现的次数。
 
@@ -545,9 +545,9 @@ m篇文档是样本给定的，K是我们自己设的。
 ## 计算因子
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5ke41dbj0j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/5ke41dbj0j.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/89Gakhk3I0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/89Gakhk3I0.png?imageslim)
 
 解释：
 
@@ -562,7 +562,7 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-由于![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/69a6KDF3jb.png?imageslim)是一个dirichlet分布，而![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/dl6AfLE4kl.png?imageslim)所以，我们可以把这个带入到![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CIc4Hi1hcc.png?imageslim)
+由于![mark](http://images.iterate.site/blog/image/180728/69a6KDF3jb.png?imageslim)是一个dirichlet分布，而![mark](http://images.iterate.site/blog/image/180728/dl6AfLE4kl.png?imageslim)所以，我们可以把这个带入到![mark](http://images.iterate.site/blog/image/180728/CIc4Hi1hcc.png?imageslim)
 
 
 
@@ -572,25 +572,20 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-我们看前面这个：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/636k5DGEcD.png?imageslim)，这个是给定了某个主题的词分布
+我们看前面这个：![mark](http://images.iterate.site/blog/image/180728/636k5DGEcD.png?imageslim)，这个是给定了某个主题的词分布
 
 
 
 
-和某个主题之后，词的概率，这是一个普通的多项分布。由于term有V个，所以这是一个V项分布。那么当我的w想取到t的时候，有多少个是属于z这个分布的，就是![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/gJKjg0H8HL.png?imageslim)
-
-
-
-
-
-
-
-**![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5F5mjh1F4A.png?imageslim)这个式子没明白？为什么![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2Gi04JgaJ0.png?imageslim)这个放在![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fLE56JF5HH.png?imageslim)前面？为什么是![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2Bc9KD1DGi.png?imageslim)这个？里面的乘法是那里来的？而且为什么要先对 t 求prod？这个![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/c8dCKJDJ6d.png?imageslim)是数出来的吗？为什么要相乘？而且，多项分布的时候，求其中某一个出现的概率是怎么算的？多项分布再看下。**
+和某个主题之后，词的概率，这是一个普通的多项分布。由于term有V个，所以这是一个V项分布。那么当我的w想取到t的时候，有多少个是属于z这个分布的，就是![mark](http://images.iterate.site/blog/image/180728/gJKjg0H8HL.png?imageslim)
 
 
 
 
 
+
+
+**![mark](http://images.iterate.site/blog/image/180728/5F5mjh1F4A.png?imageslim)这个式子没明白？为什么![mark](http://images.iterate.site/blog/image/180728/2Gi04JgaJ0.png?imageslim)这个放在![mark](http://images.iterate.site/blog/image/180728/fLE56JF5HH.png?imageslim)前面？为什么是![mark](http://images.iterate.site/blog/image/180728/2Bc9KD1DGi.png?imageslim)这个？里面的乘法是那里来的？而且为什么要先对 t 求prod？这个![mark](http://images.iterate.site/blog/image/180728/c8dCKJDJ6d.png?imageslim)是数出来的吗？为什么要相乘？而且，多项分布的时候，求其中某一个出现的概率是怎么算的？多项分布再看下。**
 
 
 
@@ -600,17 +595,22 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-那么拿到了这个积分![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J1h8dckDA3.png?imageslim)怎么求呢？首先我们看到了：
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6D993hIhHB.png?imageslim)这个式子的左右两边同时对p求积分，左边对p积分是1，那么我正好把右边的![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2fEjGmg1ad.png?imageslim)乘到左边去，然后得到![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mf7b1KkkEm.png?imageslim)而由于![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/m9Fm8DfGeC.png?imageslim)
+
+那么拿到了这个积分![mark](http://images.iterate.site/blog/image/180728/J1h8dckDA3.png?imageslim)怎么求呢？首先我们看到了：
 
 
 
-这部分不含![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mic9Ed2jeh.png?imageslim)，因此把它直接放到积分外面，而![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/94jh113gEE.png?imageslim)
-的积分根绝上面的式子可以写成![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4CEcCF9Ebk.png?imageslim)。也就是说：得到：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/E0LJ8B39I6.png?imageslim)
+
+![mark](http://images.iterate.site/blog/image/180728/6D993hIhHB.png?imageslim)这个式子的左右两边同时对p求积分，左边对p积分是1，那么我正好把右边的![mark](http://images.iterate.site/blog/image/180728/2fEjGmg1ad.png?imageslim)乘到左边去，然后得到![mark](http://images.iterate.site/blog/image/180728/mf7b1KkkEm.png?imageslim)而由于![mark](http://images.iterate.site/blog/image/180728/m9Fm8DfGeC.png?imageslim)
+
+
+
+这部分不含![mark](http://images.iterate.site/blog/image/180728/mic9Ed2jeh.png?imageslim)，因此把它直接放到积分外面，而![mark](http://images.iterate.site/blog/image/180728/94jh113gEE.png?imageslim)
+的积分根绝上面的式子可以写成![mark](http://images.iterate.site/blog/image/180728/4CEcCF9Ebk.png?imageslim)。也就是说：得到：![mark](http://images.iterate.site/blog/image/180728/E0LJ8B39I6.png?imageslim)
 
 
 
@@ -621,11 +621,11 @@ m篇文档是样本给定的，K是我们自己设的。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i8flD50maJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/i8flD50maJ.png?imageslim)
 
 
 
-上面的两个可以看成：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/15kJAIKi0G.png?imageslim)与![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/g1Fd9hl2J5.png?imageslim)成正比，![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4jgegF9FhK.png?imageslim)与![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5JG8JkhF5a.png?imageslim)成正比。而所以，后面我就不管分母的问题，只管分子，**为什么可以不管分母？难道，不管是什么\alpha 的![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j1iD83mKCF.png?imageslim)都一样？**
+上面的两个可以看成：![mark](http://images.iterate.site/blog/image/180728/15kJAIKi0G.png?imageslim)与![mark](http://images.iterate.site/blog/image/180728/g1Fd9hl2J5.png?imageslim)成正比，![mark](http://images.iterate.site/blog/image/180728/4jgegF9FhK.png?imageslim)与![mark](http://images.iterate.site/blog/image/180728/5JG8JkhF5a.png?imageslim)成正比。而所以，后面我就不管分母的问题，只管分子，**为什么可以不管分母？难道，不管是什么\alpha 的![mark](http://images.iterate.site/blog/image/180728/j1iD83mKCF.png?imageslim)都一样？**
 
 所以，我们就可以往后面写了：
 
@@ -641,25 +641,25 @@ Gibbs采样蕴含这一个思想：我想看看我所属的类别，我就看看
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kHile891Bi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kHile891Bi.png?imageslim)
 
-这里的![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/I3fLl50BbJ.png?imageslim)是指除了i以外其它的主题。分子之所以是![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/glhfIehgJ1.png?imageslim)是因为i和除i以外的写在一起。这个![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l81e6fHBb0.png?imageslim)就等于![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/B849E3c8cE.png?imageslim)其中p(wi)就是\(p(w_i|\overrightarrow{z}_{\neg i})\)，因为i与非i是独立的，因此直接写成p(wi)
-
-
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/eDch2DGeLA.png?imageslim)是把之前的两个式子的结果带入进来，而之所以\(p(\w_i)\)没有了，是因为这个是一个词在样本给定之后的概率分布，在给定样本之后就是一个确认的值，因此直接扔掉了。因为这个\(\propto\)是要求成比例就行。
+这里的![mark](http://images.iterate.site/blog/image/180728/I3fLl50BbJ.png?imageslim)是指除了i以外其它的主题。分子之所以是![mark](http://images.iterate.site/blog/image/180728/glhfIehgJ1.png?imageslim)是因为i和除i以外的写在一起。这个![mark](http://images.iterate.site/blog/image/180728/l81e6fHBb0.png?imageslim)就等于![mark](http://images.iterate.site/blog/image/180728/B849E3c8cE.png?imageslim)其中p(wi)就是\(p(w_i|\overrightarrow{z}_{\neg i})\)，因为i与非i是独立的，因此直接写成p(wi)
 
 
-带入之后。![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/I1lhaHf924.png?imageslim)就是![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bAb6FGki46.png?imageslim) 没明白？**为什么![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4BGc1hfd2k.png?imageslim)比![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Dd0jEGJEg4.png?imageslim)小1？**
-
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LJkj42A2JK.png?imageslim)这个指的是某一个词t term可能隶属于第k号主题 出现了几次，比如说，在所有主题的第1，2个主题中出现了，那么值就是2，
+![mark](http://images.iterate.site/blog/image/180728/eDch2DGeLA.png?imageslim)是把之前的两个式子的结果带入进来，而之所以\(p(\w_i)\)没有了，是因为这个是一个词在样本给定之后的概率分布，在给定样本之后就是一个确认的值，因此直接扔掉了。因为这个\(\propto\)是要求成比例就行。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AeKadCC98F.png?imageslim)的意思是除去这篇这篇文档中第i个词以外的时候，词t在第k号主题中出现了多少次。**是不是这个意思？还是没明白？**
+带入之后。![mark](http://images.iterate.site/blog/image/180728/I1lhaHf924.png?imageslim)就是![mark](http://images.iterate.site/blog/image/180728/bAb6FGki46.png?imageslim) 没明白？**为什么![mark](http://images.iterate.site/blog/image/180728/4BGc1hfd2k.png?imageslim)比![mark](http://images.iterate.site/blog/image/180728/Dd0jEGJEg4.png?imageslim)小1？**
+
+![mark](http://images.iterate.site/blog/image/180728/LJkj42A2JK.png?imageslim)这个指的是某一个词t term可能隶属于第k号主题 出现了几次，比如说，在所有主题的第1，2个主题中出现了，那么值就是2，
 
 
-而这个![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/gGH8hF74FH.png?imageslim)是第m个文档中第k个主题出现的次数，这个是一个常数项，这个与我们要求的东西无关，因此直接扔掉。就得到了最后的式子。
+![mark](http://images.iterate.site/blog/image/180728/AeKadCC98F.png?imageslim)的意思是除去这篇这篇文档中第i个词以外的时候，词t在第k号主题中出现了多少次。**是不是这个意思？还是没明白？**
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ClcE8Hg3aH.png?imageslim)![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LgFCKKK3gg.png?imageslim)这个词t隶属于第k号主题的个数有多少个![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/26F9m15mI2.png?imageslim)是m文档里面第k个主题出现多少次。所以这两个都可以通过样本数出来，而\alpha 和\beta 是已知的，所以这个数是可以算的。所以这个都是可以通过编程实现的。
+
+而这个![mark](http://images.iterate.site/blog/image/180728/gGH8hF74FH.png?imageslim)是第m个文档中第k个主题出现的次数，这个是一个常数项，这个与我们要求的东西无关，因此直接扔掉。就得到了最后的式子。
+
+![mark](http://images.iterate.site/blog/image/180728/ClcE8Hg3aH.png?imageslim)![mark](http://images.iterate.site/blog/image/180728/LgFCKKK3gg.png?imageslim)这个词t隶属于第k号主题的个数有多少个![mark](http://images.iterate.site/blog/image/180728/26F9m15mI2.png?imageslim)是m文档里面第k个主题出现多少次。所以这两个都可以通过样本数出来，而\alpha 和\beta 是已知的，所以这个数是可以算的。所以这个都是可以通过编程实现的。
 
 
 
@@ -689,11 +689,11 @@ OK 刚才我们推出了重要的结论。
 词分布和主题分布
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/03aehaLcA0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/03aehaLcA0.png?imageslim)
 
-在已知了z这个隐变量的时候，我们就可以这么写了![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5iE8b0AFih.png?imageslim)，因为根据马尔科夫毯，我们只要把它的父亲孩子和亲家拿出来，那么它就相对独立了。所以我们现在研究![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2AdJfbg7Ah.png?imageslim)就可以这样研究了。
+在已知了z这个隐变量的时候，我们就可以这么写了![mark](http://images.iterate.site/blog/image/180728/5iE8b0AFih.png?imageslim)，因为根据马尔科夫毯，我们只要把它的父亲孩子和亲家拿出来，那么它就相对独立了。所以我们现在研究![mark](http://images.iterate.site/blog/image/180728/2AdJfbg7Ah.png?imageslim)就可以这样研究了。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/41g112J6K2.png?imageslim)是归一化因子。![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ie6A6JmDjC.png?imageslim)是给定一个\alpha 的时候它的主题分布，是一个dirichlet分布。![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d88B4ij4lm.png?imageslim)是给定一个\theta的时候采样的某一个主题，这个就是一个普通的k项分布。那么k项分布乘以它的共轭分布就得到了一个dirichlet分布。而这个![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/951CGeLiIg.png?imageslim)的期望就是![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/20L346mjLH.png?imageslim)。
+![mark](http://images.iterate.site/blog/image/180728/41g112J6K2.png?imageslim)是归一化因子。![mark](http://images.iterate.site/blog/image/180728/ie6A6JmDjC.png?imageslim)是给定一个\alpha 的时候它的主题分布，是一个dirichlet分布。![mark](http://images.iterate.site/blog/image/180728/d88B4ij4lm.png?imageslim)是给定一个\theta的时候采样的某一个主题，这个就是一个普通的k项分布。那么k项分布乘以它的共轭分布就得到了一个dirichlet分布。而这个![mark](http://images.iterate.site/blog/image/180728/951CGeLiIg.png?imageslim)的期望就是![mark](http://images.iterate.site/blog/image/180728/20L346mjLH.png?imageslim)。
 
 **还是有些不清楚？**
 
@@ -702,7 +702,7 @@ OK 刚才我们推出了重要的结论。
 
 ## Gibbs采样算法：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/h5DiG4C1F1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/h5DiG4C1F1.png?imageslim)
 
 
 
@@ -757,38 +757,38 @@ OK 刚才我们推出了重要的结论。
 
 
 
-nw 和 nd 就是这![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0fAA85hHca.png?imageslim)里面的![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j4L4acjF2j.png?imageslim)和![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5HagcGla4i.png?imageslim)
+nw 和 nd 就是这![mark](http://images.iterate.site/blog/image/180728/0fAA85hHca.png?imageslim)里面的![mark](http://images.iterate.site/blog/image/180728/j4L4acjF2j.png?imageslim)和![mark](http://images.iterate.site/blog/image/180728/5HagcGla4i.png?imageslim)
 
 ## Code
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/80fFEAiKa4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/80fFEAiKa4.png?imageslim)
 
 因为我们的文档里卖弄会有一些停止词，所以 stop_words 里面就是停止词库，然后把停止词过滤掉
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/D63Hd7a4HH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/D63Hd7a4HH.png?imageslim)
 
 把第m篇文档中的第i个词在词典中是第几号，然后做gibbs采样。然后计算主题分布和词分布。
 
-gibbs采样用的是：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/djAHe6Bfm7.png?imageslim)这个公式，
+gibbs采样用的是：![mark](http://images.iterate.site/blog/image/180728/djAHe6Bfm7.png?imageslim)这个公式，
 
-计算主题分布用的是：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jB655b4jiH.png?imageslim)这个公式
+计算主题分布用的是：![mark](http://images.iterate.site/blog/image/180728/jB655b4jiH.png?imageslim)这个公式
 
-计算词分布用的是：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5m0m9JJ5Cb.png?imageslim)这个公式
-
-
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j6bJmgc8iB.png?imageslim)
+计算词分布用的是：![mark](http://images.iterate.site/blog/image/180728/5m0m9JJ5Cb.png?imageslim)这个公式
 
 
-
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bBAI972ACh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/j6bJmgc8iB.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aLLdF3ga4f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/bBAI972ACh.png?imageslim)
+
+
+
+![mark](http://images.iterate.site/blog/image/180728/aLLdF3ga4f.png?imageslim)
 
 有人提到了MCMC采样，第一个MC是马尔科夫链，第二个MC是蒙特卡洛，到底什么是MCMC采样？
 
@@ -832,9 +832,9 @@ gibbs采样用的是：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/18072
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b17f9IkD3g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/b17f9IkD3g.png?imageslim)
 
-如果我们有了一个\alpha 值，那么带到![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jacc4jiAGE.png?imageslim)
+如果我们有了一个\alpha 值，那么带到![mark](http://images.iterate.site/blog/image/180728/jacc4jiAGE.png?imageslim)
 这个公式中，总是可以求出新的\alpha 值的。因此，我们可以迭代出来一个\alpha 值，这个就可以作为我的\alpha
 
 

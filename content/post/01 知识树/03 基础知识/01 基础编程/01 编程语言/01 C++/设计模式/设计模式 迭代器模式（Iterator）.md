@@ -111,7 +111,7 @@ Iterator 模式也正是用来解决对一个聚合对象的遍历问题，将�
 Iterator模式典型的结构图为:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jK5G7k7ic1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/jK5G7k7ic1.png?imageslim)
 
 图 2-1： Iterator Pattern 结构图
 

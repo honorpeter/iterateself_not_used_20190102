@@ -108,7 +108,7 @@ Interpreter 模式提供了这样的一个实现语法解释器的框架，笔�
 Interpreter模式典型的结构图为:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EGHh6J9e1D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EGHh6J9e1D.png?imageslim)
 
 图 2-1: Interpreter Pattern 结构图
 

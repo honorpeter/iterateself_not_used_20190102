@@ -5,7 +5,7 @@ date: 2018-09-22
 ---
 # SPP-Net
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180922/3kHB0m7kdB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180922/3kHB0m7kdB.png?imageslim)
 
 
 针对 R-CNN 中卷积神经网络重复运算问题，2015年微软研究院的何恺明等提出一种 SPP-Net 算法，通过在卷积层和全连接层之间加入空间金字塔池化结构（Spatial Pyramid Pooling）代替R-CNN算法在输入卷积神经网络前对各个候选区域进行剪裁、缩放操作使其图像子块尺寸一致的做法。

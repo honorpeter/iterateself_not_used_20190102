@@ -9,7 +9,7 @@ date: 2018-10-17
 
 `File->Setting->Editor->Code Style->Python`
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181017/BLI87hc3K9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181017/BLI87hc3K9.png?imageslim)
 
 
 # 相关资料

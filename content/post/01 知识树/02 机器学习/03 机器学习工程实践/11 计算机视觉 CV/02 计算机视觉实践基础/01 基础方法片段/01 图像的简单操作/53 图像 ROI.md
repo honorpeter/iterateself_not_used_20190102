@@ -28,7 +28,7 @@ img[273:333, 100:160] = ball
 看看结果吧：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181017/9JCkgcjH69.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181017/9JCkgcjH69.png?imageslim)
 
 
 

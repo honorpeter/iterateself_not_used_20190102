@@ -18,19 +18,19 @@ K近邻是一种常用的监督学习方法, 它的工作机制非常简单：
 
 图10.1给出了$k$近邻分类器的一个示意图.显然，$k$是一个重要参数，当$k$取不同值时，分类结果会有显著不同.另一方面，若采用不同的距离计算方式， 则找出的“近邻”可能有显著差别，从而也会导致分类结果有显著不同.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/bCe7ImF5kb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180629/bCe7ImF5kb.png?imageslim)
 
 暂且假设距离计算是“恰当”的，即能够恰当地找出$k$个近邻，我们来对 “最近邻分类器” (1NN,即$k$= 1)在二分类问题上的性能做一个简单的讨论.
 
 
 给定测试样本 x ，若其最近邻样本为 z ，则最近邻分类器出错的概率就是 x 与 z 类别标记不同的概率，即
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/Bk05aE9IbL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180629/Bk05aE9IbL.png?imageslim)
 
 
 假设样本独立同分布，且对任意 x 和任意小正数 $\delta$ ，在 x 附近 $\delta$ 距离范围内总能找到一个训练样本；换言之，对任意测试样本，总能在任意近的范围内找到式(10.1)中的训练样本令 $c^*=arg\,max_{c\in \mathcal{Y} }P(c|x)$ 表示贝叶斯最优分类器的结果，有
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/dg7HGB0EK1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180629/dg7HGB0EK1.png?imageslim)
 
 于是我们得到了有点令人惊讶的结论:最近邻分类器虽简单，但它的泛化错误率不超过贝叶斯最优分类器的错误率的两倍！<span style="color:red;">真的假的，再看看</span>
 

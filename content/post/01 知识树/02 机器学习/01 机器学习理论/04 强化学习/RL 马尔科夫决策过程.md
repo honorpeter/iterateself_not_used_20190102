@@ -177,7 +177,7 @@ OK，马尔科夫性描述的是每个状态的性质。
 
 OK，下面我们借用一个例子来说明这里面的参数和整个的马尔科夫过程：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/g7f3CAe5g3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/g7f3CAe5g3.png?imageslim)
 
 
 
@@ -237,7 +237,7 @@ OK，我们现在把动作（策略）和回报添加进去看下：
 
 OK，我们同样举上面的例子，然后把动作的回报添加进来：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/d4cB2c732c.png?imageslim)上面就是马尔科夫决策过程的示例图，与之前的例子类似。之前讲马尔科夫过程，只有状态，现在有动作集了：
+![mark](http://images.iterate.site/blog/image/180728/d4cB2c732c.png?imageslim)上面就是马尔科夫决策过程的示例图，与之前的例子类似。之前讲马尔科夫过程，只有状态，现在有动作集了：
 
 
 

@@ -12,4 +12,4 @@ date: 2018-09-22
 RON算法通过设计方向连接结构，利用多尺度表征显著改善各种多尺度物体检测，同时为了减少对象搜索空间，在卷积特征图创建objectness prior引导目标对象搜索，训练时将检测器进行联合优化。并通过多任务损失函数联合优化了反向连接、objectness prior和对象检测，因此可直接预测各种特征图所有位置的最终检测结果。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180922/8751e2jiCi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180922/8751e2jiCi.png?imageslim)

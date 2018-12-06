@@ -83,7 +83,7 @@ with open(patn) as f:
 
 这里有一张表格会更全一些：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180615/J2IFk4Cf9d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180615/J2IFk4Cf9d.png?imageslim)
 
 想要写文本到文件里的话，用file的write或writelines方法。比如，我们想给prof_mod.py写一个没有空白行的版本：
 
@@ -117,9 +117,9 @@ with open('../examples/tmp.txt') as f:
 
 下面的方法，有需要再去看吧：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180615/H4KmD1eFd5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180615/H4KmD1eFd5.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180615/AGjjff0mJA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180615/AGjjff0mJA.png?imageslim)
 
 ==到底什么时候用 flush？ 这个tell 和seek 到底是怎么用的？什么时候会用 closed 来判断是否关闭？如果没有关闭怎么办？强制关闭吗？怎么做？==
 

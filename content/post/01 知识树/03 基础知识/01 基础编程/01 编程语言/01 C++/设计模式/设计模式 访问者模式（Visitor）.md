@@ -31,7 +31,7 @@ Visitor 模式则提供了一种解决方案:将更新(变更)封装到一个类
 我们通过Visitor模式解决上面的问题，其典型的结构图为:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Ifl7d1Cd8h.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Ifl7d1Cd8h.png?imageslim)
 
 图2-1: Visitor Pattern 结构图
 

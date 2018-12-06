@@ -122,7 +122,7 @@ y_scores--- <class 'numpy.float64'> 4 [ 0.1   0.4   0.35  0.8 ]
 输出图像：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LBaaCKALba.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/LBaaCKALba.png?imageslim)
 
 
 

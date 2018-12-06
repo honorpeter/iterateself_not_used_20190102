@@ -198,7 +198,7 @@ date: 2018-08-03 12:18:46
 画出的图形如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FfmAjmEG42.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/FfmAjmEG42.png?imageslim)
 
 输出的结果如下：
 

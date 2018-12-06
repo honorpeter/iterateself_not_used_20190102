@@ -10,7 +10,7 @@ Linux 与 Windows 最大的不同之处在于Linux目录结构的设计，在开
 
 登录 Windows 以后，打开 C 盘，会发现一些常见的文件夹，而登录 Linux 以后，执行 `ls -l /` 会发现在 `/` 下包含很多的目录，比如`etc`、`usr`、`var`、`bin`等目录，进入其中一个目录后，看到的还是很多文件和目录。Linux的目录类似树形结构，如图2.43所示。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180712/aGfH4BaG43.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180712/aGfH4BaG43.png?imageslim)
 
 认识Linux的目录结构首先必须认识 Linux 目录结构的最顶端 `/` ，任何目录、文件和设备等都在 `/` 之下。Linux 的文件路径与 Windows 不同，Linux的文件路径类似 `/data/myfde.txt` ， 没有Windows中盘符的概念。初学者开始对 Linux 的目录结构可能不是很习惯，可以把 `/` 当作Windows的盘符（如C盘）。表2.2对Linux中主要的目录进行说明。
 

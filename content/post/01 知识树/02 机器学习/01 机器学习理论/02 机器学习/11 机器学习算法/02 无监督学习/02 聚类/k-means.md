@@ -23,7 +23,7 @@ date: 2018-08-12 20:11:45
 也是别的聚类的方法的基础。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1E9mB39AJm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1E9mB39AJm.png?imageslim)
 
 **arg min 这种式子还是没怎么明白？每次都要遍历多有的样本点吗？簇中心变化率是什么？**
 
@@ -33,7 +33,7 @@ date: 2018-08-12 20:11:45
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CIAFD0HDgL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/CIAFD0HDgL.png?imageslim)
 
 
 
@@ -41,7 +41,7 @@ date: 2018-08-12 20:11:45
 ## K-means过程
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2al4j6CFaD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/2al4j6CFaD.png?imageslim)
 
 K-means本质上做的是一个均方误差的梯度下降。可以这么理解。
 
@@ -51,7 +51,7 @@ K-means本质上做的是一个均方误差的梯度下降。可以这么理解�
 
 因为它是贪心的，所以它的初值是敏感的：所以它做聚类结束的那个点，仅仅是局部最优，不是全局最优：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jkKmHemBlJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/jkKmHemBlJ.png?imageslim)
 
 所以有些时候，我们会重复很多次，随机选初始点进行聚类，最后把几次的结果比较一下，那个好选那个。**有什么更好的方法吗？**
 
@@ -59,14 +59,14 @@ K-means本质上做的是一个均方误差的梯度下降。可以这么理解�
 ## K-means 无法处理异常点
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/jcflFhmd7H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/jcflFhmd7H.png?imageslim)
 
 **上面提到的 K 中值聚类经常用吗？**
 
 
 ## 使用二分 k均值聚类来避免初值敏感
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AD2d3IJc1j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/AD2d3IJc1j.png?imageslim)
 
 我可以算一下各自簇的均方误差，如果我发现，又一个簇的均方误差特别大，总是将不了，那么我就强制把这个簇分成两类，然后再选择某两个簇中心最近的合成一类。这样就又合成了一个类，这样就可以得到第二幅图。**厉害了。**
 
@@ -76,7 +76,7 @@ K-means本质上做的是一个均方误差的梯度下降。可以这么理解�
 ## K-Means适用范围
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bck9fLgJdA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/bck9fLgJdA.png?imageslim)
 
 可见4类和6类，有时候真的无法判断出那个好。所以聚类里面有时候不太方便判断那个是好的，没有一个好的指标 。
 

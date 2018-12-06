@@ -26,7 +26,7 @@ date: 2018-07-25 21:07:13
 整个纽约州的电能由12个“区域”生产和提供，这12个区有自己独立的能源市场。下面这张图可以给你一个直观的印象，大概的一个分布状况。我们这里采集到的数据，也会按照这12个区域做分割，其中区域的名称会写在"name"字段里。<span style="color:red;">嗯。</span>
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180724/FaekHBH3AG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180724/FaekHBH3AG.png?imageslim)
 
 
 ```python

@@ -10,7 +10,7 @@ date: 2018-07-08 11:44:37
 百度搜索框中，输入“北京”，搜索框下面会以北京为前缀，展示“北京爱情故事”、“北京公交”、“北京医院”等等搜索词，输入“[结构之](http://www.baidu.com/s?wd=结构之&rsv_bp=0&ch=&tn=baidu&bar=&rsv_spt=3&ie=utf-8&rsv_sug3=8&rsv_sug=0&rsv_sug4=1075&rsv_sug1=3&inputT=2559)”，会提示“结构之法”，“结构之法 算法之道”等搜索词。
 请问，如何设计此系统，使得空间和时间复杂度尽量低。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/fK3Dcj4mGG.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/fK3Dcj4mGG.jpg?imageslim)
 
 ### 分析与解法
 
@@ -50,7 +50,7 @@ Trie的核心思想是空间换时间。利用字符串的公共前缀来降低�
 
 好比假设有b，abc，abd，bcd，abcd，efg，hii 这6个单词，我们构建的树就是如下图这样的：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/JLa6mGHC1b.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/JLa6mGHC1b.jpg?imageslim)
 
 当时第一次看到这幅图的时候，便立马感到此树之不凡构造了。单单从上幅图便可窥知一二，好比大海搜人，立马就能确定东南西北中的到底哪个方位，如此迅速缩小查找的范围和提高查找的针对性，不失为一创举。
 
@@ -65,7 +65,7 @@ ok，如上图所示，对于每一个节点，从根遍历到他的过程就是
 
 如本题描述所说，在去年的这个时候，当我在搜索框内搜索“北京”时，它下面会提示以“北京”为前缀的诸如“北京爱情故事”，“北京公交”，“北京医院”，且“ 北京爱情故事”展示在第一个：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/fmj6mbCCdI.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/fmj6mbCCdI.jpg?imageslim)
 
 为何输入“北京”，会首先提示“北京爱情故事”呢？因为去年的这个时候，正是《北京爱情故事》这部电视剧上映正火的时候（其上映日期为2012年1月8日，火了至少一年），那个时候大家都一个劲的搜索这部电视剧的相关信息，当10个人中输入“北京”后，其中有8个人会继续敲入“爱情故事”（连起来就是“北京爱情故事”）的时候，搜索引擎对此当然不会无动于衷。
 
@@ -98,7 +98,7 @@ ok，如上图所示，对于每一个节点，从根遍历到他的过程就是
 
 而且你以后就可以告诉你身边的伙伴们，为何输入“结构之”，会提示出来一堆以“结构之”为前缀的词了：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/2mLbJm2bif.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180708/2mLbJm2bif.jpg?imageslim)
 
 方法貌似成型了，但有哪些需要注意的细节呢？如@江申_Johnson所说：“实际工作里，比如当前缀很短的时候，候选词很多的时候，查询和排序性能可能有问题，也许可以加一层索引trie（这层索引可以只索引频率高于某一个阈值的词，很短的时候查这个就可以了。数量不够的话再去查索引了全部词的trie树）；而且有时候不能根据query频率来排，而要引导用户输入信息量更全面的query，或者或不仅仅是前缀匹配这么简单。”
 

@@ -16,7 +16,7 @@ Our goal is to <b>use time and weather to predict energy demand of buildings bas
 There are three types of energy consumption, electricity, chilled water and steam. Chilled water is for cooling and steam is for heating. Chilled water and steam are generated in center plants and are delivered to buildings, just like electricity.
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/7m154leAki.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/7m154leAki.jpg?imageslim)
 
 Image source: http://www.compression.org/distributed-energy/district-energy-distributed-energy-deschematic-640w/
 
@@ -33,11 +33,11 @@ We tried five Machine Learning methods. <b>(1) Linear Regression (LR) (2) Suppor
 
 * Electricity shows a strong periodical pattern. You can clearly see the difference between day and night, weekdays and weekends.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/G28jc6mC1D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/G28jc6mC1D.png?imageslim)
 
 * It looks like during each semester, electricity use ramps up toward a peak at finals, perhaps representative of studying patterns. The students are working harder and harder toward finals. Then there is a dip after semesters end, inlcuding Christmas vacation. The electricity consumption is relatively low during January and summer terms, and spring break, when campus can be relatively empty. (Text partially contributed by Steven)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/dHBlcBccaB.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/dHBlcBccaB.jpg?imageslim)
 
 ### Relationship between Energy Consumption and Features
 
@@ -46,7 +46,7 @@ We tried five Machine Learning methods. <b>(1) Linear Regression (LR) (2) Suppor
 
 * Chilled water and steam are strongly co-related with temperature and humidity. Daily chilled water and steam consumption have a good linear relationship with cooling and heating degrees. Even simple linear regression might be already quite accurate. However, using with weather information to predict hourly chilled water and steam is not suffient.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/KcI99dKi6c.jpg?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/KcI99dKi6c.jpg?imageslim)
 
 ## 5.3 Prediction Accuracy of Different Machine Learning Methods
 
@@ -54,7 +54,7 @@ We tried five Machine Learning methods. <b>(1) Linear Regression (LR) (2) Suppor
 
 ### Linear Regression
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/5F8b6lG51L.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/5F8b6lG51L.png?imageslim)
 
 Advantage of the method: Simple and fast.
 
@@ -62,19 +62,19 @@ Disadvantage of the method: Poor results for large data sets. For example, hourl
 
 ### Support Vector Regression
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/5d6507Cdbf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/5d6507Cdbf.png?imageslim)
 
 ### Gaussian Process Regression
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/f691fEDJlj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/f691fEDJlj.png?imageslim)
 
 ### Random Forests
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/HD1KmIl8cg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/HD1KmIl8cg.png?imageslim)
 
 ### K-Nearest Neighbours
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/iCHD9ikG00.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/iCHD9ikG00.png?imageslim)
 
 * Please note that in Random Forests and K-Nearest Neighbours methods, the training set is larger and the test set is smaller compared with those in other methods.
 
@@ -89,9 +89,9 @@ Disadvantage of the method: Poor results for large data sets. For example, hourl
 下面是各个模型的对比：真的很清楚，厉害了。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/gIiBGKJeee.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/gIiBGKJeee.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/gID65ad8aA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/gID65ad8aA.png?imageslim)
 
 ### Daily Consumption
 
@@ -129,7 +129,7 @@ Disadvantage of the method: Poor results for large data sets. For example, hourl
 
 * It is no doubt that Gaussian Process Regression outperforms other methods even in an <b><i>unfair</b></i> comparison. However, this does not mean Gaussian Process Regression is superior to other methods in genral. The features in Gaussian Process Regression are different from other methods. Maybe it is because we choose the right features for Gaussian Process regression.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/L0E3Fl93CA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/L0E3Fl93CA.png?imageslim)
 
 A sample image of Gaussian Process Regression prediction.
 

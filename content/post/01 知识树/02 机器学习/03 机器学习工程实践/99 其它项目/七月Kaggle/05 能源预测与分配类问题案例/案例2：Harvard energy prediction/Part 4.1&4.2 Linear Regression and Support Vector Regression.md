@@ -143,7 +143,7 @@ plt.legend(loc='upper right')
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/jJL2D8m17g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/jJL2D8m17g.png?imageslim)
 
 
 ```python
@@ -165,7 +165,7 @@ plt.title("Energy vs Predicted Elec.: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/iIb0kehAjG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/iIb0kehAjG.png?imageslim)
 
 
 ### Daily Chilled Water Prediction
@@ -237,7 +237,7 @@ plt.legend(loc='upper right')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/h75Dh4dA36.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/h75Dh4dA36.png?imageslim)
 
 
 
@@ -260,7 +260,7 @@ plt.title("Observed vs Predicted Chilled Water: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/b5mAac9mak.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/b5mAac9mak.png?imageslim)
 
 ### Daily Steam Prediction
 
@@ -331,7 +331,7 @@ plt.legend(loc='upper right')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/71i80DiLLd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/71i80DiLLd.png?imageslim)
 
 
 
@@ -354,7 +354,7 @@ plt.title("Observed vs Predicted Steam: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/hF2GkfLem0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/hF2GkfLem0.png?imageslim)
 
 
 ## Hourly Prediction
@@ -440,7 +440,7 @@ plt.legend(loc='upper right')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/C85bgGjDIJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/C85bgGjDIJ.png?imageslim)
 
 
 ```python
@@ -461,7 +461,7 @@ plt.title("Energy vs Predicted Elec.: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/H7a6DE4aAd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/H7a6DE4aAd.png?imageslim)
 
 
 ### Hourly Chilled Water Prediction
@@ -534,7 +534,7 @@ plt.legend(loc='upper right')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/BIBBDdf142.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/BIBBDdf142.png?imageslim)
 
 
 ```python
@@ -557,7 +557,7 @@ plt.title("Observed vs Predicted Chilled Water: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/ej2c55587h.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/ej2c55587h.png?imageslim)
 
 ### Hourly Steam Prediction
 
@@ -632,7 +632,7 @@ plt.legend(loc='upper right')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/3Gl7l2cJL5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/3Gl7l2cJL5.png?imageslim)
 
 
 ```python
@@ -653,7 +653,7 @@ plt.title("Observed vs Predicted Steam: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/hK19A3Gl69.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/hK19A3Gl69.png?imageslim)
 
 ## 4.2 Support Vector Regression and Cross Validation
 
@@ -803,7 +803,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/55IhdE8jB1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/55IhdE8jB1.png?imageslim)
 
 
 ```python
@@ -826,7 +826,7 @@ plt.title("Energy vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/FG2C9kgJ9d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/FG2C9kgJ9d.png?imageslim)
 
 ### Daily Chilled Water Prediction
 
@@ -893,7 +893,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/2gf1Aki1LG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/2gf1Aki1LG.png?imageslim)
 
 
 ```python
@@ -914,7 +914,7 @@ plt.title("Observed vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/03iKj23A70.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/03iKj23A70.png?imageslim)
 
 ### Daily Steam Prediction
 
@@ -980,7 +980,7 @@ plt.show()
 ```
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/F0CGIJ8B4k.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/F0CGIJ8B4k.png?imageslim)
 
 
 ```python
@@ -1002,7 +1002,7 @@ plt.title("Observed vs Predicted Energy: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/Ljm8kkBFCK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/Ljm8kkBFCK.png?imageslim)
 
 ## Hourly Prediction
 
@@ -1092,7 +1092,7 @@ plt.legend(loc='upper right')
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/LB43Hje8EJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/LB43Hje8EJ.png?imageslim)
 
 
 ```python
@@ -1114,4 +1114,4 @@ plt.title("Observed vs Predicted Elec.: $Y_i$ vs $\hat{Y}_i$")
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180725/K1lkLkE74F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180725/K1lkLkE74F.png?imageslim)

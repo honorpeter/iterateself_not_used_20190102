@@ -190,29 +190,29 @@
 <p>正排表是以文档的ID为关键字，表中记录文档中每个字的位置信息，查找时扫描表中每个文档中字的信息直到找出所有包含查询关键字的文档。正排表结构如图1所示，这种组织方法在建立索引的时候结构比较简单，建立比较方便且易于维护;因为索引是基于文档建立的，若是有新的文档假如，直接为该文档建立一个新的索引块，挂接在原来索引文件的后面。若是有文档删除，则直接找到该文档号文档对因的索引信息，将其直接删除。但是在查询的时候需对所有的文档进行扫描以确保没有遗漏，这样就使得检索时间大大延长，检索效率低下。</p>
 
 <p>尽管正排表的工作原理非常的简单，但是由于其检索效率太低，除非在特定情况下，否则实用性价值不大。
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/m0aE6cg80C.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/m0aE6cg80C.gif" alt="mark" /></p>
 
 <p>##倒排索引</p>
 
 <p>倒排表以字或词为关键字进行索引，表中关键字所对应的记录表项记录了出现这个字或词的所有文档，一个表项就是一个字表段，它记录该文档的ID和字符在该文档中出现的位置情况。由于每个字或词对应的文档数量在动态变化，所以倒排表的建立和维护都较为复杂，但是在查询的时候由于可以一次得到查询关键字所对应的所有文档，所以效率高于正排表。在全文检索中，检索的快速响应是一个最为关键的性能，而索引建立由于在后台进行，尽管效率相对低一些，但不会影响整个搜索引擎的效率。</p>
 
 <p>倒排表的结构图如图2：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/h6BcEC65bI.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/h6BcEC65bI.gif" alt="mark" /></p>
 
 <p>倒排表的索引信息保存的是字或词后继数组模型、互关联后继数组模型条在文档内的位置，在同一篇文档内相邻的字或词条的前后关系没有被保存到索引文件内。</p>
 
 <p>##24.2、倒排索引中提取关键词
 倒排索引是搜索引擎之基石。建成了倒排索引后，用户要查找某个query，如在搜索框输入某个关键词：“结构之法”后，搜索引擎不会再次使用爬虫又一个一个去抓取每一个网页，从上到下扫描网页，看这个网页有没有出现这个关键词，而是会在它预先生成的倒排索引文件中查找和匹配包含这个关键词“结构之法”的所有网页。找到了之后，再按相关性度排序，最终把排序后的结果显示给用户。
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/j5ACDI8GG0.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/j5ACDI8GG0.gif" alt="mark" /></p>
 
-<p>如下，即是一个倒排索引文件（不全），我们把它取名为big_index，<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/I5mAfj3hj7.gif" alt="mark" />文件中每一较短的，不包含有“#####”符号的便是某个关键词，及这个关键词的出现次数。现在要从这个大索引文件中提取出这些关键词，&ndash;Firelf&ndash;，-11，-Winter-，.，007，007：天降杀机，02Chan..如何做到呢？一行一行的扫描整个索引文件么？</p>
+<p>如下，即是一个倒排索引文件（不全），我们把它取名为big_index，<img src="http://images.iterate.site/blog/image/180708/I5mAfj3hj7.gif" alt="mark" />文件中每一较短的，不包含有“#####”符号的便是某个关键词，及这个关键词的出现次数。现在要从这个大索引文件中提取出这些关键词，&ndash;Firelf&ndash;，-11，-Winter-，.，007，007：天降杀机，02Chan..如何做到呢？一行一行的扫描整个索引文件么？</p>
 
 <p>何意？之前已经说过：倒排索引包含词典和倒排记录表两个部分，词典一般有词项（或称为关键词）和词项频率（即这个词项或关键词出现的次数），倒排记录表则记录着上述词项（或关键词）所出现的位置，或出现的文档及网页ID等相关信息。</p>
 
 <p>最简单的讲，就是要提取词典中的词项（关键词）：&ndash;Firelf&ndash;，-11，-Winter-，.，007，007：天降杀机，02Chan&hellip;。</p>
 
 <p>&ndash;Firelf&ndash;（关键词）8（出现次数）
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/339eiFHg0A.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/339eiFHg0A.gif" alt="mark" /></p>
 
 <p>我们可以试着这么解决：通过查找#####便可判断某一行出现的词是不是关键词，但如果这样做的话，便要扫描整个索引文件的每一行，代价实在巨大。如何提高速度呢？对了，关键词后面的那个出现次数为我们问题的解决起到了很好的作用，如下注释所示：</p>
 
@@ -238,7 +238,7 @@
 <p>-11         对应编码为：106101</p>
 
 <p>&hellip;.
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/Dd8eac6G23.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/Dd8eac6G23.gif" alt="mark" /></p>
 
 <p>但细心的朋友一看上图便知，其中第34~39行显示，有重复的编码，那么如何解决这个不重复编码的问题呢？
 用hash表编码？但其极易产生冲突碰撞，为什么？请看：</p>
@@ -257,7 +257,7 @@
 <p>不论使用了哪种碰撞解决策略，都导致插入和查找操作的时间复杂度不再是O(1)。以查找为例，不能通过key定位到桶就结束，必须还要比较原始key（即未做哈希之前的key）是否相等，如果不相等，则要使用与插入相同的算法继续查找，直到找到匹配的值或确认数据不在哈希表中。</p>
 
 <p>PHP是使用单链表存储碰撞的数据，因此实际上PHP哈希表的平均查找复杂度为O(L)，其中L为桶链表的平均长度；而最坏复杂度为O(N)，此时所有数据全部碰撞，哈希表退化成单链表。下图PHP中正常哈希表和退化哈希表的示意图。
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/mJhJE79I7J.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/mJhJE79I7J.gif" alt="mark" /></p>
 
 <p>哈希表碰撞攻击就是通过精心构造数据，使得所有数据全部碰撞，人为将哈希表变成一个退化的单链表，此时哈希表各种操作的时间均提升了一个数量级，因此会消耗大量CPU资源，导致系统无法快速响应请求，从而达到拒绝服务攻击（DoS）的目的。</p>
 
@@ -620,14 +620,14 @@ int insert_string(const char *string_in)
 </code></pre>
 
 <p>程序运行后生成的hashpath.txt文件如下：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/3mA4b3m9Ec.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/3mA4b3m9Ec.gif" alt="mark" /></p>
 
 <p>如上所示，采取暴雪的Hash算法并在插入的时候做适当处理，当再次对上文中的索引文件big_index进行Hash编码后，冲突问题已经得到初步解决。当然，还有待更进一步更深入的测试。</p>
 
 <p>后续添上数目索引1~10000&hellip;</p>
 
 <p>后来又为上述文件中的关键词编了码一个计数的内码，不过，奇怪的是，同样的代码，在Dev C++ 与VS2010上运行结果却不同（左边dev上计数从&rdquo;1&rdquo;开始，VS上计数从“1994014002”开始），如下图所示：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/5ie0a2JHDk.gif" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/5ie0a2JHDk.gif" alt="mark" /></p>
 
 <p>在上面的bigIndex_hashcode函数的基础上，修改如下，即可得到上面的效果：</p>
 

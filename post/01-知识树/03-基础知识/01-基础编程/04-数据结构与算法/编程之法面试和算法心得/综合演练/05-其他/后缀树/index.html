@@ -191,17 +191,17 @@
 
 <p>而后缀树，就是包含一则字符串所有后缀的压缩Trie。把上面的后缀加入Trie后，我们得到下面的结构：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/IeFb7ilLHf.gif" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/IeFb7ilLHf.gif" alt="mark" /></p>
 
 <p>仔细观察上图，我们可以看到不少值得压缩的地方。比如蓝框标注的分支都是独苗，没有必要用单独的节点同边表示。如果我们允许任意一条边里包含多个字 母，就可以把这种没有分叉的路径压缩到一条边。而另外每条边已经包含了足够的后缀信息，我们就不用再给节点标注字符串信息，只需要<strong>在叶节点上标注上每项后缀的起始位置</strong>。</p>
 
 <p>于是我们得到下图：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/8AfFALbeHk.gif" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/8AfFALbeHk.gif" alt="mark" /></p>
 
 <p>这样的结构丢失了某些后缀。比如后<strong>缀X在上图中消失了</strong>，因为它正好是字符串XMADAMYX的前缀。为了避免这种情况，我们也规定<strong>每项后缀不能是其它后缀的前缀</strong>。要解决这个问题其实挺简单，在<strong>待处理的子串后加一个空字串</strong>就行了。例如我们处理XMADAMYX前，先把XMADAMYX变为 XMADAMYX$，于是就得到suffix tree&ndash;后缀树了，如下图所示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/CKE73heAB8.gif" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/CKE73heAB8.gif" alt="mark" /></p>
 
 <h3 id="1-2-后缀树的应用">1.2、后缀树的应用</h3>
 
@@ -211,13 +211,13 @@
 <li>最低共有祖先，<strong>LCA</strong>（Lowest Common Ancestor)，也就是任意两节点（多个也行）最长的共有前缀。比如下图中，节点7同节点1的共同祖先是节点5与节点10，但最低共同祖先是5。 查找LCA的算法是O(1)的复杂度，当然，代价是需要对后缀树做复杂度为O(n)的预处理。</li>
 </ul>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/5c8BFHI21L.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/5c8BFHI21L.jpg?imageslim" alt="mark" /></p>
 
 <ul>
 <li>广义后缀树(Generalized Suffix Tree)。传统的后缀树处理一坨单词的所有后缀。广义后缀树存储任意多个单词的所有后缀。例如下图是单词<strong>XMADAMYX与XYMADAMX的广义后缀 树</strong>。注意我们需要区分不同单词的后缀，所以叶节点用不同的特殊符号与后缀位置配对。</li>
 </ul>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/g3E8LLiacD.gif" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/g3E8LLiacD.gif" alt="mark" /></p>
 
 <p>有了上面的概念，本文引言中提出的查找最长回文问题就相对简单了。咱们来回顾下引言中提出的回文问题的具体描述：找出给定字符串里的最长回文。例如输入XMADAMYX，则输出MADAM。</p>
 

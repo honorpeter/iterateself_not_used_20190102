@@ -204,11 +204,11 @@
 
 <p>R树是B树在高维空间的扩展，是一棵平衡树。每个R树的叶子结点包含了多个指向不同数据的指针，这些数据可以是存放在硬盘中的，也可以是存在内存中。根据R树的这种数据结构，当我们需要进行一个高维空间查询时，我们只需要遍历少数几个叶子结点所包含的指针，查看这些指针指向的数据是否满足要求即可。这种方式使我们不必遍历所有数据即可获得答案，效率显著提高。下图1是R树的一个简单实例：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/DeFghc1id1.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/DeFghc1id1.jpg?imageslim" alt="mark" /></p>
 
 <p>我们在上面说过，R树运用了空间分割的理念，这种理念是如何实现的呢？R树采用了一种称为MBR(Minimal Bounding Rectangle)的方法，在此我把它译作“最小边界矩形”。从叶子结点开始用矩形（rectangle）将空间框起来，结点越往上，框住的空间就越大，以此对空间进行分割。有点不懂？没关系，继续往下看。在这里我还想提一下，R树中的R应该代表的是Rectangle（此处参考wikipedia上关于<a href="http://en.wikipedia.org/wiki/R-tree">R树</a>的介绍），而不是大多数国内教材中所说的Region（很多书把R树称为区域树，这是有误的）。我们就拿二维空间来举例。下图是Guttman论文中的一幅图：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/5mLeK2k65l.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/5mLeK2k65l.jpg?imageslim" alt="mark" /></p>
 
 <p>我来详细解释一下这张图。先来看图（b）</p>
 
@@ -235,7 +235,7 @@
 
 <p>怎么样，其实R树的查找规则跟查地图很像吧？对应下图：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/3kf1gijgJC.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/3kf1gijgJC.jpg?imageslim" alt="mark" /></p>
 
 <h5 id="一棵r树满足如下的性质">一棵R树满足如下的性质：</h5>
 
@@ -253,11 +253,11 @@
 
 <p>其中，tuple-identifier表示的是一个存放于数据库中的tuple，也就是一条记录，它是n维的。I是一个n维空间的矩形，并可以恰好框住这个叶子结点中所有记录代表的n维空间中的点。I=(I0,I1,…,In-1)。其结构如下图所示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/C6bK529djL.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/C6bK529djL.jpg?imageslim" alt="mark" /></p>
 
 <p>下图描述的就是在二维空间中的叶子结点所要存储的信息。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/f9Gj8Fj8EH.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/f9Gj8Fj8EH.jpg?imageslim" alt="mark" /></p>
 
 <p>在这张图中，I所代表的就是图中的矩形，其范围是a&lt;=I0&lt;=b，c&lt;=I1&lt;=d。有两个tuple-identifier，在图中即表示为那两个点。这种形式完全可以推广到高维空间。大家简单想想三维空间中的样子就可以了。这样，叶子结点的结构就介绍完了。</p>
 
@@ -269,7 +269,7 @@
 
 <p>其中，child-pointer是指向孩子结点的指针，I是覆盖所有孩子结点对应矩形的矩形。这边有点拗口，但我想不是很难懂？给张图：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/bf4HiLfmj4.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/bf4HiLfmj4.jpg?imageslim" alt="mark" /></p>
 
 <p>D,E,F,G为孩子结点所对应的矩形。A为能够覆盖这些矩形的更大的矩形。这个A就是这个非叶子结点所对应的矩形。这时候你应该悟到了吧？无论是叶子结点还是非叶子结点，它们都对应着一个矩形。树形结构上层的结点所对应的矩形能够完全覆盖它的孩子结点所对应的矩形。根结点也唯一对应一个矩形，而这个矩形是可以覆盖所有我们拥有的数据信息在空间中代表的点的。</p>
 
@@ -292,9 +292,9 @@ S2:[查找叶子结点] 如果T是叶子结点，如果T所对应的矩形与S�
 
 <p>我们通过下图来理解这个Search操作。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/A5iHc45GG7.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/A5iHc45GG7.jpg?imageslim" alt="mark" /></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/bm9i0m5hl2.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/bm9i0m5hl2.jpg?imageslim" alt="mark" /></p>
 
 <p>阴影部分所对应的矩形为搜索矩形。它与根结点对应的最大的矩形（未画出）有重叠。这样将Search操作作用在其两个子树上。两个子树对应的矩形分别为R1与R2。搜索R1，发现与R1中的R4矩形有重叠，继续搜索R4。最终在R4所包含的R11与R12两个矩形中查找是否有符合条件的记录。搜索R2的过程同样如此。很显然，该算法进行的是一个迭代操作。</p>
 
@@ -328,15 +328,15 @@ AT5：[升高至下一级] 如果N等于L且发生了分裂，则把NN置为PP�
 
 <p>同样，我们用图来更加直观的理解这个插入操作。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/G8fklkkI3g.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/G8fklkkI3g.jpg?imageslim" alt="mark" /></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/KmKiDIbK7d.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/KmKiDIbK7d.jpg?imageslim" alt="mark" /></p>
 
 <p>我们来通过图分析一下插入操作。现在我们需要插入R21这个矩形。开始时我们进行ChooseLeaf操作。在根结点中有两个条目，分别为R1，R2。其实R1已经完全覆盖了R21，而若向R2中添加R21，则会使R2.I增大很多。显然我们选择R1插入。然后进行下一级的操作。相比于R4，向R3中添加R21会更合适，因为R3覆盖R21所需增大的面积相对较小。这样就在B8，B9，B10所在的叶子结点中插入R21。由于叶子结点没有足够空间，则要进行分裂操作。</p>
 
 <p>插入操作如下图所示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/8iaEHGLKf2.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/8iaEHGLKf2.jpg?imageslim" alt="mark" /></p>
 
 <p>这个插入操作其实类似于第一节中B树的插入操作，这里不再具体介绍，不过想必看过上面的伪代码大家应该也清楚了。</p>
 
@@ -371,13 +371,13 @@ CT6：[重新插入孤立的条目] 所有在Q中的结点中的条目需要被�
 
 <p>同样，我们用图直观的说明这个操作。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/1gKBad0k0K.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/1gKBad0k0K.jpg?imageslim" alt="mark" /></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/GKjfGFG30b.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/GKjfGFG30b.jpg?imageslim" alt="mark" /></p>
 
 <p>假设结点最大条目数为4，最小条目数为2。在这张图中，我们的目标是删除记录c。首先使用FindLeaf操作找到c所处在的叶子结点的位置——R11。当c从R11删除时，R11就只有一条记录了，少于最小条目数2，出现下溢，此时要调用CondenseTree操作。这样，c被删除，R11剩余的条目——指向记录d的指针——被插入链表Q。然后向更高一层的结点进行此操作。这样R12会被插入链表中。原理是一样的，在这里就不再赘述。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/liCem4dd2H.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/liCem4dd2H.jpg?imageslim" alt="mark" /></p>
 
 <p>有一点需要解释的是，我们发现这个删除操作向上传递之后，根结点的条目R1也被插入了Q中，这样根结点只剩下了R2。别着急，重新插入操作会有效的解决这个问题。我们插入R3，R12，d至它原来所处的层。这样，我们发现根结点只有一个条目了，此时根据Inert中的操作，我们把这个根结点删除，它的孩子结点，即R5，R6，R7，R3所在的结点被置为根结点。至此，删除操作结束。</p>
 

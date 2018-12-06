@@ -170,11 +170,11 @@
 
 <p><strong>题目</strong>：用 1×1×1, 1×2×1以及2×1×1的三种木块（横绿竖蓝，且绿蓝长度均为2），</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/k1GKD11K3h.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/k1GKD11K3h.png?imageslim" alt="mark" /></p>
 
 <p>搭建高长宽分别为K × 2^N × 1的墙，不能翻转、旋转（其中，0&lt;=N&lt;=1024，1&lt;=K&lt;=4）</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/3928d3bcjE.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/3928d3bcjE.png?imageslim" alt="mark" /></p>
 
 <p>有多少种方案，输出结果</p>
 
@@ -182,19 +182,19 @@
 
 <p>举个例子如给定高度和长度：N=1 K=2，则答案是7，即有7种搭法，如下图所示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/4Aj63fGCKk.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/4Aj63fGCKk.png?imageslim" alt="mark" /></p>
 
 <p><strong>详解</strong>：此题很有意思，涉及的知识点也比较多，包括动态规划，快速矩阵幂，状态压缩，排列组合等等都一一考察了个遍。而且跟一个比较经典的矩阵乘法问题类似：即用1 x 2的多米诺骨牌填满M x N的矩形有多少种方案，M&lt;=5，N&lt;2^31，输出答案mod p的结果</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/IEbJ3HKdDD.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/IEbJ3HKdDD.png?imageslim" alt="mark" /></p>
 
 <p>OK，回到正题。下文使用的图示说明(所有看到的都是横切面)：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/BBfjkaGhdH.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/BBfjkaGhdH.png?imageslim" alt="mark" /></p>
 
 <p>首先说明“？方块”的作用</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/BeGeLc50HF.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/BeGeLc50HF.png?imageslim" alt="mark" /></p>
 
 <p>“？方块”，表示这个位置是空位置，可以任意摆放。</p>
 
@@ -204,11 +204,11 @@
 
 <p>初看此题，你可能最先想到的思路便是穷举：用二维数组模拟墙，从左下角开始摆放，从左往右，从下往上，最后一个格子是右上角那个位置；每个格子把每种可以摆放木块都摆放一次，每堆满一次算一种用摆放方法。为了便于描述，为木块的每个格子进行编号：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/fiFhIBaAk1.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/fiFhIBaAk1.png?imageslim" alt="mark" /></p>
 
 <p>下面演示当n=1,k=2的算法过程（7种情况）：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/7m5mliklKa.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/7m5mliklKa.png?imageslim" alt="mark" /></p>
 
 <p>穷举遍历在数据规模比较小的情况下还撑得住，但在0&lt;=N&lt;=1024这样的数据规模下，此方法则立刻变得有心无力，因此我们得寻找更优化的解法。</p>
 
@@ -224,16 +224,16 @@
 
 <p>首先演示，<strong>n=1,k=2</strong>时的情况，如下图2-1：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/DFme9lLHlL.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/DFme9lLHlL.png?imageslim" alt="mark" /></p>
 
 <p>图 2-1</p>
 
 <p>上图2-1中：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/20kcA3LIaL.png?imageslim" alt="mark" />
+<p><img src="http://images.iterate.site/blog/image/180708/20kcA3LIaL.png?imageslim" alt="mark" />
 表示，左边墙的所有堆放方案数 * 右边墙所有堆放方案数 = 2 * 2 = 4</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/hL849mfC8A.png?imageslim" alt="mark" />
+<p><img src="http://images.iterate.site/blog/image/180708/hL849mfC8A.png?imageslim" alt="mark" />
 表示，当切开处有一个横条的时候，空位置存在的堆放方案数。左边*右边 = 1*1 = 2；剩余两组以此类推。</p>
 
 <p>这个是排列组合的知识。</p>
@@ -242,13 +242,13 @@
 
 <p>其次，我们再来演示下面更具一般性的计算分解，即当<strong>n=2,k=3</strong>的情况，如下图2-2：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/l2ikhG3EKK.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/l2ikhG3EKK.png?imageslim" alt="mark" /></p>
 
 <p>图 2-2</p>
 
 <p>再从分解的结果中，挑选一组进行分解演示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/7i7aFmmbF1.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/7i7aFmmbF1.png?imageslim" alt="mark" /></p>
 
 <p>图 2-3</p>
 
@@ -258,13 +258,13 @@
 
 <p>我们再假设一堵墙n=4，k=3，也就是说，宽度是16，高度是3时，会有以下分解：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/JLKb0IAHIJ.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/JLKb0IAHIJ.png?imageslim" alt="mark" /></p>
 
 <p>图2-4</p>
 
 <p>根据上面的分解的一个中间结果，再进行分解，如下：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/b6480eBDeC.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/b6480eBDeC.png?imageslim" alt="mark" /></p>
 
 <p>图2-5</p>
 
@@ -278,7 +278,7 @@
 
 <p>且在观察图2-5被切分后，所有左边的墙，他们的左边界ls状态始终保持不变，右边界rs状态从0~maxState, maxState = 2^k-1（有绿色方块表示1，没有表示0；ls表示左边界状态，rs表示右边界状态）：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/i4dI7lEj8f.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/i4dI7lEj8f.png?imageslim" alt="mark" /></p>
 
 <p>图2-6</p>
 
@@ -286,7 +286,7 @@
 
 <p>有一点可能要特别说明下，即上文中说，有绿色方块的状态表示标为1，无绿色方块的状态表示标为0，特意又拿上图2-6标记了一些数字，以让绝大部分读者能看得一目了然，如下所示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/5ce4ic3IJ1.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/5ce4ic3IJ1.png?imageslim" alt="mark" /></p>
 
 <p>图2-7</p>
 
@@ -296,29 +296,29 @@
 
 <p>通过图2-4、图2-5、图2-6的分解过程，我们可以总结出下面公式（leftState=最左边边界状态，rightState=最右边边界状态）：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/hjJBHB0C27.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/hjJBHB0C27.png?imageslim" alt="mark" /></p>
 
 <p>即：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/fj0J9kEAgJ.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/fj0J9kEAgJ.png?imageslim" alt="mark" /></p>
 
 <p>接下来，分3点解释下上述公式：</p>
 
 <p><strong>1</strong>、上述函数返回结果是当左边状态为=leftState，右边状态=rightState时木墙的堆砌方案数，相当于直接分解的左右状态都为0的情况，即直接分解f(n,k,0,0)即可。看到这，读者可能便有疑问了，既然直接分解f(n,k,0,0)即可，为何还要加leftstate和leftstate两个变量呢？回顾下2.1.3节中n=4，k=3的演示例子，即当n=4，k=3时，其分解过程即如下图（上文2.1.3节中的图2-4）</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/BIej0404jf.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/BIej0404jf.png?imageslim" alt="mark" /></p>
 
 <p>也就是说，刚开始直接分解f(4,3,0,0)，即n=4，k=3，leftstate=0，rightstate=0，但分解过程中leftstate和rightstate皆从0变化到了maxstate，故才让函数的第3和第4个参数采用leftstate和rightstate这两个变量的形式，公式也就理所当然的写成了f(n,k,leftstate,rightstate)。</p>
 
 <p><strong>2</strong>、然后我们再看下当n=4，k=3分解的一个中间结果，即给定如上图最下面部分中红色框框所框住的木块时：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/gclLm2E7b0.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/gclLm2E7b0.png?imageslim" alt="mark" /></p>
 
 <p>它用方程表示即为 f(2,3,2,5)，怎么得来的呢？其实还是又回到了上文2.1.3节中，当n=2，k=3 时（下图即为上文2.1.3节中的图2-5和图2-6）</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/hEA34DC32b.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/hEA34DC32b.png?imageslim" alt="mark" /></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/k5B4eg4i5i.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/k5B4eg4i5i.png?imageslim" alt="mark" /></p>
 
 <p>左边界ls状态始终保持不变时，右边界rs状态从0~maxState；右边界状态保持不变时，而左边界状态从0~maxState。</p>
 
@@ -512,7 +512,7 @@ namespace HeapBlock
 
 <p>因为它最终都是分解成一列的情况进行处理，这就会导致很慢。为了提高速度，本文使用了缓存机制来提高性能。缓存原理就是，n,k,leftState,rightState相同的墙，返回的结果肯定相同。利用这个特性，每计算一种结果就放入到缓存中，如果下次计算直接从缓存取出。刚开始缓存用字典类实现，有网友给出了更好的缓存方法——数组。这样性能好了很多，也更加简单。程序结构如下图所示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/kgaGjjj4im.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/kgaGjjj4im.png?imageslim" alt="mark" /></p>
 
 <p>上图反应了Heap调用的主要方法调用，在循环中，result 累加 lResult 和 rResult。</p>
 
@@ -550,7 +550,7 @@ namespace HeapBlock
 
 <p>当n=1切分时，需要特殊考虑。如下图：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/24GGCf79C5.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/24GGCf79C5.png?imageslim" alt="mark" /></p>
 
 <p>图2-8</p>
 
@@ -558,9 +558,9 @@ namespace HeapBlock
 
 <p>特别说明下：依据我们上文2.2节中的公式，如果第i行有这种木块，state对应2^(i-1)，加上所有行的贡献就得到state（0就是没有这种横跨木块，2^k-1就是所有行都是横跨木块），然后遍历state，还记得上文中的图2-7么？</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/KA5FdK5kjD.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/KA5FdK5kjD.png?imageslim" alt="mark" /></p>
 
-<p>当第i行被这样的木块<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/90gG1b204J.png?imageslim" alt="mark" />或这样的木块<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/9d7IhImG9K.png?imageslim" alt="mark" />占据时，其各自对应的state值分别为：</p>
+<p>当第i行被这样的木块<img src="http://images.iterate.site/blog/image/180708/90gG1b204J.png?imageslim" alt="mark" />或这样的木块<img src="http://images.iterate.site/blog/image/180708/9d7IhImG9K.png?imageslim" alt="mark" />占据时，其各自对应的state值分别为：</p>
 
 <p>1.当第1行被占据，state=1；</p>
 
@@ -580,7 +580,7 @@ namespace HeapBlock
 
 <p>具体来说，下面图中所有框出来的位置，不能有绿色的：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/KDg4KjgBeg.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/KDg4KjgBeg.png?imageslim" alt="mark" /></p>
 
 <p>③CalcOneColumnHeap(int state)函数用于计算一列时摆放方案数。</p>
 

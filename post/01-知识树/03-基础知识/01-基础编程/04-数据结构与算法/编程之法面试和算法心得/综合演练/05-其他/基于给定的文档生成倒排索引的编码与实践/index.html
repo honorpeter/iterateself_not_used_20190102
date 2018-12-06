@@ -228,7 +228,7 @@ while(all documents have not been processed)
 
 <p>合并时，同时打开所有块对应的文件，内存中维护了为10个块准备的读缓冲区和一个为最终合并索引准备的写缓冲区。每次迭代中，利用优先级队列（如堆结构或类似的数据结构）选择最小的未处理的词项ID进行处理。如下图所示（图片引自深入搜索引擎&ndash;海里信息的压缩、索引和查询，梁斌译），分块索引，分块排序，最终全部合并（说实话，跟MapReduce还是有些类似的）：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/A2k13kDcim.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/A2k13kDcim.jpg?imageslim" alt="mark" /></p>
 
 <p>读入该词项的倒排记录表并合并，合并结果写回磁盘中。需要时，再次从文件中读入数据到每个读缓冲区。</p>
 
@@ -299,14 +299,14 @@ return output_file
 <h2 id="第二节-hash表的构建与实现">第二节、Hash表的构建与实现</h2>
 
 <p>如下，给定如下图所示的正排文档，每一行的信息分别为（中间用##########隔开）：文档ID、订阅源（子频道）、 频道分类、 网站类ID（大频道）、时间、 md5、文档权值、关键词、作者等等。
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/iIJ45Fg1mh.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/iIJ45Fg1mh.jpg?imageslim" alt="mark" /></p>
 
 <p>要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件（注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开）：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/B87ej61gKD.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/B87ej61gKD.jpg?imageslim" alt="mark" /></p>
 
 <p>我们知道：为网页建立全文索引是网页预处理的核心部分，包括分析网页和建立倒排文件。二者是顺序进行，先分析网页，后建立倒排文件（也称为反向索引），如图所示：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/bh8jiJK5AG.jpg?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180708/bh8jiJK5AG.jpg?imageslim" alt="mark" /></p>
 
 <p>正如上图粗略所示，我们知道倒排索引创建的过程如下：</p>
 
@@ -745,7 +745,7 @@ FILE* OpenWriteFile(const char *in_file_path)
 </code></pre>
 
 <p>程序编译运行后，生成的倒排索引文件为index.txt，其与原来给定的正排文档对照如下：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/imDciI5AIH.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/imDciI5AIH.jpg?imageslim" alt="mark" /></p>
 
 <p>有没有发现关键词奥恰洛夫出现在的三篇文章是同一个日期1210的，貌似与本文开头指定的倒排索引格式要求不符？因为第二部分开头中，已明确说明：“注，关键词所在的文章如果是同一个日期的话，是挨在同一行的，用“#”符号隔开”。OK，有疑问是好事，代表你思考了，请直接转至下文第4部分。</p>
 
@@ -754,10 +754,10 @@ FILE* OpenWriteFile(const char *in_file_path)
 <h3 id="对相同日期与不同日期的处理">对相同日期与不同日期的处理</h3>
 
 <p>细心的读者可能还是会注意到：在第二部分开头中，要求基于给定的上述正排文档。生成如第二十四章所示的倒排索引文件是下面这样子的，即是：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/B8F2ABk9EA.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/B8F2ABk9EA.jpg?imageslim" alt="mark" /></p>
 
 <p>也就是说，上面建索引的过程本该是如下的：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/lk0hE2hBb0.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/lk0hE2hBb0.jpg?imageslim" alt="mark" /></p>
 
 <p>与第一部分所述的SMIPI算法有什么区别？对的，就在于对在同一个日期的出现的关键词的处理。如果是遇一旧词，则找到其倒排记录表的位置：相同日期，添加到之前同一日期的记录之后（第一个记录的后面记下同一日期的记录数目）；不同日期，另起一行新增记录。</p>
 
@@ -913,12 +913,12 @@ int main()
 </code></pre>
 
 <p>修改后编译运行，生成的index.txt文件如下：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/CF6H5Eha7d.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/CF6H5Eha7d.jpg?imageslim" alt="mark" /></p>
 
 <h3 id="为关键词添上编码">为关键词添上编码</h3>
 
 <p>如上图所示，已经满足需求了。但可以再在每个关键词的背后添加一个计数表示索引到了第多少个关键词：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/4DCdfh399B.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/4DCdfh399B.jpg?imageslim" alt="mark" /></p>
 
 <h2 id="第五节-算法的二次改进">第五节、算法的二次改进</h2>
 
@@ -1042,7 +1042,7 @@ qsort(words, WORD_MAX_NUM, WORD_MAX_LEN, strcoll);
 </code></pre>
 
 <p>修改后编译运行的效果图如下（用了另外一份更大的数据文件进行测试）：
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180708/kfKCddFG2D.jpg?imageslim" alt="mark" /></p>
+<img src="http://images.iterate.site/blog/image/180708/kfKCddFG2D.jpg?imageslim" alt="mark" /></p>
 
     </div>
 

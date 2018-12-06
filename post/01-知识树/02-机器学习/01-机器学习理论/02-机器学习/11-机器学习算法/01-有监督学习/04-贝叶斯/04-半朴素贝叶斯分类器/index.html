@@ -171,17 +171,17 @@
 
 <p>半朴素贝叶斯分类器的基本想法是适当考虑一部分属性间的相互依赖信息，从而既不需进行完全联合概率计算，又不至于彻底忽略了比较强的属性依赖关系.“独依赖估计” (One-Dependent Estimator,简称ODE)是半朴素贝叶斯分类器最常用的一种策略.顾名思议，所谓“独依赖”就是假设每个属性在 类别之外最多仅依赖于一个其他属性，即</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/9126dKd1LI.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180628/9126dKd1LI.png?imageslim" alt="mark" /></p>
 
 <p>其中 $pa_i$ 为属性 $x_i$ 所依赖的属性，称为 $x_i$ 的父属性.此时，对每个属性 $x_i$ ,若其父属性 $pa_i$ 已知，则可采用类似式(7.20)的办法来估计概率值 $P(x_i|c,pa_i)$ . 于是，问题的关键就转化为如何确定每个属性的父属性，不同的做法产生不同的独依赖分类器.</p>
 
 <p>最直接的做法是假设所有属性都依赖于同一个属性，称为 “超父” (superparent), 然后通过交叉验证等模型选择方法来确定超父属性，由此形成了 SPODE (Super-Parent ODE)方法.例如，在图7.1(b)中， $x_1$ 是超父属性.</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/ak2lc8F694.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180628/ak2lc8F694.png?imageslim" alt="mark" /></p>
 
 <p>TAN (Tree Augmented naive Bayes) [Friedman et al., 1997] 则是在最大带权生成树(maximum weighted spanning tree)算法［Chow and Liu, 1968］的基 础上，通过以下步骤将属性间依赖关系约简为如图 7.1&copy; 所示的树形结构：
 1. 计算任意两个属性之间的条件互信息(conditional mutual information)
-<img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/GK6fc1fc3F.png?imageslim" alt="mark" />
+<img src="http://images.iterate.site/blog/image/180628/GK6fc1fc3F.png?imageslim" alt="mark" />
 2. 以属性为结点构建完全图，任意两个结点之间边的权重设为  $I(x_i,x_j|y)$ 。
 3. 构建此完全图的最大带权生成树，挑选根变量,将边置为有向；
 4. 加入类别结点 $y$ ，增加从 $y$ 到每个属性的有向边.</p>
@@ -190,15 +190,15 @@
 
 <p>AODE (Averaged One-Dependent Estimator) ［Webb et al., 2005］是一种基于集成学习机制、更为强大的独依赖分类器.与SPODE通过模型选择确定 超父属性不同，AODE尝试将每个属性作为超父来构建SPODE,然后将那些具有足够训练数据支撑的SPODE集成起来作为最终结果，即</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/j3mAjbAjFG.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180628/j3mAjbAjFG.png?imageslim" alt="mark" /></p>
 
 <p>其中 $D_{x_i}$ 是在第 i 个属性上取值为 $x_i$ 的样本的集合， $m&rsquo;$ 为阈值常数.显然， AODE需估计 $P(c,x_i)$ 和 $P(x_j|c,x_i)$ .类似式(7.20)，有</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/2kL6CcL3hL.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180628/2kL6CcL3hL.png?imageslim" alt="mark" /></p>
 
 <p>其中 $N<em>i$ 是第 i 个属性可能的取值数, $D</em>{c,x_i}$ 是类别为 c 且在第i个属性上取值为 $x<em>i$ 的样本集合，$D</em>{c,x_i,x_j}$ 是类别为 c 且在第 i 和第 j 个属性上取值分别为 $x_i$ 和 $x_j$ 的样本集合.例如，对西瓜数据集3.0有</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180628/9d91Dlf4Ej.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180628/9d91Dlf4Ej.png?imageslim" alt="mark" /></p>
 
 <p>不难看出，与朴素贝叶斯分类器类似，AODE的训练过程也是“计数”，即在训练数据集上对符合条件的样本进行计数的过程.与朴素贝叶斯分类器相似，.AODE无需模型选择，既能通过预计算节省预测时间，也能采取懒惰学习方式在预测时再进行计数，并且易于实现增量学习.</p>
 

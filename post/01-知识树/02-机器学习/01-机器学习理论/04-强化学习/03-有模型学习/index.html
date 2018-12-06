@@ -178,67 +178,67 @@
 
 <p>由累积奖赏的定义，有状态值函数</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/ca4AAki8GG.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/ca4AAki8GG.png?imageslim" alt="mark" /></p>
 
 <p>为叙述简洁,后面在涉及上述两种累积奖赏时,就不再说明奖赏类别，读者从上下文应能容易地判知。令 $x_0$ 表示起始状态, $a_0$ 表示起始状态上采取的第一个动作；对于 $T$ 步累积奖赏，用下标 $t$ 表示后续执行的步数。我们有状态-动作值函数</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/KBJ04dlKmH.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/KBJ04dlKmH.png?imageslim" alt="mark" /></p>
 
 <p>由于 MDP 具有马尔可夫性质，即系统下一时刻的状态仅由当前时刻的状态决定，不依赖于以往任何状态，于是值函数有很简单的递归形式.对于 $T$ 步累积奖赏有</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/Eaf7E2c8jJ.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/Eaf7E2c8jJ.png?imageslim" alt="mark" /></p>
 
 <p>类似的，对于 $\gamma$ 折扣累积奖赏有</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/5ejbF6G1CL.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/5ejbF6G1CL.png?imageslim" alt="mark" /></p>
 
 <p>需注意的是，正是由于 $P$ 和 $R$ 已知，才可以进行全概率展开.</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/kG53JKbj7b.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/kG53JKbj7b.png?imageslim" alt="mark" /></p>
 
 <p>读者可能已发现，用上面的递归等式来计算值函数，实际上就是一种动态规划算法。对于 $V_T^\pi$ ,可设想递归一直进行下去，直到最初的起点；换言之，从值函数的初始值 $V_0^\pi$ 出发，通过一次迭代能计算出每个状态的单步奖赏 $V_1^\pi$ ，进而从单步奖赏出发，通过一次迭代计算出两步累积奖赏 $V_2^\pi$ ,……图 16.7 中算法遵 循了上述流程，对于 $T$ 步累积奖赏，只需迭代 $T$ 轮就能精确地求出值函数.</p>
 
 <p>对于 $V_\gamma^\pi$ ,由于 $\gamma^t$ 在 t 很大时趋于0,因此也能使用类似的算法，只需将图 16.7算法的第3行根据式(16.8)进行替换。此外，由于算法可能会迭代很多次， 因此需设置一个停止准则.常见的是设置一个阈值 $\theta$ ,若在执行一次迭代后值函数的改变小于 $\theta$ 则算法停止；相应的，图16.7算法第4行中的 $t=T+1$ 需替换为</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/aed7c3hmle.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/aed7c3hmle.png?imageslim" alt="mark" /></p>
 
 <p>有了状态值函数 V,就能直接计算出状态-动作值函数</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/jI5KK3FJ6k.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/jI5KK3FJ6k.png?imageslim" alt="mark" /></p>
 
 <h2 id="2-策略改进">2 策略改进</h2>
 
 <p>对某个策略的累积奖赏进行评估后，若发现它并非最优策略，则当然希望 对其进行改进.理想的策略应能最大化累积奖赏</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/8f6AJJ5FC3.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/8f6AJJ5FC3.png?imageslim" alt="mark" /></p>
 
 <p>一个强化学习任务可能有多个最优策略，最优策略所对应的值函数 $V^*$ 称 为最优值函数，即</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/Fe7Bi9e6i1.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180701/Fe7Bi9e6i1.png?imageslim" alt="mark" /></p>
 
 <p>注意，当策略空间无约束时式(16.12)的 $V^*$ 才是最优策略对应的值函数,例如对 离散状态空间和离散动作空间，策略空间是所有状态上所有动作的组合，共有 |A|IXI种不同的策略.若策略空间有约束，则违背约束的策略是“不合法”的， 即便其值函数所取得的累积奖赏值最大，也不能作为最优值函数.</p>
 
 <p>由于最优值函数的累积奖赏值已达最大，因此可对前面的Bellman等 式(16.7)和(16.8)做一个改动，即将对动作的求和改为取最优：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/JHlFgCgCH1.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180702/JHlFgCgCH1.png?imageslim" alt="mark" /></p>
 
 <p>换言之，</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/CC7G3h2hI0.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180702/CC7G3h2hI0.png?imageslim" alt="mark" /></p>
 
 <p>代入式(16.10)可得最优状态-动作值函数</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/DaLH8BHFme.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180702/DaLH8BHFme.png?imageslim" alt="mark" /></p>
 
 <p>上述关于最优值函数的等式，称为最优 Bellman 等式,其唯一解是最优值函数.</p>
 
 <p>最优 Bellman 等式揭示了非最优策略的改进方式：将策略选择的动作改变 为当前最优的动作.显然，这样的改变能使策略更好。不妨令动作改变后对应的 策略为 $\pi&rsquo;$ ,改变动作的条件为 $Q^{\pi}(x,\pi&rsquo;Ix))\geq V^\pi (x)$ ,以 $\gamma$ 折扣累积奖赏为例，由式(16.10)可计算出递推不等式</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/deDA285EB2.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180702/deDA285EB2.png?imageslim" alt="mark" /></p>
 
 <p>值函数对于策略的每一点改进都是单调递增的，因此对于当前策略 $\pi$ ,可放心地将其改进为</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180702/h59IjCIdJd.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180702/h59IjCIdJd.png?imageslim" alt="mark" /></p>
 
 <p>直到 $pi&rsquo;$ 与 $pi$ 一致、不再发生变化，此时就满足了最优 Bellman 等式，即找到了最优策略.</p>
 

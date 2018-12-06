@@ -218,15 +218,15 @@
 
 <h2 id="之前提到的rnn结构如下">之前提到的RNN结构如下：</h2>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/amEb5BK0cA.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/amEb5BK0cA.png?imageslim" alt="mark" /></p>
 
 <p>即可以写成如下的形式：<strong>嗯 是的</strong></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Hecfm41e7C.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/Hecfm41e7C.png?imageslim" alt="mark" /></p>
 
 <h2 id="而lstm的记忆细胞如下">而LSTM的记忆细胞如下：</h2>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0c29Aj2ba7.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/0c29Aj2ba7.png?imageslim" alt="mark" /></p>
 
 <p>解释一下：</p>
 
@@ -241,13 +241,13 @@
 
 <p>细胞状态（cell state 也就是之前RNN中提到的S，即细胞的记忆）类似于传送带，直接在整个链上运行，只有一些少量的线性交互，信息在上面流传保持不变会很容易。可见，从 (C<em>{t-1}) 到 (C</em>{t}) 是从上一个时刻的记忆到这个时刻的记忆。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/alh50LlGI8.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/alh50LlGI8.png?imageslim" alt="mark" /></p>
 
 <h2 id="说明一下这中间的-sigmoid">说明一下这中间的 Sigmoid</h2>
 
 <p>可以通过 ”门“ 让信息选择性通过，来去除或者增加信息到细胞状态。那么这个”门“是什么呢？它其实就是一个 Sigmoid 层。Sigmoid 层输出0到1之间的概率值，描述每个部分有多少量可以通过，其中0代表不允许任何量通过，1代表允许任意量通过。所以，用这个层与之前过来的记忆做一个 pointwise  乘法就可以控制之前状态过来的记忆信息的通过程度。<strong>为什么不用ReLU？因为要0~1才能起到信息筛选的作用。只有这样的话，C才能会被保持在一定的范围内，如果用ReLU的话，信息就会不断膨胀。</strong></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/47iJKad8DB.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/47iJKad8DB.png?imageslim" alt="mark" /></p>
 
 <h1 id="lstm的几个关键-门-与操作">LSTM的几个关键”门“与操作</h1>
 
@@ -259,7 +259,7 @@
 
 <p><strong>注意：这里的([h_{t-1},x_t])指的是向量的拼接操作。</strong></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/k71DgHLJ7f.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/k71DgHLJ7f.png?imageslim" alt="mark" /></p>
 
 <h2 id="第2步-决定放什么新信息到-细胞状态-中">第2步：决定放什么新信息到”细胞状态“中</h2>
 
@@ -273,7 +273,7 @@
 <li><p>相乘之后，就加到了我的cell state中。</p></li>
 </ol>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Je9KhlHHl8.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/Je9KhlHHl8.png?imageslim" alt="mark" /></p>
 
 <h2 id="第3步-更新-细胞状态">第3步：更新”细胞状态“</h2>
 
@@ -285,7 +285,7 @@
 <li><p>加上(i_t*\widetilde{C_t})。这就是新的候选值，根据我们决定更新每个状态的程度进行变化</p></li>
 </ol>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Kdh6F67lIi.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/Kdh6F67lIi.png?imageslim" alt="mark" /></p>
 
 <h2 id="第4步-基于-细胞状态-得到输出">第4步：基于 ”细胞状态“ 得到输出</h2>
 
@@ -297,7 +297,7 @@
 <li><p>比如我们可能需要单复数信息来确定输出”他“还是”他们“</p></li>
 </ol>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ALHd954jea.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/ALHd954jea.png?imageslim" alt="mark" /></p>
 
 <h1 id="那么为什么lstm比rnn更能解决记忆长时依赖的问题">那么为什么LSTM比RNN更能解决记忆长时依赖的问题？</h1>
 
@@ -315,19 +315,19 @@
 
 <p>为什么只使用我上次的输出和我这次的输入作为忘掉或记住的依据？而不用我之前的状态和现在的状态作为依据？这种变体就是考虑这个的，它增加了 &ldquo;peephole connection&rdquo; ，让门层也会接受细胞状态的输入。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ILlcCccC7g.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/ILlcCccC7g.png?imageslim" alt="mark" /></p>
 
 <h2 id="变种2">变种2：</h2>
 
 <p>为什么遗忘和记忆的概率是不一样的呢？能不能忘掉多少就补充多少？这个变体就是对应这个的。它通过使用 coupled 忘记和输入门。</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lH8cLGBbbF.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/lH8cLGBbbF.png?imageslim" alt="mark" /></p>
 
 <h2 id="变种3-gru-gated-recurrent-unit">变种3：GRU （Gated Recurrent Unit）</h2>
 
 <p>这是一个比较著名的变种。2014年提出，将忘记门和输入门合成了一个单一的更新门，同样还混合了细胞状态和隐藏状态，和其他一些改动，比LSTM更简单。<strong>看起来有些利害，C没有了，但是感觉整个流程又差不多。这个没有细讲，要仔细了解下。</strong></p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KfF4fffDb6.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180728/KfF4fffDb6.png?imageslim" alt="mark" /></p>
 
 <h1 id="rnn拓展">RNN拓展</h1>
 

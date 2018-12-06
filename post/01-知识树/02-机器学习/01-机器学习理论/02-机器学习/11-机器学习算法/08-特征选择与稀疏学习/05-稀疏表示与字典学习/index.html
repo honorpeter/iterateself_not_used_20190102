@@ -179,7 +179,7 @@
 
 <p>给定数据集 ${x_1,x_2,\cdots ,x_m}$ 字典学习最简单的形式为</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/2l1Ke7cA1c.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180629/2l1Ke7cA1c.png?imageslim" alt="mark" /></p>
 
 <p>其中  $B\in\mathbb{R}^{d\times k}$ 为字典矩阵，k 称为字典的词汇量，通常由用户指定，$\alpha_i\in \mathbb{R}^{k}$ 则是样本 $\x_i\in \mathbb{R}^d$ 的稀疏表示.显然，式(11.15)的第一项是希望 $\alpha_i$ 能很好地重构 $x_i$ ,第二项则是希望 $\alpha_i$ 尽量稀疏.</p>
 
@@ -187,15 +187,15 @@
 
 <p>首先在第一步，我们固定住字典 B ，若将式(11.15)按分量展开，可看出其中 不涉及 $\alpha_i^u\alpha_i^v$$(u\neq v)$ 这样的交叉项，于是可参照 LASSO 的解法求解下式，从而为每个样本 $x_i$ 找到相应的 $\alpha_i$ ：</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/0Hh3LdchI5.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180629/0Hh3LdchI5.png?imageslim" alt="mark" /></p>
 
 <p>在第二步，我们固定住 $\alpha_i$ 来更新字典B，此时可将式(11.15) 写为</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/03fLC8G9ag.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180629/03fLC8G9ag.png?imageslim" alt="mark" /></p>
 
 <p>其中 $X=(x_1,x_2,\cdots ,x_m)\in \mathbb{R}^{d\times m}$ ，$A=(\alpha_1,\alpha_2,\cdots ,\alpha_m)\in \mathbb{R}^{k\times m}$,$||\cdot ||_F$ 是矩阵的 Erobenius 范数。式(11.17)有多种求解方法，常用的有基于逐列更新策略的 KSVD 。令 $b_i$ 表示字典矩阵 B 的第i列，$\alpha^i$ 表示稀疏矩阵 A 的第 i 行，式(11.17)可重写为</p>
 
-<p><img src="http://pacdb2bfr.bkt.clouddn.com/blog/image/180629/akHEB83g6L.png?imageslim" alt="mark" /></p>
+<p><img src="http://images.iterate.site/blog/image/180629/akHEB83g6L.png?imageslim" alt="mark" /></p>
 
 <p>在更新字典的第 i 列时，其他各列都是固定的，因此 $E<em>i=\sum</em>{j\neq i}b_j\alpha^j$ 是固定的，于是最小化式(11.18)原则上只需对 $E_i$ 进行奇异值分解以取得最大奇异值所对应的正交向量。然而，直接对 $E_i$ 进行奇异值分解会同时修改 $b_i$ 和 $\alpha^i$ ，从而可能破坏 A 的稀疏性.为避免发生这种情况，KSVD 对 $E_i$  和 $\alpha^i$ 进行专门处理: $\alpha^i$ 仅保留非零元素， $E_i$ 则仅保留 $b_i$ 与 $\alpha^i$ 的非零元素的乘积项，然后再进行奇异值分解，这样就保持了第一步所得到的稀疏性.</p>
 

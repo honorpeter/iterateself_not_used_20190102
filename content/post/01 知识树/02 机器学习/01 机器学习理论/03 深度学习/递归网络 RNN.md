@@ -46,7 +46,7 @@ date: 2018-07-28 22:56:15
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1G3mgJECk2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1G3mgJECk2.png?imageslim)
 
 
 
@@ -96,12 +96,12 @@ RNN学习出来的是程序，不是函数。**什么意思？ 神经网络前�
 即假设 \(x_{t+1 }\)  除了与之前的 x 有关，还与之前的状态变量 z 有关：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/16fclLFbF0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/16fclLFbF0.png?imageslim)
 
 而 z 本身也是与之前的 x 和隐含状态有关的：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LiGEa3JCKl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/LiGEa3JCKl.png?imageslim)
 
 
 
@@ -117,19 +117,19 @@ RNN学习出来的是程序，不是函数。**什么意思？ 神经网络前�
 我们知道之前的模型是关于t的，但是我们可以按照时间为横坐标展开成一个固定的网络结构。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/722CL7970b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/722CL7970b.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9jFg7iggEJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9jFg7iggEJ.png?imageslim)
 
 h_t里面的维度对应到全连接网络里面的hidden-unit number ，因此这个h的维度是与模型的复杂度直接相关的。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/dAGkLi9AA6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/dAGkLi9AA6.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9EBKkc5H4a.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9EBKkc5H4a.png?imageslim)
 
 
 
@@ -144,11 +144,11 @@ h_t里面的维度对应到全连接网络里面的hidden-unit number ，因此�
 在后向计算的时候，同样相同的矩阵也会乘以多次
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FEAm5A4cj4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/FEAm5A4cj4.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/i2f4lbgjaA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/i2f4lbgjaA.png?imageslim)
 
 
 
@@ -159,17 +159,17 @@ h_t里面的维度对应到全连接网络里面的hidden-unit number ，因此�
 RNN前向计算
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GL7ImeJBC5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/GL7ImeJBC5.png?imageslim)
 
 计算W的偏导，需要把所有Time Step加起来
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Bjm63746Dj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Bjm63746Dj.png?imageslim)
 
 应⽤用链式规则
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/B7K9gajflh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/B7K9gajflh.png?imageslim)
 
 
 
@@ -177,22 +177,22 @@ RNN前向计算
 ### BPTT算法：计算实现
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/15K3EjkJ5G.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/15K3EjkJ5G.png?imageslim)
 
 BPTT算法：梯度 vanishing/exploding 现象分析
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bd1iel08Ff.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/bd1iel08Ff.png?imageslim)
 
 BPTT算法：解决⽅方案
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6BFDkKAbBb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/6BFDkKAbBb.png?imageslim)
 
 Long Term Memory?
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/05ldJ5k5CG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/05ldJ5k5CG.png?imageslim)
 
 
 
@@ -203,9 +203,9 @@ Long Term Memory?
 应⽤用最为广泛、成功的RNN
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l4BgjGJKfm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/l4BgjGJKfm.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bjfb5aCa4m.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/bjfb5aCa4m.png?imageslim)
 
 
 
@@ -218,9 +218,9 @@ Long Term Memory?
 Layer 把 输入维度x变成输出维度h
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/EE7hJ08HiH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/EE7hJ08HiH.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4HK93Fjhb8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/4HK93Fjhb8.png?imageslim)
 
 ×处为gate
 
@@ -232,28 +232,28 @@ Layer 把 输入维度x变成输出维度h
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3ED4L1hgba.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/3ED4L1hgba.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1GBkCaK3Ld.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1GBkCaK3Ld.png?imageslim)
 
 LSTM: update cell
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b0G678HfbF.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/798mLm791I.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/b0G678HfbF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/798mLm791I.png?imageslim)
 
 LSTM: output
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2L76Ch6A5e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/2L76Ch6A5e.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/b7hIfgLh3L.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/b7hIfgLh3L.png?imageslim)
 
 LSTM
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a1HlagIj6K.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/a1HlagIj6K.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/a1f3f4dcF2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/a1f3f4dcF2.png?imageslim)
 
 
 
@@ -265,7 +265,7 @@ LSTM
 
 ### Gated Recurrent Unit
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kc6I455fAA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kc6I455fAA.png?imageslim)
 
 
 
@@ -283,7 +283,7 @@ LSTM 具备一定抑制梯度 vanishing/exploding 特性
 * 网络中有多层
 * 复杂的结构能够处理更大范围的动态性
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/BdhDb6F7dG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/BdhDb6F7dG.png?imageslim)
 
 
 ## RNN算法应用
@@ -308,7 +308,7 @@ LSTM 具备一定抑制梯度 vanishing/exploding 特性
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/G56hj41jK5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/G56hj41jK5.png?imageslim)
 
 
 

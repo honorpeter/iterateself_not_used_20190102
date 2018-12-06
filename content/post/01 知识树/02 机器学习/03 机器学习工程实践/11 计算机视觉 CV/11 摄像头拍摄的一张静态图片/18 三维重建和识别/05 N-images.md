@@ -38,7 +38,7 @@ Batched method: order of images can be random
 
 每个camera 都可以构造出 u、v，From measurement $[u,v]_i$ find X
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/ECG950kmJf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/ECG950kmJf.png?imageslim)
 
 
 这个就是一堆 image 的成像原理
@@ -47,7 +47,7 @@ Batched method: order of images can be random
 Example
 Bundle adjustment reconstruction
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/hdJhbLjGk7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/hdJhbLjGk7.png?imageslim)
 
 http://www.cse.cuhk.edu.hk/%7Ekhwong/demo/canyon2b2.mpg
 
@@ -63,13 +63,13 @@ http://www.cse.cuhk.edu.hk/%7Ekhwong/demo/canyon2b2.mpg
 如果是一台摄像机位置一直在变化，然后把这些位置变化后排到的图像看做是 n 太摄像机，那么再最图像进行处理就是 Kalman Filter。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/JGf82H2c45.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/JGf82H2c45.png?imageslim)
 
 有一个最先开始的state，由于相机在不断的移动，因此不断循环
 
 Kalman filter example：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/C0B9ja5i2E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/C0B9ja5i2E.png?imageslim)
 
 
 

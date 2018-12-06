@@ -113,7 +113,7 @@ date: 2018-08-12 17:13:36
     ldd a.out
     ```
 
-    ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/idAEcaGB9c.png?imageslim)
+    ![mark](http://images.iterate.site/blog/image/180812/idAEcaGB9c.png?imageslim)
 
 5. 二进制文件分析：objdump
     - 反汇编，需要理解汇编语言
@@ -336,7 +336,7 @@ date: 2018-08-12 17:13:36
     top
     ```
 
-    ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/5mKhF56miK.png?imageslim)
+    ![mark](http://images.iterate.site/blog/image/180812/5mKhF56miK.png?imageslim)
 
 3. 打开文件查询：lsof
    - 查看占用某端口的进程
@@ -548,7 +548,7 @@ date: 2018-08-12 17:13:36
     dig baidu.com
     ```
 
-    ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/iI6G3icHEm.png?imageslim)
+    ![mark](http://images.iterate.site/blog/image/180812/iI6G3icHEm.png?imageslim)
 
 
 

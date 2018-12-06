@@ -54,7 +54,7 @@ OK，现在才开始写配置文件：
 * 里面写上：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7eaL4gd7e1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7eaL4gd7e1.png?imageslim)
 
 
 

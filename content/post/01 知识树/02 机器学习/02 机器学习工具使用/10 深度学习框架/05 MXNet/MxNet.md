@@ -36,18 +36,18 @@ http://mxnet.incubator.apache.org/index.html
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IfCd4G68iE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IfCd4G68iE.png?imageslim)
 
 
 
 
 ### 定义网络
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Eh47G8LFJK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Eh47G8LFJK.png?imageslim)
 
 ### 训练
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/K8mfl2ag5g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/K8mfl2ag5g.png?imageslim)
 
 
 
@@ -57,7 +57,7 @@ http://mxnet.incubator.apache.org/index.html
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/c7lHH00maH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/c7lHH00maH.png?imageslim)
 
 
 
@@ -70,15 +70,15 @@ ResNet通过直接将input直接送到后续层里，在一定程度上克服了
 试试MxNet，它对显存的利用率高一些。**什么是显存的利用率？为什么对显存的利用率更高一些？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/74dJe0lC0G.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/74dJe0lC0G.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7A5cIfL1iL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7A5cIfL1iL.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8CJK9Jd469.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8CJK9Jd469.png?imageslim)
 
 
 

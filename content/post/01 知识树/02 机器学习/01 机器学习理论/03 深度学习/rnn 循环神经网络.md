@@ -37,20 +37,20 @@ RNN 一般在自然语言处理中用的比较多。其实只要是序列到序�
 
 可以模仿论文（连公式都格式很正确）
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1hE8H1BeCG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1hE8H1BeCG.png?imageslim)
 
 <span style="color:red;">对于现在自动写新闻的还是要了解下。想知道具体是怎么实现的。</span>
 
 可以模仿linux内核代码 “写程序”，它不能学到逻辑，但是能学到排布：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fj7bL3iH4D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/fj7bL3iH4D.png?imageslim)
 
 <span style="color:red;">不知道现在的自动程序开发到什么程度了。要了解下。</span>
 
 
 模仿郭敬明的小说：可以模仿出小说的语言风格。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5Ef85F8h4F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/5Ef85F8h4F.png?imageslim)
 
 <span style="color:red;">语言风格到底是什么呢？</span>
 
@@ -68,7 +68,7 @@ bing 用的就是 SMT，google 用的就是 NMT。<span style="color:red;">不�
 
 NMT 就是 RNN 最擅长的事情：序列到序列的学习。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GJDgb05A3B.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/GJDgb05A3B.png?imageslim)
 
 
 
@@ -77,7 +77,7 @@ NMT 就是 RNN 最擅长的事情：序列到序列的学习。
 
 会根据图片的内容来用文字进行描述。也可以对一个图片进行提问，然后会给出答案。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HdlhIleF67.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/HdlhIleF67.png?imageslim)
 
 <span style="color:red;">不知道现在的进展是什么样了？对图片进行提问真的可以吗？是什么原理？这样的网络是怎么训练出来的？图像和问题同时作为输入？答案作为label？涉及图片的时候也用RNN吗？</span>
 
@@ -93,7 +93,7 @@ language model 指的是，有一个序列，我们知道了前n-1个element是�
 
 简单来看，把序列按照时间展开
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/K56eAIjEG6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/K56eAIjEG6.png?imageslim)
 
 解释如下：**还是很清楚的**
 
@@ -122,7 +122,7 @@ language model 指的是，有一个序列，我们知道了前n-1个element是�
 有一个经典的例子是char-rnn，上面的文本的模仿的三个例子都是这个模型生成的。**这个就是char-rnn 吗？想看一下char-rnn。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/f7Kkib6199.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/f7Kkib6199.png?imageslim)
 
 RNN生成模型模仿语言风格例子：
 
@@ -176,7 +176,7 @@ RNN生成模型模仿语言风格例子：
 在有些情况下，当前的输入不只依赖于之前的序列元素，还可能依赖于之后的序列元素，比如说从一段话踢掉部分词，让你补全。那么这个时候，只用之前的RNN感觉就有点不足了，那么怎么办呢？可以用双向的RNN。当然，单向的RNN可以做的事情也可以用双向来做，可能会捕捉到更多的信息
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/L77Bf8IllF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/L77Bf8IllF.png?imageslim)
 
 上面的h是hidden的意思，对应于之前的RNN中的S。
 
@@ -191,7 +191,7 @@ Tensorflow中是有双向的RNN的。 MxNet里面也是有的。
 和双向RNN的区别是每一步/每个时间点我们设定多层结构
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J1A76D0k80.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/J1A76D0k80.png?imageslim)
 
 **说实话这个没听明白。为什么有这些隐层？训练的时候是什么样的？看一下相关的资料。**
 
@@ -212,7 +212,7 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 ## 举个例子：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6GbL3BGHj3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/6GbL3BGHj3.png?imageslim)
 
 比如说，我依次输入的是："我"，“爱”，“北京“，”天安门“，”广场“，然后想要的输出是：“爱”，“北京“，”天安门“，”广场“。假设我的词典中有4万个词。即，每个输出都是一个4万*1的一个概率向量。
 
@@ -223,12 +223,12 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 我们到每个时间点的时候都又一个输出，都会计算一个loss， 交叉熵损失 softmax ，**交叉熵损失函数是这样的吗？**：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fm92AGjEfh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/fm92AGjEfh.png?imageslim)
 
 现在我要计算所有的loss，因此，沿着时间轴把所有的loss加在一起：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KmdJ02FH4B.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/KmdJ02FH4B.png?imageslim)
 
 
 
@@ -241,22 +241,22 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 首先我们知道要求这么一个偏导：**为什么是针对W的？U和V不用管吗？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1LA4IAFG4F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1LA4IAFG4F.png?imageslim)
 
 我们单独看一个位置的：**是的**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8BCcD76JBJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/8BCcD76JBJ.png?imageslim)
 
 但是呢：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mlcJkI58L8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/mlcJkI58L8.png?imageslim)
 
 我们发现，s3与s2还有关系，即，s3对于W的偏导我们没有办法直接求出，因此我们只能沿着时间轴把s2往前展开：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2DDiKkIImJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/2DDiKkIImJ.png?imageslim)
 
 
 
@@ -265,12 +265,12 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CG1Hi0BHKL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/CG1Hi0BHKL.png?imageslim)
 
 即可以写成：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hAKA7LmhkL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/hAKA7LmhkL.png?imageslim)
 
 那么这个就是BPTT，可见，与BP还是有本质的区别的，就是要涉及之前的各个状态的偏导。
 
@@ -292,12 +292,12 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 我们找了一个Alexnet，输进去一张图片之后，会得到一个4096*1的向量。这个向量含有图片的很多的信息，相当于对这个图片抽取了特征信息。然后，我把这个向量也添加到我们的RNN中。如下图所示：即把我的4096*1的向量以一个新的权重\(W_{ih}\)叠加到我的RNN的公式中。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J6b3CA9ECH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/J6b3CA9ECH.png?imageslim)
 
 实际上，上面这个公式写的有些不清楚，后面把图修一下，公式实际上就是：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Kl2dCihjih.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Kl2dCihjih.png?imageslim)
 
 现在在括号中添加了 \(W_{ih}*v\) 这一项。
 
@@ -306,7 +306,7 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 **但是我没有很明白，为什么这样直接的添加是有用的？为什么只在第一步的时候添加这一项？而且，起头的东西是什么？也就是说这个时候的\(x_0\)是什么？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lh6B56BIgK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/lh6B56BIgK.png?imageslim)
 
 这个是简单的一种image caption ，有更厉害的attention model，这个后面会讲到。**讲到之后我这个地方提一下。对比一下。**
 
@@ -317,12 +317,12 @@ MLP（DNN）与CNN用BP算法求偏导，BPTT和BP是一个思路。**MLP（DNN�
 有图片描述数据集 http://mscoco.org   里面有12w张图片，5句话描述每张图片。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l1maJh0LGd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/l1maJh0LGd.png?imageslim)
 
 下面是一些attention model 产生的结果：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fAhc8CA7l2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/fAhc8CA7l2.png?imageslim)
 
 **最好自己试一下，最起码要找一个已经实现的代码看一遍。**
 

@@ -120,7 +120,7 @@ Google Deepmind公司最新发布的AlphaZero~\cite{silver2017mastering}就实�
 远领域迁移学习示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AKc2ja2BhF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/AKc2ja2BhF.png?imageslim)
 
 传递迁移学习目前的研究成果还十分稀少。我们期待这一领域会有更多好的成果出现。
 
@@ -159,7 +159,7 @@ Google Deepmind公司最新发布的AlphaZero~\cite{silver2017mastering}就实�
 终身迁移学习示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EL9EccaFhK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EL9EccaFhK.png?imageslim)
 
 **有些厉害了。**
 

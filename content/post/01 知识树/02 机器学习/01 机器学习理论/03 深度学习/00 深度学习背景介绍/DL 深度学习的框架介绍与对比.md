@@ -23,19 +23,19 @@ date: 2018-07-28 23:15:49
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0Fi75GGGgB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0Fi75GGGgB.png?imageslim)
 
 
 
 速度对比：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0BikjI4kCb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0BikjI4kCb.png?imageslim)
 
 训练截断消耗存储（batch=128）**这个图对吗？怎么是naive什么的？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/F017I786Fl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/F017I786Fl.png?imageslim)
 
 
 
@@ -73,7 +73,7 @@ date: 2018-07-28 23:15:49
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/C5l874aedc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/C5l874aedc.png?imageslim)
 
 基于层模型
 

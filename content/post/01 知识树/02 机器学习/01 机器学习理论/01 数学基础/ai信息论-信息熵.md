@@ -33,7 +33,7 @@ date: 2018-07-27 20:38:44
 OK，举个例子来说明什么是信息熵：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8lI6kj23dd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8lI6kj23dd.png?imageslim)
 
 OK，我们先来求特征列的信息熵，特征列功3种颜色，有5个样本，则，最终的特征列信息熵计算如下：
 

@@ -69,7 +69,7 @@ int main()
 
 运行结果：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/7H5b81CkAe.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/7H5b81CkAe.png?imageslim)
 
 说明：
 

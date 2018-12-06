@@ -45,19 +45,19 @@ LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 c
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/amEb5BK0cA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/amEb5BK0cA.png?imageslim)
 
 即可以写成如下的形式：**嗯 是的**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Hecfm41e7C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Hecfm41e7C.png?imageslim)
 
 
 
 
 ## 而LSTM的记忆细胞如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0c29Aj2ba7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0c29Aj2ba7.png?imageslim)
 
 解释一下：
 
@@ -74,7 +74,7 @@ LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 c
 细胞状态（cell state 也就是之前RNN中提到的S，即细胞的记忆）类似于传送带，直接在整个链上运行，只有一些少量的线性交互，信息在上面流传保持不变会很容易。可见，从 \(C_{t-1}\) 到 \(C_{t}\) 是从上一个时刻的记忆到这个时刻的记忆。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/alh50LlGI8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/alh50LlGI8.png?imageslim)
 
 ## 说明一下这中间的 Sigmoid
 
@@ -82,7 +82,7 @@ LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 c
 可以通过 ”门“ 让信息选择性通过，来去除或者增加信息到细胞状态。那么这个”门“是什么呢？它其实就是一个 Sigmoid 层。Sigmoid 层输出0到1之间的概率值，描述每个部分有多少量可以通过，其中0代表不允许任何量通过，1代表允许任意量通过。所以，用这个层与之前过来的记忆做一个 pointwise  乘法就可以控制之前状态过来的记忆信息的通过程度。**为什么不用ReLU？因为要0~1才能起到信息筛选的作用。只有这样的话，C才能会被保持在一定的范围内，如果用ReLU的话，信息就会不断膨胀。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/47iJKad8DB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/47iJKad8DB.png?imageslim)
 
 
 # LSTM的几个关键”门“与操作
@@ -100,7 +100,7 @@ LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 c
 **注意：这里的\([h_{t-1},x_t]\)指的是向量的拼接操作。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/k71DgHLJ7f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/k71DgHLJ7f.png?imageslim)
 
 
 
@@ -121,7 +121,7 @@ LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 c
   3. 相乘之后，就加到了我的cell state中。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Je9KhlHHl8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Je9KhlHHl8.png?imageslim)
 
 
 
@@ -142,7 +142,7 @@ LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 c
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Kdh6F67lIi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Kdh6F67lIi.png?imageslim)
 
 
 
@@ -162,7 +162,7 @@ LSTM 是 RNN的一种，大体结构几乎一样，但是：它的记忆细胞 c
   3. 比如我们可能需要单复数信息来确定输出”他“还是”他们“
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ALHd954jea.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ALHd954jea.png?imageslim)
 
 
 
@@ -191,7 +191,7 @@ LSTM的变体实际上是非常多的。
 为什么只使用我上次的输出和我这次的输入作为忘掉或记住的依据？而不用我之前的状态和现在的状态作为依据？这种变体就是考虑这个的，它增加了 "peephole connection" ，让门层也会接受细胞状态的输入。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ILlcCccC7g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ILlcCccC7g.png?imageslim)
 
 
 
@@ -202,7 +202,7 @@ LSTM的变体实际上是非常多的。
 为什么遗忘和记忆的概率是不一样的呢？能不能忘掉多少就补充多少？这个变体就是对应这个的。它通过使用 coupled 忘记和输入门。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lH8cLGBbbF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/lH8cLGBbbF.png?imageslim)
 
 
 
@@ -212,7 +212,7 @@ LSTM的变体实际上是非常多的。
 这是一个比较著名的变种。2014年提出，将忘记门和输入门合成了一个单一的更新门，同样还混合了细胞状态和隐藏状态，和其他一些改动，比LSTM更简单。**看起来有些利害，C没有了，但是感觉整个流程又差不多。这个没有细讲，要仔细了解下。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KfF4fffDb6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/KfF4fffDb6.png?imageslim)
 
 
 

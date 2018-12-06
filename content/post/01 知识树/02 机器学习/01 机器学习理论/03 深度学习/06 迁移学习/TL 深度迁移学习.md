@@ -98,7 +98,7 @@ tags:
 深度与非深度迁移学习方法的结果对比：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Ce7FG3idGE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Ce7FG3idGE.png?imageslim)
 
 本部分重点介绍深度迁移学习的基本思路：
 
@@ -132,7 +132,7 @@ tags:
 深度神经网络进行特征提取到分类的简单示例：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jb8m51faDK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/jb8m51faDK.png?imageslim)
 
 这表达了一个什么事实呢？概括来说就是：
 
@@ -196,7 +196,7 @@ tags:
 实验结果如下图所示：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/35CIGAfcEH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/35CIGAfcEH.png?imageslim)
 
 这个图说明了什么呢？
 
@@ -245,7 +245,7 @@ tags:
 把上面的结果合并就得到了下面一张图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/9BfK8jJ0Hh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/9BfK8jJ0Hh.png?imageslim)
 
 至此，AnB 和 BnB 基本完成。
 
@@ -254,7 +254,7 @@ tags:
 为了排除这些影响，作者又分了一下数据集，这次使得 A和B里几乎没有相似的类别。在这个条件下再做 AnB，与原来精度比较（0\%为基准）得到了下图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gcCBg65bgI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/gcCBg65bgI.png?imageslim)
 
 **这个图中的 random splits 指的是什么？m/n split ? random features？**
 
@@ -332,7 +332,7 @@ OK，上面我们知道了深度网络是可迁移的，并且，finetune威力�
 下图展示了一个简单的finetune过程。从图中我们可以看到，我们采用的预训练好的网络非常复杂，如果直接拿来从头开始训练，则时间成本会非常高昂。因此我们将此网络进行改造，固定前面若干层的参数，只针对我们的任务，微调后面若干层。这样，网络训练速度会极大地加快，而且对提高我们任务的表现也具有很大的促进作用。**但是，根据上面的研究结果，不是 前几层才是抽取 general feature 的吗？只切掉后面一层的话，虽然训练速度很快，但是效果会不会差比较多？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/a39jeJEfHm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/a39jeJEfHm.png?imageslim)
 
 
 
@@ -459,7 +459,7 @@ Finetune 并不只是针对深度神经网络有促进作用，对传统的非�
 下图是DDC方法的示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/iHKh7bd717.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/iHKh7bd717.png?imageslim)
 
 DDC 固定了 AlexNet 的前7层，在第8层(分类器前一层)上加入了自适应的度量。自适应度量方法采用了被广泛使用的 MMD 准则。DDC 方法的损失函数表示为：
 
@@ -502,7 +502,7 @@ DAN的优化目标也由两部分组成：损失函数和自适应损失。损�
 DAN的网络结构如下图所示：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Fjf3BA7L5j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Fjf3BA7L5j.png?imageslim)
 
 学习策略
 
@@ -554,7 +554,7 @@ Loss由三部分组成：第一部分是普通训练的loss，对应于经验风
 Joint CNN architecture for domain and task transfer 方法示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8Fe5jcamEj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8Fe5jcamEj.png?imageslim)
 
 Domain confusion就不用多说，和现有的一些比如DAN和JAN一样，直接对source和target的margina distribution进行估计即可。
 
@@ -564,7 +564,7 @@ Domain confusion就不用多说，和现有的一些比如DAN和JAN一样，直�
 
 Softlabel示意图：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2CHk4HGF66.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/2CHk4HGF66.png?imageslim)
 
 ### 4. 深度联合分布自适应
 
@@ -574,7 +574,7 @@ DAN的作者、清华大学的龙明盛在2017年机器学习顶级会议ICML上
 JAN方法示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/56gFIkHd7g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/56gFIkHd7g.png?imageslim)
 
 
 
@@ -587,7 +587,7 @@ JAN方法示意图：
 AdaBN方法示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/D2AGDAJ0Bd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/D2AGDAJ0Bd.png?imageslim)
 
 AdaBN对比其他方法，实现相当简单。并且，方法本身不带有任何额外的参数。在许多公开数据集上都取得了很好的效果。
 
@@ -675,7 +675,7 @@ Yaroslav Ganin等人~\cite{ganin2016domain}首先在神经网络的训练中加�
 下图是DSN方法的示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ejcgk2Lf68.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ejcgk2Lf68.png?imageslim)
 
 DDC方法的作者、加州大学伯克利分校的Tzeng等人在2017年发表于计算机视觉顶级会议CVPR上的文章提出了ADDA方法(Adversarial Discriminative Domain Adaptation)~\cite{tzeng2017adversarial}。ADDA是一个通用的框架，现有的很多方法都可被看作是ADDA的特例。上海交通大学的研究者们用Wasserstein GAN进行迁移学习~\cite{shen2018w}，Liu等人提出了Coupled GAN用于迁移学习~\cite{liu2016coupled}。这些工作都大体上按照之前思路进行。
 
@@ -690,7 +690,7 @@ DDC方法的作者、加州大学伯克利分校的Tzeng等人在2017年发表�
 下图展示了部分迁移学习的思想：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3bA35k83F1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/3bA35k83F1.png?imageslim)
 
 作者提出了一个叫做 Selective Adversarial Networks (SAN)~\cite{cao2017partial} 的方法来处理partial transfer问题。在partial问题中，传统的对抗网络不再适用。所以就需要对进行一些修改，使得它能够适用于partial问题。
 

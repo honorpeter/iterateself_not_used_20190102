@@ -22,7 +22,7 @@ date: 2018-07-27 20:34:06
 看到公式里有一个公式是这样的：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IA1jmB89lK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IA1jmB89lK.png?imageslim)
 
 但是我找了下mathjax里面没有这中间的空心中括号的打法，latex里面倒是有：
 

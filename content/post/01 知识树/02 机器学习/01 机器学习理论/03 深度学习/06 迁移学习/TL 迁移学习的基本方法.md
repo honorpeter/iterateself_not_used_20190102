@@ -102,7 +102,7 @@ tags:
 源域中存在不同种类的动物，如狗、鸟、猫等，目标域只有狗这一种类别。在迁移时，为了最大限度地和目标域相似，我们可以人为地提高 源域 中属于狗这个类别的样本权重。**嗯，刚想写个为什么，想了下，感觉的确是这么回事。提高样本权重指的是什么？提高狗的样本个数吗？提升到多少合适？把目标领域全部包括进去？这个真的可行吗？不会使模型不平衡吗？而且目标域只有狗是什么意思？是分类狗的品种吗？如果权重是一个值的话怎么放到训练模型中的？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1B5Hl3780c.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/1B5Hl3780c.png?imageslim)
 
 在迁移学习中，对于源域 \(\mathcal{D}_s\) 和目标域 \(\mathcal{D}_t\) ，通常假定产生它们的概率分布是不同且未知的( \(P(\mathbf{x}_s) \ne P(\mathbf{x}_t)\) )。
 
@@ -157,7 +157,7 @@ tags:
 根据特征的同构和异构性，又可以分为同构和异构迁移学习。下图很形象地表示了两种基于特征的迁移学习方法：**什么是特征的同构与异构性？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/K3cEj9GDDm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/K3cEj9GDDm.png?imageslim)
 
 基于特征的迁移学习方法是迁移学习领域中最热门的研究方法，这类方法通常假设源域和目标域间有一些交叉的特征。举几个例子：**什么是交叉的特征？ 这几个例子所讲的方法都要总结下。**
 
@@ -187,7 +187,7 @@ tags:
 下图形象地表示了基于模型的迁移学习方法的基本思想：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eH8lfKh3cG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/eH8lfKh3cG.png?imageslim)
 
 下面介绍几种代表性的工作：**都要总结下**
 
@@ -223,14 +223,14 @@ tags:
 下图表示了不同领域之间相似的关系。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/afGccJcgcl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/afGccJcgcl.png?imageslim)
 
 就目前来说，基于关系的迁移学习方法的相关研究工作非常少，仅有几篇连贯式的文章讨论。这些文章都借助于马尔科夫逻辑网络 (Markov Logic Net) 来挖掘不同领域之间的关系相似性。**什么意思？**
 
 基于马尔科夫网络的关系迁移：**没看懂？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3gH9E4idHH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/3gH9E4idHH.png?imageslim)
 
 
 

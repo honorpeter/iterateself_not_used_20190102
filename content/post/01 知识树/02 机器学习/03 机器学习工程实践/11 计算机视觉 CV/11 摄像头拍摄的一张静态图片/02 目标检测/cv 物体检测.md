@@ -17,7 +17,7 @@ date: 2018-08-16 19:00:26
 物体识别
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lg976294Cl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/lg976294Cl.png?imageslim)
 
 下面这四张图片分别对应的四种不同的要求：越来越难**  ****厉害  想知道这些都是怎么做到的。**
 
@@ -25,7 +25,7 @@ date: 2018-08-16 19:00:26
 
 Classification                  Localization                         Object Detection            Instance Segmentation
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7bAh7g3A9E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7bAh7g3A9E.png?imageslim)
 
 左边两种应用的场景特点：
 
@@ -79,7 +79,7 @@ Classification                  Localization                  
 # 比较关键的几个Deep Models：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/J3fHGd4EhD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/J3fHGd4EhD.png?imageslim)
 
 
 
@@ -93,11 +93,11 @@ Deformable Parts Model
 **这个方法到底是怎么做的？现在还这么做吗？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IdmiKAf367.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IdmiKAf367.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/km3mIBkH3b.png?imageslim)
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/kB8fa28CId.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/km3mIBkH3b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/kB8fa28CId.png?imageslim)
 
 
 涉及到两篇论文：
@@ -112,7 +112,7 @@ Deformable Parts Model
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0gH5gFfmd0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/0gH5gFfmd0.png?imageslim)
 
 提出了一系列非常经典的做法，包括：
 1. 如何应用stochastic gradient descent (SGD) 到training里。
@@ -140,21 +140,21 @@ Deformable Parts Model
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/53741a1gJ3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/53741a1gJ3.png?imageslim)
 
 以前，怕纯CNN不带好，因此最后总是加上FC，但是现在很多都是纯CNN的model了，只不过最后的CNN用的是1*1的卷积。1*1的卷积有什么意义呢？1*1不会减少参数的，**不知道。**
 
 Loss over the whole dataset:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/G770EhJlbH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/G770EhJlbH.png?imageslim)
 
 后面的是为了防止过拟合
 
 In each solver iteration, we use a stochastic approximation of this objective, drawing a mini-batch of N << |D| instances:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/g8Ec2HgihI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/g8Ec2HgihI.png?imageslim)
 
 
 
@@ -164,7 +164,7 @@ In each solver iteration, we use a stochastic approximation of this objective, d
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Imd9ea31A7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Imd9ea31A7.png?imageslim)
 
 Data term: error averagedover instances
 
@@ -173,17 +173,17 @@ Regularizationterm: penalizelarge weights to improve generalization
 Stochastic Gradient Descent (known as Solver)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/e0B1DddII5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/e0B1DddII5.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CbcDL8CBlk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/CbcDL8CBlk.png?imageslim)
 
 对于一个AlexNet来说，
 solver.prototxt里的设计如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/33e2AjH4d1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/33e2AjH4d1.png?imageslim)
 
 http://caffe.berkeleyvision.org/doxygen/classcaffe_1_1HingeLossLayer.html
 
@@ -232,11 +232,11 @@ http://caffe.berkeleyvision.org/doxygen/classcaffe_1_1HingeLossLayer.html
 问题：给出一张图，识别图中的物体类别及位置。**提示：用分类做检测？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dKciGl8gEa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/dKciGl8gEa.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/fD9BH1GC44.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/fD9BH1GC44.png?imageslim)
 
 
 
@@ -276,7 +276,7 @@ http://caffe.berkeleyvision.org/doxygen/classcaffe_1_1HingeLossLayer.html
 computer vision 最大的哲学理念就是multiple scale 这个，即多尺度。它能解决很多问题，一个是看到一个物体在不同的视角；一个是把data **tation做的非常好了，就是一张图变成很多张图。**这个还想再了解下。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6ggIJa51C0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/6ggIJa51C0.png?imageslim)
 
 Uijlingset al, “Selective Search for Object Recognition”, IJCV 2013
 
@@ -291,7 +291,7 @@ Uijlingset al, “Selective Search for Object Recognition”, IJCV 2013
 而DL的方法，就比如fast RCNN 等很多。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0JD5afFhc8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/0JD5afFhc8.png?imageslim)
 
 
 这个表在下面这个文档中：
@@ -309,12 +309,12 @@ Region Proposasl Network
 这是一个feature map，有一个中间点，有9个anchor，anchor box rpn **什么是rpn？没明白这张图。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1bH370ik44.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/1bH370ik44.png?imageslim)
 
 其实就是 iteratively/ recursively 做一遍 sliding window, 把feature map上的每一个点，遍历搜索，设计出两种loss： **没有很明白**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LcK4jhC5Ii.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/LcK4jhC5Ii.png?imageslim)
 
 DL 的重要方法：RCNN，Fast-RCNN，Faster-RCNN：
 
@@ -329,7 +329,7 @@ pipeline 就是整体的流程
 R是region的意思。为什么要warped一下？因为当时大家的网络最后一层都是一个FC，它的输入是fixed的，由于要求这最后的输入是一样的，所以最前面的输入也需要一样。后面发展到全卷积网络就不需要这个warped的操作。由于当时全都是加一个FC，因此加了warped。**这也就是为什么1*1的卷积有他自己的用处，因为它虽然等于FC，但是允许你输入任意变化。****利害**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/4JeGj6L7KE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/4JeGj6L7KE.png?imageslim)
 
 当时它只把DL作为特征提取，然后做SVM，而且forward 2000遍，
 
@@ -337,7 +337,7 @@ R是region的意思。为什么要warped一下？因为当时大家的网络最�
 ## Step 1: Train (or download) a classification model for ImageNet (ResNet-101)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/738G9lIcE9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/738G9lIcE9.png?imageslim)
 
 
 ## Step 2: Fine-tune model for detection
@@ -358,7 +358,7 @@ R是region的意思。为什么要warped一下？因为当时大家的网络最�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0BLB89ifhi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/0BLB89ifhi.png?imageslim)
 
 
 
@@ -382,7 +382,7 @@ R是region的意思。为什么要warped一下？因为当时大家的网络最�
 虽然有些比较笨重的缺点，但是当时是第一个用DL的方法来做 object detection 的。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/99feB6AGDF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/99feB6AGDF.png?imageslim)
 
 
 
@@ -393,7 +393,7 @@ R是region的意思。为什么要warped一下？因为当时大家的网络最�
 相当于把softmax用SVM来做
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6DjkgJ7hj7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/6DjkgJ7hj7.png?imageslim)
 
 
 
@@ -406,12 +406,12 @@ For each class, train a linear regression model to map from cached features to o
 即只要有offset，他就把框动一动
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1Hm0aE9beB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/1Hm0aE9beB.png?imageslim)
 
 RCNN results：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jd6C9315b4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/jd6C9315b4.png?imageslim)
 
 两个结论：
 
@@ -470,7 +470,7 @@ RCNN results：
 **而且对于RoI的BP是怎么做的？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/JLcAab532E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/JLcAab532E.png?imageslim)
 
 Solution：Share computation of convolutional layers between proposals.
 
@@ -481,7 +481,7 @@ Solution：Share computation of convolutional layers between proposals.
 loss 是 smooth L1 和 softmax 加起来的。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mDg3B4JlG9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mDg3B4JlG9.png?imageslim)
 
 Train end-to-end：
 
@@ -494,10 +494,10 @@ Train end-to-end：
 **这一节没看懂，很重要**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/fjJLb1Eha1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/fjJLb1Eha1.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/kFiebCa9h2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/kFiebCa9h2.png?imageslim)
 
 
 为什么又两项求和呢？原来是 28*28 的，
@@ -507,24 +507,24 @@ i是上一层的位置，j是这一层的位置 ，虽然是二维的，但是�
 回顾一下深度学习课程中，如何计算层与层之间的梯度的？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/E6gieII954.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/E6gieII954.png?imageslim)
 
 
 ## Fast-RCNN bbox regression loss
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EK8f0j70hg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EK8f0j70hg.png?imageslim)
 
 t是target v是prediction，**没明白**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/G7K3JA6iAB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/G7K3JA6iAB.png?imageslim)
 
 https://github.com/ShaoqingRen/caffe/blob/062f2431162165c658a42d717baf8b74918aa18e/src/caffe/layers/smooth_L1_loss_layer.cu
 
 那么具体的target (Ground Truth)坐标怎么算呢？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lDjl5chEff.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/lDjl5chEff.png?imageslim)
 
 真实坐标减去已经有的坐标，然后除以宽度。我们预测的就是这个宽度
 
@@ -538,7 +538,7 @@ https://github.com/ShaoqingRen/caffe/blob/062f2431162165c658a42d717baf8b74918aa1
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/JH71CJEbGE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/JH71CJEbGE.png?imageslim)
 
 又4个loss，rpn里面两个，一个是regression一个是classification 然后classificer里面又两个loss，也是一个regression和一个classification。
 
@@ -583,9 +583,9 @@ rpn只有两类 前景和后景？ **什么？**
 找到这四步骤对应的函数，对于理解整个算法非常重要。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7F03EkdeEG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7F03EkdeEG.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1K13Im20Ch.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/1K13Im20Ch.png?imageslim)
 
 
 ### Test 过程
@@ -602,16 +602,16 @@ rpn只有两类 前景和后景？ **什么？**
   3. NMS等后续过程，凝练出top_k个置信度很高的box, 计算recall, 得出结论。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GhkiBfjI83.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/GhkiBfjI83.png?imageslim)
 
 
 
 
 ## RPN实验结果
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/E157Ch0iFJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/E157Ch0iFJ.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dmHJF8774D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/dmHJF8774D.png?imageslim)
 
 
 
@@ -655,7 +655,7 @@ Region-based Fully Convolutional Networks
 Code available: [https://github.com/daijifengoo1/r-fcn](https://github.com/daijifeng001/r-fcn)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/15Fc5ei52b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/15Fc5ei52b.png?imageslim)
 
 每个颜色代表不同的位置选择区域。
 The bank of kxk score maps correspond to a kxk spatial grid describing relative positions.
@@ -663,7 +663,7 @@ The bank of kxk score maps correspond to a kxk spatial grid describing relative 
 The loss of training:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/I1hmGAhG26.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/I1hmGAhG26.png?imageslim)
 
 
 
@@ -672,32 +672,32 @@ In particular, the classification loss:
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mEg1aFJE5F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mEg1aFJE5F.png?imageslim)
 
 问题1: RFCN跟DPM的关系，如何理解？
 
 Position-sensitive score maps and ROI pooling
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CHFKJK34eL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/CHFKJK34eL.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EE3kJaHI4I.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EE3kJaHI4I.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HFkEK7JE1F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HFkEK7JE1F.png?imageslim)
 
 Figure 1: a positive box of person class
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/KGmK5FllH5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/KGmK5FllH5.png?imageslim)
 
 Figure 2: a negative box of person class
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AiJB7aL5eB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/AiJB7aL5eB.png?imageslim)
 
 问题2: RCNN, Fast-RCNN, RFCN 在feature-map 层面是如何联系起来的？
 
@@ -709,7 +709,7 @@ Figure 2: a negative box of person class
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HGie3a24kg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HGie3a24kg.png?imageslim)
 
 
 
@@ -725,7 +725,7 @@ Figure 2: a negative box of person class
 
 ### Joint Training
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/e5E6DDjH3E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/e5E6DDjH3E.png?imageslim)
 
 能不能一下把4个loss一起train？这样train好像效果不好。
 
@@ -744,7 +744,7 @@ Figure 2: a negative box of person class
 * 中继监督训练
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6CFDEgfI8g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/6CFDEgfI8g.png?imageslim)
 
 能不能用高层信息来弥补低层的信息？先训练RCNN，后训练Fast-RCNN
 

@@ -85,7 +85,7 @@ OK，我们再看下这个强化学习例子中涉及到的一些东西：
 
 OK，我们看下面这张图：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kcD9BEbECm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kcD9BEbECm.png?imageslim)
 
 
 它解释了强化学习的基本原理：

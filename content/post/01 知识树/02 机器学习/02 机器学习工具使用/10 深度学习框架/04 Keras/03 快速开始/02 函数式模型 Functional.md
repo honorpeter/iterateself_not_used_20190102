@@ -87,7 +87,7 @@ processed_sequences = TimeDistributed(model)(input_sequences)
 
 总而言之，该模型框图如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181020/IajEbC3i60.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181020/IajEbC3i60.png?imageslim)
 
 让我们用函数式模型来实现这个框图
 

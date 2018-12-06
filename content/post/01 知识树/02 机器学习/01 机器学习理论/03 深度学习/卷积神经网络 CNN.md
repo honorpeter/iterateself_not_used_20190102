@@ -61,7 +61,7 @@ date: 2018-08-21 18:16:22
 保持了层级网络结构，不同层次有不同形式(运算)与功能
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KdK4gcgAmm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/KdK4gcgAmm.png?imageslim)
 
 
 
@@ -149,7 +149,7 @@ date: 2018-08-21 18:16:22
 ### 去均值和归一化：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ld3kJjlhdH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ld3kJjlhdH.png?imageslim)
 
 如果不做中心化，那么会非常容易饱和。
 
@@ -165,7 +165,7 @@ date: 2018-08-21 18:16:22
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kLlgLgfKki.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kLlgLgfKki.png?imageslim)
 
 原来是两个有关联的feature，但是我找到了另外一组基做投影，这样，新的维度互相之间已经没有关联了。而whiten是因为去相关会导致scale又不一样了。
 
@@ -203,7 +203,7 @@ whitened data：
 ### 把 RGB 三层中的 R 拿出来看
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l5GF9kKm4m.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/l5GF9kKm4m.png?imageslim)
 
 比如说上面这个是一张 32*32*3 的彩色图片，之所以是3，是因为彩色图片有RGB三层。
 
@@ -213,7 +213,7 @@ OK，现在我们只看 R 层，我先找一个大小比如说为 3*3 的一个�
 
 OK，现在呢，对于我的一个神经元来说，我是对应一个 3*3 的图像块的，也就是说，我的这个神经元的 w 只有9个，而不是 32*32 个。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/92l8FcHBA4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/92l8FcHBA4.png?imageslim)
 
 OK，现在把窗口在图片上开始滑动，比如以每次一个像素的速度滑动（stride），从左滑到右，在另起一行开始滑动，直到滑完了整个图片，每次滑动，我们都根据窗口看到的那一小块图像和我的 w 计算出一个值 Wx+b  。那么我现在就有了 30*30 个值，叫做 feature map。（提一下，相比FC来说，相当于参数共享了，所以叫参数共享机制。这个名字听起来高大上，但是挺令人感觉不明确的）
 
@@ -229,7 +229,7 @@ OK，我们把上面滑动的过程稍微做点调整，之前的图像是32*32�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/I4DL9k8dgI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/I4DL9k8dgI.png?imageslim)
 
 实际上RGB三层可以看作三个通道（channel），那么对于一个 R 层我可以用一个滑动窗口，然后卷积核有 3*3 个参数，那么对于RGB三层，我就可以每个channel对应一个滑动窗口，而虽然我仍然用一个卷积核，但是我有的卷积核有 3*3*3 个参数，这最后一个 3 叫做卷积核的深度，它等于我的channel的个数。
 
@@ -354,7 +354,7 @@ OK，到这里，对于单个神经元来说，基本上就OK了。那么多个�
 这个采样会丢失信息的，但是会保留大部分信息。**怎么衡量是大部分信息？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Gl9Eg41kfh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Gl9Eg41kfh.png?imageslim)
 
 那么怎么从激活层的输出保留大部分信息，而又使维度降下来呢？这里有两种 pooling 方式：**那种好？还有别的方法吗？**
 
@@ -391,7 +391,7 @@ Full Connect layer
 这样的写法是约定俗成的：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J4GiAldbhc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/J4GiAldbhc.png?imageslim)
 
 注：ReLU 已经包含在 CONV  和 FC 层里面了，而且，最后一个 FC 是不接 ReLU 的，直接接Softmax。
 
@@ -476,25 +476,25 @@ Full Connect layer
 filters：每一个是一个神经元的权重画出来的样子
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/f8Hi1l11k7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/f8Hi1l11k7.png?imageslim)
 
 data：每一个是一个神经元对应滑动窗口后输出的feature map的样子。
 
 相当于是神经元对原始图像的评价和关注，可能是轮廓，可能是深浅等。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9k4eIfBh1E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9k4eIfBh1E.png?imageslim)
 
 ## CONV Layer 2:
 
 filters：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ck82gF4Dgi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ck82gF4Dgi.png?imageslim)
 
 data：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0fcghiE3Hd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0fcghiE3Hd.png?imageslim)
 
 ## CONV Layer 3:
 
@@ -502,7 +502,7 @@ data：
 data：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5dj9cDh0dD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/5dj9cDh0dD.png?imageslim)
 
 
 
@@ -513,9 +513,9 @@ data：
 data：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/5dj9cDh0dD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/5dj9cDh0dD.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/61FC4mB76j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/61FC4mB76j.png?imageslim)
 
 
 ## CONV Layer 5：
@@ -524,7 +524,7 @@ data：
 data：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/cG6KfAfbH3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/cG6KfAfbH3.png?imageslim)
 
 
 
@@ -560,7 +560,7 @@ data：
 
 OK，我们来看一下这个例子
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Kc4gmfbC4d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Kc4gmfbC4d.png?imageslim)
 
 可见单单去掉一个FC是可以的，两个FC会稍微好一点。
 
@@ -579,7 +579,7 @@ Transfer Learning with CNNs
 有很多利害的网络已经被别人训练出来了，那么我们在做我们的东西的时候，可不可以拿过来用呢？怎么用呢？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fLmCB5amdE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/fLmCB5amdE.png?imageslim)
 
 比如说，我们已经有了一个在 ImageNet 上训练好的网络。有可能是别人的，也有可能是自己的。
 

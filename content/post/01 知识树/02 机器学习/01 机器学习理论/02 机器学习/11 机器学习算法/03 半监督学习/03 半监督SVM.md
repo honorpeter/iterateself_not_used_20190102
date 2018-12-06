@@ -10,7 +10,7 @@ date: 2018-07-01 07:30:11
 
 半监督支持向量机(Semi-Supervised Support Vector Machine，简称 S3VM)是支持向量机在半监督学习上的推广.在不考虑未标记样本时，支 持向量机试图找到最大间隔划分超平面，而在考虑未标记样本后，S3VM试图找到能将两类有标记样本分开，且穿过数据低密度区域的划分超平面，如图13.3所示，这里的基本假设是“低密度分隔” (low-density separation)，显 然，这是聚类假设在考虑了线性超平面划分后的推广.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/Fa2C4a9Gke.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180630/Fa2C4a9Gke.png?imageslim)
 
 
 
@@ -18,7 +18,7 @@ date: 2018-07-01 07:30:11
 
 形式化地说，给定 $D_l=\{(x_1,y_1),(x_2,y_2),\cdots ,(x_l,y_l)\}$和 $D_u=\{x_{l+1},x_{l+2},\ldots ,x_{l+u}\}$ 其中访 $y_i\in\{—1，+1\}$ ，$l\ll u$ ，$l+u=m$  TSVM 的学习目标是 为 $D_u$ 中的样本给出预测标记 $\hat{y}=(\hat{y}_{l+1},\hat{y}_{l+2},\cdots ,\hat{y}_{l+u},)$,$\hat{y}_i\in\{—1,+1\}$，使得
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180630/EB11hc93m5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180630/EB11hc93m5.png?imageslim)
 
 
 其中， $(w,b)$ 确定了一个划分超平面; $\xi$ 为松弛向量，$\xi_i(i=1,2,\cdots ,l)$ 对应于有标记样本, $\xi_i(i=l+1,l+2,\cdots ,m)$ 对应于未标记样本；$C_l$ 与 $C_u$ 是由用户指 定的用于平衡模型复杂度、有标记样本与未标记样本重要程度的折中参数.
@@ -31,11 +31,11 @@ TSVM 采用局部搜索来迭代地寻找式 (13.9) 的近似解.具体来说，
 
 在对未标记样本进行标记指派及调整的过程中，有可能出现类别不平衡问 题，即某类的样本远率于另一类，这将对SVM的训练造成困扰.为了减轻类别 不平衡性所造成的不利影响，可对图13.4的算法稍加改进：将优化目标中的 $C_u$ 项拆分为 $C_u^+$ 与$C_u_-$ 两项，分别对应基于伪标记而当作正、反例使用的未标记 样本，并在初始化时令
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/32GH4LLGlE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180701/32GH4LLGlE.png?imageslim)
 
 其中 $u_+$ 与 $u_-$ 为基于伪标记而当作正、反例使用的未标记样本数.
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180701/BFLBB6994c.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180701/BFLBB6994c.png?imageslim)
 
 
 在图13.4算法的第6-10行中,若存在一对未标记样本 $x_i$ 与 $x_j$ ,其标记 指派 $\hat{y}_i$ 与 $\hat{y}_j$ 不同，且对应的松弛变量满足 $\xi_i+\xi_j>2$ ,则意味着 $\hat{y}_i$ 与 $\hat{y}_j$ 很可 能是错误的，需对二者进行交换后重新求解式(13.9),这样每轮迭代后均可使 式(13.9)的目标函数值下降.

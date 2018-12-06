@@ -57,7 +57,7 @@ deb文件名，要和自己下载的版本一致。
 
 到系统设置->语言支持（System->Language Support），将键盘输入法系统由默认的iBus设置为fcitx。如下图：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181017/8DD3c9A9K8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181017/8DD3c9A9K8.png?imageslim)
 
 操作此步骤时，如果没有出现fcitx选项，说明你的机器还需要安装fcitx键盘输入法系统，直接看第二部分fcitx的安装。
 
@@ -65,7 +65,7 @@ deb文件名，要和自己下载的版本一致。
 
   将键盘输入法系统改为fcitx后，一定要注销，而且操作顺序不能改。这时还不能马上使用，还要点击右上角的输入法图标，点击设置，进入设置界面，这个时候没有看到搜狗输入法，点击左下角的加号，然后注意先要去掉”只显示当前语言的输入法”前面那个勾，然后再搜索”sogo”，这个时候就看到sogo pinyin了，接着添加就可以了，然后就可以切换输入法了。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181017/FBihId5920.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181017/FBihId5920.png?imageslim)
 
   注意: 安装搜狗输入法之前请先更换为国内的软件源，否则无法解决依赖问题。
 

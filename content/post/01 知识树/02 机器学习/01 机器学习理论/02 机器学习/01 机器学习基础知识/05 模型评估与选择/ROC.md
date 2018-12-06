@@ -30,6 +30,6 @@ date: 2018-08-12 20:04:57
 可以基于代价函数的分类器决策控制：TP*(-5)+FN*1+FP*50+TN*0
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ikh5bb33LL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ikh5bb33LL.png?imageslim)
 
 **实际中真的有这么做的吗？**

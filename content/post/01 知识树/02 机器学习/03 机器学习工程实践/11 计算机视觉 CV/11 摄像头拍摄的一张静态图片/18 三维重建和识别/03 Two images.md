@@ -21,7 +21,7 @@ method: stereo vision，就是 一个 matching 的过程
 
 如果这两个camera 的运动是平移的，
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/fjiJ4I19AG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/fjiJ4I19AG.png?imageslim)
 
 <span style="color:red;">上面图中的x 指的是什么？第一个式子中的 x 与第二个式子中的 x 指的是相同的东西吗？</span>
 
@@ -31,7 +31,7 @@ method: stereo vision，就是 一个 matching 的过程
 
 这个可以用极坐标来做：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/KbJ49djGcf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/KbJ49djGcf.png?imageslim)
 
 <span style="color:red;">关于这个的计算老师没有讲，还是要自己补充进去的。</span>
 
@@ -56,7 +56,7 @@ An example of stereo reconstruction
 Short-Baseline Stereo
 Systems for Mobile Devices
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/e02GdJHdHB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/e02GdJHdHB.png?imageslim)
 
 
 http://www.lelaps.de/videos.html#SQx5vU8BA-M
@@ -64,7 +64,7 @@ http://www.lelaps.de/projects/stmobile.html
 
 <span style="color:red;">上面这两个例子真的震惊了，导航原来已经做到这个程度了，厉害。没准这还是几年前的水平，怪不得现在自动驾驶已经基本成熟了。真厉害。</span>
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/2amj53Da71.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/2amj53Da71.png?imageslim)
 
 camera 在不同的移动，光斑就是进行匹配，在右边生成深度信息。
 
@@ -77,7 +77,7 @@ Stereo-based Free-space Estimation
 
 Another example
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180817/ahGC14fmLL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180817/ahGC14fmLL.png?imageslim)
 
 http://www.lelaps.de/videos.html#VrKBNtAN03o (demo)
 http://www.lelaps.de/projects/freespace.html

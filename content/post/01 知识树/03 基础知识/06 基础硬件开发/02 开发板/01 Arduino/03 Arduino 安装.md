@@ -18,14 +18,14 @@ date: 2018-07-27 20:31:50
 
 标准USB电缆
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aIK3F11FD6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/aIK3F11FD6.png?imageslim)
 
 
 如果使用Arduino Nano，你将需要一条A到Mini-B线，如下图所示。
 
 A 到 Mini-B 电缆：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FaFfg416JE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/FaFfg416JE.png?imageslim)
 
 
 **步骤2 - 下载Arduino IDE软件。**
@@ -34,7 +34,7 @@ A 到 Mini-B 电缆：
 
 解压缩文件
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IlBD04KHG9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IlBD04KHG9.png?imageslim)
 
 
 
@@ -57,7 +57,7 @@ Arduino Uno，Mega，Duemilanove和Arduino Nano通过USB连接到计算机或外
 启动 Arduino IDE
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5GHlH1mhmc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5GHlH1mhmc.png?imageslim)
 
 
 
@@ -80,7 +80,7 @@ Arduino Uno，Mega，Duemilanove和Arduino Nano通过USB连接到计算机或外
 
 新建项目
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/F83fD8G5Cl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/F83fD8G5Cl.png?imageslim)
 
 
 
@@ -90,7 +90,7 @@ Arduino Uno，Mega，Duemilanove和Arduino Nano通过USB连接到计算机或外
 
 打开现有项目示例
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2g5EBFfl2h.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/2g5EBFfl2h.png?imageslim)
 
 
 
@@ -107,7 +107,7 @@ Arduino Uno，Mega，Duemilanove和Arduino Nano通过USB连接到计算机或外
 
 选择您的Arduino主板
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/e3ccCIJmA9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/e3ccCIJmA9.png?imageslim)
 
 
 
@@ -122,7 +122,7 @@ Arduino Uno，Mega，Duemilanove和Arduino Nano通过USB连接到计算机或外
 
 选择串行端口
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jem0C0B0e4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/jem0C0B0e4.png?imageslim)
 
 
 
@@ -136,7 +136,7 @@ Arduino Uno，Mega，Duemilanove和Arduino Nano通过USB连接到计算机或外
 将程序上传到您的主板
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/F79lf6k1dc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/F79lf6k1dc.png?imageslim)
 
 
 

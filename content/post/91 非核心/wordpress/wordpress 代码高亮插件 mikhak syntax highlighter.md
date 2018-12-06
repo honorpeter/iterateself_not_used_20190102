@@ -40,14 +40,14 @@ date: 2018-07-27 17:21:32
 比如 Simple Code Highlighter 这个插件的效果：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lmIdacH3Kh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/lmIdacH3Kh.png?imageslim)
 
 效果非常好。但是没有什么自定义的选项。
 
 但是  mikhak syntax highlighter 的效果就不是很好了：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LH20LAhc86.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/LH20LAhc86.png?imageslim)
 
 但是可以定制，选择一些style，虽然这些style都不是很好。
 
@@ -64,12 +64,12 @@ date: 2018-07-27 17:21:32
 比如这样：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5a5be31d44.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5a5be31d44.png?imageslim)
 
 这个问题可以在 Appearance 下面的Custom CSS Code里面写入：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cbJaIC1leC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/cbJaIC1leC.png?imageslim)
 
 
 
@@ -82,7 +82,7 @@ pre.prettyprint {
 来解决：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lF53beJcD6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/lF53beJcD6.png?imageslim)
 
 
 

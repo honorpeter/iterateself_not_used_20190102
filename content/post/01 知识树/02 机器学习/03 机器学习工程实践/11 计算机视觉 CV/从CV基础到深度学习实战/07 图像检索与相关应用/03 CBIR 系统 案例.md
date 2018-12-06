@@ -17,9 +17,9 @@ date: 2018-08-18 16:38:43
 
 大概的效果是这样的：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/JchK60CgJE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180814/JchK60CgJE.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/eb60j3m1A8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180814/eb60j3m1A8.png?imageslim)
 
 要求给定一张图片，我们能得到这样的几张图片。
 
@@ -32,9 +32,9 @@ https://github.com/akshayubhat/DeepVideoAnalytics
 
 这个 VisualSearchServer 是一个图像检索的 server ，他把一整套的 server 代码都写好了，包括后台的特征的抽取，前台的直接的先计算特征然后匹配的过程。以及前台的界面 html 也写好了。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/BcKIFBLdFA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180814/BcKIFBLdFA.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180814/3h0LEc5dg1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180814/3h0LEc5dg1.png?imageslim)
 
 可以看到对于每张图片，他会检索回来 12 张最接近的图片，可能因为他图片的数据集没有那么类似的，所以找回来这么一些。
 

@@ -83,7 +83,7 @@ date: 2018-08-21 18:16:48
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bCHJ8Aggfc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/bCHJ8Aggfc.png?imageslim)
 
 理论上来说，可以对任何形式的输入数据进行学习。**为什么一定要是层级结构？之前好像看到过不是层级结构的神经网络。对，的确看到过，而且好像很厉害的。**
 
@@ -95,7 +95,7 @@ date: 2018-08-21 18:16:48
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7h0LGdc4b9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/7h0LGdc4b9.png?imageslim)
 
 一般浅层的网络主要看浅层宽网络。实际上保证足够多的单元数目的话，单隐层网络可以拟合任意函数的，这个是有证明的。（**真的假的？要看一下，多少算足够？**）
 
@@ -108,7 +108,7 @@ date: 2018-08-21 18:16:48
 即 DNN （Deep Neural Network）
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FkbgLh7jIE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/FkbgLh7jIE.png?imageslim)
 
 
 
@@ -144,7 +144,7 @@ date: 2018-08-21 18:16:48
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mgk3I4Ie8b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/mgk3I4Ie8b.png?imageslim)
 
 
 
@@ -154,7 +154,7 @@ date: 2018-08-21 18:16:48
 ## 神经元的激活函数
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/B0f8G19i2F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/B0f8G19i2F.png?imageslim)
 
 \(f\) 就是传递函数，也叫激活函数 (activation function)，实际上神经元的激活函数还是有很多种的，现在最常用的激活函数就是ReLU。**不知道有没有什么更新？**
 
@@ -211,7 +211,7 @@ date: 2018-08-21 18:16:48
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/m01KiAC5Ai.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/m01KiAC5Ai.png?imageslim)
 
 ### tanh 函数
 
@@ -219,7 +219,7 @@ date: 2018-08-21 18:16:48
 这个比sigmoid好一点
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/LEfeEB067C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/LEfeEB067C.png?imageslim)
 
 
 
@@ -257,7 +257,7 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Hm8c961KBG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Hm8c961KBG.png?imageslim)
 
 
 
@@ -267,7 +267,7 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 
 所有的LU相关的都是从ReLU出来的，这个ELU 也是对ReLU的左侧修改了下。
 
-**需要补充**![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9A9glHe4ig.png?imageslim)
+**需要补充**![mark](http://images.iterate.site/blog/image/180728/9A9glHe4ig.png?imageslim)
 
 
 
@@ -286,7 +286,7 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/baE87lljf1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/baE87lljf1.png?imageslim)
 
 对于普通的线性分类问题来说，LR、linear SVM，都可以作线性分割。他们要做的就是得到一条决策边界。然后把不同的类别分开而已。**LR 和 SVM的核函数再看下？**
 
@@ -341,7 +341,7 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 但是如果能够把这个区域抠出来，那么就可以分了。而正好右图的两条线围成的范围可以看作p1和p2对应的分类器的交集。OK，拿我们先看看怎么完成交集，即逻辑与。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HGH35mIgmB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/HGH35mIgmB.png?imageslim)
 
 
 
@@ -352,7 +352,7 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 这样的一组\(\theta\) （-30，20，20）就可以完成这个操作  **嗯 是的**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/47fc6lhI62.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/47fc6lhI62.png?imageslim)
 
 
 
@@ -363,7 +363,7 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 那么我们这个时候再找一组\(\theta\)来达成p1对应的分类功能，也可以再找一组\(\theta\)来达成p2对应的分类的功能。然后在这个的基础上取（-30，20，20）来对两个分类进行与。这样就完成了非线性切分。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Fb507GLkag.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Fb507GLkag.png?imageslim)
 
 
 
@@ -373,7 +373,7 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ihb93c720k.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ihb93c720k.png?imageslim)
 
 那么，也就是说单个 Perception 可以完成 and 和 or 这样的操作。
 
@@ -386,9 +386,9 @@ ReLU（Rectified linear unit）是现在最常用的，在卷积网络中基本�
 神经网络会找到一个线性的分类器去贴近轮廓的边缘，每个边缘都对应一个分类器，这个分类器会说自己的左边是红色，右边是绿色等等，然后可以把他们的意见汇总一下，我们要做到的是，听取大家的意见，有了每个边缘的判定之后，就可以用一组参数\(\theta\)and或者or把一块抠出来，**没明白这个例子是要做什么？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2JafFL8KIA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/2JafFL8KIA.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CF24fCl4GD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/CF24fCl4GD.png?imageslim)
 
 
 * 加了一层就可以求and，就可以把一块区域抠出来，得到开的凸区域或者封闭的凸区域。
@@ -429,7 +429,7 @@ or和and的选择取决于训练的时候自己做的调整。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J6L6KAAfCj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/J6L6KAAfCj.png?imageslim)
 
 OK，到这里，神经网络基本上就从神经元建立起来了，那么这个网络到底怎么起作用的呢？
 
@@ -444,7 +444,7 @@ OK，到这里，神经网络基本上就从神经元建立起来了，那么这
 神经网络的前向传播的计算的过程如下
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/bcm0i4DA32.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/bcm0i4DA32.png?imageslim)
 
 **需要补充吗这个地方？**
 
@@ -495,14 +495,14 @@ BP算法，也叫做\(\delta \)算法
 **正向传播很容易理解，但是这个反向传播的误差是怎么传递回来的？下面这个图没有明白？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4C8dH0l7Jc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/4C8dH0l7Jc.png?imageslim)
 
 
 ## 误差是如何展开到前面的层的？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/E8feGEELKA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/E8feGEELKA.png?imageslim)
 
 标准答案为d，输出为o，
 
@@ -530,9 +530,9 @@ BP算法，也叫做\(\delta \)算法
 
 一阶里面最简单的方式就是SGD，即随机梯度下降。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/E48Id15IJF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/E48Id15IJF.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/imGl0AB54g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/imGl0AB54g.png?imageslim)
 
 
 \[\Delta \omega_{jk}=-\eta \frac{\partial E}{\partial \omega_{jk} }\; j=0,1,2,\cdots ,m;k=1,2,\cdots ,l\]
@@ -553,7 +553,7 @@ BP算法，也叫做\(\delta \)算法
 比如这个例子：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/m36elkAf87.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/m36elkAf87.png?imageslim)
 
 我们需要拿到的结果是0.01和0.99，我们希望找到合适的w和b来得到这个输出。
 
@@ -598,7 +598,7 @@ BP算法，也叫做\(\delta \)算法
 ### 求 $w_5$ 试试
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kA8CIJhDc3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kA8CIJhDc3.png?imageslim)
 
 也就是说 E 对于 \(\w_5\) 的偏导满足：
 
@@ -642,7 +642,7 @@ BP算法，也叫做\(\delta \)算法
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/h52CDaGHHi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/h52CDaGHHi.png?imageslim)
 
 这里要知道，\(E_{total}\)分成了两部分，而\(h_1\)的out与这两部分都有关系，因此要加在一起。
 
@@ -673,7 +673,7 @@ OK，到现在为止我们已经知道到底这个神经网络的整体的计算
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0mlgGbbjHl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0mlgGbbjHl.png?imageslim)
 
 
 
@@ -699,9 +699,9 @@ OK，到现在为止我们已经知道到底这个神经网络的整体的计算
 一共是下面的五步。**再仔细在PCA哪一节中总结下。**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/53DKeiJ1Kf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/53DKeiJ1Kf.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0C8aBAfbcL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0C8aBAfbcL.png?imageslim)
 
 
 
@@ -717,7 +717,7 @@ OK，到现在为止我们已经知道到底这个神经网络的整体的计算
 * 根据 Fan-in 的大小计算：w = randn(n) / sqrt(n) 就是使每一层的Var基本不变，计算如下：**没明白？什么是Fan-in？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/BJE9AJ5A2I.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/BJE9AJ5A2I.png?imageslim)
 
 w = randn(n) / sqrt(n)
 
@@ -762,10 +762,10 @@ w = randn(n) / sqrt(n)
 提升隐层层数或者隐层神经元个数，神经网络“容量”会变大，空间表达力会变强：如下图所示，只有一个隐层，只是改变了隐层神经元的个数：**那么隐层层数与隐层神经元数目有没有什么等价关系呢？或者说是不是二者的提升从某整程度上来说是等价的？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3Bm96D2C79.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/3Bm96D2C79.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fDllHleE0i.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/fDllHleE0i.png?imageslim)
 
 过多的隐层和神经元节点，会带来过拟合问题。但是不要因为害怕overfitting，而去把神经网络的参数量降下来。因为overfitting，说明它能力强，但是需要一些限制，而降低参数量可能会导致能力不不足。**一直想知道多少叫做过多？**
 
@@ -784,7 +784,7 @@ w = randn(n) / sqrt(n)
 首先，多层网络的 Error Surface 是非常复杂的，因此存在很多的局部最优，而简单的使用BP算法，只能得到一个局部最优解，但是局部最优解也不是说不可以，只要我实际中可以用就行，那么找不到全局最优，就想找一个尽可能大的范围内的局部最优。怎么办呢？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DDai4iJ0I6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/DDai4iJ0I6.png?imageslim)
 
 
 
@@ -799,7 +799,7 @@ w = randn(n) / sqrt(n)
 在神经网络中经常会出现这种梯度极度变化而且不平滑的情况，因此这个时候的步长的调整就需要想一些方法了：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9704Ji8Chl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9704Ji8Chl.png?imageslim)
 
 **什么意思？这张图？**
 
@@ -816,7 +816,7 @@ w = randn(n) / sqrt(n)
 典型值：α=0.99，ε=0.01  **这个值怎么得到的？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/3BH3GCm7bd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/3BH3GCm7bd.png?imageslim)
 
 
 
@@ -829,7 +829,7 @@ w = randn(n) / sqrt(n)
 多层神经网络总，每个权重的梯度相差较大，采用统一的学习率不合适，因此可以对每个权重选择不同的更新参数
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lDcgb8fhmG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/lDcgb8fhmG.png?imageslim)
 
 ### SGD-rmsprop
 
@@ -839,7 +839,7 @@ w = randn(n) / sqrt(n)
 这个用的也是比较多的，使用 recent running average 平滑
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/4f7ebaIi04.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/4f7ebaIi04.png?imageslim)
 
 ### 那么到底怎么才能选择合适的SGD算法呢？
 
@@ -854,7 +854,7 @@ w = randn(n) / sqrt(n)
 因此，我们只能从简单的算法实验起，在少量样本上尝试不同的算法效果
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/fbAdm97jch.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/fbAdm97jch.png?imageslim)
 
 **epoch是什么？到底怎么选择？什么叫从简单的算法实验起来？**
 
@@ -865,9 +865,9 @@ w = randn(n) / sqrt(n)
 * 要添加一些监控训练过程中的仪表盘程序
 * Early Stop机制 **这个是什么？没有说？ 比如说我每做一个epoch就测试一下validation accuracy，如果training accuracy 在上升，但是validation accuracy在下降，说明过拟合了，就触发了Early Stop。实际中这个是怎么做的？模块里有吗？**
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HLfeEjL7ic.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/HLfeEjL7ic.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9K2g8gddCm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9K2g8gddCm.png?imageslim)
 
 
 
@@ -885,12 +885,12 @@ OK，基本上应该知道的都已经OK了，包括计算方法，预处理，�
 我们先看一下导数的定义：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/KHh0Je2IDE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/KHh0Je2IDE.png?imageslim)
 
 所以，当我反向传播求出 w 之后，我可以用这种方法验证 loss 对于这个 w 的偏导：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ci6FeE8793.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ci6FeE8793.png?imageslim)
 
 我求出这个值之后，就可以跟我的BP算法比较一下。**还是没明白？怎么比较的？这个不是w与w的偏导之间的差吗？返回值说明了什么呢？**
 
@@ -913,12 +913,12 @@ OK，基本上应该知道的都已经OK了，包括计算方法，预处理，�
 tensorflow playground
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/6j1cCF5C0H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/6j1cCF5C0H.png?imageslim)
 
 **刚尝试了一组，但是不知道为什么输出一直在震荡，而且震荡的非常厉害，什么原因呢？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ih0hLlk6e1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ih0hLlk6e1.png?imageslim)
 
 **还有一次learning rate设置为1，算着算着没有了，看了下线上的 w 都非常小。**
 
@@ -948,9 +948,9 @@ tensorflow playground
 
 ## BP的计算过程
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ff5ChGHA71.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ff5ChGHA71.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/41IK94l4AC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/41IK94l4AC.png?imageslim)
 
 注：之所以要计算对于 x 的导数，是因为 x 作为中间变量，我用链式法则在求它之前一层的 w 的偏导时候会用到对于这个中间变量的求导，因此，这个对于 x 的求导实际上是为了求在上一层对 w 求偏导的时候用的。
 

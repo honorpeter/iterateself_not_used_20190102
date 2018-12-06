@@ -20,7 +20,7 @@ date: 2018-07-27 20:33:02
 
 流程图
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/lmkBmJ131L.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/lmkBmJ131L.png?imageslim)
 
 
 

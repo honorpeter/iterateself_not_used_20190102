@@ -18,11 +18,11 @@ Caffe 虽然从应用角度更针对于卷积神经网络，但是实现简单�
 
 我们要用到的数据的二维可视化如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/7FFJ7AFIkm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180831/7FFJ7AFIkm.png?imageslim)
 
 我们将搭建一个两层神经网络，网络结构如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/2ba909hiCc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180831/2ba909hiCc.png?imageslim)
 
 
 ## 生成数据
@@ -191,7 +191,7 @@ python /path/to/caffe/python/draw_net.py train.prototxt mlp_train.png -rankdir B
 就可以得到Caffe可视化后的网络结构并保存在 mlp_train.png 中，如图7-4所示。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/gFakl4Gm2g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180831/gFakl4Gm2g.png?imageslim)
 
 
 和 MXNet 中可视化的底层实现一样，都是基于 graphviz（graphviz是一个可视化图库）， 主要区别在于 Caffe 会把每个数据对应的 blob 都画出来。另外，默认情况下，网络结构的绘制顺序是输入到输出从左至右绘制，为了方便排版，这里用一 rankdir 选项改成了从下向上绘制。<span style="color:red;">还可以这样。</span>
@@ -236,7 +236,7 @@ solver_mode: CPU
 
 就开始训练了，训练过程中会输出当前的迭代次数和对应的loss值，例如下面:
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/96mG751JFI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180831/96mG751JFI.png?imageslim)
 
 <span style="color:red;">后面要自己跑一下，自己安装 GPU 跑</span>
 

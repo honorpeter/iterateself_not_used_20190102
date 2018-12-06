@@ -66,7 +66,7 @@ JavaScript从一个简单的输人验证器发展成为一门强大的编程语�
 
 虽然 JavaScript 和 ECMAScript 通常都被人们用来表达 相同的含义，但 JavaScript 的含义却比ECMA-262中规定的 要多得多。没错，一个完整的JavaScript实现应该由下列三 个不同的部分组成（见图1-1 ）。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/B3lCL0DcgE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/B3lCL0DcgE.png?imageslim)
 
 - 核心（ECMAScript）
 - 文档对象模铟（DOM）
@@ -161,7 +161,7 @@ DOM把整个页面映射为一个多层节点结构。HTML 或XML页面中的每
 
 在DOM中，这个页面可以通过如图1.2 所示的分层节点图表示：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/hCfFCBeK1E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/hCfFCBeK1E.png?imageslim)
 
 通过DOM创建的这个表示文档的树形图，开发人员获得了控制页面内容和结构的主动权。借助 DOM提供的API。开发人员可以轻松自如地删除，添加、替换或修改任何节点。$\color{red}\large \textbf{借助 DOM提供的API 这句是什么意思？}$
 

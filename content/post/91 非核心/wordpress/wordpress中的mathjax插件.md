@@ -18,7 +18,7 @@ date: 2018-08-21 18:16:22
 ## 1.使用方法：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aCiJhfBClH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/aCiJhfBClH.png?imageslim)
 
 ## 2.在线的LaTeX编辑器，可以在那里可视化编辑好之后拷贝过来。
 

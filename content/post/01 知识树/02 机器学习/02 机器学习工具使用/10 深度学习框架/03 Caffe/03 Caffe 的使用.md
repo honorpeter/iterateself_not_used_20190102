@@ -28,68 +28,68 @@ date: 2018-08-18 21:45:23
 # 大体流程如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5hHjdB0ckJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5hHjdB0ckJ.png?imageslim)
 
 数据集图片会转存到数据库种，因为我们会频繁的读写这部分数据。它的backend是支持levelDB和LMDB的，然后在这个数据库种进行平凡的读写。**Lrn是什么？levelDB和LMDB是什么？非常想知道代码里面都是怎么实现数据库与计算之间的并行的。不同的thread之间是怎么交互的这里？**
 
 
 ## 第1步：转化格式
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HjG5f77HLc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HjG5f77HLc.png?imageslim)
 
 ### 第2步：定义层次结构
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/BbDlaHEfIL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/BbDlaHEfIL.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/k2e0LDd4CJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/k2e0LDd4CJ.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/FDl4641c06.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/FDl4641c06.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/BCLfje9gFH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/BCLfje9gFH.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/H5DgHJLfC8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/H5DgHJLfC8.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l8eLhd7jK4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/l8eLhd7jK4.png?imageslim)
 
 
 
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gBAbCibhgk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/gBAbCibhgk.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HI2j69I1D7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HI2j69I1D7.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/I16bBCF01k.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/I16bBCF01k.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0FLI74FGE1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/0FLI74FGE1.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8F2gfLLiJd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8F2gfLLiJd.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/jlk7k6KD24.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/jlk7k6KD24.png?imageslim)
 
 
 
@@ -99,20 +99,20 @@ date: 2018-08-18 21:45:23
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/J6JDC6lFKH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/J6JDC6lFKH.png?imageslim)
 
 第4步：训练
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mim1AjlfE0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mim1AjlfE0.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/d435D987im.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/d435D987im.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GalmgDEcjc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/GalmgDEcjc.png?imageslim)
 
 
 
@@ -123,7 +123,7 @@ date: 2018-08-18 21:45:23
 AlexNet 、VGG 、GoogLeNet 、ResNet
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/J2jAC5KLJd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/J2jAC5KLJd.png?imageslim)
 
 
 
@@ -138,10 +138,10 @@ AlexNet 、VGG 、GoogLeNet 、ResNet
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2AhmD2lm4j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/2AhmD2lm4j.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/F1I1jkEGjG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/F1I1jkEGjG.png?imageslim)
 
 
 
@@ -151,7 +151,7 @@ AlexNet 、VGG 、GoogLeNet 、ResNet
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/fgcGLlD8e9.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/fgcGLlD8e9.png?imageslim)
 
 
 
@@ -273,21 +273,21 @@ AlexNet 、VGG 、GoogLeNet 、ResNet
 定义网络结构
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/137gEie1cJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/137gEie1cJ.png?imageslim)
 
 载入solver
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EGa9L7kahd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EGa9L7kahd.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HLE4FB0HdK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HLE4FB0HdK.png?imageslim)
 
 Solver训练
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2G31iC2dJJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/2G31iC2dJJ.png?imageslim)
 
 
 
@@ -298,7 +298,7 @@ Solver训练
 做完前向运算取出某层输出
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/almkAh3I4J.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/almkAh3I4J.png?imageslim)
 
 更详细的流程可参考 https://github.com/HanXiaoyang/image_retrieval/blob/master/compute_fea_for_image_retrieval.py
 
@@ -306,7 +306,7 @@ Solver训练
 ### Pycaffe图像识别
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ABB6d2B9fF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ABB6d2B9fF.png?imageslim)
 
 
 
@@ -316,14 +316,14 @@ Solver训练
 
 你在conv.prototxt中定义好了卷积层如下
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/F147C5dk3a.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/F147C5dk3a.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/hhem5clh5l.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/hhem5clh5l.png?imageslim)
 
 python python/draw_net.py conv.prototxt my_net.png
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cJAHfhHHgG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/cJAHfhHHgG.png?imageslim)
 
 
 

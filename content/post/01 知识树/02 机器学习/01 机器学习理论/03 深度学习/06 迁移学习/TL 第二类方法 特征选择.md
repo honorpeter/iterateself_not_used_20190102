@@ -20,7 +20,7 @@ date: 2018-07-27 15:06:59
 特征选择法示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/d46C25mmi5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/d46C25mmi5.png?imageslim)
 
 
 
@@ -33,7 +33,7 @@ date: 2018-07-27 15:06:59
 特征选择法中的Pivot feature示意图：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HEGH3lddhJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HEGH3lddhJ.png?imageslim)
 
 上图展示了Pivot feature的含义。Pivot feature指的是在文本分类中，在不同领域中出现频次较高的那些词。
 

@@ -1,5 +1,5 @@
 ---
-title: Python 基础 01 
+title: Python 基础 01
 toc: true
 date: 2018-08-03 13:52:35
 ---
@@ -567,7 +567,7 @@ datetime.datetime(2011, 11, 15, 22, 30)
 这个datetime.timedelta(17, 7179)表明两个时间差17天，7179秒
 
 
-还有其他一些datetime格式![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/ah24ILB3e3.jpg?imageslim)
+还有其他一些datetime格式![mark](http://images.iterate.site/blog/image/180803/ah24ILB3e3.jpg?imageslim)
 
 
 # 3 控制流程 (Control Flow)

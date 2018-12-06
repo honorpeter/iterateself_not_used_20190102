@@ -68,7 +68,7 @@ Last name:<br>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/hcCJHbALJI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/hcCJHbALJI.png?imageslim)
 
 注释：表单本身并不可见。还要注意文本字段的默认宽度是 20 个字符。<span style="color:red;">文本字段的宽度怎么修改？</span>
 
@@ -94,7 +94,7 @@ Last name:<br>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/K7d9fAAGli.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/K7d9fAAGli.png?imageslim)
 
 ## 提交按钮
 
@@ -126,11 +126,11 @@ Last name:<br>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/1CaFb4gidE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/1CaFb4gidE.png?imageslim)
 
 点击之后：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/4jC06gmdIf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/4jC06gmdIf.png?imageslim)
 <span style="color:red;">上面这个例子是设置到一个asp 页面里面，那么怎么设置成一个 js 函数？</span>
 
 ## Action 属性
@@ -215,11 +215,11 @@ Last name:<br>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/hkDIgD0hLD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/hkDIgD0hLD.png?imageslim)
 
 点击提交之后：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/L0Ea83lgc2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/L0Ea83lgc2.png?imageslim)
 
 
 
@@ -252,10 +252,10 @@ Last name:<br>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/63mjeHE49D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/63mjeHE49D.png?imageslim)
 
 点击 submit 之后：
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/IAi7GeglJk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/IAi7GeglJk.png?imageslim)
 
 ## HTML Form 属性
 
@@ -331,9 +331,9 @@ form elements
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/c2G9HB9hLf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/c2G9HB9hLf.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/96AElikAm8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/96AElikAm8.png?imageslim)
 
 
 *`<option>`* 元素定义待选择的选项。
@@ -365,7 +365,7 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/bdk1LmfE61.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/bdk1LmfE61.png?imageslim)
 
 
 ## `<button>` 元素
@@ -382,9 +382,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/GD2fGKkddF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/GD2fGKkddF.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/g8BE8BIc7D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/g8BE8BIc7D.png?imageslim)
 
 <span style="color:red;">button 与 input 的 submmit 有什么区别？什么情况下用哪个？</span>
 
@@ -434,12 +434,12 @@ HTML5 增加了如下表单元素：<span style="color:red;">还有什么别的�
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/mFJGGcICCD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/mFJGGcICCD.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/k9F33JC2B5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/k9F33JC2B5.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/liAmfCCddJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/liAmfCCddJ.png?imageslim)
 
 
 
@@ -479,7 +479,7 @@ Last name:<br>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/Jh2H6m0I3D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/Jh2H6m0I3D.png?imageslim)
 
 ## 输入类型：password
 
@@ -506,7 +506,7 @@ User password:<br>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/A5kfibjm5j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/A5kfibjm5j.png?imageslim)
 
 注释：password 字段中的字符会被做掩码处理（显示为星号或实心圆）。
 
@@ -541,7 +541,7 @@ Last name:<br>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/emJK55k70C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/emJK55k70C.png?imageslim)
 
 如果您省略了提交按钮的 value 属性，那么该按钮将获得默认文本：
 
@@ -565,7 +565,7 @@ Last name:<br>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/iCdCD0k7Lh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/iCdCD0k7Lh.png?imageslim)
 
 <span style="color:red;">默认文本是怎么得出的？</span>
 
@@ -594,9 +594,9 @@ Radio buttons let a user select ONLY ONE of a limited number of choices:
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/8Eiai05igB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/8Eiai05igB.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/Bbh7Ha1EAH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/Bbh7Ha1EAH.png?imageslim)
 
 
 ## Input Type: checkbox
@@ -624,9 +624,9 @@ Radio buttons let a user select ONLY ONE of a limited number of choices:
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/ka4BBcED2b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/ka4BBcED2b.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/4Gm8f1Lj1K.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/4Gm8f1Lj1K.png?imageslim)
 
 
 ## Input Type: button
@@ -646,10 +646,10 @@ Radio buttons let a user select ONLY ONE of a limited number of choices:
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/9BkFaAD58g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/9BkFaAD58g.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/3hG6aiGakH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/3hG6aiGakH.png?imageslim)
 
 
 
@@ -705,9 +705,9 @@ HTML5 增加了多个新的输入类型：
 </html>
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/7D6kI8KiK0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/7D6kI8KiK0.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/gf72jFC3aH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/gf72jFC3aH.png?imageslim)
 
 ## 输入限制
 
@@ -754,9 +754,9 @@ Fixed steps will apply in the input field.
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/1b3LHBl38b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/1b3LHBl38b.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/GaEFcjEHLl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/GaEFcjEHLl.png?imageslim)
 
 <span style="color:red;">这种提示还是不错的。</span>
 
@@ -790,9 +790,9 @@ Internet Explorer 11 以及更早版本不支持 type="date"。</p>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/dEGgeehka2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/dEGgeehka2.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/d3CCJ7GHcF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/d3CCJ7GHcF.png?imageslim)
 
 
 您可以向输入添加限制：
@@ -819,9 +819,9 @@ Internet Explorer 不支持 type="date"。</p>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/1IkfiBI3jE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/1IkfiBI3jE.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/B01FibDKma.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/B01FibDKma.png?imageslim)
 
 
 
@@ -856,9 +856,9 @@ A color picker can pop-up when you enter the input field.
 
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/jCaD2kJbfA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/jCaD2kJbfA.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/kKFckkahEA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/kKFckkahEA.png?imageslim)
 
 ## 输入类型：range
 
@@ -890,9 +890,9 @@ A color picker can pop-up when you enter the input field.
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/H1Hcam9KmI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/H1Hcam9KmI.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/bGFIih5kfa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/bGFIih5kfa.png?imageslim)
 
 您能够使用如下属性来规定限制：min、max、step、value。
 
@@ -927,7 +927,7 @@ Internet Explorer 11 以及更早版本不支持 type="month"。</p>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/mKbAC9mk40.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/mKbAC9mk40.png?imageslim)
 
 ## 输入类型：week
 
@@ -960,7 +960,7 @@ Internet Explorer 不支持 type="week"。</p>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/132AK6721J.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/132AK6721J.png?imageslim)
 
 ## 输入类型：time
 
@@ -993,7 +993,7 @@ Internet Explorer 11 以及更早版本不支持 type="time"。</p>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/ikIFdfAeGJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/ikIFdfAeGJ.png?imageslim)
 
 ## 输入类型：datetime
 
@@ -1026,7 +1026,7 @@ Internet Explorer 11 以及更早版本不支持 type="time"。</p>
 
 ```
 <span style="color:red;">这个在 chrome 上试了下，是不支持的。</span>
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/6F8g1Jji5K.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/6F8g1Jji5K.png?imageslim)
 
 
 ## 输入类型：datetime-local
@@ -1061,7 +1061,7 @@ Internet Explorer 不支持 type="datetime-local"。</p>
 
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/8eEkD9BI6H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/8eEkD9BI6H.png?imageslim)
 
 ## 输入类型：email
 
@@ -1090,7 +1090,7 @@ Internet Explorer 不支持 type="datetime-local"。</p>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/2cElG6F88d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/2cElG6F88d.png?imageslim)
 
 ## 输入类型：search
 
@@ -1112,7 +1112,7 @@ Internet Explorer 不支持 type="datetime-local"。</p>
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/mm0F5k8g4L.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/mm0F5k8g4L.png?imageslim)
 
 
 <span style="color:red;">不知道这个有什么区别？</span>
@@ -1143,7 +1143,7 @@ Internet Explorer 不支持 type="datetime-local"。</p>
 
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/6bFCA5CLJL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/6bFCA5CLJL.png?imageslim)
 
 <span style="color:red;">不知道这个有什么区别？</span>
 
@@ -1174,7 +1174,7 @@ Internet Explorer 不支持 type="datetime-local"。</p>
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/HaALFgjC0m.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/HaALFgjC0m.png?imageslim)
 
 
 
@@ -1391,9 +1391,9 @@ Last name: <input type="text" name="lname" form="form1" />
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/d4gdB3aI12.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/d4gdB3aI12.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/2kAfJ3ffhc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/2kAfJ3ffhc.png?imageslim)
 
 
 ## formaction 属性
@@ -1424,7 +1424,7 @@ Last name: <input type="text" name="lname" /><br />
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/4K62gfdgda.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/4K62gfdgda.png?imageslim)
 
 ## formenctype 属性
 
@@ -1571,9 +1571,9 @@ height 和 width 属性仅用于 `<input type="image">`。
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/0Gb7gj2A21.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/0Gb7gj2A21.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/AcGi40JK7b.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/AcGi40JK7b.png?imageslim)
 <span style="color:red;">为什么这个坐标也会提交到 server？</span>
 
 ## list 属性
@@ -1646,9 +1646,9 @@ multiple 属性适用于以下输入类型：email 和 file。
 </html>
 ```
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/DgbJG8e1CK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/DgbJG8e1CK.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/12lc2AJG9D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/12lc2AJG9D.png?imageslim)
 
 ## pattern 属性
 
@@ -1678,7 +1678,7 @@ title="三个字母的国家代码" />
 </body>
 </html>
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/F2H34746h2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/F2H34746h2.png?imageslim)
 
 ## placeholder 属性
 
@@ -1706,7 +1706,7 @@ placeholder 属性适用于以下输入类型：text、search、url、tel、emai
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/E99DaCh9fd.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/E99DaCh9fd.png?imageslim)
 
 ## required 属性
 
@@ -1734,7 +1734,7 @@ Name: <input type="text" name="usr_name" required="required" />
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/97KD2LIGFb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/97KD2LIGFb.png?imageslim)
 
 ## step 属性
 
@@ -1764,4 +1764,4 @@ step 属性适用于以下输入类型：number、range、date、datetime、date
 </html>
 
 ```
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180625/5b8FD2hm3A.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180625/5b8FD2hm3A.png?imageslim)

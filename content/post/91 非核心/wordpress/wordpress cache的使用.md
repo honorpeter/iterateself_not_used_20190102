@@ -22,7 +22,7 @@ date: 2018-07-27 20:34:15
 设置如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Jm11BDLbkL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Jm11BDLbkL.png?imageslim)
 
 **注意：submit之后其实是要过大概10分钟才会起作用**
 

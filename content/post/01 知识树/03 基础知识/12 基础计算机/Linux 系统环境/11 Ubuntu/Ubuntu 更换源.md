@@ -131,7 +131,7 @@ sudo vi sources.list (要有管理员权限)
 
 ### 删除掉sources.list的其他内容，任意选择一种源的内容复制粘贴进去，保存，例如，选择阿里源
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181004/ABlG9C6Ela.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181004/ABlG9C6Ela.png?imageslim)
 
 ### 更新 apt
 

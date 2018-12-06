@@ -64,7 +64,7 @@ plt.show()
 输出：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180713/6HJ7Jf0glJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180713/6HJ7Jf0glJ.png?imageslim)
 
 
 

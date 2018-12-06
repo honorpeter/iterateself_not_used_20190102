@@ -21,11 +21,11 @@ date: 2018-08-29
 
 我们要用到的数据的二维可视化如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/7FFJ7AFIkm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180831/7FFJ7AFIkm.png?imageslim)
 
 我们将通过 MXNet 的 model 模块搭建一个两层神经网络，网络结构如下：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/2ba909hiCc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180831/2ba909hiCc.png?imageslim)
 
 
 ## 生成我们需要的数据
@@ -184,7 +184,7 @@ plt.show()
 说明：
 
 1. 在执行程序的时候，我们会得到如图7-2所示的结构图。
-  ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/g95g1gk0BC.png?imageslim)
+  ![mark](http://images.iterate.site/blog/image/180831/g95g1gk0BC.png?imageslim)
 
 2. 我们用的是 mxnet.io.NDArrayIter 来生成一个用于遍历训练数据和对应标签的迭代器，然后用model进行训练。<span style="color:red;">是不是一定要用这个？</span>
 
@@ -198,7 +198,7 @@ INFO:root:Epoch[1] Time cost=0.002
 ```
 
 4. 我们会用训练好的模型对所有样本和取值范围的平面进行分类，并画出对应的三维的概率可视化的图如下：
-  ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180831/AcJGk9GCl5.png?imageslim)
+  ![mark](http://images.iterate.site/blog/image/180831/AcJGk9GCl5.png?imageslim)
 
 对于上面的程序有两个地方想知道：<span style="color:red;">SoftmaxOutput 还自带 NLL 作为loss 是什么意思？冲量系数是什么？了解下。</span>
 

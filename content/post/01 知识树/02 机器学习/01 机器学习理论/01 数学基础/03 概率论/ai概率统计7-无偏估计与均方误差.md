@@ -33,7 +33,7 @@ date: 2018-07-27 13:39:28
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cmBJ4hFJhj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/cmBJ4hFJhj.png?imageslim)
 
 
 
@@ -43,20 +43,20 @@ date: 2018-07-27 13:39:28
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l7134KcB72.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/l7134KcB72.png?imageslim)
 
 为什么呢？我们先看下均值：
 
 均值的无偏性
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/g5K2A59L2l.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/g5K2A59L2l.png?imageslim)
 
 那么方差又是什么原因呢？
 
 方差的无偏性
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3IfHGd4f88.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/3IfHGd4f88.png?imageslim)
 **上面这个没明白怎么推出来的？要自己推一下。**
 
 标准差是有偏的。
@@ -69,7 +69,7 @@ date: 2018-07-27 13:39:28
 # 均方误差准则：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/HjF1mclLD2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/HjF1mclLD2.png?imageslim)
 
 如果是无偏估计，所谓的均方误差就是估计量的方差
 

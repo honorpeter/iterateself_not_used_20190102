@@ -20,14 +20,14 @@ date: 2018-08-16 21:35:39
 图像识别与定位：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8eGaaD9aCG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8eGaaD9aCG.png?imageslim)
 
 ImageNet
 
 实际上有 识别+定位 两个任务
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/LdmE8F2F8E.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/LdmE8F2F8E.png?imageslim)
 
 
 
@@ -38,14 +38,14 @@ ImageNet
 4个数字，用L2 loss/欧⽒氏距离损失?
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/ce03E2hGc1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/ce03E2hGc1.png?imageslim)
 
 步骤1:
 
   * 先解决简单问题，搭一个识别图像的神经网络
   * 在AlexNet VGG GoogleLenet ResNet上fine-tune一下
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/70BH2lLeA5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/70BH2lLeA5.png?imageslim)
 
 步骤2:
 
@@ -60,7 +60,7 @@ ImageNet
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/bEFg1FB1m5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/bEFg1FB1m5.png?imageslim)
 
 步骤3:
 
@@ -75,14 +75,14 @@ ImageNet
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/BGBAKGdGEa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/BGBAKGdGEa.png?imageslim)
 
 步骤4:
 
 * 预测阶段把2个“头部”模块拼上
 * 完成不同的功能
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/dLGb4hfjbm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/dLGb4hfjbm.png?imageslim)
 
 Regression(回归)的模块部分加在什么位置？
 
@@ -95,7 +95,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/AE1H3lbIkl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/AE1H3lbIkl.png?imageslim)
 
 能否对主体有更细致的识别？
 
@@ -110,7 +110,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1I5mKmhaEm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/1I5mKmhaEm.png?imageslim)
 
 应用：如何识别人的姿势？
 
@@ -125,7 +125,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/kAa9l31bIL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/kAa9l31bIL.png?imageslim)
 
 
 
@@ -154,7 +154,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/EkDCbBK8j3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/EkDCbBK8j3.png?imageslim)
 
 实际应用时
 
@@ -169,7 +169,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5HBDLF8g20.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5HBDLF8g20.png?imageslim)
 
 想办法克服一下过程中的“参数多”与“计算慢”
 
@@ -181,7 +181,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7i49Khi22j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7i49Khi22j.png?imageslim)
 
 想办法克服一下过程中的“参数多”与“计算慢”
 
@@ -196,7 +196,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6FllDDGCK4.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/6FllDDGCK4.png?imageslim)
 
 想办法克服一下过程中的“参数多”与“计算慢”
 
@@ -211,7 +211,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8hFD3ig7Gi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8hFD3ig7Gi.png?imageslim)
 
 
 
@@ -219,22 +219,22 @@ Regression(回归)的模块部分加在什么位置？
 # 物体识别
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/KeJGm1bIl6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/KeJGm1bIl6.png?imageslim)
 
 再次看做回归问题？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/cEg2hb7lHa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/cEg2hb7lHa.png?imageslim)
 
 其实你不知道图上有多少个物体…
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/E5h5e5JAm6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/E5h5e5JAm6.png?imageslim)
 
 试着看做分类问题？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/53da08g2f3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/53da08g2f3.png?imageslim)
 
 看做分类问题，难点是？
 
@@ -276,16 +276,16 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5K85KbaBC1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5K85KbaBC1.png?imageslim)
 
 “图框”候选：其他方式？
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gkJ5j5Jl36.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/gkJ5j5Jl36.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GLL82ajHKC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/GLL82ajHKC.png?imageslim)
 
 
 
@@ -295,7 +295,7 @@ Regression(回归)的模块部分加在什么位置？
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GkdAjg5dGl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/GkdAjg5dGl.png?imageslim)
 
 Girschick et al, “Rich feature hierarchies for accurate object detection and semantic segmentation”, CVPR 2014
 
@@ -305,7 +305,7 @@ Girschick et al, “Rich feature hierarchies for accurate object detection and s
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/93dmJeJ46j.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/93dmJeJ46j.png?imageslim)
 
 
 
@@ -316,7 +316,7 @@ Girschick et al, “Rich feature hierarchies for accurate object detection and s
 比如20个物体类别+1个背景
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/7JJFFAEf7c.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/7JJFFAEf7c.png?imageslim)
 
 
 
@@ -339,7 +339,7 @@ Girschick et al, “Rich feature hierarchies for accurate object detection and s
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/0KfHdKg7D0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/0KfHdKg7D0.png?imageslim)
 
 
 
@@ -349,11 +349,11 @@ Girschick et al, “Rich feature hierarchies for accurate object detection and s
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mEaiDHG77m.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mEaiDHG77m.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/bIljiGcdBI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/bIljiGcdBI.png?imageslim)
 
 
 
@@ -370,7 +370,7 @@ Girschick et al, “Rich feature hierarchies for accurate object detection and s
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/5e4I6beEG8.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/5e4I6beEG8.png?imageslim)
 
 
 
@@ -392,7 +392,7 @@ Girschick et al, “Rich feature hierarchies for accurate object detection and s
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aHjD5j7A50.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/aHjD5j7A50.png?imageslim)
 
 
 
@@ -409,22 +409,22 @@ Girschick et al, “Rich feature hierarchies for accurate object detection and s
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/8Lm1AKAAc1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/8Lm1AKAAc1.png?imageslim)
 
 关于RIP：Region of Interest Pooling
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1F3JaGeBIl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/1F3JaGeBIl.png?imageslim)
 
 维度不匹配怎么办：划分格子grid => 下采样
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mKc1K57Ga0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mKc1K57Ga0.png?imageslim)
 
 RIP：Region of Interest Pooling   映射关系显然是可以还原回去的
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/A2ddflj1d6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/A2ddflj1d6.png?imageslim)
 
 
 
@@ -434,7 +434,7 @@ RIP：Region of Interest Pooling   映射关系显然是可以还原回去的
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/4fk90lc5LF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/4fk90lc5LF.png?imageslim)
 
 
 
@@ -447,23 +447,23 @@ Region Proposal(候选图窗)一定要另外独立做吗？
 一起用RPN做完得了！
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/C8L18ceefc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/C8L18ceefc.png?imageslim)
 
 Ren et al, “Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks”, NIPS 2015
 
 关于RPN：Region Proposal Network
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Ilkfk6kDgi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Ilkfk6kDgi.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/BCAmmbI4IL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/BCAmmbI4IL.png?imageslim)
 
 关于Faster R-CNN的整个训练过程
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Jbm49m8hlf.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Jbm49m8hlf.png?imageslim)
 
 
 
@@ -473,7 +473,7 @@ Ren et al, “Faster R-CNN: Towards Real-Time Object Detection with Region Propo
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/G9m6La96l0.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/G9m6La96l0.png?imageslim)
 
 
 
@@ -484,7 +484,7 @@ Ren et al, “Faster R-CNN: Towards Real-Time Object Detection with Region Propo
 Jifeng Dai,etc “R-FCN: Object Detection via Region-based Fully Convolutional Networks ”, 2016
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/2EhFB17gaE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/2EhFB17gaE.png?imageslim)
 
 每个颜色代表不同的位置选择区域。
 The bank of kxk score maps correspond to a kxk spatial grid describing relative positions.
@@ -492,21 +492,21 @@ The bank of kxk score maps correspond to a kxk spatial grid describing relative 
 训练损失:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/l5gEEC8L2A.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/l5gEEC8L2A.png?imageslim)
 
 分类损失:
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/6jFHi7aIc7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/6jFHi7aIc7.png?imageslim)
 
 Region-sensitive score maps and ROI pooling
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/gF20KLk7C7.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/gF20KLk7C7.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/BgeKb43aLF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/BgeKb43aLF.png?imageslim)
 
 
 

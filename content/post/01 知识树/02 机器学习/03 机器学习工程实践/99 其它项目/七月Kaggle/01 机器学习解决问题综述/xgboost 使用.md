@@ -5,22 +5,22 @@ date: 2018-07-19 22:29:23
 ---
 
 非常不建议在XGBoost 里面用他的缺省值处理方法
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/C2DHI1elbg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180718/C2DHI1elbg.png?imageslim)
 还是要一个feature，一个feature 的手工做处理比较好。
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/dhlD6kHgHc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180718/dhlD6kHgHc.png?imageslim)
 这个可以知道每个特征的重要性。
 
 看起来 XGBoost 还是很好用的。
 最简单的例子：guide-python/basic_walkthrough.py 里面有讲一些基本的操作。
 然后guide-python 里面还有一些例子。比如custom_objective.py 这个是教你怎么自定义loss function 的。
 注意：
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/D710cdeHhD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180718/D710cdeHhD.png?imageslim)
 如果你要自己制定loss function 的话，你要保证你的loss function 是可导的，而且，你要告诉他一阶导数 grad 和二阶倒数 hess。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180718/3klEbE2jHc.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180718/3klEbE2jHc.png?imageslim)
 这个是交叉验证的使用案例。
 
 sklearn_parallel.py 这个是讲怎么用sklearn 并行的调用xgboost

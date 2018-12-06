@@ -60,7 +60,7 @@ nvidia-smi
 
 如果安装成功则会显示显卡的信息，比如笔者的 GTX980M 笔记本显示信息如图7-1 所示。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180830/bKk4m1ab7H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180830/bKk4m1ab7H.png?imageslim)
 
 如果是其他的Linux系统，步骤也很相似，首先卸载自带的显卡驱动，然后用系统自带软件包或者到 NVIDIA 官网下载驱动及 CUDA 按照说明进行安装，下载地址为 http://www.nvidia.com/Download/index.aspx 或  https://developer.nvidia.com/cuda-downloads。<span style="color:red;">还没有亲自安装过，一定要亲自实践并总结。</span>
 

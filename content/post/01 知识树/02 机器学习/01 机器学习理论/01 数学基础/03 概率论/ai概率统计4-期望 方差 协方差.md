@@ -83,7 +83,7 @@ date: 2018-08-21 18:16:23
 **取到的1的个数是k，那么总个数不用管吗？为什么这个地方是这样的？ 求和是对谁求和？\(2^m\)是什么？**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IC3KB2ALeA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IC3KB2ALeA.png?imageslim)
 
 **这里使用E(x+y)=E(x)+E(y) 来将累加和提取到外面**
 
@@ -92,7 +92,7 @@ date: 2018-08-21 18:16:23
 模拟如下：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/caEe1f4Fid.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/caEe1f4Fid.png?imageslim)
 
 
 
@@ -102,7 +102,7 @@ date: 2018-08-21 18:16:23
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GfC41FdL9d.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/GfC41FdL9d.png?imageslim)
 
 
 
@@ -117,7 +117,7 @@ date: 2018-08-21 18:16:23
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/i6HI53BhKm.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/i6HI53BhKm.png?imageslim)
 
 
 

@@ -14,17 +14,17 @@ date: 2018-08-18 16:38:27
 
 这个是 15年提出的，现在已经是基本比较平常了。
 
-最早的论文：![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/gFGH1aH3Lk.png?imageslim)
+最早的论文：![mark](http://images.iterate.site/blog/image/180812/gFGH1aH3Lk.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/ac3fbed46f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180812/ac3fbed46f.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/jAA4IJl5cj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180812/jAA4IJl5cj.png?imageslim)
 
 怎么做的呢？
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/6gGd8GEljb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180812/6gGd8GEljb.png?imageslim)
 
 他开始的时候没有想做成这个文艺的东西，他在想，我们用图像的距离比对的时候一直用的是 L2 loss，他在想有没有更好的 loss function ，然后就做了一堆的试验。
 
@@ -40,7 +40,7 @@ L2 loss 是评价两幅图在内容上的接近程度，style loss 是定义在�
 
 所以，我定义了两个loss。
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/K9F3D7lH2a.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180812/K9F3D7lH2a.png?imageslim)
 
 说明一下这个公式：
 
@@ -52,7 +52,7 @@ L2 loss 是评价两幅图在内容上的接近程度，style loss 是定义在�
 
 调节权重:偏风格or偏内容
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180812/F575IDhKBh.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180812/F575IDhKBh.png?imageslim)
 
 
 老师还是推荐去看原始的论文。这个 neural style 没有多困难。

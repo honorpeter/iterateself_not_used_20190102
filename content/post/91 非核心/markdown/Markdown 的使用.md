@@ -28,7 +28,7 @@ date: 2018-08-21 18:16:22
 ## 2. 图片与链接
 
 图片:
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/bi1FfEGkCL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180803/bi1FfEGkCL.png?imageslim)
 
 链接:
 [这是去往Leanote官方博客的链接](http://leanote.leanote.com)

@@ -43,7 +43,7 @@ date: 2018-08-21 18:16:23
 content_image + style_image=> output image
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/GHg4ILl86F.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/GHg4ILl86F.png?imageslim)
 
 文章地址：https://arxiv.org/abs/1508.06576
 
@@ -55,15 +55,15 @@ content_image + style_image=> output image
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/3I0E5Eak1f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/3I0E5Eak1f.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/aAjG9Gl1cF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/aAjG9Gl1cF.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/eCg5BGEBga.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/eCg5BGEBga.png?imageslim)
 
 
 
@@ -75,9 +75,9 @@ content_image + style_image=> output image
 
 网络结构：
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/Jj6jgJb6bI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/Jj6jgJb6bI.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/1iJ0al7meJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/1iJ0al7meJ.png?imageslim)
 
 
 在本文中，只使用了前5层的网络 'conv1_1'(a)，'conv2_1'(b)，'conv3_1'(c)，'conv4_1'(d)，'conv5_1'(e)。VGG网络主要用来做内容识别，在实践中作者发现，使用前三层1，2，3已经能达到比较好的内容重建工作，4、5两层保留了一些比较高层的特征，丢失了一些细节。
@@ -90,7 +90,7 @@ content_image + style_image=> output image
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/90c4G755aF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/90c4G755aF.png?imageslim)
 
 
 
@@ -152,9 +152,9 @@ To generate the images that mix the content of a photograph withe the style of a
 1.对于同一张content对象，给style风格图片不同时，输出的图像不同。
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/IhbD3lGifb.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/IhbD3lGifb.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/CaGgE9ab35.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/CaGgE9ab35.png?imageslim)
 
 2.Total loss 中的\(\alpha /\beta \)不同。
 
@@ -162,9 +162,9 @@ To generate the images that mix the content of a photograph withe the style of a
 
 * 从左导游表示的时不同的\(\alpha /\beta \)的比例，\(10^{-5}->10^{-2}\)是指更注重style还是更强调content。**厉害**
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/mkDiab7gba.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/mkDiab7gba.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/fL40DD470K.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/fL40DD470K.png?imageslim)
 
 
 

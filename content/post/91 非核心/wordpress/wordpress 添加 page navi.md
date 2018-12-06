@@ -11,7 +11,7 @@ date: 2018-07-27 20:34:26
 我比较喜欢wordpress的twentytwelve的主题模板，但是这个模板在博文很多的时候没有办法直接跳转到之前的博文的页面，即，没有这个：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180727/iLah170je3.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180727/iLah170je3.png?imageslim)
 
 因此想添加这样的，方便跳转。
 

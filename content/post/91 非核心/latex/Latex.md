@@ -68,13 +68,13 @@ REF：[IT 圈里有哪些经常被读错的词？](https://www.zhihu.com/questio
 
 | 介绍 | 写法 | 图片示意 | 大概的宽度  |
 | ------------ | ---------- | ------------------------------------------------------------ | -------------- |
-| 两个quad空格 | a \qquad b | ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/c7A6imL82l.png?imageslim) | 两个 *m* 的宽度  |
-| quad空格     | a \quad b  | ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/GLC1aDF2ge.png?imageslim) | 一个 *m* 的宽度  |
-| 大空格       | a\ b       | ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/dI37C4EFCm.png?imageslim) | 1/3*m* 宽度     |
-| 中等空格     | a\;b       | ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/g6BLbILmla.png?imageslim) | 2/7*m* 宽度     |
-| 小空格       | a\,b       | ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/F3iLh3JFm1.png?imageslim) | 1/6*m* 宽度     |
-| 没有空格     | ab         | ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/kgJkdmLFj1.png?imageslim) |                |
-| 紧贴         | a\!b       | ![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180803/f39mKCFHfC.png?imageslim) | 缩进 1/6*m* 宽度 |
+| 两个quad空格 | a \qquad b | ![mark](http://images.iterate.site/blog/image/180803/c7A6imL82l.png?imageslim) | 两个 *m* 的宽度  |
+| quad空格     | a \quad b  | ![mark](http://images.iterate.site/blog/image/180803/GLC1aDF2ge.png?imageslim) | 一个 *m* 的宽度  |
+| 大空格       | a\ b       | ![mark](http://images.iterate.site/blog/image/180803/dI37C4EFCm.png?imageslim) | 1/3*m* 宽度     |
+| 中等空格     | a\;b       | ![mark](http://images.iterate.site/blog/image/180803/g6BLbILmla.png?imageslim) | 2/7*m* 宽度     |
+| 小空格       | a\,b       | ![mark](http://images.iterate.site/blog/image/180803/F3iLh3JFm1.png?imageslim) | 1/6*m* 宽度     |
+| 没有空格     | ab         | ![mark](http://images.iterate.site/blog/image/180803/kgJkdmLFj1.png?imageslim) |                |
+| 紧贴         | a\!b       | ![mark](http://images.iterate.site/blog/image/180803/f39mKCFHfC.png?imageslim) | 缩进 1/6*m* 宽度 |
 
 
 

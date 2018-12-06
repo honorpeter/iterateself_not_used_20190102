@@ -470,7 +470,7 @@ score = model.evaluate(x_test, y_test, batch_size=16)
 
 开始的两层 LSTM 返回其全部输出序列，而第三层 LSTM 只返回其输出序列的最后一步结果，从而其时域维度降低（即将输入序列转换为单个向量）。<span style="color:red;">没明白？</span>
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/181020/dd44K3GjAg.png?imageslim)
+![mark](http://images.iterate.site/blog/image/181020/dd44K3GjAg.png?imageslim)
 
 ```python
 from keras.models import Sequential

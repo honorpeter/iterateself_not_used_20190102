@@ -21,22 +21,22 @@ date: 2018-07-28 09:03:43
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/40akJK4Dd2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/40akJK4Dd2.png?imageslim)
 
 加强版：注意力模型
 
 代码请戳 https://github.com/jazzsaxmafia/show_attend_and_tell.tensorflow
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1F6H0dcF0B.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1F6H0dcF0B.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DJAhHcHHgj.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/DJAhHcHHgj.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/lF7FGHeJC6.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/lF7FGHeJC6.png?imageslim)
 
 
 
@@ -52,7 +52,7 @@ date: 2018-07-28 09:03:43
 https://gist.github.com/karpathy/d4dee566867f8291f086
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aJlAl18eiJ.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/aJlAl18eiJ.png?imageslim)
 
 
 
@@ -63,11 +63,11 @@ https://gist.github.com/karpathy/d4dee566867f8291f086
 数据请戳：http://cs.stanford.edu/people/karpathy/char-rnn/wiki.txt
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kIKb7l6FgA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kIKb7l6FgA.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0ChKGH7eal.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0ChKGH7eal.png?imageslim)
 
 
 
@@ -78,12 +78,12 @@ https://gist.github.com/karpathy/d4dee566867f8291f086
 依旧是：https://gist.github.com/karpathy/d4dee566867f8291f086
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/D5ig5aAbJG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/D5ig5aAbJG.png?imageslim)
 
 第一行是真正的输入的文本，每一列是输入那个字符之后，猜测的可能后续会输入什么。蓝色表示的是强烈的认为下一个字符是应该是这个字符，是一个正向的非常大的值。**好像没有很明白**
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/e7L9ida6ig.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/e7L9ida6ig.png?imageslim)
 
 
 
@@ -98,11 +98,11 @@ https://gist.github.com/karpathy/d4dee566867f8291f086
 数据请戳：http://www.ffts.com/recipes/lg/lg32965.zip
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/8ImkHlJhCi.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/8ImkHlJhCi.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/B00f21EIIE.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/B00f21EIIE.png?imageslim)
 
 
 
@@ -113,11 +113,11 @@ https://gist.github.com/karpathy/d4dee566867f8291f086
 https://medium.com/@samim/obama-rnn-machine-generated-political-speeches-c8abd18a2ea0#.9sb793kbm
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Ke0kK5HGCF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Ke0kK5HGCF.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/da18kI6B0G.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/da18kI6B0G.png?imageslim)
 
 
 
@@ -129,18 +129,18 @@ https://medium.com/@samim/obama-rnn-machine-generated-political-speeches-c8abd18
 https://highnoongmt.wordpress.com/2015/05/22/lisls-stis-recurrent-neural-networks-for-folk-music-generation
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/9m6k12F3hl.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/9m6k12F3hl.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/2hi9F5hkB2.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/2hi9F5hkB2.png?imageslim)
 
 Abc notaion 转化 参见：
 
 http://abcnotation.com/blog/2010/01/31/how-to-understand-abc-the-basics/
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/CBaI9hF0JH.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/CBaI9hF0JH.png?imageslim)
 
 
 
@@ -153,11 +153,11 @@ http://abcnotation.com/blog/2010/01/31/how-to-understand-abc-the-basics/
 http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-networks/
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/giE8jDGLGa.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/giE8jDGLGa.png?imageslim)
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/aA77ei045e.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/aA77ei045e.png?imageslim)
 
 
 
@@ -177,7 +177,7 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/kjH4m8GHCF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/kjH4m8GHCF.png?imageslim)
 
 
 
@@ -187,23 +187,23 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
   * 生成翻译模型需要“对齐”
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Idb3fb4jaG.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Idb3fb4jaG.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/hb1G5Bg2kc.png?imageslim)
-
-
-
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/h0491h63gB.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/hb1G5Bg2kc.png?imageslim)
 
 
 
-
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J77ai7ehdd.png?imageslim)
-
+![mark](http://images.iterate.site/blog/image/180728/h0491h63gB.png?imageslim)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/B8gB8f2lD9.png?imageslim)
+
+
+![mark](http://images.iterate.site/blog/image/180728/J77ai7ehdd.png?imageslim)
+
+
+
+![mark](http://images.iterate.site/blog/image/180728/B8gB8f2lD9.png?imageslim)
 
 
 
@@ -214,12 +214,12 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
 会得到很多候选翻译短语
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/1If3cEf45C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/1If3cEf45C.png?imageslim)
 
 树搜索与剪枝 => beam-search
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/j328HJCjHD.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/j328HJCjHD.png?imageslim)
 
 
 
@@ -234,22 +234,22 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
 
 所有的源语言信息压缩到“记忆”里，再从“记忆”里解码
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/DCjhEbd82D.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/DCjhEbd82D.png?imageslim)
 
 编码过程
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/l9giH57f3i.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/l9giH57f3i.png?imageslim)
 
 解码过程
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ClhmJiBCE1.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ClhmJiBCE1.png?imageslim)
 
 最小化交叉熵损失
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7dd7lA4kLF.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/7dd7lA4kLF.png?imageslim)
 
 
 
@@ -257,7 +257,7 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
 ## 小小的改进，稠密向量(embedding dense vector)
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/mcHIgHggaK.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/mcHIgHggaK.png?imageslim)
 
 
 
@@ -267,7 +267,7 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
 * 整体差很多,某些条件下差距小
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/iaChHlb2b5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/iaChHlb2b5.png?imageslim)
 
 
 
@@ -277,9 +277,9 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/g31igjg9Ib.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/g31igjg9Ib.png?imageslim)
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/17GCe8f59f.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/17GCe8f59f.png?imageslim)
 
 
 
@@ -297,7 +297,7 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/D56KJ7E0bA.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/D56KJ7E0bA.png?imageslim)
 
 
 
@@ -315,22 +315,22 @@ http://www.hexahedria.com/2015/08/03/composing-music-with-recurrent-neural-netwo
   * “注意力”模型关注当前翻译的词
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/ibLiBC2hlC.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/ibLiBC2hlC.png?imageslim)
 
 Encoder部分：
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/h30lbjE17H.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/h30lbjE17H.png?imageslim)
 
 Decoder部分
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/FdAa5I2d7L.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/FdAa5I2d7L.png?imageslim)
 
 Attention部分
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/7ECj62f4fk.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/7ECj62f4fk.png?imageslim)
 
 
 
@@ -342,7 +342,7 @@ Attention部分
 * 源语言用n个标记向量表示
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/AL6a4hE16g.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/AL6a4hE16g.png?imageslim)
 
 
 
@@ -356,7 +356,7 @@ Attention部分
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/Aag809CKij.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/Aag809CKij.png?imageslim)
 
 
 
@@ -372,12 +372,12 @@ index.html
 models/rnn/translate
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/80aDaCmgLL.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/80aDaCmgLL.png?imageslim)
 
 
 ## 来看看Tensorflow的实现
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/HCg7a9I42C.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/HCg7a9I42C.png?imageslim)
 
 一些tricks
 
@@ -389,7 +389,7 @@ models/rnn/translate
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/J2JG4lE1c5.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/J2JG4lE1c5.png?imageslim)
 
 
 
@@ -401,7 +401,7 @@ models/rnn/translate
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/0m3HBC87GI.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/0m3HBC87GI.png?imageslim)
 
 
 
@@ -410,7 +410,7 @@ models/rnn/translate
 
 
 
-![mark](http://pacdb2bfr.bkt.clouddn.com/blog/image/180728/GHCF26LDej.png?imageslim)
+![mark](http://images.iterate.site/blog/image/180728/GHCF26LDej.png?imageslim)
 
 
 

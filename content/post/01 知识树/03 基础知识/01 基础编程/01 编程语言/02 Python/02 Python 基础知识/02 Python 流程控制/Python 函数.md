@@ -3,35 +3,7 @@ title: Python 函数
 toc: true
 date: 2018-06-11 08:14:42
 ---
----
-author: evo
-comments: true
-date: 2018-05-03 10:21:46+00:00
-layout: post
-link: http://106.15.37.116/2018/05/03/python-func/
-slug: python-func
-title: Python 函数
-wordpress_id: 4996
-categories:
-- 随想与反思
----
 
-<!-- more -->
-
-[mathjax]
-
-
-## 相关资料ERENCE
-
-
-
-
-
- 	
-  1. [python基础教程 w3cschool](https://www.w3cschool.cn/python/)
-
- 	
-  2. [Python 3 教程 菜鸟教程](http://www.runoob.com/python3/python3-tutorial.html)
 
 
 
@@ -42,7 +14,7 @@ categories:
 
 
 
- 	
+
   * aaa
 
 
@@ -54,7 +26,7 @@ categories:
 
 
 
- 	
+
   * aaa
 
 
@@ -89,19 +61,19 @@ categories:
 
 
 
- 	
+
   * 函数代码块以def关键词开头，后接函数标识符名称和圆括号()。
 
- 	
+
   * 任何传入参数和自变量必须放在圆括号中间。圆括号之间可以用于定义参数。
 
- 	
+
   * 函数的第一行语句可以选择性地使用文档字符串—用于存放函数说明。
 
- 	
+
   * 函数内容以冒号起始，并且缩进。
 
- 	
+
   * Return[expression]结束函数，选择性地返回一个值给调用方。不带表达式的return相当于返回 None。
 
 
@@ -118,12 +90,12 @@ categories:
 
 
 
-    
+
     def functionname( parameters ):
        "函数_文档字符串"
        function_suite
        return [expression]
-    
+
 
 
 默认情况下，参数值和参数名称是按函数声明中定义的的顺序匹配起来的。
@@ -134,12 +106,12 @@ categories:
 
 以下为一个简单的Python函数，它将一个字符串作为传入参数，再打印到标准显示设备上。
 
-    
+
     def printme( str ):
        "打印传入的字符串到标准显示设备上"
        print str
        return
-    
+
 
 
 
@@ -160,28 +132,28 @@ categories:
 
 如下实例调用了printme（）函数：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # Function definition is here
     def printme( str ):
        "打印任何传入的字符串"
        print str;
        return;
-     
+
     # Now you can call printme function
     printme("我要调用用户自定义函数!");
     printme("再次调用同一函数");
-    
+
 
 
 以上实例输出结果：
 
-    
+
     我要调用用户自定义函数!
     再次调用同一函数
-    
+
 
 
 
@@ -198,30 +170,30 @@ categories:
 
 所有参数（自变量）在Python里都是按引用传递。如果你在函数里修改了参数，那么在调用这个函数的函数里，原始的参数也被改变了。例如：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # 可写函数说明
     def changeme( mylist ):
        "修改传入的列表"
        mylist.append([1,2,3,4]);
        print "函数内取值: ", mylist
        return
-     
+
     # 调用changeme函数
     mylist = [10,20,30];
     changeme( mylist );
     print "函数外取值: ", mylist
-    
+
 
 
 传入函数的和在末尾添加新内容的对象用的是同一个引用。故输出结果如下：
 
-    
+
     函数内取值:  [10, 20, 30, [1, 2, 3, 4]]
     函数外取值:  [10, 20, 30, [1, 2, 3, 4]]
-    
+
 
 
 
@@ -240,16 +212,16 @@ categories:
 
 
 
- 	
+
   * 必备参数
 
- 	
+
   * 命名参数
 
- 	
+
   * 缺省参数
 
- 	
+
   * 不定长参数
 
 
@@ -262,34 +234,34 @@ categories:
 
 调用printme()函数，你必须传入一个参数，不然会出现语法错误：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     #可写函数说明
     def printme( str ):
        "打印任何传入的字符串"
        print str;
        return;
-     
+
     #调用printme函数
     printme();
-    
+
 
 
 以上实例输出结果：
 
-    
+
     Traceback (most recent call last):
       File "test.py", line 11, in <module>
         printme();
     TypeError: printme() takes exactly 1 argument (0 given)
-    
 
 
 
 
-### 
+
+###
 
 
 
@@ -303,46 +275,46 @@ categories:
 
 以下实例在函数 printme() 调用时使用参数名：
 
-    
+
     #!/usr/bin/python
     # -*- coding: UTF-8 -*-
-     
+
     #可写函数说明
     def printme( str ):
        "打印任何传入的字符串"
        print str;
        return;
-     
+
     #调用printme函数
     printme( str = "My string");
 
 
 以上实例输出结果：
 
-    
+
     My string
 
 
 下例能将关键字参数顺序不重要展示得更清楚：
 
-    
+
     #!/usr/bin/python
     # -*- coding: UTF-8 -*-
-     
+
     #可写函数说明
     def printinfo( name, age ):
        "打印任何传入的字符串"
        print "Name: ", name;
        print "Age ", age;
        return;
-     
+
     #调用printinfo函数
     printinfo( age=50, name="miki" );
 
 
 以上实例输出结果：
 
-    
+
     Name:  miki
     Age  50
 
@@ -351,52 +323,52 @@ categories:
 
 命名参数和函数调用关系紧密，调用方用参数的命名确定传入的参数值。你可以跳过不传的参数或者乱序传参，因为Python解释器能够用参数名匹配参数值。用命名参数调用printme()函数：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     #可写函数说明
     def printme( str ):
        "打印任何传入的字符串"
        print str;
        return;
-     
+
     #调用printme函数
     printme( str = "My string");
-    
+
 
 
 以上实例输出结果：
 
-    
+
     My string
-    
+
 
 
 下例能将命名参数顺序不重要展示得更清楚：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     #可写函数说明
     def printinfo( name, age ):
        "打印任何传入的字符串"
        print "Name: ", name;
        print "Age ", age;
        return;
-     
+
     #调用printinfo函数
     printinfo( age=50, name="miki" );
-    
+
 
 
 以上实例输出结果：
 
-    
+
     Name:  miki
     Age  50
-    
+
 
 
 
@@ -406,31 +378,31 @@ categories:
 
 调用函数时，缺省参数的值如果没有传入，则被认为是默认值。下例会打印默认的age，如果age没有被传入：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     #可写函数说明
     def printinfo( name, age = 35 ):
        "打印任何传入的字符串"
        print "Name: ", name;
        print "Age ", age;
        return;
-     
+
     #调用printinfo函数
     printinfo( age=50, name="miki" );
     printinfo( name="miki" );
-    
+
 
 
 以上实例输出结果：
 
-    
+
     Name:  miki
     Age  50
     Name:  miki
     Age  35
-    
+
 
 
 
@@ -440,20 +412,20 @@ categories:
 
 你可能需要一个函数能处理比当初声明时更多的参数。这些参数叫做不定长参数，和上述2种参数不同，声明时不会命名。基本语法如下：
 
-    
+
     def functionname([formal_args,] *var_args_tuple ):
        "函数_文档字符串"
        function_suite
        return [expression]
-    
+
 
 
 加了星号（*）的变量名会存放所有未命名的变量参数。选择不多传参数也可。如下实例：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # 可写函数说明
     def printinfo( arg1, *vartuple ):
        "打印任何传入的参数"
@@ -462,23 +434,23 @@ categories:
        for var in vartuple:
           print var
        return;
-     
+
     # 调用printinfo 函数
     printinfo( 10 );
     printinfo( 70, 60, 50 );
-    
+
 
 
 以上实例输出结果：
 
-    
+
     输出:
     10
     输出:
     70
     60
     50
-    
+
 
 
 
@@ -497,16 +469,16 @@ python 使用 lambda 来创建匿名函数。
 
 
 
- 	
+
   * lambda只是一个表达式，函数体比def简单很多。
 
- 	
+
   * lambda的主体是一个表达式，而不是一个代码块。仅仅能在lambda表达式中封装有限的逻辑进去。
 
- 	
+
   * lambda函数拥有自己的命名空间，且不能访问自有参数列表之外或全局命名空间里的参数。
 
- 	
+
   * 虽然lambda函数看起来只能写一行，却不等同于C或C++的内联函数，后者的目的是调用小函数时不占用栈内存从而增加运行效率。
 
 
@@ -517,32 +489,32 @@ python 使用 lambda 来创建匿名函数。
 
 lambda函数的语法只包含一个语句，如下：
 
-    
+
     lambda [arg1 [,arg2,.....argn]]:expression
-    
+
 
 
 如下实例：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     #可写函数说明
     sum = lambda arg1, arg2: arg1 + arg2;
-     
+
     #调用sum函数
     print "Value of total : ", sum( 10, 20 )
     print "Value of total : ", sum( 20, 20 )
-    
+
 
 
 以上实例输出结果：
 
-    
+
     Value of total :  30
     Value of total :  40
-    
+
 
 
 
@@ -559,29 +531,29 @@ lambda函数的语法只包含一个语句，如下：
 
 return语句[表达式]退出函数，选择性地向调用方返回一个表达式。不带参数值的return语句返回None。之前的例子都没有示范如何返回数值，下例便告诉你怎么做：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     # 可写函数说明
     def sum( arg1, arg2 ):
        # 返回2个参数的和."
        total = arg1 + arg2
        print "Inside the function : ", total
        return total;
-     
+
     # 调用sum函数
     total = sum( 10, 20 );
-    print "Outside the function : ", total 
-    
+    print "Outside the function : ", total
+
 
 
 以上实例输出结果：
 
-    
+
     Inside the function :  30
     Outside the function :  30
-    
+
 
 
 
@@ -602,10 +574,10 @@ return语句[表达式]退出函数，选择性地向调用方返回一个表达
 
 
 
- 	
+
   * 全局变量
 
- 	
+
   * 局部变量
 
 
@@ -625,10 +597,10 @@ return语句[表达式]退出函数，选择性地向调用方返回一个表达
 
 局部变量只能在其被声明的函数内部访问，而全局变量可以在整个程序范围内访问。调用函数时，所有在函数内声明的变量名称都将被加入到作用域中。如下实例：
 
-    
+
     #coding=utf-8
     #!/usr/bin/python
-     
+
     total = 0; # This is global variable.
     # 可写函数说明
     def sum( arg1, arg2 ):
@@ -636,16 +608,16 @@ return语句[表达式]退出函数，选择性地向调用方返回一个表达
        total = arg1 + arg2; # total在这里是局部变量.
        print "Inside the function local total : ", total
        return total;
-     
+
     #调用sum函数
     sum( 10, 20 );
-    print "Outside the function global total : ", total 
-    
+    print "Outside the function global total : ", total
+
 
 
 以上实例输出结果：
 
-    
+
     Inside the function local total :  30
     Outside the function global total :  0
 
@@ -679,6 +651,3 @@ return语句[表达式]退出函数，选择性地向调用方返回一个表达
 
 
 # COMMENT
-
-
-

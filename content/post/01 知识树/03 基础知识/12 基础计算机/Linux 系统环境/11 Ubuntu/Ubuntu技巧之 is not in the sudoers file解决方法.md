@@ -18,19 +18,21 @@ www_linuxidc_com@linuxidc-Aspire-3680:~$ sudo add-apt-repository ppa:stk/dev
 www_linuxidc_com is not in the sudoers file.  This incident will be reported.
 www_linuxidc_com@linuxidc-Aspire-3680:~$
 
-![Ubuntu技巧之 is not in the sudoers file解决方法](https://www.linuxidc.com/upload/2010_12/10120719174561.png)
+![mark](http://images.iterate.site/blog/image/20181206/RElyBKucuyM9.png?imageslim)
+
 
 下面是解决方法：
 
 1）进入超级用户模式。也就是输入"su -",系统会让你输入超级用户密码，输入密码后就进入了超级用户模式。（当然，你也可以直接用root用）
 (注意有- ，这和su是不同的，在用命令”su”的时候只是切换到root，但没有把root的环境变量传过去，还是当前用户的环境变量，用”su -”命令将环境变量也一起带过去，就象和root登录一样)
 
-![Ubuntu技巧之 is not in the sudoers file解决方法](https://www.linuxidc.com/upload/2010_12/10120719187480.png)
+![mark](http://images.iterate.site/blog/image/20181206/ktsJfM6QtW1n.png?imageslim)
+
 
 2）添加文件的写权限。也就是输入命令"chmod u+w /etc/sudoers"。
 3）编辑/etc/sudoers文件。也就是输入命令"gedit /etc/sudoers",进入编辑模式，找到这一 行："root ALL=(ALL) ALL"在起下面添加"www_linuxidc_com ALL=(ALL) ALL"(这里的xxx是你的用户名)，然后保存退出。
 
-![Ubuntu技巧之 is not in the sudoers file解决方法](https://www.linuxidc.com/upload/2010_12/10120719186314.png)
+![mark](http://images.iterate.site/blog/image/20181206/aqdHr6PvSgjr.png?imageslim)
 
 4）撤销文件的写权限。也就是输入命令"chmod u-w /etc/sudoers"。
 

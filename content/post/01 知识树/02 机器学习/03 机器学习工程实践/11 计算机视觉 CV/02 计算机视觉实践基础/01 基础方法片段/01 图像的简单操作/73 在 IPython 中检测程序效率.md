@@ -3,22 +3,25 @@ title: 73 在 IPython 中检测程序效率
 toc: true
 date: 2018-10-27
 ---
+# 需要补充的
+
 # 在 IPython 中检测程序效率
 
-##### 有时你需要比较两个相似操作的效率，这时你可以使用 IPython 为你提供
+有时你需要比较两个相似操作的效率，这时你可以使用 IPython 为你提供的魔法命令 `％time`。他会让代码运行好几次从而得到一个准确的(运行)时间。它也可以被用来测试单行代码的。<span style="color:red;">一定要在 IPython 里面才能用吗？普通的时候怎么用？还是只能用 time.time() 这样得到两个值，然后再循环里进行统计？</span>
 
-##### 的魔法命令％time。他会让代码运行好几次从而得到一个准确的(运行)时 间。它也可以被用来测试单行代码的。
+例如，你知道下面这同一个数学运算用哪种行式的代码会执行的更快吗？
 
-例如，你知道下面这同一个数学运算用哪种行式的代码会执行的更快吗？ x = 5; y 二 x * *2 x 二5; y 二 x * x x 二 np.uint([5]); y 二 x * x y 二 np.squre(x)
+```py
+x = 5; y = x ∗ ∗2
+x = 5; y = x ∗ x
+x = np.uint([5]); y = x ∗ x
+y = np.squre(x)
+```
 
-##### 我们可以在IPython的Shell中使用魔法命令找到答案。
+我们可以在IPython的Shell中使用魔法命令找到答案。
 
-Created on Thu Jan 9 21:10:40 2014
-
-@author: duan
 
 import cv2
-
 import numpy as np
 
 In [10]: x = 5

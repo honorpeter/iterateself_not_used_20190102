@@ -1,3 +1,8 @@
+---
+title: 使用 vlc media player 推流
+toc: true
+date: 2018-12-08
+---
 # 使用 vlc media player 推流
 
 

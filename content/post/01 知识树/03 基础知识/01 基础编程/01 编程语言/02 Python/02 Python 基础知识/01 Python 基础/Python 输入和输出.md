@@ -3,6 +3,11 @@ title: Python 输入和输出
 toc: true
 date: 2018-11-23
 ---
+
+# 输入和输出
+
+
+
 ### 输出
 
 用 `print()` 在括号中加上字符串，就可以向屏幕上输出指定的文字。比如输出`'hello, world'`，用代码实现如下：
@@ -21,11 +26,11 @@ The quick brown fox jumps over the lazy dog
 
 `print()`会依次打印每个字符串，遇到逗号“,”会输出一个空格，因此，输出的字符串是这样拼起来的：<span style="color:red;">嗯，这个注意一下</span>
 
-![print-explain](https://cdn.liaoxuefeng.com/cdn/files/attachments/001431643506965540b8016b45c4d27b84c734543f78840000/l)
+![mark](http://images.iterate.site/blog/image/20181208/G6orM5Q8tLuY.png?imageslim)
 
 `print()`也可以打印整数，或者计算结果：
 
-```
+```py
 >>> print(300)
 300
 >>> print(100 + 200)
@@ -114,7 +119,7 @@ hello, Michael
 
 在命令行下，输入和输出就是这么简单。
 
-### 小结
+# 小结
 
 任何计算机程序都是为了执行一个特定的任务，有了输入，用户才能告诉计算机程序所需的信息，有了输出，程序运行后才能告诉用户任务的结果。
 

@@ -1,3 +1,8 @@
+---
+title: _CRT_SECURE_NO_WARNINGS错误提示 解决办法
+toc: true
+date: 2018-12-08
+---
 # `_CRT_SECURE_NO_WARNINGS` 错误提示，解决办法
 
 

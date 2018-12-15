@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title> - 迭代自己</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="iterateself" />
+  <meta name="description" content="需要补充的 这个例子是在灰度图上的，彩色的要改一下 关于 shape 的用法还是要在 python 里详细总结 关于这些噪音背后的原理要总结下 为什么感觉高斯噪音的图片这么的" />
+
+  <meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.47.1" />
+
+
+<link rel="canonical" href="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E9%AB%98%E6%96%AF%E5%99%AA%E5%A3%B0%E5%92%8C%E6%A4%92%E7%9B%90%E5%99%AA%E5%A3%B0%E7%9A%84python%E7%A8%8B%E5%BA%8F%E5%AE%9E%E7%8E%B0/" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<link href="/dist/even.min.css?v=3.2.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="" />
+<meta property="og:description" content="需要补充的 这个例子是在灰度图上的，彩色的要改一下 关于 shape 的用法还是要在 python 里详细总结 关于这些噪音背后的原理要总结下 为什么感觉高斯噪音的图片这么的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iterate.site/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/%E9%AB%98%E6%96%AF%E5%99%AA%E5%A3%B0%E5%92%8C%E6%A4%92%E7%9B%90%E5%99%AA%E5%A3%B0%E7%9A%84python%E7%A8%8B%E5%BA%8F%E5%AE%9E%E7%8E%B0/" />
+<meta itemprop="name" content="">
+<meta itemprop="description" content="需要补充的 这个例子是在灰度图上的，彩色的要改一下 关于 shape 的用法还是要在 python 里详细总结 关于这些噪音背后的原理要总结下 为什么感觉高斯噪音的图片这么的">
+
+
+
+<meta itemprop="wordCount" content="895">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content=""/>
+<meta name="twitter:description" content="需要补充的 这个例子是在灰度图上的，彩色的要改一下 关于 shape 的用法还是要在 python 里详细总结 关于这些噪音背后的原理要总结下 为什么感觉高斯噪音的图片这么的"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">迭代自己</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">最新</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于</li>
+      </a><a href="/catalog/">
+        <li class="mobile-menu-item">完整目录</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">迭代自己</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">最新</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/catalog/">完整目录</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title"></h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 0001-01-01 </span>
+        
+        <span class="more-meta"> 895 words </span>
+        <span class="more-meta"> 2 mins read </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> times read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#需要补充的">需要补充的</a></li>
+<li><a href="#高斯噪声和椒盐噪声的python程序实现">高斯噪声和椒盐噪声的python程序实现</a></li>
+<li><a href="#相关资料">相关资料</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    
+
+    
+    <div class="post-content">
+      
+
+<h1 id="需要补充的">需要补充的</h1>
+
+<ul>
+<li>这个例子是在灰度图上的，彩色的要改一下</li>
+<li>关于 shape 的用法还是要在 python 里详细总结</li>
+<li>关于这些噪音背后的原理要总结下</li>
+<li>为什么感觉高斯噪音的图片这么的奇怪？为什么有值得地方感觉没有很多的变化？还是说实际上是有变化的，但是变化不明显？<span style="color:red;">哇塞，当我把高斯噪音的图片放大后与 gray 图片详细对比了下，才知道，这个高斯噪音就是我之前做的项目的时候分频器处理过的视频画面的噪声！！简直了，我之前还以为这个是一种变异的 0~250 的椒盐噪音，所以撒了很多变种的椒盐噪音在画面上然后生成数据。。好吧，原来是高斯噪音！！厉害了。</span></li>
+</ul>
+
+<h1 id="高斯噪声和椒盐噪声的python程序实现">高斯噪声和椒盐噪声的python程序实现</h1>
+
+<p>首首先我们先来看下python中shape()函数的用法</p>
+
+<pre><code class="language-py">import numpy as np
+
+a = np.array([[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]])
+print(a.shape[0])
+print(a.shape[1])
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>4
+3
+</code></pre>
+
+<p>可以看到 <code>shape[0]</code> 表示的为行数，<code>shape[1]</code> 表示的为列数</p>
+
+<p>进入正题：</p>
+
+<p>我们先定义高斯噪声函数：<code>gaussian_noise(img,means,sigma)</code></p>
+
+<p>通过使用函数 <code>random.gauss(means,sigma)</code> 生成均值为<code>means</code>，标准差为 <code>sigma</code> 的高斯白噪声。<span style="color:red;">这个random.gauss 之前没有使用过，也不知道 random 里面还可以这样生成，嗯，对于 random 还是要了解更多。</span></p>
+
+<p>高斯噪声的代码如下：</p>
+
+<pre><code class="language-py">import numpy as np
+import random
+
+
+def gaussian_noise(img, means, sigma):
+    img_noise = img
+    h = img_noise.shape[0]
+    w = img_noise.shape[1]
+    for i in range(h):
+        for j in range(w):
+            img_noise[i, j] = img_noise[i, j] + random.gauss(means, sigma)
+            if img_noise[i, j] &lt; 0:
+                img_noise[i, j] = 0
+            elif img_noise[i, j] &gt; 255:
+                img_noise[i, j] = 255
+    return img_noise
+
+</code></pre>
+
+<p>椒盐噪声的函数定义如下：<span style="color:red;">一直想知道什么样的噪声叫椒盐噪声？为什么会有椒盐噪声？什么是有效的去处椒盐噪声的方法？而且，在视频传输的过程中海油什么别的噪声吗？分别要怎么处理？分别要怎么模拟生成？嗯，这些其实都是可能会用到的。</span></p>
+
+<pre><code class="language-py">import numpy as np
+import random
+
+
+def pepper_and_salt(img, percetage):
+    img_noise = img.copy()
+    noise_num = int(percetage * img.shape[0] * img.shape[1])
+    for i in range(noise_num):
+        r = random.randint(0, img.shape[0] - 1)
+        c = random.randint(0, img.shape[1] - 1)
+        if random.random() &lt;= 0.5:
+            img_noise[r, c] = 0
+        else:
+            img_noise[r, c] = 255
+    return img_noise
+</code></pre>
+
+<p>例子如下：</p>
+
+<pre><code class="language-py">import numpy as np
+import random
+import cv2
+
+
+def gaussian_noise(img, means, sigma):
+    img_noise = img.copy()
+    h = img_noise.shape[0]
+    w = img_noise.shape[1]
+    for i in range(h):
+        for j in range(w):
+            img_noise[i, j] = img_noise[i, j] + random.gauss(means, sigma)
+            if img_noise[i, j] &lt; 0:
+                img_noise[i, j] = 0
+            elif img_noise[i, j] &gt; 255:
+                img_noise[i, j] = 255
+    return img_noise
+
+def pepper_and_salt(img, percetage):
+    img_noise = img.copy()
+    noise_num = int(percetage * img.shape[0] * img.shape[1])
+    for i in range(noise_num):
+        r = random.randint(0, img.shape[0] - 1)
+        c = random.randint(0, img.shape[1] - 1)
+        if random.random() &lt;= 0.5:
+            img_noise[r, c] = 0
+        else:
+            img_noise[r, c] = 255
+    return img_noise
+
+
+
+if __name__==&quot;__main__&quot;:
+    img_gray=cv2.imread(&quot;1.jpg&quot;, 0)
+    img_gaussian=gaussian_noise(img_gray, 2, 4)
+    img_pepper_and_salt=pepper_and_salt(img_gray, 0.2)
+    cv2.imwrite('1_gray.jpg',img_gray)
+    cv2.imwrite('1_gaussian.jpg',img_gaussian)
+    cv2.imwrite('1_pepper_and_salt.jpg',img_pepper_and_salt)
+</code></pre>
+
+<p>结果如下：</p>
+
+<p>1.jpg：</p>
+
+<p><img src="http://images.iterate.site/blog/image/20181215/w6nxktnasA4u.jpg?imageslim" alt="mark" /></p>
+
+<p>1_gray.jpg：</p>
+
+<p><img src="http://images.iterate.site/blog/image/20181215/rrpcbooPehRr.jpg?imageslim" alt="mark" /></p>
+
+<p>1_gaussian.jpg：</p>
+
+<p><img src="http://images.iterate.site/blog/image/20181215/ieaRThsJqKNX.jpg?imageslim" alt="mark" /></p>
+
+<p>1_pepper_and_salt.jpg：</p>
+
+<p><img src="http://images.iterate.site/blog/image/20181215/mnKBDrD3EWIA.jpg?imageslim" alt="mark" /></p>
+
+<h1 id="相关资料">相关资料</h1>
+
+<ul>
+<li><a href="https://blog.csdn.net/kaikai______/article/details/53535909">高斯噪声和椒盐噪声的python程序实现</a></li>
+</ul>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/02-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89%E5%AE%9E%E8%B7%B5%E5%9F%BA%E7%A1%80/01-%E5%9F%BA%E7%A1%80%E6%96%B9%E6%B3%95%E7%89%87%E6%AE%B5/01-%E5%9B%BE%E5%83%8F%E7%9A%84%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C/19-%E7%94%A8%E9%BC%A0%E6%A0%87%E8%BF%9B%E8%A1%8C%E7%94%BB%E7%94%BB/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default"></span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/01-%E7%9F%A5%E8%AF%86%E6%A0%91/02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/11-%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89-cv/11-%E6%91%84%E5%83%8F%E5%A4%B4%E6%8B%8D%E6%91%84%E7%9A%84%E4%B8%80%E5%BC%A0%E9%9D%99%E6%80%81%E5%9B%BE%E7%89%87/02-%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/02-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%97%B6%E4%BB%A3%E7%9A%84%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/03-one-stage-%E7%9A%84%E6%96%B9%E6%B3%95/yolov3/02-yolov3-%E4%BD%BF%E7%94%A8/01-keras-%E5%AE%9E%E7%8E%B0/00-%E6%A1%86%E6%9E%B6%E4%BB%8B%E7%BB%8D/">
+            <span class="next-text nav-default"></span>
+            <span class="next-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="iteratelyd@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://github.com/iterateself" class="iconfont icon-github" title="github"></a>
+      <a href="https://www.zhihu.com/people/thebegin/activities" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.douban.com/people/68028070/" class="iconfont icon-douban" title="douban"></a>
+  <a href="http://iterate.site/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> site pv: <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+    <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> site uv: <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">iterateself</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script><script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+
+
+<script type="text/javascript" src="/dist/even.min.js?v=3.2.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
